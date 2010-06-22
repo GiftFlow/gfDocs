@@ -1,0 +1,790 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+
+<html lang="en">
+<head>
+
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
+<meta name="generator" content="PHPDoctor 2RC4 (http://peej.github.com/phpdoctor/)">
+<meta name="when" content="Sun, 20 Jun 2010 17:43:50 +0000">
+
+<link rel="stylesheet" type="text/css" href="../stylesheet.css">
+<link rel="start" href="../overview-summary.html">
+
+<title>GdThumb (GiftFlow API)</title>
+
+</head>
+<body id="definition" onload="parent.document.title=document.title;">
+
+<div class="header">
+<h1>GiftFlow API</h1>
+<ul>
+<li><a href="../overview-summary.html">Overview</a></li>
+<li><a href="../phpthumb/package-summary.html">Package</a></li>
+<li class="active">Class</li>
+<li><a href="../phpthumb/package-tree.html">Tree</a></li>
+<li><a href="../overview-files.html">Files</a></li>
+<li><a href="../deprecated-list.html">Deprecated</a></li>
+<li><a href="../index-all.html">Index</a></li>
+</ul>
+</div>
+
+<div class="small_links">
+<a href="../index.html" target="_top">Frames</a>
+<a href="../phpthumb/gdthumb.html" target="_top">No frames</a>
+</div>
+<div class="small_links">
+Summary: <a href="#summary_field">Field</a> | <a href="#summary_method">Method</a> | <a href="#summary_constr">Constr</a>
+Detail: <a href="#detail_field">Field</a> | <a href="#detail_method">Method</a> | <a href="#summary_constr">Constr</a>
+</div>
+<hr>
+
+<div class="qualifiedName">PhpThumb\GdThumb</div>
+<a href="../source/application/libraries/thumb/gdthumb.inc.php.html#line33" class="location">application/libraries/thumb/GdThumb.inc.php at line 33</a>
+
+<h1>Class GdThumb</h1>
+
+<pre class="tree"><a href="../phpthumb/thumbbase.html">ThumbBase</a><br>    └─<strong>GdThumb</strong><br /></pre>
+
+<hr>
+
+<p class="signature">public  class <strong>GdThumb</strong><br>extends <a href="../phpthumb/thumbbase.html">ThumbBase</a>
+
+</p>
+
+<div class="comment" id="overview_description"><p>GdThumb Class Definition</p><p>This is the GD Implementation of the PHP Thumb library.</p></div>
+
+<dl>
+<dt>Subpackage:</dt>
+<dd>Core</dd>
+</dl>
+<hr>
+
+<table id="summary_field">
+<tr><th colspan="2">Field Summary</th></tr>
+<tr>
+<td class="type">protected  array</td>
+<td class="description"><p class="name"><a href="#currentDimensions">$currentDimensions</a></p><p class="description">The current dimensions of the image</p></td>
+</tr>
+<tr>
+<td class="type">protected  resource</td>
+<td class="description"><p class="name"><a href="#is_ajax">$is_ajax</a></p><p class="description">The prior image (before manipulation)</p></td>
+</tr>
+<tr>
+<td class="type">protected  int</td>
+<td class="description"><p class="name"><a href="#maxHeight">$maxHeight</a></p><p class="description">The maximum height an image can be after resizing (in pixels)</p></td>
+</tr>
+<tr>
+<td class="type">protected  int</td>
+<td class="description"><p class="name"><a href="#maxWidth">$maxWidth</a></p><p class="description">The maximum width an image can be after resizing (in pixels)</p></td>
+</tr>
+<tr>
+<td class="type">protected  array</td>
+<td class="description"><p class="name"><a href="#newDimensions">$newDimensions</a></p><p class="description">The new, calculated dimensions of the image</p></td>
+</tr>
+<tr>
+<td class="type">protected  array</td>
+<td class="description"><p class="name"><a href="#options">$options</a></p><p class="description">The options for this classThis array contains various options that determine the behavior in
+various functions throughout the class. </p></td>
+</tr>
+<tr>
+<td class="type">protected  int</td>
+<td class="description"><p class="name"><a href="#percent">$percent</a></p><p class="description">The percentage to resize the image by</p></td>
+</tr>
+<tr>
+<td class="type">protected  resource</td>
+<td class="description"><p class="name"><a href="#workingImage">$workingImage</a></p><p class="description">The working image (used during manipulation)</p></td>
+</tr>
+</table>
+
+<table class="inherit">
+<tr><th colspan="2">Fields inherited from PhpThumb\ThumbBase</th></tr>
+<tr><td><a href="../phpthumb/thumbbase.html#create">create</a>, <a href="../phpthumb/thumbbase.html#errorMessage">errorMessage</a>, <a href="../phpthumb/thumbbase.html#fileName">fileName</a>, <a href="../phpthumb/thumbbase.html#format">format</a>, <a href="../phpthumb/thumbbase.html#hasError">hasError</a>, <a href="../phpthumb/thumbbase.html#importedFunctions">importedFunctions</a>, <a href="../phpthumb/thumbbase.html#isDataStream">isDataStream</a>, <a href="../phpthumb/thumbbase.html#remoteImage">remoteImage</a></td></tr></table>
+
+<table id="summary_method">
+<tr><th colspan="2">Method Summary</th></tr>
+<tr>
+<td class="type"> <a href="../phpthumb/gdthumb.html">GdThumb</a></td>
+<td class="description"><p class="name"><a href="#__construct()">__construct</a>(string fileName, mixed options, bool isDataStream)</p><p class="description">Class Constructor</p></td>
+</tr>
+<tr>
+<td class="type"> void</td>
+<td class="description"><p class="name"><a href="#__destruct()">__destruct</a>()</p><p class="description">Class Destructor</p></td>
+</tr>
+<tr>
+<td class="type"> <a href="../phpthumb/gdthumb.html">GdThumb</a></td>
+<td class="description"><p class="name"><a href="#adaptiveResize()">adaptiveResize</a>(mixed width, mixed height, int maxWidth, int maxHeight)</p><p class="description">Adaptively Resizes the ImageThis function attempts to get the image to as close to the provided dimensions as possible, and then crops the 
+remaining overflow (from the center) to get the image to be the size specified</p></td>
+</tr>
+<tr>
+<td class="type">protected  array</td>
+<td class="description"><p class="name"><a href="#calcHeight()">calcHeight</a>(int width, int height)</p><p class="description">Calculates a new width and height for the image based on $this->maxWidth and the provided dimensions</p></td>
+</tr>
+<tr>
+<td class="type">protected  void</td>
+<td class="description"><p class="name"><a href="#calcImageSize()">calcImageSize</a>(int width, int height)</p><p class="description">Calculates the new image dimensionsThese calculations are based on both the provided dimensions and $this->maxWidth and $this->maxHeight</p></td>
+</tr>
+<tr>
+<td class="type">protected  void</td>
+<td class="description"><p class="name"><a href="#calcImageSizePercent()">calcImageSizePercent</a>(int width, int height)</p><p class="description">Calculates new dimensions based on $this->percent and the provided dimensions</p></td>
+</tr>
+<tr>
+<td class="type">protected  void</td>
+<td class="description"><p class="name"><a href="#calcImageSizeStrict()">calcImageSizeStrict</a>(int width, int height)</p><p class="description">Calculates new image dimensions, not allowing the width and height to be less than either the max width or height</p></td>
+</tr>
+<tr>
+<td class="type">protected  array</td>
+<td class="description"><p class="name"><a href="#calcPercent()">calcPercent</a>(int width, int height)</p><p class="description">Calculates a new width and height for the image based on $this->percent and the provided dimensions</p></td>
+</tr>
+<tr>
+<td class="type">protected  array</td>
+<td class="description"><p class="name"><a href="#calcWidth()">calcWidth</a>(int width, int height)</p><p class="description">Calculates a new width and height for the image based on $this->maxWidth and the provided dimensions</p></td>
+</tr>
+<tr>
+<td class="type"> <a href="../phpthumb/gdthumb.html">GdThumb</a></td>
+<td class="description"><p class="name"><a href="#crop()">crop</a>(int startX, int startY, int cropWidth, int cropHeight)</p><p class="description">Vanilla Cropping - Crops from x,y with specified width and height</p></td>
+</tr>
+<tr>
+<td class="type"> <a href="../phpthumb/gdthumb.html">GdThumb</a></td>
+<td class="description"><p class="name"><a href="#cropFromCenter()">cropFromCenter</a>(int cropWidth, int cropHeight)</p><p class="description">Crops an image from the center with provided dimensionsIf no height is given, the width will be used as a height, thus creating a square crop</p></td>
+</tr>
+<tr>
+<td class="type">protected  void</td>
+<td class="description"><p class="name"><a href="#determineFormat()">determineFormat</a>()</p><p class="description">Determines the file format by mime-typeThis function will throw exceptions for invalid images / mime-types</p></td>
+</tr>
+<tr>
+<td class="type"> void</td>
+<td class="description"><p class="name"><a href="#getCurrentDimensions()">getCurrentDimensions</a>()</p><p class="description">Returns $currentDimensions.</p></td>
+</tr>
+<tr>
+<td class="type"> string</td>
+<td class="description"><p class="name"><a href="#getImageAsString()">getImageAsString</a>()</p><p class="description">Returns the Working Image as a StringThis function is useful for getting the raw image data as a string for storage in
+a database, or other similar things.</p></td>
+</tr>
+<tr>
+<td class="type"> void</td>
+<td class="description"><p class="name"><a href="#getMaxHeight()">getMaxHeight</a>()</p><p class="description">Returns $maxHeight.</p></td>
+</tr>
+<tr>
+<td class="type"> void</td>
+<td class="description"><p class="name"><a href="#getMaxWidth()">getMaxWidth</a>()</p><p class="description">Returns $maxWidth.</p></td>
+</tr>
+<tr>
+<td class="type"> void</td>
+<td class="description"><p class="name"><a href="#getNewDimensions()">getNewDimensions</a>()</p><p class="description">Returns $newDimensions.</p></td>
+</tr>
+<tr>
+<td class="type"> void</td>
+<td class="description"><p class="name"><a href="#getOldImage()">getOldImage</a>()</p><p class="description">Returns $oldImage.</p></td>
+</tr>
+<tr>
+<td class="type"> void</td>
+<td class="description"><p class="name"><a href="#getOptions()">getOptions</a>()</p><p class="description">Returns $options.</p></td>
+</tr>
+<tr>
+<td class="type"> void</td>
+<td class="description"><p class="name"><a href="#getPercent()">getPercent</a>()</p><p class="description">Returns $percent.</p></td>
+</tr>
+<tr>
+<td class="type"> void</td>
+<td class="description"><p class="name"><a href="#getWorkingImage()">getWorkingImage</a>()</p><p class="description">Returns $workingImage.</p></td>
+</tr>
+<tr>
+<td class="type">protected  void</td>
+<td class="description"><p class="name"><a href="#preserveAlpha()">preserveAlpha</a>()</p><p class="description">Preserves the alpha or transparency for PNG and GIF filesAlpha / transparency will not be preserved if the appropriate options are set to false.
+</p></td>
+</tr>
+<tr>
+<td class="type"> <a href="../phpthumb/gdthumb.html">GdThumb</a></td>
+<td class="description"><p class="name"><a href="#resize()">resize</a>(int maxWidth, int maxHeight)</p><p class="description">Resizes an image to be no larger than $maxWidth or $maxHeightIf either param is set to zero, then that dimension will not be considered as a part of the resize.
+</p></td>
+</tr>
+<tr>
+<td class="type"> <a href="../phpthumb/gdthumb.html">GdThumb</a></td>
+<td class="description"><p class="name"><a href="#resizePercent()">resizePercent</a>(int percent)</p><p class="description">Resizes an image by a given percent uniformlyPercentage should be whole number representation (i.e. </p></td>
+</tr>
+<tr>
+<td class="type"> void</td>
+<td class="description"><p class="name"><a href="#rotateImage()">rotateImage</a>(string direction)</p><p class="description">Rotates image either 90 degrees clockwise or counter-clockwise</p></td>
+</tr>
+<tr>
+<td class="type"> <a href="../phpthumb/gdthumb.html">GdThumb</a></td>
+<td class="description"><p class="name"><a href="#rotateImageNDegrees()">rotateImageNDegrees</a>(int degrees)</p><p class="description">Rotates image specified number of degrees</p></td>
+</tr>
+<tr>
+<td class="type"> <a href="../phpthumb/gdthumb.html">GdThumb</a></td>
+<td class="description"><p class="name"><a href="#save()">save</a>(string fileName, string format)</p><p class="description">Saves an imageThis function will make sure the target directory is writeable, and then save the image.
+</p></td>
+</tr>
+<tr>
+<td class="type"> void</td>
+<td class="description"><p class="name"><a href="#setCurrentDimensions()">setCurrentDimensions</a>(object currentDimensions)</p><p class="description">Sets $currentDimensions.</p></td>
+</tr>
+<tr>
+<td class="type"> void</td>
+<td class="description"><p class="name"><a href="#setMaxHeight()">setMaxHeight</a>(object maxHeight)</p><p class="description">Sets $maxHeight.</p></td>
+</tr>
+<tr>
+<td class="type"> void</td>
+<td class="description"><p class="name"><a href="#setMaxWidth()">setMaxWidth</a>(object maxWidth)</p><p class="description">Sets $maxWidth.</p></td>
+</tr>
+<tr>
+<td class="type"> void</td>
+<td class="description"><p class="name"><a href="#setNewDimensions()">setNewDimensions</a>(object newDimensions)</p><p class="description">Sets $newDimensions.</p></td>
+</tr>
+<tr>
+<td class="type"> void</td>
+<td class="description"><p class="name"><a href="#setOldImage()">setOldImage</a>(object oldImage)</p><p class="description">Sets $oldImage.</p></td>
+</tr>
+<tr>
+<td class="type"> void</td>
+<td class="description"><p class="name"><a href="#setOptions()">setOptions</a>(array options)</p><p class="description">Sets $this->options to $options</p></td>
+</tr>
+<tr>
+<td class="type"> void</td>
+<td class="description"><p class="name"><a href="#setPercent()">setPercent</a>(object percent)</p><p class="description">Sets $percent.</p></td>
+</tr>
+<tr>
+<td class="type"> void</td>
+<td class="description"><p class="name"><a href="#setWorkingImage()">setWorkingImage</a>(object workingImage)</p><p class="description">Sets $workingImage.</p></td>
+</tr>
+<tr>
+<td class="type"> <a href="../phpthumb/gdthumb.html">GdThumb</a></td>
+<td class="description"><p class="name"><a href="#show()">show</a>(bool rawData)</p><p class="description">Shows an imageThis function will show the current image by first sending the appropriate header
+for the format, and then outputting the image data. </p></td>
+</tr>
+<tr>
+<td class="type">protected  void</td>
+<td class="description"><p class="name"><a href="#verifyFormatCompatiblity()">verifyFormatCompatiblity</a>()</p><p class="description">Makes sure the correct GD implementation exists for the file type</p></td>
+</tr>
+</table>
+
+<table class="inherit">
+<tr><th colspan="2">Methods inherited from PhpThumb\ThumbBase</th></tr>
+<tr><td><a href="../phpthumb/thumbbase.html#__call()">__call</a>, <a href="../phpthumb/thumbbase.html#__construct()">__construct</a>, <a href="../phpthumb/thumbbase.html#fileExistsAndReadable()">fileExistsAndReadable</a>, <a href="../phpthumb/thumbbase.html#getErrorMessage()">getErrorMessage</a>, <a href="../phpthumb/thumbbase.html#getFileName()">getFileName</a>, <a href="../phpthumb/thumbbase.html#getFormat()">getFormat</a>, <a href="../phpthumb/thumbbase.html#getHasError()">getHasError</a>, <a href="../phpthumb/thumbbase.html#getImported()">getImported</a>, <a href="../phpthumb/thumbbase.html#getImportedFunctions()">getImportedFunctions</a>, <a href="../phpthumb/thumbbase.html#importPlugins()">importPlugins</a>, <a href="../phpthumb/thumbbase.html#imports()">imports</a>, <a href="../phpthumb/thumbbase.html#setErrorMessage()">setErrorMessage</a>, <a href="../phpthumb/thumbbase.html#setFileName()">setFileName</a>, <a href="../phpthumb/thumbbase.html#setFormat()">setFormat</a>, <a href="../phpthumb/thumbbase.html#setHasError()">setHasError</a>, <a href="../phpthumb/thumbbase.html#triggerError()">triggerError</a></td></tr></table>
+
+<h2 id="detail_field">Field Detail</h2>
+<a href="../source/application/libraries/thumb/gdthumb.inc.php.html#line52" class="location">application/libraries/thumb/GdThumb.inc.php at line 52</a>
+
+<h3 id="currentDimensions">currentDimensions</h3>
+<code class="signature">protected  array <strong>$currentDimensions</strong></code>
+<div class="details">
+<p>The current dimensions of the image</p></div>
+
+<hr>
+
+<a href="../source/application/libraries/thumb/gdthumb.inc.php.html#line40" class="location">application/libraries/thumb/GdThumb.inc.php at line 40</a>
+
+<h3 id="is_ajax">is_ajax</h3>
+<code class="signature">protected  resource <strong>$is_ajax</strong> = 1</code>
+<div class="details">
+<p>The prior image (before manipulation)</p></div>
+
+<hr>
+
+<a href="../source/application/libraries/thumb/gdthumb.inc.php.html#line80" class="location">application/libraries/thumb/GdThumb.inc.php at line 80</a>
+
+<h3 id="maxHeight">maxHeight</h3>
+<code class="signature">protected  int <strong>$maxHeight</strong></code>
+<div class="details">
+<p>The maximum height an image can be after resizing (in pixels)</p></div>
+
+<hr>
+
+<a href="../source/application/libraries/thumb/gdthumb.inc.php.html#line74" class="location">application/libraries/thumb/GdThumb.inc.php at line 74</a>
+
+<h3 id="maxWidth">maxWidth</h3>
+<code class="signature">protected  int <strong>$maxWidth</strong></code>
+<div class="details">
+<p>The maximum width an image can be after resizing (in pixels)</p></div>
+
+<hr>
+
+<a href="../source/application/libraries/thumb/gdthumb.inc.php.html#line58" class="location">application/libraries/thumb/GdThumb.inc.php at line 58</a>
+
+<h3 id="newDimensions">newDimensions</h3>
+<code class="signature">protected  array <strong>$newDimensions</strong></code>
+<div class="details">
+<p>The new, calculated dimensions of the image</p></div>
+
+<hr>
+
+<a href="../source/application/libraries/thumb/gdthumb.inc.php.html#line68" class="location">application/libraries/thumb/GdThumb.inc.php at line 68</a>
+
+<h3 id="options">options</h3>
+<code class="signature">protected  array <strong>$options</strong></code>
+<div class="details">
+<p>The options for this class</p><p>This array contains various options that determine the behavior in
+various functions throughout the class.  Functions note which specific 
+option key / values are used in their documentation</p></div>
+
+<hr>
+
+<a href="../source/application/libraries/thumb/gdthumb.inc.php.html#line86" class="location">application/libraries/thumb/GdThumb.inc.php at line 86</a>
+
+<h3 id="percent">percent</h3>
+<code class="signature">protected  int <strong>$percent</strong></code>
+<div class="details">
+<p>The percentage to resize the image by</p></div>
+
+<hr>
+
+<a href="../source/application/libraries/thumb/gdthumb.inc.php.html#line46" class="location">application/libraries/thumb/GdThumb.inc.php at line 46</a>
+
+<h3 id="workingImage">workingImage</h3>
+<code class="signature">protected  resource <strong>$workingImage</strong></code>
+<div class="details">
+<p>The working image (used during manipulation)</p></div>
+
+<hr>
+
+<h2 id="detail_method">Method Detail</h2><div class="method_detail">
+<div class='method'><a href="../source/application/libraries/thumb/gdthumb.inc.php.html#line94" class="location">application/libraries/thumb/GdThumb.inc.php at line 94</a>
+
+<h3 id="__construct()">__construct</h3>
+<code class="signature">public  <a href="../phpthumb/gdthumb.html">GdThumb</a> <strong>__construct</strong>(string fileName, mixed options, bool isDataStream)</code>
+<div class="details">
+<p>Class Constructor</p></div></div>
+
+
+
+<div class='method'><a href="../source/application/libraries/thumb/gdthumb.inc.php.html#line136" class="location">application/libraries/thumb/GdThumb.inc.php at line 136</a>
+
+<h3 id="__destruct()">__destruct</h3>
+<code class="signature">public  void <strong>__destruct</strong>()</code>
+<div class="details">
+<p>Class Destructor</p></div></div>
+
+
+
+<div class='method'><a href="../source/application/libraries/thumb/gdthumb.inc.php.html#line237" class="location">application/libraries/thumb/GdThumb.inc.php at line 237</a>
+
+<h3 id="adaptiveResize()">adaptiveResize</h3>
+<code class="signature">public  <a href="../phpthumb/gdthumb.html">GdThumb</a> <strong>adaptiveResize</strong>(mixed width, mixed height, int maxWidth, int maxHeight)</code>
+<div class="details">
+<p>Adaptively Resizes the Image</p><p>This function attempts to get the image to as close to the provided dimensions as possible, and then crops the 
+remaining overflow (from the center) to get the image to be the size specified</p></div></div>
+
+
+
+<div class='method'><a href="../source/application/libraries/thumb/gdthumb.inc.php.html#line916" class="location">application/libraries/thumb/GdThumb.inc.php at line 916</a>
+
+<h3 id="calcHeight()">calcHeight</h3>
+<code class="signature">protected  array <strong>calcHeight</strong>(int width, int height)</code>
+<div class="details">
+<p>Calculates a new width and height for the image based on $this->maxWidth and the provided dimensions</p></div></div>
+
+
+
+<div class='method'><a href="../source/application/libraries/thumb/gdthumb.inc.php.html#line955" class="location">application/libraries/thumb/GdThumb.inc.php at line 955</a>
+
+<h3 id="calcImageSize()">calcImageSize</h3>
+<code class="signature">protected  void <strong>calcImageSize</strong>(int width, int height)</code>
+<div class="details">
+<p>Calculates the new image dimensions</p><p>These calculations are based on both the provided dimensions and $this->maxWidth and $this->maxHeight</p></div></div>
+
+
+
+<div class='method'><a href="../source/application/libraries/thumb/gdthumb.inc.php.html#line1048" class="location">application/libraries/thumb/GdThumb.inc.php at line 1048</a>
+
+<h3 id="calcImageSizePercent()">calcImageSizePercent</h3>
+<code class="signature">protected  void <strong>calcImageSizePercent</strong>(int width, int height)</code>
+<div class="details">
+<p>Calculates new dimensions based on $this->percent and the provided dimensions</p></div></div>
+
+
+
+<div class='method'><a href="../source/application/libraries/thumb/gdthumb.inc.php.html#line992" class="location">application/libraries/thumb/GdThumb.inc.php at line 992</a>
+
+<h3 id="calcImageSizeStrict()">calcImageSizeStrict</h3>
+<code class="signature">protected  void <strong>calcImageSizeStrict</strong>(int width, int height)</code>
+<div class="details">
+<p>Calculates new image dimensions, not allowing the width and height to be less than either the max width or height</p></div></div>
+
+
+
+<div class='method'><a href="../source/application/libraries/thumb/gdthumb.inc.php.html#line935" class="location">application/libraries/thumb/GdThumb.inc.php at line 935</a>
+
+<h3 id="calcPercent()">calcPercent</h3>
+<code class="signature">protected  array <strong>calcPercent</strong>(int width, int height)</code>
+<div class="details">
+<p>Calculates a new width and height for the image based on $this->percent and the provided dimensions</p></div></div>
+
+
+
+<div class='method'><a href="../source/application/libraries/thumb/gdthumb.inc.php.html#line897" class="location">application/libraries/thumb/GdThumb.inc.php at line 897</a>
+
+<h3 id="calcWidth()">calcWidth</h3>
+<code class="signature">protected  array <strong>calcWidth</strong>(int width, int height)</code>
+<div class="details">
+<p>Calculates a new width and height for the image based on $this->maxWidth and the provided dimensions</p></div></div>
+
+
+
+<div class='method'><a href="../source/application/libraries/thumb/gdthumb.inc.php.html#line424" class="location">application/libraries/thumb/GdThumb.inc.php at line 424</a>
+
+<h3 id="crop()">crop</h3>
+<code class="signature">public  <a href="../phpthumb/gdthumb.html">GdThumb</a> <strong>crop</strong>(int startX, int startY, int cropWidth, int cropHeight)</code>
+<div class="details">
+<p>Vanilla Cropping - Crops from x,y with specified width and height</p></div></div>
+
+
+
+<div class='method'><a href="../source/application/libraries/thumb/gdthumb.inc.php.html#line387" class="location">application/libraries/thumb/GdThumb.inc.php at line 387</a>
+
+<h3 id="cropFromCenter()">cropFromCenter</h3>
+<code class="signature">public  <a href="../phpthumb/gdthumb.html">GdThumb</a> <strong>cropFromCenter</strong>(int cropWidth, int cropHeight)</code>
+<div class="details">
+<p>Crops an image from the center with provided dimensions</p><p>If no height is given, the width will be used as a height, thus creating a square crop</p></div></div>
+
+
+
+<div class='method'><a href="../source/application/libraries/thumb/gdthumb.inc.php.html#line1062" class="location">application/libraries/thumb/GdThumb.inc.php at line 1062</a>
+
+<h3 id="determineFormat()">determineFormat</h3>
+<code class="signature">protected  void <strong>determineFormat</strong>()</code>
+<div class="details">
+<p>Determines the file format by mime-type</p><p>This function will throw exceptions for invalid images / mime-types</p></div></div>
+
+
+
+<div class='method'><a href="../source/application/libraries/thumb/gdthumb.inc.php.html#line733" class="location">application/libraries/thumb/GdThumb.inc.php at line 733</a>
+
+<h3 id="getCurrentDimensions()">getCurrentDimensions</h3>
+<code class="signature">public  void <strong>getCurrentDimensions</strong>()</code>
+<div class="details">
+<p>Returns $currentDimensions.</p><dl>
+<dt>See Also:</dt>
+<dd><a href="../phpthumb/gdthumb.html#currentDimensions">GdThumb::$currentDimensions</a></dd>
+</dl>
+</div></div>
+
+
+
+<div class='method'><a href="../source/application/libraries/thumb/gdthumb.inc.php.html#line609" class="location">application/libraries/thumb/GdThumb.inc.php at line 609</a>
+
+<h3 id="getImageAsString()">getImageAsString</h3>
+<code class="signature">public  string <strong>getImageAsString</strong>()</code>
+<div class="details">
+<p>Returns the Working Image as a String</p><p>This function is useful for getting the raw image data as a string for storage in
+a database, or other similar things.</p></div></div>
+
+
+
+<div class='method'><a href="../source/application/libraries/thumb/gdthumb.inc.php.html#line754" class="location">application/libraries/thumb/GdThumb.inc.php at line 754</a>
+
+<h3 id="getMaxHeight()">getMaxHeight</h3>
+<code class="signature">public  void <strong>getMaxHeight</strong>()</code>
+<div class="details">
+<p>Returns $maxHeight.</p><dl>
+<dt>See Also:</dt>
+<dd><a href="../phpthumb/gdthumb.html#maxHeight">GdThumb::$maxHeight</a></dd>
+</dl>
+</div></div>
+
+
+
+<div class='method'><a href="../source/application/libraries/thumb/gdthumb.inc.php.html#line775" class="location">application/libraries/thumb/GdThumb.inc.php at line 775</a>
+
+<h3 id="getMaxWidth()">getMaxWidth</h3>
+<code class="signature">public  void <strong>getMaxWidth</strong>()</code>
+<div class="details">
+<p>Returns $maxWidth.</p><dl>
+<dt>See Also:</dt>
+<dd><a href="../phpthumb/gdthumb.html#maxWidth">GdThumb::$maxWidth</a></dd>
+</dl>
+</div></div>
+
+
+
+<div class='method'><a href="../source/application/libraries/thumb/gdthumb.inc.php.html#line796" class="location">application/libraries/thumb/GdThumb.inc.php at line 796</a>
+
+<h3 id="getNewDimensions()">getNewDimensions</h3>
+<code class="signature">public  void <strong>getNewDimensions</strong>()</code>
+<div class="details">
+<p>Returns $newDimensions.</p><dl>
+<dt>See Also:</dt>
+<dd><a href="../phpthumb/gdthumb.html#newDimensions">GdThumb::$newDimensions</a></dd>
+</dl>
+</div></div>
+
+
+
+<div class='method'><a href="../source/application/libraries/thumb/gdthumb.inc.php.html#line848" class="location">application/libraries/thumb/GdThumb.inc.php at line 848</a>
+
+<h3 id="getOldImage()">getOldImage</h3>
+<code class="signature">public  void <strong>getOldImage</strong>()</code>
+<div class="details">
+<p>Returns $oldImage.</p><dl>
+<dt>See Also:</dt>
+<dd>GdThumb::$oldImage</dd>
+</dl>
+</div></div>
+
+
+
+<div class='method'><a href="../source/application/libraries/thumb/gdthumb.inc.php.html#line817" class="location">application/libraries/thumb/GdThumb.inc.php at line 817</a>
+
+<h3 id="getOptions()">getOptions</h3>
+<code class="signature">public  void <strong>getOptions</strong>()</code>
+<div class="details">
+<p>Returns $options.</p><dl>
+<dt>See Also:</dt>
+<dd><a href="../phpthumb/gdthumb.html#options">GdThumb::$options</a></dd>
+</dl>
+</div></div>
+
+
+
+<div class='method'><a href="../source/application/libraries/thumb/gdthumb.inc.php.html#line827" class="location">application/libraries/thumb/GdThumb.inc.php at line 827</a>
+
+<h3 id="getPercent()">getPercent</h3>
+<code class="signature">public  void <strong>getPercent</strong>()</code>
+<div class="details">
+<p>Returns $percent.</p><dl>
+<dt>See Also:</dt>
+<dd><a href="../phpthumb/gdthumb.html#percent">GdThumb::$percent</a></dd>
+</dl>
+</div></div>
+
+
+
+<div class='method'><a href="../source/application/libraries/thumb/gdthumb.inc.php.html#line869" class="location">application/libraries/thumb/GdThumb.inc.php at line 869</a>
+
+<h3 id="getWorkingImage()">getWorkingImage</h3>
+<code class="signature">public  void <strong>getWorkingImage</strong>()</code>
+<div class="details">
+<p>Returns $workingImage.</p><dl>
+<dt>See Also:</dt>
+<dd><a href="../phpthumb/gdthumb.html#workingImage">GdThumb::$workingImage</a></dd>
+</dl>
+</div></div>
+
+
+
+<div class='method'><a href="../source/application/libraries/thumb/gdthumb.inc.php.html#line1152" class="location">application/libraries/thumb/GdThumb.inc.php at line 1152</a>
+
+<h3 id="preserveAlpha()">preserveAlpha</h3>
+<code class="signature">protected  void <strong>preserveAlpha</strong>()</code>
+<div class="details">
+<p>Preserves the alpha or transparency for PNG and GIF files</p><p>Alpha / transparency will not be preserved if the appropriate options are set to false.
+Also, the GIF transparency is pretty skunky (the results aren't awesome), but it works like a 
+champ... that's the nature of GIFs tho, so no huge surprise.</p><p>This functionality was originally suggested by commenter Aimi (no links / site provided) - Thanks! :)</p></div></div>
+
+
+
+<div class='method'><a href="../source/application/libraries/thumb/gdthumb.inc.php.html#line164" class="location">application/libraries/thumb/GdThumb.inc.php at line 164</a>
+
+<h3 id="resize()">resize</h3>
+<code class="signature">public  <a href="../phpthumb/gdthumb.html">GdThumb</a> <strong>resize</strong>(int maxWidth, int maxHeight)</code>
+<div class="details">
+<p>Resizes an image to be no larger than $maxWidth or $maxHeight</p><p>If either param is set to zero, then that dimension will not be considered as a part of the resize.
+Additionally, if $this->options['resizeUp'] is set to true (false by default), then this function will
+also scale the image up to the maximum dimensions provided.</p><dl>
+<dt>Parameters:</dt>
+<dd>maxWidth - The maximum width of the image in pixels</dd>
+<dd>maxHeight - The maximum height of the image in pixels</dd>
+</dl>
+</div></div>
+
+
+
+<div class='method'><a href="../source/application/libraries/thumb/gdthumb.inc.php.html#line336" class="location">application/libraries/thumb/GdThumb.inc.php at line 336</a>
+
+<h3 id="resizePercent()">resizePercent</h3>
+<code class="signature">public  <a href="../phpthumb/gdthumb.html">GdThumb</a> <strong>resizePercent</strong>(int percent)</code>
+<div class="details">
+<p>Resizes an image by a given percent uniformly</p><p>Percentage should be whole number representation (i.e. 1-100)</p></div></div>
+
+
+
+<div class='method'><a href="../source/application/libraries/thumb/gdthumb.inc.php.html#line512" class="location">application/libraries/thumb/GdThumb.inc.php at line 512</a>
+
+<h3 id="rotateImage()">rotateImage</h3>
+<code class="signature">public  void <strong>rotateImage</strong>(string direction)</code>
+<div class="details">
+<p>Rotates image either 90 degrees clockwise or counter-clockwise</p><dl>
+<dt>Retunrn:</dt>
+<dd>GdThumb</dd>
+</dl>
+</div></div>
+
+
+
+<div class='method'><a href="../source/application/libraries/thumb/gdthumb.inc.php.html#line532" class="location">application/libraries/thumb/GdThumb.inc.php at line 532</a>
+
+<h3 id="rotateImageNDegrees()">rotateImageNDegrees</h3>
+<code class="signature">public  <a href="../phpthumb/gdthumb.html">GdThumb</a> <strong>rotateImageNDegrees</strong>(int degrees)</code>
+<div class="details">
+<p>Rotates image specified number of degrees</p></div></div>
+
+
+
+<div class='method'><a href="../source/application/libraries/thumb/gdthumb.inc.php.html#line635" class="location">application/libraries/thumb/GdThumb.inc.php at line 635</a>
+
+<h3 id="save()">save</h3>
+<code class="signature">public  <a href="../phpthumb/gdthumb.html">GdThumb</a> <strong>save</strong>(string fileName, string format)</code>
+<div class="details">
+<p>Saves an image</p><p>This function will make sure the target directory is writeable, and then save the image.</p><p>If the target directory is not writeable, the function will try to correct the permissions (if allowed, this
+is set as an option ($this->options['correctPermissions']).  If the target cannot be made writeable, then a
+RuntimeException is thrown.</p><p>TODO: Create additional paramter for color matte when saving images with alpha to non-alpha formats (i.e. PNG => JPG)</p><dl>
+<dt>Parameters:</dt>
+<dd>fileName - The full path and filename of the image to save</dd>
+<dd>format - The format to save the image in (optional, must be one of [GIF,JPG,PNG]</dd>
+</dl>
+</div></div>
+
+
+
+<div class='method'><a href="../source/application/libraries/thumb/gdthumb.inc.php.html#line744" class="location">application/libraries/thumb/GdThumb.inc.php at line 744</a>
+
+<h3 id="setCurrentDimensions()">setCurrentDimensions</h3>
+<code class="signature">public  void <strong>setCurrentDimensions</strong>(object currentDimensions)</code>
+<div class="details">
+<p>Sets $currentDimensions.</p><dl>
+<dt>See Also:</dt>
+<dd><a href="../phpthumb/gdthumb.html#currentDimensions">GdThumb::$currentDimensions</a></dd>
+</dl>
+</div></div>
+
+
+
+<div class='method'><a href="../source/application/libraries/thumb/gdthumb.inc.php.html#line765" class="location">application/libraries/thumb/GdThumb.inc.php at line 765</a>
+
+<h3 id="setMaxHeight()">setMaxHeight</h3>
+<code class="signature">public  void <strong>setMaxHeight</strong>(object maxHeight)</code>
+<div class="details">
+<p>Sets $maxHeight.</p><dl>
+<dt>See Also:</dt>
+<dd><a href="../phpthumb/gdthumb.html#maxHeight">GdThumb::$maxHeight</a></dd>
+</dl>
+</div></div>
+
+
+
+<div class='method'><a href="../source/application/libraries/thumb/gdthumb.inc.php.html#line786" class="location">application/libraries/thumb/GdThumb.inc.php at line 786</a>
+
+<h3 id="setMaxWidth()">setMaxWidth</h3>
+<code class="signature">public  void <strong>setMaxWidth</strong>(object maxWidth)</code>
+<div class="details">
+<p>Sets $maxWidth.</p><dl>
+<dt>See Also:</dt>
+<dd><a href="../phpthumb/gdthumb.html#maxWidth">GdThumb::$maxWidth</a></dd>
+</dl>
+</div></div>
+
+
+
+<div class='method'><a href="../source/application/libraries/thumb/gdthumb.inc.php.html#line807" class="location">application/libraries/thumb/GdThumb.inc.php at line 807</a>
+
+<h3 id="setNewDimensions()">setNewDimensions</h3>
+<code class="signature">public  void <strong>setNewDimensions</strong>(object newDimensions)</code>
+<div class="details">
+<p>Sets $newDimensions.</p><dl>
+<dt>See Also:</dt>
+<dd><a href="../phpthumb/gdthumb.html#newDimensions">GdThumb::$newDimensions</a></dd>
+</dl>
+</div></div>
+
+
+
+<div class='method'><a href="../source/application/libraries/thumb/gdthumb.inc.php.html#line859" class="location">application/libraries/thumb/GdThumb.inc.php at line 859</a>
+
+<h3 id="setOldImage()">setOldImage</h3>
+<code class="signature">public  void <strong>setOldImage</strong>(object oldImage)</code>
+<div class="details">
+<p>Sets $oldImage.</p><dl>
+<dt>See Also:</dt>
+<dd>GdThumb::$oldImage</dd>
+</dl>
+</div></div>
+
+
+
+<div class='method'><a href="../source/application/libraries/thumb/gdthumb.inc.php.html#line691" class="location">application/libraries/thumb/GdThumb.inc.php at line 691</a>
+
+<h3 id="setOptions()">setOptions</h3>
+<code class="signature">public  void <strong>setOptions</strong>(array options)</code>
+<div class="details">
+<p>Sets $this->options to $options</p></div></div>
+
+
+
+<div class='method'><a href="../source/application/libraries/thumb/gdthumb.inc.php.html#line838" class="location">application/libraries/thumb/GdThumb.inc.php at line 838</a>
+
+<h3 id="setPercent()">setPercent</h3>
+<code class="signature">public  void <strong>setPercent</strong>(object percent)</code>
+<div class="details">
+<p>Sets $percent.</p><dl>
+<dt>See Also:</dt>
+<dd><a href="../phpthumb/gdthumb.html#percent">GdThumb::$percent</a></dd>
+</dl>
+</div></div>
+
+
+
+<div class='method'><a href="../source/application/libraries/thumb/gdthumb.inc.php.html#line880" class="location">application/libraries/thumb/GdThumb.inc.php at line 880</a>
+
+<h3 id="setWorkingImage()">setWorkingImage</h3>
+<code class="signature">public  void <strong>setWorkingImage</strong>(object workingImage)</code>
+<div class="details">
+<p>Sets $workingImage.</p><dl>
+<dt>See Also:</dt>
+<dd><a href="../phpthumb/gdthumb.html#workingImage">GdThumb::$workingImage</a></dd>
+</dl>
+</div></div>
+
+
+
+<div class='method'><a href="../source/application/libraries/thumb/gdthumb.inc.php.html#line565" class="location">application/libraries/thumb/GdThumb.inc.php at line 565</a>
+
+<h3 id="show()">show</h3>
+<code class="signature">public  <a href="../phpthumb/gdthumb.html">GdThumb</a> <strong>show</strong>(bool rawData)</code>
+<div class="details">
+<p>Shows an image</p><p>This function will show the current image by first sending the appropriate header
+for the format, and then outputting the image data. If headers have already been sent, 
+a runtime exception will be thrown</p><dl>
+<dt>Parameters:</dt>
+<dd>rawData - Whether or not the raw image stream should be output</dd>
+</dl>
+</div></div>
+
+
+
+<div class='method'><a href="../source/application/libraries/thumb/gdthumb.inc.php.html#line1110" class="location">application/libraries/thumb/GdThumb.inc.php at line 1110</a>
+
+<h3 id="verifyFormatCompatiblity()">verifyFormatCompatiblity</h3>
+<code class="signature">protected  void <strong>verifyFormatCompatiblity</strong>()</code>
+<div class="details">
+<p>Makes sure the correct GD implementation exists for the file type</p></div></div>
+
+
+
+</div><div class="header">
+<h1>GiftFlow API</h1>
+<ul>
+<li><a href="../overview-summary.html">Overview</a></li>
+<li><a href="../phpthumb/package-summary.html">Package</a></li>
+<li class="active">Class</li>
+<li><a href="../phpthumb/package-tree.html">Tree</a></li>
+<li><a href="../overview-files.html">Files</a></li>
+<li><a href="../deprecated-list.html">Deprecated</a></li>
+<li><a href="../index-all.html">Index</a></li>
+</ul>
+</div>
+
+<div class="small_links">
+<a href="../index.html" target="_top">Frames</a>
+<a href="../phpthumb/gdthumb.html" target="_top">No frames</a>
+</div>
+<div class="small_links">
+Summary: <a href="#summary_field">Field</a> | <a href="#summary_method">Method</a> | <a href="#summary_constr">Constr</a>
+Detail: <a href="#detail_field">Field</a> | <a href="#detail_method">Method</a> | <a href="#summary_constr">Constr</a>
+</div>
+<hr>
+
+<p id="footer">This document was generated by <a href="http://peej.github.com/phpdoctor/">PHPDoctor: The PHP Documentation Creator</a></p>
+
+</body>
+
+</html>

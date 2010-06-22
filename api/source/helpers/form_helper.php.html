@@ -1,0 +1,1085 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+
+<html lang="en">
+<head>
+
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
+<meta name="generator" content="PHPDoctor 2RC4 (http://peej.github.com/phpdoctor/)">
+<meta name="when" content="Sun, 20 Jun 2010 17:43:51 +0000">
+
+<link rel="stylesheet" type="text/css" href="../../stylesheet.css">
+<link rel="start" href="../../overview-summary.html">
+
+<title>helpers/form_helper.php (GiftFlow API)</title>
+
+</head>
+<body id="file" onload="parent.document.title=document.title;">
+
+<div class="header">
+<h1>GiftFlow API</h1>
+<ul>
+<li><a href="../../overview-summary.html">Overview</a></li>
+<li>Package</li><li>Class</li><li>Tree</li><li><a href="../../overview-files.html">Files</a></li>
+<li><a href="../../deprecated-list.html">Deprecated</a></li>
+<li><a href="../../index-all.html">Index</a></li>
+</ul>
+</div>
+
+<div class="small_links">
+<a href="../../index.html" target="_top">Frames</a>
+<a href="../../source/helpers/form_helper.php.html" target="_top">No frames</a>
+</div>
+<hr>
+
+<h1>helpers/form_helper.php</h1>
+<div class="comment" id="overview_description"><p>CodeIgniter</p><p>An open source application development framework for PHP 4.3.2 or newer</p></div>
+
+<hr>
+
+<a name="line1"></a><pre><?php  if ( ! defined('BASEPATH')) exit('No direct script access allowed');
+<a name="line2"></a>/**
+<a name="line3"></a> * CodeIgniter
+<a name="line4"></a> *
+<a name="line5"></a> * An open source application development framework for PHP 4.3.2 or newer
+<a name="line6"></a> *
+<a name="line7"></a> * @package		CodeIgniter
+<a name="line8"></a> * @author		ExpressionEngine Dev Team
+<a name="line9"></a> * @copyright	Copyright (c) 2008 - 2009, EllisLab, Inc.
+<a name="line10"></a> * @license		http://codeigniter.com/user_guide/license.html
+<a name="line11"></a> * @link		http://codeigniter.com
+<a name="line12"></a> * @since		Version 1.0
+<a name="line13"></a> * @filesource
+<a name="line14"></a> */
+<a name="line15"></a>
+<a name="line16"></a>// ------------------------------------------------------------------------
+<a name="line17"></a>
+<a name="line18"></a>/**
+<a name="line19"></a> * CodeIgniter Form Helpers
+<a name="line20"></a> *
+<a name="line21"></a> * @package		CodeIgniter
+<a name="line22"></a> * @subpackage	Helpers
+<a name="line23"></a> * @category	Helpers
+<a name="line24"></a> * @author		ExpressionEngine Dev Team
+<a name="line25"></a> * @link		http://codeigniter.com/user_guide/helpers/form_helper.html
+<a name="line26"></a> */
+<a name="line27"></a>
+<a name="line28"></a>// ------------------------------------------------------------------------
+<a name="line29"></a>
+<a name="line30"></a>/**
+<a name="line31"></a> * Form Declaration
+<a name="line32"></a> *
+<a name="line33"></a> * Creates the opening portion of the form.
+<a name="line34"></a> *
+<a name="line35"></a> * @access	public
+<a name="line36"></a> * @param	string	the URI segments of the form destination
+<a name="line37"></a> * @param	array	a key/value pair of attributes
+<a name="line38"></a> * @param	array	a key/value pair hidden data
+<a name="line39"></a> * @return	string
+<a name="line40"></a> */	
+<a name="line41"></a>if ( ! function_exists('form_open'))
+<a name="line42"></a>{
+<a name="line43"></a>	function form_open($action = '', $attributes = '', $hidden = array())
+<a name="line44"></a>	{
+<a name="line45"></a>		$CI =& get_instance();
+<a name="line46"></a>
+<a name="line47"></a>		if ($attributes == '')
+<a name="line48"></a>		{
+<a name="line49"></a>			$attributes = 'method="post"';
+<a name="line50"></a>		}
+<a name="line51"></a>
+<a name="line52"></a>		$action = ( strpos($action, '://') === FALSE) ? $CI->config->site_url($action) : $action;
+<a name="line53"></a>
+<a name="line54"></a>		$form = '<form action="'.$action.'"';
+<a name="line55"></a>	
+<a name="line56"></a>		$form .= _attributes_to_string($attributes, TRUE);
+<a name="line57"></a>	
+<a name="line58"></a>		$form .= '>';
+<a name="line59"></a>
+<a name="line60"></a>		if (is_array($hidden) AND count($hidden) > 0)
+<a name="line61"></a>		{
+<a name="line62"></a>			$form .= form_hidden($hidden);
+<a name="line63"></a>		}
+<a name="line64"></a>
+<a name="line65"></a>		return $form;
+<a name="line66"></a>	}
+<a name="line67"></a>}
+<a name="line68"></a>
+<a name="line69"></a>// ------------------------------------------------------------------------
+<a name="line70"></a>
+<a name="line71"></a>/**
+<a name="line72"></a> * Form Declaration - Multipart type
+<a name="line73"></a> *
+<a name="line74"></a> * Creates the opening portion of the form, but with "multipart/form-data".
+<a name="line75"></a> *
+<a name="line76"></a> * @access	public
+<a name="line77"></a> * @param	string	the URI segments of the form destination
+<a name="line78"></a> * @param	array	a key/value pair of attributes
+<a name="line79"></a> * @param	array	a key/value pair hidden data
+<a name="line80"></a> * @return	string
+<a name="line81"></a> */
+<a name="line82"></a>if ( ! function_exists('form_open_multipart'))
+<a name="line83"></a>{
+<a name="line84"></a>	function form_open_multipart($action, $attributes = array(), $hidden = array())
+<a name="line85"></a>	{
+<a name="line86"></a>		$attributes['enctype'] = 'multipart/form-data';
+<a name="line87"></a>		return form_open($action, $attributes, $hidden);
+<a name="line88"></a>	}
+<a name="line89"></a>}
+<a name="line90"></a>
+<a name="line91"></a>// ------------------------------------------------------------------------
+<a name="line92"></a>
+<a name="line93"></a>/**
+<a name="line94"></a> * Hidden Input Field
+<a name="line95"></a> *
+<a name="line96"></a> * Generates hidden fields.  You can pass a simple key/value string or an associative
+<a name="line97"></a> * array with multiple values.
+<a name="line98"></a> *
+<a name="line99"></a> * @access	public
+<a name="line100"></a> * @param	mixed
+<a name="line101"></a> * @param	string
+<a name="line102"></a> * @return	string
+<a name="line103"></a> */
+<a name="line104"></a>if ( ! function_exists('form_hidden'))
+<a name="line105"></a>{
+<a name="line106"></a>	function form_hidden($name, $value = '', $recursing = FALSE)
+<a name="line107"></a>	{
+<a name="line108"></a>		static $form;
+<a name="line109"></a>
+<a name="line110"></a>		if ($recursing === FALSE)
+<a name="line111"></a>		{
+<a name="line112"></a>			$form = "\n";
+<a name="line113"></a>		}
+<a name="line114"></a>
+<a name="line115"></a>		if (is_array($name))
+<a name="line116"></a>		{
+<a name="line117"></a>			foreach ($name as $key => $val)
+<a name="line118"></a>			{
+<a name="line119"></a>				form_hidden($key, $val, TRUE);
+<a name="line120"></a>			}
+<a name="line121"></a>			return $form;
+<a name="line122"></a>		}
+<a name="line123"></a>
+<a name="line124"></a>		if ( ! is_array($value))
+<a name="line125"></a>		{
+<a name="line126"></a>			$form .= '<input type="hidden" name="'.$name.'" value="'.form_prep($value, $name).'" />'."\n";
+<a name="line127"></a>		}
+<a name="line128"></a>		else
+<a name="line129"></a>		{
+<a name="line130"></a>			foreach ($value as $k => $v)
+<a name="line131"></a>			{
+<a name="line132"></a>				$k = (is_int($k)) ? '' : $k; 
+<a name="line133"></a>				form_hidden($name.'['.$k.']', $v, TRUE);
+<a name="line134"></a>			}
+<a name="line135"></a>		}
+<a name="line136"></a>
+<a name="line137"></a>		return $form;
+<a name="line138"></a>	}
+<a name="line139"></a>}
+<a name="line140"></a>
+<a name="line141"></a>// ------------------------------------------------------------------------
+<a name="line142"></a>
+<a name="line143"></a>/**
+<a name="line144"></a> * Text Input Field
+<a name="line145"></a> *
+<a name="line146"></a> * @access	public
+<a name="line147"></a> * @param	mixed
+<a name="line148"></a> * @param	string
+<a name="line149"></a> * @param	string
+<a name="line150"></a> * @return	string
+<a name="line151"></a> */
+<a name="line152"></a>if ( ! function_exists('form_input'))
+<a name="line153"></a>{
+<a name="line154"></a>	function form_input($data = '', $value = '', $extra = '')
+<a name="line155"></a>	{
+<a name="line156"></a>		$defaults = array('type' => 'text', 'name' => (( ! is_array($data)) ? $data : ''), 'value' => $value);
+<a name="line157"></a>
+<a name="line158"></a>		return "<input "._parse_form_attributes($data, $defaults).$extra." />";
+<a name="line159"></a>	}
+<a name="line160"></a>}
+<a name="line161"></a>
+<a name="line162"></a>// ------------------------------------------------------------------------
+<a name="line163"></a>
+<a name="line164"></a>/**
+<a name="line165"></a> * Password Field
+<a name="line166"></a> *
+<a name="line167"></a> * Identical to the input function but adds the "password" type
+<a name="line168"></a> *
+<a name="line169"></a> * @access	public
+<a name="line170"></a> * @param	mixed
+<a name="line171"></a> * @param	string
+<a name="line172"></a> * @param	string
+<a name="line173"></a> * @return	string
+<a name="line174"></a> */
+<a name="line175"></a>if ( ! function_exists('form_password'))
+<a name="line176"></a>{
+<a name="line177"></a>	function form_password($data = '', $value = '', $extra = '')
+<a name="line178"></a>	{
+<a name="line179"></a>		if ( ! is_array($data))
+<a name="line180"></a>		{
+<a name="line181"></a>			$data = array('name' => $data);
+<a name="line182"></a>		}
+<a name="line183"></a>
+<a name="line184"></a>		$data['type'] = 'password';
+<a name="line185"></a>		return form_input($data, $value, $extra);
+<a name="line186"></a>	}
+<a name="line187"></a>}
+<a name="line188"></a>
+<a name="line189"></a>// ------------------------------------------------------------------------
+<a name="line190"></a>
+<a name="line191"></a>/**
+<a name="line192"></a> * Upload Field
+<a name="line193"></a> *
+<a name="line194"></a> * Identical to the input function but adds the "file" type
+<a name="line195"></a> *
+<a name="line196"></a> * @access	public
+<a name="line197"></a> * @param	mixed
+<a name="line198"></a> * @param	string
+<a name="line199"></a> * @param	string
+<a name="line200"></a> * @return	string
+<a name="line201"></a> */
+<a name="line202"></a>if ( ! function_exists('form_upload'))
+<a name="line203"></a>{
+<a name="line204"></a>	function form_upload($data = '', $value = '', $extra = '')
+<a name="line205"></a>	{
+<a name="line206"></a>		if ( ! is_array($data))
+<a name="line207"></a>		{
+<a name="line208"></a>			$data = array('name' => $data);
+<a name="line209"></a>		}
+<a name="line210"></a>
+<a name="line211"></a>		$data['type'] = 'file';
+<a name="line212"></a>		return form_input($data, $value, $extra);
+<a name="line213"></a>	}
+<a name="line214"></a>}
+<a name="line215"></a>
+<a name="line216"></a>// ------------------------------------------------------------------------
+<a name="line217"></a>
+<a name="line218"></a>/**
+<a name="line219"></a> * Textarea field
+<a name="line220"></a> *
+<a name="line221"></a> * @access	public
+<a name="line222"></a> * @param	mixed
+<a name="line223"></a> * @param	string
+<a name="line224"></a> * @param	string
+<a name="line225"></a> * @return	string
+<a name="line226"></a> */
+<a name="line227"></a>if ( ! function_exists('form_textarea'))
+<a name="line228"></a>{
+<a name="line229"></a>	function form_textarea($data = '', $value = '', $extra = '')
+<a name="line230"></a>	{
+<a name="line231"></a>		$defaults = array('name' => (( ! is_array($data)) ? $data : ''), 'cols' => '90', 'rows' => '12');
+<a name="line232"></a>
+<a name="line233"></a>		if ( ! is_array($data) OR ! isset($data['value']))
+<a name="line234"></a>		{
+<a name="line235"></a>			$val = $value;
+<a name="line236"></a>		}
+<a name="line237"></a>		else
+<a name="line238"></a>		{
+<a name="line239"></a>			$val = $data['value']; 
+<a name="line240"></a>			unset($data['value']); // textareas don't use the value attribute
+<a name="line241"></a>		}
+<a name="line242"></a>		
+<a name="line243"></a>		$name = (is_array($data)) ? $data['name'] : $data;
+<a name="line244"></a>		return "<textarea "._parse_form_attributes($data, $defaults).$extra.">".form_prep($val, $name)."</textarea>";
+<a name="line245"></a>	}
+<a name="line246"></a>}
+<a name="line247"></a>
+<a name="line248"></a>// ------------------------------------------------------------------------
+<a name="line249"></a>
+<a name="line250"></a>/**
+<a name="line251"></a> * Multi-select menu
+<a name="line252"></a> *
+<a name="line253"></a> * @access	public
+<a name="line254"></a> * @param	string
+<a name="line255"></a> * @param	array
+<a name="line256"></a> * @param	mixed
+<a name="line257"></a> * @param	string
+<a name="line258"></a> * @return	type
+<a name="line259"></a> */
+<a name="line260"></a>if (! function_exists('form_multiselect'))
+<a name="line261"></a>{
+<a name="line262"></a>	function form_multiselect($name = '', $options = array(), $selected = array(), $extra = '')
+<a name="line263"></a>	{
+<a name="line264"></a>		if ( ! strpos($extra, 'multiple'))
+<a name="line265"></a>		{
+<a name="line266"></a>			$extra .= ' multiple="multiple"';
+<a name="line267"></a>		}
+<a name="line268"></a>		
+<a name="line269"></a>		return form_dropdown($name, $options, $selected, $extra);
+<a name="line270"></a>	}
+<a name="line271"></a>}
+<a name="line272"></a>
+<a name="line273"></a>// --------------------------------------------------------------------
+<a name="line274"></a>
+<a name="line275"></a>/**
+<a name="line276"></a> * Drop-down Menu
+<a name="line277"></a> *
+<a name="line278"></a> * @access	public
+<a name="line279"></a> * @param	string
+<a name="line280"></a> * @param	array
+<a name="line281"></a> * @param	string
+<a name="line282"></a> * @param	string
+<a name="line283"></a> * @return	string
+<a name="line284"></a> */
+<a name="line285"></a>if ( ! function_exists('form_dropdown'))
+<a name="line286"></a>{
+<a name="line287"></a>	function form_dropdown($name = '', $options = array(), $selected = array(), $extra = '')
+<a name="line288"></a>	{
+<a name="line289"></a>		if ( ! is_array($selected))
+<a name="line290"></a>		{
+<a name="line291"></a>			$selected = array($selected);
+<a name="line292"></a>		}
+<a name="line293"></a>
+<a name="line294"></a>		// If no selected state was submitted we will attempt to set it automatically
+<a name="line295"></a>		if (count($selected) === 0)
+<a name="line296"></a>		{
+<a name="line297"></a>			// If the form name appears in the $_POST array we have a winner!
+<a name="line298"></a>			if (isset($_POST[$name]))
+<a name="line299"></a>			{
+<a name="line300"></a>				$selected = array($_POST[$name]);
+<a name="line301"></a>			}
+<a name="line302"></a>		}
+<a name="line303"></a>
+<a name="line304"></a>		if ($extra != '') $extra = ' '.$extra;
+<a name="line305"></a>
+<a name="line306"></a>		$multiple = (count($selected) > 1 && strpos($extra, 'multiple') === FALSE) ? ' multiple="multiple"' : '';
+<a name="line307"></a>
+<a name="line308"></a>		$form = '<select name="'.$name.'"'.$extra.$multiple.">\n";
+<a name="line309"></a>
+<a name="line310"></a>		foreach ($options as $key => $val)
+<a name="line311"></a>		{
+<a name="line312"></a>			$key = (string) $key;
+<a name="line313"></a>
+<a name="line314"></a>			if (is_array($val))
+<a name="line315"></a>			{
+<a name="line316"></a>				$form .= '<optgroup label="'.$key.'">'."\n";
+<a name="line317"></a>
+<a name="line318"></a>				foreach ($val as $optgroup_key => $optgroup_val)
+<a name="line319"></a>				{
+<a name="line320"></a>					$sel = (in_array($optgroup_key, $selected)) ? ' selected="selected"' : '';
+<a name="line321"></a>
+<a name="line322"></a>					$form .= '<option value="'.$optgroup_key.'"'.$sel.'>'.(string) $optgroup_val."</option>\n";
+<a name="line323"></a>				}
+<a name="line324"></a>
+<a name="line325"></a>				$form .= '</optgroup>'."\n";
+<a name="line326"></a>			}
+<a name="line327"></a>			else
+<a name="line328"></a>			{
+<a name="line329"></a>				$sel = (in_array($key, $selected)) ? ' selected="selected"' : '';
+<a name="line330"></a>
+<a name="line331"></a>				$form .= '<option value="'.$key.'"'.$sel.'>'.(string) $val."</option>\n";
+<a name="line332"></a>			}
+<a name="line333"></a>		}
+<a name="line334"></a>
+<a name="line335"></a>		$form .= '</select>';
+<a name="line336"></a>
+<a name="line337"></a>		return $form;
+<a name="line338"></a>	}
+<a name="line339"></a>}
+<a name="line340"></a>
+<a name="line341"></a>// ------------------------------------------------------------------------
+<a name="line342"></a>
+<a name="line343"></a>/**
+<a name="line344"></a> * Checkbox Field
+<a name="line345"></a> *
+<a name="line346"></a> * @access	public
+<a name="line347"></a> * @param	mixed
+<a name="line348"></a> * @param	string
+<a name="line349"></a> * @param	bool
+<a name="line350"></a> * @param	string
+<a name="line351"></a> * @return	string
+<a name="line352"></a> */
+<a name="line353"></a>if ( ! function_exists('form_checkbox'))
+<a name="line354"></a>{
+<a name="line355"></a>	function form_checkbox($data = '', $value = '', $checked = FALSE, $extra = '')
+<a name="line356"></a>	{
+<a name="line357"></a>		$defaults = array('type' => 'checkbox', 'name' => (( ! is_array($data)) ? $data : ''), 'value' => $value);
+<a name="line358"></a>
+<a name="line359"></a>		if (is_array($data) AND array_key_exists('checked', $data))
+<a name="line360"></a>		{
+<a name="line361"></a>			$checked = $data['checked'];
+<a name="line362"></a>
+<a name="line363"></a>			if ($checked == FALSE)
+<a name="line364"></a>			{
+<a name="line365"></a>				unset($data['checked']);
+<a name="line366"></a>			}
+<a name="line367"></a>			else
+<a name="line368"></a>			{
+<a name="line369"></a>				$data['checked'] = 'checked';
+<a name="line370"></a>			}
+<a name="line371"></a>		}
+<a name="line372"></a>
+<a name="line373"></a>		if ($checked == TRUE)
+<a name="line374"></a>		{
+<a name="line375"></a>			$defaults['checked'] = 'checked';
+<a name="line376"></a>		}
+<a name="line377"></a>		else
+<a name="line378"></a>		{
+<a name="line379"></a>			unset($defaults['checked']);
+<a name="line380"></a>		}
+<a name="line381"></a>
+<a name="line382"></a>		return "<input "._parse_form_attributes($data, $defaults).$extra." />";
+<a name="line383"></a>	}
+<a name="line384"></a>}
+<a name="line385"></a>
+<a name="line386"></a>// ------------------------------------------------------------------------
+<a name="line387"></a>
+<a name="line388"></a>/**
+<a name="line389"></a> * Radio Button
+<a name="line390"></a> *
+<a name="line391"></a> * @access	public
+<a name="line392"></a> * @param	mixed
+<a name="line393"></a> * @param	string
+<a name="line394"></a> * @param	bool
+<a name="line395"></a> * @param	string
+<a name="line396"></a> * @return	string
+<a name="line397"></a> */
+<a name="line398"></a>if ( ! function_exists('form_radio'))
+<a name="line399"></a>{
+<a name="line400"></a>	function form_radio($data = '', $value = '', $checked = FALSE, $extra = '')
+<a name="line401"></a>	{
+<a name="line402"></a>		if ( ! is_array($data))
+<a name="line403"></a>		{	
+<a name="line404"></a>			$data = array('name' => $data);
+<a name="line405"></a>		}
+<a name="line406"></a>
+<a name="line407"></a>		$data['type'] = 'radio';
+<a name="line408"></a>		return form_checkbox($data, $value, $checked, $extra);
+<a name="line409"></a>	}
+<a name="line410"></a>}
+<a name="line411"></a>
+<a name="line412"></a>// ------------------------------------------------------------------------
+<a name="line413"></a>
+<a name="line414"></a>/**
+<a name="line415"></a> * Submit Button
+<a name="line416"></a> *
+<a name="line417"></a> * @access	public
+<a name="line418"></a> * @param	mixed
+<a name="line419"></a> * @param	string
+<a name="line420"></a> * @param	string
+<a name="line421"></a> * @return	string
+<a name="line422"></a> */
+<a name="line423"></a>if ( ! function_exists('form_submit'))
+<a name="line424"></a>{	
+<a name="line425"></a>	function form_submit($data = '', $value = '', $extra = '')
+<a name="line426"></a>	{
+<a name="line427"></a>		$defaults = array('type' => 'submit', 'name' => (( ! is_array($data)) ? $data : ''), 'value' => $value);
+<a name="line428"></a>
+<a name="line429"></a>		return "<input "._parse_form_attributes($data, $defaults).$extra." />";
+<a name="line430"></a>	}
+<a name="line431"></a>}
+<a name="line432"></a>
+<a name="line433"></a>// ------------------------------------------------------------------------
+<a name="line434"></a>
+<a name="line435"></a>/**
+<a name="line436"></a> * Reset Button
+<a name="line437"></a> *
+<a name="line438"></a> * @access	public
+<a name="line439"></a> * @param	mixed
+<a name="line440"></a> * @param	string
+<a name="line441"></a> * @param	string
+<a name="line442"></a> * @return	string
+<a name="line443"></a> */
+<a name="line444"></a>if ( ! function_exists('form_reset'))
+<a name="line445"></a>{
+<a name="line446"></a>	function form_reset($data = '', $value = '', $extra = '')
+<a name="line447"></a>	{
+<a name="line448"></a>		$defaults = array('type' => 'reset', 'name' => (( ! is_array($data)) ? $data : ''), 'value' => $value);
+<a name="line449"></a>
+<a name="line450"></a>		return "<input "._parse_form_attributes($data, $defaults).$extra." />";
+<a name="line451"></a>	}
+<a name="line452"></a>}
+<a name="line453"></a>
+<a name="line454"></a>// ------------------------------------------------------------------------
+<a name="line455"></a>
+<a name="line456"></a>/**
+<a name="line457"></a> * Form Button
+<a name="line458"></a> *
+<a name="line459"></a> * @access	public
+<a name="line460"></a> * @param	mixed
+<a name="line461"></a> * @param	string
+<a name="line462"></a> * @param	string
+<a name="line463"></a> * @return	string
+<a name="line464"></a> */
+<a name="line465"></a>if ( ! function_exists('form_button'))
+<a name="line466"></a>{
+<a name="line467"></a>	function form_button($data = '', $content = '', $extra = '')
+<a name="line468"></a>	{
+<a name="line469"></a>		$defaults = array('name' => (( ! is_array($data)) ? $data : ''), 'type' => 'button');
+<a name="line470"></a>
+<a name="line471"></a>		if ( is_array($data) AND isset($data['content']))
+<a name="line472"></a>		{
+<a name="line473"></a>			$content = $data['content'];
+<a name="line474"></a>			unset($data['content']); // content is not an attribute
+<a name="line475"></a>		}
+<a name="line476"></a>
+<a name="line477"></a>		return "<button "._parse_form_attributes($data, $defaults).$extra.">".$content."</button>";
+<a name="line478"></a>	}
+<a name="line479"></a>}
+<a name="line480"></a>
+<a name="line481"></a>// ------------------------------------------------------------------------
+<a name="line482"></a>
+<a name="line483"></a>/**
+<a name="line484"></a> * Form Label Tag
+<a name="line485"></a> *
+<a name="line486"></a> * @access	public
+<a name="line487"></a> * @param	string	The text to appear onscreen
+<a name="line488"></a> * @param	string	The id the label applies to
+<a name="line489"></a> * @param	string	Additional attributes
+<a name="line490"></a> * @return	string
+<a name="line491"></a> */
+<a name="line492"></a>if ( ! function_exists('form_label'))
+<a name="line493"></a>{
+<a name="line494"></a>	function form_label($label_text = '', $id = '', $attributes = array())
+<a name="line495"></a>	{
+<a name="line496"></a>
+<a name="line497"></a>		$label = '<label';
+<a name="line498"></a>
+<a name="line499"></a>		if ($id != '')
+<a name="line500"></a>		{
+<a name="line501"></a>			 $label .= " for=\"$id\"";
+<a name="line502"></a>		}
+<a name="line503"></a>
+<a name="line504"></a>		if (is_array($attributes) AND count($attributes) > 0)
+<a name="line505"></a>		{
+<a name="line506"></a>			foreach ($attributes as $key => $val)
+<a name="line507"></a>			{
+<a name="line508"></a>				$label .= ' '.$key.'="'.$val.'"';
+<a name="line509"></a>			}
+<a name="line510"></a>		}
+<a name="line511"></a>
+<a name="line512"></a>		$label .= ">$label_text</label>";
+<a name="line513"></a>
+<a name="line514"></a>		return $label;
+<a name="line515"></a>	}
+<a name="line516"></a>}
+<a name="line517"></a>
+<a name="line518"></a>// ------------------------------------------------------------------------
+<a name="line519"></a>/**
+<a name="line520"></a> * Fieldset Tag
+<a name="line521"></a> *
+<a name="line522"></a> * Used to produce <fieldset><legend>text</legend>.  To close fieldset
+<a name="line523"></a> * use form_fieldset_close()
+<a name="line524"></a> *
+<a name="line525"></a> * @access	public
+<a name="line526"></a> * @param	string	The legend text
+<a name="line527"></a> * @param	string	Additional attributes
+<a name="line528"></a> * @return	string
+<a name="line529"></a> */
+<a name="line530"></a>if ( ! function_exists('form_fieldset'))
+<a name="line531"></a>{
+<a name="line532"></a>	function form_fieldset($legend_text = '', $attributes = array())
+<a name="line533"></a>	{
+<a name="line534"></a>		$fieldset = "<fieldset";
+<a name="line535"></a>
+<a name="line536"></a>		$fieldset .= _attributes_to_string($attributes, FALSE);
+<a name="line537"></a>
+<a name="line538"></a>		$fieldset .= ">\n";
+<a name="line539"></a>
+<a name="line540"></a>		if ($legend_text != '')
+<a name="line541"></a>		{
+<a name="line542"></a>			$fieldset .= "<legend>$legend_text</legend>\n";
+<a name="line543"></a>		}
+<a name="line544"></a>
+<a name="line545"></a>		return $fieldset;
+<a name="line546"></a>	}
+<a name="line547"></a>}
+<a name="line548"></a>
+<a name="line549"></a>// ------------------------------------------------------------------------
+<a name="line550"></a>
+<a name="line551"></a>/**
+<a name="line552"></a> * Fieldset Close Tag
+<a name="line553"></a> *
+<a name="line554"></a> * @access	public
+<a name="line555"></a> * @param	string
+<a name="line556"></a> * @return	string
+<a name="line557"></a> */
+<a name="line558"></a>if ( ! function_exists('form_fieldset_close'))
+<a name="line559"></a>{
+<a name="line560"></a>	function form_fieldset_close($extra = '')
+<a name="line561"></a>	{
+<a name="line562"></a>		return "</fieldset>".$extra;
+<a name="line563"></a>	}
+<a name="line564"></a>}
+<a name="line565"></a>
+<a name="line566"></a>// ------------------------------------------------------------------------
+<a name="line567"></a>
+<a name="line568"></a>/**
+<a name="line569"></a> * Form Close Tag
+<a name="line570"></a> *
+<a name="line571"></a> * @access	public
+<a name="line572"></a> * @param	string
+<a name="line573"></a> * @return	string
+<a name="line574"></a> */
+<a name="line575"></a>if ( ! function_exists('form_close'))
+<a name="line576"></a>{
+<a name="line577"></a>	function form_close($extra = '')
+<a name="line578"></a>	{
+<a name="line579"></a>		return "</form>".$extra;
+<a name="line580"></a>	}
+<a name="line581"></a>}
+<a name="line582"></a>
+<a name="line583"></a>// ------------------------------------------------------------------------
+<a name="line584"></a>
+<a name="line585"></a>/**
+<a name="line586"></a> * Form Prep
+<a name="line587"></a> *
+<a name="line588"></a> * Formats text so that it can be safely placed in a form field in the event it has HTML tags.
+<a name="line589"></a> *
+<a name="line590"></a> * @access	public
+<a name="line591"></a> * @param	string
+<a name="line592"></a> * @return	string
+<a name="line593"></a> */
+<a name="line594"></a>if ( ! function_exists('form_prep'))
+<a name="line595"></a>{
+<a name="line596"></a>	function form_prep($str = '', $field_name = '')
+<a name="line597"></a>	{
+<a name="line598"></a>		static $prepped_fields = array();
+<a name="line599"></a>		
+<a name="line600"></a>		// if the field name is an array we do this recursively
+<a name="line601"></a>		if (is_array($str))
+<a name="line602"></a>		{
+<a name="line603"></a>			foreach ($str as $key => $val)
+<a name="line604"></a>			{
+<a name="line605"></a>				$str[$key] = form_prep($val);
+<a name="line606"></a>			}
+<a name="line607"></a>
+<a name="line608"></a>			return $str;
+<a name="line609"></a>		}
+<a name="line610"></a>
+<a name="line611"></a>		if ($str === '')
+<a name="line612"></a>		{
+<a name="line613"></a>			return '';
+<a name="line614"></a>		}
+<a name="line615"></a>
+<a name="line616"></a>		// we've already prepped a field with this name
+<a name="line617"></a>		// @todo need to figure out a way to namespace this so
+<a name="line618"></a>		// that we know the *exact* field and not just one with
+<a name="line619"></a>		// the same name
+<a name="line620"></a>		if (isset($prepped_fields[$field_name]))
+<a name="line621"></a>		{
+<a name="line622"></a>			return $str;
+<a name="line623"></a>		}
+<a name="line624"></a>		
+<a name="line625"></a>		$str = htmlspecialchars($str);
+<a name="line626"></a>
+<a name="line627"></a>		// In case htmlspecialchars misses these.
+<a name="line628"></a>		$str = str_replace(array("'", '"'), array("&#39;", "&quot;"), $str);
+<a name="line629"></a>
+<a name="line630"></a>		if ($field_name != '')
+<a name="line631"></a>		{
+<a name="line632"></a>			$prepped_fields[$field_name] = $str;
+<a name="line633"></a>		}
+<a name="line634"></a>		
+<a name="line635"></a>		return $str;
+<a name="line636"></a>	}
+<a name="line637"></a>}
+<a name="line638"></a>
+<a name="line639"></a>// ------------------------------------------------------------------------
+<a name="line640"></a>
+<a name="line641"></a>/**
+<a name="line642"></a> * Form Value
+<a name="line643"></a> *
+<a name="line644"></a> * Grabs a value from the POST array for the specified field so you can
+<a name="line645"></a> * re-populate an input field or textarea.  If Form Validation
+<a name="line646"></a> * is active it retrieves the info from the validation class
+<a name="line647"></a> *
+<a name="line648"></a> * @access	public
+<a name="line649"></a> * @param	string
+<a name="line650"></a> * @return	mixed
+<a name="line651"></a> */
+<a name="line652"></a>if ( ! function_exists('set_value'))
+<a name="line653"></a>{
+<a name="line654"></a>	function set_value($field = '', $default = '')
+<a name="line655"></a>	{
+<a name="line656"></a>		if (FALSE === ($OBJ =& _get_validation_object()))
+<a name="line657"></a>		{
+<a name="line658"></a>			if ( ! isset($_POST[$field]))
+<a name="line659"></a>			{
+<a name="line660"></a>				return $default;
+<a name="line661"></a>			}
+<a name="line662"></a>
+<a name="line663"></a>			return form_prep($_POST[$field], $field);
+<a name="line664"></a>		}
+<a name="line665"></a>
+<a name="line666"></a>		return form_prep($OBJ->set_value($field, $default), $field);
+<a name="line667"></a>	}
+<a name="line668"></a>}
+<a name="line669"></a>
+<a name="line670"></a>// ------------------------------------------------------------------------
+<a name="line671"></a>
+<a name="line672"></a>/**
+<a name="line673"></a> * Set Select
+<a name="line674"></a> *
+<a name="line675"></a> * Let's you set the selected value of a <select> menu via data in the POST array.
+<a name="line676"></a> * If Form Validation is active it retrieves the info from the validation class
+<a name="line677"></a> *
+<a name="line678"></a> * @access	public
+<a name="line679"></a> * @param	string
+<a name="line680"></a> * @param	string
+<a name="line681"></a> * @param	bool
+<a name="line682"></a> * @return	string
+<a name="line683"></a> */
+<a name="line684"></a>if ( ! function_exists('set_select'))
+<a name="line685"></a>{
+<a name="line686"></a>	function set_select($field = '', $value = '', $default = FALSE)
+<a name="line687"></a>	{
+<a name="line688"></a>		$OBJ =& _get_validation_object();
+<a name="line689"></a>
+<a name="line690"></a>		if ($OBJ === FALSE)
+<a name="line691"></a>		{
+<a name="line692"></a>			if ( ! isset($_POST[$field]))
+<a name="line693"></a>			{
+<a name="line694"></a>				if (count($_POST) === 0 AND $default == TRUE)
+<a name="line695"></a>				{
+<a name="line696"></a>					return ' selected="selected"';
+<a name="line697"></a>				}
+<a name="line698"></a>				return '';
+<a name="line699"></a>			}
+<a name="line700"></a>
+<a name="line701"></a>			$field = $_POST[$field];
+<a name="line702"></a>
+<a name="line703"></a>			if (is_array($field))
+<a name="line704"></a>			{
+<a name="line705"></a>				if ( ! in_array($value, $field))
+<a name="line706"></a>				{
+<a name="line707"></a>					return '';
+<a name="line708"></a>				}
+<a name="line709"></a>			}
+<a name="line710"></a>			else
+<a name="line711"></a>			{
+<a name="line712"></a>				if (($field == '' OR $value == '') OR ($field != $value))
+<a name="line713"></a>				{
+<a name="line714"></a>					return '';
+<a name="line715"></a>				}
+<a name="line716"></a>			}
+<a name="line717"></a>
+<a name="line718"></a>			return ' selected="selected"';
+<a name="line719"></a>		}
+<a name="line720"></a>
+<a name="line721"></a>		return $OBJ->set_select($field, $value, $default);
+<a name="line722"></a>	}
+<a name="line723"></a>}
+<a name="line724"></a>
+<a name="line725"></a>// ------------------------------------------------------------------------
+<a name="line726"></a>
+<a name="line727"></a>/**
+<a name="line728"></a> * Set Checkbox
+<a name="line729"></a> *
+<a name="line730"></a> * Let's you set the selected value of a checkbox via the value in the POST array.
+<a name="line731"></a> * If Form Validation is active it retrieves the info from the validation class
+<a name="line732"></a> *
+<a name="line733"></a> * @access	public
+<a name="line734"></a> * @param	string
+<a name="line735"></a> * @param	string
+<a name="line736"></a> * @param	bool
+<a name="line737"></a> * @return	string
+<a name="line738"></a> */
+<a name="line739"></a>if ( ! function_exists('set_checkbox'))
+<a name="line740"></a>{
+<a name="line741"></a>	function set_checkbox($field = '', $value = '', $default = FALSE)
+<a name="line742"></a>	{
+<a name="line743"></a>		$OBJ =& _get_validation_object();
+<a name="line744"></a>
+<a name="line745"></a>		if ($OBJ === FALSE)
+<a name="line746"></a>		{ 
+<a name="line747"></a>			if ( ! isset($_POST[$field]))
+<a name="line748"></a>			{
+<a name="line749"></a>				if (count($_POST) === 0 AND $default == TRUE)
+<a name="line750"></a>				{
+<a name="line751"></a>					return ' checked="checked"';
+<a name="line752"></a>				}
+<a name="line753"></a>				return '';
+<a name="line754"></a>			}
+<a name="line755"></a>
+<a name="line756"></a>			$field = $_POST[$field];
+<a name="line757"></a>			
+<a name="line758"></a>			if (is_array($field))
+<a name="line759"></a>			{
+<a name="line760"></a>				if ( ! in_array($value, $field))
+<a name="line761"></a>				{
+<a name="line762"></a>					return '';
+<a name="line763"></a>				}
+<a name="line764"></a>			}
+<a name="line765"></a>			else
+<a name="line766"></a>			{
+<a name="line767"></a>				if (($field == '' OR $value == '') OR ($field != $value))
+<a name="line768"></a>				{
+<a name="line769"></a>					return '';
+<a name="line770"></a>				}
+<a name="line771"></a>			}
+<a name="line772"></a>
+<a name="line773"></a>			return ' checked="checked"';
+<a name="line774"></a>		}
+<a name="line775"></a>
+<a name="line776"></a>		return $OBJ->set_checkbox($field, $value, $default);
+<a name="line777"></a>	}
+<a name="line778"></a>}
+<a name="line779"></a>
+<a name="line780"></a>// ------------------------------------------------------------------------
+<a name="line781"></a>
+<a name="line782"></a>/**
+<a name="line783"></a> * Set Radio
+<a name="line784"></a> *
+<a name="line785"></a> * Let's you set the selected value of a radio field via info in the POST array.
+<a name="line786"></a> * If Form Validation is active it retrieves the info from the validation class
+<a name="line787"></a> *
+<a name="line788"></a> * @access	public
+<a name="line789"></a> * @param	string
+<a name="line790"></a> * @param	string
+<a name="line791"></a> * @param	bool
+<a name="line792"></a> * @return	string
+<a name="line793"></a> */
+<a name="line794"></a>if ( ! function_exists('set_radio'))
+<a name="line795"></a>{
+<a name="line796"></a>	function set_radio($field = '', $value = '', $default = FALSE)
+<a name="line797"></a>	{
+<a name="line798"></a>		$OBJ =& _get_validation_object();
+<a name="line799"></a>
+<a name="line800"></a>		if ($OBJ === FALSE)
+<a name="line801"></a>		{
+<a name="line802"></a>			if ( ! isset($_POST[$field]))
+<a name="line803"></a>			{
+<a name="line804"></a>				if (count($_POST) === 0 AND $default == TRUE)
+<a name="line805"></a>				{
+<a name="line806"></a>					return ' checked="checked"';
+<a name="line807"></a>				}
+<a name="line808"></a>				return '';
+<a name="line809"></a>			}
+<a name="line810"></a>
+<a name="line811"></a>			$field = $_POST[$field];
+<a name="line812"></a>			
+<a name="line813"></a>			if (is_array($field))
+<a name="line814"></a>			{
+<a name="line815"></a>				if ( ! in_array($value, $field))
+<a name="line816"></a>				{
+<a name="line817"></a>					return '';
+<a name="line818"></a>				}
+<a name="line819"></a>			}
+<a name="line820"></a>			else
+<a name="line821"></a>			{
+<a name="line822"></a>				if (($field == '' OR $value == '') OR ($field != $value))
+<a name="line823"></a>				{
+<a name="line824"></a>					return '';
+<a name="line825"></a>				}
+<a name="line826"></a>			}
+<a name="line827"></a>
+<a name="line828"></a>			return ' checked="checked"';
+<a name="line829"></a>		}
+<a name="line830"></a>
+<a name="line831"></a>		return $OBJ->set_radio($field, $value, $default);
+<a name="line832"></a>	}
+<a name="line833"></a>}
+<a name="line834"></a>
+<a name="line835"></a>// ------------------------------------------------------------------------
+<a name="line836"></a>
+<a name="line837"></a>/**
+<a name="line838"></a> * Form Error
+<a name="line839"></a> *
+<a name="line840"></a> * Returns the error for a specific form field.  This is a helper for the
+<a name="line841"></a> * form validation class.
+<a name="line842"></a> *
+<a name="line843"></a> * @access	public
+<a name="line844"></a> * @param	string
+<a name="line845"></a> * @param	string
+<a name="line846"></a> * @param	string
+<a name="line847"></a> * @return	string
+<a name="line848"></a> */
+<a name="line849"></a>if ( ! function_exists('form_error'))
+<a name="line850"></a>{
+<a name="line851"></a>	function form_error($field = '', $prefix = '', $suffix = '')
+<a name="line852"></a>	{
+<a name="line853"></a>		if (FALSE === ($OBJ =& _get_validation_object()))
+<a name="line854"></a>		{
+<a name="line855"></a>			return '';
+<a name="line856"></a>		}
+<a name="line857"></a>
+<a name="line858"></a>		return $OBJ->error($field, $prefix, $suffix);
+<a name="line859"></a>	}
+<a name="line860"></a>}
+<a name="line861"></a>
+<a name="line862"></a>// ------------------------------------------------------------------------
+<a name="line863"></a>
+<a name="line864"></a>/**
+<a name="line865"></a> * Validation Error String
+<a name="line866"></a> *
+<a name="line867"></a> * Returns all the errors associated with a form submission.  This is a helper
+<a name="line868"></a> * function for the form validation class.
+<a name="line869"></a> *
+<a name="line870"></a> * @access	public
+<a name="line871"></a> * @param	string
+<a name="line872"></a> * @param	string
+<a name="line873"></a> * @return	string
+<a name="line874"></a> */
+<a name="line875"></a>if ( ! function_exists('validation_errors'))
+<a name="line876"></a>{
+<a name="line877"></a>	function validation_errors($prefix = '', $suffix = '')
+<a name="line878"></a>	{
+<a name="line879"></a>		if (FALSE === ($OBJ =& _get_validation_object()))
+<a name="line880"></a>		{
+<a name="line881"></a>			return '';
+<a name="line882"></a>		}
+<a name="line883"></a>
+<a name="line884"></a>		return $OBJ->error_string($prefix, $suffix);
+<a name="line885"></a>	}
+<a name="line886"></a>}
+<a name="line887"></a>
+<a name="line888"></a>// ------------------------------------------------------------------------
+<a name="line889"></a>
+<a name="line890"></a>/**
+<a name="line891"></a> * Parse the form attributes
+<a name="line892"></a> *
+<a name="line893"></a> * Helper function used by some of the form helpers
+<a name="line894"></a> *
+<a name="line895"></a> * @access	private
+<a name="line896"></a> * @param	array
+<a name="line897"></a> * @param	array
+<a name="line898"></a> * @return	string
+<a name="line899"></a> */
+<a name="line900"></a>if ( ! function_exists('_parse_form_attributes'))
+<a name="line901"></a>{
+<a name="line902"></a>	function _parse_form_attributes($attributes, $default)
+<a name="line903"></a>	{
+<a name="line904"></a>		if (is_array($attributes))
+<a name="line905"></a>		{
+<a name="line906"></a>			foreach ($default as $key => $val)
+<a name="line907"></a>			{
+<a name="line908"></a>				if (isset($attributes[$key]))
+<a name="line909"></a>				{
+<a name="line910"></a>					$default[$key] = $attributes[$key];
+<a name="line911"></a>					unset($attributes[$key]);
+<a name="line912"></a>				}
+<a name="line913"></a>			}
+<a name="line914"></a>
+<a name="line915"></a>			if (count($attributes) > 0)
+<a name="line916"></a>			{
+<a name="line917"></a>				$default = array_merge($default, $attributes);
+<a name="line918"></a>			}
+<a name="line919"></a>		}
+<a name="line920"></a>
+<a name="line921"></a>		$att = '';
+<a name="line922"></a>		
+<a name="line923"></a>		foreach ($default as $key => $val)
+<a name="line924"></a>		{
+<a name="line925"></a>			if ($key == 'value')
+<a name="line926"></a>			{
+<a name="line927"></a>				$val = form_prep($val, $default['name']);
+<a name="line928"></a>			}
+<a name="line929"></a>
+<a name="line930"></a>			$att .= $key . '="' . $val . '" ';
+<a name="line931"></a>		}
+<a name="line932"></a>
+<a name="line933"></a>		return $att;
+<a name="line934"></a>	}
+<a name="line935"></a>}
+<a name="line936"></a>
+<a name="line937"></a>// ------------------------------------------------------------------------
+<a name="line938"></a>
+<a name="line939"></a>/**
+<a name="line940"></a> * Attributes To String
+<a name="line941"></a> *
+<a name="line942"></a> * Helper function used by some of the form helpers
+<a name="line943"></a> *
+<a name="line944"></a> * @access	private
+<a name="line945"></a> * @param	mixed
+<a name="line946"></a> * @param	bool
+<a name="line947"></a> * @return	string
+<a name="line948"></a> */
+<a name="line949"></a>if ( ! function_exists('_attributes_to_string'))
+<a name="line950"></a>{
+<a name="line951"></a>	function _attributes_to_string($attributes, $formtag = FALSE)
+<a name="line952"></a>	{
+<a name="line953"></a>		if (is_string($attributes) AND strlen($attributes) > 0)
+<a name="line954"></a>		{
+<a name="line955"></a>			if ($formtag == TRUE AND strpos($attributes, 'method=') === FALSE)
+<a name="line956"></a>			{
+<a name="line957"></a>				$attributes .= ' method="post"';
+<a name="line958"></a>			}
+<a name="line959"></a>
+<a name="line960"></a>		return ' '.$attributes;
+<a name="line961"></a>		}
+<a name="line962"></a>	
+<a name="line963"></a>		if (is_object($attributes) AND count($attributes) > 0)
+<a name="line964"></a>		{
+<a name="line965"></a>			$attributes = (array)$attributes;
+<a name="line966"></a>		}
+<a name="line967"></a>
+<a name="line968"></a>		if (is_array($attributes) AND count($attributes) > 0)
+<a name="line969"></a>		{
+<a name="line970"></a>		$atts = '';
+<a name="line971"></a>
+<a name="line972"></a>		if ( ! isset($attributes['method']) AND $formtag === TRUE)
+<a name="line973"></a>		{
+<a name="line974"></a>			$atts .= ' method="post"';
+<a name="line975"></a>		}
+<a name="line976"></a>
+<a name="line977"></a>		foreach ($attributes as $key => $val)
+<a name="line978"></a>		{
+<a name="line979"></a>			$atts .= ' '.$key.'="'.$val.'"';
+<a name="line980"></a>		}
+<a name="line981"></a>
+<a name="line982"></a>		return $atts;
+<a name="line983"></a>		}
+<a name="line984"></a>	}
+<a name="line985"></a>}
+<a name="line986"></a>
+<a name="line987"></a>// ------------------------------------------------------------------------
+<a name="line988"></a>
+<a name="line989"></a>/**
+<a name="line990"></a> * Validation Object
+<a name="line991"></a> *
+<a name="line992"></a> * Determines what the form validation class was instantiated as, fetches
+<a name="line993"></a> * the object and returns it.
+<a name="line994"></a> *
+<a name="line995"></a> * @access	private
+<a name="line996"></a> * @return	mixed
+<a name="line997"></a> */
+<a name="line998"></a>if ( ! function_exists('_get_validation_object'))
+<a name="line999"></a>{
+<a name="line1000"></a>	function &_get_validation_object()
+<a name="line1001"></a>	{
+<a name="line1002"></a>		$CI =& get_instance();
+<a name="line1003"></a>
+<a name="line1004"></a>		// We set this as a variable since we're returning by reference
+<a name="line1005"></a>		$return = FALSE;
+<a name="line1006"></a>
+<a name="line1007"></a>		if ( ! isset($CI->load->_ci_classes) OR  ! isset($CI->load->_ci_classes['form_validation']))
+<a name="line1008"></a>		{
+<a name="line1009"></a>			return $return;
+<a name="line1010"></a>		}
+<a name="line1011"></a>
+<a name="line1012"></a>		$object = $CI->load->_ci_classes['form_validation'];
+<a name="line1013"></a>
+<a name="line1014"></a>		if ( ! isset($CI->$object) OR ! is_object($CI->$object))
+<a name="line1015"></a>		{
+<a name="line1016"></a>			return $return;
+<a name="line1017"></a>		}
+<a name="line1018"></a>
+<a name="line1019"></a>		return $CI->$object;
+<a name="line1020"></a>	}
+<a name="line1021"></a>}
+<a name="line1022"></a>
+<a name="line1023"></a>
+<a name="line1024"></a>/* End of file form_helper.php */
+<a name="line1025"></a>/* Location: ./system/helpers/form_helper.php */</pre>
+<div class="header">
+<h1>GiftFlow API</h1>
+<ul>
+<li><a href="../../overview-summary.html">Overview</a></li>
+<li>Package</li><li>Class</li><li>Tree</li><li><a href="../../overview-files.html">Files</a></li>
+<li><a href="../../deprecated-list.html">Deprecated</a></li>
+<li><a href="../../index-all.html">Index</a></li>
+</ul>
+</div>
+
+<div class="small_links">
+<a href="../../index.html" target="_top">Frames</a>
+<a href="../../source/helpers/form_helper.php.html" target="_top">No frames</a>
+</div>
+<hr>
+
+<p id="footer">This document was generated by <a href="http://peej.github.com/phpdoctor/">PHPDoctor: The PHP Documentation Creator</a></p>
+
+</body>
+
+</html>

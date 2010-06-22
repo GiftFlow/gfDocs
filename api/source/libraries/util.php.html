@@ -1,0 +1,290 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+
+<html lang="en">
+<head>
+
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
+<meta name="generator" content="PHPDoctor 2RC4 (http://peej.github.com/phpdoctor/)">
+<meta name="when" content="Fri, 18 Jun 2010 15:58:03 +0000">
+
+<link rel="stylesheet" type="text/css" href="../../stylesheet.css">
+<link rel="start" href="../../overview-summary.html">
+
+<title>libraries/util.php (GiftFlow API)</title>
+
+</head>
+<body id="file" onload="parent.document.title=document.title;">
+
+<div class="header">
+<h1>GiftFlow API</h1>
+<ul>
+<li><a href="../../overview-summary.html">Overview</a></li>
+<li>Package</li><li>Class</li><li>Tree</li><li><a href="../../overview-files.html">Files</a></li>
+<li><a href="../../deprecated-list.html">Deprecated</a></li>
+<li><a href="../../index-all.html">Index</a></li>
+</ul>
+</div>
+
+<div class="small_links">
+<a href="../../index.html" target="_top">Frames</a>
+<a href="../../source/libraries/util.php.html" target="_top">No frames</a>
+</div>
+<hr>
+
+<h1>libraries/util.php</h1>
+<hr>
+
+<a name="line1"></a><pre><?php  if ( ! defined('BASEPATH')) exit('No direct script access allowed');
+<a name="line2"></a>
+<a name="line3"></a>class Util
+<a name="line4"></a>{
+<a name="line5"></a>
+<a name="line6"></a>	protected $ci;
+<a name="line7"></a>
+<a name="line8"></a>	public function __construct()
+<a name="line9"></a>	{
+<a name="line10"></a>		$this->ci =& get_instance();
+<a name="line11"></a>		
+<a name="line12"></a>	}
+<a name="line13"></a>	public function config()
+<a name="line14"></a>	{
+<a name="line15"></a>		//$this->ci->output->enable_profiler('true');
+<a name="line16"></a>	}
+<a name="line17"></a>	
+<a name="line18"></a>	public function parse_globals()
+<a name="line19"></a>	{
+<a name="line20"></a>		$globals = array();
+<a name="line21"></a>		// Set userdata
+<a name="line22"></a>		if($this->ci->session->userdata('user_id'))
+<a name="line23"></a>		{
+<a name="line24"></a>			$globals['logged_in'] = TRUE;
+<a name="line25"></a>			$globals['logged_in_user_id'] = $this->ci->session->userdata('user_id');
+<a name="line26"></a>			$globals['logged_in_screen_name'] = $this->ci->session->userdata('screen_name');
+<a name="line27"></a>			$globals['logged_in_email'] = $this->ci->session->userdata('email');
+<a name="line28"></a>			$globals['userdata']['user_id'] = $this->ci->session->userdata('user_id');
+<a name="line29"></a>			$globals['userdata']['screen_name'] = $this->ci->session->userdata('screen_name');
+<a name="line30"></a>			$globals['userdata'] = array(
+<a name="line31"></a>				'logged_in' => TRUE,
+<a name="line32"></a>				'role_id'=>$this->ci->session->userdata('id'),
+<a name="line33"></a>				'level'=>$this->ci->session->userdata('level'),
+<a name="line34"></a>				'user_id'=>$this->ci->session->userdata('user_id'),
+<a name="line35"></a>				'email'=>$this->ci->session->userdata('email'),
+<a name="line36"></a>				'username'=>$this->ci->session->userdata('username'),
+<a name="line37"></a>				'screen_name'=>$this->ci->session->userdata('screen_name'),
+<a name="line38"></a>				'first_name'=>$this->ci->session->userdata('first_name'),
+<a name="line39"></a>				'last_name'=>$this->ci->session->userdata('last_name'),
+<a name="line40"></a>				'location_latitude'=>$this->ci->session->userdata('location_latitude'),
+<a name="line41"></a>				'location_longitude'=>$this->ci->session->userdata('location_longitude'),
+<a name="line42"></a>				'location_address'=>$this->ci->session->userdata('location_address'),
+<a name="line43"></a>				'location_city'=>$this->ci->session->userdata('location_city'),
+<a name="line44"></a>				'location_state'=>$this->ci->session->userdata('location_state'),
+<a name="line45"></a>				'photo_thumb_url'=>$this->ci->session->userdata('photo_thumb_url'),
+<a name="line46"></a>				'photo_url'=>$this->ci->session->userdata('photo_url')
+<a name="line47"></a>			);
+<a name="line48"></a>			if(empty( $globals['userdata']['first_name'] ))
+<a name="line49"></a>				$globals['userdata']['first_name'] = $globals['userdata']['screen_name'];
+<a name="line50"></a>						
+<a name="line51"></a>		}
+<a name="line52"></a>		else
+<a name="line53"></a>		{
+<a name="line54"></a>			$globals['logged_in'] = FALSE;
+<a name="line55"></a>		}
+<a name="line56"></a>		$globals['alert_success'] = '';
+<a name="line57"></a>		$globals['alert_error'] = '';
+<a name="line58"></a>		$globals['is_ajax'] = $this->is_ajax();
+<a name="line59"></a>		
+<a name="line60"></a>		return $globals;
+<a name="line61"></a>	}
+<a name="line62"></a>	public function setting ( $item )
+<a name="line63"></a>	{
+<a name="line64"></a>		return true;
+<a name="line65"></a>	}
+<a name="line66"></a>	
+<a name="line67"></a>	/*
+<a name="line68"></a>	*	Calculates time ago string
+<a name="line69"></a>	*	For example, "This post was created 4 minutes ago" instead of displaying
+<a name="line70"></a>	*	a date
+<a name="line71"></a>	*
+<a name="line72"></a>	*	@param timestamp $datefrom
+<a name="line73"></a>	*	@param timestamp $dateto
+<a name="line74"></a>	*/
+<a name="line75"></a>	public function time_ago( $datefrom, $dateto=-1 )
+<a name="line76"></a>	{
+<a name="line77"></a>		// Defaults and assume if 0 is passed in that
+<a name="line78"></a>		// its an error rather than the epoch
+<a name="line79"></a>		
+<a name="line80"></a>		if($datefrom<=0) { return "A long time ago"; }
+<a name="line81"></a>		if($dateto==-1) { $dateto = time(); }
+<a name="line82"></a>		
+<a name="line83"></a>		// Calculate the difference in seconds betweeen
+<a name="line84"></a>		// the two timestamps
+<a name="line85"></a>		
+<a name="line86"></a>		$difference = $dateto - $datefrom;
+<a name="line87"></a>		
+<a name="line88"></a>		// If difference is less than 60 seconds,
+<a name="line89"></a>		// seconds is a good interval of choice
+<a name="line90"></a>		
+<a name="line91"></a>		if($difference < 60)
+<a name="line92"></a>		{
+<a name="line93"></a>		$interval = "s";
+<a name="line94"></a>		}
+<a name="line95"></a>		
+<a name="line96"></a>		// If difference is between 60 seconds and
+<a name="line97"></a>		// 60 minutes, minutes is a good interval
+<a name="line98"></a>		elseif($difference >= 60 && $difference<60*60)
+<a name="line99"></a>		{
+<a name="line100"></a>		$interval = "n";
+<a name="line101"></a>		}
+<a name="line102"></a>		
+<a name="line103"></a>		// If difference is between 1 hour and 24 hours
+<a name="line104"></a>		// hours is a good interval
+<a name="line105"></a>		elseif($difference >= 60*60 && $difference<60*60*24)
+<a name="line106"></a>		{
+<a name="line107"></a>		$interval = "h";
+<a name="line108"></a>		}
+<a name="line109"></a>		
+<a name="line110"></a>		// If difference is between 1 day and 7 days
+<a name="line111"></a>		// days is a good interval
+<a name="line112"></a>		elseif($difference >= 60*60*24 && $difference<60*60*24*7)
+<a name="line113"></a>		{
+<a name="line114"></a>		$interval = "d";
+<a name="line115"></a>		}
+<a name="line116"></a>		
+<a name="line117"></a>		// If difference is between 1 week and 30 days
+<a name="line118"></a>		// weeks is a good interval
+<a name="line119"></a>		elseif($difference >= 60*60*24*7 && $difference <
+<a name="line120"></a>		60*60*24*30)
+<a name="line121"></a>		{
+<a name="line122"></a>		$interval = "ww";
+<a name="line123"></a>		}
+<a name="line124"></a>		
+<a name="line125"></a>		// If difference is between 30 days and 365 days
+<a name="line126"></a>		// months is a good interval, again, the same thing
+<a name="line127"></a>		// applies, if the 29th February happens to exist
+<a name="line128"></a>		// between your 2 dates, the function will return
+<a name="line129"></a>		// the 'incorrect' value for a day
+<a name="line130"></a>		elseif($difference >= 60*60*24*30 && $difference <
+<a name="line131"></a>		60*60*24*365)
+<a name="line132"></a>		{
+<a name="line133"></a>		$interval = "m";
+<a name="line134"></a>		}
+<a name="line135"></a>		
+<a name="line136"></a>		// If difference is greater than or equal to 365
+<a name="line137"></a>		// days, return year. This will be incorrect if
+<a name="line138"></a>		// for example, you call the function on the 28th April
+<a name="line139"></a>		// 2008 passing in 29th April 2007. It will return
+<a name="line140"></a>		// 1 year ago when in actual fact (yawn!) not quite
+<a name="line141"></a>		// a year has gone by
+<a name="line142"></a>		elseif($difference >= 60*60*24*365)
+<a name="line143"></a>		{
+<a name="line144"></a>		$interval = "y";
+<a name="line145"></a>		}
+<a name="line146"></a>		
+<a name="line147"></a>		// Based on the interval, determine the
+<a name="line148"></a>		// number of units between the two dates
+<a name="line149"></a>		// From this point on, you would be hard
+<a name="line150"></a>		// pushed telling the difference between
+<a name="line151"></a>		// this function and DateDiff. If the $datediff
+<a name="line152"></a>		// returned is 1, be sure to return the singular
+<a name="line153"></a>		// of the unit, e.g. 'day' rather 'days'
+<a name="line154"></a>		
+<a name="line155"></a>		switch($interval)
+<a name="line156"></a>		{
+<a name="line157"></a>		case "m":
+<a name="line158"></a>		$months_difference = floor($difference / 60 / 60 / 24 /
+<a name="line159"></a>		29);
+<a name="line160"></a>		while (mktime(date("H", $datefrom), date("i", $datefrom),
+<a name="line161"></a>		date("s", $datefrom), date("n", $datefrom)+($months_difference),
+<a name="line162"></a>		date("j", $dateto), date("Y", $datefrom)) < $dateto)
+<a name="line163"></a>		{
+<a name="line164"></a>		$months_difference++;
+<a name="line165"></a>		}
+<a name="line166"></a>		$datediff = $months_difference;
+<a name="line167"></a>		
+<a name="line168"></a>		// We need this in here because it is possible
+<a name="line169"></a>		// to have an 'm' interval and a months
+<a name="line170"></a>		// difference of 12 because we are using 29 days
+<a name="line171"></a>		// in a month
+<a name="line172"></a>		
+<a name="line173"></a>		if($datediff==12)
+<a name="line174"></a>		{
+<a name="line175"></a>		$datediff--;
+<a name="line176"></a>		}
+<a name="line177"></a>		
+<a name="line178"></a>		$res = ($datediff==1) ? "$datediff month ago" : "$datediff
+<a name="line179"></a>		months ago";
+<a name="line180"></a>		break;
+<a name="line181"></a>		
+<a name="line182"></a>		case "y":
+<a name="line183"></a>		$datediff = floor($difference / 60 / 60 / 24 / 365);
+<a name="line184"></a>		$res = ($datediff==1) ? "$datediff year ago" : "$datediff
+<a name="line185"></a>		years ago";
+<a name="line186"></a>		break;
+<a name="line187"></a>		
+<a name="line188"></a>		case "d":
+<a name="line189"></a>		$datediff = floor($difference / 60 / 60 / 24);
+<a name="line190"></a>		$res = ($datediff==1) ? "$datediff day ago" : "$datediff
+<a name="line191"></a>		days ago";
+<a name="line192"></a>		break;
+<a name="line193"></a>		
+<a name="line194"></a>		case "ww":
+<a name="line195"></a>		$datediff = floor($difference / 60 / 60 / 24 / 7);
+<a name="line196"></a>		$res = ($datediff==1) ? "$datediff week ago" : "$datediff
+<a name="line197"></a>		weeks ago";
+<a name="line198"></a>		break;
+<a name="line199"></a>		
+<a name="line200"></a>		case "h":
+<a name="line201"></a>		$datediff = floor($difference / 60 / 60);
+<a name="line202"></a>		$res = ($datediff==1) ? "$datediff hour ago" : "$datediff
+<a name="line203"></a>		hours ago";
+<a name="line204"></a>		break;
+<a name="line205"></a>		
+<a name="line206"></a>		case "n":
+<a name="line207"></a>		$datediff = floor($difference / 60);
+<a name="line208"></a>		$res = ($datediff==1) ? "$datediff minute ago" :
+<a name="line209"></a>		"$datediff minutes ago";
+<a name="line210"></a>		break;
+<a name="line211"></a>		
+<a name="line212"></a>		case "s":
+<a name="line213"></a>		$datediff = $difference;
+<a name="line214"></a>		$res = ($datediff==1) ? "$datediff second ago" :
+<a name="line215"></a>		"$datediff seconds ago";
+<a name="line216"></a>		break;
+<a name="line217"></a>		}
+<a name="line218"></a>		return $res;
+<a name="line219"></a>	}
+<a name="line220"></a>	/* 
+<a name="line221"></a>	*	Tests to see if request is AJAXified   
+<a name="line222"></a>	*/
+<a name="line223"></a>	function is_ajax() 
+<a name="line224"></a>	{
+<a name="line225"></a>		return ( isset( $_SERVER['HTTP_X_REQUESTED_WITH']) && ($_SERVER['HTTP_X_REQUESTED_WITH'] == 'XMLHttpRequest'));
+<a name="line226"></a>	}
+<a name="line227"></a>
+<a name="line228"></a>	
+<a name="line229"></a>	
+<a name="line230"></a>	
+<a name="line231"></a>}
+<a name="line232"></a></pre>
+<div class="header">
+<h1>GiftFlow API</h1>
+<ul>
+<li><a href="../../overview-summary.html">Overview</a></li>
+<li>Package</li><li>Class</li><li>Tree</li><li><a href="../../overview-files.html">Files</a></li>
+<li><a href="../../deprecated-list.html">Deprecated</a></li>
+<li><a href="../../index-all.html">Index</a></li>
+</ul>
+</div>
+
+<div class="small_links">
+<a href="../../index.html" target="_top">Frames</a>
+<a href="../../source/libraries/util.php.html" target="_top">No frames</a>
+</div>
+<hr>
+
+<p id="footer">This document was generated by <a href="http://peej.github.com/phpdoctor/">PHPDoctor: The PHP Documentation Creator</a></p>
+
+</body>
+
+</html>

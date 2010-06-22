@@ -1,0 +1,351 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+
+<html lang="en">
+<head>
+
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
+<meta name="generator" content="PHPDoctor 2RC4 (http://peej.github.com/phpdoctor/)">
+<meta name="when" content="Sun, 20 Jun 2010 17:43:51 +0000">
+
+<link rel="stylesheet" type="text/css" href="../../stylesheet.css">
+<link rel="start" href="../../overview-summary.html">
+
+<title>scaffolding/Scaffolding.php (GiftFlow API)</title>
+
+</head>
+<body id="file" onload="parent.document.title=document.title;">
+
+<div class="header">
+<h1>GiftFlow API</h1>
+<ul>
+<li><a href="../../overview-summary.html">Overview</a></li>
+<li>Package</li><li>Class</li><li>Tree</li><li><a href="../../overview-files.html">Files</a></li>
+<li><a href="../../deprecated-list.html">Deprecated</a></li>
+<li><a href="../../index-all.html">Index</a></li>
+</ul>
+</div>
+
+<div class="small_links">
+<a href="../../index.html" target="_top">Frames</a>
+<a href="../../source/scaffolding/scaffolding.php.html" target="_top">No frames</a>
+</div>
+<hr>
+
+<h1>scaffolding/Scaffolding.php</h1>
+<div class="comment" id="overview_description"><p>CodeIgniter</p><p>An open source application development framework for PHP 4.3.2 or newer</p></div>
+
+<hr>
+
+<a name="line1"></a><pre><?php  if ( ! defined('BASEPATH')) exit('No direct script access allowed');
+<a name="line2"></a>/**
+<a name="line3"></a> * CodeIgniter
+<a name="line4"></a> *
+<a name="line5"></a> * An open source application development framework for PHP 4.3.2 or newer
+<a name="line6"></a> *
+<a name="line7"></a> * @package		CodeIgniter
+<a name="line8"></a> * @author		ExpressionEngine Dev Team
+<a name="line9"></a> * @copyright	Copyright (c) 2008 - 2009, EllisLab, Inc.
+<a name="line10"></a> * @license		http://codeigniter.com/user_guide/license.html
+<a name="line11"></a> * @link		http://codeigniter.com
+<a name="line12"></a> * @since		Version 1.0
+<a name="line13"></a> * @filesource
+<a name="line14"></a> */
+<a name="line15"></a>
+<a name="line16"></a>// ------------------------------------------------------------------------
+<a name="line17"></a>
+<a name="line18"></a>/**
+<a name="line19"></a> * Scaffolding Class
+<a name="line20"></a> *
+<a name="line21"></a> * Provides the Scaffolding framework
+<a name="line22"></a> *
+<a name="line23"></a> * @package		CodeIgniter
+<a name="line24"></a> * @subpackage	Scaffolding
+<a name="line25"></a> * @author		ExpressionEngine Dev Team
+<a name="line26"></a> * @link		http://codeigniter.com/user_guide/general/scaffolding.html
+<a name="line27"></a> */
+<a name="line28"></a>class Scaffolding {
+<a name="line29"></a>
+<a name="line30"></a>	var $CI;
+<a name="line31"></a>	var $current_table;
+<a name="line32"></a>	var $base_url = '';
+<a name="line33"></a>	var $lang = array();
+<a name="line34"></a>
+<a name="line35"></a>	function Scaffolding($db_table)
+<a name="line36"></a>	{
+<a name="line37"></a>		$this->CI =& get_instance();
+<a name="line38"></a>		
+<a name="line39"></a>		$this->CI->load->database("", FALSE, TRUE);			
+<a name="line40"></a>		$this->CI->load->library('pagination');
+<a name="line41"></a>		
+<a name="line42"></a>		// Turn off caching
+<a name="line43"></a>		$this->CI->db->cache_off();
+<a name="line44"></a>				
+<a name="line45"></a>		/**
+<a name="line46"></a>		 * Set the current table name
+<a name="line47"></a>		 * This is done when initializing scaffolding:
+<a name="line48"></a>		 * $this->load->scaffolding('table_name')
+<a name="line49"></a>		 *
+<a name="line50"></a>		 */
+<a name="line51"></a>		$this->current_table = $db_table;
+<a name="line52"></a>		
+<a name="line53"></a>		/**
+<a name="line54"></a>		 * Set the path to the "view" files
+<a name="line55"></a>		 * We'll manually override the "view" path so that
+<a name="line56"></a>		 * the load->view function knows where to look.
+<a name="line57"></a>		 */
+<a name="line58"></a>		
+<a name="line59"></a>		$this->CI->load->_ci_view_path = BASEPATH.'scaffolding/views/';
+<a name="line60"></a>
+<a name="line61"></a>		// Set the base URL
+<a name="line62"></a>		$this->base_url = $this->CI->config->site_url().'/'.$this->CI->uri->segment(1).$this->CI->uri->slash_segment(2, 'both');
+<a name="line63"></a>		$this->base_uri = $this->CI->uri->segment(1).$this->CI->uri->slash_segment(2, 'leading');
+<a name="line64"></a>
+<a name="line65"></a>		// Set a few globals
+<a name="line66"></a>		$data = array(
+<a name="line67"></a>						'image_url'	=> $this->CI->config->system_url().'scaffolding/images/',
+<a name="line68"></a>						'base_uri'  => $this->base_uri,
+<a name="line69"></a>						'base_url'	=> $this->base_url,
+<a name="line70"></a>						'title'		=> $this->current_table
+<a name="line71"></a>					);
+<a name="line72"></a>		
+<a name="line73"></a>		$this->CI->load->vars($data);
+<a name="line74"></a>		
+<a name="line75"></a>		// Load the language file and create variables
+<a name="line76"></a>		$this->lang = $this->CI->load->scaffold_language('scaffolding', '', TRUE);
+<a name="line77"></a>		$this->CI->load->vars($this->lang);
+<a name="line78"></a>				
+<a name="line79"></a>		//  Load the helper files we plan to use
+<a name="line80"></a>		$this->CI->load->helper(array('url', 'form'));
+<a name="line81"></a>		
+<a name="line82"></a>				
+<a name="line83"></a>		log_message('debug', 'Scaffolding Class Initialized');
+<a name="line84"></a>	}
+<a name="line85"></a>	
+<a name="line86"></a>	// --------------------------------------------------------------------
+<a name="line87"></a>	
+<a name="line88"></a>	/**
+<a name="line89"></a>	 * "Add" Page
+<a name="line90"></a>	 *
+<a name="line91"></a>	 * Shows a form representing the currently selected DB
+<a name="line92"></a>	 * so that data can be inserted
+<a name="line93"></a>	 *
+<a name="line94"></a>	 * @access	public
+<a name="line95"></a>	 * @return	string	the HTML "add" page
+<a name="line96"></a>	 */
+<a name="line97"></a>	function add()
+<a name="line98"></a>	{	
+<a name="line99"></a>		$data = array(
+<a name="line100"></a>						'title'	=>  ( ! isset($this->lang['scaff_add'])) ? 'Add Data' : $this->lang['scaff_add'],
+<a name="line101"></a>						'fields' => $this->CI->db->field_data($this->current_table),
+<a name="line102"></a>						'action' => $this->base_uri.'/insert'
+<a name="line103"></a>					);
+<a name="line104"></a>	
+<a name="line105"></a>		$this->CI->load->view('add', $data);
+<a name="line106"></a>	}
+<a name="line107"></a>	
+<a name="line108"></a>	// --------------------------------------------------------------------
+<a name="line109"></a>	
+<a name="line110"></a>	/**
+<a name="line111"></a>	 * Insert the data
+<a name="line112"></a>	 *
+<a name="line113"></a>	 * @access	public
+<a name="line114"></a>	 * @return	void	redirects to the view page
+<a name="line115"></a>	 */
+<a name="line116"></a>	function insert()
+<a name="line117"></a>	{		
+<a name="line118"></a>		if ($this->CI->db->insert($this->current_table, $_POST) === FALSE)
+<a name="line119"></a>		{
+<a name="line120"></a>			$this->add();
+<a name="line121"></a>		}
+<a name="line122"></a>		else
+<a name="line123"></a>		{
+<a name="line124"></a>			redirect($this->base_uri.'/view/');
+<a name="line125"></a>		}
+<a name="line126"></a>	}
+<a name="line127"></a>	
+<a name="line128"></a>	// --------------------------------------------------------------------
+<a name="line129"></a>	
+<a name="line130"></a>	/**
+<a name="line131"></a>	 * "View" Page
+<a name="line132"></a>	 *
+<a name="line133"></a>	 * Shows a table containing the data in the currently
+<a name="line134"></a>	 * selected DB
+<a name="line135"></a>	 *
+<a name="line136"></a>	 * @access	public
+<a name="line137"></a>	 * @return	string	the HTML "view" page
+<a name="line138"></a>	 */
+<a name="line139"></a>	function view()
+<a name="line140"></a>	{
+<a name="line141"></a>		// Fetch the total number of DB rows
+<a name="line142"></a>		$total_rows = $this->CI->db->count_all($this->current_table);
+<a name="line143"></a>		
+<a name="line144"></a>		if ($total_rows < 1)
+<a name="line145"></a>		{
+<a name="line146"></a>			return $this->CI->load->view('no_data');
+<a name="line147"></a>		}
+<a name="line148"></a>		
+<a name="line149"></a>		// Set the query limit/offset
+<a name="line150"></a>		$per_page = 20;
+<a name="line151"></a>		$offset = $this->CI->uri->segment(4, 0);
+<a name="line152"></a>		
+<a name="line153"></a>		// Run the query
+<a name="line154"></a>		$query = $this->CI->db->get($this->current_table, $per_page, $offset);
+<a name="line155"></a>
+<a name="line156"></a>		// Now let's get the field names				
+<a name="line157"></a>		$fields = $this->CI->db->list_fields($this->current_table);
+<a name="line158"></a>		
+<a name="line159"></a>		// We assume that the column in the first position is the primary field.
+<a name="line160"></a>		$primary = current($fields);
+<a name="line161"></a>
+<a name="line162"></a>		// Pagination!
+<a name="line163"></a>		$this->CI->pagination->initialize(
+<a name="line164"></a>							array(
+<a name="line165"></a>									'base_url'		 => $this->base_url.'/view',
+<a name="line166"></a>									'total_rows'	 => $total_rows,
+<a name="line167"></a>									'per_page'		 => $per_page,
+<a name="line168"></a>									'uri_segment'	 => 4,
+<a name="line169"></a>									'full_tag_open'	 => '<p>',
+<a name="line170"></a>									'full_tag_close' => '</p>'
+<a name="line171"></a>									)
+<a name="line172"></a>								);	
+<a name="line173"></a>
+<a name="line174"></a>		$data = array(
+<a name="line175"></a>						'title'	=>  ( ! isset($this->lang['scaff_view'])) ? 'View Data' : $this->lang['scaff_view'],
+<a name="line176"></a>						'query'		=> $query,
+<a name="line177"></a>						'fields'	=> $fields,
+<a name="line178"></a>						'primary'	=> $primary,
+<a name="line179"></a>						'paginate'	=> $this->CI->pagination->create_links()
+<a name="line180"></a>					);
+<a name="line181"></a>						
+<a name="line182"></a>		$this->CI->load->view('view', $data);
+<a name="line183"></a>	}
+<a name="line184"></a>	
+<a name="line185"></a>	// --------------------------------------------------------------------
+<a name="line186"></a>	
+<a name="line187"></a>	/**
+<a name="line188"></a>	 * "Edit" Page
+<a name="line189"></a>	 *
+<a name="line190"></a>	 * Shows a form representing the currently selected DB
+<a name="line191"></a>	 * so that data can be edited
+<a name="line192"></a>	 *
+<a name="line193"></a>	 * @access	public
+<a name="line194"></a>	 * @return	string	the HTML "edit" page
+<a name="line195"></a>	 */
+<a name="line196"></a>	function edit()
+<a name="line197"></a>	{
+<a name="line198"></a>		if (FALSE === ($id = $this->CI->uri->segment(4)))
+<a name="line199"></a>		{
+<a name="line200"></a>			return $this->view();
+<a name="line201"></a>		}
+<a name="line202"></a>
+<a name="line203"></a>		// Fetch the primary field name
+<a name="line204"></a>		$primary = $this->CI->db->primary($this->current_table);				
+<a name="line205"></a>
+<a name="line206"></a>		// Run the query
+<a name="line207"></a>		$query = $this->CI->db->get_where($this->current_table, array($primary => $id));
+<a name="line208"></a>
+<a name="line209"></a>		$data = array(
+<a name="line210"></a>						'title'	=>  ( ! isset($this->lang['scaff_edit'])) ? 'Edit Data' : $this->lang['scaff_edit'],
+<a name="line211"></a>						'fields'	=> $query->field_data(),
+<a name="line212"></a>						'query'		=> $query->row(),
+<a name="line213"></a>						'action'	=> $this->base_uri.'/update/'.$this->CI->uri->segment(4)
+<a name="line214"></a>					);
+<a name="line215"></a>	
+<a name="line216"></a>		$this->CI->load->view('edit', $data);
+<a name="line217"></a>	}
+<a name="line218"></a>	
+<a name="line219"></a>	// --------------------------------------------------------------------
+<a name="line220"></a>	
+<a name="line221"></a>	/**
+<a name="line222"></a>	 * Update
+<a name="line223"></a>	 *
+<a name="line224"></a>	 * @access	public
+<a name="line225"></a>	 * @return	void	redirects to the view page
+<a name="line226"></a>	 */
+<a name="line227"></a>	function update()
+<a name="line228"></a>	{	
+<a name="line229"></a>		// Fetch the primary key
+<a name="line230"></a>		$primary = $this->CI->db->primary($this->current_table);				
+<a name="line231"></a>
+<a name="line232"></a>		// Now do the query
+<a name="line233"></a>		$this->CI->db->update($this->current_table, $_POST, array($primary => $this->CI->uri->segment(4)));
+<a name="line234"></a>		
+<a name="line235"></a>		redirect($this->base_uri.'/view/');
+<a name="line236"></a>	}
+<a name="line237"></a>	
+<a name="line238"></a>	// --------------------------------------------------------------------
+<a name="line239"></a>	
+<a name="line240"></a>	/**
+<a name="line241"></a>	 * Delete Confirmation
+<a name="line242"></a>	 *
+<a name="line243"></a>	 * @access	public
+<a name="line244"></a>	 * @return	string	the HTML "delete confirm" page
+<a name="line245"></a>	 */
+<a name="line246"></a>	function delete()
+<a name="line247"></a>	{
+<a name="line248"></a>		if ( ! isset($this->lang['scaff_del_confirm']))
+<a name="line249"></a>		{
+<a name="line250"></a>			$message = 'Are you sure you want to delete the following row: '.$this->CI->uri->segment(4);
+<a name="line251"></a>		}
+<a name="line252"></a>		else
+<a name="line253"></a>		{
+<a name="line254"></a>			$message = $this->lang['scaff_del_confirm'].' '.$this->CI->uri->segment(4);
+<a name="line255"></a>		}
+<a name="line256"></a>		
+<a name="line257"></a>		$data = array(
+<a name="line258"></a>						'title'		=> ( ! isset($this->lang['scaff_delete'])) ? 'Delete Data' : $this->lang['scaff_delete'],
+<a name="line259"></a>						'message'	=> $message,
+<a name="line260"></a>						'no'		=> anchor(array($this->base_uri, 'view'), ( ! isset($this->lang['scaff_no'])) ? 'No' : $this->lang['scaff_no']),
+<a name="line261"></a>						'yes'		=> anchor(array($this->base_uri, 'do_delete', $this->CI->uri->segment(4)), ( ! isset($this->lang['scaff_yes'])) ? 'Yes' : $this->lang['scaff_yes'])
+<a name="line262"></a>					);
+<a name="line263"></a>	
+<a name="line264"></a>		$this->CI->load->view('delete', $data);
+<a name="line265"></a>	}
+<a name="line266"></a>	
+<a name="line267"></a>	// --------------------------------------------------------------------
+<a name="line268"></a>	
+<a name="line269"></a>	/**
+<a name="line270"></a>	 * Delete
+<a name="line271"></a>	 *
+<a name="line272"></a>	 * @access	public
+<a name="line273"></a>	 * @return	void	redirects to the view page
+<a name="line274"></a>	 */
+<a name="line275"></a>	function do_delete()
+<a name="line276"></a>	{		
+<a name="line277"></a>		// Fetch the primary key
+<a name="line278"></a>		$primary = $this->CI->db->primary($this->current_table);				
+<a name="line279"></a>
+<a name="line280"></a>		// Now do the query
+<a name="line281"></a>		$this->CI->db->where($primary, $this->CI->uri->segment(4));
+<a name="line282"></a>		$this->CI->db->delete($this->current_table);
+<a name="line283"></a>
+<a name="line284"></a>		header("Refresh:0;url=".site_url(array($this->base_uri, 'view')));
+<a name="line285"></a>		exit;
+<a name="line286"></a>	}
+<a name="line287"></a>
+<a name="line288"></a>}
+<a name="line289"></a>
+<a name="line290"></a>/* End of file Scaffolding.php */
+<a name="line291"></a>/* Location: ./system/scaffolding/Scaffolding.php */</pre>
+<div class="header">
+<h1>GiftFlow API</h1>
+<ul>
+<li><a href="../../overview-summary.html">Overview</a></li>
+<li>Package</li><li>Class</li><li>Tree</li><li><a href="../../overview-files.html">Files</a></li>
+<li><a href="../../deprecated-list.html">Deprecated</a></li>
+<li><a href="../../index-all.html">Index</a></li>
+</ul>
+</div>
+
+<div class="small_links">
+<a href="../../index.html" target="_top">Frames</a>
+<a href="../../source/scaffolding/scaffolding.php.html" target="_top">No frames</a>
+</div>
+<hr>
+
+<p id="footer">This document was generated by <a href="http://peej.github.com/phpdoctor/">PHPDoctor: The PHP Documentation Creator</a></p>
+
+</body>
+
+</html>

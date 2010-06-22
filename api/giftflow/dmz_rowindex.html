@@ -1,0 +1,225 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+
+<html lang="en">
+<head>
+
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
+<meta name="generator" content="PHPDoctor 2RC4 (http://peej.github.com/phpdoctor/)">
+<meta name="when" content="Sun, 20 Jun 2010 17:43:50 +0000">
+
+<link rel="stylesheet" type="text/css" href="../stylesheet.css">
+<link rel="start" href="../overview-summary.html">
+
+<title>DMZ_RowIndex (GiftFlow API)</title>
+
+</head>
+<body id="definition" onload="parent.document.title=document.title;">
+
+<div class="header">
+<h1>GiftFlow API</h1>
+<ul>
+<li><a href="../overview-summary.html">Overview</a></li>
+<li><a href="../giftflow/package-summary.html">Package</a></li>
+<li class="active">Class</li>
+<li><a href="../giftflow/package-tree.html">Tree</a></li>
+<li><a href="../overview-files.html">Files</a></li>
+<li><a href="../deprecated-list.html">Deprecated</a></li>
+<li><a href="../index-all.html">Index</a></li>
+</ul>
+</div>
+
+<div class="small_links">
+<a href="../index.html" target="_top">Frames</a>
+<a href="../giftflow/dmz_rowindex.html" target="_top">No frames</a>
+</div>
+<div class="small_links">
+Summary: <a href="#summary_field">Field</a> | <a href="#summary_method">Method</a> | <a href="#summary_constr">Constr</a>
+Detail: <a href="#detail_field">Field</a> | <a href="#detail_method">Method</a> | <a href="#summary_constr">Constr</a>
+</div>
+<hr>
+
+<div class="qualifiedName">GiftFlow\DMZ_RowIndex</div>
+<a href="../source/application/datamapper/rowindex.php.html#line23" class="location">application/datamapper/rowindex.php at line 23</a>
+
+<h1>Class DMZ_RowIndex</h1>
+
+<pre class="tree"><strong>DMZ_RowIndex</strong><br /></pre>
+
+<hr>
+
+<p class="signature">public  class <strong>DMZ_RowIndex</strong></p>
+
+<div class="comment" id="overview_description"><p>DMZ_RowIndex Class</p></div>
+
+<dl>
+<dt>Package		DMZ-Included-Extensions.</dt>
+</dl>
+<hr>
+
+<table id="summary_field">
+<tr><th colspan="2">Field Summary</th></tr>
+<tr>
+<td class="type">private  mixed</td>
+<td class="description"><p class="name"><a href="#first_only">$first_only</a></p></td>
+</tr>
+</table>
+
+<table id="summary_method">
+<tr><th colspan="2">Method Summary</th></tr>
+<tr>
+<td class="type">private  void</td>
+<td class="description"><p class="name"><a href="#_orderlist()">_orderlist</a>(mixed order_by)</p><p class="description">Processes the order_by array, and converts it into a list
+of non-fully-qualified columns. </p></td>
+</tr>
+<tr>
+<td class="type">private  void</td>
+<td class="description"><p class="name"><a href="#_splitselect()">_splitselect</a>(mixed select)</p><p class="description">Splits the select query up into parts.</p></td>
+</tr>
+<tr>
+<td class="type">private  void</td>
+<td class="description"><p class="name"><a href="#_splitselect_parens()">_splitselect_parens</a>(mixed select, mixed pos)</p><p class="description">Recursively processes parentheses in the select string.</p></td>
+</tr>
+<tr>
+<td class="type"> void</td>
+<td class="description"><p class="name"><a href="#row_index()">row_index</a>(mixed object, mixed id, mixed leave_select)</p><p class="description">Given an already-built query and an object's ID, determine what row
+that object has in the query.</p></td>
+</tr>
+<tr>
+<td class="type"> void</td>
+<td class="description"><p class="name"><a href="#row_indices()">row_indices</a>(mixed object, mixed ids, mixed leave_select)</p><p class="description">Given an already-built query and an object's ID, determine what row
+that object has in the query.</p></td>
+</tr>
+</table>
+
+<h2 id="detail_field">Field Detail</h2>
+<a href="../source/application/datamapper/rowindex.php.html#line25" class="location">application/datamapper/rowindex.php at line 25</a>
+
+<h3 id="first_only">first_only</h3>
+<code class="signature">private  mixed <strong>$first_only</strong> = FALSE</code>
+<div class="details">
+</div>
+
+<hr>
+
+<h2 id="detail_method">Method Detail</h2><div class="method_detail">
+<div class='method'><a href="../source/application/datamapper/rowindex.php.html#line128" class="location">application/datamapper/rowindex.php at line 128</a>
+
+<h3 id="_orderlist()">_orderlist</h3>
+<code class="signature">private  void <strong>_orderlist</strong>(mixed order_by)</code>
+<div class="details">
+<p>Processes the order_by array, and converts it into a list
+of non-fully-qualified columns. These might be aliases.</p><dl>
+<dt>Param	array:</dt>
+<dd>$order_by  Original order_by array</dd>
+<dt>Return	array:</dt>
+<dd>Modified array.</dd>
+</dl>
+</div></div>
+
+
+
+<div class='method'><a href="../source/application/datamapper/rowindex.php.html#line159" class="location">application/datamapper/rowindex.php at line 159</a>
+
+<h3 id="_splitselect()">_splitselect</h3>
+<code class="signature">private  void <strong>_splitselect</strong>(mixed select)</code>
+<div class="details">
+<p>Splits the select query up into parts.</p><dl>
+<dt>Param	string:</dt>
+<dd>$select Original select string</dd>
+<dt>Return	array:</dt>
+<dd>Individual select components.</dd>
+</dl>
+</div></div>
+
+
+
+<div class='method'><a href="../source/application/datamapper/rowindex.php.html#line189" class="location">application/datamapper/rowindex.php at line 189</a>
+
+<h3 id="_splitselect_parens()">_splitselect_parens</h3>
+<code class="signature">private  void <strong>_splitselect_parens</strong>(mixed select, mixed pos)</code>
+<div class="details">
+<p>Recursively processes parentheses in the select string.</p><dl>
+<dt>Param	string:</dt>
+<dd>$select Select string.</dd>
+<dt>Param	int:</dt>
+<dd>$pos current location in the string.</dd>
+<dt>Return	int:</dt>
+<dd>final position after all recursing is complete.</dd>
+</dl>
+</div></div>
+
+
+
+<div class='method'><a href="../source/application/datamapper/rowindex.php.html#line37" class="location">application/datamapper/rowindex.php at line 37</a>
+
+<h3 id="row_index()">row_index</h3>
+<code class="signature">public  void <strong>row_index</strong>(mixed object, mixed id, mixed leave_select)</code>
+<div class="details">
+<p>Given an already-built query and an object's ID, determine what row
+that object has in the query.</p><dl>
+<dt>Param	DataMapper:</dt>
+<dd>$object THe DataMapper object.</dd>
+<dt>Param	DataMapper|int:</dt>
+<dd>$id The ID or object to look for.</dd>
+<dt>Param	array:</dt>
+<dd>$leave_select A list of items to leave in the selection array, overriding the automatic removal.</dd>
+<dt>Param	<type>:</dt>
+<dd>$distinct_on If TRUE, use DISTINCT ON (not all DBs support this)</dd>
+<dt>Return	bool|int:</dt>
+<dd>Returns the index of the item, or FALSE if none are found.</dd>
+</dl>
+</div></div>
+
+
+
+<div class='method'><a href="../source/application/datamapper/rowindex.php.html#line59" class="location">application/datamapper/rowindex.php at line 59</a>
+
+<h3 id="row_indices()">row_indices</h3>
+<code class="signature">public  void <strong>row_indices</strong>(mixed object, mixed ids, mixed leave_select)</code>
+<div class="details">
+<p>Given an already-built query and an object's ID, determine what row
+that object has in the query.</p><dl>
+<dt>Param	DataMapper:</dt>
+<dd>$object THe DataMapper object.</dd>
+<dt>Param	DataMapper|array|int:</dt>
+<dd>$id The ID or object to look for.</dd>
+<dt>Param	array:</dt>
+<dd>$leave_select A list of items to leave in the selection array, overriding the automatic removal.</dd>
+<dt>Param	<type>:</dt>
+<dd>$distinct_on If TRUE, use DISTINCT ON (not all DBs support this)</dd>
+<dt>Return	array:</dt>
+<dd>Returns an array of row indices.</dd>
+</dl>
+</div></div>
+
+
+
+</div><div class="header">
+<h1>GiftFlow API</h1>
+<ul>
+<li><a href="../overview-summary.html">Overview</a></li>
+<li><a href="../giftflow/package-summary.html">Package</a></li>
+<li class="active">Class</li>
+<li><a href="../giftflow/package-tree.html">Tree</a></li>
+<li><a href="../overview-files.html">Files</a></li>
+<li><a href="../deprecated-list.html">Deprecated</a></li>
+<li><a href="../index-all.html">Index</a></li>
+</ul>
+</div>
+
+<div class="small_links">
+<a href="../index.html" target="_top">Frames</a>
+<a href="../giftflow/dmz_rowindex.html" target="_top">No frames</a>
+</div>
+<div class="small_links">
+Summary: <a href="#summary_field">Field</a> | <a href="#summary_method">Method</a> | <a href="#summary_constr">Constr</a>
+Detail: <a href="#detail_field">Field</a> | <a href="#detail_method">Method</a> | <a href="#summary_constr">Constr</a>
+</div>
+<hr>
+
+<p id="footer">This document was generated by <a href="http://peej.github.com/phpdoctor/">PHPDoctor: The PHP Documentation Creator</a></p>
+
+</body>
+
+</html>

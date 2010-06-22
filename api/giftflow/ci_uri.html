@@ -1,0 +1,564 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+
+<html lang="en">
+<head>
+
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
+<meta name="generator" content="PHPDoctor 2RC4 (http://peej.github.com/phpdoctor/)">
+<meta name="when" content="Sun, 20 Jun 2010 17:43:50 +0000">
+
+<link rel="stylesheet" type="text/css" href="../stylesheet.css">
+<link rel="start" href="../overview-summary.html">
+
+<title>CI_URI (GiftFlow API)</title>
+
+</head>
+<body id="definition" onload="parent.document.title=document.title;">
+
+<div class="header">
+<h1>GiftFlow API</h1>
+<ul>
+<li><a href="../overview-summary.html">Overview</a></li>
+<li><a href="../giftflow/package-summary.html">Package</a></li>
+<li class="active">Class</li>
+<li><a href="../giftflow/package-tree.html">Tree</a></li>
+<li><a href="../overview-files.html">Files</a></li>
+<li><a href="../deprecated-list.html">Deprecated</a></li>
+<li><a href="../index-all.html">Index</a></li>
+</ul>
+</div>
+
+<div class="small_links">
+<a href="../index.html" target="_top">Frames</a>
+<a href="../giftflow/ci_uri.html" target="_top">No frames</a>
+</div>
+<div class="small_links">
+Summary: <a href="#summary_field">Field</a> | <a href="#summary_method">Method</a> | <a href="#summary_constr">Constr</a>
+Detail: <a href="#detail_field">Field</a> | <a href="#detail_method">Method</a> | <a href="#summary_constr">Constr</a>
+</div>
+<hr>
+
+<div class="qualifiedName">GiftFlow\CI_URI</div>
+<a href="../source/libraries/uri.php.html#line29" class="location">libraries/URI.php at line 29</a>
+
+<h1>Class CI_URI</h1>
+
+<pre class="tree"><strong>CI_URI</strong><br /></pre>
+
+<hr>
+
+<p class="signature">public  class <strong>CI_URI</strong></p>
+
+<div class="comment" id="overview_description"><p>URI Class</p><p>Parses URIs and determines routing</p></div>
+
+<dl>
+<dt>Package		CodeIgniter.</dt>
+<dt>Subpackage	Libraries.</dt>
+<dt>Category	URI.</dt>
+<dt>Author		ExpressionEngine:</dt>
+<dd>Dev Team</dd>
+<dt>Link		http://codeigniter.com/user_guide/libraries/uri.html.</dt>
+</dl>
+<hr>
+
+<table id="summary_field">
+<tr><th colspan="2">Field Summary</th></tr>
+<tr>
+<td class="type"> mixed</td>
+<td class="description"><p class="name"><a href="#keyval">$keyval</a></p></td>
+</tr>
+<tr>
+<td class="type"> mixed</td>
+<td class="description"><p class="name"><a href="#rsegments">$rsegments</a></p></td>
+</tr>
+<tr>
+<td class="type"> mixed</td>
+<td class="description"><p class="name"><a href="#segments">$segments</a></p></td>
+</tr>
+<tr>
+<td class="type"> mixed</td>
+<td class="description"><p class="name"><a href="#uri_string">$uri_string</a></p></td>
+</tr>
+</table>
+
+<table id="summary_method">
+<tr><th colspan="2">Method Summary</th></tr>
+<tr>
+<td class="type"> void</td>
+<td class="description"><p class="name"><a href="#__construct()">__construct</a>()</p><p class="description">ConstructorSimply globalizes the $RTR object. </p></td>
+</tr>
+<tr>
+<td class="type">private  void</td>
+<td class="description"><p class="name"><a href="#_explode_segments()">_explode_segments</a>()</p><p class="description">Explode the URI Segments. </p></td>
+</tr>
+<tr>
+<td class="type">private  void</td>
+<td class="description"><p class="name"><a href="#_fetch_uri_string()">_fetch_uri_string</a>()</p><p class="description">Get the URI String</p></td>
+</tr>
+<tr>
+<td class="type">private  void</td>
+<td class="description"><p class="name"><a href="#_filter_uri()">_filter_uri</a>(mixed str)</p><p class="description">Filter segments for malicious characters</p></td>
+</tr>
+<tr>
+<td class="type">private  void</td>
+<td class="description"><p class="name"><a href="#_parse_request_uri()">_parse_request_uri</a>()</p><p class="description">Parse the REQUEST_URIDue to the way REQUEST_URI works it usually contains path info
+that makes it unusable as URI data. </p></td>
+</tr>
+<tr>
+<td class="type">private  void</td>
+<td class="description"><p class="name"><a href="#_reindex_segments()">_reindex_segments</a>()</p><p class="description">Re-index SegmentsThis function re-indexes the $this->segment array so that it
+starts at 1 rather than 0. </p></td>
+</tr>
+<tr>
+<td class="type">private  void</td>
+<td class="description"><p class="name"><a href="#_remove_url_suffix()">_remove_url_suffix</a>()</p><p class="description">Remove the suffix from the URL if needed</p></td>
+</tr>
+<tr>
+<td class="type">private  void</td>
+<td class="description"><p class="name"><a href="#_slash_segment()">_slash_segment</a>(mixed n, str where, str which)</p><p class="description">Fetch a URI Segment and add a trailing slash - helper function</p></td>
+</tr>
+<tr>
+<td class="type">private  void</td>
+<td class="description"><p class="name"><a href="#_uri_to_assoc()">_uri_to_assoc</a>(int n, mixed default)</p><p class="description">Generate a key value pair from the URI string or Re-routed URI string</p></td>
+</tr>
+<tr>
+<td class="type"> void</td>
+<td class="description"><p class="name"><a href="#assoc_to_uri()">assoc_to_uri</a>(mixed array)</p><p class="description">Generate a URI string from an associative array</p></td>
+</tr>
+<tr>
+<td class="type"> void</td>
+<td class="description"><p class="name"><a href="#rsegment()">rsegment</a>(mixed n, bool no_result)</p><p class="description">Fetch a URI "routed" SegmentThis function returns the re-routed URI segment (assuming routing rules are used)
+based on the number provided. </p></td>
+</tr>
+<tr>
+<td class="type"> void</td>
+<td class="description"><p class="name"><a href="#rsegment_array()">rsegment_array</a>()</p><p class="description">Routed Segment Array</p></td>
+</tr>
+<tr>
+<td class="type"> void</td>
+<td class="description"><p class="name"><a href="#ruri_string()">ruri_string</a>()</p><p class="description">Fetch the entire Re-routed URI string</p></td>
+</tr>
+<tr>
+<td class="type"> void</td>
+<td class="description"><p class="name"><a href="#ruri_to_assoc()">ruri_to_assoc</a>(int n, mixed default)</p><p class="description">Identical to above only it uses the re-routed segment array</p></td>
+</tr>
+<tr>
+<td class="type"> void</td>
+<td class="description"><p class="name"><a href="#segment()">segment</a>(mixed n, bool no_result)</p><p class="description">Fetch a URI SegmentThis function returns the URI segment based on the number provided.</p></td>
+</tr>
+<tr>
+<td class="type"> void</td>
+<td class="description"><p class="name"><a href="#segment_array()">segment_array</a>()</p><p class="description">Segment Array</p></td>
+</tr>
+<tr>
+<td class="type"> void</td>
+<td class="description"><p class="name"><a href="#slash_rsegment()">slash_rsegment</a>(mixed n, str where)</p><p class="description">Fetch a URI Segment and add a trailing slash</p></td>
+</tr>
+<tr>
+<td class="type"> void</td>
+<td class="description"><p class="name"><a href="#slash_segment()">slash_segment</a>(mixed n, str where)</p><p class="description">Fetch a URI Segment and add a trailing slash</p></td>
+</tr>
+<tr>
+<td class="type"> void</td>
+<td class="description"><p class="name"><a href="#total_rsegments()">total_rsegments</a>()</p><p class="description">Total number of routed segments</p></td>
+</tr>
+<tr>
+<td class="type"> void</td>
+<td class="description"><p class="name"><a href="#total_segments()">total_segments</a>()</p><p class="description">Total number of segments</p></td>
+</tr>
+<tr>
+<td class="type"> void</td>
+<td class="description"><p class="name"><a href="#uri_string()">uri_string</a>()</p><p class="description">Fetch the entire URI string</p></td>
+</tr>
+<tr>
+<td class="type"> void</td>
+<td class="description"><p class="name"><a href="#uri_to_assoc()">uri_to_assoc</a>(int n, mixed default)</p><p class="description">Generate a key value pair from the URI stringThis function generates and associative array of URI data starting
+at the supplied segment. </p></td>
+</tr>
+</table>
+
+<h2 id="detail_field">Field Detail</h2>
+<a href="../source/libraries/uri.php.html#line31" class="location">libraries/URI.php at line 31</a>
+
+<h3 id="keyval">keyval</h3>
+<code class="signature">public  mixed <strong>$keyval</strong> = array()</code>
+<div class="details">
+</div>
+
+<hr>
+
+<a href="../source/libraries/uri.php.html#line34" class="location">libraries/URI.php at line 34</a>
+
+<h3 id="rsegments">rsegments</h3>
+<code class="signature">public  mixed <strong>$rsegments</strong> = array()</code>
+<div class="details">
+</div>
+
+<hr>
+
+<a href="../source/libraries/uri.php.html#line33" class="location">libraries/URI.php at line 33</a>
+
+<h3 id="segments">segments</h3>
+<code class="signature">public  mixed <strong>$segments</strong> = array()</code>
+<div class="details">
+</div>
+
+<hr>
+
+<a href="../source/libraries/uri.php.html#line32" class="location">libraries/URI.php at line 32</a>
+
+<h3 id="uri_string">uri_string</h3>
+<code class="signature">public  mixed <strong>$uri_string</strong></code>
+<div class="details">
+</div>
+
+<hr>
+
+<h2 id="detail_method">Method Detail</h2><div class="method_detail">
+<div class='method'><a href="../source/libraries/uri.php.html#line45" class="location">libraries/URI.php at line 45</a>
+
+<h3 id="__construct()">__construct</h3>
+<code class="signature">public  void <strong>__construct</strong>()</code>
+<div class="details">
+<p>Constructor</p><p>Simply globalizes the $RTR object.  The front
+loads the Router class early on so it's not available
+normally as other classes are.</p><dl>
+<dt>Access	public.</dt>
+</dl>
+</div></div>
+
+
+
+<div class='method'><a href="../source/libraries/uri.php.html#line229" class="location">libraries/URI.php at line 229</a>
+
+<h3 id="_explode_segments()">_explode_segments</h3>
+<code class="signature">private  void <strong>_explode_segments</strong>()</code>
+<div class="details">
+<p>Explode the URI Segments. The individual segments will
+be stored in the $this->segments array.</p><dl>
+<dt>Access	private.</dt>
+<dt>Return	void.</dt>
+</dl>
+</div></div>
+
+
+
+<div class='method'><a href="../source/libraries/uri.php.html#line60" class="location">libraries/URI.php at line 60</a>
+
+<h3 id="_fetch_uri_string()">_fetch_uri_string</h3>
+<code class="signature">private  void <strong>_fetch_uri_string</strong>()</code>
+<div class="details">
+<p>Get the URI String</p><dl>
+<dt>Access	private.</dt>
+<dt>Return	string.</dt>
+</dl>
+</div></div>
+
+
+
+<div class='method'><a href="../source/libraries/uri.php.html#line185" class="location">libraries/URI.php at line 185</a>
+
+<h3 id="_filter_uri()">_filter_uri</h3>
+<code class="signature">private  void <strong>_filter_uri</strong>(mixed str)</code>
+<div class="details">
+<p>Filter segments for malicious characters</p><dl>
+<dt>Access	private.</dt>
+<dt>Param	string.</dt>
+<dt>Return	string.</dt>
+</dl>
+</div></div>
+
+
+
+<div class='method'><a href="../source/libraries/uri.php.html#line135" class="location">libraries/URI.php at line 135</a>
+
+<h3 id="_parse_request_uri()">_parse_request_uri</h3>
+<code class="signature">private  void <strong>_parse_request_uri</strong>()</code>
+<div class="details">
+<p>Parse the REQUEST_URI</p><p>Due to the way REQUEST_URI works it usually contains path info
+that makes it unusable as URI data.  We'll trim off the unnecessary
+data, hopefully arriving at a valid URI that we can use.</p><dl>
+<dt>Access	private.</dt>
+<dt>Return	string.</dt>
+</dl>
+</div></div>
+
+
+
+<div class='method'><a href="../source/libraries/uri.php.html#line255" class="location">libraries/URI.php at line 255</a>
+
+<h3 id="_reindex_segments()">_reindex_segments</h3>
+<code class="signature">private  void <strong>_reindex_segments</strong>()</code>
+<div class="details">
+<p>Re-index Segments</p><p>This function re-indexes the $this->segment array so that it
+starts at 1 rather than 0.  Doing so makes it simpler to
+use functions like $this->uri->segment(n) since there is
+a 1:1 relationship between the segment array and the actual segments.</p><dl>
+<dt>Access	private.</dt>
+<dt>Return	void.</dt>
+</dl>
+</div></div>
+
+
+
+<div class='method'><a href="../source/libraries/uri.php.html#line212" class="location">libraries/URI.php at line 212</a>
+
+<h3 id="_remove_url_suffix()">_remove_url_suffix</h3>
+<code class="signature">private  void <strong>_remove_url_suffix</strong>()</code>
+<div class="details">
+<p>Remove the suffix from the URL if needed</p><dl>
+<dt>Access	private.</dt>
+<dt>Return	void.</dt>
+</dl>
+</div></div>
+
+
+
+<div class='method'><a href="../source/libraries/uri.php.html#line483" class="location">libraries/URI.php at line 483</a>
+
+<h3 id="_slash_segment()">_slash_segment</h3>
+<code class="signature">private  void <strong>_slash_segment</strong>(mixed n, str where, str which)</code>
+<div class="details">
+<p>Fetch a URI Segment and add a trailing slash - helper function</p><dl>
+<dt>Access	private.</dt>
+<dt>Param	integer.</dt>
+<dt>Return	string.</dt>
+</dl>
+</div></div>
+
+
+
+<div class='method'><a href="../source/libraries/uri.php.html#line346" class="location">libraries/URI.php at line 346</a>
+
+<h3 id="_uri_to_assoc()">_uri_to_assoc</h3>
+<code class="signature">private  void <strong>_uri_to_assoc</strong>(int n, mixed default)</code>
+<div class="details">
+<p>Generate a key value pair from the URI string or Re-routed URI string</p><dl>
+<dt>Access	private.</dt>
+<dt>Param	integer	the:</dt>
+<dd>starting segment number</dd>
+<dt>Param	array	an:</dt>
+<dd>array of default values</dd>
+<dt>Param	string	which:</dt>
+<dd>array we should use</dd>
+<dt>Return	array.</dt>
+</dl>
+</div></div>
+
+
+
+<div class='method'><a href="../source/libraries/uri.php.html#line430" class="location">libraries/URI.php at line 430</a>
+
+<h3 id="assoc_to_uri()">assoc_to_uri</h3>
+<code class="signature">public  void <strong>assoc_to_uri</strong>(mixed array)</code>
+<div class="details">
+<p>Generate a URI string from an associative array</p><dl>
+<dt>Access	public.</dt>
+<dt>Param	array	an:</dt>
+<dd>associative array of key/values</dd>
+<dt>Return	array.</dt>
+</dl>
+</div></div>
+
+
+
+<div class='method'><a href="../source/libraries/uri.php.html#line294" class="location">libraries/URI.php at line 294</a>
+
+<h3 id="rsegment()">rsegment</h3>
+<code class="signature">public  void <strong>rsegment</strong>(mixed n, bool no_result)</code>
+<div class="details">
+<p>Fetch a URI "routed" Segment</p><p>This function returns the re-routed URI segment (assuming routing rules are used)
+based on the number provided.  If there is no routing this function returns the
+same result as $this->segment()</p><dl>
+<dt>Access	public.</dt>
+<dt>Param	integer.</dt>
+<dt>Param	bool.</dt>
+<dt>Return	string.</dt>
+</dl>
+</div></div>
+
+
+
+<div class='method'><a href="../source/libraries/uri.php.html#line524" class="location">libraries/URI.php at line 524</a>
+
+<h3 id="rsegment_array()">rsegment_array</h3>
+<code class="signature">public  void <strong>rsegment_array</strong>()</code>
+<div class="details">
+<p>Routed Segment Array</p><dl>
+<dt>Access	public.</dt>
+<dt>Return	array.</dt>
+</dl>
+</div></div>
+
+
+
+<div class='method'><a href="../source/libraries/uri.php.html#line577" class="location">libraries/URI.php at line 577</a>
+
+<h3 id="ruri_string()">ruri_string</h3>
+<code class="signature">public  void <strong>ruri_string</strong>()</code>
+<div class="details">
+<p>Fetch the entire Re-routed URI string</p><dl>
+<dt>Access	public.</dt>
+<dt>Return	string.</dt>
+</dl>
+</div></div>
+
+
+
+<div class='method'><a href="../source/libraries/uri.php.html#line330" class="location">libraries/URI.php at line 330</a>
+
+<h3 id="ruri_to_assoc()">ruri_to_assoc</h3>
+<code class="signature">public  void <strong>ruri_to_assoc</strong>(int n, mixed default)</code>
+<div class="details">
+<p>Identical to above only it uses the re-routed segment array</p></div></div>
+
+
+
+<div class='method'><a href="../source/libraries/uri.php.html#line275" class="location">libraries/URI.php at line 275</a>
+
+<h3 id="segment()">segment</h3>
+<code class="signature">public  void <strong>segment</strong>(mixed n, bool no_result)</code>
+<div class="details">
+<p>Fetch a URI Segment</p><p>This function returns the URI segment based on the number provided.</p><dl>
+<dt>Access	public.</dt>
+<dt>Param	integer.</dt>
+<dt>Param	bool.</dt>
+<dt>Return	string.</dt>
+</dl>
+</div></div>
+
+
+
+<div class='method'><a href="../source/libraries/uri.php.html#line511" class="location">libraries/URI.php at line 511</a>
+
+<h3 id="segment_array()">segment_array</h3>
+<code class="signature">public  void <strong>segment_array</strong>()</code>
+<div class="details">
+<p>Segment Array</p><dl>
+<dt>Access	public.</dt>
+<dt>Return	array.</dt>
+</dl>
+</div></div>
+
+
+
+<div class='method'><a href="../source/libraries/uri.php.html#line467" class="location">libraries/URI.php at line 467</a>
+
+<h3 id="slash_rsegment()">slash_rsegment</h3>
+<code class="signature">public  void <strong>slash_rsegment</strong>(mixed n, str where)</code>
+<div class="details">
+<p>Fetch a URI Segment and add a trailing slash</p><dl>
+<dt>Access	public.</dt>
+<dt>Param	integer.</dt>
+<dt>Param	string.</dt>
+<dt>Return	string.</dt>
+</dl>
+</div></div>
+
+
+
+<div class='method'><a href="../source/libraries/uri.php.html#line452" class="location">libraries/URI.php at line 452</a>
+
+<h3 id="slash_segment()">slash_segment</h3>
+<code class="signature">public  void <strong>slash_segment</strong>(mixed n, str where)</code>
+<div class="details">
+<p>Fetch a URI Segment and add a trailing slash</p><dl>
+<dt>Access	public.</dt>
+<dt>Param	integer.</dt>
+<dt>Param	string.</dt>
+<dt>Return	string.</dt>
+</dl>
+</div></div>
+
+
+
+<div class='method'><a href="../source/libraries/uri.php.html#line550" class="location">libraries/URI.php at line 550</a>
+
+<h3 id="total_rsegments()">total_rsegments</h3>
+<code class="signature">public  void <strong>total_rsegments</strong>()</code>
+<div class="details">
+<p>Total number of routed segments</p><dl>
+<dt>Access	public.</dt>
+<dt>Return	integer.</dt>
+</dl>
+</div></div>
+
+
+
+<div class='method'><a href="../source/libraries/uri.php.html#line537" class="location">libraries/URI.php at line 537</a>
+
+<h3 id="total_segments()">total_segments</h3>
+<code class="signature">public  void <strong>total_segments</strong>()</code>
+<div class="details">
+<p>Total number of segments</p><dl>
+<dt>Access	public.</dt>
+<dt>Return	integer.</dt>
+</dl>
+</div></div>
+
+
+
+<div class='method'><a href="../source/libraries/uri.php.html#line563" class="location">libraries/URI.php at line 563</a>
+
+<h3 id="uri_string()">uri_string</h3>
+<code class="signature">public  void <strong>uri_string</strong>()</code>
+<div class="details">
+<p>Fetch the entire URI string</p><dl>
+<dt>Access	public.</dt>
+<dt>Return	string.</dt>
+</dl>
+</div></div>
+
+
+
+<div class='method'><a href="../source/libraries/uri.php.html#line322" class="location">libraries/URI.php at line 322</a>
+
+<h3 id="uri_to_assoc()">uri_to_assoc</h3>
+<code class="signature">public  void <strong>uri_to_assoc</strong>(int n, mixed default)</code>
+<div class="details">
+<p>Generate a key value pair from the URI string</p><p>This function generates and associative array of URI data starting
+at the supplied segment. For example, if this is your URI:</p><p>example.com/user/search/name/joe/location/UK/gender/male</p><p>You can use this function to generate an array with this prototype:</p><p>array (
+name => joe
+location => UK
+gender => male
+)</p><dl>
+<dt>Access	public.</dt>
+<dt>Param	integer	the:</dt>
+<dd>starting segment number</dd>
+<dt>Param	array	an:</dt>
+<dd>array of default values</dd>
+<dt>Return	array.</dt>
+</dl>
+</div></div>
+
+
+
+</div><div class="header">
+<h1>GiftFlow API</h1>
+<ul>
+<li><a href="../overview-summary.html">Overview</a></li>
+<li><a href="../giftflow/package-summary.html">Package</a></li>
+<li class="active">Class</li>
+<li><a href="../giftflow/package-tree.html">Tree</a></li>
+<li><a href="../overview-files.html">Files</a></li>
+<li><a href="../deprecated-list.html">Deprecated</a></li>
+<li><a href="../index-all.html">Index</a></li>
+</ul>
+</div>
+
+<div class="small_links">
+<a href="../index.html" target="_top">Frames</a>
+<a href="../giftflow/ci_uri.html" target="_top">No frames</a>
+</div>
+<div class="small_links">
+Summary: <a href="#summary_field">Field</a> | <a href="#summary_method">Method</a> | <a href="#summary_constr">Constr</a>
+Detail: <a href="#detail_field">Field</a> | <a href="#detail_method">Method</a> | <a href="#summary_constr">Constr</a>
+</div>
+<hr>
+
+<p id="footer">This document was generated by <a href="http://peej.github.com/phpdoctor/">PHPDoctor: The PHP Documentation Creator</a></p>
+
+</body>
+
+</html>

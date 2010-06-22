@@ -1,0 +1,459 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+
+<html lang="en">
+<head>
+
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
+<meta name="generator" content="PHPDoctor 2RC4 (http://peej.github.com/phpdoctor/)">
+<meta name="when" content="Sun, 20 Jun 2010 17:43:51 +0000">
+
+<link rel="stylesheet" type="text/css" href="../../../stylesheet.css">
+<link rel="start" href="../../../overview-summary.html">
+
+<title>application/libraries/auth.php (GiftFlow API)</title>
+
+</head>
+<body id="file" onload="parent.document.title=document.title;">
+
+<div class="header">
+<h1>GiftFlow API</h1>
+<ul>
+<li><a href="../../../overview-summary.html">Overview</a></li>
+<li>Package</li><li>Class</li><li>Tree</li><li><a href="../../../overview-files.html">Files</a></li>
+<li><a href="../../../deprecated-list.html">Deprecated</a></li>
+<li><a href="../../../index-all.html">Index</a></li>
+</ul>
+</div>
+
+<div class="small_links">
+<a href="../../../index.html" target="_top">Frames</a>
+<a href="../../../source/application/libraries/auth.php.html" target="_top">No frames</a>
+</div>
+<hr>
+
+<h1>application/libraries/auth.php</h1>
+<hr>
+
+<a name="line1"></a><pre><?php  if ( ! defined('BASEPATH')) exit('No direct script access allowed');
+<a name="line2"></a>/**
+<a name="line3"></a>*	The Auth library handles both authentication and authorization functionality.
+<a name="line4"></a>*
+<a name="line5"></a>*	@author Brandon Jackson
+<a name="line6"></a>* 	@package Libraries
+<a name="line7"></a>*/
+<a name="line8"></a>class Auth
+<a name="line9"></a>{
+<a name="line10"></a>
+<a name="line11"></a>	protected $CI;
+<a name="line12"></a>	
+<a name="line13"></a>	/**
+<a name="line14"></a>	*	@var User
+<a name="line15"></a>	*/
+<a name="line16"></a>	var $U;
+<a name="line17"></a>
+<a name="line18"></a>	/**
+<a name="line19"></a>	*	Constructor
+<a name="line20"></a>	*/
+<a name="line21"></a>	public function __construct()
+<a name="line22"></a>	{
+<a name="line23"></a>		$this->CI =& get_instance();
+<a name="line24"></a>	}
+<a name="line25"></a>	
+<a name="line26"></a>	/**
+<a name="line27"></a>	*	Register new user
+<a name="line28"></a>	*
+<a name="line29"></a>	*	Reads from $_POST data
+<a name="line30"></a>	*
+<a name="line31"></a>	*	@return User
+<a name="line32"></a>	*/
+<a name="line33"></a>	public function register()
+<a name="line34"></a>	{
+<a name="line35"></a>		// Construct new User object
+<a name="line36"></a>		$this->U = new User();
+<a name="line37"></a>		
+<a name="line38"></a>		// Set $_POST data
+<a name="line39"></a>		$this->U->email = $this->CI->input->post('email');
+<a name="line40"></a>		$this->U->screen_name = $this->U->email;
+<a name="line41"></a>		$this->U->password = $this->CI->input->post('password');
+<a name="line42"></a>		
+<a name="line43"></a>		// Set default user role to 2, which is a normal user
+<a name="line44"></a>		$this->U->role_id = 2;
+<a name="line45"></a>		
+<a name="line46"></a>		// Set IP address
+<a name="line47"></a>		$this->U->ip_address = $this->CI->input->ip_address();
+<a name="line48"></a>		
+<a name="line49"></a>		// Generate salt based on time and email
+<a name="line50"></a>		$this->U->salt =  sha1('~'.$this->U->email.'~'.microtime(TRUE));
+<a name="line51"></a>		
+<a name="line52"></a>		// Save new user. If successful....
+<a name="line53"></a>		if($this->U->save())
+<a name="line54"></a>		{ 
+<a name="line55"></a>			// Create a new settings object.
+<a name="line56"></a>			$s = new User_setting();
+<a name="line57"></a>			
+<a name="line58"></a>			// Save settings object
+<a name="line59"></a>			$this->U->save($s);
+<a name="line60"></a>			
+<a name="line61"></a>			// Send email verification
+<a name="line62"></a>			$this->email_verification();
+<a name="line63"></a>		}
+<a name="line64"></a>		
+<a name="line65"></a>		// Return new user
+<a name="line66"></a>		return $this->U;
+<a name="line67"></a>	}
+<a name="line68"></a>	
+<a name="line69"></a>	/**
+<a name="line70"></a>	*	Handles logins. Reads credentials from $_POST and validates using 
+<a name="line71"></a>	*	methods stored in the User model. If successful, creates new session.
+<a name="line72"></a>	*
+<a name="line73"></a>	*	@return User
+<a name="line74"></a>	*/
+<a name="line75"></a>	public function login()
+<a name="line76"></a>	{
+<a name="line77"></a>		// Construct new User object
+<a name="line78"></a>		$this->U = new User();
+<a name="line79"></a>		
+<a name="line80"></a>		// Parse $_POST input
+<a name="line81"></a>		$this->U->email = $this->CI->input->post('email');
+<a name="line82"></a>		$this->U->password = $this->CI->input->post('password');
+<a name="line83"></a>		
+<a name="line84"></a>		// Validates login info. If valid...
+<a name="line85"></a>		if($this->U->login())
+<a name="line86"></a>		{
+<a name="line87"></a>			// ... create new session
+<a name="line88"></a>			$this->new_session();
+<a name="line89"></a>		}
+<a name="line90"></a>		
+<a name="line91"></a>		// Return User object
+<a name="line92"></a>		return $this->U;
+<a name="line93"></a>	}
+<a name="line94"></a>	/**
+<a name="line95"></a>	*	Logs user out. Destroys CodeIgniter session.
+<a name="line96"></a>	*
+<a name="line97"></a>	*	@return void
+<a name="line98"></a>	*/
+<a name="line99"></a>	public function logout()
+<a name="line100"></a>	{
+<a name="line101"></a>		$this->CI->session->sess_destroy();
+<a name="line102"></a>	}
+<a name="line103"></a>	
+<a name="line104"></a>	/**
+<a name="line105"></a>	*	Creates new CodeIgniter session
+<a name="line106"></a>	*
+<a name="line107"></a>	*	@return boolean
+<a name="line108"></a>	*/
+<a name="line109"></a>	protected function new_session()
+<a name="line110"></a>	{
+<a name="line111"></a>		if ( empty($this->U) )
+<a name="line112"></a>		{
+<a name="line113"></a>			return FALSE;
+<a name="line114"></a>		}
+<a name="line115"></a>		$this->U->default_location->get();
+<a name="line116"></a>		$this->U->default_photo->get();
+<a name="line117"></a>		$this->U->role->get();
+<a name="line118"></a>		$userdata = array ( 	'logged_in' => TRUE,
+<a name="line119"></a>						'role_id'=>$this->U->role->id,
+<a name="line120"></a>						'level'=>$this->U->role->level,
+<a name="line121"></a>						'user_id'=>$this->U->id,
+<a name="line122"></a>						'email'=>$this->U->email,
+<a name="line123"></a>						'username'=>$this->U->username,
+<a name="line124"></a>						'screen_name'=>$this->U->screen_name,
+<a name="line125"></a>						'first_name'=>$this->U->first_name,
+<a name="line126"></a>						'last_name'=>$this->U->last_name,
+<a name="line127"></a>						'location_latitude'=>$this->U->default_location->latitude,
+<a name="line128"></a>						'location_longitude'=>$this->U->default_location->longitude,
+<a name="line129"></a>						'location_street_address'=>$this->U->default_location->street_address,
+<a name="line130"></a>						'location_address'=>$this->U->default_location->address,
+<a name="line131"></a>						'location_city'=>$this->U->default_location->city,
+<a name="line132"></a>						'location_state'=>$this->U->default_location->state
+<a name="line133"></a>						);
+<a name="line134"></a>		if($this->U->facebook_photo==1&&!empty($this->U->facebook_id))
+<a name="line135"></a>		{
+<a name="line136"></a>			$userdata['photo_thumb_url'] = "http://graph.facebook.com/".$this->U->facebook_id."/picture?type=square";
+<a name="line137"></a>			$userdata['photo_url'] = "http://graph.facebook.com/".$this->U->facebook_id."/picture?type=large";
+<a name="line138"></a>		}
+<a name="line139"></a>		elseif(!empty($this->U->default_photo->thumb_url)&&!empty($this->U->default_photo->url))
+<a name="line140"></a>		{
+<a name="line141"></a>			$userdata['photo_thumb_url'] = $this->U->default_photo->thumb_url;
+<a name="line142"></a>			$userdata['photo_url'] = $this->U->default_photo->url;
+<a name="line143"></a>		}
+<a name="line144"></a>		else
+<a name="line145"></a>		{
+<a name="line146"></a>			$userdata['photo_thumb_url'] = base_url().'assets/images/default_user_photo_thumb.jpg';
+<a name="line147"></a>			$userdata['photo_url'] = base_url().'assets/images/default_user_photo.jpg';
+<a name="line148"></a>		}
+<a name="line149"></a>		// Save to userdata array
+<a name="line150"></a>		$this->CI->session->set_userdata($userdata);
+<a name="line151"></a>		return TRUE;
+<a name="line152"></a>	}
+<a name="line153"></a>	
+<a name="line154"></a>	
+<a name="line155"></a>	/*
+<a name="line156"></a>	*
+<a name="line157"></a>	*	AUTHORIZATION FUNCTIONS
+<a name="line158"></a>	*
+<a name="line159"></a>	*/
+<a name="line160"></a>
+<a name="line161"></a>	/**
+<a name="line162"></a>	*	Validates whether the user has a high enough authentication level to view a page.
+<a name="line163"></a>	*	
+<a name="line164"></a>	*	@param int $min	The minimum authorization level needed to view this page
+<a name="line165"></a>	*
+<a name="line166"></a>	*	@return boolean
+<a name="line167"></a>	*/
+<a name="line168"></a>	public function validate( $min )
+<a name="line169"></a>	{
+<a name="line170"></a>		if($this->CI->session->userdata('level')) $level = $this->CI->session->userdata('level');
+<a name="line171"></a>		else $level = 0;
+<a name="line172"></a>
+<a name="line173"></a>		if(empty($min))
+<a name="line174"></a>		{
+<a name="line175"></a>			$method = $this->CI->uri->segment(2);
+<a name="line176"></a>			if(empty($method)) $method = 'index';
+<a name="line177"></a>			$where = array ('controller' => $this->CI->uri->segment(1), 'method' => $method );
+<a name="line178"></a>			$query = $this->CI->db->where($where)->get('permissions');
+<a name="line179"></a>			if($query->num_rows() == 1)
+<a name="line180"></a>			{
+<a name="line181"></a>				$row = $query->row();
+<a name="line182"></a>				$min = $row->level;
+<a name="line183"></a>			}
+<a name="line184"></a>			else $min = 100;
+<a name="line185"></a>		}
+<a name="line186"></a>		if ( $level >= $min )
+<a name="line187"></a>			return true;
+<a name="line188"></a>		else
+<a name="line189"></a>			return false;
+<a name="line190"></a>	}
+<a name="line191"></a>	
+<a name="line192"></a>	/**
+<a name="line193"></a>	*	Lets authorized users view a page and redirects unauthorized users
+<a name="line194"></a>	*	to either an access denied page or login page.
+<a name="line195"></a>	*
+<a name="line196"></a>	*	@param int $min 			Minimum auth level
+<a name="line197"></a>	*	@param string $redirect	URL to redirect to
+<a name="line198"></a>	*/
+<a name="line199"></a>	
+<a name="line200"></a>	public function bouncer ($min = NULL, $redirect = 'login')
+<a name="line201"></a>	{
+<a name="line202"></a>		if($this->validate($min))
+<a name="line203"></a>		{
+<a name="line204"></a>			return true;
+<a name="line205"></a>		}
+<a name="line206"></a>		else
+<a name="line207"></a>		{
+<a name="line208"></a>			if($this->CI->session->userdata('logged_in'))
+<a name="line209"></a>			{
+<a name="line210"></a>				redirect('restricted');
+<a name="line211"></a>			}
+<a name="line212"></a>			else
+<a name="line213"></a>			{
+<a name="line214"></a>				$this->CI->db->insert('redirects', array("url"=>$this->CI->uri->uri_string()));
+<a name="line215"></a>				redirect($redirect."/".$this->CI->db->insert_id());
+<a name="line216"></a>			}
+<a name="line217"></a>		}
+<a name="line218"></a>	}
+<a name="line219"></a>	
+<a name="line220"></a>	
+<a name="line221"></a>	function email_verification()
+<a name="line222"></a>	{
+<a name="line223"></a>		$this->U->deactivate();
+<a name="line224"></a>		$this->CI->load->library('email');
+<a name="line225"></a>		
+<a name="line226"></a>		$config['protocol']  = 'smtp';
+<a name="line227"></a>		$config['newline'] = '\r\n';
+<a name="line228"></a>		$config['crlf'] = '\r\n';
+<a name="line229"></a>		$config['smtp_host'] = 'mail.giftflow.org';
+<a name="line230"></a>		$config['smtp_user'] = 'no-reply@giftflow.org';
+<a name="line231"></a>		$config['smtp_pass'] = 'mon3yis3vil';
+<a name="line232"></a>		$config['smtp_port'] = '26';
+<a name="line233"></a>		$config['mailtype']  = 'text';
+<a name="line234"></a>		$config['charset']   = 'utf-8';
+<a name="line235"></a>
+<a name="line236"></a>		$this->CI->email->initialize($config);
+<a name="line237"></a>		
+<a name="line238"></a>
+<a name="line239"></a>		$this->CI->email->from('no-reply@giftflow.org', 'GiftFlow');
+<a name="line240"></a>		$this->CI->email->to($this->U->email);
+<a name="line241"></a>		
+<a name="line242"></a>		$this->CI->email->subject('[GiftFlow] Activate Your Account');
+<a name="line243"></a>		$message = "Hello! \r\n";
+<a name="line244"></a>		$message .= "Welcome to GiftFlow. Please click the link below to activate your account and verify this email address. \r\n ";
+<a name="line245"></a>		$message .= site_url('member/activate/'.$this->U->activation_code)." \r\n";
+<a name="line246"></a>		$message .= "Thanks! \r\n";
+<a name="line247"></a>		$message .= "The GiftFlow Team";
+<a name="line248"></a>		
+<a name="line249"></a>		$this->CI->email->message($message);
+<a name="line250"></a>		
+<a name="line251"></a>		$this->CI->email->send();		
+<a name="line252"></a>	}
+<a name="line253"></a>	
+<a name="line254"></a>	function facebook( $data )
+<a name="line255"></a>	{
+<a name="line256"></a>		/** 	Outline
+<a name="line257"></a>		* 	1: Is the Facebook data valid?
+<a name="line258"></a>		*    		a: Yes. Proceed to 2.
+<a name="line259"></a>		*    		b: No. Return error message.
+<a name="line260"></a>		* 	2: Is Facebook ID in system?
+<a name="line261"></a>		*     	a: Yes. Create session for that user.
+<a name="line262"></a>		*     	b: No. Facebook ID not in system. Proceed to 3.
+<a name="line263"></a>		* 	3: Is email in system?
+<a name="line264"></a>		*     	a: Yes. Create session for that user. Link Facebook ID with that user. Fill in missing profile fields.
+<a name="line265"></a>		*     	b: No. Create new User.
+<a name="line266"></a>		*/
+<a name="line267"></a>		if(!empty($data->id))
+<a name="line268"></a>		{
+<a name="line269"></a>			$step_two = $this->CI->db->where('facebook_id',$data->id)->from('users')->get();
+<a name="line270"></a>			
+<a name="line271"></a>			// Outcome 2a
+<a name="line272"></a>			if($step_two->num_rows==1)
+<a name="line273"></a>			{
+<a name="line274"></a>				$user = $step_two->row();
+<a name="line275"></a>				$this->U = new User($user->id);
+<a name="line276"></a>				$this->U->facebook_sync( $data );
+<a name="line277"></a>				$this->new_session();
+<a name="line278"></a>				redirect('');
+<a name="line279"></a>			}
+<a name="line280"></a>			// eof 2a
+<a name="line281"></a>			
+<a name="line282"></a>			elseif(!empty($data->email))
+<a name="line283"></a>			{
+<a name="line284"></a>				$step_three = $this->CI->db->where('email',$data->email)->from('users')->get();
+<a name="line285"></a>				// Outcome 3a
+<a name="line286"></a>				if($step_three->num_rows==1)
+<a name="line287"></a>				{
+<a name="line288"></a>					$user = $step_three->row();
+<a name="line289"></a>					$this->U = new User($user->id);
+<a name="line290"></a>					$this->U->facebook_sync($data);
+<a name="line291"></a>					if($this->new_session())
+<a name="line292"></a>					{
+<a name="line293"></a>						$this->U->save();
+<a name="line294"></a>						redirect('');
+<a name="line295"></a>					}
+<a name="line296"></a>				}
+<a name="line297"></a>				// eof 3a
+<a name="line298"></a>				
+<a name="line299"></a>				// Outcome 3b
+<a name="line300"></a>				else
+<a name="line301"></a>				{
+<a name="line302"></a>					$this->U = new User();
+<a name="line303"></a>					if($this->U->facebook_sync( $data ))
+<a name="line304"></a>					{
+<a name="line305"></a>						if($this->new_session())
+<a name="line306"></a>						{
+<a name="line307"></a>							$this->U->save();
+<a name="line308"></a>							redirect('');
+<a name="line309"></a>						}
+<a name="line310"></a>					}
+<a name="line311"></a>				}
+<a name="line312"></a>				// eof 3b
+<a name="line313"></a>			}
+<a name="line314"></a>		}
+<a name="line315"></a>		$this->U = new User();
+<a name="line316"></a>		if(!empty($data->id))
+<a name="line317"></a>			$this->U->facebook_id = $data->id;
+<a name="line318"></a>		if(!empty($data->name))
+<a name="line319"></a>			$this->U->screen_name = $data->name;
+<a name="line320"></a>		if(!empty($data->first_name))
+<a name="line321"></a>			$this->U->first_name = $data->first_name;
+<a name="line322"></a>		if(!empty($data->last_name))
+<a name="line323"></a>			$this->U->last_name = $data->last_name;
+<a name="line324"></a>		if(!empty($data->email))
+<a name="line325"></a>			$this->U->email = $data->email;
+<a name="line326"></a>		
+<a name="line327"></a>	}
+<a name="line328"></a>	
+<a name="line329"></a>	/**
+<a name="line330"></a>	*	Lists pages and looks for their permissions. DEPRECATED.
+<a name="line331"></a>	*
+<a name="line332"></a>	*	@deprecated
+<a name="line333"></a>	*/
+<a name="line334"></a>	public function page_lister()
+<a name="line335"></a>	{
+<a name="line336"></a>		$this->invalid_methods = array ("Controller","_ci_initialize","_ci_scaffolding", "CI_Base", "get_instance", "__construct");
+<a name="line337"></a>
+<a name="line338"></a>		$this->APPLICATION_DIRECTORY = "/Applications/XAMPP/xamppfiles/htdocs/gift/system/application/controllers/";
+<a name="line339"></a>		
+<a name="line340"></a>		// Open the Application Directory
+<a name="line341"></a>		$directory = opendir($this->APPLICATION_DIRECTORY);
+<a name="line342"></a>
+<a name="line343"></a>		// loop through all the files and set the name into an array
+<a name="line344"></a>		while (($file = readdir($directory)) !== FALSE)
+<a name="line345"></a>		{
+<a name="line346"></a>			if (preg_match('/.php/i',$file))
+<a name="line347"></a>			{
+<a name="line348"></a>				$temp = explode('.',$file);
+<a name="line349"></a>				$controllers[] = $temp[0];
+<a name="line350"></a>			}
+<a name="line351"></a>		}
+<a name="line352"></a>
+<a name="line353"></a>		// Close the Application Directory
+<a name="line354"></a>		closedir($directory);
+<a name="line355"></a>
+<a name="line356"></a>		// Look through all the controllers for their methods
+<a name="line357"></a>		foreach ($controllers as $c)
+<a name="line358"></a>		{
+<a name="line359"></a>			// Check to see if the class has been loaded
+<a name="line360"></a>			if (!class_exists($c))
+<a name="line361"></a>			{
+<a name="line362"></a>				$this->CI->load->file($this->APPLICATION_DIRECTORY.$c.'.php');
+<a name="line363"></a>			}
+<a name="line364"></a>
+<a name="line365"></a>			// Add the constructors to the values we don't care about
+<a name="line366"></a>			$this->invalid_methods[] = ucfirst($c);
+<a name="line367"></a>
+<a name="line368"></a>			foreach (get_class_methods($c) as $key => $val)
+<a name="line369"></a>			{
+<a name="line370"></a>				  /* Get a reflection object for the class method */
+<a name="line371"></a>       				$reflect = new ReflectionMethod($c, $val);
+<a name="line372"></a>
+<a name="line373"></a>				/* For private, use isPrivate().  For protected, use isProtected() */
+<a name="line374"></a>				
+<a name="line375"></a>				if($reflect->isPublic()) 
+<a name="line376"></a>				{
+<a name="line377"></a>				  	if (!in_array($val,$this->invalid_methods))
+<a name="line378"></a>					{
+<a name="line379"></a>						// Put the methods we care about into an array
+<a name="line380"></a>						$method[$c][] = $val;
+<a name="line381"></a>					}
+<a name="line382"></a>				}
+<a name="line383"></a>			}
+<a name="line384"></a>		}
+<a name="line385"></a>		
+<a name="line386"></a>		// Now lets create the classes and methods and relate them
+<a name="line387"></a>		foreach ($method as $class => $methods)
+<a name="line388"></a>		{
+<a name="line389"></a>			foreach ($methods as $value)
+<a name="line390"></a>			{
+<a name="line391"></a>				$where = array('controller'=>$class, 'method'=>$value);
+<a name="line392"></a>				$query = $this->CI->db->where($where)->get('permissions');
+<a name="line393"></a>				if($query->num_rows == 0)
+<a name="line394"></a>				{
+<a name="line395"></a>					$this->CI->db->insert('permissions', $where);
+<a name="line396"></a>				}
+<a name="line397"></a>			}	
+<a name="line398"></a>		}
+<a name="line399"></a>	}
+<a name="line400"></a>}
+<a name="line401"></a></pre>
+<div class="header">
+<h1>GiftFlow API</h1>
+<ul>
+<li><a href="../../../overview-summary.html">Overview</a></li>
+<li>Package</li><li>Class</li><li>Tree</li><li><a href="../../../overview-files.html">Files</a></li>
+<li><a href="../../../deprecated-list.html">Deprecated</a></li>
+<li><a href="../../../index-all.html">Index</a></li>
+</ul>
+</div>
+
+<div class="small_links">
+<a href="../../../index.html" target="_top">Frames</a>
+<a href="../../../source/application/libraries/auth.php.html" target="_top">No frames</a>
+</div>
+<hr>
+
+<p id="footer">This document was generated by <a href="http://peej.github.com/phpdoctor/">PHPDoctor: The PHP Documentation Creator</a></p>
+
+</body>
+
+</html>

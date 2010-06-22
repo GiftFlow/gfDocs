@@ -1,0 +1,469 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+
+<html lang="en">
+<head>
+
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
+<meta name="generator" content="PHPDoctor 2RC4 (http://peej.github.com/phpdoctor/)">
+<meta name="when" content="Sun, 20 Jun 2010 17:43:51 +0000">
+
+<link rel="stylesheet" type="text/css" href="../../stylesheet.css">
+<link rel="start" href="../../overview-summary.html">
+
+<title>libraries/Output.php (GiftFlow API)</title>
+
+</head>
+<body id="file" onload="parent.document.title=document.title;">
+
+<div class="header">
+<h1>GiftFlow API</h1>
+<ul>
+<li><a href="../../overview-summary.html">Overview</a></li>
+<li>Package</li><li>Class</li><li>Tree</li><li><a href="../../overview-files.html">Files</a></li>
+<li><a href="../../deprecated-list.html">Deprecated</a></li>
+<li><a href="../../index-all.html">Index</a></li>
+</ul>
+</div>
+
+<div class="small_links">
+<a href="../../index.html" target="_top">Frames</a>
+<a href="../../source/libraries/output.php.html" target="_top">No frames</a>
+</div>
+<hr>
+
+<h1>libraries/Output.php</h1>
+<div class="comment" id="overview_description"><p>CodeIgniter</p><p>An open source application development framework for PHP 4.3.2 or newer</p></div>
+
+<hr>
+
+<a name="line1"></a><pre><?php  if ( ! defined('BASEPATH')) exit('No direct script access allowed');
+<a name="line2"></a>/**
+<a name="line3"></a> * CodeIgniter
+<a name="line4"></a> *
+<a name="line5"></a> * An open source application development framework for PHP 4.3.2 or newer
+<a name="line6"></a> *
+<a name="line7"></a> * @package		CodeIgniter
+<a name="line8"></a> * @author		ExpressionEngine Dev Team
+<a name="line9"></a> * @copyright	Copyright (c) 2008 - 2009, EllisLab, Inc.
+<a name="line10"></a> * @license		http://codeigniter.com/user_guide/license.html
+<a name="line11"></a> * @link		http://codeigniter.com
+<a name="line12"></a> * @since		Version 1.0
+<a name="line13"></a> * @filesource
+<a name="line14"></a> */
+<a name="line15"></a>
+<a name="line16"></a>// ------------------------------------------------------------------------
+<a name="line17"></a>
+<a name="line18"></a>/**
+<a name="line19"></a> * Output Class
+<a name="line20"></a> *
+<a name="line21"></a> * Responsible for sending final output to browser
+<a name="line22"></a> *
+<a name="line23"></a> * @package		CodeIgniter
+<a name="line24"></a> * @subpackage	Libraries
+<a name="line25"></a> * @category	Output
+<a name="line26"></a> * @author		ExpressionEngine Dev Team
+<a name="line27"></a> * @link		http://codeigniter.com/user_guide/libraries/output.html
+<a name="line28"></a> */
+<a name="line29"></a>class CI_Output {
+<a name="line30"></a>
+<a name="line31"></a>	var $final_output;
+<a name="line32"></a>	var $cache_expiration	= 0;
+<a name="line33"></a>	var $headers 			= array();
+<a name="line34"></a>	var $enable_profiler 	= FALSE;
+<a name="line35"></a>
+<a name="line36"></a>
+<a name="line37"></a>	function CI_Output()
+<a name="line38"></a>	{
+<a name="line39"></a>		log_message('debug', "Output Class Initialized");
+<a name="line40"></a>	}
+<a name="line41"></a>	
+<a name="line42"></a>	// --------------------------------------------------------------------
+<a name="line43"></a>	
+<a name="line44"></a>	/**
+<a name="line45"></a>	 * Get Output
+<a name="line46"></a>	 *
+<a name="line47"></a>	 * Returns the current output string
+<a name="line48"></a>	 *
+<a name="line49"></a>	 * @access	public
+<a name="line50"></a>	 * @return	string
+<a name="line51"></a>	 */	
+<a name="line52"></a>	function get_output()
+<a name="line53"></a>	{
+<a name="line54"></a>		return $this->final_output;
+<a name="line55"></a>	}
+<a name="line56"></a>	
+<a name="line57"></a>	// --------------------------------------------------------------------
+<a name="line58"></a>	
+<a name="line59"></a>	/**
+<a name="line60"></a>	 * Set Output
+<a name="line61"></a>	 *
+<a name="line62"></a>	 * Sets the output string
+<a name="line63"></a>	 *
+<a name="line64"></a>	 * @access	public
+<a name="line65"></a>	 * @param	string
+<a name="line66"></a>	 * @return	void
+<a name="line67"></a>	 */	
+<a name="line68"></a>	function set_output($output)
+<a name="line69"></a>	{
+<a name="line70"></a>		$this->final_output = $output;
+<a name="line71"></a>	}
+<a name="line72"></a>
+<a name="line73"></a>	// --------------------------------------------------------------------
+<a name="line74"></a>
+<a name="line75"></a>	/**
+<a name="line76"></a>	 * Append Output
+<a name="line77"></a>	 *
+<a name="line78"></a>	 * Appends data onto the output string
+<a name="line79"></a>	 *
+<a name="line80"></a>	 * @access	public
+<a name="line81"></a>	 * @param	string
+<a name="line82"></a>	 * @return	void
+<a name="line83"></a>	 */	
+<a name="line84"></a>	function append_output($output)
+<a name="line85"></a>	{
+<a name="line86"></a>		if ($this->final_output == '')
+<a name="line87"></a>		{
+<a name="line88"></a>			$this->final_output = $output;
+<a name="line89"></a>		}
+<a name="line90"></a>		else
+<a name="line91"></a>		{
+<a name="line92"></a>			$this->final_output .= $output;
+<a name="line93"></a>		}
+<a name="line94"></a>	}
+<a name="line95"></a>
+<a name="line96"></a>	// --------------------------------------------------------------------
+<a name="line97"></a>
+<a name="line98"></a>	/**
+<a name="line99"></a>	 * Set Header
+<a name="line100"></a>	 *
+<a name="line101"></a>	 * Lets you set a server header which will be outputted with the final display.
+<a name="line102"></a>	 *
+<a name="line103"></a>	 * Note:  If a file is cached, headers will not be sent.  We need to figure out
+<a name="line104"></a>	 * how to permit header data to be saved with the cache data...
+<a name="line105"></a>	 *
+<a name="line106"></a>	 * @access	public
+<a name="line107"></a>	 * @param	string
+<a name="line108"></a>	 * @return	void
+<a name="line109"></a>	 */	
+<a name="line110"></a>	function set_header($header, $replace = TRUE)
+<a name="line111"></a>	{
+<a name="line112"></a>		$this->headers[] = array($header, $replace);
+<a name="line113"></a>	}
+<a name="line114"></a>
+<a name="line115"></a>	// --------------------------------------------------------------------
+<a name="line116"></a>	
+<a name="line117"></a>	/**
+<a name="line118"></a>	 * Set HTTP Status Header
+<a name="line119"></a>	 * moved to Common procedural functions in 1.7.2
+<a name="line120"></a>	 * 
+<a name="line121"></a>	 * @access	public
+<a name="line122"></a>	 * @param	int 	the status code
+<a name="line123"></a>	 * @param	string	
+<a name="line124"></a>	 * @return	void
+<a name="line125"></a>	 */	
+<a name="line126"></a>	function set_status_header($code = '200', $text = '')
+<a name="line127"></a>	{
+<a name="line128"></a>		set_status_header($code, $text);
+<a name="line129"></a>	}
+<a name="line130"></a>	
+<a name="line131"></a>	// --------------------------------------------------------------------
+<a name="line132"></a>	
+<a name="line133"></a>	/**
+<a name="line134"></a>	 * Enable/disable Profiler
+<a name="line135"></a>	 *
+<a name="line136"></a>	 * @access	public
+<a name="line137"></a>	 * @param	bool
+<a name="line138"></a>	 * @return	void
+<a name="line139"></a>	 */	
+<a name="line140"></a>	function enable_profiler($val = TRUE)
+<a name="line141"></a>	{
+<a name="line142"></a>		$this->enable_profiler = (is_bool($val)) ? $val : TRUE;
+<a name="line143"></a>	}
+<a name="line144"></a>	
+<a name="line145"></a>	// --------------------------------------------------------------------
+<a name="line146"></a>	
+<a name="line147"></a>	/**
+<a name="line148"></a>	 * Set Cache
+<a name="line149"></a>	 *
+<a name="line150"></a>	 * @access	public
+<a name="line151"></a>	 * @param	integer
+<a name="line152"></a>	 * @return	void
+<a name="line153"></a>	 */	
+<a name="line154"></a>	function cache($time)
+<a name="line155"></a>	{
+<a name="line156"></a>		$this->cache_expiration = ( ! is_numeric($time)) ? 0 : $time;
+<a name="line157"></a>	}
+<a name="line158"></a>	
+<a name="line159"></a>	// --------------------------------------------------------------------
+<a name="line160"></a>	
+<a name="line161"></a>	/**
+<a name="line162"></a>	 * Display Output
+<a name="line163"></a>	 *
+<a name="line164"></a>	 * All "view" data is automatically put into this variable by the controller class:
+<a name="line165"></a>	 *
+<a name="line166"></a>	 * $this->final_output
+<a name="line167"></a>	 *
+<a name="line168"></a>	 * This function sends the finalized output data to the browser along
+<a name="line169"></a>	 * with any server headers and profile data.  It also stops the
+<a name="line170"></a>	 * benchmark timer so the page rendering speed and memory usage can be shown.
+<a name="line171"></a>	 *
+<a name="line172"></a>	 * @access	public
+<a name="line173"></a>	 * @return	mixed
+<a name="line174"></a>	 */		
+<a name="line175"></a>	function _display($output = '')
+<a name="line176"></a>	{	
+<a name="line177"></a>		// Note:  We use globals because we can't use $CI =& get_instance()
+<a name="line178"></a>		// since this function is sometimes called by the caching mechanism,
+<a name="line179"></a>		// which happens before the CI super object is available.
+<a name="line180"></a>		global $BM, $CFG;
+<a name="line181"></a>		
+<a name="line182"></a>		// --------------------------------------------------------------------
+<a name="line183"></a>		
+<a name="line184"></a>		// Set the output data
+<a name="line185"></a>		if ($output == '')
+<a name="line186"></a>		{
+<a name="line187"></a>			$output =& $this->final_output;
+<a name="line188"></a>		}
+<a name="line189"></a>		
+<a name="line190"></a>		// --------------------------------------------------------------------
+<a name="line191"></a>		
+<a name="line192"></a>		// Do we need to write a cache file?
+<a name="line193"></a>		if ($this->cache_expiration > 0)
+<a name="line194"></a>		{
+<a name="line195"></a>			$this->_write_cache($output);
+<a name="line196"></a>		}
+<a name="line197"></a>		
+<a name="line198"></a>		// --------------------------------------------------------------------
+<a name="line199"></a>
+<a name="line200"></a>		// Parse out the elapsed time and memory usage,
+<a name="line201"></a>		// then swap the pseudo-variables with the data
+<a name="line202"></a>
+<a name="line203"></a>		$elapsed = $BM->elapsed_time('total_execution_time_start', 'total_execution_time_end');		
+<a name="line204"></a>		$output = str_replace('{elapsed_time}', $elapsed, $output);
+<a name="line205"></a>		
+<a name="line206"></a>		$memory	 = ( ! function_exists('memory_get_usage')) ? '0' : round(memory_get_usage()/1024/1024, 2).'MB';
+<a name="line207"></a>		$output = str_replace('{memory_usage}', $memory, $output);		
+<a name="line208"></a>
+<a name="line209"></a>		// --------------------------------------------------------------------
+<a name="line210"></a>		
+<a name="line211"></a>		// Is compression requested?
+<a name="line212"></a>		if ($CFG->item('compress_output') === TRUE)
+<a name="line213"></a>		{
+<a name="line214"></a>			if (extension_loaded('zlib'))
+<a name="line215"></a>			{
+<a name="line216"></a>				if (isset($_SERVER['HTTP_ACCEPT_ENCODING']) AND strpos($_SERVER['HTTP_ACCEPT_ENCODING'], 'gzip') !== FALSE)
+<a name="line217"></a>				{
+<a name="line218"></a>					ob_start('ob_gzhandler');
+<a name="line219"></a>				}
+<a name="line220"></a>			}
+<a name="line221"></a>		}
+<a name="line222"></a>
+<a name="line223"></a>		// --------------------------------------------------------------------
+<a name="line224"></a>		
+<a name="line225"></a>		// Are there any server headers to send?
+<a name="line226"></a>		if (count($this->headers) > 0)
+<a name="line227"></a>		{
+<a name="line228"></a>			foreach ($this->headers as $header)
+<a name="line229"></a>			{
+<a name="line230"></a>				@header($header[0], $header[1]);
+<a name="line231"></a>			}
+<a name="line232"></a>		}		
+<a name="line233"></a>
+<a name="line234"></a>		// --------------------------------------------------------------------
+<a name="line235"></a>		
+<a name="line236"></a>		// Does the get_instance() function exist?
+<a name="line237"></a>		// If not we know we are dealing with a cache file so we'll
+<a name="line238"></a>		// simply echo out the data and exit.
+<a name="line239"></a>		if ( ! function_exists('get_instance'))
+<a name="line240"></a>		{
+<a name="line241"></a>			echo $output;
+<a name="line242"></a>			log_message('debug', "Final output sent to browser");
+<a name="line243"></a>			log_message('debug', "Total execution time: ".$elapsed);
+<a name="line244"></a>			return TRUE;
+<a name="line245"></a>		}
+<a name="line246"></a>	
+<a name="line247"></a>		// --------------------------------------------------------------------
+<a name="line248"></a>
+<a name="line249"></a>		// Grab the super object.  We'll need it in a moment...
+<a name="line250"></a>		$CI =& get_instance();
+<a name="line251"></a>		
+<a name="line252"></a>		// Do we need to generate profile data?
+<a name="line253"></a>		// If so, load the Profile class and run it.
+<a name="line254"></a>		if ($this->enable_profiler == TRUE)
+<a name="line255"></a>		{
+<a name="line256"></a>			$CI->load->library('profiler');				
+<a name="line257"></a>										
+<a name="line258"></a>			// If the output data contains closing </body> and </html> tags
+<a name="line259"></a>			// we will remove them and add them back after we insert the profile data
+<a name="line260"></a>			if (preg_match("|</body>.*?</html>|is", $output))
+<a name="line261"></a>			{
+<a name="line262"></a>				$output  = preg_replace("|</body>.*?</html>|is", '', $output);
+<a name="line263"></a>				$output .= $CI->profiler->run();
+<a name="line264"></a>				$output .= '</body></html>';
+<a name="line265"></a>			}
+<a name="line266"></a>			else
+<a name="line267"></a>			{
+<a name="line268"></a>				$output .= $CI->profiler->run();
+<a name="line269"></a>			}
+<a name="line270"></a>		}
+<a name="line271"></a>		
+<a name="line272"></a>		// --------------------------------------------------------------------
+<a name="line273"></a>
+<a name="line274"></a>		// Does the controller contain a function named _output()?
+<a name="line275"></a>		// If so send the output there.  Otherwise, echo it.
+<a name="line276"></a>		if (method_exists($CI, '_output'))
+<a name="line277"></a>		{
+<a name="line278"></a>			$CI->_output($output);
+<a name="line279"></a>		}
+<a name="line280"></a>		else
+<a name="line281"></a>		{
+<a name="line282"></a>			echo $output;  // Send it to the browser!
+<a name="line283"></a>		}
+<a name="line284"></a>		
+<a name="line285"></a>		log_message('debug', "Final output sent to browser");
+<a name="line286"></a>		log_message('debug', "Total execution time: ".$elapsed);		
+<a name="line287"></a>	}
+<a name="line288"></a>	
+<a name="line289"></a>	// --------------------------------------------------------------------
+<a name="line290"></a>	
+<a name="line291"></a>	/**
+<a name="line292"></a>	 * Write a Cache File
+<a name="line293"></a>	 *
+<a name="line294"></a>	 * @access	public
+<a name="line295"></a>	 * @return	void
+<a name="line296"></a>	 */	
+<a name="line297"></a>	function _write_cache($output)
+<a name="line298"></a>	{
+<a name="line299"></a>		$CI =& get_instance();	
+<a name="line300"></a>		$path = $CI->config->item('cache_path');
+<a name="line301"></a>	
+<a name="line302"></a>		$cache_path = ($path == '') ? BASEPATH.'cache/' : $path;
+<a name="line303"></a>		
+<a name="line304"></a>		if ( ! is_dir($cache_path) OR ! is_really_writable($cache_path))
+<a name="line305"></a>		{
+<a name="line306"></a>			return;
+<a name="line307"></a>		}
+<a name="line308"></a>		
+<a name="line309"></a>		$uri =	$CI->config->item('base_url').
+<a name="line310"></a>				$CI->config->item('index_page').
+<a name="line311"></a>				$CI->uri->uri_string();
+<a name="line312"></a>		
+<a name="line313"></a>		$cache_path .= md5($uri);
+<a name="line314"></a>
+<a name="line315"></a>		if ( ! $fp = @fopen($cache_path, FOPEN_WRITE_CREATE_DESTRUCTIVE))
+<a name="line316"></a>		{
+<a name="line317"></a>			log_message('error', "Unable to write cache file: ".$cache_path);
+<a name="line318"></a>			return;
+<a name="line319"></a>		}
+<a name="line320"></a>		
+<a name="line321"></a>		$expire = time() + ($this->cache_expiration * 60);
+<a name="line322"></a>		
+<a name="line323"></a>		if (flock($fp, LOCK_EX))
+<a name="line324"></a>		{
+<a name="line325"></a>			fwrite($fp, $expire.'TS--->'.$output);
+<a name="line326"></a>			flock($fp, LOCK_UN);
+<a name="line327"></a>		}
+<a name="line328"></a>		else
+<a name="line329"></a>		{
+<a name="line330"></a>			log_message('error', "Unable to secure a file lock for file at: ".$cache_path);
+<a name="line331"></a>			return;
+<a name="line332"></a>		}
+<a name="line333"></a>		fclose($fp);
+<a name="line334"></a>		@chmod($cache_path, DIR_WRITE_MODE);
+<a name="line335"></a>
+<a name="line336"></a>		log_message('debug', "Cache file written: ".$cache_path);
+<a name="line337"></a>	}
+<a name="line338"></a>
+<a name="line339"></a>	// --------------------------------------------------------------------
+<a name="line340"></a>	
+<a name="line341"></a>	/**
+<a name="line342"></a>	 * Update/serve a cached file
+<a name="line343"></a>	 *
+<a name="line344"></a>	 * @access	public
+<a name="line345"></a>	 * @return	void
+<a name="line346"></a>	 */	
+<a name="line347"></a>	function _display_cache(&$CFG, &$URI)
+<a name="line348"></a>	{
+<a name="line349"></a>		$cache_path = ($CFG->item('cache_path') == '') ? BASEPATH.'cache/' : $CFG->item('cache_path');
+<a name="line350"></a>			
+<a name="line351"></a>		if ( ! is_dir($cache_path) OR ! is_really_writable($cache_path))
+<a name="line352"></a>		{
+<a name="line353"></a>			return FALSE;
+<a name="line354"></a>		}
+<a name="line355"></a>		
+<a name="line356"></a>		// Build the file path.  The file name is an MD5 hash of the full URI
+<a name="line357"></a>		$uri =	$CFG->item('base_url').
+<a name="line358"></a>				$CFG->item('index_page').
+<a name="line359"></a>				$URI->uri_string;
+<a name="line360"></a>				
+<a name="line361"></a>		$filepath = $cache_path.md5($uri);
+<a name="line362"></a>		
+<a name="line363"></a>		if ( ! @file_exists($filepath))
+<a name="line364"></a>		{
+<a name="line365"></a>			return FALSE;
+<a name="line366"></a>		}
+<a name="line367"></a>	
+<a name="line368"></a>		if ( ! $fp = @fopen($filepath, FOPEN_READ))
+<a name="line369"></a>		{
+<a name="line370"></a>			return FALSE;
+<a name="line371"></a>		}
+<a name="line372"></a>			
+<a name="line373"></a>		flock($fp, LOCK_SH);
+<a name="line374"></a>		
+<a name="line375"></a>		$cache = '';
+<a name="line376"></a>		if (filesize($filepath) > 0)
+<a name="line377"></a>		{
+<a name="line378"></a>			$cache = fread($fp, filesize($filepath));
+<a name="line379"></a>		}
+<a name="line380"></a>	
+<a name="line381"></a>		flock($fp, LOCK_UN);
+<a name="line382"></a>		fclose($fp);
+<a name="line383"></a>					
+<a name="line384"></a>		// Strip out the embedded timestamp		
+<a name="line385"></a>		if ( ! preg_match("/(\d+TS--->)/", $cache, $match))
+<a name="line386"></a>		{
+<a name="line387"></a>			return FALSE;
+<a name="line388"></a>		}
+<a name="line389"></a>		
+<a name="line390"></a>		// Has the file expired? If so we'll delete it.
+<a name="line391"></a>		if (time() >= trim(str_replace('TS--->', '', $match['1'])))
+<a name="line392"></a>		{ 		
+<a name="line393"></a>			@unlink($filepath);
+<a name="line394"></a>			log_message('debug', "Cache file has expired. File deleted");
+<a name="line395"></a>			return FALSE;
+<a name="line396"></a>		}
+<a name="line397"></a>
+<a name="line398"></a>		// Display the cache
+<a name="line399"></a>		$this->_display(str_replace($match['0'], '', $cache));
+<a name="line400"></a>		log_message('debug', "Cache file is current. Sending it to browser.");		
+<a name="line401"></a>		return TRUE;
+<a name="line402"></a>	}
+<a name="line403"></a>
+<a name="line404"></a>
+<a name="line405"></a>}
+<a name="line406"></a>// END Output Class
+<a name="line407"></a>
+<a name="line408"></a>/* End of file Output.php */
+<a name="line409"></a>/* Location: ./system/libraries/Output.php */</pre>
+<div class="header">
+<h1>GiftFlow API</h1>
+<ul>
+<li><a href="../../overview-summary.html">Overview</a></li>
+<li>Package</li><li>Class</li><li>Tree</li><li><a href="../../overview-files.html">Files</a></li>
+<li><a href="../../deprecated-list.html">Deprecated</a></li>
+<li><a href="../../index-all.html">Index</a></li>
+</ul>
+</div>
+
+<div class="small_links">
+<a href="../../index.html" target="_top">Frames</a>
+<a href="../../source/libraries/output.php.html" target="_top">No frames</a>
+</div>
+<hr>
+
+<p id="footer">This document was generated by <a href="http://peej.github.com/phpdoctor/">PHPDoctor: The PHP Documentation Creator</a></p>
+
+</body>
+
+</html>

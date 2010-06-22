@@ -1,0 +1,607 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+
+<html lang="en">
+<head>
+
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
+<meta name="generator" content="PHPDoctor 2RC4 (http://peej.github.com/phpdoctor/)">
+<meta name="when" content="Sun, 20 Jun 2010 17:43:51 +0000">
+
+<link rel="stylesheet" type="text/css" href="../../stylesheet.css">
+<link rel="start" href="../../overview-summary.html">
+
+<title>libraries/Trackback.php (GiftFlow API)</title>
+
+</head>
+<body id="file" onload="parent.document.title=document.title;">
+
+<div class="header">
+<h1>GiftFlow API</h1>
+<ul>
+<li><a href="../../overview-summary.html">Overview</a></li>
+<li>Package</li><li>Class</li><li>Tree</li><li><a href="../../overview-files.html">Files</a></li>
+<li><a href="../../deprecated-list.html">Deprecated</a></li>
+<li><a href="../../index-all.html">Index</a></li>
+</ul>
+</div>
+
+<div class="small_links">
+<a href="../../index.html" target="_top">Frames</a>
+<a href="../../source/libraries/trackback.php.html" target="_top">No frames</a>
+</div>
+<hr>
+
+<h1>libraries/Trackback.php</h1>
+<div class="comment" id="overview_description"><p>CodeIgniter</p><p>An open source application development framework for PHP 4.3.2 or newer</p></div>
+
+<hr>
+
+<a name="line1"></a><pre><?php  if ( ! defined('BASEPATH')) exit('No direct script access allowed');
+<a name="line2"></a>/**
+<a name="line3"></a> * CodeIgniter
+<a name="line4"></a> *
+<a name="line5"></a> * An open source application development framework for PHP 4.3.2 or newer
+<a name="line6"></a> *
+<a name="line7"></a> * @package		CodeIgniter
+<a name="line8"></a> * @author		ExpressionEngine Dev Team
+<a name="line9"></a> * @copyright	Copyright (c) 2008 - 2009, EllisLab, Inc.
+<a name="line10"></a> * @license		http://codeigniter.com/user_guide/license.html
+<a name="line11"></a> * @link		http://codeigniter.com
+<a name="line12"></a> * @since		Version 1.0
+<a name="line13"></a> * @filesource
+<a name="line14"></a> */
+<a name="line15"></a>
+<a name="line16"></a>// ------------------------------------------------------------------------
+<a name="line17"></a>
+<a name="line18"></a>/**
+<a name="line19"></a> * Trackback Class
+<a name="line20"></a> *
+<a name="line21"></a> * Trackback Sending/Receiving Class
+<a name="line22"></a> *
+<a name="line23"></a> * @package		CodeIgniter
+<a name="line24"></a> * @subpackage	Libraries
+<a name="line25"></a> * @category	Trackbacks
+<a name="line26"></a> * @author		ExpressionEngine Dev Team
+<a name="line27"></a> * @link		http://codeigniter.com/user_guide/libraries/trackback.html
+<a name="line28"></a> */
+<a name="line29"></a>class CI_Trackback {
+<a name="line30"></a>		
+<a name="line31"></a>	var $time_format	= 'local';
+<a name="line32"></a>	var $charset		= 'UTF-8';
+<a name="line33"></a>	var $data			= array('url' => '', 'title' => '', 'excerpt' => '', 'blog_name' => '', 'charset' => '');
+<a name="line34"></a>	var $convert_ascii	= TRUE;
+<a name="line35"></a>	var $response		= '';
+<a name="line36"></a>	var $error_msg		= array();
+<a name="line37"></a>
+<a name="line38"></a>	/**
+<a name="line39"></a>	 * Constructor
+<a name="line40"></a>	 *
+<a name="line41"></a>	 * @access	public
+<a name="line42"></a>	 */
+<a name="line43"></a>	function CI_Trackback()
+<a name="line44"></a>	{
+<a name="line45"></a>		log_message('debug', "Trackback Class Initialized");
+<a name="line46"></a>	}
+<a name="line47"></a>	
+<a name="line48"></a>	// --------------------------------------------------------------------
+<a name="line49"></a>	
+<a name="line50"></a>	/**
+<a name="line51"></a>	 * Send Trackback
+<a name="line52"></a>	 *
+<a name="line53"></a>	 * @access	public
+<a name="line54"></a>	 * @param	array
+<a name="line55"></a>	 * @return	bool
+<a name="line56"></a>	 */	
+<a name="line57"></a>	function send($tb_data)
+<a name="line58"></a>	{		
+<a name="line59"></a>		if ( ! is_array($tb_data))
+<a name="line60"></a>		{
+<a name="line61"></a>			$this->set_error('The send() method must be passed an array');
+<a name="line62"></a>			return FALSE;
+<a name="line63"></a>		}
+<a name="line64"></a>		
+<a name="line65"></a>		// Pre-process the Trackback Data
+<a name="line66"></a>		foreach (array('url', 'title', 'excerpt', 'blog_name', 'ping_url') as $item)
+<a name="line67"></a>		{
+<a name="line68"></a>			if ( ! isset($tb_data[$item]))
+<a name="line69"></a>			{
+<a name="line70"></a>				$this->set_error('Required item missing: '.$item);
+<a name="line71"></a>				return FALSE;
+<a name="line72"></a>			}
+<a name="line73"></a>			
+<a name="line74"></a>			switch ($item)
+<a name="line75"></a>			{
+<a name="line76"></a>				case 'ping_url'	: $$item = $this->extract_urls($tb_data[$item]);
+<a name="line77"></a>					break;
+<a name="line78"></a>				case 'excerpt'	: $$item = $this->limit_characters($this->convert_xml(strip_tags(stripslashes($tb_data[$item]))));
+<a name="line79"></a>					break;
+<a name="line80"></a>				case 'url'	 	: $$item = str_replace('&#45;', '-', $this->convert_xml(strip_tags(stripslashes($tb_data[$item]))));
+<a name="line81"></a>					break;
+<a name="line82"></a>				default			: $$item = $this->convert_xml(strip_tags(stripslashes($tb_data[$item])));
+<a name="line83"></a>					break;
+<a name="line84"></a>			}
+<a name="line85"></a>
+<a name="line86"></a>			// Convert High ASCII Characters
+<a name="line87"></a>			if ($this->convert_ascii == TRUE)
+<a name="line88"></a>			{
+<a name="line89"></a>				if ($item == 'excerpt')
+<a name="line90"></a>				{
+<a name="line91"></a>					$$item = $this->convert_ascii($$item);
+<a name="line92"></a>				}
+<a name="line93"></a>				elseif ($item == 'title')
+<a name="line94"></a>				{
+<a name="line95"></a>					$$item = $this->convert_ascii($$item);
+<a name="line96"></a>				}
+<a name="line97"></a>				elseif($item == 'blog_name')
+<a name="line98"></a>				{
+<a name="line99"></a>					$$item = $this->convert_ascii($$item);
+<a name="line100"></a>				}
+<a name="line101"></a>			}
+<a name="line102"></a>		}
+<a name="line103"></a>
+<a name="line104"></a>		// Build the Trackback data string
+<a name="line105"></a>		$charset = ( ! isset($tb_data['charset'])) ? $this->charset : $tb_data['charset'];
+<a name="line106"></a>		
+<a name="line107"></a>		$data = "url=".rawurlencode($url)."&title=".rawurlencode($title)."&blog_name=".rawurlencode($blog_name)."&excerpt=".rawurlencode($excerpt)."&charset=".rawurlencode($charset);
+<a name="line108"></a>				
+<a name="line109"></a>		// Send Trackback(s)
+<a name="line110"></a>		$return = TRUE;
+<a name="line111"></a>		if (count($ping_url) > 0)
+<a name="line112"></a>		{
+<a name="line113"></a>			foreach ($ping_url as $url)
+<a name="line114"></a>			{
+<a name="line115"></a>				if ($this->process($url, $data) == FALSE)
+<a name="line116"></a>				{
+<a name="line117"></a>					$return = FALSE;
+<a name="line118"></a>				}
+<a name="line119"></a>			}	
+<a name="line120"></a>		}
+<a name="line121"></a>
+<a name="line122"></a>		return $return;
+<a name="line123"></a>	}
+<a name="line124"></a>	
+<a name="line125"></a>	// --------------------------------------------------------------------
+<a name="line126"></a>	
+<a name="line127"></a>	/**
+<a name="line128"></a>	 * Receive Trackback  Data
+<a name="line129"></a>	 *
+<a name="line130"></a>	 * This function simply validates the incoming TB data.
+<a name="line131"></a>	 * It returns false on failure and true on success.
+<a name="line132"></a>	 * If the data is valid it is set to the $this->data array
+<a name="line133"></a>	 * so that it can be inserted into a database.
+<a name="line134"></a>	 *
+<a name="line135"></a>	 * @access	public
+<a name="line136"></a>	 * @return	bool
+<a name="line137"></a>	 */	
+<a name="line138"></a>	function receive()
+<a name="line139"></a>	{  					
+<a name="line140"></a>		foreach (array('url', 'title', 'blog_name', 'excerpt') as $val)
+<a name="line141"></a>		{
+<a name="line142"></a>			if ( ! isset($_POST[$val]) OR $_POST[$val] == '')
+<a name="line143"></a>			{
+<a name="line144"></a>				$this->set_error('The following required POST variable is missing: '.$val);
+<a name="line145"></a>				return FALSE;
+<a name="line146"></a>			}
+<a name="line147"></a>			
+<a name="line148"></a>			$this->data['charset'] = ( ! isset($_POST['charset'])) ? 'auto' : strtoupper(trim($_POST['charset']));
+<a name="line149"></a>	
+<a name="line150"></a>			if ($val != 'url' && function_exists('mb_convert_encoding'))
+<a name="line151"></a>			{
+<a name="line152"></a>				$_POST[$val] = mb_convert_encoding($_POST[$val], $this->charset, $this->data['charset']);
+<a name="line153"></a>			}
+<a name="line154"></a>			
+<a name="line155"></a>			$_POST[$val] = ($val != 'url') ? $this->convert_xml(strip_tags($_POST[$val])) : strip_tags($_POST[$val]);
+<a name="line156"></a>			
+<a name="line157"></a>			if ($val == 'excerpt')
+<a name="line158"></a>			{
+<a name="line159"></a>				$_POST['excerpt'] = $this->limit_characters($_POST['excerpt']);
+<a name="line160"></a>			}
+<a name="line161"></a>			
+<a name="line162"></a>			$this->data[$val] = $_POST[$val];
+<a name="line163"></a>		}
+<a name="line164"></a>
+<a name="line165"></a>		return TRUE;
+<a name="line166"></a>	}	
+<a name="line167"></a>	
+<a name="line168"></a>	// --------------------------------------------------------------------
+<a name="line169"></a>	
+<a name="line170"></a>	/**
+<a name="line171"></a>	 * Send Trackback Error Message
+<a name="line172"></a>	 *
+<a name="line173"></a>	 * Allows custom errors to be set.  By default it
+<a name="line174"></a>	 * sends the "incomplete information" error, as that's
+<a name="line175"></a>	 * the most common one.
+<a name="line176"></a>	 *
+<a name="line177"></a>	 * @access	public
+<a name="line178"></a>	 * @param	string
+<a name="line179"></a>	 * @return	void
+<a name="line180"></a>	 */	
+<a name="line181"></a>	function send_error($message = 'Incomplete Information')
+<a name="line182"></a>	{
+<a name="line183"></a>		echo "<?xml version=\"1.0\" encoding=\"utf-8\"?".">\n<response>\n<error>1</error>\n<message>".$message."</message>\n</response>";
+<a name="line184"></a>		exit;
+<a name="line185"></a>	}
+<a name="line186"></a>	
+<a name="line187"></a>	// --------------------------------------------------------------------
+<a name="line188"></a>	
+<a name="line189"></a>	/**
+<a name="line190"></a>	 * Send Trackback Success Message
+<a name="line191"></a>	 *
+<a name="line192"></a>	 * This should be called when a trackback has been
+<a name="line193"></a>	 * successfully received and inserted.
+<a name="line194"></a>	 *
+<a name="line195"></a>	 * @access	public
+<a name="line196"></a>	 * @return	void
+<a name="line197"></a>	 */		
+<a name="line198"></a>	function send_success()
+<a name="line199"></a>	{
+<a name="line200"></a>		echo "<?xml version=\"1.0\" encoding=\"utf-8\"?".">\n<response>\n<error>0</error>\n</response>";
+<a name="line201"></a>		exit;
+<a name="line202"></a>	}
+<a name="line203"></a>	
+<a name="line204"></a>	// --------------------------------------------------------------------
+<a name="line205"></a>	
+<a name="line206"></a>	/**
+<a name="line207"></a>	 * Fetch a particular item
+<a name="line208"></a>	 *
+<a name="line209"></a>	 * @access	public
+<a name="line210"></a>	 * @param	string
+<a name="line211"></a>	 * @return	string
+<a name="line212"></a>	 */	
+<a name="line213"></a>	function data($item)
+<a name="line214"></a>	{
+<a name="line215"></a>		return ( ! isset($this->data[$item])) ? '' : $this->data[$item];
+<a name="line216"></a>	}
+<a name="line217"></a>
+<a name="line218"></a>	// --------------------------------------------------------------------
+<a name="line219"></a>	
+<a name="line220"></a>	/**
+<a name="line221"></a>	 * Process Trackback
+<a name="line222"></a>	 *
+<a name="line223"></a>	 * Opens a socket connection and passes the data to
+<a name="line224"></a>	 * the server.  Returns true on success, false on failure
+<a name="line225"></a>	 *
+<a name="line226"></a>	 * @access	public
+<a name="line227"></a>	 * @param	string
+<a name="line228"></a>	 * @param	string
+<a name="line229"></a>	 * @return	bool
+<a name="line230"></a>	 */	
+<a name="line231"></a>	function process($url, $data)
+<a name="line232"></a>	{
+<a name="line233"></a>		$target = parse_url($url);
+<a name="line234"></a>	
+<a name="line235"></a>		// Open the socket
+<a name="line236"></a>		if ( ! $fp = @fsockopen($target['host'], 80))
+<a name="line237"></a>		{
+<a name="line238"></a>			$this->set_error('Invalid Connection: '.$url);
+<a name="line239"></a>			return FALSE;
+<a name="line240"></a>		}
+<a name="line241"></a>
+<a name="line242"></a>		// Build the path
+<a name="line243"></a>		$ppath = ( ! isset($target['path'])) ? $url : $target['path'];
+<a name="line244"></a>		
+<a name="line245"></a>		$path = (isset($target['query']) && $target['query'] != "") ? $ppath.'?'.$target['query'] : $ppath;
+<a name="line246"></a>
+<a name="line247"></a>		// Add the Trackback ID to the data string
+<a name="line248"></a>		if ($id = $this->get_id($url))
+<a name="line249"></a>		{
+<a name="line250"></a>			$data = "tb_id=".$id."&".$data;
+<a name="line251"></a>		}
+<a name="line252"></a>
+<a name="line253"></a>		// Transfer the data
+<a name="line254"></a>		fputs ($fp, "POST " . $path . " HTTP/1.0\r\n" );
+<a name="line255"></a>		fputs ($fp, "Host: " . $target['host'] . "\r\n" );
+<a name="line256"></a>		fputs ($fp, "Content-type: application/x-www-form-urlencoded\r\n" );
+<a name="line257"></a>		fputs ($fp, "Content-length: " . strlen($data) . "\r\n" );
+<a name="line258"></a>		fputs ($fp, "Connection: close\r\n\r\n" );
+<a name="line259"></a>		fputs ($fp, $data);
+<a name="line260"></a>
+<a name="line261"></a>		// Was it successful?
+<a name="line262"></a>		$this->response = "";
+<a name="line263"></a>		
+<a name="line264"></a>		while( ! feof($fp))
+<a name="line265"></a>		{
+<a name="line266"></a>			$this->response .= fgets($fp, 128);
+<a name="line267"></a>		}
+<a name="line268"></a>		@fclose($fp);
+<a name="line269"></a>		
+<a name="line270"></a>		if (stristr($this->response, '<error>0</error>') === FALSE)
+<a name="line271"></a>		{
+<a name="line272"></a>			$message = 'An unknown error was encountered';
+<a name="line273"></a>			
+<a name="line274"></a>			if (preg_match("/<message>(.*?)<\/message>/is", $this->response, $match))
+<a name="line275"></a>			{
+<a name="line276"></a>				$message = trim($match['1']);
+<a name="line277"></a>			}
+<a name="line278"></a>			
+<a name="line279"></a>			$this->set_error($message);
+<a name="line280"></a>			return FALSE;
+<a name="line281"></a>		}
+<a name="line282"></a>
+<a name="line283"></a>		return TRUE;
+<a name="line284"></a>	}
+<a name="line285"></a>	
+<a name="line286"></a>	// --------------------------------------------------------------------
+<a name="line287"></a>	
+<a name="line288"></a>	/**
+<a name="line289"></a>	 * Extract Trackback URLs
+<a name="line290"></a>	 *
+<a name="line291"></a>	 * This function lets multiple trackbacks be sent.
+<a name="line292"></a>	 * It takes a string of URLs (separated by comma or
+<a name="line293"></a>	 * space) and puts each URL into an array
+<a name="line294"></a>	 *
+<a name="line295"></a>	 * @access	public
+<a name="line296"></a>	 * @param	string
+<a name="line297"></a>	 * @return	string
+<a name="line298"></a>	 */	
+<a name="line299"></a>	function extract_urls($urls)
+<a name="line300"></a>	{		
+<a name="line301"></a>		// Remove the pesky white space and replace with a comma.
+<a name="line302"></a>		$urls = preg_replace("/\s*(\S+)\s*/", "\\1,", $urls);
+<a name="line303"></a>		
+<a name="line304"></a>		// If they use commas get rid of the doubles.
+<a name="line305"></a>		$urls = str_replace(",,", ",", $urls);
+<a name="line306"></a>		
+<a name="line307"></a>		// Remove any comma that might be at the end
+<a name="line308"></a>		if (substr($urls, -1) == ",")
+<a name="line309"></a>		{
+<a name="line310"></a>			$urls = substr($urls, 0, -1);
+<a name="line311"></a>		}
+<a name="line312"></a>				
+<a name="line313"></a>		// Break into an array via commas
+<a name="line314"></a>		$urls = preg_split('/[,]/', $urls);
+<a name="line315"></a>		
+<a name="line316"></a>		// Removes duplicates
+<a name="line317"></a>		$urls = array_unique($urls);
+<a name="line318"></a>		
+<a name="line319"></a>		array_walk($urls, array($this, 'validate_url'));
+<a name="line320"></a>		
+<a name="line321"></a>		return $urls;
+<a name="line322"></a>	}
+<a name="line323"></a>	
+<a name="line324"></a>	// --------------------------------------------------------------------
+<a name="line325"></a>	
+<a name="line326"></a>	/**
+<a name="line327"></a>	 * Validate URL
+<a name="line328"></a>	 *
+<a name="line329"></a>	 * Simply adds "http://" if missing
+<a name="line330"></a>	 *
+<a name="line331"></a>	 * @access	public
+<a name="line332"></a>	 * @param	string
+<a name="line333"></a>	 * @return	string
+<a name="line334"></a>	 */	
+<a name="line335"></a>	function validate_url($url)
+<a name="line336"></a>	{
+<a name="line337"></a>		$url = trim($url);
+<a name="line338"></a>
+<a name="line339"></a>		if (substr($url, 0, 4) != "http")
+<a name="line340"></a>		{
+<a name="line341"></a>			$url = "http://".$url;
+<a name="line342"></a>		}
+<a name="line343"></a>	}
+<a name="line344"></a>	
+<a name="line345"></a>	// --------------------------------------------------------------------
+<a name="line346"></a>	
+<a name="line347"></a>	/**
+<a name="line348"></a>	 * Find the Trackback URL's ID
+<a name="line349"></a>	 *
+<a name="line350"></a>	 * @access	public
+<a name="line351"></a>	 * @param	string
+<a name="line352"></a>	 * @return	string
+<a name="line353"></a>	 */	
+<a name="line354"></a>	function get_id($url)
+<a name="line355"></a>	{	
+<a name="line356"></a>		$tb_id = "";
+<a name="line357"></a>		
+<a name="line358"></a>		if (strstr($url, '?'))
+<a name="line359"></a>		{
+<a name="line360"></a>			$tb_array = explode('/', $url);
+<a name="line361"></a>			$tb_end   = $tb_array[count($tb_array)-1];
+<a name="line362"></a>			
+<a name="line363"></a>			if ( ! is_numeric($tb_end))
+<a name="line364"></a>			{
+<a name="line365"></a>				$tb_end  = $tb_array[count($tb_array)-2];
+<a name="line366"></a>			}
+<a name="line367"></a>			
+<a name="line368"></a>			$tb_array = explode('=', $tb_end);
+<a name="line369"></a>			$tb_id	= $tb_array[count($tb_array)-1];
+<a name="line370"></a>		}
+<a name="line371"></a>		else
+<a name="line372"></a>		{
+<a name="line373"></a>			$url = rtrim($url, '/');
+<a name="line374"></a>				
+<a name="line375"></a>			$tb_array = explode('/', $url);
+<a name="line376"></a>			$tb_id	= $tb_array[count($tb_array)-1];
+<a name="line377"></a>			
+<a name="line378"></a>			if ( ! is_numeric($tb_id))
+<a name="line379"></a>			{
+<a name="line380"></a>				$tb_id  = $tb_array[count($tb_array)-2];
+<a name="line381"></a>			}
+<a name="line382"></a>		}	
+<a name="line383"></a>				
+<a name="line384"></a>		if ( ! preg_match ("/^([0-9]+)$/", $tb_id))
+<a name="line385"></a>		{
+<a name="line386"></a>			return false;
+<a name="line387"></a>		}
+<a name="line388"></a>		else
+<a name="line389"></a>		{
+<a name="line390"></a>			return $tb_id;
+<a name="line391"></a>		}		
+<a name="line392"></a>	}
+<a name="line393"></a>	
+<a name="line394"></a>	// --------------------------------------------------------------------
+<a name="line395"></a>	
+<a name="line396"></a>	/**
+<a name="line397"></a>	 * Convert Reserved XML characters to Entities
+<a name="line398"></a>	 *
+<a name="line399"></a>	 * @access	public
+<a name="line400"></a>	 * @param	string
+<a name="line401"></a>	 * @return	string
+<a name="line402"></a>	 */
+<a name="line403"></a>	function convert_xml($str)
+<a name="line404"></a>	{
+<a name="line405"></a>		$temp = '__TEMP_AMPERSANDS__';
+<a name="line406"></a>		
+<a name="line407"></a>		$str = preg_replace("/&#(\d+);/", "$temp\\1;", $str);
+<a name="line408"></a>		$str = preg_replace("/&(\w+);/",  "$temp\\1;", $str);
+<a name="line409"></a>		
+<a name="line410"></a>		$str = str_replace(array("&","<",">","\"", "'", "-"),
+<a name="line411"></a>						   array("&amp;", "&lt;", "&gt;", "&quot;", "&#39;", "&#45;"),
+<a name="line412"></a>						   $str);
+<a name="line413"></a>			
+<a name="line414"></a>		$str = preg_replace("/$temp(\d+);/","&#\\1;",$str);
+<a name="line415"></a>		$str = preg_replace("/$temp(\w+);/","&\\1;", $str);
+<a name="line416"></a>			
+<a name="line417"></a>		return $str;
+<a name="line418"></a>	}	
+<a name="line419"></a>	
+<a name="line420"></a>	// --------------------------------------------------------------------
+<a name="line421"></a>	
+<a name="line422"></a>	/**
+<a name="line423"></a>	 * Character limiter
+<a name="line424"></a>	 *
+<a name="line425"></a>	 * Limits the string based on the character count. Will preserve complete words.
+<a name="line426"></a>	 *
+<a name="line427"></a>	 * @access	public
+<a name="line428"></a>	 * @param	string
+<a name="line429"></a>	 * @param	integer
+<a name="line430"></a>	 * @param	string
+<a name="line431"></a>	 * @return	string
+<a name="line432"></a>	 */
+<a name="line433"></a>	function limit_characters($str, $n = 500, $end_char = '&#8230;')
+<a name="line434"></a>	{
+<a name="line435"></a>		if (strlen($str) < $n)
+<a name="line436"></a>		{
+<a name="line437"></a>			return $str;
+<a name="line438"></a>		}
+<a name="line439"></a>
+<a name="line440"></a>		$str = preg_replace("/\s+/", ' ', str_replace(array("\r\n", "\r", "\n"), ' ', $str));
+<a name="line441"></a>	
+<a name="line442"></a>		if (strlen($str) <= $n)
+<a name="line443"></a>		{
+<a name="line444"></a>			return $str;
+<a name="line445"></a>		}
+<a name="line446"></a>										
+<a name="line447"></a>		$out = "";
+<a name="line448"></a>		foreach (explode(' ', trim($str)) as $val)
+<a name="line449"></a>		{
+<a name="line450"></a>			$out .= $val.' ';			
+<a name="line451"></a>			if (strlen($out) >= $n)
+<a name="line452"></a>			{
+<a name="line453"></a>				return trim($out).$end_char;
+<a name="line454"></a>			}		
+<a name="line455"></a>		}
+<a name="line456"></a>	}
+<a name="line457"></a>	
+<a name="line458"></a>	// --------------------------------------------------------------------
+<a name="line459"></a>	
+<a name="line460"></a>	/**
+<a name="line461"></a>	 * High ASCII to Entities
+<a name="line462"></a>	 *
+<a name="line463"></a>	 * Converts Hight ascii text and MS Word special chars
+<a name="line464"></a>	 * to character entities
+<a name="line465"></a>	 *
+<a name="line466"></a>	 * @access	public
+<a name="line467"></a>	 * @param	string
+<a name="line468"></a>	 * @return	string
+<a name="line469"></a>	 */
+<a name="line470"></a>	function convert_ascii($str)
+<a name="line471"></a>	{
+<a name="line472"></a>	   $count	= 1;
+<a name="line473"></a>	   $out	= '';
+<a name="line474"></a>	   $temp	= array();
+<a name="line475"></a>		
+<a name="line476"></a>	   for ($i = 0, $s = strlen($str); $i < $s; $i++)
+<a name="line477"></a>	   {
+<a name="line478"></a>		   $ordinal = ord($str[$i]);
+<a name="line479"></a>		
+<a name="line480"></a>		   if ($ordinal < 128)
+<a name="line481"></a>		   {
+<a name="line482"></a>			   $out .= $str[$i];			
+<a name="line483"></a>		   }
+<a name="line484"></a>		   else
+<a name="line485"></a>		   {
+<a name="line486"></a>			   if (count($temp) == 0)
+<a name="line487"></a>			   {
+<a name="line488"></a>				   $count = ($ordinal < 224) ? 2 : 3;
+<a name="line489"></a>			   }
+<a name="line490"></a>			
+<a name="line491"></a>			   $temp[] = $ordinal;
+<a name="line492"></a>			
+<a name="line493"></a>			   if (count($temp) == $count)
+<a name="line494"></a>			   {
+<a name="line495"></a>				   $number = ($count == 3) ? (($temp['0'] % 16) * 4096) + (($temp['1'] % 64) * 64) + ($temp['2'] % 64) : (($temp['0'] % 32) * 64) + ($temp['1'] % 64);
+<a name="line496"></a>	
+<a name="line497"></a>				   $out .= '&#'.$number.';';
+<a name="line498"></a>				   $count = 1;
+<a name="line499"></a>				   $temp = array();
+<a name="line500"></a>			   }
+<a name="line501"></a>		   }
+<a name="line502"></a>	   }
+<a name="line503"></a>	
+<a name="line504"></a>	   return $out;
+<a name="line505"></a>	}
+<a name="line506"></a>	
+<a name="line507"></a>	// --------------------------------------------------------------------
+<a name="line508"></a>	
+<a name="line509"></a>	/**
+<a name="line510"></a>	 * Set error message
+<a name="line511"></a>	 *
+<a name="line512"></a>	 * @access	public
+<a name="line513"></a>	 * @param	string
+<a name="line514"></a>	 * @return	void
+<a name="line515"></a>	 */	
+<a name="line516"></a>	function set_error($msg)
+<a name="line517"></a>	{
+<a name="line518"></a>		log_message('error', $msg);
+<a name="line519"></a>		$this->error_msg[] = $msg;
+<a name="line520"></a>	}
+<a name="line521"></a>	
+<a name="line522"></a>	// --------------------------------------------------------------------
+<a name="line523"></a>	
+<a name="line524"></a>	/**
+<a name="line525"></a>	 * Show error messages
+<a name="line526"></a>	 *
+<a name="line527"></a>	 * @access	public
+<a name="line528"></a>	 * @param	string
+<a name="line529"></a>	 * @param	string
+<a name="line530"></a>	 * @return	string
+<a name="line531"></a>	 */	
+<a name="line532"></a>	function display_errors($open = '<p>', $close = '</p>')
+<a name="line533"></a>	{	
+<a name="line534"></a>		$str = '';
+<a name="line535"></a>		foreach ($this->error_msg as $val)
+<a name="line536"></a>		{
+<a name="line537"></a>			$str .= $open.$val.$close;
+<a name="line538"></a>		}
+<a name="line539"></a>	
+<a name="line540"></a>		return $str;
+<a name="line541"></a>	}
+<a name="line542"></a>
+<a name="line543"></a>}
+<a name="line544"></a>// END Trackback Class
+<a name="line545"></a>
+<a name="line546"></a>/* End of file Trackback.php */
+<a name="line547"></a>/* Location: ./system/libraries/Trackback.php */</pre>
+<div class="header">
+<h1>GiftFlow API</h1>
+<ul>
+<li><a href="../../overview-summary.html">Overview</a></li>
+<li>Package</li><li>Class</li><li>Tree</li><li><a href="../../overview-files.html">Files</a></li>
+<li><a href="../../deprecated-list.html">Deprecated</a></li>
+<li><a href="../../index-all.html">Index</a></li>
+</ul>
+</div>
+
+<div class="small_links">
+<a href="../../index.html" target="_top">Frames</a>
+<a href="../../source/libraries/trackback.php.html" target="_top">No frames</a>
+</div>
+<hr>
+
+<p id="footer">This document was generated by <a href="http://peej.github.com/phpdoctor/">PHPDoctor: The PHP Documentation Creator</a></p>
+
+</body>
+
+</html>

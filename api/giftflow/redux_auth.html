@@ -1,0 +1,307 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+
+<html lang="en">
+<head>
+
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
+<meta name="generator" content="PHPDoctor 2RC4 (http://peej.github.com/phpdoctor/)">
+<meta name="when" content="Sun, 20 Jun 2010 16:59:28 +0000">
+
+<link rel="stylesheet" type="text/css" href="../stylesheet.css">
+<link rel="start" href="../overview-summary.html">
+
+<title>redux_auth (GiftFlow API)</title>
+
+</head>
+<body id="definition" onload="parent.document.title=document.title;">
+
+<div class="header">
+<h1>GiftFlow API</h1>
+<ul>
+<li><a href="../overview-summary.html">Overview</a></li>
+<li><a href="../giftflow/package-summary.html">Package</a></li>
+<li class="active">Class</li>
+<li><a href="../giftflow/package-tree.html">Tree</a></li>
+<li><a href="../overview-files.html">Files</a></li>
+<li><a href="../deprecated-list.html">Deprecated</a></li>
+<li><a href="../index-all.html">Index</a></li>
+</ul>
+</div>
+
+<div class="small_links">
+<a href="../index.html" target="_top">Frames</a>
+<a href="../giftflow/redux_auth.html" target="_top">No frames</a>
+</div>
+<div class="small_links">
+Summary: <a href="#summary_field">Field</a> | <a href="#summary_method">Method</a> | <a href="#summary_constr">Constr</a>
+Detail: <a href="#detail_field">Field</a> | <a href="#detail_method">Method</a> | <a href="#summary_constr">Constr</a>
+</div>
+<hr>
+
+<div class="qualifiedName">GiftFlow\redux_auth</div>
+<a href="../source/application/libraries/redux_auth.php.html#line6" class="location">application/libraries/redux_auth.php at line 6</a>
+
+<h1>Class redux_auth</h1>
+
+<pre class="tree"><strong>redux_auth</strong><br /></pre>
+
+<hr>
+
+<p class="signature">public  class <strong>redux_auth</strong></p>
+
+<div class="comment" id="overview_description"><p>Redux Authentication 2</p></div>
+
+<hr>
+
+<table id="summary_field">
+<tr><th colspan="2">Field Summary</th></tr>
+<tr>
+<td class="type">protected  string /</td>
+<td class="description"><p class="name"><a href="#_http_post">$_http_post</a></p><p class="description">CodeIgniter global</p></td>
+</tr>
+<tr>
+<td class="type">protected  string /</td>
+<td class="description"><p class="name"><a href="#status">$status</a></p><p class="description">account status ('not_activated', etc ...)</p></td>
+</tr>
+</table>
+
+<table id="summary_method">
+<tr><th colspan="2">Method Summary</th></tr>
+<tr>
+<td class="type"> void</td>
+<td class="description"><p class="name"><a href="#__construct()">__construct</a>()</p><p class="description">__construct</p></td>
+</tr>
+<tr>
+<td class="type"> void</td>
+<td class="description"><p class="name"><a href="#activate()">activate</a>(mixed code)</p><p class="description">Activate user.</p></td>
+</tr>
+<tr>
+<td class="type"> void</td>
+<td class="description"><p class="name"><a href="#change_password()">change_password</a>(mixed identity, mixed old, mixed new)</p><p class="description">Change password.</p></td>
+</tr>
+<tr>
+<td class="type"> void</td>
+<td class="description"><p class="name"><a href="#deactivate()">deactivate</a>(mixed email)</p><p class="description">Deactivate user.</p></td>
+</tr>
+<tr>
+<td class="type"> void</td>
+<td class="description"><p class="name"><a href="#forgotten_password()">forgotten_password</a>(mixed email)</p><p class="description">forgotten password feature</p></td>
+</tr>
+<tr>
+<td class="type"> void</td>
+<td class="description"><p class="name"><a href="#forgotten_password_complete()">forgotten_password_complete</a>(mixed code)</p><p class="description">undocumented function</p></td>
+</tr>
+<tr>
+<td class="type"> void</td>
+<td class="description"><p class="name"><a href="#logged_in()">logged_in</a>()</p><p class="description">logged_in</p></td>
+</tr>
+<tr>
+<td class="type"> void</td>
+<td class="description"><p class="name"><a href="#login()">login</a>(mixed identity, mixed password)</p><p class="description">login</p></td>
+</tr>
+<tr>
+<td class="type"> void</td>
+<td class="description"><p class="name"><a href="#logout()">logout</a>()</p><p class="description">logout</p></td>
+</tr>
+<tr>
+<td class="type"> void</td>
+<td class="description"><p class="name"><a href="#profile()">profile</a>()</p><p class="description">Profile</p></td>
+</tr>
+<tr>
+<td class="type"> void</td>
+<td class="description"><p class="name"><a href="#register()">register</a>(mixed email, mixed password, mixed name)</p><p class="description">register</p></td>
+</tr>
+</table>
+
+<h2 id="detail_field">Field Detail</h2>
+<a href="../source/application/libraries/redux_auth.php.html#line13" class="location">application/libraries/redux_auth.php at line 13</a>
+
+<h3 id="_http_post">_http_post</h3>
+<code class="signature">protected  string / <strong>$_http_post</strong> = 80</code>
+<div class="details">
+<p>CodeIgniter global</p></div>
+
+<hr>
+
+<a href="../source/application/libraries/redux_auth.php.html#line20" class="location">application/libraries/redux_auth.php at line 20</a>
+
+<h3 id="status">status</h3>
+<code class="signature">protected  string / <strong>$status</strong></code>
+<div class="details">
+<p>account status ('not_activated', etc ...)</p></div>
+
+<hr>
+
+<h2 id="detail_method">Method Detail</h2><div class="method_detail">
+<div class='method'><a href="../source/application/libraries/redux_auth.php.html#line28" class="location">application/libraries/redux_auth.php at line 28</a>
+
+<h3 id="__construct()">__construct</h3>
+<code class="signature">public  void <strong>__construct</strong>()</code>
+<div class="details">
+<p>__construct</p><dl>
+<dt>Author:</dt>
+<dd>Mathew /</dd>
+</dl>
+</div></div>
+
+
+
+<div class='method'><a href="../source/application/libraries/redux_auth.php.html#line42" class="location">application/libraries/redux_auth.php at line 42</a>
+
+<h3 id="activate()">activate</h3>
+<code class="signature">public  void <strong>activate</strong>(mixed code)</code>
+<div class="details">
+<p>Activate user.</p><dl>
+<dt>Author:</dt>
+<dd>Mathew /</dd>
+</dl>
+</div></div>
+
+
+
+<div class='method'><a href="../source/application/libraries/redux_auth.php.html#line64" class="location">application/libraries/redux_auth.php at line 64</a>
+
+<h3 id="change_password()">change_password</h3>
+<code class="signature">public  void <strong>change_password</strong>(mixed identity, mixed old, mixed new)</code>
+<div class="details">
+<p>Change password.</p><dl>
+<dt>Author:</dt>
+<dd>Mathew /</dd>
+</dl>
+</div></div>
+
+
+
+<div class='method'><a href="../source/application/libraries/redux_auth.php.html#line53" class="location">application/libraries/redux_auth.php at line 53</a>
+
+<h3 id="deactivate()">deactivate</h3>
+<code class="signature">public  void <strong>deactivate</strong>(mixed email)</code>
+<div class="details">
+<p>Deactivate user.</p><dl>
+<dt>Author:</dt>
+<dd>Mathew /</dd>
+</dl>
+</div></div>
+
+
+
+<div class='method'><a href="../source/application/libraries/redux_auth.php.html#line75" class="location">application/libraries/redux_auth.php at line 75</a>
+
+<h3 id="forgotten_password()">forgotten_password</h3>
+<code class="signature">public  void <strong>forgotten_password</strong>(mixed email)</code>
+<div class="details">
+<p>forgotten password feature</p><dl>
+<dt>Author:</dt>
+<dd>Mathew /</dd>
+</dl>
+</div></div>
+
+
+
+<div class='method'><a href="../source/application/libraries/redux_auth.php.html#line105" class="location">application/libraries/redux_auth.php at line 105</a>
+
+<h3 id="forgotten_password_complete()">forgotten_password_complete</h3>
+<code class="signature">public  void <strong>forgotten_password_complete</strong>(mixed code)</code>
+<div class="details">
+<p>undocumented function</p><dl>
+<dt>Author:</dt>
+<dd>Mathew /</dd>
+</dl>
+</div></div>
+
+
+
+<div class='method'><a href="../source/application/libraries/redux_auth.php.html#line214" class="location">application/libraries/redux_auth.php at line 214</a>
+
+<h3 id="logged_in()">logged_in</h3>
+<code class="signature">public  void <strong>logged_in</strong>()</code>
+<div class="details">
+<p>logged_in</p><dl>
+<dt>Author:</dt>
+<dd>Mathew /</dd>
+</dl>
+</div></div>
+
+
+
+<div class='method'><a href="../source/application/libraries/redux_auth.php.html#line190" class="location">application/libraries/redux_auth.php at line 190</a>
+
+<h3 id="login()">login</h3>
+<code class="signature">public  void <strong>login</strong>(mixed identity, mixed password)</code>
+<div class="details">
+<p>login</p><dl>
+<dt>Author:</dt>
+<dd>Mathew /</dd>
+</dl>
+</div></div>
+
+
+
+<div class='method'><a href="../source/application/libraries/redux_auth.php.html#line201" class="location">application/libraries/redux_auth.php at line 201</a>
+
+<h3 id="logout()">logout</h3>
+<code class="signature">public  void <strong>logout</strong>()</code>
+<div class="details">
+<p>logout</p><dl>
+<dt>Author:</dt>
+<dd>Mathew /</dd>
+</dl>
+</div></div>
+
+
+
+<div class='method'><a href="../source/application/libraries/redux_auth.php.html#line226" class="location">application/libraries/redux_auth.php at line 226</a>
+
+<h3 id="profile()">profile</h3>
+<code class="signature">public  void <strong>profile</strong>()</code>
+<div class="details">
+<p>Profile</p><dl>
+<dt>Author:</dt>
+<dd>Mathew /</dd>
+</dl>
+</div></div>
+
+
+
+<div class='method'><a href="../source/application/libraries/redux_auth.php.html#line136" class="location">application/libraries/redux_auth.php at line 136</a>
+
+<h3 id="register()">register</h3>
+<code class="signature">public  void <strong>register</strong>(mixed email, mixed password, mixed name)</code>
+<div class="details">
+<p>register</p><dl>
+<dt>Author:</dt>
+<dd>Mathew /</dd>
+</dl>
+</div></div>
+
+
+
+</div><div class="header">
+<h1>GiftFlow API</h1>
+<ul>
+<li><a href="../overview-summary.html">Overview</a></li>
+<li><a href="../giftflow/package-summary.html">Package</a></li>
+<li class="active">Class</li>
+<li><a href="../giftflow/package-tree.html">Tree</a></li>
+<li><a href="../overview-files.html">Files</a></li>
+<li><a href="../deprecated-list.html">Deprecated</a></li>
+<li><a href="../index-all.html">Index</a></li>
+</ul>
+</div>
+
+<div class="small_links">
+<a href="../index.html" target="_top">Frames</a>
+<a href="../giftflow/redux_auth.html" target="_top">No frames</a>
+</div>
+<div class="small_links">
+Summary: <a href="#summary_field">Field</a> | <a href="#summary_method">Method</a> | <a href="#summary_constr">Constr</a>
+Detail: <a href="#detail_field">Field</a> | <a href="#detail_method">Method</a> | <a href="#summary_constr">Constr</a>
+</div>
+<hr>
+
+<p id="footer">This document was generated by <a href="http://peej.github.com/phpdoctor/">PHPDoctor: The PHP Documentation Creator</a></p>
+
+</body>
+
+</html>

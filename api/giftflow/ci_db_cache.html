@@ -1,0 +1,228 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+
+<html lang="en">
+<head>
+
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
+<meta name="generator" content="PHPDoctor 2RC4 (http://peej.github.com/phpdoctor/)">
+<meta name="when" content="Sun, 20 Jun 2010 17:43:50 +0000">
+
+<link rel="stylesheet" type="text/css" href="../stylesheet.css">
+<link rel="start" href="../overview-summary.html">
+
+<title>CI_DB_Cache (GiftFlow API)</title>
+
+</head>
+<body id="definition" onload="parent.document.title=document.title;">
+
+<div class="header">
+<h1>GiftFlow API</h1>
+<ul>
+<li><a href="../overview-summary.html">Overview</a></li>
+<li><a href="../giftflow/package-summary.html">Package</a></li>
+<li class="active">Class</li>
+<li><a href="../giftflow/package-tree.html">Tree</a></li>
+<li><a href="../overview-files.html">Files</a></li>
+<li><a href="../deprecated-list.html">Deprecated</a></li>
+<li><a href="../index-all.html">Index</a></li>
+</ul>
+</div>
+
+<div class="small_links">
+<a href="../index.html" target="_top">Frames</a>
+<a href="../giftflow/ci_db_cache.html" target="_top">No frames</a>
+</div>
+<div class="small_links">
+Summary: <a href="#summary_field">Field</a> | <a href="#summary_method">Method</a> | <a href="#summary_constr">Constr</a>
+Detail: <a href="#detail_field">Field</a> | <a href="#detail_method">Method</a> | <a href="#summary_constr">Constr</a>
+</div>
+<hr>
+
+<div class="qualifiedName">GiftFlow\CI_DB_Cache</div>
+<a href="../source/database/db_cache.php.html#line25" class="location">database/DB_cache.php at line 25</a>
+
+<h1>Class CI_DB_Cache</h1>
+
+<pre class="tree"><strong>CI_DB_Cache</strong><br /></pre>
+
+<hr>
+
+<p class="signature">public  class <strong>CI_DB_Cache</strong></p>
+
+<div class="comment" id="overview_description"><p>Database Cache Class</p></div>
+
+<dl>
+<dt>Category	Database.</dt>
+<dt>Author		ExpressionEngine:</dt>
+<dd>Dev Team</dd>
+<dt>Link		http://codeigniter.com/user_guide/database/.</dt>
+</dl>
+<hr>
+
+<table id="summary_field">
+<tr><th colspan="2">Field Summary</th></tr>
+<tr>
+<td class="type">private  mixed</td>
+<td class="description"><p class="name"><a href="#_reset_write">$_reset_write</a></p></td>
+</tr>
+<tr>
+<td class="type"> mixed</td>
+<td class="description"><p class="name"><a href="#db">$db</a></p></td>
+</tr>
+</table>
+
+<table id="summary_method">
+<tr><th colspan="2">Method Summary</th></tr>
+<tr>
+<td class="type"> void</td>
+<td class="description"><p class="name"><a href="#__construct()">__construct</a>(mixed db)</p><p class="description">ConstructorGrabs the CI super object instance so we can access it.</p></td>
+</tr>
+<tr>
+<td class="type"> void</td>
+<td class="description"><p class="name"><a href="#check_path()">check_path</a>(str path)</p><p class="description">Set Cache Directory Path</p></td>
+</tr>
+<tr>
+<td class="type"> void</td>
+<td class="description"><p class="name"><a href="#delete()">delete</a>(str segment_one, str segment_two)</p><p class="description">Delete cache files within a particular directory</p></td>
+</tr>
+<tr>
+<td class="type"> void</td>
+<td class="description"><p class="name"><a href="#delete_all()">delete_all</a>()</p><p class="description">Delete all existing cache files</p></td>
+</tr>
+<tr>
+<td class="type"> void</td>
+<td class="description"><p class="name"><a href="#read()">read</a>(mixed sql)</p><p class="description">Retrieve a cached queryThe URI being requested will become the name of the cache sub-folder.
+</p></td>
+</tr>
+<tr>
+<td class="type"> void</td>
+<td class="description"><p class="name"><a href="#write()">write</a>(mixed sql, mixed object)</p><p class="description">Write a query to a cache file</p></td>
+</tr>
+</table>
+
+<h2 id="detail_field">Field Detail</h2>
+<a href="../source/database/db_cache.php.html#line27" class="location">database/DB_cache.php at line 27</a>
+
+<h3 id="_reset_write">_reset_write</h3>
+<code class="signature">private  mixed <strong>$_reset_write</strong> = FALSE</code>
+<div class="details">
+</div>
+
+<hr>
+
+<a href="../source/database/db_cache.php.html#line28" class="location">database/DB_cache.php at line 28</a>
+
+<h3 id="db">db</h3>
+<code class="signature">public  mixed <strong>$db</strong></code>
+<div class="details">
+</div>
+
+<hr>
+
+<h2 id="detail_method">Method Detail</h2><div class="method_detail">
+<div class='method'><a href="../source/database/db_cache.php.html#line36" class="location">database/DB_cache.php at line 36</a>
+
+<h3 id="__construct()">__construct</h3>
+<code class="signature">public  void <strong>__construct</strong>(mixed db)</code>
+<div class="details">
+<p>Constructor</p><p>Grabs the CI super object instance so we can access it.</p></div></div>
+
+
+
+<div class='method'><a href="../source/database/db_cache.php.html#line54" class="location">database/DB_cache.php at line 54</a>
+
+<h3 id="check_path()">check_path</h3>
+<code class="signature">public  void <strong>check_path</strong>(str path)</code>
+<div class="details">
+<p>Set Cache Directory Path</p><dl>
+<dt>Access	public.</dt>
+<dt>Param	string	the:</dt>
+<dd>path to the cache directory</dd>
+<dt>Return	bool.</dt>
+</dl>
+</div></div>
+
+
+
+<div class='method'><a href="../source/database/db_cache.php.html#line161" class="location">database/DB_cache.php at line 161</a>
+
+<h3 id="delete()">delete</h3>
+<code class="signature">public  void <strong>delete</strong>(str segment_one, str segment_two)</code>
+<div class="details">
+<p>Delete cache files within a particular directory</p><dl>
+<dt>Access	public.</dt>
+<dt>Return	bool.</dt>
+</dl>
+</div></div>
+
+
+
+<div class='method'><a href="../source/database/db_cache.php.html#line186" class="location">database/DB_cache.php at line 186</a>
+
+<h3 id="delete_all()">delete_all</h3>
+<code class="signature">public  void <strong>delete_all</strong>()</code>
+<div class="details">
+<p>Delete all existing cache files</p><dl>
+<dt>Access	public.</dt>
+<dt>Return	bool.</dt>
+</dl>
+</div></div>
+
+
+
+<div class='method'><a href="../source/database/db_cache.php.html#line90" class="location">database/DB_cache.php at line 90</a>
+
+<h3 id="read()">read</h3>
+<code class="signature">public  void <strong>read</strong>(mixed sql)</code>
+<div class="details">
+<p>Retrieve a cached query</p><p>The URI being requested will become the name of the cache sub-folder.
+An MD5 hash of the SQL statement will become the cache file name</p><dl>
+<dt>Access	public.</dt>
+<dt>Return	string.</dt>
+</dl>
+</div></div>
+
+
+
+<div class='method'><a href="../source/database/db_cache.php.html#line119" class="location">database/DB_cache.php at line 119</a>
+
+<h3 id="write()">write</h3>
+<code class="signature">public  void <strong>write</strong>(mixed sql, mixed object)</code>
+<div class="details">
+<p>Write a query to a cache file</p><dl>
+<dt>Access	public.</dt>
+<dt>Return	bool.</dt>
+</dl>
+</div></div>
+
+
+
+</div><div class="header">
+<h1>GiftFlow API</h1>
+<ul>
+<li><a href="../overview-summary.html">Overview</a></li>
+<li><a href="../giftflow/package-summary.html">Package</a></li>
+<li class="active">Class</li>
+<li><a href="../giftflow/package-tree.html">Tree</a></li>
+<li><a href="../overview-files.html">Files</a></li>
+<li><a href="../deprecated-list.html">Deprecated</a></li>
+<li><a href="../index-all.html">Index</a></li>
+</ul>
+</div>
+
+<div class="small_links">
+<a href="../index.html" target="_top">Frames</a>
+<a href="../giftflow/ci_db_cache.html" target="_top">No frames</a>
+</div>
+<div class="small_links">
+Summary: <a href="#summary_field">Field</a> | <a href="#summary_method">Method</a> | <a href="#summary_constr">Constr</a>
+Detail: <a href="#detail_field">Field</a> | <a href="#detail_method">Method</a> | <a href="#summary_constr">Constr</a>
+</div>
+<hr>
+
+<p id="footer">This document was generated by <a href="http://peej.github.com/phpdoctor/">PHPDoctor: The PHP Documentation Creator</a></p>
+
+</body>
+
+</html>

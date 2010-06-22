@@ -1,0 +1,537 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+
+<html lang="en">
+<head>
+
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
+<meta name="generator" content="PHPDoctor 2RC4 (http://peej.github.com/phpdoctor/)">
+<meta name="when" content="Sun, 20 Jun 2010 17:43:51 +0000">
+
+<link rel="stylesheet" type="text/css" href="../../stylesheet.css">
+<link rel="start" href="../../overview-summary.html">
+
+<title>libraries/Calendar.php (GiftFlow API)</title>
+
+</head>
+<body id="file" onload="parent.document.title=document.title;">
+
+<div class="header">
+<h1>GiftFlow API</h1>
+<ul>
+<li><a href="../../overview-summary.html">Overview</a></li>
+<li>Package</li><li>Class</li><li>Tree</li><li><a href="../../overview-files.html">Files</a></li>
+<li><a href="../../deprecated-list.html">Deprecated</a></li>
+<li><a href="../../index-all.html">Index</a></li>
+</ul>
+</div>
+
+<div class="small_links">
+<a href="../../index.html" target="_top">Frames</a>
+<a href="../../source/libraries/calendar.php.html" target="_top">No frames</a>
+</div>
+<hr>
+
+<h1>libraries/Calendar.php</h1>
+<div class="comment" id="overview_description"><p>CodeIgniter</p><p>An open source application development framework for PHP 4.3.2 or newer</p></div>
+
+<hr>
+
+<a name="line1"></a><pre><?php  if ( ! defined('BASEPATH')) exit('No direct script access allowed');
+<a name="line2"></a>/**
+<a name="line3"></a> * CodeIgniter
+<a name="line4"></a> *
+<a name="line5"></a> * An open source application development framework for PHP 4.3.2 or newer
+<a name="line6"></a> *
+<a name="line7"></a> * @package		CodeIgniter
+<a name="line8"></a> * @author		ExpressionEngine Dev Team
+<a name="line9"></a> * @copyright	Copyright (c) 2008 - 2009, EllisLab, Inc.
+<a name="line10"></a> * @license		http://codeigniter.com/user_guide/license.html
+<a name="line11"></a> * @link		http://codeigniter.com
+<a name="line12"></a> * @since		Version 1.0
+<a name="line13"></a> * @filesource
+<a name="line14"></a> */
+<a name="line15"></a>
+<a name="line16"></a>// ------------------------------------------------------------------------
+<a name="line17"></a>
+<a name="line18"></a>/**
+<a name="line19"></a> * CodeIgniter Calendar Class
+<a name="line20"></a> *
+<a name="line21"></a> * This class enables the creation of calendars
+<a name="line22"></a> *
+<a name="line23"></a> * @package		CodeIgniter
+<a name="line24"></a> * @subpackage	Libraries
+<a name="line25"></a> * @category	Libraries
+<a name="line26"></a> * @author		ExpressionEngine Dev Team
+<a name="line27"></a> * @link		http://codeigniter.com/user_guide/libraries/calendar.html
+<a name="line28"></a> */
+<a name="line29"></a>class CI_Calendar {
+<a name="line30"></a>
+<a name="line31"></a>	var $CI;
+<a name="line32"></a>	var $lang;
+<a name="line33"></a>	var $local_time;
+<a name="line34"></a>	var $template		= '';
+<a name="line35"></a>	var $start_day		= 'sunday';
+<a name="line36"></a>	var $month_type 	= 'long';
+<a name="line37"></a>	var $day_type		= 'abr';
+<a name="line38"></a>	var $show_next_prev	= FALSE;
+<a name="line39"></a>	var $next_prev_url	= '';
+<a name="line40"></a>
+<a name="line41"></a>	/**
+<a name="line42"></a>	 * Constructor
+<a name="line43"></a>	 *
+<a name="line44"></a>	 * Loads the calendar language file and sets the default time reference
+<a name="line45"></a>	 *
+<a name="line46"></a>	 * @access	public
+<a name="line47"></a>	 */
+<a name="line48"></a>	function CI_Calendar($config = array())
+<a name="line49"></a>	{		
+<a name="line50"></a>		$this->CI =& get_instance();
+<a name="line51"></a>		
+<a name="line52"></a>		if ( ! in_array('calendar_lang'.EXT, $this->CI->lang->is_loaded, TRUE))
+<a name="line53"></a>		{
+<a name="line54"></a>			$this->CI->lang->load('calendar');
+<a name="line55"></a>		}
+<a name="line56"></a>
+<a name="line57"></a>		$this->local_time = time();
+<a name="line58"></a>		
+<a name="line59"></a>		if (count($config) > 0)
+<a name="line60"></a>		{
+<a name="line61"></a>			$this->initialize($config);
+<a name="line62"></a>		}
+<a name="line63"></a>		
+<a name="line64"></a>		log_message('debug', "Calendar Class Initialized");
+<a name="line65"></a>	}
+<a name="line66"></a>	
+<a name="line67"></a>	// --------------------------------------------------------------------
+<a name="line68"></a>	
+<a name="line69"></a>	/**
+<a name="line70"></a>	 * Initialize the user preferences
+<a name="line71"></a>	 *
+<a name="line72"></a>	 * Accepts an associative array as input, containing display preferences
+<a name="line73"></a>	 *
+<a name="line74"></a>	 * @access	public
+<a name="line75"></a>	 * @param	array	config preferences
+<a name="line76"></a>	 * @return	void
+<a name="line77"></a>	 */	
+<a name="line78"></a>	function initialize($config = array())
+<a name="line79"></a>	{
+<a name="line80"></a>		foreach ($config as $key => $val)
+<a name="line81"></a>		{
+<a name="line82"></a>			if (isset($this->$key))
+<a name="line83"></a>			{
+<a name="line84"></a>				$this->$key = $val;
+<a name="line85"></a>			}
+<a name="line86"></a>		}
+<a name="line87"></a>	}
+<a name="line88"></a>	
+<a name="line89"></a>	// --------------------------------------------------------------------
+<a name="line90"></a>
+<a name="line91"></a>	/**
+<a name="line92"></a>	 * Generate the calendar
+<a name="line93"></a>	 *
+<a name="line94"></a>	 * @access	public
+<a name="line95"></a>	 * @param	integer	the year
+<a name="line96"></a>	 * @param	integer	the month
+<a name="line97"></a>	 * @param	array	the data to be shown in the calendar cells
+<a name="line98"></a>	 * @return	string
+<a name="line99"></a>	 */
+<a name="line100"></a>	function generate($year = '', $month = '', $data = array())
+<a name="line101"></a>	{
+<a name="line102"></a>		// Set and validate the supplied month/year
+<a name="line103"></a>		if ($year == '')
+<a name="line104"></a>			$year  = date("Y", $this->local_time);
+<a name="line105"></a>			
+<a name="line106"></a>		if ($month == '')
+<a name="line107"></a>			$month = date("m", $this->local_time);
+<a name="line108"></a>			
+<a name="line109"></a> 		if (strlen($year) == 1)
+<a name="line110"></a>			$year = '200'.$year;
+<a name="line111"></a>		
+<a name="line112"></a> 		if (strlen($year) == 2)
+<a name="line113"></a>			$year = '20'.$year;
+<a name="line114"></a>
+<a name="line115"></a> 		if (strlen($month) == 1)
+<a name="line116"></a>			$month = '0'.$month;
+<a name="line117"></a>		
+<a name="line118"></a>		$adjusted_date = $this->adjust_date($month, $year);
+<a name="line119"></a>		
+<a name="line120"></a>		$month	= $adjusted_date['month'];
+<a name="line121"></a>		$year	= $adjusted_date['year'];
+<a name="line122"></a>		
+<a name="line123"></a>		// Determine the total days in the month
+<a name="line124"></a>		$total_days = $this->get_total_days($month, $year);
+<a name="line125"></a>						
+<a name="line126"></a>		// Set the starting day of the week
+<a name="line127"></a>		$start_days	= array('sunday' => 0, 'monday' => 1, 'tuesday' => 2, 'wednesday' => 3, 'thursday' => 4, 'friday' => 5, 'saturday' => 6);
+<a name="line128"></a>		$start_day = ( ! isset($start_days[$this->start_day])) ? 0 : $start_days[$this->start_day];
+<a name="line129"></a>		
+<a name="line130"></a>		// Set the starting day number
+<a name="line131"></a>		$local_date = mktime(12, 0, 0, $month, 1, $year);
+<a name="line132"></a>		$date = getdate($local_date);
+<a name="line133"></a>		$day  = $start_day + 1 - $date["wday"];
+<a name="line134"></a>		
+<a name="line135"></a>		while ($day > 1)
+<a name="line136"></a>		{
+<a name="line137"></a>			$day -= 7;
+<a name="line138"></a>		}
+<a name="line139"></a>		
+<a name="line140"></a>		// Set the current month/year/day
+<a name="line141"></a>		// We use this to determine the "today" date
+<a name="line142"></a>		$cur_year	= date("Y", $this->local_time);
+<a name="line143"></a>		$cur_month	= date("m", $this->local_time);
+<a name="line144"></a>		$cur_day	= date("j", $this->local_time);
+<a name="line145"></a>		
+<a name="line146"></a>		$is_current_month = ($cur_year == $year AND $cur_month == $month) ? TRUE : FALSE;
+<a name="line147"></a>	
+<a name="line148"></a>		// Generate the template data array
+<a name="line149"></a>		$this->parse_template();
+<a name="line150"></a>	
+<a name="line151"></a>		// Begin building the calendar output						
+<a name="line152"></a>		$out = $this->temp['table_open'];
+<a name="line153"></a>		$out .= "\n";	
+<a name="line154"></a>
+<a name="line155"></a>		$out .= "\n";		
+<a name="line156"></a>		$out .= $this->temp['heading_row_start'];
+<a name="line157"></a>		$out .= "\n";
+<a name="line158"></a>		
+<a name="line159"></a>		// "previous" month link
+<a name="line160"></a>		if ($this->show_next_prev == TRUE)
+<a name="line161"></a>		{
+<a name="line162"></a>			// Add a trailing slash to the  URL if needed
+<a name="line163"></a>			$this->next_prev_url = preg_replace("/(.+?)\/*$/", "\\1/",  $this->next_prev_url);
+<a name="line164"></a>		
+<a name="line165"></a>			$adjusted_date = $this->adjust_date($month - 1, $year);
+<a name="line166"></a>			$out .= str_replace('{previous_url}', $this->next_prev_url.$adjusted_date['year'].'/'.$adjusted_date['month'], $this->temp['heading_previous_cell']);
+<a name="line167"></a>			$out .= "\n";
+<a name="line168"></a>		}
+<a name="line169"></a>
+<a name="line170"></a>		// Heading containing the month/year
+<a name="line171"></a>		$colspan = ($this->show_next_prev == TRUE) ? 5 : 7;
+<a name="line172"></a>		
+<a name="line173"></a>		$this->temp['heading_title_cell'] = str_replace('{colspan}', $colspan, $this->temp['heading_title_cell']);
+<a name="line174"></a>		$this->temp['heading_title_cell'] = str_replace('{heading}', $this->get_month_name($month)."&nbsp;".$year, $this->temp['heading_title_cell']);
+<a name="line175"></a>		
+<a name="line176"></a>		$out .= $this->temp['heading_title_cell'];
+<a name="line177"></a>		$out .= "\n";
+<a name="line178"></a>
+<a name="line179"></a>		// "next" month link
+<a name="line180"></a>		if ($this->show_next_prev == TRUE)
+<a name="line181"></a>		{		
+<a name="line182"></a>			$adjusted_date = $this->adjust_date($month + 1, $year);
+<a name="line183"></a>			$out .= str_replace('{next_url}', $this->next_prev_url.$adjusted_date['year'].'/'.$adjusted_date['month'], $this->temp['heading_next_cell']);
+<a name="line184"></a>		}
+<a name="line185"></a>
+<a name="line186"></a>		$out .= "\n";		
+<a name="line187"></a>		$out .= $this->temp['heading_row_end'];
+<a name="line188"></a>		$out .= "\n";
+<a name="line189"></a>
+<a name="line190"></a>		// Write the cells containing the days of the week
+<a name="line191"></a>		$out .= "\n";	
+<a name="line192"></a>		$out .= $this->temp['week_row_start'];
+<a name="line193"></a>		$out .= "\n";
+<a name="line194"></a>
+<a name="line195"></a>		$day_names = $this->get_day_names();
+<a name="line196"></a>
+<a name="line197"></a>		for ($i = 0; $i < 7; $i ++)
+<a name="line198"></a>		{
+<a name="line199"></a>			$out .= str_replace('{week_day}', $day_names[($start_day + $i) %7], $this->temp['week_day_cell']);
+<a name="line200"></a>		}
+<a name="line201"></a>
+<a name="line202"></a>		$out .= "\n";
+<a name="line203"></a>		$out .= $this->temp['week_row_end'];
+<a name="line204"></a>		$out .= "\n";
+<a name="line205"></a>
+<a name="line206"></a>		// Build the main body of the calendar
+<a name="line207"></a>		while ($day <= $total_days)
+<a name="line208"></a>		{
+<a name="line209"></a>			$out .= "\n";
+<a name="line210"></a>			$out .= $this->temp['cal_row_start'];
+<a name="line211"></a>			$out .= "\n";
+<a name="line212"></a>
+<a name="line213"></a>			for ($i = 0; $i < 7; $i++)
+<a name="line214"></a>			{
+<a name="line215"></a>				$out .= ($is_current_month == TRUE AND $day == $cur_day) ? $this->temp['cal_cell_start_today'] : $this->temp['cal_cell_start'];
+<a name="line216"></a>			
+<a name="line217"></a>				if ($day > 0 AND $day <= $total_days)
+<a name="line218"></a>				{ 					
+<a name="line219"></a>					if (isset($data[$day]))
+<a name="line220"></a>					{	
+<a name="line221"></a>						// Cells with content
+<a name="line222"></a>						$temp = ($is_current_month == TRUE AND $day == $cur_day) ? $this->temp['cal_cell_content_today'] : $this->temp['cal_cell_content'];
+<a name="line223"></a>						$out .= str_replace('{day}', $day, str_replace('{content}', $data[$day], $temp));
+<a name="line224"></a>					}
+<a name="line225"></a>					else
+<a name="line226"></a>					{
+<a name="line227"></a>						// Cells with no content
+<a name="line228"></a>						$temp = ($is_current_month == TRUE AND $day == $cur_day) ? $this->temp['cal_cell_no_content_today'] : $this->temp['cal_cell_no_content'];
+<a name="line229"></a>						$out .= str_replace('{day}', $day, $temp);
+<a name="line230"></a>					}
+<a name="line231"></a>				}
+<a name="line232"></a>				else
+<a name="line233"></a>				{
+<a name="line234"></a>					// Blank cells
+<a name="line235"></a>					$out .= $this->temp['cal_cell_blank'];
+<a name="line236"></a>				}
+<a name="line237"></a>				
+<a name="line238"></a>				$out .= ($is_current_month == TRUE AND $day == $cur_day) ? $this->temp['cal_cell_end_today'] : $this->temp['cal_cell_end'];					  	
+<a name="line239"></a>				$day++;
+<a name="line240"></a>			}
+<a name="line241"></a>			
+<a name="line242"></a>			$out .= "\n";		
+<a name="line243"></a>			$out .= $this->temp['cal_row_end'];
+<a name="line244"></a>			$out .= "\n";		
+<a name="line245"></a>		}
+<a name="line246"></a>
+<a name="line247"></a>		$out .= "\n";		
+<a name="line248"></a>		$out .= $this->temp['table_close'];
+<a name="line249"></a>
+<a name="line250"></a>		return $out;
+<a name="line251"></a>	}
+<a name="line252"></a>	
+<a name="line253"></a>	// --------------------------------------------------------------------
+<a name="line254"></a>
+<a name="line255"></a>	/**
+<a name="line256"></a>	 * Get Month Name
+<a name="line257"></a>	 *
+<a name="line258"></a>	 * Generates a textual month name based on the numeric
+<a name="line259"></a>	 * month provided.
+<a name="line260"></a>	 *
+<a name="line261"></a>	 * @access	public
+<a name="line262"></a>	 * @param	integer	the month
+<a name="line263"></a>	 * @return	string
+<a name="line264"></a>	 */
+<a name="line265"></a>	function get_month_name($month)
+<a name="line266"></a>	{
+<a name="line267"></a>		if ($this->month_type == 'short')
+<a name="line268"></a>		{
+<a name="line269"></a>			$month_names = array('01' => 'cal_jan', '02' => 'cal_feb', '03' => 'cal_mar', '04' => 'cal_apr', '05' => 'cal_may', '06' => 'cal_jun', '07' => 'cal_jul', '08' => 'cal_aug', '09' => 'cal_sep', '10' => 'cal_oct', '11' => 'cal_nov', '12' => 'cal_dec');
+<a name="line270"></a>		}
+<a name="line271"></a>		else
+<a name="line272"></a>		{
+<a name="line273"></a>			$month_names = array('01' => 'cal_january', '02' => 'cal_february', '03' => 'cal_march', '04' => 'cal_april', '05' => 'cal_mayl', '06' => 'cal_june', '07' => 'cal_july', '08' => 'cal_august', '09' => 'cal_september', '10' => 'cal_october', '11' => 'cal_november', '12' => 'cal_december');
+<a name="line274"></a>		}
+<a name="line275"></a>		
+<a name="line276"></a>		$month = $month_names[$month];
+<a name="line277"></a>		
+<a name="line278"></a>		if ($this->CI->lang->line($month) === FALSE)
+<a name="line279"></a>		{
+<a name="line280"></a>			return ucfirst(str_replace('cal_', '', $month));
+<a name="line281"></a>		}
+<a name="line282"></a>
+<a name="line283"></a>		return $this->CI->lang->line($month);
+<a name="line284"></a>	}
+<a name="line285"></a>	
+<a name="line286"></a>	// --------------------------------------------------------------------
+<a name="line287"></a>
+<a name="line288"></a>	/**
+<a name="line289"></a>	 * Get Day Names
+<a name="line290"></a>	 *
+<a name="line291"></a>	 * Returns an array of day names (Sunday, Monday, etc.) based
+<a name="line292"></a>	 * on the type.  Options: long, short, abrev
+<a name="line293"></a>	 *
+<a name="line294"></a>	 * @access	public
+<a name="line295"></a>	 * @param	string
+<a name="line296"></a>	 * @return	array
+<a name="line297"></a>	 */
+<a name="line298"></a>	function get_day_names($day_type = '')
+<a name="line299"></a>	{
+<a name="line300"></a>		if ($day_type != '')
+<a name="line301"></a>			$this->day_type = $day_type;
+<a name="line302"></a>	
+<a name="line303"></a>		if ($this->day_type == 'long')
+<a name="line304"></a>		{
+<a name="line305"></a>			$day_names = array('sunday', 'monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday');
+<a name="line306"></a>		}
+<a name="line307"></a>		elseif ($this->day_type == 'short')
+<a name="line308"></a>		{
+<a name="line309"></a>			$day_names = array('sun', 'mon', 'tue', 'wed', 'thu', 'fri', 'sat');
+<a name="line310"></a>		}
+<a name="line311"></a>		else
+<a name="line312"></a>		{
+<a name="line313"></a>			$day_names = array('su', 'mo', 'tu', 'we', 'th', 'fr', 'sa');
+<a name="line314"></a>		}
+<a name="line315"></a>	
+<a name="line316"></a>		$days = array();
+<a name="line317"></a>		foreach ($day_names as $val)
+<a name="line318"></a>		{			
+<a name="line319"></a>			$days[] = ($this->CI->lang->line('cal_'.$val) === FALSE) ? ucfirst($val) : $this->CI->lang->line('cal_'.$val);
+<a name="line320"></a>		}
+<a name="line321"></a>	
+<a name="line322"></a>		return $days;
+<a name="line323"></a>	}
+<a name="line324"></a> 	
+<a name="line325"></a>	// --------------------------------------------------------------------
+<a name="line326"></a>
+<a name="line327"></a>	/**
+<a name="line328"></a>	 * Adjust Date
+<a name="line329"></a>	 *
+<a name="line330"></a>	 * This function makes sure that we have a valid month/year.
+<a name="line331"></a>	 * For example, if you submit 13 as the month, the year will
+<a name="line332"></a>	 * increment and the month will become January.
+<a name="line333"></a>	 *
+<a name="line334"></a>	 * @access	public
+<a name="line335"></a>	 * @param	integer	the month
+<a name="line336"></a>	 * @param	integer	the year
+<a name="line337"></a>	 * @return	array
+<a name="line338"></a>	 */
+<a name="line339"></a>	function adjust_date($month, $year)
+<a name="line340"></a>	{
+<a name="line341"></a>		$date = array();
+<a name="line342"></a>
+<a name="line343"></a>		$date['month']	= $month;
+<a name="line344"></a>		$date['year']	= $year;
+<a name="line345"></a>
+<a name="line346"></a>		while ($date['month'] > 12)
+<a name="line347"></a>		{
+<a name="line348"></a>			$date['month'] -= 12;
+<a name="line349"></a>			$date['year']++;
+<a name="line350"></a>		}
+<a name="line351"></a>
+<a name="line352"></a>		while ($date['month'] <= 0)
+<a name="line353"></a>		{
+<a name="line354"></a>			$date['month'] += 12;
+<a name="line355"></a>			$date['year']--;
+<a name="line356"></a>		}
+<a name="line357"></a>
+<a name="line358"></a>		if (strlen($date['month']) == 1)
+<a name="line359"></a>		{
+<a name="line360"></a>			$date['month'] = '0'.$date['month'];
+<a name="line361"></a>		}
+<a name="line362"></a>
+<a name="line363"></a>		return $date;
+<a name="line364"></a>	}
+<a name="line365"></a> 	
+<a name="line366"></a>	// --------------------------------------------------------------------
+<a name="line367"></a>
+<a name="line368"></a>	/**
+<a name="line369"></a>	 * Total days in a given month
+<a name="line370"></a>	 *
+<a name="line371"></a>	 * @access	public
+<a name="line372"></a>	 * @param	integer	the month
+<a name="line373"></a>	 * @param	integer	the year
+<a name="line374"></a>	 * @return	integer
+<a name="line375"></a>	 */
+<a name="line376"></a>	function get_total_days($month, $year)
+<a name="line377"></a>	{
+<a name="line378"></a>		$days_in_month	= array(31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31);
+<a name="line379"></a>
+<a name="line380"></a>		if ($month < 1 OR $month > 12)
+<a name="line381"></a>		{
+<a name="line382"></a>			return 0;
+<a name="line383"></a>		}
+<a name="line384"></a>
+<a name="line385"></a>		// Is the year a leap year?
+<a name="line386"></a>		if ($month == 2)
+<a name="line387"></a>		{
+<a name="line388"></a>			if ($year % 400 == 0 OR ($year % 4 == 0 AND $year % 100 != 0))
+<a name="line389"></a>			{
+<a name="line390"></a>				return 29;
+<a name="line391"></a>			}
+<a name="line392"></a>		}
+<a name="line393"></a>
+<a name="line394"></a>		return $days_in_month[$month - 1];
+<a name="line395"></a>	}
+<a name="line396"></a>	
+<a name="line397"></a>	// --------------------------------------------------------------------
+<a name="line398"></a>
+<a name="line399"></a>	/**
+<a name="line400"></a>	 * Set Default Template Data
+<a name="line401"></a>	 *
+<a name="line402"></a>	 * This is used in the event that the user has not created their own template
+<a name="line403"></a>	 *
+<a name="line404"></a>	 * @access	public
+<a name="line405"></a>	 * @return array
+<a name="line406"></a>	 */
+<a name="line407"></a>	function default_template()
+<a name="line408"></a>	{
+<a name="line409"></a>		return  array (
+<a name="line410"></a>						'table_open' 				=> '<table border="0" cellpadding="4" cellspacing="0">',
+<a name="line411"></a>						'heading_row_start' 		=> '<tr>',
+<a name="line412"></a>						'heading_previous_cell'		=> '<th><a href="{previous_url}">&lt;&lt;</a></th>',
+<a name="line413"></a>						'heading_title_cell' 		=> '<th colspan="{colspan}">{heading}</th>',
+<a name="line414"></a>						'heading_next_cell' 		=> '<th><a href="{next_url}">&gt;&gt;</a></th>',
+<a name="line415"></a>						'heading_row_end' 			=> '</tr>',
+<a name="line416"></a>						'week_row_start' 			=> '<tr>',
+<a name="line417"></a>						'week_day_cell' 			=> '<td>{week_day}</td>',
+<a name="line418"></a>						'week_row_end' 				=> '</tr>',
+<a name="line419"></a>						'cal_row_start' 			=> '<tr>',
+<a name="line420"></a>						'cal_cell_start' 			=> '<td>',
+<a name="line421"></a>						'cal_cell_start_today'		=> '<td>',
+<a name="line422"></a>						'cal_cell_content'			=> '<a href="{content}">{day}</a>',
+<a name="line423"></a>						'cal_cell_content_today'	=> '<a href="{content}"><strong>{day}</strong></a>',
+<a name="line424"></a>						'cal_cell_no_content'		=> '{day}',
+<a name="line425"></a>						'cal_cell_no_content_today'	=> '<strong>{day}</strong>',
+<a name="line426"></a>						'cal_cell_blank'			=> '&nbsp;',
+<a name="line427"></a>						'cal_cell_end'				=> '</td>',
+<a name="line428"></a>						'cal_cell_end_today'		=> '</td>',
+<a name="line429"></a>						'cal_row_end'				=> '</tr>',
+<a name="line430"></a>						'table_close'				=> '</table>'
+<a name="line431"></a>					);	
+<a name="line432"></a>	}
+<a name="line433"></a>	
+<a name="line434"></a>	// --------------------------------------------------------------------
+<a name="line435"></a>
+<a name="line436"></a>	/**
+<a name="line437"></a>	 * Parse Template
+<a name="line438"></a>	 *
+<a name="line439"></a>	 * Harvests the data within the template {pseudo-variables}
+<a name="line440"></a>	 * used to display the calendar
+<a name="line441"></a>	 *
+<a name="line442"></a>	 * @access	public
+<a name="line443"></a>	 * @return	void
+<a name="line444"></a>	 */
+<a name="line445"></a> 	function parse_template()
+<a name="line446"></a> 	{
+<a name="line447"></a>		$this->temp = $this->default_template();
+<a name="line448"></a> 	
+<a name="line449"></a> 		if ($this->template == '')
+<a name="line450"></a> 		{
+<a name="line451"></a> 			return;
+<a name="line452"></a> 		}
+<a name="line453"></a> 		
+<a name="line454"></a>		$today = array('cal_cell_start_today', 'cal_cell_content_today', 'cal_cell_no_content_today', 'cal_cell_end_today');
+<a name="line455"></a>		
+<a name="line456"></a>		foreach (array('table_open', 'table_close', 'heading_row_start', 'heading_previous_cell', 'heading_title_cell', 'heading_next_cell', 'heading_row_end', 'week_row_start', 'week_day_cell', 'week_row_end', 'cal_row_start', 'cal_cell_start', 'cal_cell_content', 'cal_cell_no_content',  'cal_cell_blank', 'cal_cell_end', 'cal_row_end', 'cal_cell_start_today', 'cal_cell_content_today', 'cal_cell_no_content_today', 'cal_cell_end_today') as $val)
+<a name="line457"></a>		{
+<a name="line458"></a>			if (preg_match("/\{".$val."\}(.*?)\{\/".$val."\}/si", $this->template, $match))
+<a name="line459"></a>			{
+<a name="line460"></a>				$this->temp[$val] = $match['1'];
+<a name="line461"></a>			}
+<a name="line462"></a>			else
+<a name="line463"></a>			{
+<a name="line464"></a>				if (in_array($val, $today, TRUE))
+<a name="line465"></a>				{
+<a name="line466"></a>					$this->temp[$val] = $this->temp[str_replace('_today', '', $val)];
+<a name="line467"></a>				}
+<a name="line468"></a>			}
+<a name="line469"></a>		} 	
+<a name="line470"></a> 	}
+<a name="line471"></a>
+<a name="line472"></a>}
+<a name="line473"></a>
+<a name="line474"></a>// END CI_Calendar class
+<a name="line475"></a>
+<a name="line476"></a>/* End of file Calendar.php */
+<a name="line477"></a>/* Location: ./system/libraries/Calendar.php */</pre>
+<div class="header">
+<h1>GiftFlow API</h1>
+<ul>
+<li><a href="../../overview-summary.html">Overview</a></li>
+<li>Package</li><li>Class</li><li>Tree</li><li><a href="../../overview-files.html">Files</a></li>
+<li><a href="../../deprecated-list.html">Deprecated</a></li>
+<li><a href="../../index-all.html">Index</a></li>
+</ul>
+</div>
+
+<div class="small_links">
+<a href="../../index.html" target="_top">Frames</a>
+<a href="../../source/libraries/calendar.php.html" target="_top">No frames</a>
+</div>
+<hr>
+
+<p id="footer">This document was generated by <a href="http://peej.github.com/phpdoctor/">PHPDoctor: The PHP Documentation Creator</a></p>
+
+</body>
+
+</html>

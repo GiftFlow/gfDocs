@@ -1,0 +1,409 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+
+<html lang="en">
+<head>
+
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
+<meta name="generator" content="PHPDoctor 2RC4 (http://peej.github.com/phpdoctor/)">
+<meta name="when" content="Fri, 18 Jun 2010 18:34:56 +0000">
+
+<link rel="stylesheet" type="text/css" href="../stylesheet.css">
+<link rel="start" href="../overview-summary.html">
+
+<title>Good (GiftFlow API)</title>
+
+</head>
+<body id="definition" onload="parent.document.title=document.title;">
+
+<div class="header">
+<h1>GiftFlow API</h1>
+<ul>
+<li><a href="../overview-summary.html">Overview</a></li>
+<li><a href="../application/package-summary.html">Package</a></li>
+<li class="active">Class</li>
+<li><a href="../application/package-tree.html">Tree</a></li>
+<li><a href="../overview-files.html">Files</a></li>
+<li><a href="../deprecated-list.html">Deprecated</a></li>
+<li><a href="../index-all.html">Index</a></li>
+</ul>
+</div>
+
+<div class="small_links">
+<a href="../index.html" target="_top">Frames</a>
+<a href="../application/good.html" target="_top">No frames</a>
+</div>
+<div class="small_links">
+Summary: <a href="#summary_field">Field</a> | <a href="#summary_method">Method</a> | <a href="#summary_constr">Constr</a>
+Detail: <a href="#detail_field">Field</a> | <a href="#detail_method">Method</a> | <a href="#summary_constr">Constr</a>
+</div>
+<hr>
+
+<div class="qualifiedName">Application\Good</div>
+<a href="../source/application/models/good.php.html#line12" class="location">application/models/good.php at line 12</a>
+
+<h1>Class Good</h1>
+
+<pre class="tree"><a href="../giftflow/datamapper.html">DataMapper</a><br>    └─<a href="../giftflow/datamapperextension.html">DataMapperExtension</a><br>       └─<strong>Good</strong><br /></pre>
+
+<hr>
+
+<p class="signature">public  class <strong>Good</strong><br>extends <a href="../giftflow/datamapperextension.html">DataMapperExtension</a>
+
+</p>
+
+<div class="comment" id="overview_description"><p>The Good object is used primarily to store two types of objects:
+Gifts and Needs.</p></div>
+
+<dl>
+<dt>Author:</dt>
+<dd>Brandon Jackson</dd>
+<dt>Version:</dt>
+<dd>0.1</dd>
+<dt>Package		DMZ:</dt>
+<dd>Properties (for code completion)</dd>
+<dt>Property:</dt>
+<dd>CI_DB_driver $db The CodeIgniter Database Library</dd>
+<dd>CI_Loader $load The CodeIgnter Loader Library</dd>
+<dd>CI_Language $lang The CodeIgniter Language Library</dd>
+<dd>CI_Config $config The CodeIgniter Config Library</dd>
+<dd>CI_Form_validation $form_validation The CodeIgniter Form Validation Library Define some of the magic methods: Get By:</dd>
+<dt>Method:</dt>
+<dd>DataMapper get_by_id() get_by_id(int $value) Looks up an item by its ID.</dd>
+<dd>DataMapper get_by_FIELD() get_by_FIELD(mixed $value) Looks up an item by a specific FIELD. Ex: get_by_name($user_name);</dd>
+<dd>DataMapper get_by_related() get_by_related(mixed $related, string $field = NULL, string $value = NULL) Get results based on a related item.</dd>
+<dd>DataMapper get_by_related_RELATEDFIELD() get_by_related_RELATEDFIELD(string $field = NULL, string $value = NULL) Get results based on a RELATEDFIELD. Ex: get_by_related_user('id', $userid); Save and Delete</dd>
+<dd>DataMapper save_RELATEDFIELD() save_RELATEDFIELD(mixed $object) Saves relationship(s) using the specified RELATEDFIELD. Ex: save_user($user);</dd>
+<dd>DataMapper delete_RELATEDFIELD() delete_RELATEDFIELD(mixed $object) Deletes relationship(s) using the specified RELATEDFIELD. Ex: delete_user($user); Related:</dd>
+<dd>DataMapper where_related() where_related(mixed $related, string $field = NULL, string $value = NULL) Limits results based on a related field.</dd>
+<dd>DataMapper or_where_related() or_where_related(mixed $related, string $field = NULL, string $value = NULL) Limits results based on a related field, via OR.</dd>
+<dd>DataMapper where_in_related() where_in_related(mixed $related, string $field, array $values) Limits results by comparing a related field to a range of values.</dd>
+<dd>DataMapper or_where_in_related() or_where_in_related(mixed $related, string $field, array $values) Limits results by comparing a related field to a range of values.</dd>
+<dd>DataMapper where_not_in_related() where_not_in_related(mixed $related, string $field, array $values) Limits results by comparing a related field to a range of values.</dd>
+<dd>DataMapper or_where_not_in_related() or_where_not_in_related(mixed $related, string $field, array $values) Limits results by comparing a related field to a range of values.</dd>
+<dd>DataMapper like_related() like_related(mixed $related, string $field, string $value, string $match = 'both') Limits results by matching a related field to a value.</dd>
+<dd>DataMapper or_like_related() like_related(mixed $related, string $field, string $value, string $match = 'both') Limits results by matching a related field to a value.</dd>
+<dd>DataMapper not_like_related() like_related(mixed $related, string $field, string $value, string $match = 'both') Limits results by matching a related field to a value.</dd>
+<dd>DataMapper or_not_like_related() like_related(mixed $related, string $field, string $value, string $match = 'both') Limits results by matching a related field to a value.</dd>
+<dd>DataMapper ilike_related() like_related(mixed $related, string $field, string $value, string $match = 'both') Limits results by matching a related field to a value (case insensitive).</dd>
+<dd>DataMapper or_ilike_related() like_related(mixed $related, string $field, string $value, string $match = 'both') Limits results by matching a related field to a value (case insensitive).</dd>
+<dd>DataMapper not_ilike_related() like_related(mixed $related, string $field, string $value, string $match = 'both') Limits results by matching a related field to a value (case insensitive).</dd>
+<dd>DataMapper or_not_ilike_related() like_related(mixed $related, string $field, string $value, string $match = 'both') Limits results by matching a related field to a value (case insensitive).</dd>
+<dd>DataMapper group_by_related() group_by_related(mixed $related, string $field) Groups the query by a related field.</dd>
+<dd>DataMapper having_related() having_related(mixed $related, string $field, string $value) Groups the querying using a HAVING clause.</dd>
+<dd>DataMapper or_having_related() having_related(mixed $related, string $field, string $value) Groups the querying using a HAVING clause, via OR.</dd>
+<dd>DataMapper order_by_related() order_by_related(mixed $related, string $field, string $direction) Orders the query based on a related field. Join Fields:</dd>
+<dd>DataMapper where_join_field() where_join_field(mixed $related, string $field = NULL, string $value = NULL) Limits results based on a join field.</dd>
+<dd>DataMapper or_where_join_field() or_where_join_field(mixed $related, string $field = NULL, string $value = NULL) Limits results based on a join field, via OR.</dd>
+<dd>DataMapper where_in_join_field() where_in_join_field(mixed $related, string $field, array $values) Limits results by comparing a join field to a range of values.</dd>
+<dd>DataMapper or_where_in_join_field() or_where_in_join_field(mixed $related, string $field, array $values) Limits results by comparing a join field to a range of values.</dd>
+<dd>DataMapper where_not_in_join_field() where_not_in_join_field(mixed $related, string $field, array $values) Limits results by comparing a join field to a range of values.</dd>
+<dd>DataMapper or_where_not_in_join_field() or_where_not_in_join_field(mixed $related, string $field, array $values) Limits results by comparing a join field to a range of values.</dd>
+<dd>DataMapper like_join_field() like_join_field(mixed $related, string $field, string $value, string $match = 'both') Limits results by matching a join field to a value.</dd>
+<dd>DataMapper or_like_join_field() like_join_field(mixed $related, string $field, string $value, string $match = 'both') Limits results by matching a join field to a value.</dd>
+<dd>DataMapper not_like_join_field() like_join_field(mixed $related, string $field, string $value, string $match = 'both') Limits results by matching a join field to a value.</dd>
+<dd>DataMapper or_not_like_join_field() like_join_field(mixed $related, string $field, string $value, string $match = 'both') Limits results by matching a join field to a value.</dd>
+<dd>DataMapper ilike_join_field() like_join_field(mixed $related, string $field, string $value, string $match = 'both') Limits results by matching a join field to a value (case insensitive).</dd>
+<dd>DataMapper or_ilike_join_field() like_join_field(mixed $related, string $field, string $value, string $match = 'both') Limits results by matching a join field to a value (case insensitive).</dd>
+<dd>DataMapper not_ilike_join_field() like_join_field(mixed $related, string $field, string $value, string $match = 'both') Limits results by matching a join field to a value (case insensitive).</dd>
+<dd>DataMapper or_not_ilike_join_field() like_join_field(mixed $related, string $field, string $value, string $match = 'both') Limits results by matching a join field to a value (case insensitive).</dd>
+<dd>DataMapper group_by_join_field() group_by_join_field(mixed $related, string $field) Groups the query by a join field.</dd>
+<dd>DataMapper having_join_field() having_join_field(mixed $related, string $field, string $value) Groups the querying using a HAVING clause.</dd>
+<dd>DataMapper or_having_join_field() having_join_field(mixed $related, string $field, string $value) Groups the querying using a HAVING clause, via OR.</dd>
+<dd>DataMapper order_by_join_field() order_by_join_field(mixed $related, string $field, string $direction) Orders the query based on a join field. SQL Functions:</dd>
+<dd>DataMapper select_func() select_func(string $function_name, mixed $args,..., string $alias) Selects the result of a SQL function. Alias is required.</dd>
+<dd>DataMapper where_func() where_func(string $function_name, mixed $args,..., string $value) Limits results based on a SQL function.</dd>
+<dd>DataMapper or_where_func() or_where_func(string $function_name, mixed $args,..., string $value) Limits results based on a SQL function, via OR.</dd>
+<dd>DataMapper where_in_func() where_in_func(string $function_name, mixed $args,..., array $values) Limits results by comparing a SQL function to a range of values.</dd>
+<dd>DataMapper or_where_in_func() or_where_in_func(string $function_name, mixed $args,..., array $values) Limits results by comparing a SQL function to a range of values.</dd>
+<dd>DataMapper where_not_in_func() where_not_in_func(string $function_name, string $field, array $values) Limits results by comparing a SQL function to a range of values.</dd>
+<dd>DataMapper or_where_not_in_func() or_where_not_in_func(string $function_name, mixed $args,..., array $values) Limits results by comparing a SQL function to a range of values.</dd>
+<dd>DataMapper like_func() like_func(string $function_name, mixed $args,..., string $value) Limits results by matching a SQL function to a value.</dd>
+<dd>DataMapper or_like_func() like_func(string $function_name, mixed $args,..., string $value) Limits results by matching a SQL function to a value.</dd>
+<dd>DataMapper not_like_func() like_func(string $function_name, mixed $args,..., string $value) Limits results by matching a SQL function to a value.</dd>
+<dd>DataMapper or_not_like_func() like_func(string $function_name, mixed $args,..., string $value) Limits results by matching a SQL function to a value.</dd>
+<dd>DataMapper ilike_func() like_func(string $function_name, mixed $args,..., string $value) Limits results by matching a SQL function to a value (case insensitive).</dd>
+<dd>DataMapper or_ilike_func() like_func(string $function_name, mixed $args,..., string $value) Limits results by matching a SQL function to a value (case insensitive).</dd>
+<dd>DataMapper not_ilike_func() like_func(string $function_name, mixed $args,..., string $value) Limits results by matching a SQL function to a value (case insensitive).</dd>
+<dd>DataMapper or_not_ilike_func() like_func(string $function_name, mixed $args,..., string $value) Limits results by matching a SQL function to a value (case insensitive).</dd>
+<dd>DataMapper group_by_func() group_by_func(string $function_name, mixed $args,...) Groups the query by a SQL function.</dd>
+<dd>DataMapper having_func() having_func(string $function_name, mixed $args,..., string $value) Groups the querying using a HAVING clause.</dd>
+<dd>DataMapper or_having_func() having_func(string $function_name, mixed $args,..., string $value) Groups the querying using a HAVING clause, via OR.</dd>
+<dd>DataMapper order_by_func() order_by_func(string $function_name, mixed $args,..., string $direction) Orders the query based on a SQL function. Field -> SQL functions:</dd>
+<dd>DataMapper where_field_field_func() where_field_func($field, string $function_name, mixed $args,...) Limits results based on a SQL function.</dd>
+<dd>DataMapper or_where_field_field_func() or_where_field_func($field, string $function_name, mixed $args,...) Limits results based on a SQL function, via OR.</dd>
+<dd>DataMapper where_in_field_field_func() where_in_field_func($field, string $function_name, mixed $args,...) Limits results by comparing a SQL function to a range of values.</dd>
+<dd>DataMapper or_where_in_field_field_func() or_where_in_field_func($field, string $function_name, mixed $args,...) Limits results by comparing a SQL function to a range of values.</dd>
+<dd>DataMapper where_not_in_field_field_func() where_not_in_field_func($field, string $function_name, string $field) Limits results by comparing a SQL function to a range of values.</dd>
+<dd>DataMapper or_where_not_in_field_field_func() or_where_not_in_field_func($field, string $function_name, mixed $args,...) Limits results by comparing a SQL function to a range of values.</dd>
+<dd>DataMapper like_field_field_func() like_field_func($field, string $function_name, mixed $args,...) Limits results by matching a SQL function to a value.</dd>
+<dd>DataMapper or_like_field_field_func() like_field_func($field, string $function_name, mixed $args,...) Limits results by matching a SQL function to a value.</dd>
+<dd>DataMapper not_like_field_field_func() like_field_func($field, string $function_name, mixed $args,...) Limits results by matching a SQL function to a value.</dd>
+<dd>DataMapper or_not_like_field_field_func() like_field_func($field, string $function_name, mixed $args,...) Limits results by matching a SQL function to a value.</dd>
+<dd>DataMapper ilike_field_field_func() like_field_func($field, string $function_name, mixed $args,...) Limits results by matching a SQL function to a value (case insensitive).</dd>
+<dd>DataMapper or_ilike_field_field_func() like_field_func($field, string $function_name, mixed $args,...) Limits results by matching a SQL function to a value (case insensitive).</dd>
+<dd>DataMapper not_ilike_field_field_func() like_field_func($field, string $function_name, mixed $args,...) Limits results by matching a SQL function to a value (case insensitive).</dd>
+<dd>DataMapper or_not_ilike_field_field_func() like_field_func($field, string $function_name, mixed $args,...) Limits results by matching a SQL function to a value (case insensitive).</dd>
+<dd>DataMapper group_by_field_field_func() group_by_field_func($field, string $function_name, mixed $args,...) Groups the query by a SQL function.</dd>
+<dd>DataMapper having_field_field_func() having_field_func($field, string $function_name, mixed $args,...) Groups the querying using a HAVING clause.</dd>
+<dd>DataMapper or_having_field_field_func() having_field_func($field, string $function_name, mixed $args,...) Groups the querying using a HAVING clause, via OR.</dd>
+<dd>DataMapper order_by_field_field_func() order_by_field_func($field, string $function_name, mixed $args,...) Orders the query based on a SQL function. Subqueries:</dd>
+<dd>DataMapper select_subquery() select_subquery(DataMapper $subquery, string $alias) Selects the result of a function. Alias is required.</dd>
+<dd>DataMapper where_subquery() where_subquery(mixed $subquery_or_field, mixed $value_or_subquery) Limits results based on a subquery.</dd>
+<dd>DataMapper or_where_subquery() or_where_subquery(mixed $subquery_or_field, mixed $value_or_subquery) Limits results based on a subquery, via OR.</dd>
+<dd>DataMapper where_in_subquery() where_in_subquery(mixed $subquery_or_field, mixed $values_or_subquery) Limits results by comparing a subquery to a range of values.</dd>
+<dd>DataMapper or_where_in_subquery() or_where_in_subquery(mixed $subquery_or_field, mixed $values_or_subquery) Limits results by comparing a subquery to a range of values.</dd>
+<dd>DataMapper where_not_in_subquery() where_not_in_subquery(mixed $subquery_or_field, string $field, mixed $values_or_subquery) Limits results by comparing a subquery to a range of values.</dd>
+<dd>DataMapper or_where_not_in_subquery() or_where_not_in_subquery(mixed $subquery_or_field, mixed $values_or_subquery) Limits results by comparing a subquery to a range of values.</dd>
+<dd>DataMapper like_subquery() like_subquery(DataMapper $subquery, string $value, string $match = 'both') Limits results by matching a subquery to a value.</dd>
+<dd>DataMapper or_like_subquery() like_subquery(DataMapper $subquery, string $value, string $match = 'both') Limits results by matching a subquery to a value.</dd>
+<dd>DataMapper not_like_subquery() like_subquery(DataMapper $subquery, string $value, string $match = 'both') Limits results by matching a subquery to a value.</dd>
+<dd>DataMapper or_not_like_subquery() like_subquery(DataMapper $subquery, string $value, string $match = 'both') Limits results by matching a subquery to a value.</dd>
+<dd>DataMapper ilike_subquery() like_subquery(DataMapper $subquery, string $value, string $match = 'both') Limits results by matching a subquery to a value (case insensitive).</dd>
+<dd>DataMapper or_ilike_subquery() like_subquery(DataMapper $subquery, string $value, string $match = 'both') Limits results by matching a subquery to a value (case insensitive).</dd>
+<dd>DataMapper not_ilike_subquery() like_subquery(DataMapper $subquery, string $value, string $match = 'both') Limits results by matching a subquery to a value (case insensitive).</dd>
+<dd>DataMapper or_not_ilike_subquery() like_subquery(DataMapper $subquery, string $value, string $match = 'both') Limits results by matching a subquery to a value (case insensitive).</dd>
+<dd>DataMapper having_subquery() having_subquery(string $field, DataMapper $subquery) Groups the querying using a HAVING clause.</dd>
+<dd>DataMapper or_having_subquery() having_subquery(string $field, DataMapper $subquery) Groups the querying using a HAVING clause, via OR.</dd>
+<dd>DataMapper order_by_subquery() order_by_subquery(DataMapper $subquery, string $direction) Orders the query based on a subquery. Related Subqueries:</dd>
+<dd>DataMapper where_related_subquery() where_related_subquery(mixed $related_model, string $related_field, DataMapper $subquery) Limits results based on a subquery.</dd>
+<dd>DataMapper or_where_related_subquery() or_where_related_subquery(mixed $related_model, string $related_field, DataMapper $subquery) Limits results based on a subquery, via OR.</dd>
+<dd>DataMapper where_in_related_subquery() where_in_related_subquery(mixed $related_model, string $related_field, DataMapper $subquery) Limits results by comparing a subquery to a range of values.</dd>
+<dd>DataMapper or_where_in_related_subquery() or_where_in_related_subquery(mixed $related_model, string $related_field, DataMapper $subquery) Limits results by comparing a subquery to a range of values.</dd>
+<dd>DataMapper where_not_in_related_subquery() where_not_in_related_subquery(mixed $related_model, string $related_field, DataMapper $subquery) Limits results by comparing a subquery to a range of values.</dd>
+<dd>DataMapper or_where_not_in_related_subquery() or_where_not_in_related_subquery(mixed $related_model, string $related_field, DataMapper $subquery) Limits results by comparing a subquery to a range of values.</dd>
+<dd>DataMapper having_related_subquery() having_related_subquery(mixed $related_model, string $related_field, DataMapper $subquery) Groups the querying using a HAVING clause.</dd>
+<dd>DataMapper or_having_related_subquery() having_related_subquery(mixed $related_model, string $related_field, DataMapper $subquery) Groups the querying using a HAVING clause, via OR. Array Extension:</dd>
+<dd>array to_array() to_array($fields = '') NEEDS ARRAY EXTENSION.  Converts this object into an associative array.  @link DMZ_Array::to_array</dd>
+<dd>array all_to_array() all_to_array($fields = '') NEEDS ARRAY EXTENSION.  Converts the all array into an associative array.  @link DMZ_Array::all_to_array</dd>
+<dd>array|bool from_array() from_array($data, $fields = '', $save = FALSE) NEEDS ARRAY EXTENSION.  Converts $this->all into an associative array.  @link DMZ_Array::all_to_array CSV Extension</dd>
+<dd>bool csv_export() csv_export($filename, $fields = '', $include_header = TRUE) NEEDS CSV EXTENSION.  Exports this object as a CSV file.</dd>
+<dd>array csv_import() csv_import($filename, $fields = '', $header_row = TRUE, $callback = NULL) NEEDS CSV EXTENSION.  Imports a CSV file into this object. JSON Extension:</dd>
+<dd>string to_json() to_json($fields = '', $pretty_print = FALSE) NEEDS JSON EXTENSION.  Converts this object into a JSON string.</dd>
+<dd>string all_to_json() all_to_json($fields = '', $pretty_print = FALSE) NEEDS JSON EXTENSION.  Converts the all array into a JSON string.</dd>
+<dd>bool from_json() from_json($json, $fields = '') NEEDS JSON EXTENSION.  Imports the values from a JSON string into this object.</dd>
+<dd>void set_json_content_type() set_json_content_type() NEEDS JSON EXTENSION.  Sets the content type header to Content-Type: application/json. SimpleCache Extension:</dd>
+<dd>DataMapper get_cached() get_cached($limit = '', $offset = '') NEEDS SIMPLECACHE EXTENSION.  Enables cacheable queries.</dd>
+<dd>DataMapper clear_cache() get_cached($segment,...) NEEDS SIMPLECACHE EXTENSION.  Clears a cache for the specfied segment. /</dd>
+</dl>
+<hr>
+
+<table id="summary_field">
+<tr><th colspan="2">Field Summary</th></tr>
+<tr>
+<td class="type"> mixed</td>
+<td class="description"><p class="name"><a href="#active_transaction">$active_transaction</a></p></td>
+</tr>
+<tr>
+<td class="type"> mixed</td>
+<td class="description"><p class="name"><a href="#created_field">$created_field</a></p></td>
+</tr>
+<tr>
+<td class="type"> mixed</td>
+<td class="description"><p class="name"><a href="#error_prefix">$error_prefix</a></p></td>
+</tr>
+<tr>
+<td class="type"> mixed</td>
+<td class="description"><p class="name"><a href="#error_suffix">$error_suffix</a></p></td>
+</tr>
+<tr>
+<td class="type"> mixed</td>
+<td class="description"><p class="name"><a href="#has_many">$has_many</a></p></td>
+</tr>
+<tr>
+<td class="type"> mixed</td>
+<td class="description"><p class="name"><a href="#has_one">$has_one</a></p></td>
+</tr>
+<tr>
+<td class="type"> mixed</td>
+<td class="description"><p class="name"><a href="#validation">$validation</a></p></td>
+</tr>
+</table>
+
+<table id="summary_method">
+<tr><th colspan="2">Method Summary</th></tr>
+<tr>
+<td class="type"> void</td>
+<td class="description"><p class="name"><a href="#__construct()">__construct</a>(mixed id)</p><p class="description">ConstructorInitialize DataMapper.</p></td>
+</tr>
+<tr>
+<td class="type"> void</td>
+<td class="description"><p class="name"><a href="#active_transaction()">active_transaction</a>()</p></td>
+</tr>
+<tr>
+<td class="type"> void</td>
+<td class="description"><p class="name"><a href="#add_tag()">add_tag</a>(mixed tag_name, string )</p><p class="description"></p></td>
+</tr>
+<tr>
+<td class="type"> void</td>
+<td class="description"><p class="name"><a href="#get_htmlform_list()">get_htmlform_list</a>(mixed object, mixed field)</p></td>
+</tr>
+<tr>
+<td class="type"> void</td>
+<td class="description"><p class="name"><a href="#request_status()">request_status</a>(mixed user_id)</p></td>
+</tr>
+<tr>
+<td class="type"> void</td>
+<td class="description"><p class="name"><a href="#requests()">requests</a>(mixed status)</p></td>
+</tr>
+</table>
+
+<table class="inherit">
+<tr><th colspan="2">Methods inherited from GiftFlow\DataMapperExtension</th></tr>
+<tr><td><a href="../giftflow/datamapperextension.html#__construct()">__construct</a>, <a href="../giftflow/datamapperextension.html#delete()">delete</a></td></tr></table>
+
+<table class="inherit">
+<tr><th colspan="2">Methods inherited from GiftFlow\DataMapper</th></tr>
+<tr><td><a href="../giftflow/datamapper.html#__call()">__call</a>, <a href="../giftflow/datamapper.html#__clone()">__clone</a>, <a href="../giftflow/datamapper.html#__construct()">__construct</a>, <a href="../giftflow/datamapper.html#__get()">__get</a>, <a href="../giftflow/datamapper.html#__toString()">__toString</a>, <a href="../giftflow/datamapper.html#_add_related_table()">_add_related_table</a>, <a href="../giftflow/datamapper.html#_add_to_select_directly()">_add_to_select_directly</a>, <a href="../giftflow/datamapper.html#_alpha_dash_dot()">_alpha_dash_dot</a>, <a href="../giftflow/datamapper.html#_alpha_slash_dot()">_alpha_slash_dot</a>, <a href="../giftflow/datamapper.html#_always_validate()">_always_validate</a>, <a href="../giftflow/datamapper.html#_assign_libraries()">_assign_libraries</a>, <a href="../giftflow/datamapper.html#_auto_trans_begin()">_auto_trans_begin</a>, <a href="../giftflow/datamapper.html#_auto_trans_complete()">_auto_trans_complete</a>, <a href="../giftflow/datamapper.html#_boolean()">_boolean</a>, <a href="../giftflow/datamapper.html#_clear_after_query()">_clear_after_query</a>, <a href="../giftflow/datamapper.html#_count_related()">_count_related</a>, <a href="../giftflow/datamapper.html#_count_related_objects()">_count_related_objects</a>, <a href="../giftflow/datamapper.html#_delete()">_delete</a>, <a href="../giftflow/datamapper.html#_delete_relation()">_delete_relation</a>, <a href="../giftflow/datamapper.html#_dmz_assign_libraries()">_dmz_assign_libraries</a>, <a href="../giftflow/datamapper.html#_encode_php_tags()">_encode_php_tags</a>, <a href="../giftflow/datamapper.html#_extension_method_exists()">_extension_method_exists</a>, <a href="../giftflow/datamapper.html#_field_func()">_field_func</a>, <a href="../giftflow/datamapper.html#_func()">_func</a>, <a href="../giftflow/datamapper.html#_get_by()">_get_by</a>, <a href="../giftflow/datamapper.html#_get_by_related()">_get_by_related</a>, <a href="../giftflow/datamapper.html#_get_generated_timestamp()">_get_generated_timestamp</a>, <a href="../giftflow/datamapper.html#_get_prepend_type()">_get_prepend_type</a>, <a href="../giftflow/datamapper.html#_get_related_properties()">_get_related_properties</a>, <a href="../giftflow/datamapper.html#_get_relation()">_get_relation</a>, <a href="../giftflow/datamapper.html#_get_relationship_table()">_get_relationship_table</a>, <a href="../giftflow/datamapper.html#_get_without_auto_populating()">_get_without_auto_populating</a>, <a href="../giftflow/datamapper.html#_handle_default_order_by()">_handle_default_order_by</a>, <a href="../giftflow/datamapper.html#_handle_related()">_handle_related</a>, <a href="../giftflow/datamapper.html#_having()">_having</a>, <a href="../giftflow/datamapper.html#_initiate_local_extensions()">_initiate_local_extensions</a>, <a href="../giftflow/datamapper.html#_join_field()">_join_field</a>, <a href="../giftflow/datamapper.html#_like()">_like</a>, <a href="../giftflow/datamapper.html#_load_extensions()">_load_extensions</a>, <a href="../giftflow/datamapper.html#_load_helpers()">_load_helpers</a>, <a href="../giftflow/datamapper.html#_load_languages()">_load_languages</a>, <a href="../giftflow/datamapper.html#_matches()">_matches</a>, <a href="../giftflow/datamapper.html#_max_date()">_max_date</a>, <a href="../giftflow/datamapper.html#_max_size()">_max_size</a>, <a href="../giftflow/datamapper.html#_min_date()">_min_date</a>, <a href="../giftflow/datamapper.html#_min_size()">_min_size</a>, <a href="../giftflow/datamapper.html#_parse_subquery_object()">_parse_subquery_object</a>, <a href="../giftflow/datamapper.html#_prep_for_form()">_prep_for_form</a>, <a href="../giftflow/datamapper.html#_prep_url()">_prep_url</a>, <a href="../giftflow/datamapper.html#_process_function_arg()">_process_function_arg</a>, <a href="../giftflow/datamapper.html#_process_query()">_process_query</a>, <a href="../giftflow/datamapper.html#_process_special_query_clause()">_process_special_query_clause</a>, <a href="../giftflow/datamapper.html#_refresh_stored_values()">_refresh_stored_values</a>, <a href="../giftflow/datamapper.html#_related()">_related</a>, <a href="../giftflow/datamapper.html#_related_max_size()">_related_max_size</a>, <a href="../giftflow/datamapper.html#_related_min_size()">_related_min_size</a>, <a href="../giftflow/datamapper.html#_related_required()">_related_required</a>, <a href="../giftflow/datamapper.html#_related_subquery()">_related_subquery</a>, <a href="../giftflow/datamapper.html#_remove_other_one_to_one()">_remove_other_one_to_one</a>, <a href="../giftflow/datamapper.html#_run_get_rules()">_run_get_rules</a>, <a href="../giftflow/datamapper.html#_save()">_save</a>, <a href="../giftflow/datamapper.html#_save_itfk()">_save_itfk</a>, <a href="../giftflow/datamapper.html#_save_related_recursive()">_save_related_recursive</a>, <a href="../giftflow/datamapper.html#_save_relation()">_save_relation</a>, <a href="../giftflow/datamapper.html#_strip_image_tags()">_strip_image_tags</a>, <a href="../giftflow/datamapper.html#_subquery()">_subquery</a>, <a href="../giftflow/datamapper.html#_to_array()">_to_array</a>, <a href="../giftflow/datamapper.html#_to_object()">_to_object</a>, <a href="../giftflow/datamapper.html#_trim()">_trim</a>, <a href="../giftflow/datamapper.html#_unique()">_unique</a>, <a href="../giftflow/datamapper.html#_unique_pair()">_unique_pair</a>, <a href="../giftflow/datamapper.html#_valid_date()">_valid_date</a>, <a href="../giftflow/datamapper.html#_valid_date_group()">_valid_date_group</a>, <a href="../giftflow/datamapper.html#_valid_match()">_valid_match</a>, <a href="../giftflow/datamapper.html#_where()">_where</a>, <a href="../giftflow/datamapper.html#_where_in()">_where_in</a>, <a href="../giftflow/datamapper.html#_xss_clean()">_xss_clean</a>, <a href="../giftflow/datamapper.html#add_table_name()">add_table_name</a>, <a href="../giftflow/datamapper.html#autoload()">autoload</a>, <a href="../giftflow/datamapper.html#check_last_query()">check_last_query</a>, <a href="../giftflow/datamapper.html#clear()">clear</a>, <a href="../giftflow/datamapper.html#count()">count</a>, <a href="../giftflow/datamapper.html#count_distinct()">count_distinct</a>, <a href="../giftflow/datamapper.html#delete()">delete</a>, <a href="../giftflow/datamapper.html#delete_all()">delete_all</a>, <a href="../giftflow/datamapper.html#distinct()">distinct</a>, <a href="../giftflow/datamapper.html#error_message()">error_message</a>, <a href="../giftflow/datamapper.html#exists()">exists</a>, <a href="../giftflow/datamapper.html#flush_cache()">flush_cache</a>, <a href="../giftflow/datamapper.html#func()">func</a>, <a href="../giftflow/datamapper.html#get()">get</a>, <a href="../giftflow/datamapper.html#getIterator()">getIterator</a>, <a href="../giftflow/datamapper.html#get_clone()">get_clone</a>, <a href="../giftflow/datamapper.html#get_copy()">get_copy</a>, <a href="../giftflow/datamapper.html#get_iterated()">get_iterated</a>, <a href="../giftflow/datamapper.html#get_paged()">get_paged</a>, <a href="../giftflow/datamapper.html#get_paged_iterated()">get_paged_iterated</a>, <a href="../giftflow/datamapper.html#get_raw()">get_raw</a>, <a href="../giftflow/datamapper.html#get_sql()">get_sql</a>, <a href="../giftflow/datamapper.html#get_where()">get_where</a>, <a href="../giftflow/datamapper.html#group_by()">group_by</a>, <a href="../giftflow/datamapper.html#group_end()">group_end</a>, <a href="../giftflow/datamapper.html#group_start()">group_start</a>, <a href="../giftflow/datamapper.html#having()">having</a>, <a href="../giftflow/datamapper.html#ilike()">ilike</a>, <a href="../giftflow/datamapper.html#include_join_fields()">include_join_fields</a>, <a href="../giftflow/datamapper.html#include_related()">include_related</a>, <a href="../giftflow/datamapper.html#include_related_count()">include_related_count</a>, <a href="../giftflow/datamapper.html#is_related_to()">is_related_to</a>, <a href="../giftflow/datamapper.html#join_related()">join_related</a>, <a href="../giftflow/datamapper.html#like()">like</a>, <a href="../giftflow/datamapper.html#limit()">limit</a>, <a href="../giftflow/datamapper.html#load_extension()">load_extension</a>, <a href="../giftflow/datamapper.html#localize_by_model()">localize_by_model</a>, <a href="../giftflow/datamapper.html#localize_label()">localize_label</a>, <a href="../giftflow/datamapper.html#not_group_start()">not_group_start</a>, <a href="../giftflow/datamapper.html#not_ilike()">not_ilike</a>, <a href="../giftflow/datamapper.html#not_like()">not_like</a>, <a href="../giftflow/datamapper.html#offset()">offset</a>, <a href="../giftflow/datamapper.html#or_group_start()">or_group_start</a>, <a href="../giftflow/datamapper.html#or_having()">or_having</a>, <a href="../giftflow/datamapper.html#or_ilike()">or_ilike</a>, <a href="../giftflow/datamapper.html#or_like()">or_like</a>, <a href="../giftflow/datamapper.html#or_not_group_start()">or_not_group_start</a>, <a href="../giftflow/datamapper.html#or_not_ilike()">or_not_ilike</a>, <a href="../giftflow/datamapper.html#or_not_like()">or_not_like</a>, <a href="../giftflow/datamapper.html#or_where()">or_where</a>, <a href="../giftflow/datamapper.html#or_where_in()">or_where_in</a>, <a href="../giftflow/datamapper.html#or_where_not_in()">or_where_not_in</a>, <a href="../giftflow/datamapper.html#order_by()">order_by</a>, <a href="../giftflow/datamapper.html#query()">query</a>, <a href="../giftflow/datamapper.html#recursive_require_once()">recursive_require_once</a>, <a href="../giftflow/datamapper.html#refresh_all()">refresh_all</a>, <a href="../giftflow/datamapper.html#reinitialize_model()">reinitialize_model</a>, <a href="../giftflow/datamapper.html#result_count()">result_count</a>, <a href="../giftflow/datamapper.html#save()">save</a>, <a href="../giftflow/datamapper.html#save_as_new()">save_as_new</a>, <a href="../giftflow/datamapper.html#select()">select</a>, <a href="../giftflow/datamapper.html#select_avg()">select_avg</a>, <a href="../giftflow/datamapper.html#select_max()">select_max</a>, <a href="../giftflow/datamapper.html#select_min()">select_min</a>, <a href="../giftflow/datamapper.html#select_sum()">select_sum</a>, <a href="../giftflow/datamapper.html#set_join_field()">set_join_field</a>, <a href="../giftflow/datamapper.html#skip_validation()">skip_validation</a>, <a href="../giftflow/datamapper.html#start_cache()">start_cache</a>, <a href="../giftflow/datamapper.html#stop_cache()">stop_cache</a>, <a href="../giftflow/datamapper.html#trans_begin()">trans_begin</a>, <a href="../giftflow/datamapper.html#trans_commit()">trans_commit</a>, <a href="../giftflow/datamapper.html#trans_complete()">trans_complete</a>, <a href="../giftflow/datamapper.html#trans_off()">trans_off</a>, <a href="../giftflow/datamapper.html#trans_rollback()">trans_rollback</a>, <a href="../giftflow/datamapper.html#trans_start()">trans_start</a>, <a href="../giftflow/datamapper.html#trans_status()">trans_status</a>, <a href="../giftflow/datamapper.html#trans_strict()">trans_strict</a>, <a href="../giftflow/datamapper.html#update()">update</a>, <a href="../giftflow/datamapper.html#update_all()">update_all</a>, <a href="../giftflow/datamapper.html#validate()">validate</a>, <a href="../giftflow/datamapper.html#where()">where</a>, <a href="../giftflow/datamapper.html#where_in()">where_in</a>, <a href="../giftflow/datamapper.html#where_not_in()">where_not_in</a></td></tr></table>
+
+<h2 id="detail_field">Field Detail</h2>
+<a href="../source/application/models/good.php.html#line18" class="location">application/models/good.php at line 18</a>
+
+<h3 id="active_transaction">active_transaction</h3>
+<code class="signature">public  mixed <strong>$active_transaction</strong></code>
+<div class="details">
+</div>
+
+<hr>
+
+<a href="../source/application/models/good.php.html#line15" class="location">application/models/good.php at line 15</a>
+
+<h3 id="created_field">created_field</h3>
+<code class="signature">public  mixed <strong>$created_field</strong> = 'created'</code>
+<div class="details">
+</div>
+
+<hr>
+
+<a href="../source/application/models/good.php.html#line16" class="location">application/models/good.php at line 16</a>
+
+<h3 id="error_prefix">error_prefix</h3>
+<code class="signature">public  mixed <strong>$error_prefix</strong> = &quot;&lt;p class='alert_error'&gt;&quot;</code>
+<div class="details">
+</div>
+
+<hr>
+
+<a href="../source/application/models/good.php.html#line17" class="location">application/models/good.php at line 17</a>
+
+<h3 id="error_suffix">error_suffix</h3>
+<code class="signature">public  mixed <strong>$error_suffix</strong> = &quot;&lt;/p&gt;&quot;</code>
+<div class="details">
+</div>
+
+<hr>
+
+<a href="../source/application/models/good.php.html#line27" class="location">application/models/good.php at line 27</a>
+
+<h3 id="has_many">has_many</h3>
+<code class="signature">public  mixed <strong>$has_many</strong> = array(...)</code>
+<div class="details">
+</div>
+
+<hr>
+
+<a href="../source/application/models/good.php.html#line25" class="location">application/models/good.php at line 25</a>
+
+<h3 id="has_one">has_one</h3>
+<code class="signature">public  mixed <strong>$has_one</strong> = array(...)</code>
+<div class="details">
+</div>
+
+<hr>
+
+<a href="../source/application/models/good.php.html#line34" class="location">application/models/good.php at line 34</a>
+
+<h3 id="validation">validation</h3>
+<code class="signature">public  mixed <strong>$validation</strong> = array(...)</code>
+<div class="details">
+</div>
+
+<hr>
+
+<h2 id="detail_method">Method Detail</h2><div class="method_detail">
+<a href="../source/application/models/good.php.html#line36" class="location">application/models/good.php at line 36</a>
+
+<h3 id="__construct()">__construct</h3>
+<code class="signature">public  void <strong>__construct</strong>(mixed id)</code>
+<div class="details">
+<p>Constructor</p><p>Initialize DataMapper.</p><dl>
+<dt>Param	int:</dt>
+<dd>$id if provided, load in the object specified by that ID.</dd>
+</dl>
+</div>
+
+<hr>
+
+<a href="../source/application/models/good.php.html#line118" class="location">application/models/good.php at line 118</a>
+
+<h3 id="active_transaction()">active_transaction</h3>
+<code class="signature">public  void <strong>active_transaction</strong>()</code>
+<div class="details">
+</div>
+
+<hr>
+
+<a href="../source/application/models/good.php.html#line48" class="location">application/models/good.php at line 48</a>
+
+<h3 id="add_tag()">add_tag</h3>
+<code class="signature">public  void <strong>add_tag</strong>(mixed tag_name, string )</code>
+<div class="details">
+<p></p></div>
+
+<hr>
+
+<a href="../source/application/models/good.php.html#line41" class="location">application/models/good.php at line 41</a>
+
+<h3 id="get_htmlform_list()">get_htmlform_list</h3>
+<code class="signature">public  void <strong>get_htmlform_list</strong>(mixed object, mixed field)</code>
+<div class="details">
+</div>
+
+<hr>
+
+<a href="../source/application/models/good.php.html#line102" class="location">application/models/good.php at line 102</a>
+
+<h3 id="request_status()">request_status</h3>
+<code class="signature">public  void <strong>request_status</strong>(mixed user_id)</code>
+<div class="details">
+</div>
+
+<hr>
+
+<a href="../source/application/models/good.php.html#line76" class="location">application/models/good.php at line 76</a>
+
+<h3 id="requests()">requests</h3>
+<code class="signature">public  void <strong>requests</strong>(mixed status)</code>
+<div class="details">
+</div>
+
+<hr>
+
+</div><div class="header">
+<h1>GiftFlow API</h1>
+<ul>
+<li><a href="../overview-summary.html">Overview</a></li>
+<li><a href="../application/package-summary.html">Package</a></li>
+<li class="active">Class</li>
+<li><a href="../application/package-tree.html">Tree</a></li>
+<li><a href="../overview-files.html">Files</a></li>
+<li><a href="../deprecated-list.html">Deprecated</a></li>
+<li><a href="../index-all.html">Index</a></li>
+</ul>
+</div>
+
+<div class="small_links">
+<a href="../index.html" target="_top">Frames</a>
+<a href="../application/good.html" target="_top">No frames</a>
+</div>
+<div class="small_links">
+Summary: <a href="#summary_field">Field</a> | <a href="#summary_method">Method</a> | <a href="#summary_constr">Constr</a>
+Detail: <a href="#detail_field">Field</a> | <a href="#detail_method">Method</a> | <a href="#summary_constr">Constr</a>
+</div>
+<hr>
+
+<p id="footer">This document was generated by <a href="http://peej.github.com/phpdoctor/">PHPDoctor: The PHP Documentation Creator</a></p>
+
+</body>
+
+</html>

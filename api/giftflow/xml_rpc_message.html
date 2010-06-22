@@ -1,0 +1,281 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+
+<html lang="en">
+<head>
+
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
+<meta name="generator" content="PHPDoctor 2RC4 (http://peej.github.com/phpdoctor/)">
+<meta name="when" content="Sun, 20 Jun 2010 17:43:50 +0000">
+
+<link rel="stylesheet" type="text/css" href="../stylesheet.css">
+<link rel="start" href="../overview-summary.html">
+
+<title>XML_RPC_Message (GiftFlow API)</title>
+
+</head>
+<body id="definition" onload="parent.document.title=document.title;">
+
+<div class="header">
+<h1>GiftFlow API</h1>
+<ul>
+<li><a href="../overview-summary.html">Overview</a></li>
+<li><a href="../giftflow/package-summary.html">Package</a></li>
+<li class="active">Class</li>
+<li><a href="../giftflow/package-tree.html">Tree</a></li>
+<li><a href="../overview-files.html">Files</a></li>
+<li><a href="../deprecated-list.html">Deprecated</a></li>
+<li><a href="../index-all.html">Index</a></li>
+</ul>
+</div>
+
+<div class="small_links">
+<a href="../index.html" target="_top">Frames</a>
+<a href="../giftflow/xml_rpc_message.html" target="_top">No frames</a>
+</div>
+<div class="small_links">
+Summary: <a href="#summary_field">Field</a> | <a href="#summary_method">Method</a> | <a href="#summary_constr">Constr</a>
+Detail: <a href="#detail_field">Field</a> | <a href="#detail_method">Method</a> | <a href="#summary_constr">Constr</a>
+</div>
+<hr>
+
+<div class="qualifiedName">GiftFlow\XML_RPC_Message</div>
+<a href="../source/libraries/xmlrpc.php.html#line610" class="location">libraries/Xmlrpc.php at line 610</a>
+
+<h1>Class XML_RPC_Message</h1>
+
+<pre class="tree"><a href="../giftflow/ci_xmlrpc.html">CI_Xmlrpc</a><br>    └─<strong>XML_RPC_Message</strong><br /></pre>
+
+<hr>
+
+<p class="signature">public  class <strong>XML_RPC_Message</strong><br>extends <a href="../giftflow/ci_xmlrpc.html">CI_Xmlrpc</a>
+
+</p>
+
+<div class="comment" id="overview_description"><p>XML-RPC Message class</p></div>
+
+<dl>
+<dt>Category	XML-RPC.</dt>
+<dt>Author		ExpressionEngine:</dt>
+<dd>Dev Team</dd>
+<dt>Link		http://codeigniter.com/user_guide/libraries/xmlrpc.html.</dt>
+<dt>Package		CodeIgniter.</dt>
+<dt>Subpackage	Libraries.</dt>
+</dl>
+<hr>
+
+<table id="summary_field">
+<tr><th colspan="2">Field Summary</th></tr>
+<tr>
+<td class="type"> mixed</td>
+<td class="description"><p class="name"><a href="#iso8601_decode">$iso8601_decode</a></p></td>
+</tr>
+<tr>
+<td class="type"> mixed</td>
+<td class="description"><p class="name"><a href="#method_name">$method_name</a></p></td>
+</tr>
+<tr>
+<td class="type"> mixed</td>
+<td class="description"><p class="name"><a href="#params">$params</a></p></td>
+</tr>
+<tr>
+<td class="type"> mixed</td>
+<td class="description"><p class="name"><a href="#xh">$xh</a></p></td>
+</tr>
+</table>
+
+<table class="inherit">
+<tr><th colspan="2">Fields inherited from GiftFlow\CI_Xmlrpc</th></tr>
+<tr><td><a href="../giftflow/ci_xmlrpc.html#client">client</a>, <a href="../giftflow/ci_xmlrpc.html#data">data</a>, <a href="../giftflow/ci_xmlrpc.html#debug">debug</a>, <a href="../giftflow/ci_xmlrpc.html#error">error</a>, <a href="../giftflow/ci_xmlrpc.html#message">message</a>, <a href="../giftflow/ci_xmlrpc.html#method">method</a>, <a href="../giftflow/ci_xmlrpc.html#response">response</a>, <a href="../giftflow/ci_xmlrpc.html#result">result</a>, <a href="../giftflow/ci_xmlrpc.html#valid_parents">valid_parents</a>, <a href="../giftflow/ci_xmlrpc.html#xmlrpcArray">xmlrpcArray</a>, <a href="../giftflow/ci_xmlrpc.html#xmlrpcBase64">xmlrpcBase64</a>, <a href="../giftflow/ci_xmlrpc.html#xmlrpcBoolean">xmlrpcBoolean</a>, <a href="../giftflow/ci_xmlrpc.html#xmlrpcDateTime">xmlrpcDateTime</a>, <a href="../giftflow/ci_xmlrpc.html#xmlrpcDouble">xmlrpcDouble</a>, <a href="../giftflow/ci_xmlrpc.html#xmlrpcI4">xmlrpcI4</a>, <a href="../giftflow/ci_xmlrpc.html#xmlrpcInt">xmlrpcInt</a>, <a href="../giftflow/ci_xmlrpc.html#xmlrpcName">xmlrpcName</a>, <a href="../giftflow/ci_xmlrpc.html#xmlrpcString">xmlrpcString</a>, <a href="../giftflow/ci_xmlrpc.html#xmlrpcStruct">xmlrpcStruct</a>, <a href="../giftflow/ci_xmlrpc.html#xmlrpcTypes">xmlrpcTypes</a>, <a href="../giftflow/ci_xmlrpc.html#xmlrpcVersion">xmlrpcVersion</a>, <a href="../giftflow/ci_xmlrpc.html#xmlrpc_backslash">xmlrpc_backslash</a>, <a href="../giftflow/ci_xmlrpc.html#xmlrpc_defencoding">xmlrpc_defencoding</a>, <a href="../giftflow/ci_xmlrpc.html#xmlrpcerr">xmlrpcerr</a>, <a href="../giftflow/ci_xmlrpc.html#xmlrpcerruser">xmlrpcerruser</a>, <a href="../giftflow/ci_xmlrpc.html#xmlrpcerrxml">xmlrpcerrxml</a>, <a href="../giftflow/ci_xmlrpc.html#xmlrpcstr">xmlrpcstr</a></td></tr></table>
+
+<table id="summary_method">
+<tr><th colspan="2">Method Summary</th></tr>
+<tr>
+<td class="type"> void</td>
+<td class="description"><p class="name"><a href="#__construct()">__construct</a>(mixed method, int pars, mixed config)</p></td>
+</tr>
+<tr>
+<td class="type"> void</td>
+<td class="description"><p class="name"><a href="#addParam()">addParam</a>(mixed par)</p></td>
+</tr>
+<tr>
+<td class="type"> void</td>
+<td class="description"><p class="name"><a href="#character_data()">character_data</a>(mixed the_parser, mixed data)</p></td>
+</tr>
+<tr>
+<td class="type"> void</td>
+<td class="description"><p class="name"><a href="#closing_tag()">closing_tag</a>(mixed the_parser, mixed name)</p></td>
+</tr>
+<tr>
+<td class="type"> void</td>
+<td class="description"><p class="name"><a href="#createPayload()">createPayload</a>()</p></td>
+</tr>
+<tr>
+<td class="type"> void</td>
+<td class="description"><p class="name"><a href="#decode_message()">decode_message</a>(mixed param)</p></td>
+</tr>
+<tr>
+<td class="type"> void</td>
+<td class="description"><p class="name"><a href="#open_tag()">open_tag</a>(mixed the_parser, mixed name, mixed attrs)</p></td>
+</tr>
+<tr>
+<td class="type"> void</td>
+<td class="description"><p class="name"><a href="#output_parameters()">output_parameters</a>(bool array)</p></td>
+</tr>
+<tr>
+<td class="type"> void</td>
+<td class="description"><p class="name"><a href="#parseResponse()">parseResponse</a>(mixed fp)</p></td>
+</tr>
+</table>
+
+<table class="inherit">
+<tr><th colspan="2">Methods inherited from GiftFlow\CI_Xmlrpc</th></tr>
+<tr><td><a href="../giftflow/ci_xmlrpc.html#__construct()">__construct</a>, <a href="../giftflow/ci_xmlrpc.html#display_error()">display_error</a>, <a href="../giftflow/ci_xmlrpc.html#display_response()">display_response</a>, <a href="../giftflow/ci_xmlrpc.html#initialize()">initialize</a>, <a href="../giftflow/ci_xmlrpc.html#method()">method</a>, <a href="../giftflow/ci_xmlrpc.html#request()">request</a>, <a href="../giftflow/ci_xmlrpc.html#send_error_message()">send_error_message</a>, <a href="../giftflow/ci_xmlrpc.html#send_request()">send_request</a>, <a href="../giftflow/ci_xmlrpc.html#send_response()">send_response</a>, <a href="../giftflow/ci_xmlrpc.html#server()">server</a>, <a href="../giftflow/ci_xmlrpc.html#set_debug()">set_debug</a>, <a href="../giftflow/ci_xmlrpc.html#timeout()">timeout</a>, <a href="../giftflow/ci_xmlrpc.html#values_parsing()">values_parsing</a></td></tr></table>
+
+<h2 id="detail_field">Field Detail</h2>
+<a href="../source/libraries/xmlrpc.php.html#line612" class="location">libraries/Xmlrpc.php at line 612</a>
+
+<h3 id="iso8601_decode">iso8601_decode</h3>
+<code class="signature">public  mixed <strong>$iso8601_decode</strong></code>
+<div class="details">
+</div>
+
+<hr>
+
+<a href="../source/libraries/xmlrpc.php.html#line613" class="location">libraries/Xmlrpc.php at line 613</a>
+
+<h3 id="method_name">method_name</h3>
+<code class="signature">public  mixed <strong>$method_name</strong></code>
+<div class="details">
+</div>
+
+<hr>
+
+<a href="../source/libraries/xmlrpc.php.html#line614" class="location">libraries/Xmlrpc.php at line 614</a>
+
+<h3 id="params">params</h3>
+<code class="signature">public  mixed <strong>$params</strong> = array()</code>
+<div class="details">
+</div>
+
+<hr>
+
+<a href="../source/libraries/xmlrpc.php.html#line615" class="location">libraries/Xmlrpc.php at line 615</a>
+
+<h3 id="xh">xh</h3>
+<code class="signature">public  mixed <strong>$xh</strong> = array()</code>
+<div class="details">
+</div>
+
+<hr>
+
+<h2 id="detail_method">Method Detail</h2><div class="method_detail">
+<div class='method'><a href="../source/libraries/xmlrpc.php.html#line617" class="location">libraries/Xmlrpc.php at line 617</a>
+
+<h3 id="__construct()">__construct</h3>
+<code class="signature">public  void <strong>__construct</strong>(mixed method, int pars, mixed config)</code>
+<div class="details">
+</div></div>
+
+
+
+<div class='method'><a href="../source/libraries/xmlrpc.php.html#line1114" class="location">libraries/Xmlrpc.php at line 1114</a>
+
+<h3 id="addParam()">addParam</h3>
+<code class="signature">public  void <strong>addParam</strong>(mixed par)</code>
+<div class="details">
+</div></div>
+
+
+
+<div class='method'><a href="../source/libraries/xmlrpc.php.html#line1092" class="location">libraries/Xmlrpc.php at line 1092</a>
+
+<h3 id="character_data()">character_data</h3>
+<code class="signature">public  void <strong>character_data</strong>(mixed the_parser, mixed data)</code>
+<div class="details">
+</div></div>
+
+
+
+<div class='method'><a href="../source/libraries/xmlrpc.php.html#line948" class="location">libraries/Xmlrpc.php at line 948</a>
+
+<h3 id="closing_tag()">closing_tag</h3>
+<code class="signature">public  void <strong>closing_tag</strong>(mixed the_parser, mixed name)</code>
+<div class="details">
+</div></div>
+
+
+
+<div class='method'><a href="../source/libraries/xmlrpc.php.html#line636" class="location">libraries/Xmlrpc.php at line 636</a>
+
+<h3 id="createPayload()">createPayload</h3>
+<code class="signature">public  void <strong>createPayload</strong>()</code>
+<div class="details">
+</div></div>
+
+
+
+<div class='method'><a href="../source/libraries/xmlrpc.php.html#line1159" class="location">libraries/Xmlrpc.php at line 1159</a>
+
+<h3 id="decode_message()">decode_message</h3>
+<code class="signature">public  void <strong>decode_message</strong>(mixed param)</code>
+<div class="details">
+</div></div>
+
+
+
+<div class='method'><a href="../source/libraries/xmlrpc.php.html#line846" class="location">libraries/Xmlrpc.php at line 846</a>
+
+<h3 id="open_tag()">open_tag</h3>
+<code class="signature">public  void <strong>open_tag</strong>(mixed the_parser, mixed name, mixed attrs)</code>
+<div class="details">
+</div></div>
+
+
+
+<div class='method'><a href="../source/libraries/xmlrpc.php.html#line1116" class="location">libraries/Xmlrpc.php at line 1116</a>
+
+<h3 id="output_parameters()">output_parameters</h3>
+<code class="signature">public  void <strong>output_parameters</strong>(bool array)</code>
+<div class="details">
+</div></div>
+
+
+
+<div class='method'><a href="../source/libraries/xmlrpc.php.html#line656" class="location">libraries/Xmlrpc.php at line 656</a>
+
+<h3 id="parseResponse()">parseResponse</h3>
+<code class="signature">public  void <strong>parseResponse</strong>(mixed fp)</code>
+<div class="details">
+</div></div>
+
+
+
+</div><div class="header">
+<h1>GiftFlow API</h1>
+<ul>
+<li><a href="../overview-summary.html">Overview</a></li>
+<li><a href="../giftflow/package-summary.html">Package</a></li>
+<li class="active">Class</li>
+<li><a href="../giftflow/package-tree.html">Tree</a></li>
+<li><a href="../overview-files.html">Files</a></li>
+<li><a href="../deprecated-list.html">Deprecated</a></li>
+<li><a href="../index-all.html">Index</a></li>
+</ul>
+</div>
+
+<div class="small_links">
+<a href="../index.html" target="_top">Frames</a>
+<a href="../giftflow/xml_rpc_message.html" target="_top">No frames</a>
+</div>
+<div class="small_links">
+Summary: <a href="#summary_field">Field</a> | <a href="#summary_method">Method</a> | <a href="#summary_constr">Constr</a>
+Detail: <a href="#detail_field">Field</a> | <a href="#detail_method">Method</a> | <a href="#summary_constr">Constr</a>
+</div>
+<hr>
+
+<p id="footer">This document was generated by <a href="http://peej.github.com/phpdoctor/">PHPDoctor: The PHP Documentation Creator</a></p>
+
+</body>
+
+</html>

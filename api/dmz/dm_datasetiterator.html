@@ -1,0 +1,281 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+
+<html lang="en">
+<head>
+
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
+<meta name="generator" content="PHPDoctor 2RC4 (http://peej.github.com/phpdoctor/)">
+<meta name="when" content="Sun, 20 Jun 2010 17:43:50 +0000">
+
+<link rel="stylesheet" type="text/css" href="../stylesheet.css">
+<link rel="start" href="../overview-summary.html">
+
+<title>DM_DatasetIterator (GiftFlow API)</title>
+
+</head>
+<body id="definition" onload="parent.document.title=document.title;">
+
+<div class="header">
+<h1>GiftFlow API</h1>
+<ul>
+<li><a href="../overview-summary.html">Overview</a></li>
+<li><a href="../dmz/package-summary.html">Package</a></li>
+<li class="active">Class</li>
+<li><a href="../dmz/package-tree.html">Tree</a></li>
+<li><a href="../overview-files.html">Files</a></li>
+<li><a href="../deprecated-list.html">Deprecated</a></li>
+<li><a href="../index-all.html">Index</a></li>
+</ul>
+</div>
+
+<div class="small_links">
+<a href="../index.html" target="_top">Frames</a>
+<a href="../dmz/dm_datasetiterator.html" target="_top">No frames</a>
+</div>
+<div class="small_links">
+Summary: <a href="#summary_field">Field</a> | <a href="#summary_method">Method</a> | <a href="#summary_constr">Constr</a>
+Detail: <a href="#detail_field">Field</a> | <a href="#detail_method">Method</a> | <a href="#summary_constr">Constr</a>
+</div>
+<hr>
+
+<div class="qualifiedName">DMZ\DM_DatasetIterator</div>
+<a href="../source/application/libraries/datamapper.php.html#line6171" class="location">application/libraries/datamapper.php at line 6171</a>
+
+<h1>Class DM_DatasetIterator</h1>
+
+<pre class="tree"><strong>DM_DatasetIterator</strong><br /></pre>
+
+<hr>
+
+<p class="signature">public  class <strong>DM_DatasetIterator</strong></p>
+
+<div class="comment" id="overview_description"><p>Iterator for get_iterated</p></div>
+
+<hr>
+
+<table id="summary_field">
+<tr><th colspan="2">Field Summary</th></tr>
+<tr>
+<td class="type">protected  <a href="../giftflow/datamapper.html">DataMapper</a></td>
+<td class="description"><p class="name"><a href="#__get">$__get</a></p><p class="description">The parent DataMapper object that contains important info.</p></td>
+</tr>
+<tr>
+<td class="type">protected  int</td>
+<td class="description"><p class="name"><a href="#count">$count</a></p><p class="description">Number of results</p></td>
+</tr>
+<tr>
+<td class="type">protected  <a href="../giftflow/datamapper.html">DataMapper</a></td>
+<td class="description"><p class="name"><a href="#object">$object</a></p><p class="description">The temporary DM object used in the loops.</p></td>
+</tr>
+<tr>
+<td class="type">protected  int</td>
+<td class="description"><p class="name"><a href="#pos">$pos</a></p><p class="description">Current position</p></td>
+</tr>
+<tr>
+<td class="type">protected  array</td>
+<td class="description"><p class="name"><a href="#result">$result</a></p><p class="description">Results array</p></td>
+</tr>
+</table>
+
+<table id="summary_method">
+<tr><th colspan="2">Method Summary</th></tr>
+<tr>
+<td class="type"> void</td>
+<td class="description"><p class="name"><a href="#__construct()">__construct</a>(<a href="../giftflow/datamapper.html">DataMapper</a> object, DB_result query)</p><p class="description"></p></td>
+</tr>
+<tr>
+<td class="type"> int</td>
+<td class="description"><p class="name"><a href="#count()">count</a>()</p><p class="description">Returns the number of results</p></td>
+</tr>
+<tr>
+<td class="type"> <a href="../giftflow/datamapper.html">DataMapper</a></td>
+<td class="description"><p class="name"><a href="#current()">current</a>()</p><p class="description">Gets the item at the current index $pos</p></td>
+</tr>
+<tr>
+<td class="type"> <a href="../giftflow/datamapper.html">DataMapper</a></td>
+<td class="description"><p class="name"><a href="#get()">get</a>(int index)</p><p class="description">Gets the item at index $index</p></td>
+</tr>
+<tr>
+<td class="type"> void</td>
+<td class="description"><p class="name"><a href="#key()">key</a>()</p></td>
+</tr>
+<tr>
+<td class="type"> void</td>
+<td class="description"><p class="name"><a href="#next()">next</a>()</p></td>
+</tr>
+<tr>
+<td class="type"> void</td>
+<td class="description"><p class="name"><a href="#result_count()">result_count</a>()</p></td>
+</tr>
+<tr>
+<td class="type"> void</td>
+<td class="description"><p class="name"><a href="#rewind()">rewind</a>()</p></td>
+</tr>
+<tr>
+<td class="type"> void</td>
+<td class="description"><p class="name"><a href="#valid()">valid</a>()</p></td>
+</tr>
+</table>
+
+<h2 id="detail_field">Field Detail</h2>
+<a href="../source/application/libraries/datamapper.php.html#line6177" class="location">application/libraries/datamapper.php at line 6177</a>
+
+<h3 id="__get">__get</h3>
+<code class="signature">protected  <a href="../giftflow/datamapper.html">DataMapper</a> <strong>$__get</strong></code>
+<div class="details">
+<p>The parent DataMapper object that contains important info.</p></div>
+
+<hr>
+
+<a href="../source/application/libraries/datamapper.php.html#line6192" class="location">application/libraries/datamapper.php at line 6192</a>
+
+<h3 id="count">count</h3>
+<code class="signature">protected  int <strong>$count</strong></code>
+<div class="details">
+<p>Number of results</p></div>
+
+<hr>
+
+<a href="../source/application/libraries/datamapper.php.html#line6182" class="location">application/libraries/datamapper.php at line 6182</a>
+
+<h3 id="object">object</h3>
+<code class="signature">protected  <a href="../giftflow/datamapper.html">DataMapper</a> <strong>$object</strong></code>
+<div class="details">
+<p>The temporary DM object used in the loops.</p></div>
+
+<hr>
+
+<a href="../source/application/libraries/datamapper.php.html#line6197" class="location">application/libraries/datamapper.php at line 6197</a>
+
+<h3 id="pos">pos</h3>
+<code class="signature">protected  int <strong>$pos</strong></code>
+<div class="details">
+<p>Current position</p></div>
+
+<hr>
+
+<a href="../source/application/libraries/datamapper.php.html#line6187" class="location">application/libraries/datamapper.php at line 6187</a>
+
+<h3 id="result">result</h3>
+<code class="signature">protected  array <strong>$result</strong></code>
+<div class="details">
+<p>Results array</p></div>
+
+<hr>
+
+<h2 id="detail_method">Method Detail</h2><div class="method_detail">
+<div class='method'><a href="../source/application/libraries/datamapper.php.html#line6203" class="location">application/libraries/datamapper.php at line 6203</a>
+
+<h3 id="__construct()">__construct</h3>
+<code class="signature">public  void <strong>__construct</strong>(<a href="../giftflow/datamapper.html">DataMapper</a> object, DB_result query)</code>
+<div class="details">
+<p></p><dl>
+<dt>Parameters:</dt>
+<dd>object - Should be cloned ahead of time</dd>
+<dd>query - result from a CI DB query</dd>
+</dl>
+</div></div>
+
+
+
+<div class='method'><a href="../source/application/libraries/datamapper.php.html#line6262" class="location">application/libraries/datamapper.php at line 6262</a>
+
+<h3 id="count()">count</h3>
+<code class="signature">public  int <strong>count</strong>()</code>
+<div class="details">
+<p>Returns the number of results</p></div></div>
+
+
+
+<div class='method'><a href="../source/application/libraries/datamapper.php.html#line6220" class="location">application/libraries/datamapper.php at line 6220</a>
+
+<h3 id="current()">current</h3>
+<code class="signature">public  <a href="../giftflow/datamapper.html">DataMapper</a> <strong>current</strong>()</code>
+<div class="details">
+<p>Gets the item at the current index $pos</p></div></div>
+
+
+
+<div class='method'><a href="../source/application/libraries/datamapper.php.html#line6235" class="location">application/libraries/datamapper.php at line 6235</a>
+
+<h3 id="get()">get</h3>
+<code class="signature">public  <a href="../giftflow/datamapper.html">DataMapper</a> <strong>get</strong>(int index)</code>
+<div class="details">
+<p>Gets the item at index $index</p></div></div>
+
+
+
+<div class='method'><a href="../source/application/libraries/datamapper.php.html#line6225" class="location">application/libraries/datamapper.php at line 6225</a>
+
+<h3 id="key()">key</h3>
+<code class="signature">public  void <strong>key</strong>()</code>
+<div class="details">
+</div></div>
+
+
+
+<div class='method'><a href="../source/application/libraries/datamapper.php.html#line6243" class="location">application/libraries/datamapper.php at line 6243</a>
+
+<h3 id="next()">next</h3>
+<code class="signature">public  void <strong>next</strong>()</code>
+<div class="details">
+</div></div>
+
+
+
+<div class='method'><a href="../source/application/libraries/datamapper.php.html#line6268" class="location">application/libraries/datamapper.php at line 6268</a>
+
+<h3 id="result_count()">result_count</h3>
+<code class="signature">public  void <strong>result_count</strong>()</code>
+<div class="details">
+</div></div>
+
+
+
+<div class='method'><a href="../source/application/libraries/datamapper.php.html#line6248" class="location">application/libraries/datamapper.php at line 6248</a>
+
+<h3 id="rewind()">rewind</h3>
+<code class="signature">public  void <strong>rewind</strong>()</code>
+<div class="details">
+</div></div>
+
+
+
+<div class='method'><a href="../source/application/libraries/datamapper.php.html#line6253" class="location">application/libraries/datamapper.php at line 6253</a>
+
+<h3 id="valid()">valid</h3>
+<code class="signature">public  void <strong>valid</strong>()</code>
+<div class="details">
+</div></div>
+
+
+
+</div><div class="header">
+<h1>GiftFlow API</h1>
+<ul>
+<li><a href="../overview-summary.html">Overview</a></li>
+<li><a href="../dmz/package-summary.html">Package</a></li>
+<li class="active">Class</li>
+<li><a href="../dmz/package-tree.html">Tree</a></li>
+<li><a href="../overview-files.html">Files</a></li>
+<li><a href="../deprecated-list.html">Deprecated</a></li>
+<li><a href="../index-all.html">Index</a></li>
+</ul>
+</div>
+
+<div class="small_links">
+<a href="../index.html" target="_top">Frames</a>
+<a href="../dmz/dm_datasetiterator.html" target="_top">No frames</a>
+</div>
+<div class="small_links">
+Summary: <a href="#summary_field">Field</a> | <a href="#summary_method">Method</a> | <a href="#summary_constr">Constr</a>
+Detail: <a href="#detail_field">Field</a> | <a href="#detail_method">Method</a> | <a href="#summary_constr">Constr</a>
+</div>
+<hr>
+
+<p id="footer">This document was generated by <a href="http://peej.github.com/phpdoctor/">PHPDoctor: The PHP Documentation Creator</a></p>
+
+</body>
+
+</html>

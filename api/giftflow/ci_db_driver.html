@@ -1,0 +1,1322 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+
+<html lang="en">
+<head>
+
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
+<meta name="generator" content="PHPDoctor 2RC4 (http://peej.github.com/phpdoctor/)">
+<meta name="when" content="Sun, 20 Jun 2010 17:43:50 +0000">
+
+<link rel="stylesheet" type="text/css" href="../stylesheet.css">
+<link rel="start" href="../overview-summary.html">
+
+<title>CI_DB_driver (GiftFlow API)</title>
+
+</head>
+<body id="definition" onload="parent.document.title=document.title;">
+
+<div class="header">
+<h1>GiftFlow API</h1>
+<ul>
+<li><a href="../overview-summary.html">Overview</a></li>
+<li><a href="../giftflow/package-summary.html">Package</a></li>
+<li class="active">Class</li>
+<li><a href="../giftflow/package-tree.html">Tree</a></li>
+<li><a href="../overview-files.html">Files</a></li>
+<li><a href="../deprecated-list.html">Deprecated</a></li>
+<li><a href="../index-all.html">Index</a></li>
+</ul>
+</div>
+
+<div class="small_links">
+<a href="../index.html" target="_top">Frames</a>
+<a href="../giftflow/ci_db_driver.html" target="_top">No frames</a>
+</div>
+<div class="small_links">
+Summary: <a href="#summary_field">Field</a> | <a href="#summary_method">Method</a> | <a href="#summary_constr">Constr</a>
+Detail: <a href="#detail_field">Field</a> | <a href="#detail_method">Method</a> | <a href="#summary_constr">Constr</a>
+</div>
+<hr>
+
+<div class="qualifiedName">GiftFlow\CI_DB_driver</div>
+<a href="../source/database/db_driver.php.html#line31" class="location">database/DB_driver.php at line 31</a>
+
+<h1>Class CI_DB_driver</h1>
+
+<pre class="tree"><strong>CI_DB_driver</strong><br /></pre>
+
+<hr>
+
+<p class="signature">public  class <strong>CI_DB_driver</strong></p>
+
+<div class="comment" id="overview_description"><p>Database Driver Class</p><p>This is the platform-independent base DB implementation class.
+This class will not be called directly. Rather, the adapter
+class for the specific database will extend and instantiate it.</p></div>
+
+<dl>
+<dt>Package		CodeIgniter.</dt>
+<dt>Subpackage	Drivers.</dt>
+<dt>Category	Database.</dt>
+<dt>Author		ExpressionEngine:</dt>
+<dd>Dev Team</dd>
+<dt>Link		http://codeigniter.com/user_guide/database/.</dt>
+</dl>
+<hr>
+
+<table id="summary_field">
+<tr><th colspan="2">Field Summary</th></tr>
+<tr>
+<td class="type"> mixed</td>
+<td class="description"><p class="name"><a href="#CACHE">$CACHE</a></p></td>
+</tr>
+<tr>
+<td class="type">private  mixed</td>
+<td class="description"><p class="name"><a href="#_protect_identifiers">$_protect_identifiers</a></p></td>
+</tr>
+<tr>
+<td class="type">private  mixed</td>
+<td class="description"><p class="name"><a href="#_reserved_identifiers">$_reserved_identifiers</a></p></td>
+</tr>
+<tr>
+<td class="type">private  mixed</td>
+<td class="description"><p class="name"><a href="#_trans_depth">$_trans_depth</a></p></td>
+</tr>
+<tr>
+<td class="type">private  mixed</td>
+<td class="description"><p class="name"><a href="#_trans_status">$_trans_status</a></p></td>
+</tr>
+<tr>
+<td class="type"> mixed</td>
+<td class="description"><p class="name"><a href="#autoinit">$autoinit</a></p></td>
+</tr>
+<tr>
+<td class="type"> mixed</td>
+<td class="description"><p class="name"><a href="#benchmark">$benchmark</a></p></td>
+</tr>
+<tr>
+<td class="type"> mixed</td>
+<td class="description"><p class="name"><a href="#bind_marker">$bind_marker</a></p></td>
+</tr>
+<tr>
+<td class="type"> mixed</td>
+<td class="description"><p class="name"><a href="#cache_autodel">$cache_autodel</a></p></td>
+</tr>
+<tr>
+<td class="type"> mixed</td>
+<td class="description"><p class="name"><a href="#cache_on">$cache_on</a></p></td>
+</tr>
+<tr>
+<td class="type"> mixed</td>
+<td class="description"><p class="name"><a href="#cachedir">$cachedir</a></p></td>
+</tr>
+<tr>
+<td class="type"> mixed</td>
+<td class="description"><p class="name"><a href="#char_set">$char_set</a></p></td>
+</tr>
+<tr>
+<td class="type"> mixed</td>
+<td class="description"><p class="name"><a href="#conn_id">$conn_id</a></p></td>
+</tr>
+<tr>
+<td class="type"> mixed</td>
+<td class="description"><p class="name"><a href="#curs_id">$curs_id</a></p></td>
+</tr>
+<tr>
+<td class="type"> mixed</td>
+<td class="description"><p class="name"><a href="#data_cache">$data_cache</a></p></td>
+</tr>
+<tr>
+<td class="type"> mixed</td>
+<td class="description"><p class="name"><a href="#database">$database</a></p></td>
+</tr>
+<tr>
+<td class="type"> mixed</td>
+<td class="description"><p class="name"><a href="#db_debug">$db_debug</a></p></td>
+</tr>
+<tr>
+<td class="type"> mixed</td>
+<td class="description"><p class="name"><a href="#dbcollat">$dbcollat</a></p></td>
+</tr>
+<tr>
+<td class="type"> mixed</td>
+<td class="description"><p class="name"><a href="#dbdriver">$dbdriver</a></p></td>
+</tr>
+<tr>
+<td class="type"> mixed</td>
+<td class="description"><p class="name"><a href="#dbprefix">$dbprefix</a></p></td>
+</tr>
+<tr>
+<td class="type"> mixed</td>
+<td class="description"><p class="name"><a href="#delete_all">$delete_all</a></p></td>
+</tr>
+<tr>
+<td class="type"> mixed</td>
+<td class="description"><p class="name"><a href="#hostname">$hostname</a></p></td>
+</tr>
+<tr>
+<td class="type"> mixed</td>
+<td class="description"><p class="name"><a href="#limit_used">$limit_used</a></p></td>
+</tr>
+<tr>
+<td class="type"> mixed</td>
+<td class="description"><p class="name"><a href="#password">$password</a></p></td>
+</tr>
+<tr>
+<td class="type"> mixed</td>
+<td class="description"><p class="name"><a href="#pconnect">$pconnect</a></p></td>
+</tr>
+<tr>
+<td class="type"> mixed</td>
+<td class="description"><p class="name"><a href="#port">$port</a></p></td>
+</tr>
+<tr>
+<td class="type"> mixed</td>
+<td class="description"><p class="name"><a href="#queries">$queries</a></p></td>
+</tr>
+<tr>
+<td class="type"> mixed</td>
+<td class="description"><p class="name"><a href="#query_count">$query_count</a></p></td>
+</tr>
+<tr>
+<td class="type"> mixed</td>
+<td class="description"><p class="name"><a href="#query_times">$query_times</a></p></td>
+</tr>
+<tr>
+<td class="type"> mixed</td>
+<td class="description"><p class="name"><a href="#result_id">$result_id</a></p></td>
+</tr>
+<tr>
+<td class="type"> mixed</td>
+<td class="description"><p class="name"><a href="#save_queries">$save_queries</a></p></td>
+</tr>
+<tr>
+<td class="type"> mixed</td>
+<td class="description"><p class="name"><a href="#stmt_id">$stmt_id</a></p></td>
+</tr>
+<tr>
+<td class="type"> mixed</td>
+<td class="description"><p class="name"><a href="#swap_pre">$swap_pre</a></p></td>
+</tr>
+<tr>
+<td class="type"> mixed</td>
+<td class="description"><p class="name"><a href="#trans_enabled">$trans_enabled</a></p></td>
+</tr>
+<tr>
+<td class="type"> mixed</td>
+<td class="description"><p class="name"><a href="#trans_strict">$trans_strict</a></p></td>
+</tr>
+</table>
+
+<table id="summary_method">
+<tr><th colspan="2">Method Summary</th></tr>
+<tr>
+<td class="type"> void</td>
+<td class="description"><p class="name"><a href="#__construct()">__construct</a>(mixed params, array )</p><p class="description">Constructor. </p></td>
+</tr>
+<tr>
+<td class="type">private  void</td>
+<td class="description"><p class="name"><a href="#_cache_init()">_cache_init</a>()</p><p class="description">Initialize the Cache Class</p></td>
+</tr>
+<tr>
+<td class="type">private  void</td>
+<td class="description"><p class="name"><a href="#_has_operator()">_has_operator</a>(mixed str)</p><p class="description">Tests whether the string has an SQL operator</p></td>
+</tr>
+<tr>
+<td class="type">private  void</td>
+<td class="description"><p class="name"><a href="#_protect_identifiers()">_protect_identifiers</a>(mixed item, bool prefix_single, mixed protect_identifiers, bool field_exists)</p><p class="description">Protect IdentifiersThis function is used extensively by the Active Record class, and by
+a couple functions in this class. </p></td>
+</tr>
+<tr>
+<td class="type"> void</td>
+<td class="description"><p class="name"><a href="#cache_delete()">cache_delete</a>(str segment_one, str segment_two)</p><p class="description">Delete the cache files associated with a particular URI</p></td>
+</tr>
+<tr>
+<td class="type"> void</td>
+<td class="description"><p class="name"><a href="#cache_delete_all()">cache_delete_all</a>()</p><p class="description">Delete All cache files</p></td>
+</tr>
+<tr>
+<td class="type"> void</td>
+<td class="description"><p class="name"><a href="#cache_off()">cache_off</a>()</p><p class="description">Disable Query Caching</p></td>
+</tr>
+<tr>
+<td class="type"> void</td>
+<td class="description"><p class="name"><a href="#cache_on()">cache_on</a>()</p><p class="description">Enable Query Caching</p></td>
+</tr>
+<tr>
+<td class="type"> void</td>
+<td class="description"><p class="name"><a href="#cache_set_path()">cache_set_path</a>(str path)</p><p class="description">Set Cache Directory Path</p></td>
+</tr>
+<tr>
+<td class="type"> void</td>
+<td class="description"><p class="name"><a href="#call_function()">call_function</a>(mixed function)</p><p class="description">Enables a native PHP function to be run, using a platform agnostic wrapper.</p></td>
+</tr>
+<tr>
+<td class="type"> void</td>
+<td class="description"><p class="name"><a href="#close()">close</a>()</p><p class="description">Close DB Connection</p></td>
+</tr>
+<tr>
+<td class="type"> void</td>
+<td class="description"><p class="name"><a href="#compile_binds()">compile_binds</a>(mixed sql, mixed binds)</p><p class="description">Compile Bindings</p></td>
+</tr>
+<tr>
+<td class="type"> void</td>
+<td class="description"><p class="name"><a href="#db_set_charset()">db_set_charset</a>(mixed charset, mixed collation)</p><p class="description">Set client character set</p></td>
+</tr>
+<tr>
+<td class="type"> void</td>
+<td class="description"><p class="name"><a href="#display_error()">display_error</a>(str error, str swap, bool native)</p><p class="description">Display an error message</p></td>
+</tr>
+<tr>
+<td class="type"> void</td>
+<td class="description"><p class="name"><a href="#elapsed_time()">elapsed_time</a>(int decimals)</p><p class="description">Calculate the aggregate query elapsed time</p></td>
+</tr>
+<tr>
+<td class="type"> void</td>
+<td class="description"><p class="name"><a href="#escape()">escape</a>(mixed str)</p><p class="description">"Smart" Escape StringEscapes data based on type
+Sets boolean and null types</p></td>
+</tr>
+<tr>
+<td class="type"> void</td>
+<td class="description"><p class="name"><a href="#escape_like_str()">escape_like_str</a>(mixed str)</p><p class="description">Escape LIKE StringCalls the individual driver for platform
+specific escaping for LIKE conditions</p></td>
+</tr>
+<tr>
+<td class="type"> void</td>
+<td class="description"><p class="name"><a href="#field_data()">field_data</a>(str table)</p><p class="description">Returns an object with field data</p></td>
+</tr>
+<tr>
+<td class="type"> void</td>
+<td class="description"><p class="name"><a href="#field_exists()">field_exists</a>(mixed field_name, mixed table_name)</p><p class="description">Determine if a particular field exists</p></td>
+</tr>
+<tr>
+<td class="type"> void</td>
+<td class="description"><p class="name"><a href="#initialize()">initialize</a>()</p><p class="description">Initialize Database Settings</p></td>
+</tr>
+<tr>
+<td class="type"> void</td>
+<td class="description"><p class="name"><a href="#insert_string()">insert_string</a>(mixed table, mixed data)</p><p class="description">Generate an insert string</p></td>
+</tr>
+<tr>
+<td class="type"> void</td>
+<td class="description"><p class="name"><a href="#is_write_type()">is_write_type</a>(mixed sql)</p><p class="description">Determines if a query is a "write" type.</p></td>
+</tr>
+<tr>
+<td class="type"> void</td>
+<td class="description"><p class="name"><a href="#last_query()">last_query</a>()</p><p class="description">Returns the last query that was executed</p></td>
+</tr>
+<tr>
+<td class="type"> void</td>
+<td class="description"><p class="name"><a href="#list_fields()">list_fields</a>(str table)</p><p class="description">Fetch MySQL Field Names</p></td>
+</tr>
+<tr>
+<td class="type"> void</td>
+<td class="description"><p class="name"><a href="#list_tables()">list_tables</a>(bool constrain_by_prefix)</p><p class="description">Returns an array of table names</p></td>
+</tr>
+<tr>
+<td class="type"> void</td>
+<td class="description"><p class="name"><a href="#load_rdriver()">load_rdriver</a>()</p><p class="description">Load the result drivers</p></td>
+</tr>
+<tr>
+<td class="type"> void</td>
+<td class="description"><p class="name"><a href="#platform()">platform</a>()</p><p class="description">The name of the platform in use (mysql, mssql, etc...)</p></td>
+</tr>
+<tr>
+<td class="type"> void</td>
+<td class="description"><p class="name"><a href="#primary()">primary</a>(str table)</p><p class="description">PrimaryRetrieves the primary key. </p></td>
+</tr>
+<tr>
+<td class="type"> void</td>
+<td class="description"><p class="name"><a href="#protect_identifiers()">protect_identifiers</a>(mixed item, bool prefix_single)</p><p class="description">Protect IdentifiersThis function adds backticks if appropriate based on db type</p></td>
+</tr>
+<tr>
+<td class="type"> void</td>
+<td class="description"><p class="name"><a href="#query()">query</a>(mixed sql, bool binds, bool return_object)</p><p class="description">Execute the queryAccepts an SQL string as input and returns a result object upon
+successful execution of a "read" type query. </p></td>
+</tr>
+<tr>
+<td class="type"> void</td>
+<td class="description"><p class="name"><a href="#simple_query()">simple_query</a>(mixed sql)</p><p class="description">Simple Query
+This is a simplified version of the query() function. </p></td>
+</tr>
+<tr>
+<td class="type"> void</td>
+<td class="description"><p class="name"><a href="#table_exists()">table_exists</a>(mixed table_name)</p><p class="description">Determine if a particular table exists</p></td>
+</tr>
+<tr>
+<td class="type"> void</td>
+<td class="description"><p class="name"><a href="#total_queries()">total_queries</a>()</p><p class="description">Returns the total number of queries</p></td>
+</tr>
+<tr>
+<td class="type"> void</td>
+<td class="description"><p class="name"><a href="#trans_complete()">trans_complete</a>()</p><p class="description">Complete Transaction</p></td>
+</tr>
+<tr>
+<td class="type"> void</td>
+<td class="description"><p class="name"><a href="#trans_off()">trans_off</a>()</p><p class="description">Disable Transactions
+This permits transactions to be disabled at run-time.</p></td>
+</tr>
+<tr>
+<td class="type"> void</td>
+<td class="description"><p class="name"><a href="#trans_start()">trans_start</a>(bool test_mode)</p><p class="description">Start Transaction</p></td>
+</tr>
+<tr>
+<td class="type"> void</td>
+<td class="description"><p class="name"><a href="#trans_status()">trans_status</a>()</p><p class="description">Lets you retrieve the transaction flag to determine if it has failed</p></td>
+</tr>
+<tr>
+<td class="type"> void</td>
+<td class="description"><p class="name"><a href="#trans_strict()">trans_strict</a>(bool mode)</p><p class="description">Enable/disable Transaction Strict Mode
+When strict mode is enabled, if you are running multiple groups of
+transactions, if one group fails all groups will be rolled back.
+</p></td>
+</tr>
+<tr>
+<td class="type"> void</td>
+<td class="description"><p class="name"><a href="#update_string()">update_string</a>(mixed table, mixed data, mixed where)</p><p class="description">Generate an update string</p></td>
+</tr>
+<tr>
+<td class="type"> void</td>
+<td class="description"><p class="name"><a href="#version()">version</a>()</p><p class="description">Database Version Number. </p></td>
+</tr>
+</table>
+
+<h2 id="detail_field">Field Detail</h2>
+<a href="../source/database/db_driver.php.html#line62" class="location">database/DB_driver.php at line 62</a>
+
+<h3 id="CACHE">CACHE</h3>
+<code class="signature">public  mixed <strong>$CACHE</strong></code>
+<div class="details">
+</div>
+
+<hr>
+
+<a href="../source/database/db_driver.php.html#line65" class="location">database/DB_driver.php at line 65</a>
+
+<h3 id="_protect_identifiers">_protect_identifiers</h3>
+<code class="signature">private  mixed <strong>$_protect_identifiers</strong> = TRUE</code>
+<div class="details">
+</div>
+
+<hr>
+
+<a href="../source/database/db_driver.php.html#line66" class="location">database/DB_driver.php at line 66</a>
+
+<h3 id="_reserved_identifiers">_reserved_identifiers</h3>
+<code class="signature">private  mixed <strong>$_reserved_identifiers</strong> = array('*')</code>
+<div class="details">
+</div>
+
+<hr>
+
+<a href="../source/database/db_driver.php.html#line57" class="location">database/DB_driver.php at line 57</a>
+
+<h3 id="_trans_depth">_trans_depth</h3>
+<code class="signature">private  mixed <strong>$_trans_depth</strong></code>
+<div class="details">
+</div>
+
+<hr>
+
+<a href="../source/database/db_driver.php.html#line58" class="location">database/DB_driver.php at line 58</a>
+
+<h3 id="_trans_status">_trans_status</h3>
+<code class="signature">private  mixed <strong>$_trans_status</strong> = TRUE</code>
+<div class="details">
+</div>
+
+<hr>
+
+<a href="../source/database/db_driver.php.html#line41" class="location">database/DB_driver.php at line 41</a>
+
+<h3 id="autoinit">autoinit</h3>
+<code class="signature">public  mixed <strong>$autoinit</strong> = TRUE</code>
+<div class="details">
+</div>
+
+<hr>
+
+<a href="../source/database/db_driver.php.html#line48" class="location">database/DB_driver.php at line 48</a>
+
+<h3 id="benchmark">benchmark</h3>
+<code class="signature">public  mixed <strong>$benchmark</strong></code>
+<div class="details">
+</div>
+
+<hr>
+
+<a href="../source/database/db_driver.php.html#line50" class="location">database/DB_driver.php at line 50</a>
+
+<h3 id="bind_marker">bind_marker</h3>
+<code class="signature">public  mixed <strong>$bind_marker</strong> = '?'</code>
+<div class="details">
+</div>
+
+<hr>
+
+<a href="../source/database/db_driver.php.html#line61" class="location">database/DB_driver.php at line 61</a>
+
+<h3 id="cache_autodel">cache_autodel</h3>
+<code class="signature">public  mixed <strong>$cache_autodel</strong> = FALSE</code>
+<div class="details">
+</div>
+
+<hr>
+
+<a href="../source/database/db_driver.php.html#line59" class="location">database/DB_driver.php at line 59</a>
+
+<h3 id="cache_on">cache_on</h3>
+<code class="signature">public  mixed <strong>$cache_on</strong> = FALSE</code>
+<div class="details">
+</div>
+
+<hr>
+
+<a href="../source/database/db_driver.php.html#line60" class="location">database/DB_driver.php at line 60</a>
+
+<h3 id="cachedir">cachedir</h3>
+<code class="signature">public  mixed <strong>$cachedir</strong> = ''</code>
+<div class="details">
+</div>
+
+<hr>
+
+<a href="../source/database/db_driver.php.html#line39" class="location">database/DB_driver.php at line 39</a>
+
+<h3 id="char_set">char_set</h3>
+<code class="signature">public  mixed <strong>$char_set</strong> = 'utf8'</code>
+<div class="details">
+</div>
+
+<hr>
+
+<a href="../source/database/db_driver.php.html#line45" class="location">database/DB_driver.php at line 45</a>
+
+<h3 id="conn_id">conn_id</h3>
+<code class="signature">public  mixed <strong>$conn_id</strong> = FALSE</code>
+<div class="details">
+</div>
+
+<hr>
+
+<a href="../source/database/db_driver.php.html#line70" class="location">database/DB_driver.php at line 70</a>
+
+<h3 id="curs_id">curs_id</h3>
+<code class="signature">public  mixed <strong>$curs_id</strong></code>
+<div class="details">
+</div>
+
+<hr>
+
+<a href="../source/database/db_driver.php.html#line54" class="location">database/DB_driver.php at line 54</a>
+
+<h3 id="data_cache">data_cache</h3>
+<code class="signature">public  mixed <strong>$data_cache</strong> = array()</code>
+<div class="details">
+</div>
+
+<hr>
+
+<a href="../source/database/db_driver.php.html#line36" class="location">database/DB_driver.php at line 36</a>
+
+<h3 id="database">database</h3>
+<code class="signature">public  mixed <strong>$database</strong></code>
+<div class="details">
+</div>
+
+<hr>
+
+<a href="../source/database/db_driver.php.html#line47" class="location">database/DB_driver.php at line 47</a>
+
+<h3 id="db_debug">db_debug</h3>
+<code class="signature">public  mixed <strong>$db_debug</strong> = FALSE</code>
+<div class="details">
+</div>
+
+<hr>
+
+<a href="../source/database/db_driver.php.html#line40" class="location">database/DB_driver.php at line 40</a>
+
+<h3 id="dbcollat">dbcollat</h3>
+<code class="signature">public  mixed <strong>$dbcollat</strong> = 'utf8_general_ci'</code>
+<div class="details">
+</div>
+
+<hr>
+
+<a href="../source/database/db_driver.php.html#line37" class="location">database/DB_driver.php at line 37</a>
+
+<h3 id="dbdriver">dbdriver</h3>
+<code class="signature">public  mixed <strong>$dbdriver</strong> = 'mysql'</code>
+<div class="details">
+</div>
+
+<hr>
+
+<a href="../source/database/db_driver.php.html#line38" class="location">database/DB_driver.php at line 38</a>
+
+<h3 id="dbprefix">dbprefix</h3>
+<code class="signature">public  mixed <strong>$dbprefix</strong> = ''</code>
+<div class="details">
+</div>
+
+<hr>
+
+<a href="../source/database/db_driver.php.html#line33" class="location">database/DB_driver.php at line 33</a>
+
+<h3 id="delete_all">delete_all</h3>
+<code class="signature">public  mixed <strong>$delete_all</strong> = ''</code>
+<div class="details">
+</div>
+
+<hr>
+
+<a href="../source/database/db_driver.php.html#line35" class="location">database/DB_driver.php at line 35</a>
+
+<h3 id="hostname">hostname</h3>
+<code class="signature">public  mixed <strong>$hostname</strong></code>
+<div class="details">
+</div>
+
+<hr>
+
+<a href="../source/database/db_driver.php.html#line71" class="location">database/DB_driver.php at line 71</a>
+
+<h3 id="limit_used">limit_used</h3>
+<code class="signature">public  mixed <strong>$limit_used</strong></code>
+<div class="details">
+</div>
+
+<hr>
+
+<a href="../source/database/db_driver.php.html#line34" class="location">database/DB_driver.php at line 34</a>
+
+<h3 id="password">password</h3>
+<code class="signature">public  mixed <strong>$password</strong></code>
+<div class="details">
+</div>
+
+<hr>
+
+<a href="../source/database/db_driver.php.html#line44" class="location">database/DB_driver.php at line 44</a>
+
+<h3 id="pconnect">pconnect</h3>
+<code class="signature">public  mixed <strong>$pconnect</strong> = FALSE</code>
+<div class="details">
+</div>
+
+<hr>
+
+<a href="../source/database/db_driver.php.html#line43" class="location">database/DB_driver.php at line 43</a>
+
+<h3 id="port">port</h3>
+<code class="signature">public  mixed <strong>$port</strong> = ''</code>
+<div class="details">
+</div>
+
+<hr>
+
+<a href="../source/database/db_driver.php.html#line52" class="location">database/DB_driver.php at line 52</a>
+
+<h3 id="queries">queries</h3>
+<code class="signature">public  mixed <strong>$queries</strong> = array()</code>
+<div class="details">
+</div>
+
+<hr>
+
+<a href="../source/database/db_driver.php.html#line49" class="location">database/DB_driver.php at line 49</a>
+
+<h3 id="query_count">query_count</h3>
+<code class="signature">public  mixed <strong>$query_count</strong></code>
+<div class="details">
+</div>
+
+<hr>
+
+<a href="../source/database/db_driver.php.html#line53" class="location">database/DB_driver.php at line 53</a>
+
+<h3 id="query_times">query_times</h3>
+<code class="signature">public  mixed <strong>$query_times</strong> = array()</code>
+<div class="details">
+</div>
+
+<hr>
+
+<a href="../source/database/db_driver.php.html#line46" class="location">database/DB_driver.php at line 46</a>
+
+<h3 id="result_id">result_id</h3>
+<code class="signature">public  mixed <strong>$result_id</strong> = FALSE</code>
+<div class="details">
+</div>
+
+<hr>
+
+<a href="../source/database/db_driver.php.html#line51" class="location">database/DB_driver.php at line 51</a>
+
+<h3 id="save_queries">save_queries</h3>
+<code class="signature">public  mixed <strong>$save_queries</strong> = TRUE</code>
+<div class="details">
+</div>
+
+<hr>
+
+<a href="../source/database/db_driver.php.html#line69" class="location">database/DB_driver.php at line 69</a>
+
+<h3 id="stmt_id">stmt_id</h3>
+<code class="signature">public  mixed <strong>$stmt_id</strong></code>
+<div class="details">
+</div>
+
+<hr>
+
+<a href="../source/database/db_driver.php.html#line42" class="location">database/DB_driver.php at line 42</a>
+
+<h3 id="swap_pre">swap_pre</h3>
+<code class="signature">public  mixed <strong>$swap_pre</strong> = ''</code>
+<div class="details">
+</div>
+
+<hr>
+
+<a href="../source/database/db_driver.php.html#line55" class="location">database/DB_driver.php at line 55</a>
+
+<h3 id="trans_enabled">trans_enabled</h3>
+<code class="signature">public  mixed <strong>$trans_enabled</strong> = TRUE</code>
+<div class="details">
+</div>
+
+<hr>
+
+<a href="../source/database/db_driver.php.html#line56" class="location">database/DB_driver.php at line 56</a>
+
+<h3 id="trans_strict">trans_strict</h3>
+<code class="signature">public  mixed <strong>$trans_strict</strong> = TRUE</code>
+<div class="details">
+</div>
+
+<hr>
+
+<h2 id="detail_method">Method Detail</h2><div class="method_detail">
+<div class='method'><a href="../source/database/db_driver.php.html#line81" class="location">database/DB_driver.php at line 81</a>
+
+<h3 id="__construct()">__construct</h3>
+<code class="signature">public  void <strong>__construct</strong>(mixed params, array )</code>
+<div class="details">
+<p>Constructor.  Accepts one parameter containing the database
+connection settings.</p></div></div>
+
+
+
+<div class='method'><a href="../source/database/db_driver.php.html#line1103" class="location">database/DB_driver.php at line 1103</a>
+
+<h3 id="_cache_init()">_cache_init</h3>
+<code class="signature">private  void <strong>_cache_init</strong>()</code>
+<div class="details">
+<p>Initialize the Cache Class</p><dl>
+<dt>Access	private.</dt>
+<dt>Return	void.</dt>
+</dl>
+</div></div>
+
+
+
+<div class='method'><a href="../source/database/db_driver.php.html#line971" class="location">database/DB_driver.php at line 971</a>
+
+<h3 id="_has_operator()">_has_operator</h3>
+<code class="signature">private  void <strong>_has_operator</strong>(mixed str)</code>
+<div class="details">
+<p>Tests whether the string has an SQL operator</p><dl>
+<dt>Access	private.</dt>
+<dt>Param	string.</dt>
+<dt>Return	bool.</dt>
+</dl>
+</div></div>
+
+
+
+<div class='method'><a href="../source/database/db_driver.php.html#line1216" class="location">database/DB_driver.php at line 1216</a>
+
+<h3 id="_protect_identifiers()">_protect_identifiers</h3>
+<code class="signature">private  void <strong>_protect_identifiers</strong>(mixed item, bool prefix_single, mixed protect_identifiers, bool field_exists)</code>
+<div class="details">
+<p>Protect Identifiers</p><p>This function is used extensively by the Active Record class, and by
+a couple functions in this class. 
+It takes a column or table name (optionally with an alias) and inserts
+the table prefix onto it.  Some logic is necessary in order to deal with
+column names that include the path.  Consider a query like this:</p><p>SELECT * FROM hostname.database.table.column AS c FROM hostname.database.table</p><p>Or a query with aliasing:</p><p>SELECT m.member_id, m.member_name FROM members AS m</p><p>Since the column name can include up to four segments (host, DB, table, column)
+or also have an alias prefix, we need to do a bit of work to figure this out and
+insert the table prefix (if it exists) in the proper position, and escape only
+the correct identifiers.</p><dl>
+<dt>Access	private.</dt>
+<dt>Param	string.</dt>
+<dt>Param	mixed.</dt>
+<dt>Return	string.</dt>
+</dl>
+</div></div>
+
+
+
+<div class='method'><a href="../source/database/db_driver.php.html#line1068" class="location">database/DB_driver.php at line 1068</a>
+
+<h3 id="cache_delete()">cache_delete</h3>
+<code class="signature">public  void <strong>cache_delete</strong>(str segment_one, str segment_two)</code>
+<div class="details">
+<p>Delete the cache files associated with a particular URI</p><dl>
+<dt>Access	public.</dt>
+<dt>Return	void.</dt>
+</dl>
+</div></div>
+
+
+
+<div class='method'><a href="../source/database/db_driver.php.html#line1085" class="location">database/DB_driver.php at line 1085</a>
+
+<h3 id="cache_delete_all()">cache_delete_all</h3>
+<code class="signature">public  void <strong>cache_delete_all</strong>()</code>
+<div class="details">
+<p>Delete All cache files</p><dl>
+<dt>Access	public.</dt>
+<dt>Return	void.</dt>
+</dl>
+</div></div>
+
+
+
+<div class='method'><a href="../source/database/db_driver.php.html#line1053" class="location">database/DB_driver.php at line 1053</a>
+
+<h3 id="cache_off()">cache_off</h3>
+<code class="signature">public  void <strong>cache_off</strong>()</code>
+<div class="details">
+<p>Disable Query Caching</p><dl>
+<dt>Access	public.</dt>
+<dt>Return	void.</dt>
+</dl>
+</div></div>
+
+
+
+<div class='method'><a href="../source/database/db_driver.php.html#line1039" class="location">database/DB_driver.php at line 1039</a>
+
+<h3 id="cache_on()">cache_on</h3>
+<code class="signature">public  void <strong>cache_on</strong>()</code>
+<div class="details">
+<p>Enable Query Caching</p><dl>
+<dt>Access	public.</dt>
+<dt>Return	void.</dt>
+</dl>
+</div></div>
+
+
+
+<div class='method'><a href="../source/database/db_driver.php.html#line1026" class="location">database/DB_driver.php at line 1026</a>
+
+<h3 id="cache_set_path()">cache_set_path</h3>
+<code class="signature">public  void <strong>cache_set_path</strong>(str path)</code>
+<div class="details">
+<p>Set Cache Directory Path</p><dl>
+<dt>Access	public.</dt>
+<dt>Param	string	the:</dt>
+<dd>path to the cache directory</dd>
+<dt>Return	void.</dt>
+</dl>
+</div></div>
+
+
+
+<div class='method'><a href="../source/database/db_driver.php.html#line992" class="location">database/DB_driver.php at line 992</a>
+
+<h3 id="call_function()">call_function</h3>
+<code class="signature">public  void <strong>call_function</strong>(mixed function)</code>
+<div class="details">
+<p>Enables a native PHP function to be run, using a platform agnostic wrapper.</p><dl>
+<dt>Access	public.</dt>
+<dt>Param	string	the:</dt>
+<dd>function name</dd>
+<dt>Param	mixed	any:</dt>
+<dd>parameters needed by the function</dd>
+<dt>Return	mixed.</dt>
+</dl>
+</div></div>
+
+
+
+<div class='method'><a href="../source/database/db_driver.php.html#line1130" class="location">database/DB_driver.php at line 1130</a>
+
+<h3 id="close()">close</h3>
+<code class="signature">public  void <strong>close</strong>()</code>
+<div class="details">
+<p>Close DB Connection</p><dl>
+<dt>Access	public.</dt>
+<dt>Return	void.</dt>
+</dl>
+</div></div>
+
+
+
+<div class='method'><a href="../source/database/db_driver.php.html#line572" class="location">database/DB_driver.php at line 572</a>
+
+<h3 id="compile_binds()">compile_binds</h3>
+<code class="signature">public  void <strong>compile_binds</strong>(mixed sql, mixed binds)</code>
+<div class="details">
+<p>Compile Bindings</p><dl>
+<dt>Access	public.</dt>
+<dt>Param	string	the:</dt>
+<dd>sql statement</dd>
+<dt>Param	array	an:</dt>
+<dd>array of bind data</dd>
+<dt>Return	string.</dt>
+</dl>
+</div></div>
+
+
+
+<div class='method'><a href="../source/database/db_driver.php.html#line169" class="location">database/DB_driver.php at line 169</a>
+
+<h3 id="db_set_charset()">db_set_charset</h3>
+<code class="signature">public  void <strong>db_set_charset</strong>(mixed charset, mixed collation)</code>
+<div class="details">
+<p>Set client character set</p><dl>
+<dt>Access	public.</dt>
+<dt>Return	resource.</dt>
+</dl>
+</div></div>
+
+
+
+<div class='method'><a href="../source/database/db_driver.php.html#line1150" class="location">database/DB_driver.php at line 1150</a>
+
+<h3 id="display_error()">display_error</h3>
+<code class="signature">public  void <strong>display_error</strong>(str error, str swap, bool native)</code>
+<div class="details">
+<p>Display an error message</p><dl>
+<dt>Access	public.</dt>
+<dt>Param	string	the:</dt>
+<dd>error message</dd>
+<dt>Param	string	any:</dt>
+<dd>"swap" values</dd>
+<dt>Param	boolean	whether:</dt>
+<dd>to localize the message</dd>
+<dt>Return	string	sends:</dt>
+<dd>the application/error_db.php template</dd>
+</dl>
+</div></div>
+
+
+
+<div class='method'><a href="../source/database/db_driver.php.html#line632" class="location">database/DB_driver.php at line 632</a>
+
+<h3 id="elapsed_time()">elapsed_time</h3>
+<code class="signature">public  void <strong>elapsed_time</strong>(int decimals)</code>
+<div class="details">
+<p>Calculate the aggregate query elapsed time</p><dl>
+<dt>Access	public.</dt>
+<dt>Param	integer	The:</dt>
+<dd>number of decimal places</dd>
+<dt>Return	integer.</dt>
+</dl>
+</div></div>
+
+
+
+<div class='method'><a href="../source/database/db_driver.php.html#line675" class="location">database/DB_driver.php at line 675</a>
+
+<h3 id="escape()">escape</h3>
+<code class="signature">public  void <strong>escape</strong>(mixed str)</code>
+<div class="details">
+<p>"Smart" Escape String</p><p>Escapes data based on type
+Sets boolean and null types</p><dl>
+<dt>Access	public.</dt>
+<dt>Param	string.</dt>
+<dt>Return	mixed.</dt>
+</dl>
+</div></div>
+
+
+
+<div class='method'><a href="../source/database/db_driver.php.html#line705" class="location">database/DB_driver.php at line 705</a>
+
+<h3 id="escape_like_str()">escape_like_str</h3>
+<code class="signature">public  void <strong>escape_like_str</strong>(mixed str)</code>
+<div class="details">
+<p>Escape LIKE String</p><p>Calls the individual driver for platform
+specific escaping for LIKE conditions</p><dl>
+<dt>Access	public.</dt>
+<dt>Param	string.</dt>
+<dt>Return	mixed.</dt>
+</dl>
+</div></div>
+
+
+
+<div class='method'><a href="../source/database/db_driver.php.html#line870" class="location">database/DB_driver.php at line 870</a>
+
+<h3 id="field_data()">field_data</h3>
+<code class="signature">public  void <strong>field_data</strong>(str table)</code>
+<div class="details">
+<p>Returns an object with field data</p><dl>
+<dt>Access	public.</dt>
+<dt>Param	string	the:</dt>
+<dd>table name</dd>
+<dt>Return	object.</dt>
+</dl>
+</div></div>
+
+
+
+<div class='method'><a href="../source/database/db_driver.php.html#line856" class="location">database/DB_driver.php at line 856</a>
+
+<h3 id="field_exists()">field_exists</h3>
+<code class="signature">public  void <strong>field_exists</strong>(mixed field_name, mixed table_name)</code>
+<div class="details">
+<p>Determine if a particular field exists</p><dl>
+<dt>Access	public.</dt>
+<dt>Return	boolean.</dt>
+</dl>
+</div></div>
+
+
+
+<div class='method'><a href="../source/database/db_driver.php.html#line103" class="location">database/DB_driver.php at line 103</a>
+
+<h3 id="initialize()">initialize</h3>
+<code class="signature">public  void <strong>initialize</strong>()</code>
+<div class="details">
+<p>Initialize Database Settings</p><dl>
+<dt>Access	private:</dt>
+<dd>Called by the constructor</dd>
+<dt>Param	mixed.</dt>
+<dt>Return	void.</dt>
+</dl>
+</div></div>
+
+
+
+<div class='method'><a href="../source/database/db_driver.php.html#line896" class="location">database/DB_driver.php at line 896</a>
+
+<h3 id="insert_string()">insert_string</h3>
+<code class="signature">public  void <strong>insert_string</strong>(mixed table, mixed data)</code>
+<div class="details">
+<p>Generate an insert string</p><dl>
+<dt>Access	public.</dt>
+<dt>Param	string	the:</dt>
+<dd>table upon which the query will be performed</dd>
+<dt>Param	array	an:</dt>
+<dd>associative array data of key/values</dd>
+<dt>Return	string.</dt>
+</dl>
+</div></div>
+
+
+
+<div class='method'><a href="../source/database/db_driver.php.html#line614" class="location">database/DB_driver.php at line 614</a>
+
+<h3 id="is_write_type()">is_write_type</h3>
+<code class="signature">public  void <strong>is_write_type</strong>(mixed sql)</code>
+<div class="details">
+<p>Determines if a query is a "write" type.</p><dl>
+<dt>Access	public.</dt>
+<dt>Param	string	An:</dt>
+<dd>SQL query string</dd>
+<dt>Return	boolean.</dt>
+</dl>
+</div></div>
+
+
+
+<div class='method'><a href="../source/database/db_driver.php.html#line658" class="location">database/DB_driver.php at line 658</a>
+
+<h3 id="last_query()">last_query</h3>
+<code class="signature">public  void <strong>last_query</strong>()</code>
+<div class="details">
+<p>Returns the last query that was executed</p><dl>
+<dt>Access	public.</dt>
+<dt>Return	void.</dt>
+</dl>
+</div></div>
+
+
+
+<div class='method'><a href="../source/database/db_driver.php.html#line802" class="location">database/DB_driver.php at line 802</a>
+
+<h3 id="list_fields()">list_fields</h3>
+<code class="signature">public  void <strong>list_fields</strong>(str table)</code>
+<div class="details">
+<p>Fetch MySQL Field Names</p><dl>
+<dt>Access	public.</dt>
+<dt>Param	string	the:</dt>
+<dd>table name</dd>
+<dt>Return	array.</dt>
+</dl>
+</div></div>
+
+
+
+<div class='method'><a href="../source/database/db_driver.php.html#line742" class="location">database/DB_driver.php at line 742</a>
+
+<h3 id="list_tables()">list_tables</h3>
+<code class="signature">public  void <strong>list_tables</strong>(bool constrain_by_prefix)</code>
+<div class="details">
+<p>Returns an array of table names</p><dl>
+<dt>Access	public.</dt>
+<dt>Return	array.</dt>
+</dl>
+</div></div>
+
+
+
+<div class='method'><a href="../source/database/db_driver.php.html#line415" class="location">database/DB_driver.php at line 415</a>
+
+<h3 id="load_rdriver()">load_rdriver</h3>
+<code class="signature">public  void <strong>load_rdriver</strong>()</code>
+<div class="details">
+<p>Load the result drivers</p><dl>
+<dt>Access	public.</dt>
+<dt>Return	string:</dt>
+<dd>the name of the result class</dd>
+</dl>
+</div></div>
+
+
+
+<div class='method'><a href="../source/database/db_driver.php.html#line194" class="location">database/DB_driver.php at line 194</a>
+
+<h3 id="platform()">platform</h3>
+<code class="signature">public  void <strong>platform</strong>()</code>
+<div class="details">
+<p>The name of the platform in use (mysql, mssql, etc...)</p><dl>
+<dt>Access	public.</dt>
+<dt>Return	string.</dt>
+</dl>
+</div></div>
+
+
+
+<div class='method'><a href="../source/database/db_driver.php.html#line722" class="location">database/DB_driver.php at line 722</a>
+
+<h3 id="primary()">primary</h3>
+<code class="signature">public  void <strong>primary</strong>(str table)</code>
+<div class="details">
+<p>Primary</p><p>Retrieves the primary key.  It assumes that the row in the first
+position is the primary key</p><dl>
+<dt>Access	public.</dt>
+<dt>Param	string	the:</dt>
+<dd>table name</dd>
+<dt>Return	string.</dt>
+</dl>
+</div></div>
+
+
+
+<div class='method'><a href="../source/database/db_driver.php.html#line1182" class="location">database/DB_driver.php at line 1182</a>
+
+<h3 id="protect_identifiers()">protect_identifiers</h3>
+<code class="signature">public  void <strong>protect_identifiers</strong>(mixed item, bool prefix_single)</code>
+<div class="details">
+<p>Protect Identifiers</p><p>This function adds backticks if appropriate based on db type</p><dl>
+<dt>Access	private.</dt>
+<dt>Param	mixed	the:</dt>
+<dd>item to escape</dd>
+<dt>Return	mixed	the:</dt>
+<dd>item with backticks</dd>
+</dl>
+</div></div>
+
+
+
+<div class='method'><a href="../source/database/db_driver.php.html#line244" class="location">database/DB_driver.php at line 244</a>
+
+<h3 id="query()">query</h3>
+<code class="signature">public  void <strong>query</strong>(mixed sql, bool binds, bool return_object)</code>
+<div class="details">
+<p>Execute the query</p><p>Accepts an SQL string as input and returns a result object upon
+successful execution of a "read" type query.  Returns boolean TRUE
+upon successful execution of a "write" type query. Returns boolean
+FALSE upon failure, and if the $db_debug variable is set to TRUE
+will raise an error.</p><dl>
+<dt>Access	public.</dt>
+<dt>Param	string	An:</dt>
+<dd>SQL query string</dd>
+<dt>Param	array	An:</dt>
+<dd>array of binding data</dd>
+<dt>Return	mixed.</dt>
+</dl>
+</div></div>
+
+
+
+<div class='method'><a href="../source/database/db_driver.php.html#line440" class="location">database/DB_driver.php at line 440</a>
+
+<h3 id="simple_query()">simple_query</h3>
+<code class="signature">public  void <strong>simple_query</strong>(mixed sql)</code>
+<div class="details">
+<p>Simple Query
+This is a simplified version of the query() function.  Internally
+we only use it when running transaction commands since they do
+not require all the features of the main query() function.</p><dl>
+<dt>Access	public.</dt>
+<dt>Param	string	the:</dt>
+<dd>sql query</dd>
+<dt>Return	mixed.</dt>
+</dl>
+</div></div>
+
+
+
+<div class='method'><a href="../source/database/db_driver.php.html#line788" class="location">database/DB_driver.php at line 788</a>
+
+<h3 id="table_exists()">table_exists</h3>
+<code class="signature">public  void <strong>table_exists</strong>(mixed table_name)</code>
+<div class="details">
+<p>Determine if a particular table exists</p><dl>
+<dt>Access	public.</dt>
+<dt>Return	boolean.</dt>
+</dl>
+</div></div>
+
+
+
+<div class='method'><a href="../source/database/db_driver.php.html#line645" class="location">database/DB_driver.php at line 645</a>
+
+<h3 id="total_queries()">total_queries</h3>
+<code class="signature">public  void <strong>total_queries</strong>()</code>
+<div class="details">
+<p>Returns the total number of queries</p><dl>
+<dt>Access	public.</dt>
+<dt>Return	integer.</dt>
+</dl>
+</div></div>
+
+
+
+<div class='method'><a href="../source/database/db_driver.php.html#line514" class="location">database/DB_driver.php at line 514</a>
+
+<h3 id="trans_complete()">trans_complete</h3>
+<code class="signature">public  void <strong>trans_complete</strong>()</code>
+<div class="details">
+<p>Complete Transaction</p><dl>
+<dt>Access	public.</dt>
+<dt>Return	bool.</dt>
+</dl>
+</div></div>
+
+
+
+<div class='method'><a href="../source/database/db_driver.php.html#line459" class="location">database/DB_driver.php at line 459</a>
+
+<h3 id="trans_off()">trans_off</h3>
+<code class="signature">public  void <strong>trans_off</strong>()</code>
+<div class="details">
+<p>Disable Transactions
+This permits transactions to be disabled at run-time.</p><dl>
+<dt>Access	public.</dt>
+<dt>Return	void.</dt>
+</dl>
+</div></div>
+
+
+
+<div class='method'><a href="../source/database/db_driver.php.html#line489" class="location">database/DB_driver.php at line 489</a>
+
+<h3 id="trans_start()">trans_start</h3>
+<code class="signature">public  void <strong>trans_start</strong>(bool test_mode)</code>
+<div class="details">
+<p>Start Transaction</p><dl>
+<dt>Access	public.</dt>
+<dt>Return	void.</dt>
+</dl>
+</div></div>
+
+
+
+<div class='method'><a href="../source/database/db_driver.php.html#line557" class="location">database/DB_driver.php at line 557</a>
+
+<h3 id="trans_status()">trans_status</h3>
+<code class="signature">public  void <strong>trans_status</strong>()</code>
+<div class="details">
+<p>Lets you retrieve the transaction flag to determine if it has failed</p><dl>
+<dt>Access	public.</dt>
+<dt>Return	bool.</dt>
+</dl>
+</div></div>
+
+
+
+<div class='method'><a href="../source/database/db_driver.php.html#line476" class="location">database/DB_driver.php at line 476</a>
+
+<h3 id="trans_strict()">trans_strict</h3>
+<code class="signature">public  void <strong>trans_strict</strong>(bool mode)</code>
+<div class="details">
+<p>Enable/disable Transaction Strict Mode
+When strict mode is enabled, if you are running multiple groups of
+transactions, if one group fails all groups will be rolled back.
+If strict mode is disabled, each group is treated autonomously, meaning
+a failure of one group will not affect any others</p><dl>
+<dt>Access	public.</dt>
+<dt>Return	void.</dt>
+</dl>
+</div></div>
+
+
+
+<div class='method'><a href="../source/database/db_driver.php.html#line921" class="location">database/DB_driver.php at line 921</a>
+
+<h3 id="update_string()">update_string</h3>
+<code class="signature">public  void <strong>update_string</strong>(mixed table, mixed data, mixed where)</code>
+<div class="details">
+<p>Generate an update string</p><dl>
+<dt>Access	public.</dt>
+<dt>Param	string	the:</dt>
+<dd>table upon which the query will be performed</dd>
+<dt>Param	array	an:</dt>
+<dd>associative array data of key/values</dd>
+<dt>Param	mixed	the:</dt>
+<dd>"where" statement</dd>
+<dt>Return	string.</dt>
+</dl>
+</div></div>
+
+
+
+<div class='method'><a href="../source/database/db_driver.php.html#line208" class="location">database/DB_driver.php at line 208</a>
+
+<h3 id="version()">version</h3>
+<code class="signature">public  void <strong>version</strong>()</code>
+<div class="details">
+<p>Database Version Number.  Returns a string containing the
+version of the database being used</p><dl>
+<dt>Access	public.</dt>
+<dt>Return	string.</dt>
+</dl>
+</div></div>
+
+
+
+</div><div class="header">
+<h1>GiftFlow API</h1>
+<ul>
+<li><a href="../overview-summary.html">Overview</a></li>
+<li><a href="../giftflow/package-summary.html">Package</a></li>
+<li class="active">Class</li>
+<li><a href="../giftflow/package-tree.html">Tree</a></li>
+<li><a href="../overview-files.html">Files</a></li>
+<li><a href="../deprecated-list.html">Deprecated</a></li>
+<li><a href="../index-all.html">Index</a></li>
+</ul>
+</div>
+
+<div class="small_links">
+<a href="../index.html" target="_top">Frames</a>
+<a href="../giftflow/ci_db_driver.html" target="_top">No frames</a>
+</div>
+<div class="small_links">
+Summary: <a href="#summary_field">Field</a> | <a href="#summary_method">Method</a> | <a href="#summary_constr">Constr</a>
+Detail: <a href="#detail_field">Field</a> | <a href="#detail_method">Method</a> | <a href="#summary_constr">Constr</a>
+</div>
+<hr>
+
+<p id="footer">This document was generated by <a href="http://peej.github.com/phpdoctor/">PHPDoctor: The PHP Documentation Creator</a></p>
+
+</body>
+
+</html>

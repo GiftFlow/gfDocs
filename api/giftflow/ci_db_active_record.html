@@ -1,0 +1,1549 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+
+<html lang="en">
+<head>
+
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
+<meta name="generator" content="PHPDoctor 2RC4 (http://peej.github.com/phpdoctor/)">
+<meta name="when" content="Sun, 20 Jun 2010 17:43:50 +0000">
+
+<link rel="stylesheet" type="text/css" href="../stylesheet.css">
+<link rel="start" href="../overview-summary.html">
+
+<title>CI_DB_active_record (GiftFlow API)</title>
+
+</head>
+<body id="definition" onload="parent.document.title=document.title;">
+
+<div class="header">
+<h1>GiftFlow API</h1>
+<ul>
+<li><a href="../overview-summary.html">Overview</a></li>
+<li><a href="../giftflow/package-summary.html">Package</a></li>
+<li class="active">Class</li>
+<li><a href="../giftflow/package-tree.html">Tree</a></li>
+<li><a href="../overview-files.html">Files</a></li>
+<li><a href="../deprecated-list.html">Deprecated</a></li>
+<li><a href="../index-all.html">Index</a></li>
+</ul>
+</div>
+
+<div class="small_links">
+<a href="../index.html" target="_top">Frames</a>
+<a href="../giftflow/ci_db_active_record.html" target="_top">No frames</a>
+</div>
+<div class="small_links">
+Summary: <a href="#summary_field">Field</a> | <a href="#summary_method">Method</a> | <a href="#summary_constr">Constr</a>
+Detail: <a href="#detail_field">Field</a> | <a href="#detail_method">Method</a> | <a href="#summary_constr">Constr</a>
+</div>
+<hr>
+
+<div class="qualifiedName">GiftFlow\CI_DB_active_record</div>
+<a href="../source/database/db_active_rec.php.html#line29" class="location">database/DB_active_rec.php at line 29</a>
+
+<h1>Class CI_DB_active_record</h1>
+
+<pre class="tree"><a href="../giftflow/ci_db_driver.html">CI_DB_driver</a><br>    └─<strong>CI_DB_active_record</strong><br /></pre>
+
+<hr>
+
+<p class="signature">public  class <strong>CI_DB_active_record</strong><br>extends <a href="../giftflow/ci_db_driver.html">CI_DB_driver</a>
+
+</p>
+
+<div class="comment" id="overview_description"><p>Active Record Class</p><p>This is the platform-independent base Active Record implementation class.</p></div>
+
+<dl>
+<dt>Package		CodeIgniter.</dt>
+<dt>Subpackage	Drivers.</dt>
+<dt>Category	Database.</dt>
+<dt>Author		ExpressionEngine:</dt>
+<dd>Dev Team</dd>
+<dt>Link		http://codeigniter.com/user_guide/database/.</dt>
+</dl>
+<hr>
+
+<table id="summary_field">
+<tr><th colspan="2">Field Summary</th></tr>
+<tr>
+<td class="type"> mixed</td>
+<td class="description"><p class="name"><a href="#ar_aliased_tables">$ar_aliased_tables</a></p></td>
+</tr>
+<tr>
+<td class="type"> mixed</td>
+<td class="description"><p class="name"><a href="#ar_cache_exists">$ar_cache_exists</a></p></td>
+</tr>
+<tr>
+<td class="type"> mixed</td>
+<td class="description"><p class="name"><a href="#ar_cache_from">$ar_cache_from</a></p></td>
+</tr>
+<tr>
+<td class="type"> mixed</td>
+<td class="description"><p class="name"><a href="#ar_cache_groupby">$ar_cache_groupby</a></p></td>
+</tr>
+<tr>
+<td class="type"> mixed</td>
+<td class="description"><p class="name"><a href="#ar_cache_having">$ar_cache_having</a></p></td>
+</tr>
+<tr>
+<td class="type"> mixed</td>
+<td class="description"><p class="name"><a href="#ar_cache_join">$ar_cache_join</a></p></td>
+</tr>
+<tr>
+<td class="type"> mixed</td>
+<td class="description"><p class="name"><a href="#ar_cache_like">$ar_cache_like</a></p></td>
+</tr>
+<tr>
+<td class="type"> mixed</td>
+<td class="description"><p class="name"><a href="#ar_cache_orderby">$ar_cache_orderby</a></p></td>
+</tr>
+<tr>
+<td class="type"> mixed</td>
+<td class="description"><p class="name"><a href="#ar_cache_select">$ar_cache_select</a></p></td>
+</tr>
+<tr>
+<td class="type"> mixed</td>
+<td class="description"><p class="name"><a href="#ar_cache_set">$ar_cache_set</a></p></td>
+</tr>
+<tr>
+<td class="type"> mixed</td>
+<td class="description"><p class="name"><a href="#ar_cache_where">$ar_cache_where</a></p></td>
+</tr>
+<tr>
+<td class="type"> mixed</td>
+<td class="description"><p class="name"><a href="#ar_caching">$ar_caching</a></p></td>
+</tr>
+<tr>
+<td class="type"> mixed</td>
+<td class="description"><p class="name"><a href="#ar_distinct">$ar_distinct</a></p></td>
+</tr>
+<tr>
+<td class="type"> mixed</td>
+<td class="description"><p class="name"><a href="#ar_from">$ar_from</a></p></td>
+</tr>
+<tr>
+<td class="type"> mixed</td>
+<td class="description"><p class="name"><a href="#ar_groupby">$ar_groupby</a></p></td>
+</tr>
+<tr>
+<td class="type"> mixed</td>
+<td class="description"><p class="name"><a href="#ar_having">$ar_having</a></p></td>
+</tr>
+<tr>
+<td class="type"> mixed</td>
+<td class="description"><p class="name"><a href="#ar_join">$ar_join</a></p></td>
+</tr>
+<tr>
+<td class="type"> mixed</td>
+<td class="description"><p class="name"><a href="#ar_like">$ar_like</a></p></td>
+</tr>
+<tr>
+<td class="type"> mixed</td>
+<td class="description"><p class="name"><a href="#ar_limit">$ar_limit</a></p></td>
+</tr>
+<tr>
+<td class="type"> mixed</td>
+<td class="description"><p class="name"><a href="#ar_offset">$ar_offset</a></p></td>
+</tr>
+<tr>
+<td class="type"> mixed</td>
+<td class="description"><p class="name"><a href="#ar_order">$ar_order</a></p></td>
+</tr>
+<tr>
+<td class="type"> mixed</td>
+<td class="description"><p class="name"><a href="#ar_orderby">$ar_orderby</a></p></td>
+</tr>
+<tr>
+<td class="type"> mixed</td>
+<td class="description"><p class="name"><a href="#ar_select">$ar_select</a></p></td>
+</tr>
+<tr>
+<td class="type"> mixed</td>
+<td class="description"><p class="name"><a href="#ar_set">$ar_set</a></p></td>
+</tr>
+<tr>
+<td class="type"> mixed</td>
+<td class="description"><p class="name"><a href="#ar_store_array">$ar_store_array</a></p></td>
+</tr>
+<tr>
+<td class="type"> mixed</td>
+<td class="description"><p class="name"><a href="#ar_where">$ar_where</a></p></td>
+</tr>
+<tr>
+<td class="type"> mixed</td>
+<td class="description"><p class="name"><a href="#ar_wherein">$ar_wherein</a></p></td>
+</tr>
+</table>
+
+<table class="inherit">
+<tr><th colspan="2">Fields inherited from GiftFlow\CI_DB_driver</th></tr>
+<tr><td><a href="../giftflow/ci_db_driver.html#CACHE">CACHE</a>, <a href="../giftflow/ci_db_driver.html#_protect_identifiers">_protect_identifiers</a>, <a href="../giftflow/ci_db_driver.html#_reserved_identifiers">_reserved_identifiers</a>, <a href="../giftflow/ci_db_driver.html#_trans_depth">_trans_depth</a>, <a href="../giftflow/ci_db_driver.html#_trans_status">_trans_status</a>, <a href="../giftflow/ci_db_driver.html#autoinit">autoinit</a>, <a href="../giftflow/ci_db_driver.html#benchmark">benchmark</a>, <a href="../giftflow/ci_db_driver.html#bind_marker">bind_marker</a>, <a href="../giftflow/ci_db_driver.html#cache_autodel">cache_autodel</a>, <a href="../giftflow/ci_db_driver.html#cache_on">cache_on</a>, <a href="../giftflow/ci_db_driver.html#cachedir">cachedir</a>, <a href="../giftflow/ci_db_driver.html#char_set">char_set</a>, <a href="../giftflow/ci_db_driver.html#conn_id">conn_id</a>, <a href="../giftflow/ci_db_driver.html#curs_id">curs_id</a>, <a href="../giftflow/ci_db_driver.html#data_cache">data_cache</a>, <a href="../giftflow/ci_db_driver.html#database">database</a>, <a href="../giftflow/ci_db_driver.html#db_debug">db_debug</a>, <a href="../giftflow/ci_db_driver.html#dbcollat">dbcollat</a>, <a href="../giftflow/ci_db_driver.html#dbdriver">dbdriver</a>, <a href="../giftflow/ci_db_driver.html#dbprefix">dbprefix</a>, <a href="../giftflow/ci_db_driver.html#delete_all">delete_all</a>, <a href="../giftflow/ci_db_driver.html#hostname">hostname</a>, <a href="../giftflow/ci_db_driver.html#limit_used">limit_used</a>, <a href="../giftflow/ci_db_driver.html#password">password</a>, <a href="../giftflow/ci_db_driver.html#pconnect">pconnect</a>, <a href="../giftflow/ci_db_driver.html#port">port</a>, <a href="../giftflow/ci_db_driver.html#queries">queries</a>, <a href="../giftflow/ci_db_driver.html#query_count">query_count</a>, <a href="../giftflow/ci_db_driver.html#query_times">query_times</a>, <a href="../giftflow/ci_db_driver.html#result_id">result_id</a>, <a href="../giftflow/ci_db_driver.html#save_queries">save_queries</a>, <a href="../giftflow/ci_db_driver.html#stmt_id">stmt_id</a>, <a href="../giftflow/ci_db_driver.html#swap_pre">swap_pre</a>, <a href="../giftflow/ci_db_driver.html#trans_enabled">trans_enabled</a>, <a href="../giftflow/ci_db_driver.html#trans_strict">trans_strict</a></td></tr></table>
+
+<table id="summary_method">
+<tr><th colspan="2">Method Summary</th></tr>
+<tr>
+<td class="type">private  void</td>
+<td class="description"><p class="name"><a href="#_compile_select()">_compile_select</a>(bool select_override)</p><p class="description">Compile the SELECT statementGenerates a query string based on which functions were used.
+</p></td>
+</tr>
+<tr>
+<td class="type">private  void</td>
+<td class="description"><p class="name"><a href="#_create_alias_from_table()">_create_alias_from_table</a>(mixed item)</p><p class="description">Determines the alias name based on the table</p></td>
+</tr>
+<tr>
+<td class="type">private  void</td>
+<td class="description"><p class="name"><a href="#_having()">_having</a>(mixed key, str value, str type, bool escape)</p><p class="description">Sets the HAVING valuesCalled by having() or or_having()</p></td>
+</tr>
+<tr>
+<td class="type">private  void</td>
+<td class="description"><p class="name"><a href="#_like()">_like</a>(mixed field, str match, str type, str side, str not)</p><p class="description">LikeCalled by like() or orlike()</p></td>
+</tr>
+<tr>
+<td class="type">private  void</td>
+<td class="description"><p class="name"><a href="#_max_min_avg_sum()">_max_min_avg_sum</a>(str select, str alias, str type)</p><p class="description">Processing Function for the four functions above:select_max()
+select_min()
+select_avg()
+select_sum()</p></td>
+</tr>
+<tr>
+<td class="type">private  void</td>
+<td class="description"><p class="name"><a href="#_merge_cache()">_merge_cache</a>()</p><p class="description">Merge CacheWhen called, this function merges any cached AR arrays with 
+locally called ones.</p></td>
+</tr>
+<tr>
+<td class="type">private  void</td>
+<td class="description"><p class="name"><a href="#_object_to_array()">_object_to_array</a>(mixed object)</p><p class="description">Object to ArrayTakes an object as input and converts the class variables to array key/vals</p></td>
+</tr>
+<tr>
+<td class="type">private  void</td>
+<td class="description"><p class="name"><a href="#_reset_run()">_reset_run</a>(mixed ar_reset_items)</p><p class="description">Resets the active record values. </p></td>
+</tr>
+<tr>
+<td class="type">private  void</td>
+<td class="description"><p class="name"><a href="#_reset_select()">_reset_select</a>()</p><p class="description">Resets the active record values. </p></td>
+</tr>
+<tr>
+<td class="type">private  void</td>
+<td class="description"><p class="name"><a href="#_reset_write()">_reset_write</a>()</p><p class="description">Resets the active record "write" values.
+</p></td>
+</tr>
+<tr>
+<td class="type">private  void</td>
+<td class="description"><p class="name"><a href="#_track_aliases()">_track_aliases</a>(mixed table)</p><p class="description">Track AliasesUsed to track SQL statements written with aliased tables.</p></td>
+</tr>
+<tr>
+<td class="type">private  void</td>
+<td class="description"><p class="name"><a href="#_where()">_where</a>(mixed key, mixed value, str type, mixed escape)</p><p class="description">WhereCalled by where() or orwhere()</p></td>
+</tr>
+<tr>
+<td class="type">private  void</td>
+<td class="description"><p class="name"><a href="#_where_in()">_where_in</a>(mixed key, mixed values, bool not, str type)</p><p class="description">Where_inCalled by where_in, where_in_or, where_not_in, where_not_in_or</p></td>
+</tr>
+<tr>
+<td class="type"> void</td>
+<td class="description"><p class="name"><a href="#count_all_results()">count_all_results</a>(str table)</p><p class="description">"Count All Results" queryGenerates a platform-specific query string that counts all records 
+returned by an Active Record query.</p></td>
+</tr>
+<tr>
+<td class="type"> void</td>
+<td class="description"><p class="name"><a href="#dbprefix()">dbprefix</a>(str table)</p><p class="description">DB PrefixPrepends a database prefix if one exists in configuration</p></td>
+</tr>
+<tr>
+<td class="type"> void</td>
+<td class="description"><p class="name"><a href="#delete()">delete</a>(str table, str where, mixed limit, bool reset_data)</p><p class="description">DeleteCompiles a delete string and runs the query</p></td>
+</tr>
+<tr>
+<td class="type"> void</td>
+<td class="description"><p class="name"><a href="#distinct()">distinct</a>(bool val)</p><p class="description">DISTINCTSets a flag which tells the query string compiler to add DISTINCT</p></td>
+</tr>
+<tr>
+<td class="type"> void</td>
+<td class="description"><p class="name"><a href="#empty_table()">empty_table</a>(str table)</p><p class="description">Empty TableCompiles a delete string and runs "DELETE FROM table"</p></td>
+</tr>
+<tr>
+<td class="type"> void</td>
+<td class="description"><p class="name"><a href="#flush_cache()">flush_cache</a>()</p><p class="description">Flush CacheEmpties the AR cache</p></td>
+</tr>
+<tr>
+<td class="type"> void</td>
+<td class="description"><p class="name"><a href="#from()">from</a>(mixed from)</p><p class="description">FromGenerates the FROM portion of the query</p></td>
+</tr>
+<tr>
+<td class="type"> void</td>
+<td class="description"><p class="name"><a href="#get()">get</a>(str table, mixed limit, mixed offset)</p><p class="description">GetCompiles the select statement based on the other functions called
+and runs the query</p></td>
+</tr>
+<tr>
+<td class="type"> void</td>
+<td class="description"><p class="name"><a href="#get_where()">get_where</a>(str table, mixed where, mixed limit, mixed offset)</p><p class="description">Get_WhereAllows the where clause, limit and offset to be added directly</p></td>
+</tr>
+<tr>
+<td class="type"> void</td>
+<td class="description"><p class="name"><a href="#getwhere()">getwhere</a>(str table, mixed where, mixed limit, mixed offset)</p><p class="description">getwhere() is an alias of get_where()
+this function is here for backwards compatibility, as
+getwhere() has been deprecated</p></td>
+</tr>
+<tr>
+<td class="type"> void</td>
+<td class="description"><p class="name"><a href="#group_by()">group_by</a>(mixed by)</p><p class="description">GROUP BY</p></td>
+</tr>
+<tr>
+<td class="type"> void</td>
+<td class="description"><p class="name"><a href="#groupby()">groupby</a>(mixed by)</p><p class="description">groupby() is an alias of group_by()
+this function is here for backwards compatibility, as
+groupby() has been deprecated</p></td>
+</tr>
+<tr>
+<td class="type"> void</td>
+<td class="description"><p class="name"><a href="#having()">having</a>(mixed key, str value, bool escape)</p><p class="description">Sets the HAVING valueSeparates multiple calls with AND</p></td>
+</tr>
+<tr>
+<td class="type"> void</td>
+<td class="description"><p class="name"><a href="#insert()">insert</a>(str table, mixed set)</p><p class="description">InsertCompiles an insert string and runs the query</p></td>
+</tr>
+<tr>
+<td class="type"> void</td>
+<td class="description"><p class="name"><a href="#join()">join</a>(mixed table, mixed cond, str type)</p><p class="description">JoinGenerates the JOIN portion of the query</p></td>
+</tr>
+<tr>
+<td class="type"> void</td>
+<td class="description"><p class="name"><a href="#like()">like</a>(mixed field, str match, str side)</p><p class="description">LikeGenerates a %LIKE% portion of the query. </p></td>
+</tr>
+<tr>
+<td class="type"> void</td>
+<td class="description"><p class="name"><a href="#limit()">limit</a>(mixed value, str offset)</p><p class="description">Sets the LIMIT value</p></td>
+</tr>
+<tr>
+<td class="type"> void</td>
+<td class="description"><p class="name"><a href="#not_like()">not_like</a>(mixed field, str match, str side)</p><p class="description">Not LikeGenerates a NOT LIKE portion of the query. </p></td>
+</tr>
+<tr>
+<td class="type"> void</td>
+<td class="description"><p class="name"><a href="#offset()">offset</a>(mixed offset)</p><p class="description">Sets the OFFSET value</p></td>
+</tr>
+<tr>
+<td class="type"> void</td>
+<td class="description"><p class="name"><a href="#or_having()">or_having</a>(mixed key, str value, bool escape)</p><p class="description">Sets the OR HAVING valueSeparates multiple calls with OR</p></td>
+</tr>
+<tr>
+<td class="type"> void</td>
+<td class="description"><p class="name"><a href="#or_like()">or_like</a>(mixed field, str match, str side)</p><p class="description">OR LikeGenerates a %LIKE% portion of the query. </p></td>
+</tr>
+<tr>
+<td class="type"> void</td>
+<td class="description"><p class="name"><a href="#or_not_like()">or_not_like</a>(mixed field, str match, str side)</p><p class="description">OR Not LikeGenerates a NOT LIKE portion of the query. </p></td>
+</tr>
+<tr>
+<td class="type"> void</td>
+<td class="description"><p class="name"><a href="#or_where()">or_where</a>(mixed key, mixed value, bool escape)</p><p class="description">OR WhereGenerates the WHERE portion of the query. </p></td>
+</tr>
+<tr>
+<td class="type"> void</td>
+<td class="description"><p class="name"><a href="#or_where_in()">or_where_in</a>(mixed key, mixed values)</p><p class="description">Where_in_orGenerates a WHERE field IN ('item', 'item') SQL query joined with
+OR if appropriate</p></td>
+</tr>
+<tr>
+<td class="type"> void</td>
+<td class="description"><p class="name"><a href="#or_where_not_in()">or_where_not_in</a>(mixed key, mixed values)</p><p class="description">Where_not_in_orGenerates a WHERE field NOT IN ('item', 'item') SQL query joined
+with OR if appropriate</p></td>
+</tr>
+<tr>
+<td class="type"> void</td>
+<td class="description"><p class="name"><a href="#order_by()">order_by</a>(mixed orderby, str direction)</p><p class="description">Sets the ORDER BY value</p></td>
+</tr>
+<tr>
+<td class="type"> void</td>
+<td class="description"><p class="name"><a href="#orderby()">orderby</a>(mixed orderby, str direction)</p><p class="description">orderby() is an alias of order_by()
+this function is here for backwards compatibility, as
+orderby() has been deprecated</p></td>
+</tr>
+<tr>
+<td class="type"> void</td>
+<td class="description"><p class="name"><a href="#orhaving()">orhaving</a>(mixed key, str value, bool escape)</p><p class="description">orhaving() is an alias of or_having()
+this function is here for backwards compatibility, as
+orhaving() has been deprecated</p></td>
+</tr>
+<tr>
+<td class="type"> void</td>
+<td class="description"><p class="name"><a href="#orlike()">orlike</a>(mixed field, str match, str side)</p><p class="description">orlike() is an alias of or_like()
+this function is here for backwards compatibility, as
+orlike() has been deprecated</p></td>
+</tr>
+<tr>
+<td class="type"> void</td>
+<td class="description"><p class="name"><a href="#orwhere()">orwhere</a>(mixed key, mixed value, bool escape)</p><p class="description">orwhere() is an alias of or_where()
+this function is here for backwards compatibility, as
+orwhere() has been deprecated</p></td>
+</tr>
+<tr>
+<td class="type"> void</td>
+<td class="description"><p class="name"><a href="#select()">select</a>(str select, mixed escape)</p><p class="description">SelectGenerates the SELECT portion of the query</p></td>
+</tr>
+<tr>
+<td class="type"> void</td>
+<td class="description"><p class="name"><a href="#select_avg()">select_avg</a>(str select, str alias)</p><p class="description">Select AverageGenerates a SELECT AVG(field) portion of a query</p></td>
+</tr>
+<tr>
+<td class="type"> void</td>
+<td class="description"><p class="name"><a href="#select_max()">select_max</a>(str select, str alias)</p><p class="description">Select MaxGenerates a SELECT MAX(field) portion of a query</p></td>
+</tr>
+<tr>
+<td class="type"> void</td>
+<td class="description"><p class="name"><a href="#select_min()">select_min</a>(str select, str alias)</p><p class="description">Select MinGenerates a SELECT MIN(field) portion of a query</p></td>
+</tr>
+<tr>
+<td class="type"> void</td>
+<td class="description"><p class="name"><a href="#select_sum()">select_sum</a>(str select, str alias)</p><p class="description">Select SumGenerates a SELECT SUM(field) portion of a query</p></td>
+</tr>
+<tr>
+<td class="type"> void</td>
+<td class="description"><p class="name"><a href="#set()">set</a>(mixed key, str value, bool escape)</p><p class="description">The "set" function. </p></td>
+</tr>
+<tr>
+<td class="type"> void</td>
+<td class="description"><p class="name"><a href="#start_cache()">start_cache</a>()</p><p class="description">Start CacheStarts AR caching</p></td>
+</tr>
+<tr>
+<td class="type"> void</td>
+<td class="description"><p class="name"><a href="#stop_cache()">stop_cache</a>()</p><p class="description">Stop CacheStops AR caching</p></td>
+</tr>
+<tr>
+<td class="type"> void</td>
+<td class="description"><p class="name"><a href="#truncate()">truncate</a>(str table)</p><p class="description">TruncateCompiles a truncate string and runs the query
+If the database does not support the truncate() command
+This function maps to "DELETE FROM table"</p></td>
+</tr>
+<tr>
+<td class="type"> void</td>
+<td class="description"><p class="name"><a href="#update()">update</a>(str table, mixed set, mixed where, mixed limit)</p><p class="description">UpdateCompiles an update string and runs the query</p></td>
+</tr>
+<tr>
+<td class="type"> void</td>
+<td class="description"><p class="name"><a href="#where()">where</a>(mixed key, mixed value, bool escape)</p><p class="description">WhereGenerates the WHERE portion of the query. </p></td>
+</tr>
+<tr>
+<td class="type"> void</td>
+<td class="description"><p class="name"><a href="#where_in()">where_in</a>(mixed key, mixed values)</p><p class="description">Where_inGenerates a WHERE field IN ('item', 'item') SQL query joined with
+AND if appropriate</p></td>
+</tr>
+<tr>
+<td class="type"> void</td>
+<td class="description"><p class="name"><a href="#where_not_in()">where_not_in</a>(mixed key, mixed values)</p><p class="description">Where_not_inGenerates a WHERE field NOT IN ('item', 'item') SQL query joined
+with AND if appropriate</p></td>
+</tr>
+</table>
+
+<table class="inherit">
+<tr><th colspan="2">Methods inherited from GiftFlow\CI_DB_driver</th></tr>
+<tr><td><a href="../giftflow/ci_db_driver.html#__construct()">__construct</a>, <a href="../giftflow/ci_db_driver.html#_cache_init()">_cache_init</a>, <a href="../giftflow/ci_db_driver.html#_has_operator()">_has_operator</a>, <a href="../giftflow/ci_db_driver.html#_protect_identifiers()">_protect_identifiers</a>, <a href="../giftflow/ci_db_driver.html#cache_delete()">cache_delete</a>, <a href="../giftflow/ci_db_driver.html#cache_delete_all()">cache_delete_all</a>, <a href="../giftflow/ci_db_driver.html#cache_off()">cache_off</a>, <a href="../giftflow/ci_db_driver.html#cache_on()">cache_on</a>, <a href="../giftflow/ci_db_driver.html#cache_set_path()">cache_set_path</a>, <a href="../giftflow/ci_db_driver.html#call_function()">call_function</a>, <a href="../giftflow/ci_db_driver.html#close()">close</a>, <a href="../giftflow/ci_db_driver.html#compile_binds()">compile_binds</a>, <a href="../giftflow/ci_db_driver.html#db_set_charset()">db_set_charset</a>, <a href="../giftflow/ci_db_driver.html#display_error()">display_error</a>, <a href="../giftflow/ci_db_driver.html#elapsed_time()">elapsed_time</a>, <a href="../giftflow/ci_db_driver.html#escape()">escape</a>, <a href="../giftflow/ci_db_driver.html#escape_like_str()">escape_like_str</a>, <a href="../giftflow/ci_db_driver.html#field_data()">field_data</a>, <a href="../giftflow/ci_db_driver.html#field_exists()">field_exists</a>, <a href="../giftflow/ci_db_driver.html#initialize()">initialize</a>, <a href="../giftflow/ci_db_driver.html#insert_string()">insert_string</a>, <a href="../giftflow/ci_db_driver.html#is_write_type()">is_write_type</a>, <a href="../giftflow/ci_db_driver.html#last_query()">last_query</a>, <a href="../giftflow/ci_db_driver.html#list_fields()">list_fields</a>, <a href="../giftflow/ci_db_driver.html#list_tables()">list_tables</a>, <a href="../giftflow/ci_db_driver.html#load_rdriver()">load_rdriver</a>, <a href="../giftflow/ci_db_driver.html#platform()">platform</a>, <a href="../giftflow/ci_db_driver.html#primary()">primary</a>, <a href="../giftflow/ci_db_driver.html#protect_identifiers()">protect_identifiers</a>, <a href="../giftflow/ci_db_driver.html#query()">query</a>, <a href="../giftflow/ci_db_driver.html#simple_query()">simple_query</a>, <a href="../giftflow/ci_db_driver.html#table_exists()">table_exists</a>, <a href="../giftflow/ci_db_driver.html#total_queries()">total_queries</a>, <a href="../giftflow/ci_db_driver.html#trans_complete()">trans_complete</a>, <a href="../giftflow/ci_db_driver.html#trans_off()">trans_off</a>, <a href="../giftflow/ci_db_driver.html#trans_start()">trans_start</a>, <a href="../giftflow/ci_db_driver.html#trans_status()">trans_status</a>, <a href="../giftflow/ci_db_driver.html#trans_strict()">trans_strict</a>, <a href="../giftflow/ci_db_driver.html#update_string()">update_string</a>, <a href="../giftflow/ci_db_driver.html#version()">version</a></td></tr></table>
+
+<h2 id="detail_field">Field Detail</h2>
+<a href="../source/database/db_active_rec.php.html#line45" class="location">database/DB_active_rec.php at line 45</a>
+
+<h3 id="ar_aliased_tables">ar_aliased_tables</h3>
+<code class="signature">public  mixed <strong>$ar_aliased_tables</strong> = array()</code>
+<div class="details">
+</div>
+
+<hr>
+
+<a href="../source/database/db_active_rec.php.html#line50" class="location">database/DB_active_rec.php at line 50</a>
+
+<h3 id="ar_cache_exists">ar_cache_exists</h3>
+<code class="signature">public  mixed <strong>$ar_cache_exists</strong> = array()</code>
+<div class="details">
+</div>
+
+<hr>
+
+<a href="../source/database/db_active_rec.php.html#line52" class="location">database/DB_active_rec.php at line 52</a>
+
+<h3 id="ar_cache_from">ar_cache_from</h3>
+<code class="signature">public  mixed <strong>$ar_cache_from</strong> = array()</code>
+<div class="details">
+</div>
+
+<hr>
+
+<a href="../source/database/db_active_rec.php.html#line56" class="location">database/DB_active_rec.php at line 56</a>
+
+<h3 id="ar_cache_groupby">ar_cache_groupby</h3>
+<code class="signature">public  mixed <strong>$ar_cache_groupby</strong> = array()</code>
+<div class="details">
+</div>
+
+<hr>
+
+<a href="../source/database/db_active_rec.php.html#line57" class="location">database/DB_active_rec.php at line 57</a>
+
+<h3 id="ar_cache_having">ar_cache_having</h3>
+<code class="signature">public  mixed <strong>$ar_cache_having</strong> = array()</code>
+<div class="details">
+</div>
+
+<hr>
+
+<a href="../source/database/db_active_rec.php.html#line53" class="location">database/DB_active_rec.php at line 53</a>
+
+<h3 id="ar_cache_join">ar_cache_join</h3>
+<code class="signature">public  mixed <strong>$ar_cache_join</strong> = array()</code>
+<div class="details">
+</div>
+
+<hr>
+
+<a href="../source/database/db_active_rec.php.html#line55" class="location">database/DB_active_rec.php at line 55</a>
+
+<h3 id="ar_cache_like">ar_cache_like</h3>
+<code class="signature">public  mixed <strong>$ar_cache_like</strong> = array()</code>
+<div class="details">
+</div>
+
+<hr>
+
+<a href="../source/database/db_active_rec.php.html#line58" class="location">database/DB_active_rec.php at line 58</a>
+
+<h3 id="ar_cache_orderby">ar_cache_orderby</h3>
+<code class="signature">public  mixed <strong>$ar_cache_orderby</strong> = array()</code>
+<div class="details">
+</div>
+
+<hr>
+
+<a href="../source/database/db_active_rec.php.html#line51" class="location">database/DB_active_rec.php at line 51</a>
+
+<h3 id="ar_cache_select">ar_cache_select</h3>
+<code class="signature">public  mixed <strong>$ar_cache_select</strong> = array()</code>
+<div class="details">
+</div>
+
+<hr>
+
+<a href="../source/database/db_active_rec.php.html#line59" class="location">database/DB_active_rec.php at line 59</a>
+
+<h3 id="ar_cache_set">ar_cache_set</h3>
+<code class="signature">public  mixed <strong>$ar_cache_set</strong> = array()</code>
+<div class="details">
+</div>
+
+<hr>
+
+<a href="../source/database/db_active_rec.php.html#line54" class="location">database/DB_active_rec.php at line 54</a>
+
+<h3 id="ar_cache_where">ar_cache_where</h3>
+<code class="signature">public  mixed <strong>$ar_cache_where</strong> = array()</code>
+<div class="details">
+</div>
+
+<hr>
+
+<a href="../source/database/db_active_rec.php.html#line49" class="location">database/DB_active_rec.php at line 49</a>
+
+<h3 id="ar_caching">ar_caching</h3>
+<code class="signature">public  mixed <strong>$ar_caching</strong> = FALSE</code>
+<div class="details">
+</div>
+
+<hr>
+
+<a href="../source/database/db_active_rec.php.html#line32" class="location">database/DB_active_rec.php at line 32</a>
+
+<h3 id="ar_distinct">ar_distinct</h3>
+<code class="signature">public  mixed <strong>$ar_distinct</strong> = FALSE</code>
+<div class="details">
+</div>
+
+<hr>
+
+<a href="../source/database/db_active_rec.php.html#line33" class="location">database/DB_active_rec.php at line 33</a>
+
+<h3 id="ar_from">ar_from</h3>
+<code class="signature">public  mixed <strong>$ar_from</strong> = array()</code>
+<div class="details">
+</div>
+
+<hr>
+
+<a href="../source/database/db_active_rec.php.html#line37" class="location">database/DB_active_rec.php at line 37</a>
+
+<h3 id="ar_groupby">ar_groupby</h3>
+<code class="signature">public  mixed <strong>$ar_groupby</strong> = array()</code>
+<div class="details">
+</div>
+
+<hr>
+
+<a href="../source/database/db_active_rec.php.html#line38" class="location">database/DB_active_rec.php at line 38</a>
+
+<h3 id="ar_having">ar_having</h3>
+<code class="signature">public  mixed <strong>$ar_having</strong> = array()</code>
+<div class="details">
+</div>
+
+<hr>
+
+<a href="../source/database/db_active_rec.php.html#line34" class="location">database/DB_active_rec.php at line 34</a>
+
+<h3 id="ar_join">ar_join</h3>
+<code class="signature">public  mixed <strong>$ar_join</strong> = array()</code>
+<div class="details">
+</div>
+
+<hr>
+
+<a href="../source/database/db_active_rec.php.html#line36" class="location">database/DB_active_rec.php at line 36</a>
+
+<h3 id="ar_like">ar_like</h3>
+<code class="signature">public  mixed <strong>$ar_like</strong> = array()</code>
+<div class="details">
+</div>
+
+<hr>
+
+<a href="../source/database/db_active_rec.php.html#line39" class="location">database/DB_active_rec.php at line 39</a>
+
+<h3 id="ar_limit">ar_limit</h3>
+<code class="signature">public  mixed <strong>$ar_limit</strong> = FALSE</code>
+<div class="details">
+</div>
+
+<hr>
+
+<a href="../source/database/db_active_rec.php.html#line40" class="location">database/DB_active_rec.php at line 40</a>
+
+<h3 id="ar_offset">ar_offset</h3>
+<code class="signature">public  mixed <strong>$ar_offset</strong> = FALSE</code>
+<div class="details">
+</div>
+
+<hr>
+
+<a href="../source/database/db_active_rec.php.html#line41" class="location">database/DB_active_rec.php at line 41</a>
+
+<h3 id="ar_order">ar_order</h3>
+<code class="signature">public  mixed <strong>$ar_order</strong> = FALSE</code>
+<div class="details">
+</div>
+
+<hr>
+
+<a href="../source/database/db_active_rec.php.html#line42" class="location">database/DB_active_rec.php at line 42</a>
+
+<h3 id="ar_orderby">ar_orderby</h3>
+<code class="signature">public  mixed <strong>$ar_orderby</strong> = array()</code>
+<div class="details">
+</div>
+
+<hr>
+
+<a href="../source/database/db_active_rec.php.html#line31" class="location">database/DB_active_rec.php at line 31</a>
+
+<h3 id="ar_select">ar_select</h3>
+<code class="signature">public  mixed <strong>$ar_select</strong> = array()</code>
+<div class="details">
+</div>
+
+<hr>
+
+<a href="../source/database/db_active_rec.php.html#line43" class="location">database/DB_active_rec.php at line 43</a>
+
+<h3 id="ar_set">ar_set</h3>
+<code class="signature">public  mixed <strong>$ar_set</strong> = array()</code>
+<div class="details">
+</div>
+
+<hr>
+
+<a href="../source/database/db_active_rec.php.html#line46" class="location">database/DB_active_rec.php at line 46</a>
+
+<h3 id="ar_store_array">ar_store_array</h3>
+<code class="signature">public  mixed <strong>$ar_store_array</strong> = array()</code>
+<div class="details">
+</div>
+
+<hr>
+
+<a href="../source/database/db_active_rec.php.html#line35" class="location">database/DB_active_rec.php at line 35</a>
+
+<h3 id="ar_where">ar_where</h3>
+<code class="signature">public  mixed <strong>$ar_where</strong> = array()</code>
+<div class="details">
+</div>
+
+<hr>
+
+<a href="../source/database/db_active_rec.php.html#line44" class="location">database/DB_active_rec.php at line 44</a>
+
+<h3 id="ar_wherein">ar_wherein</h3>
+<code class="signature">public  mixed <strong>$ar_wherein</strong> = array()</code>
+<div class="details">
+</div>
+
+<hr>
+
+<h2 id="detail_method">Method Detail</h2><div class="method_detail">
+<div class='method'><a href="../source/database/db_active_rec.php.html#line1481" class="location">database/DB_active_rec.php at line 1481</a>
+
+<h3 id="_compile_select()">_compile_select</h3>
+<code class="signature">private  void <strong>_compile_select</strong>(bool select_override)</code>
+<div class="details">
+<p>Compile the SELECT statement</p><p>Generates a query string based on which functions were used.
+Should not be called directly.  The get() function calls it.</p><dl>
+<dt>Access	private.</dt>
+<dt>Return	string.</dt>
+</dl>
+</div></div>
+
+
+
+<div class='method'><a href="../source/database/db_active_rec.php.html#line228" class="location">database/DB_active_rec.php at line 228</a>
+
+<h3 id="_create_alias_from_table()">_create_alias_from_table</h3>
+<code class="signature">private  void <strong>_create_alias_from_table</strong>(mixed item)</code>
+<div class="details">
+<p>Determines the alias name based on the table</p><dl>
+<dt>Access	private.</dt>
+<dt>Param	string.</dt>
+<dt>Return	string.</dt>
+</dl>
+</div></div>
+
+
+
+<div class='method'><a href="../source/database/db_active_rec.php.html#line846" class="location">database/DB_active_rec.php at line 846</a>
+
+<h3 id="_having()">_having</h3>
+<code class="signature">private  void <strong>_having</strong>(mixed key, str value, str type, bool escape)</code>
+<div class="details">
+<p>Sets the HAVING values</p><p>Called by having() or or_having()</p><dl>
+<dt>Access	private.</dt>
+<dt>Return	object.</dt>
+</dl>
+</div></div>
+
+
+
+<div class='method'><a href="../source/database/db_active_rec.php.html#line697" class="location">database/DB_active_rec.php at line 697</a>
+
+<h3 id="_like()">_like</h3>
+<code class="signature">private  void <strong>_like</strong>(mixed field, str match, str type, str side, str not)</code>
+<div class="details">
+<p>Like</p><p>Called by like() or orlike()</p><dl>
+<dt>Access	private.</dt>
+<dt>Param	string.</dt>
+<dt>Return	object.</dt>
+</dl>
+</div></div>
+
+
+
+<div class='method'><a href="../source/database/db_active_rec.php.html#line187" class="location">database/DB_active_rec.php at line 187</a>
+
+<h3 id="_max_min_avg_sum()">_max_min_avg_sum</h3>
+<code class="signature">private  void <strong>_max_min_avg_sum</strong>(str select, str alias, str type)</code>
+<div class="details">
+<p>Processing Function for the four functions above:</p><p>select_max()
+select_min()
+select_avg()
+select_sum()</p><dl>
+<dt>Access	public.</dt>
+<dt>Param	string	the:</dt>
+<dd>field</dd>
+<dt>Param	string	an:</dt>
+<dd>alias</dd>
+<dt>Return	object.</dt>
+</dl>
+</div></div>
+
+
+
+<div class='method'><a href="../source/database/db_active_rec.php.html#line1714" class="location">database/DB_active_rec.php at line 1714</a>
+
+<h3 id="_merge_cache()">_merge_cache</h3>
+<code class="signature">private  void <strong>_merge_cache</strong>()</code>
+<div class="details">
+<p>Merge Cache</p><p>When called, this function merges any cached AR arrays with 
+locally called ones.</p><dl>
+<dt>Access	private.</dt>
+<dt>Return	void.</dt>
+</dl>
+</div></div>
+
+
+
+<div class='method'><a href="../source/database/db_active_rec.php.html#line1625" class="location">database/DB_active_rec.php at line 1625</a>
+
+<h3 id="_object_to_array()">_object_to_array</h3>
+<code class="signature">private  void <strong>_object_to_array</strong>(mixed object)</code>
+<div class="details">
+<p>Object to Array</p><p>Takes an object as input and converts the class variables to array key/vals</p><dl>
+<dt>Access	public.</dt>
+<dt>Param	object.</dt>
+<dt>Return	array.</dt>
+</dl>
+</div></div>
+
+
+
+<div class='method'><a href="../source/database/db_active_rec.php.html#line1751" class="location">database/DB_active_rec.php at line 1751</a>
+
+<h3 id="_reset_run()">_reset_run</h3>
+<code class="signature">private  void <strong>_reset_run</strong>(mixed ar_reset_items)</code>
+<div class="details">
+<p>Resets the active record values.  Called by the get() function</p><dl>
+<dt>Access	private.</dt>
+<dt>Param	array	An:</dt>
+<dd>array of fields to reset</dd>
+<dt>Return	void.</dt>
+</dl>
+</div></div>
+
+
+
+<div class='method'><a href="../source/database/db_active_rec.php.html#line1770" class="location">database/DB_active_rec.php at line 1770</a>
+
+<h3 id="_reset_select()">_reset_select</h3>
+<code class="signature">private  void <strong>_reset_select</strong>()</code>
+<div class="details">
+<p>Resets the active record values.  Called by the get() function</p><dl>
+<dt>Access	private.</dt>
+<dt>Return	void.</dt>
+</dl>
+</div></div>
+
+
+
+<div class='method'><a href="../source/database/db_active_rec.php.html#line1802" class="location">database/DB_active_rec.php at line 1802</a>
+
+<h3 id="_reset_write()">_reset_write</h3>
+<code class="signature">private  void <strong>_reset_write</strong>()</code>
+<div class="details">
+<p>Resets the active record "write" values.</p><p>Called by the insert() update() and delete() functions</p><dl>
+<dt>Access	private.</dt>
+<dt>Return	void.</dt>
+</dl>
+</div></div>
+
+
+
+<div class='method'><a href="../source/database/db_active_rec.php.html#line1435" class="location">database/DB_active_rec.php at line 1435</a>
+
+<h3 id="_track_aliases()">_track_aliases</h3>
+<code class="signature">private  void <strong>_track_aliases</strong>(mixed table)</code>
+<div class="details">
+<p>Track Aliases</p><p>Used to track SQL statements written with aliased tables.</p><dl>
+<dt>Access	private.</dt>
+<dt>Param	string	The:</dt>
+<dd>table to inspect</dd>
+<dt>Return	string.</dt>
+</dl>
+</div></div>
+
+
+
+<div class='method'><a href="../source/database/db_active_rec.php.html#line424" class="location">database/DB_active_rec.php at line 424</a>
+
+<h3 id="_where()">_where</h3>
+<code class="signature">private  void <strong>_where</strong>(mixed key, mixed value, str type, mixed escape)</code>
+<div class="details">
+<p>Where</p><p>Called by where() or orwhere()</p><dl>
+<dt>Access	private.</dt>
+<dt>Param	string.</dt>
+<dt>Return	object.</dt>
+</dl>
+</div></div>
+
+
+
+<div class='method'><a href="../source/database/db_active_rec.php.html#line565" class="location">database/DB_active_rec.php at line 565</a>
+
+<h3 id="_where_in()">_where_in</h3>
+<code class="signature">private  void <strong>_where_in</strong>(mixed key, mixed values, bool not, str type)</code>
+<div class="details">
+<p>Where_in</p><p>Called by where_in, where_in_or, where_not_in, where_not_in_or</p><dl>
+<dt>Access	public.</dt>
+<dt>Param	string	The:</dt>
+<dd>field to search</dd>
+<dt>Param	array	The:</dt>
+<dd>values searched on</dd>
+<dt>Param	boolean	If:</dt>
+<dd>the statement would be IN or NOT IN</dd>
+<dt>Param	string.</dt>
+<dt>Return	object.</dt>
+</dl>
+</div></div>
+
+
+
+<div class='method'><a href="../source/database/db_active_rec.php.html#line1067" class="location">database/DB_active_rec.php at line 1067</a>
+
+<h3 id="count_all_results()">count_all_results</h3>
+<code class="signature">public  void <strong>count_all_results</strong>(str table)</code>
+<div class="details">
+<p>"Count All Results" query</p><p>Generates a platform-specific query string that counts all records 
+returned by an Active Record query.</p><dl>
+<dt>Access	public.</dt>
+<dt>Param	string.</dt>
+<dt>Return	string.</dt>
+</dl>
+</div></div>
+
+
+
+<div class='method'><a href="../source/database/db_active_rec.php.html#line1414" class="location">database/DB_active_rec.php at line 1414</a>
+
+<h3 id="dbprefix()">dbprefix</h3>
+<code class="signature">public  void <strong>dbprefix</strong>(str table)</code>
+<div class="details">
+<p>DB Prefix</p><p>Prepends a database prefix if one exists in configuration</p><dl>
+<dt>Access	public.</dt>
+<dt>Param	string	the:</dt>
+<dd>table</dd>
+<dt>Return	string.</dt>
+</dl>
+</div></div>
+
+
+
+<div class='method'><a href="../source/database/db_active_rec.php.html#line1340" class="location">database/DB_active_rec.php at line 1340</a>
+
+<h3 id="delete()">delete</h3>
+<code class="signature">public  void <strong>delete</strong>(str table, str where, mixed limit, bool reset_data)</code>
+<div class="details">
+<p>Delete</p><p>Compiles a delete string and runs the query</p><dl>
+<dt>Access	public.</dt>
+<dt>Param	mixed	the:</dt>
+<dd>table(s) to delete from. String or array</dd>
+<dd>where clause</dd>
+<dd>limit clause</dd>
+<dt>Param	boolean.</dt>
+<dt>Return	object.</dt>
+</dl>
+</div></div>
+
+
+
+<div class='method'><a href="../source/database/db_active_rec.php.html#line249" class="location">database/DB_active_rec.php at line 249</a>
+
+<h3 id="distinct()">distinct</h3>
+<code class="signature">public  void <strong>distinct</strong>(bool val)</code>
+<div class="details">
+<p>DISTINCT</p><p>Sets a flag which tells the query string compiler to add DISTINCT</p><dl>
+<dt>Access	public.</dt>
+<dt>Param	bool.</dt>
+<dt>Return	object.</dt>
+</dl>
+</div></div>
+
+
+
+<div class='method'><a href="../source/database/db_active_rec.php.html#line1259" class="location">database/DB_active_rec.php at line 1259</a>
+
+<h3 id="empty_table()">empty_table</h3>
+<code class="signature">public  void <strong>empty_table</strong>(str table)</code>
+<div class="details">
+<p>Empty Table</p><p>Compiles a delete string and runs "DELETE FROM table"</p><dl>
+<dt>Access	public.</dt>
+<dt>Param	string	the:</dt>
+<dd>table to empty</dd>
+<dt>Return	object.</dt>
+</dl>
+</div></div>
+
+
+
+<div class='method'><a href="../source/database/db_active_rec.php.html#line1685" class="location">database/DB_active_rec.php at line 1685</a>
+
+<h3 id="flush_cache()">flush_cache</h3>
+<code class="signature">public  void <strong>flush_cache</strong>()</code>
+<div class="details">
+<p>Flush Cache</p><p>Empties the AR cache</p><dl>
+<dt>Access	public.</dt>
+<dt>Return	void.</dt>
+</dl>
+</div></div>
+
+
+
+<div class='method'><a href="../source/database/db_active_rec.php.html#line266" class="location">database/DB_active_rec.php at line 266</a>
+
+<h3 id="from()">from</h3>
+<code class="signature">public  void <strong>from</strong>(mixed from)</code>
+<div class="details">
+<p>From</p><p>Generates the FROM portion of the query</p><dl>
+<dt>Access	public.</dt>
+<dt>Param	mixed	can:</dt>
+<dd>be a string or array</dd>
+<dt>Return	object.</dt>
+</dl>
+</div></div>
+
+
+
+<div class='method'><a href="../source/database/db_active_rec.php.html#line1037" class="location">database/DB_active_rec.php at line 1037</a>
+
+<h3 id="get()">get</h3>
+<code class="signature">public  void <strong>get</strong>(str table, mixed limit, mixed offset)</code>
+<div class="details">
+<p>Get</p><p>Compiles the select statement based on the other functions called
+and runs the query</p><dl>
+<dt>Access	public.</dt>
+<dt>Param	string	the:</dt>
+<dd>table</dd>
+<dd>limit clause</dd>
+<dd>offset clause</dd>
+<dt>Return	object.</dt>
+</dl>
+</div></div>
+
+
+
+<div class='method'><a href="../source/database/db_active_rec.php.html#line1102" class="location">database/DB_active_rec.php at line 1102</a>
+
+<h3 id="get_where()">get_where</h3>
+<code class="signature">public  void <strong>get_where</strong>(str table, mixed where, mixed limit, mixed offset)</code>
+<div class="details">
+<p>Get_Where</p><p>Allows the where clause, limit and offset to be added directly</p><dl>
+<dt>Access	public.</dt>
+<dt>Param	string	the:</dt>
+<dd>where clause</dd>
+<dd>limit clause</dd>
+<dd>offset clause</dd>
+<dt>Return	object.</dt>
+</dl>
+</div></div>
+
+
+
+<div class='method'><a href="../source/database/db_active_rec.php.html#line1133" class="location">database/DB_active_rec.php at line 1133</a>
+
+<h3 id="getwhere()">getwhere</h3>
+<code class="signature">public  void <strong>getwhere</strong>(str table, mixed where, mixed limit, mixed offset)</code>
+<div class="details">
+<p>getwhere() is an alias of get_where()
+this function is here for backwards compatibility, as
+getwhere() has been deprecated</p></div></div>
+
+
+
+<div class='method'><a href="../source/database/db_active_rec.php.html#line751" class="location">database/DB_active_rec.php at line 751</a>
+
+<h3 id="group_by()">group_by</h3>
+<code class="signature">public  void <strong>group_by</strong>(mixed by)</code>
+<div class="details">
+<p>GROUP BY</p><dl>
+<dt>Access	public.</dt>
+<dt>Param	string.</dt>
+<dt>Return	object.</dt>
+</dl>
+</div></div>
+
+
+
+<div class='method'><a href="../source/database/db_active_rec.php.html#line783" class="location">database/DB_active_rec.php at line 783</a>
+
+<h3 id="groupby()">groupby</h3>
+<code class="signature">public  void <strong>groupby</strong>(mixed by)</code>
+<div class="details">
+<p>groupby() is an alias of group_by()
+this function is here for backwards compatibility, as
+groupby() has been deprecated</p></div></div>
+
+
+
+<div class='method'><a href="../source/database/db_active_rec.php.html#line800" class="location">database/DB_active_rec.php at line 800</a>
+
+<h3 id="having()">having</h3>
+<code class="signature">public  void <strong>having</strong>(mixed key, str value, bool escape)</code>
+<div class="details">
+<p>Sets the HAVING value</p><p>Separates multiple calls with AND</p><dl>
+<dt>Access	public.</dt>
+<dt>Return	object.</dt>
+</dl>
+</div></div>
+
+
+
+<div class='method'><a href="../source/database/db_active_rec.php.html#line1150" class="location">database/DB_active_rec.php at line 1150</a>
+
+<h3 id="insert()">insert</h3>
+<code class="signature">public  void <strong>insert</strong>(str table, mixed set)</code>
+<div class="details">
+<p>Insert</p><p>Compiles an insert string and runs the query</p><dl>
+<dt>Access	public.</dt>
+<dt>Param	string	the:</dt>
+<dd>table to retrieve the results from</dd>
+<dt>Param	array	an:</dt>
+<dd>associative array of insert values</dd>
+<dt>Return	object.</dt>
+</dl>
+</div></div>
+
+
+
+<div class='method'><a href="../source/database/db_active_rec.php.html#line321" class="location">database/DB_active_rec.php at line 321</a>
+
+<h3 id="join()">join</h3>
+<code class="signature">public  void <strong>join</strong>(mixed table, mixed cond, str type)</code>
+<div class="details">
+<p>Join</p><p>Generates the JOIN portion of the query</p><dl>
+<dt>Access	public.</dt>
+<dt>Param	string.</dt>
+<dt>Param	string	the:</dt>
+<dd>join condition</dd>
+<dd>type of join</dd>
+<dt>Return	object.</dt>
+</dl>
+</div></div>
+
+
+
+<div class='method'><a href="../source/database/db_active_rec.php.html#line613" class="location">database/DB_active_rec.php at line 613</a>
+
+<h3 id="like()">like</h3>
+<code class="signature">public  void <strong>like</strong>(mixed field, str match, str side)</code>
+<div class="details">
+<p>Like</p><p>Generates a %LIKE% portion of the query. Separates
+multiple calls with AND</p><dl>
+<dt>Access	public.</dt>
+<dt>Return	object.</dt>
+</dl>
+</div></div>
+
+
+
+<div class='method'><a href="../source/database/db_active_rec.php.html#line961" class="location">database/DB_active_rec.php at line 961</a>
+
+<h3 id="limit()">limit</h3>
+<code class="signature">public  void <strong>limit</strong>(mixed value, str offset)</code>
+<div class="details">
+<p>Sets the LIMIT value</p><dl>
+<dt>Access	public.</dt>
+<dt>Param	integer	the:</dt>
+<dd>limit value</dd>
+<dd>offset value</dd>
+<dt>Return	object.</dt>
+</dl>
+</div></div>
+
+
+
+<div class='method'><a href="../source/database/db_active_rec.php.html#line631" class="location">database/DB_active_rec.php at line 631</a>
+
+<h3 id="not_like()">not_like</h3>
+<code class="signature">public  void <strong>not_like</strong>(mixed field, str match, str side)</code>
+<div class="details">
+<p>Not Like</p><p>Generates a NOT LIKE portion of the query. Separates
+multiple calls with AND</p><dl>
+<dt>Access	public.</dt>
+<dt>Return	object.</dt>
+</dl>
+</div></div>
+
+
+
+<div class='method'><a href="../source/database/db_active_rec.php.html#line982" class="location">database/DB_active_rec.php at line 982</a>
+
+<h3 id="offset()">offset</h3>
+<code class="signature">public  void <strong>offset</strong>(mixed offset)</code>
+<div class="details">
+<p>Sets the OFFSET value</p><dl>
+<dt>Access	public.</dt>
+<dt>Param	integer	the:</dt>
+<dd>offset value</dd>
+<dt>Return	object.</dt>
+</dl>
+</div></div>
+
+
+
+<div class='method'><a href="../source/database/db_active_rec.php.html#line829" class="location">database/DB_active_rec.php at line 829</a>
+
+<h3 id="or_having()">or_having</h3>
+<code class="signature">public  void <strong>or_having</strong>(mixed key, str value, bool escape)</code>
+<div class="details">
+<p>Sets the OR HAVING value</p><p>Separates multiple calls with OR</p><dl>
+<dt>Access	public.</dt>
+<dt>Return	object.</dt>
+</dl>
+</div></div>
+
+
+
+<div class='method'><a href="../source/database/db_active_rec.php.html#line649" class="location">database/DB_active_rec.php at line 649</a>
+
+<h3 id="or_like()">or_like</h3>
+<code class="signature">public  void <strong>or_like</strong>(mixed field, str match, str side)</code>
+<div class="details">
+<p>OR Like</p><p>Generates a %LIKE% portion of the query. Separates
+multiple calls with OR</p><dl>
+<dt>Access	public.</dt>
+<dt>Return	object.</dt>
+</dl>
+</div></div>
+
+
+
+<div class='method'><a href="../source/database/db_active_rec.php.html#line667" class="location">database/DB_active_rec.php at line 667</a>
+
+<h3 id="or_not_like()">or_not_like</h3>
+<code class="signature">public  void <strong>or_not_like</strong>(mixed field, str match, str side)</code>
+<div class="details">
+<p>OR Not Like</p><p>Generates a NOT LIKE portion of the query. Separates
+multiple calls with OR</p><dl>
+<dt>Access	public.</dt>
+<dt>Return	object.</dt>
+</dl>
+</div></div>
+
+
+
+<div class='method'><a href="../source/database/db_active_rec.php.html#line394" class="location">database/DB_active_rec.php at line 394</a>
+
+<h3 id="or_where()">or_where</h3>
+<code class="signature">public  void <strong>or_where</strong>(mixed key, mixed value, bool escape)</code>
+<div class="details">
+<p>OR Where</p><p>Generates the WHERE portion of the query. Separates
+multiple calls with OR</p><dl>
+<dt>Access	public.</dt>
+<dt>Return	object.</dt>
+</dl>
+</div></div>
+
+
+
+<div class='method'><a href="../source/database/db_active_rec.php.html#line510" class="location">database/DB_active_rec.php at line 510</a>
+
+<h3 id="or_where_in()">or_where_in</h3>
+<code class="signature">public  void <strong>or_where_in</strong>(mixed key, mixed values)</code>
+<div class="details">
+<p>Where_in_or</p><p>Generates a WHERE field IN ('item', 'item') SQL query joined with
+OR if appropriate</p><dl>
+<dt>Access	public.</dt>
+<dt>Param	string	The:</dt>
+<dd>field to search</dd>
+<dt>Param	array	The:</dt>
+<dd>values searched on</dd>
+<dt>Return	object.</dt>
+</dl>
+</div></div>
+
+
+
+<div class='method'><a href="../source/database/db_active_rec.php.html#line546" class="location">database/DB_active_rec.php at line 546</a>
+
+<h3 id="or_where_not_in()">or_where_not_in</h3>
+<code class="signature">public  void <strong>or_where_not_in</strong>(mixed key, mixed values)</code>
+<div class="details">
+<p>Where_not_in_or</p><p>Generates a WHERE field NOT IN ('item', 'item') SQL query joined
+with OR if appropriate</p><dl>
+<dt>Access	public.</dt>
+<dt>Param	string	The:</dt>
+<dd>field to search</dd>
+<dt>Param	array	The:</dt>
+<dd>values searched on</dd>
+<dt>Return	object.</dt>
+</dl>
+</div></div>
+
+
+
+<div class='method'><a href="../source/database/db_active_rec.php.html#line893" class="location">database/DB_active_rec.php at line 893</a>
+
+<h3 id="order_by()">order_by</h3>
+<code class="signature">public  void <strong>order_by</strong>(mixed orderby, str direction)</code>
+<div class="details">
+<p>Sets the ORDER BY value</p><dl>
+<dt>Access	public.</dt>
+<dt>Param	string.</dt>
+<dt>Param	string	direction::</dt>
+<dd>asc or desc</dd>
+<dt>Return	object.</dt>
+</dl>
+</div></div>
+
+
+
+<div class='method'><a href="../source/database/db_active_rec.php.html#line946" class="location">database/DB_active_rec.php at line 946</a>
+
+<h3 id="orderby()">orderby</h3>
+<code class="signature">public  void <strong>orderby</strong>(mixed orderby, str direction)</code>
+<div class="details">
+<p>orderby() is an alias of order_by()
+this function is here for backwards compatibility, as
+orderby() has been deprecated</p></div></div>
+
+
+
+<div class='method'><a href="../source/database/db_active_rec.php.html#line813" class="location">database/DB_active_rec.php at line 813</a>
+
+<h3 id="orhaving()">orhaving</h3>
+<code class="signature">public  void <strong>orhaving</strong>(mixed key, str value, bool escape)</code>
+<div class="details">
+<p>orhaving() is an alias of or_having()
+this function is here for backwards compatibility, as
+orhaving() has been deprecated</p></div></div>
+
+
+
+<div class='method'><a href="../source/database/db_active_rec.php.html#line679" class="location">database/DB_active_rec.php at line 679</a>
+
+<h3 id="orlike()">orlike</h3>
+<code class="signature">public  void <strong>orlike</strong>(mixed field, str match, str side)</code>
+<div class="details">
+<p>orlike() is an alias of or_like()
+this function is here for backwards compatibility, as
+orlike() has been deprecated</p></div></div>
+
+
+
+<div class='method'><a href="../source/database/db_active_rec.php.html#line406" class="location">database/DB_active_rec.php at line 406</a>
+
+<h3 id="orwhere()">orwhere</h3>
+<code class="signature">public  void <strong>orwhere</strong>(mixed key, mixed value, bool escape)</code>
+<div class="details">
+<p>orwhere() is an alias of or_where()
+this function is here for backwards compatibility, as
+orwhere() has been deprecated</p></div></div>
+
+
+
+<div class='method'><a href="../source/database/db_active_rec.php.html#line73" class="location">database/DB_active_rec.php at line 73</a>
+
+<h3 id="select()">select</h3>
+<code class="signature">public  void <strong>select</strong>(str select, mixed escape)</code>
+<div class="details">
+<p>Select</p><p>Generates the SELECT portion of the query</p><dl>
+<dt>Access	public.</dt>
+<dt>Param	string.</dt>
+<dt>Return	object.</dt>
+</dl>
+</div></div>
+
+
+
+<div class='method'><a href="../source/database/db_active_rec.php.html#line150" class="location">database/DB_active_rec.php at line 150</a>
+
+<h3 id="select_avg()">select_avg</h3>
+<code class="signature">public  void <strong>select_avg</strong>(str select, str alias)</code>
+<div class="details">
+<p>Select Average</p><p>Generates a SELECT AVG(field) portion of a query</p><dl>
+<dt>Access	public.</dt>
+<dt>Param	string	the:</dt>
+<dd>field</dd>
+<dt>Param	string	an:</dt>
+<dd>alias</dd>
+<dt>Return	object.</dt>
+</dl>
+</div></div>
+
+
+
+<div class='method'><a href="../source/database/db_active_rec.php.html#line116" class="location">database/DB_active_rec.php at line 116</a>
+
+<h3 id="select_max()">select_max</h3>
+<code class="signature">public  void <strong>select_max</strong>(str select, str alias)</code>
+<div class="details">
+<p>Select Max</p><p>Generates a SELECT MAX(field) portion of a query</p><dl>
+<dt>Access	public.</dt>
+<dt>Param	string	the:</dt>
+<dd>field</dd>
+<dt>Param	string	an:</dt>
+<dd>alias</dd>
+<dt>Return	object.</dt>
+</dl>
+</div></div>
+
+
+
+<div class='method'><a href="../source/database/db_active_rec.php.html#line133" class="location">database/DB_active_rec.php at line 133</a>
+
+<h3 id="select_min()">select_min</h3>
+<code class="signature">public  void <strong>select_min</strong>(str select, str alias)</code>
+<div class="details">
+<p>Select Min</p><p>Generates a SELECT MIN(field) portion of a query</p><dl>
+<dt>Access	public.</dt>
+<dt>Param	string	the:</dt>
+<dd>field</dd>
+<dt>Param	string	an:</dt>
+<dd>alias</dd>
+<dt>Return	object.</dt>
+</dl>
+</div></div>
+
+
+
+<div class='method'><a href="../source/database/db_active_rec.php.html#line167" class="location">database/DB_active_rec.php at line 167</a>
+
+<h3 id="select_sum()">select_sum</h3>
+<code class="signature">public  void <strong>select_sum</strong>(str select, str alias)</code>
+<div class="details">
+<p>Select Sum</p><p>Generates a SELECT SUM(field) portion of a query</p><dl>
+<dt>Access	public.</dt>
+<dt>Param	string	the:</dt>
+<dd>field</dd>
+<dt>Param	string	an:</dt>
+<dd>alias</dd>
+<dt>Return	object.</dt>
+</dl>
+</div></div>
+
+
+
+<div class='method'><a href="../source/database/db_active_rec.php.html#line999" class="location">database/DB_active_rec.php at line 999</a>
+
+<h3 id="set()">set</h3>
+<code class="signature">public  void <strong>set</strong>(mixed key, str value, bool escape)</code>
+<div class="details">
+<p>The "set" function.  Allows key/value pairs to be set for inserting or updating</p><dl>
+<dt>Access	public.</dt>
+<dt>Param	mixed.</dt>
+<dt>Param	string.</dt>
+<dt>Param	boolean.</dt>
+<dt>Return	object.</dt>
+</dl>
+</div></div>
+
+
+
+<div class='method'><a href="../source/database/db_active_rec.php.html#line1655" class="location">database/DB_active_rec.php at line 1655</a>
+
+<h3 id="start_cache()">start_cache</h3>
+<code class="signature">public  void <strong>start_cache</strong>()</code>
+<div class="details">
+<p>Start Cache</p><p>Starts AR caching</p><dl>
+<dt>Access	public.</dt>
+<dt>Return	void.</dt>
+</dl>
+</div></div>
+
+
+
+<div class='method'><a href="../source/database/db_active_rec.php.html#line1670" class="location">database/DB_active_rec.php at line 1670</a>
+
+<h3 id="stop_cache()">stop_cache</h3>
+<code class="signature">public  void <strong>stop_cache</strong>()</code>
+<div class="details">
+<p>Stop Cache</p><p>Stops AR caching</p><dl>
+<dt>Access	public.</dt>
+<dt>Return	void.</dt>
+</dl>
+</div></div>
+
+
+
+<div class='method'><a href="../source/database/db_active_rec.php.html#line1299" class="location">database/DB_active_rec.php at line 1299</a>
+
+<h3 id="truncate()">truncate</h3>
+<code class="signature">public  void <strong>truncate</strong>(str table)</code>
+<div class="details">
+<p>Truncate</p><p>Compiles a truncate string and runs the query
+If the database does not support the truncate() command
+This function maps to "DELETE FROM table"</p><dl>
+<dt>Access	public.</dt>
+<dt>Param	string	the:</dt>
+<dd>table to truncate</dd>
+<dt>Return	object.</dt>
+</dl>
+</div></div>
+
+
+
+<div class='method'><a href="../source/database/db_active_rec.php.html#line1199" class="location">database/DB_active_rec.php at line 1199</a>
+
+<h3 id="update()">update</h3>
+<code class="signature">public  void <strong>update</strong>(str table, mixed set, mixed where, mixed limit)</code>
+<div class="details">
+<p>Update</p><p>Compiles an update string and runs the query</p><dl>
+<dt>Access	public.</dt>
+<dt>Param	string	the:</dt>
+<dd>table to retrieve the results from</dd>
+<dt>Param	array	an:</dt>
+<dd>associative array of update values</dd>
+<dt>Param	mixed	the:</dt>
+<dd>where clause</dd>
+<dt>Return	object.</dt>
+</dl>
+</div></div>
+
+
+
+<div class='method'><a href="../source/database/db_active_rec.php.html#line376" class="location">database/DB_active_rec.php at line 376</a>
+
+<h3 id="where()">where</h3>
+<code class="signature">public  void <strong>where</strong>(mixed key, mixed value, bool escape)</code>
+<div class="details">
+<p>Where</p><p>Generates the WHERE portion of the query. Separates
+multiple calls with AND</p><dl>
+<dt>Access	public.</dt>
+<dt>Return	object.</dt>
+</dl>
+</div></div>
+
+
+
+<div class='method'><a href="../source/database/db_active_rec.php.html#line492" class="location">database/DB_active_rec.php at line 492</a>
+
+<h3 id="where_in()">where_in</h3>
+<code class="signature">public  void <strong>where_in</strong>(mixed key, mixed values)</code>
+<div class="details">
+<p>Where_in</p><p>Generates a WHERE field IN ('item', 'item') SQL query joined with
+AND if appropriate</p><dl>
+<dt>Access	public.</dt>
+<dt>Param	string	The:</dt>
+<dd>field to search</dd>
+<dt>Param	array	The:</dt>
+<dd>values searched on</dd>
+<dt>Return	object.</dt>
+</dl>
+</div></div>
+
+
+
+<div class='method'><a href="../source/database/db_active_rec.php.html#line528" class="location">database/DB_active_rec.php at line 528</a>
+
+<h3 id="where_not_in()">where_not_in</h3>
+<code class="signature">public  void <strong>where_not_in</strong>(mixed key, mixed values)</code>
+<div class="details">
+<p>Where_not_in</p><p>Generates a WHERE field NOT IN ('item', 'item') SQL query joined
+with AND if appropriate</p><dl>
+<dt>Access	public.</dt>
+<dt>Param	string	The:</dt>
+<dd>field to search</dd>
+<dt>Param	array	The:</dt>
+<dd>values searched on</dd>
+<dt>Return	object.</dt>
+</dl>
+</div></div>
+
+
+
+</div><div class="header">
+<h1>GiftFlow API</h1>
+<ul>
+<li><a href="../overview-summary.html">Overview</a></li>
+<li><a href="../giftflow/package-summary.html">Package</a></li>
+<li class="active">Class</li>
+<li><a href="../giftflow/package-tree.html">Tree</a></li>
+<li><a href="../overview-files.html">Files</a></li>
+<li><a href="../deprecated-list.html">Deprecated</a></li>
+<li><a href="../index-all.html">Index</a></li>
+</ul>
+</div>
+
+<div class="small_links">
+<a href="../index.html" target="_top">Frames</a>
+<a href="../giftflow/ci_db_active_record.html" target="_top">No frames</a>
+</div>
+<div class="small_links">
+Summary: <a href="#summary_field">Field</a> | <a href="#summary_method">Method</a> | <a href="#summary_constr">Constr</a>
+Detail: <a href="#detail_field">Field</a> | <a href="#detail_method">Method</a> | <a href="#summary_constr">Constr</a>
+</div>
+<hr>
+
+<p id="footer">This document was generated by <a href="http://peej.github.com/phpdoctor/">PHPDoctor: The PHP Documentation Creator</a></p>
+
+</body>
+
+</html>

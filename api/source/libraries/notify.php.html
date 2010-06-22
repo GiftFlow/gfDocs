@@ -1,0 +1,327 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+
+<html lang="en">
+<head>
+
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
+<meta name="generator" content="PHPDoctor 2RC4 (http://peej.github.com/phpdoctor/)">
+<meta name="when" content="Fri, 18 Jun 2010 15:58:03 +0000">
+
+<link rel="stylesheet" type="text/css" href="../../stylesheet.css">
+<link rel="start" href="../../overview-summary.html">
+
+<title>libraries/notify.php (GiftFlow API)</title>
+
+</head>
+<body id="file" onload="parent.document.title=document.title;">
+
+<div class="header">
+<h1>GiftFlow API</h1>
+<ul>
+<li><a href="../../overview-summary.html">Overview</a></li>
+<li>Package</li><li>Class</li><li>Tree</li><li><a href="../../overview-files.html">Files</a></li>
+<li><a href="../../deprecated-list.html">Deprecated</a></li>
+<li><a href="../../index-all.html">Index</a></li>
+</ul>
+</div>
+
+<div class="small_links">
+<a href="../../index.html" target="_top">Frames</a>
+<a href="../../source/libraries/notify.php.html" target="_top">No frames</a>
+</div>
+<hr>
+
+<h1>libraries/notify.php</h1>
+<hr>
+
+<a name="line1"></a><pre><?php  if ( ! defined('BASEPATH')) exit('No direct script access allowed');
+<a name="line2"></a>
+<a name="line3"></a>class Notify
+<a name="line4"></a>{
+<a name="line5"></a>	
+<a name="line6"></a>	protected $ci;
+<a name="line7"></a>	
+<a name="line8"></a>	var $from_address;
+<a name="line9"></a>	var $from_name;
+<a name="line10"></a>	var $to;
+<a name="line11"></a>	var $subject;
+<a name="line12"></a>	var $body;
+<a name="line13"></a>	var $user_id;
+<a name="line14"></a>	var $template;
+<a name="line15"></a>	var $u;
+<a name="line16"></a>	var $view_dir;
+<a name="line17"></a>	var $view;
+<a name="line18"></a>	var $data;
+<a name="line19"></a>	
+<a name="line20"></a>	var $site_url;
+<a name="line21"></a>	var $member_data;
+<a name="line22"></a>	
+<a name="line23"></a>	
+<a name="line24"></a>	/*
+<a name="line25"></a>	Fields to parse:
+<a name="line26"></a>	{site_url}
+<a name="line27"></a>	{name}
+<a name="line28"></a>	{member_id}
+<a name="line29"></a>	{revision_id}
+<a name="line30"></a>	*/
+<a name="line31"></a>	var $config = array (
+<a name="line32"></a>				"gift_requested" => array (
+<a name="line33"></a>						"title"=>"DJ Profile Updated",
+<a name="line34"></a>						"message"=>"{name} requested",
+<a name="line35"></a>						"url"=>"{site_url}/roster/revisions/{revision_id}",
+<a name="line36"></a>					)
+<a name="line37"></a>	);
+<a name="line38"></a>	
+<a name="line39"></a>	public function __construct()
+<a name="line40"></a>	{
+<a name="line41"></a>		$this->ci =& get_instance();
+<a name="line42"></a>		$this->ci->load->library('util');
+<a name="line43"></a>		$this->site_url = $this->ci->util->setting('url');
+<a name="line44"></a>	}
+<a name="line45"></a>
+<a name="line46"></a>	/*
+<a name="line47"></a>	function notifications( $type, $member_id, $otherdata = NULL )
+<a name="line48"></a>	{
+<a name="line49"></a>		$this->load->library('notify');
+<a name="line50"></a>		$update = TRUE;
+<a name="line51"></a>		if(!empty($member_id)) $member_data = $this->member_management->member_data( $member_id );
+<a name="line52"></a>		switch($type)
+<a name="line53"></a>		{
+<a name="line54"></a>			case "dj_profile_updated":
+<a name="line55"></a>				$update_data['title'] = "DJ Profile Updated";
+<a name="line56"></a>				$update_data['message'] = $member_data['first_name']." ".$member_data['last_name']." updated their DJ profile.";
+<a name="line57"></a>				
+<a name="line58"></a>				// Send email
+<a name="line59"></a>				$subject = $member_data['first_name']." ".$member_data['last_name']." has updated their data";
+<a name="line60"></a>				$message = $member_data['first_name']." ".$member_data['last_name']." has edited their data. It is awaiting your review. You may view it at " . $this->util->setting('url')."/roster/edit/" . $member_id;
+<a name="line61"></a>		
+<a name="line62"></a>				$email[]= array(	"to"=>$this->util->setting('email_station_manager'),
+<a name="line63"></a>								"subject"=>$subject,
+<a name="line64"></a>								"message"=>$message);
+<a name="line65"></a>				break;
+<a name="line66"></a>			
+<a name="line67"></a>			case "squads_updated":
+<a name="line68"></a>				$update_data['title'] = "Squads Updated";
+<a name="line69"></a>				$message = $member_data['first_name']." ".$member_data['last_name']." has updated their squads.";
+<a name="line70"></a>
+<a name="line71"></a>
+<a name="line72"></a>			case "member_data_edited":
+<a name="line73"></a>				$update_data['title'] = "Member Data Updated";
+<a name="line74"></a>				$update_data['message'] = "An admin updated ".$member_data['first_name']." ".$member_data['last_name']."'s data.";
+<a name="line75"></a>				
+<a name="line76"></a>				break;
+<a name="line77"></a>			
+<a name="line78"></a>			case "member_self_update":
+<a name="line79"></a>				$update_data['title'] = "Member Self-Update";
+<a name="line80"></a>				$update_data['message'] = $member_data['first_name']." ".$member_data['last_name']." updated their own data.";
+<a name="line81"></a>				
+<a name="line82"></a>				// Send email
+<a name="line83"></a>				$subject = $member_data['first_name']." ".$member_data['last_name']." has updated their data";
+<a name="line84"></a>				$message = $member_data['first_name']." ".$member_data['last_name']." has edited their data. It is awaiting your review. You may view it at " . $this->util->setting('url')."/roster/edit/" . $member_id;
+<a name="line85"></a>		
+<a name="line86"></a>				$email[]= array(	"to"=>$this->util->setting('email_station_manager'),
+<a name="line87"></a>								"subject"=>$subject,
+<a name="line88"></a>								"message"=>$message);
+<a name="line89"></a>				break;
+<a name="line90"></a>			
+<a name="line91"></a>			case "new_application":
+<a name="line92"></a>				// Create update
+<a name="line93"></a>				$update_data['title'] = "New Application";
+<a name="line94"></a>				$update_data['message'] = $member_data['first_name']." ".$member_data['last_name']." submitted a new application.";
+<a name="line95"></a>				
+<a name="line96"></a>				// Send emails
+<a name="line97"></a>				$subject = "New Application";
+<a name="line98"></a>				$message_one = $member_data['first_name']." ".$member_data['last_name']." has submitted a new application. It is awaiting your review. You may view it at " . $this->util->setting('url')."/roster/edit/" . $member_id;
+<a name="line99"></a>				
+<a name="line100"></a>				// Load messages for the members based on app type
+<a name="line101"></a>				if ( $member_data['undergrad'] == 0 || $member_data['undergrad'] == 2 || $member_data['undergrad'] == 3) 
+<a name="line102"></a>					$message_two = $this->util->page('email_associate_app_received');
+<a name="line103"></a>				else
+<a name="line104"></a>					$message_two = $this->util->page('email_full_app_received');
+<a name="line105"></a>				
+<a name="line106"></a>				$email[]= array(	"to"=>$this->util->setting('email_station_manager'),
+<a name="line107"></a>								"subject"=>$subject,
+<a name="line108"></a>								"message"=>$message_one );
+<a name="line109"></a>				$email[]= array(	"to"=>$this->util->setting('email_training_director'),
+<a name="line110"></a>								"subject"=>$subject,
+<a name="line111"></a>								"message"=>$message_one );
+<a name="line112"></a>				$email[] = array(	"to"=> $member_data['email'],
+<a name="line113"></a>								"subject" => "Application Received!",
+<a name="line114"></a>								"message" => $message_two);
+<a name="line115"></a>				break;
+<a name="line116"></a>			
+<a name="line117"></a>			case "new_member":
+<a name="line118"></a>				$update_data['title'] = "New Member";
+<a name="line119"></a>				$update_data['message'] = "An admin added ".$member_data['first_name']." ".$member_data['last_name']." as a member.";
+<a name="line120"></a>				break;
+<a name="line121"></a>				
+<a name="line122"></a>			case "request_update":
+<a name="line123"></a>				$update_data['title'] = "Updates Requested";
+<a name="line124"></a>				$update_data['message'] = "An admin requested an update from ".count($otherdata)." members.";
+<a name="line125"></a>				
+<a name="line126"></a>				$message = $this->util->page('email_request_update');
+<a name="line127"></a>				
+<a name="line128"></a>				foreach($otherdata as $key=>$val)
+<a name="line129"></a>				{
+<a name="line130"></a>					$data = $this->member_management->member_data($val);
+<a name="line131"></a>					$email[] = array(	"to"=> $data['email'],
+<a name="line132"></a>									"subject" => "Please Update Your Member Data",
+<a name="line133"></a>									"message" => $message);
+<a name="line134"></a>				}
+<a name="line135"></a>				$this->session->set_flashdata('success', 'Requested Data Updates from '.count($otherdata).' members.');
+<a name="line136"></a>				$redirect = "roster/main";
+<a name="line137"></a>				break;
+<a name="line138"></a>			case "revision_approved":
+<a name="line139"></a>				$update = FALSE;
+<a name="line140"></a>				break;
+<a name="line141"></a>			case "revision_rejected":
+<a name="line142"></a>				$update = FALSE;
+<a name="line143"></a>				break;
+<a name="line144"></a>		}
+<a name="line145"></a>		
+<a name="line146"></a>		if($update)
+<a name="line147"></a>		{
+<a name="line148"></a>			$this->notify->update('roster', $type, $update_data['title'], $update_data['message']);
+<a name="line149"></a>		}
+<a name="line150"></a>		if(!empty($email))
+<a name="line151"></a>		{
+<a name="line152"></a>			foreach($email as $key=>$val)
+<a name="line153"></a>			{
+<a name="line154"></a>				$this->notify->robot_email($val['to'], $val['subject'], $val['message']);
+<a name="line155"></a>			}
+<a name="line156"></a>		}
+<a name="line157"></a>		if(!empty($redirect))
+<a name="line158"></a>		{
+<a name="line159"></a>			redirect($redirect);
+<a name="line160"></a>		}
+<a name="line161"></a>	}	
+<a name="line162"></a>	
+<a name="line163"></a>	*/
+<a name="line164"></a>	function save( $type, $member_id = '', $data = NULL )
+<a name="line165"></a>	{
+<a name="line166"></a>		$config = $this->config[$type];
+<a name="line167"></a>		if(!empty($member_id))
+<a name="line168"></a>			$this->member_data = $this->ci->member_management->member_data( $member_id );
+<a name="line169"></a>		
+<a name="line170"></a>		// Set parsing variables
+<a name="line171"></a>		$parse['site_url'] = $this->site_url;
+<a name="line172"></a>		if(!empty($member_id))
+<a name="line173"></a>		{
+<a name="line174"></a>			$parse['name'] = $this->member_data['first_name']." ".$this->member_data['last_name'];
+<a name="line175"></a>			$parse['member_id'] = $this->member_data['member_id'];
+<a name="line176"></a>		}
+<a name="line177"></a>		if(!empty($data['revision_id']))
+<a name="line178"></a>			$parse['revision_id'] = $data['revision_id'];
+<a name="line179"></a>		if(!empty($data['team_id']))
+<a name="line180"></a>		{
+<a name="line181"></a>			$q = $this->ci->db->where('team_id', $data['team_id'])->get('team_data');
+<a name="line182"></a>			$r = $q->row();
+<a name="line183"></a>			$parse['squad_name'] = $r->team_title;
+<a name="line184"></a>		}
+<a name="line185"></a>		
+<a name="line186"></a>		// Set things to parse
+<a name="line187"></a>		$parseable = array("message", "url");
+<a name="line188"></a>		
+<a name="line189"></a>		// Parse that shit
+<a name="line190"></a>		foreach($parseable as $item)
+<a name="line191"></a>		{
+<a name="line192"></a>			foreach($parse as $key=>$val)
+<a name="line193"></a>			{
+<a name="line194"></a>				if(!empty($config[$item]))
+<a name="line195"></a>					$config[$item] = str_replace("{".$key."}", $val, $config[$item]);
+<a name="line196"></a>			}
+<a name="line197"></a>		}
+<a name="line198"></a>		
+<a name="line199"></a>		// Set url variable to avoid undefined index errors below
+<a name="line200"></a>		if(!empty($config['url'])) $url = $config['url'];
+<a name="line201"></a>		else $url = NULL;
+<a name="line202"></a>
+<a name="line203"></a>		if(!empty($config['parameter_one'])) $parameter_one = $data[$config['parameter_one']];
+<a name="line204"></a>		else $parameter_one = '';		
+<a name="line205"></a>		
+<a name="line206"></a>		if(!empty($config['parameter_two'])) $parameter_two = $data[$config['parameter_two']];
+<a name="line207"></a>		else $parameter_two = '';		
+<a name="line208"></a>		
+<a name="line209"></a>		$this->update($config['service'], $type, $config['title'], $config['message'], $url, $member_id, $parameter_one, $parameter_two);
+<a name="line210"></a>	}
+<a name="line211"></a>	
+<a name="line212"></a>	function update ( $service, $name, $title, $message, $url = '', $member_id = '', $parameter_one = '', $parameter_two = ''  )
+<a name="line213"></a>	{
+<a name="line214"></a>		$data = array ( "type"=>"update",
+<a name="line215"></a>					"service"=>$service,
+<a name="line216"></a>					"name"=>$name,
+<a name="line217"></a>					"title"=>$title,
+<a name="line218"></a>					"message"=>$message,
+<a name="line219"></a>					"parameter_one"=>$parameter_one,
+<a name="line220"></a>					"parameter_two"=>$parameter_two,
+<a name="line221"></a>					"member_id"=>$member_id );
+<a name="line222"></a>		if(!empty($url)) $data['url'] = $url;
+<a name="line223"></a>		$this->ci->db->insert('updates', $data);
+<a name="line224"></a>	}
+<a name="line225"></a>	
+<a name="line226"></a>	function mass ( $type, $to )
+<a name="line227"></a>	{
+<a name="line228"></a>		$subject = $this->ci->util->email($type, 'subject');
+<a name="line229"></a>		$message = $this->ci->util->email($type, 'body');
+<a name="line230"></a>		foreach ( $to as $id )
+<a name="line231"></a>		{
+<a name="line232"></a>			$data = $this->ci->member_management->member_data($id);
+<a name="line233"></a>			$message = str_replace("{first_name}", $data['first_name'], $message);
+<a name="line234"></a>			$message = str_replace("{name}", $data['first_name']." ".$data['last_name'], $message);
+<a name="line235"></a>			$email = $data['email'];
+<a name="line236"></a>			$this->robot_email($email, $subject, $message);
+<a name="line237"></a>		}
+<a name="line238"></a>	}
+<a name="line239"></a>
+<a name="line240"></a>	function robot_email ( $to, $subject, $message, $html = TRUE )
+<a name="line241"></a>	{
+<a name="line242"></a>	
+<a name="line243"></a>				
+<a name="line244"></a>		$html_message = "<html><head><title>A Message from GiftFlow</title></head><body>";
+<a name="line245"></a>		$html_message .= $message;
+<a name="line246"></a>		$html_message .= "</body></html>";		
+<a name="line247"></a>		
+<a name="line248"></a>		$config = Array(
+<a name="line249"></a>			'protocol' => 'smtp',
+<a name="line250"></a>			'smtp_host' => 'ssl://smtp.googlemail.com',
+<a name="line251"></a>			'smtp_port' => 465,
+<a name="line252"></a>			'smtp_user' => 'robot@wybc.com',
+<a name="line253"></a>			'mailtype' => 'html',
+<a name="line254"></a>			'smtp_pass' => 'nargo^%'
+<a name="line255"></a>		);
+<a name="line256"></a>		$this->ci->load->library('email', $config);
+<a name="line257"></a>		$this->ci->email->set_newline("\r\n");
+<a name="line258"></a>		
+<a name="line259"></a>		$this->ci->email->from('robot@wybc.com', 'WYBC');
+<a name="line260"></a>		$this->ci->email->to($to);
+<a name="line261"></a>		
+<a name="line262"></a>		$this->ci->email->subject("[WYBC] ".$subject);
+<a name="line263"></a>		$this->ci->email->message($html_message);
+<a name="line264"></a>		
+<a name="line265"></a>		if (!$this->ci->email->send())
+<a name="line266"></a>			return "Ooops! There has been an error. Please copy and paste following error message in an email to gm@wybc.com. Thanks!<br /><br />".show_error($this->ci->email->print_debugger());
+<a name="line267"></a>	}
+<a name="line268"></a>}
+<a name="line269"></a></pre>
+<div class="header">
+<h1>GiftFlow API</h1>
+<ul>
+<li><a href="../../overview-summary.html">Overview</a></li>
+<li>Package</li><li>Class</li><li>Tree</li><li><a href="../../overview-files.html">Files</a></li>
+<li><a href="../../deprecated-list.html">Deprecated</a></li>
+<li><a href="../../index-all.html">Index</a></li>
+</ul>
+</div>
+
+<div class="small_links">
+<a href="../../index.html" target="_top">Frames</a>
+<a href="../../source/libraries/notify.php.html" target="_top">No frames</a>
+</div>
+<hr>
+
+<p id="footer">This document was generated by <a href="http://peej.github.com/phpdoctor/">PHPDoctor: The PHP Documentation Creator</a></p>
+
+</body>
+
+</html>

@@ -1,0 +1,300 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+
+<html lang="en">
+<head>
+
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
+<meta name="generator" content="PHPDoctor 2RC4 (http://peej.github.com/phpdoctor/)">
+<meta name="when" content="Fri, 18 Jun 2010 15:58:03 +0000">
+
+<link rel="stylesheet" type="text/css" href="../../stylesheet.css">
+<link rel="start" href="../../overview-summary.html">
+
+<title>libraries/images.php (GiftFlow API)</title>
+
+</head>
+<body id="file" onload="parent.document.title=document.title;">
+
+<div class="header">
+<h1>GiftFlow API</h1>
+<ul>
+<li><a href="../../overview-summary.html">Overview</a></li>
+<li>Package</li><li>Class</li><li>Tree</li><li><a href="../../overview-files.html">Files</a></li>
+<li><a href="../../deprecated-list.html">Deprecated</a></li>
+<li><a href="../../index-all.html">Index</a></li>
+</ul>
+</div>
+
+<div class="small_links">
+<a href="../../index.html" target="_top">Frames</a>
+<a href="../../source/libraries/images.php.html" target="_top">No frames</a>
+</div>
+<hr>
+
+<h1>libraries/images.php</h1>
+<hr>
+
+<a name="line1"></a><pre><?php
+<a name="line2"></a>if (! defined('BASEPATH'))
+<a name="line3"></a>    exit('No direct script access allowed');
+<a name="line4"></a>
+<a name="line5"></a>/**
+<a name="line6"></a>* Handle common image manipulation using the CI image_lib class.
+<a name="line7"></a>*
+<a name="line8"></a>* @category   Accent Interactive CMS
+<a name="line9"></a>* @package    Accent_Library
+<a name="line10"></a>* @name Images.php
+<a name="line11"></a>* @version 2.0
+<a name="line12"></a>* @author Joost van Veen
+<a name="line13"></a>* @copyright Accent Interactive
+<a name="line14"></a>* @created: 7 dec 2009
+<a name="line15"></a>*/
+<a name="line16"></a>class Images
+<a name="line17"></a>{
+<a name="line18"></a>    
+<a name="line19"></a>    /**
+<a name="line20"></a>     * The CI super object
+<a name="line21"></a>     * @var object
+<a name="line22"></a>     */
+<a name="line23"></a>    private $_ci;
+<a name="line24"></a>    
+<a name="line25"></a>    /**
+<a name="line26"></a>     * Default image library. I highly recommend changing this to imagemagick,
+<a name="line27"></a>     * because its performance is *way* better than GD2.
+<a name="line28"></a>     *
+<a name="line29"></a>     * If you set $config['image_library'] in a config file, it will override
+<a name="line30"></a>     * the default value for this variable.
+<a name="line31"></a>     * @var string
+<a name="line32"></a>     */
+<a name="line33"></a>    public $image_library = 'GD2';
+<a name="line34"></a>    
+<a name="line35"></a>    /**
+<a name="line36"></a>     * Path for deault image library.
+<a name="line37"></a>     * If you use image magick on Linux, this is probabaly /usr/bin/
+<a name="line38"></a>     * If you use XAMPP this is probably sth like c:\xampp\imagemagick-6.2.8-q16
+<a name="line39"></a>     * Defaults to null, for GD2
+<a name="line40"></a>     *
+<a name="line41"></a>     * If you set $config['library_path'] in a config file, it will override
+<a name="line42"></a>     * the default value for this variable.
+<a name="line43"></a>     * @var mixed
+<a name="line44"></a>     */
+<a name="line45"></a>    public $library_path = null;
+<a name="line46"></a>
+<a name="line47"></a>    public function __construct ()
+<a name="line48"></a>    {
+<a name="line49"></a>        // Instantiate the CI libraries so we can work with them
+<a name="line50"></a>        $this->_ci = & get_instance();
+<a name="line51"></a>        
+<a name="line52"></a>        // Load image library if necessary
+<a name="line53"></a>        if (! isset($this->_ci->image_lib)) {
+<a name="line54"></a>            $this->_ci->load->library('image_lib');
+<a name="line55"></a>        }
+<a name="line56"></a>
+<a name="line57"></a>        // Set image library and path from settings in configuration file.
+<a name="line58"></a>        // If you did not set these settings in a config file the settings remain default.
+<a name="line59"></a>        $this->_ci->config->item('image_library') === false || $this->image_library = $this->_ci->config->item('image_library');
+<a name="line60"></a>        $this->_ci->config->item('library_path') === false || $this->library_path = $this->_ci->config->item('library_path');
+<a name="line61"></a>    }
+<a name="line62"></a>
+<a name="line63"></a>    /**
+<a name="line64"></a>     * Calls $this->square and $this->resize. The squared image is always a copy
+<a name="line65"></a>     * of the original, since it is a thumbnail.
+<a name="line66"></a>     *
+<a name="line67"></a>     * @param $originalFile Full path and filename of original image
+<a name="line68"></a>     * @param $newFile The full destination path and filename
+<a name="line69"></a>     * @param $newSize (optional) The new size of the squared image
+<a name="line70"></a>     * @param integer $offset (optional) Offset for either x or y axis
+<a name="line71"></a>     * @return void
+<a name="line72"></a>     */
+<a name="line73"></a>    function squareThumb ($originalFile, $newFile, $newSize = 120, $offset = 0)
+<a name="line74"></a>    {
+<a name="line75"></a>        $this->square($originalFile, $newFile, $offset);
+<a name="line76"></a>        $this->resize($newFile, $newSize, $newSize, $newFile, false);
+<a name="line77"></a>    }
+<a name="line78"></a>
+<a name="line79"></a>    /**
+<a name="line80"></a>     *
+<a name="line81"></a>     * @param $originalFile Full path and filename of original image
+<a name="line82"></a>     * @param $newWidth (optional) The width of the resized image
+<a name="line83"></a>     * @param $newHeight (optional) The height of the resized image
+<a name="line84"></a>     * @param $newFile (optional) The full destination path and filename
+<a name="line85"></a>     * @param $enlarge (optional) Whether a smaller original should be enlarged
+<a name="line86"></a>     * @return mixed False if no action was performed, else void
+<a name="line87"></a>     */
+<a name="line88"></a>    function resize ($originalFile, $newWidth = 120, $newHeight = 120, $newFile = '', $enlarge = false)
+<a name="line89"></a>    {
+<a name="line90"></a>        
+<a name="line91"></a>        // Abort if image does not exist
+<a name="line92"></a>        if (! file_exists($originalFile) || ! is_file($originalFile)) {
+<a name="line93"></a>            return false;
+<a name="line94"></a>        }
+<a name="line95"></a>        
+<a name="line96"></a>        // If we should not enlarge we need to check the size of the original image
+<a name="line97"></a>        if ($enlarge == false) {
+<a name="line98"></a>            
+<a name="line99"></a>            // Do not resize if the image is already smaller than $newWidth and $newHeight
+<a name="line100"></a>            $imgData = $this->getSize($originalFile);
+<a name="line101"></a>            if ($imgData['width'] <= $newWidth && $imgData['height'] <= $newHeight) {
+<a name="line102"></a>                if ($newFile == '') {
+<a name="line103"></a>                    return false;
+<a name="line104"></a>                }
+<a name="line105"></a>                else {
+<a name="line106"></a>                    // We need to copy the image to the new path
+<a name="line107"></a>                    $this->delete($newFile);
+<a name="line108"></a>                    copy($originalFile, $newFile);
+<a name="line109"></a>                    return false;
+<a name="line110"></a>                }
+<a name="line111"></a>            }
+<a name="line112"></a>        }
+<a name="line113"></a>        
+<a name="line114"></a>        // Configure CI image_lib
+<a name="line115"></a>        $config['image_library'] = $this->image_library;
+<a name="line116"></a>        $config['library_path'] = $this->library_path;
+<a name="line117"></a>        $config['maintain_ratio'] = true;
+<a name="line118"></a>        $config['width'] = $newWidth;
+<a name="line119"></a>        $config['height'] = $newHeight;
+<a name="line120"></a>        $config['source_image'] = $originalFile;
+<a name="line121"></a>        $config['quality'] = "20%";
+<a name="line122"></a>        if ($newFile) {
+<a name="line123"></a>            $config['new_image'] = $newFile;
+<a name="line124"></a>        }
+<a name="line125"></a>        $this->_ci->image_lib->initialize($config);
+<a name="line126"></a>        
+<a name="line127"></a>        // Resize the image
+<a name="line128"></a>        if (! $this->_ci->image_lib->resize()) {
+<a name="line129"></a>            show_error($this->_ci->image_lib->display_errors());
+<a name="line130"></a>        }
+<a name="line131"></a>        
+<a name="line132"></a>        // Clear lib so we can perform another image action
+<a name="line133"></a>        $this->_ci->image_lib->clear();
+<a name="line134"></a>    }
+<a name="line135"></a>
+<a name="line136"></a>    /**
+<a name="line137"></a>     * Crop an image so that it becomes square. I fyou need a square thumbnail,
+<a name="line138"></a>     * run this method first and resize afterwards.
+<a name="line139"></a>     *
+<a name="line140"></a>     * By default the original image is cropped and overwritten, but you can
+<a name="line141"></a>     * supply a destination path if you wish to retain the original image and
+<a name="line142"></a>     * create a new, cropped version of that image somewhere else.  
+<a name="line143"></a>     *
+<a name="line144"></a>     * By default the image is cropped from the center, but you can supply an
+<a name="line145"></a>     * optional offset parameter.
+<a name="line146"></a>     *
+<a name="line147"></a>     * @param string $originalFile The full path and filename of the image to be cropped
+<a name="line148"></a>     * @param string $newFile (optional) The full destination path and filename
+<a name="line149"></a>     * @param integer $offset (optional) Offset for either x or y axis
+<a name="line150"></a>     * @return mixed False if no action was performed, else void
+<a name="line151"></a>     */
+<a name="line152"></a>    function square ($originalFile, $newFile = '', $offset = 0)
+<a name="line153"></a>    {
+<a name="line154"></a>        
+<a name="line155"></a>        // Abort if image does not exist
+<a name="line156"></a>        if (! file_exists($originalFile) || ! is_file($originalFile)) {
+<a name="line157"></a>            return false;
+<a name="line158"></a>        }
+<a name="line159"></a>        
+<a name="line160"></a>        // Get original image data
+<a name="line161"></a>        $imgData = $this->getSize($originalFile);
+<a name="line162"></a>        
+<a name="line163"></a>        // Set image lib config
+<a name="line164"></a>        // Best cropping results on all three main image formats (png, gif, jpg)
+<a name="line165"></a>        // are with GD2
+<a name="line166"></a>        $config['image_library'] = 'GD2';
+<a name="line167"></a>        $config['library_path'] = null;
+<a name="line168"></a>        $config['source_image'] = $originalFile;
+<a name="line169"></a>        $config['maintain_ratio'] = false;
+<a name="line170"></a>        if ($newFile) {
+<a name="line171"></a>            $config['new_image'] = $newFile;
+<a name="line172"></a>        }
+<a name="line173"></a>        
+<a name="line174"></a>        // Crop only if image is not square yet
+<a name="line175"></a>        if ($imgData['width'] != $imgData['height']) {
+<a name="line176"></a>            
+<a name="line177"></a>            // Set x and y axis for cropping. If x and y axis have not been
+<a name="line178"></a>            // passed as parameter we will crop from the center of the image.
+<a name="line179"></a>            if ($imgData['width'] > $imgData['height']) { // Landscape, crop left & right
+<a name="line180"></a>                $config['width'] = $imgData['height'];
+<a name="line181"></a>                $config['height'] = $imgData['height'];
+<a name="line182"></a>                $config['x_axis'] = $offset > 0 ? $offset : ($imgData['width'] - $config['width']) / 2;
+<a name="line183"></a>            }
+<a name="line184"></a>            else { // Portrait, crop top & bottom
+<a name="line185"></a>                $config['width'] = $imgData['width'];
+<a name="line186"></a>                $config['height'] = $imgData['width'];
+<a name="line187"></a>                $config['y_axis'] = $offset > 0 ? $offset : ($imgData['height'] - $config['height']) / 2;
+<a name="line188"></a>            }
+<a name="line189"></a>        }
+<a name="line190"></a>        else {
+<a name="line191"></a>            // Image is already square. No cropping required.
+<a name="line192"></a>            if ($newFile == '') {
+<a name="line193"></a>                return false;
+<a name="line194"></a>            }
+<a name="line195"></a>            else {
+<a name="line196"></a>                // We need to copy the image to the new path
+<a name="line197"></a>                $this->delete($newFile);
+<a name="line198"></a>                copy($originalFile, $newFile);
+<a name="line199"></a>                return false;
+<a name="line200"></a>            }
+<a name="line201"></a>        }
+<a name="line202"></a>        
+<a name="line203"></a>        // Crop image
+<a name="line204"></a>        $this->_ci->image_lib->initialize($config);
+<a name="line205"></a>        if (! $this->_ci->image_lib->crop()) {
+<a name="line206"></a>            show_error($this->_ci->image_lib->display_errors());
+<a name="line207"></a>        }
+<a name="line208"></a>        
+<a name="line209"></a>        // Clear lib so we can perform another image action
+<a name="line210"></a>        $this->_ci->image_lib->clear();
+<a name="line211"></a>    }
+<a name="line212"></a>
+<a name="line213"></a>    /**
+<a name="line214"></a>     * Return an array that contains size and mime of an image. Uses getimagesize().
+<a name="line215"></a>     *
+<a name="line216"></a>     * Return array indexes:
+<a name="line217"></a>     * 'width'
+<a name="line218"></a>     * 'height'
+<a name="line219"></a>     * 'mime'
+<a name="line220"></a>     * @param string $image Full path to image
+<a name="line221"></a>     * @return array that contains size and mime of an image
+<a name="line222"></a>     */
+<a name="line223"></a>    public function getSize ($image)
+<a name="line224"></a>    {
+<a name="line225"></a>        $imgData = getimagesize($image);
+<a name="line226"></a>        $retval['width'] = $imgData[0];
+<a name="line227"></a>        $retval['height'] = $imgData[1];
+<a name="line228"></a>        $retval['mime'] = $imgData['mime'];
+<a name="line229"></a>        return $retval;
+<a name="line230"></a>    }
+<a name="line231"></a>
+<a name="line232"></a>    /**
+<a name="line233"></a>     * Delete an image if it exists.
+<a name="line234"></a>     * @param string $image Full path and filename
+<a name="line235"></a>     */
+<a name="line236"></a>    public function delete ($image)
+<a name="line237"></a>    {
+<a name="line238"></a>        if (file_exists($image) && is_file($image)) {
+<a name="line239"></a>            unlink($image);
+<a name="line240"></a>        }
+<a name="line241"></a>    }
+<a name="line242"></a>} </pre>
+<div class="header">
+<h1>GiftFlow API</h1>
+<ul>
+<li><a href="../../overview-summary.html">Overview</a></li>
+<li>Package</li><li>Class</li><li>Tree</li><li><a href="../../overview-files.html">Files</a></li>
+<li><a href="../../deprecated-list.html">Deprecated</a></li>
+<li><a href="../../index-all.html">Index</a></li>
+</ul>
+</div>
+
+<div class="small_links">
+<a href="../../index.html" target="_top">Frames</a>
+<a href="../../source/libraries/images.php.html" target="_top">No frames</a>
+</div>
+<hr>
+
+<p id="footer">This document was generated by <a href="http://peej.github.com/phpdoctor/">PHPDoctor: The PHP Documentation Creator</a></p>
+
+</body>
+
+</html>

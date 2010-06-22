@@ -1,0 +1,883 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+
+<html lang="en">
+<head>
+
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
+<meta name="generator" content="PHPDoctor 2RC4 (http://peej.github.com/phpdoctor/)">
+<meta name="when" content="Sun, 20 Jun 2010 17:43:50 +0000">
+
+<link rel="stylesheet" type="text/css" href="../stylesheet.css">
+<link rel="start" href="../overview-summary.html">
+
+<title>CI_Upload (GiftFlow API)</title>
+
+</head>
+<body id="definition" onload="parent.document.title=document.title;">
+
+<div class="header">
+<h1>GiftFlow API</h1>
+<ul>
+<li><a href="../overview-summary.html">Overview</a></li>
+<li><a href="../giftflow/package-summary.html">Package</a></li>
+<li class="active">Class</li>
+<li><a href="../giftflow/package-tree.html">Tree</a></li>
+<li><a href="../overview-files.html">Files</a></li>
+<li><a href="../deprecated-list.html">Deprecated</a></li>
+<li><a href="../index-all.html">Index</a></li>
+</ul>
+</div>
+
+<div class="small_links">
+<a href="../index.html" target="_top">Frames</a>
+<a href="../giftflow/ci_upload.html" target="_top">No frames</a>
+</div>
+<div class="small_links">
+Summary: <a href="#summary_field">Field</a> | <a href="#summary_method">Method</a> | <a href="#summary_constr">Constr</a>
+Detail: <a href="#detail_field">Field</a> | <a href="#detail_method">Method</a> | <a href="#summary_constr">Constr</a>
+</div>
+<hr>
+
+<div class="qualifiedName">GiftFlow\CI_Upload</div>
+<a href="../source/libraries/upload.php.html#line27" class="location">libraries/Upload.php at line 27</a>
+
+<h1>Class CI_Upload</h1>
+
+<pre class="tree"><strong>CI_Upload</strong><br /></pre>
+
+<hr>
+
+<p class="signature">public  class <strong>CI_Upload</strong></p>
+
+<div class="comment" id="overview_description"><p>File Uploading Class</p></div>
+
+<dl>
+<dt>Package		CodeIgniter.</dt>
+<dt>Subpackage	Libraries.</dt>
+<dt>Category	Uploads.</dt>
+<dt>Author		ExpressionEngine:</dt>
+<dd>Dev Team</dd>
+<dt>Link		http://codeigniter.com/user_guide/libraries/file_uploading.html.</dt>
+</dl>
+<hr>
+
+<table id="summary_field">
+<tr><th colspan="2">Field Summary</th></tr>
+<tr>
+<td class="type"> mixed</td>
+<td class="description"><p class="name"><a href="#allowed_types">$allowed_types</a></p></td>
+</tr>
+<tr>
+<td class="type"> mixed</td>
+<td class="description"><p class="name"><a href="#encrypt_name">$encrypt_name</a></p></td>
+</tr>
+<tr>
+<td class="type"> mixed</td>
+<td class="description"><p class="name"><a href="#error_msg">$error_msg</a></p></td>
+</tr>
+<tr>
+<td class="type"> mixed</td>
+<td class="description"><p class="name"><a href="#file_ext">$file_ext</a></p></td>
+</tr>
+<tr>
+<td class="type"> mixed</td>
+<td class="description"><p class="name"><a href="#file_name">$file_name</a></p></td>
+</tr>
+<tr>
+<td class="type"> mixed</td>
+<td class="description"><p class="name"><a href="#file_size">$file_size</a></p></td>
+</tr>
+<tr>
+<td class="type"> mixed</td>
+<td class="description"><p class="name"><a href="#file_temp">$file_temp</a></p></td>
+</tr>
+<tr>
+<td class="type"> mixed</td>
+<td class="description"><p class="name"><a href="#file_type">$file_type</a></p></td>
+</tr>
+<tr>
+<td class="type"> mixed</td>
+<td class="description"><p class="name"><a href="#image_height">$image_height</a></p></td>
+</tr>
+<tr>
+<td class="type"> mixed</td>
+<td class="description"><p class="name"><a href="#image_size_str">$image_size_str</a></p></td>
+</tr>
+<tr>
+<td class="type"> mixed</td>
+<td class="description"><p class="name"><a href="#image_type">$image_type</a></p></td>
+</tr>
+<tr>
+<td class="type"> mixed</td>
+<td class="description"><p class="name"><a href="#image_width">$image_width</a></p></td>
+</tr>
+<tr>
+<td class="type"> mixed</td>
+<td class="description"><p class="name"><a href="#is_image">$is_image</a></p></td>
+</tr>
+<tr>
+<td class="type"> mixed</td>
+<td class="description"><p class="name"><a href="#max_filename">$max_filename</a></p></td>
+</tr>
+<tr>
+<td class="type"> mixed</td>
+<td class="description"><p class="name"><a href="#max_height">$max_height</a></p></td>
+</tr>
+<tr>
+<td class="type"> mixed</td>
+<td class="description"><p class="name"><a href="#max_size">$max_size</a></p></td>
+</tr>
+<tr>
+<td class="type"> mixed</td>
+<td class="description"><p class="name"><a href="#max_width">$max_width</a></p></td>
+</tr>
+<tr>
+<td class="type"> mixed</td>
+<td class="description"><p class="name"><a href="#mimes">$mimes</a></p></td>
+</tr>
+<tr>
+<td class="type"> mixed</td>
+<td class="description"><p class="name"><a href="#orig_name">$orig_name</a></p></td>
+</tr>
+<tr>
+<td class="type"> mixed</td>
+<td class="description"><p class="name"><a href="#overwrite">$overwrite</a></p></td>
+</tr>
+<tr>
+<td class="type"> mixed</td>
+<td class="description"><p class="name"><a href="#remove_spaces">$remove_spaces</a></p></td>
+</tr>
+<tr>
+<td class="type"> mixed</td>
+<td class="description"><p class="name"><a href="#temp_prefix">$temp_prefix</a></p></td>
+</tr>
+<tr>
+<td class="type"> mixed</td>
+<td class="description"><p class="name"><a href="#upload_path">$upload_path</a></p></td>
+</tr>
+<tr>
+<td class="type"> mixed</td>
+<td class="description"><p class="name"><a href="#xss_clean">$xss_clean</a></p></td>
+</tr>
+</table>
+
+<table id="summary_method">
+<tr><th colspan="2">Method Summary</th></tr>
+<tr>
+<td class="type"> void</td>
+<td class="description"><p class="name"><a href="#__construct()">__construct</a>(mixed props)</p><p class="description">Constructor</p></td>
+</tr>
+<tr>
+<td class="type">private  void</td>
+<td class="description"><p class="name"><a href="#_prep_filename()">_prep_filename</a>(mixed filename)</p><p class="description">Prep FilenamePrevents possible script execution from Apache's handling of files multiple extensions
+http://httpd.apache.org/docs/1.3/mod/mod_mime.html#multipleext</p></td>
+</tr>
+<tr>
+<td class="type"> void</td>
+<td class="description"><p class="name"><a href="#clean_file_name()">clean_file_name</a>(mixed filename)</p><p class="description">Clean the file name for security</p></td>
+</tr>
+<tr>
+<td class="type"> void</td>
+<td class="description"><p class="name"><a href="#data()">data</a>()</p><p class="description">Finalized Data ArrayReturns an associative array containing all of the information
+related to the upload, allowing the developer easy access in one array.</p></td>
+</tr>
+<tr>
+<td class="type"> void</td>
+<td class="description"><p class="name"><a href="#display_errors()">display_errors</a>(str open, str close)</p><p class="description">Display the error message</p></td>
+</tr>
+<tr>
+<td class="type"> void</td>
+<td class="description"><p class="name"><a href="#do_upload()">do_upload</a>(str field)</p><p class="description">Perform the file upload</p></td>
+</tr>
+<tr>
+<td class="type"> void</td>
+<td class="description"><p class="name"><a href="#do_xss_clean()">do_xss_clean</a>()</p><p class="description">Runs the file through the XSS clean functionThis prevents people from embedding malicious code in their files.
+</p></td>
+</tr>
+<tr>
+<td class="type"> void</td>
+<td class="description"><p class="name"><a href="#get_extension()">get_extension</a>(mixed filename)</p><p class="description">Extract the file extension</p></td>
+</tr>
+<tr>
+<td class="type"> void</td>
+<td class="description"><p class="name"><a href="#initialize()">initialize</a>(mixed config)</p><p class="description">Initialize preferences</p></td>
+</tr>
+<tr>
+<td class="type"> void</td>
+<td class="description"><p class="name"><a href="#is_allowed_dimensions()">is_allowed_dimensions</a>()</p><p class="description">Verify that the image is within the allowed width/height</p></td>
+</tr>
+<tr>
+<td class="type"> void</td>
+<td class="description"><p class="name"><a href="#is_allowed_filesize()">is_allowed_filesize</a>()</p><p class="description">Verify that the file is within the allowed size</p></td>
+</tr>
+<tr>
+<td class="type"> void</td>
+<td class="description"><p class="name"><a href="#is_allowed_filetype()">is_allowed_filetype</a>()</p><p class="description">Verify that the filetype is allowed</p></td>
+</tr>
+<tr>
+<td class="type"> void</td>
+<td class="description"><p class="name"><a href="#is_image()">is_image</a>()</p><p class="description">Validate the image</p></td>
+</tr>
+<tr>
+<td class="type"> void</td>
+<td class="description"><p class="name"><a href="#limit_filename_length()">limit_filename_length</a>(mixed filename, mixed length)</p><p class="description">Limit the File Name Length</p></td>
+</tr>
+<tr>
+<td class="type"> void</td>
+<td class="description"><p class="name"><a href="#mimes_types()">mimes_types</a>(mixed mime)</p><p class="description">List of Mime TypesThis is a list of mime types. </p></td>
+</tr>
+<tr>
+<td class="type"> void</td>
+<td class="description"><p class="name"><a href="#set_allowed_types()">set_allowed_types</a>(mixed types)</p><p class="description">Set Allowed File Types</p></td>
+</tr>
+<tr>
+<td class="type"> void</td>
+<td class="description"><p class="name"><a href="#set_error()">set_error</a>(mixed msg)</p><p class="description">Set an error message</p></td>
+</tr>
+<tr>
+<td class="type"> void</td>
+<td class="description"><p class="name"><a href="#set_filename()">set_filename</a>(mixed path, mixed filename)</p><p class="description">Set the file nameThis function takes a filename/path as input and looks for the
+existence of a file with the same name. </p></td>
+</tr>
+<tr>
+<td class="type"> void</td>
+<td class="description"><p class="name"><a href="#set_image_properties()">set_image_properties</a>(str path)</p><p class="description">Set Image PropertiesUses GD to determine the width/height/type of image</p></td>
+</tr>
+<tr>
+<td class="type"> void</td>
+<td class="description"><p class="name"><a href="#set_max_filename()">set_max_filename</a>(mixed n)</p><p class="description">Set Maximum File Name Length</p></td>
+</tr>
+<tr>
+<td class="type"> void</td>
+<td class="description"><p class="name"><a href="#set_max_filesize()">set_max_filesize</a>(mixed n)</p><p class="description">Set Maximum File Size</p></td>
+</tr>
+<tr>
+<td class="type"> void</td>
+<td class="description"><p class="name"><a href="#set_max_height()">set_max_height</a>(mixed n)</p><p class="description">Set Maximum Image Height</p></td>
+</tr>
+<tr>
+<td class="type"> void</td>
+<td class="description"><p class="name"><a href="#set_max_width()">set_max_width</a>(mixed n)</p><p class="description">Set Maximum Image Width</p></td>
+</tr>
+<tr>
+<td class="type"> void</td>
+<td class="description"><p class="name"><a href="#set_upload_path()">set_upload_path</a>(mixed path)</p><p class="description">Set Upload Path</p></td>
+</tr>
+<tr>
+<td class="type"> void</td>
+<td class="description"><p class="name"><a href="#set_xss_clean()">set_xss_clean</a>(bool flag)</p><p class="description">Set XSS CleanEnables the XSS flag so that the file that was uploaded
+will be run through the XSS filter.</p></td>
+</tr>
+<tr>
+<td class="type"> void</td>
+<td class="description"><p class="name"><a href="#validate_upload_path()">validate_upload_path</a>()</p><p class="description">Validate Upload PathVerifies that it is a valid upload path with proper permissions.</p></td>
+</tr>
+</table>
+
+<h2 id="detail_field">Field Detail</h2>
+<a href="../source/libraries/upload.php.html#line33" class="location">libraries/Upload.php at line 33</a>
+
+<h3 id="allowed_types">allowed_types</h3>
+<code class="signature">public  mixed <strong>$allowed_types</strong> = &quot;&quot;</code>
+<div class="details">
+</div>
+
+<hr>
+
+<a href="../source/libraries/upload.php.html#line42" class="location">libraries/Upload.php at line 42</a>
+
+<h3 id="encrypt_name">encrypt_name</h3>
+<code class="signature">public  mixed <strong>$encrypt_name</strong> = FALSE</code>
+<div class="details">
+</div>
+
+<hr>
+
+<a href="../source/libraries/upload.php.html#line48" class="location">libraries/Upload.php at line 48</a>
+
+<h3 id="error_msg">error_msg</h3>
+<code class="signature">public  mixed <strong>$error_msg</strong> = array()</code>
+<div class="details">
+</div>
+
+<hr>
+
+<a href="../source/libraries/upload.php.html#line39" class="location">libraries/Upload.php at line 39</a>
+
+<h3 id="file_ext">file_ext</h3>
+<code class="signature">public  mixed <strong>$file_ext</strong> = &quot;&quot;</code>
+<div class="details">
+</div>
+
+<hr>
+
+<a href="../source/libraries/upload.php.html#line35" class="location">libraries/Upload.php at line 35</a>
+
+<h3 id="file_name">file_name</h3>
+<code class="signature">public  mixed <strong>$file_name</strong> = &quot;&quot;</code>
+<div class="details">
+</div>
+
+<hr>
+
+<a href="../source/libraries/upload.php.html#line38" class="location">libraries/Upload.php at line 38</a>
+
+<h3 id="file_size">file_size</h3>
+<code class="signature">public  mixed <strong>$file_size</strong> = &quot;&quot;</code>
+<div class="details">
+</div>
+
+<hr>
+
+<a href="../source/libraries/upload.php.html#line34" class="location">libraries/Upload.php at line 34</a>
+
+<h3 id="file_temp">file_temp</h3>
+<code class="signature">public  mixed <strong>$file_temp</strong> = &quot;&quot;</code>
+<div class="details">
+</div>
+
+<hr>
+
+<a href="../source/libraries/upload.php.html#line37" class="location">libraries/Upload.php at line 37</a>
+
+<h3 id="file_type">file_type</h3>
+<code class="signature">public  mixed <strong>$file_type</strong> = &quot;&quot;</code>
+<div class="details">
+</div>
+
+<hr>
+
+<a href="../source/libraries/upload.php.html#line45" class="location">libraries/Upload.php at line 45</a>
+
+<h3 id="image_height">image_height</h3>
+<code class="signature">public  mixed <strong>$image_height</strong> = ''</code>
+<div class="details">
+</div>
+
+<hr>
+
+<a href="../source/libraries/upload.php.html#line47" class="location">libraries/Upload.php at line 47</a>
+
+<h3 id="image_size_str">image_size_str</h3>
+<code class="signature">public  mixed <strong>$image_size_str</strong> = ''</code>
+<div class="details">
+</div>
+
+<hr>
+
+<a href="../source/libraries/upload.php.html#line46" class="location">libraries/Upload.php at line 46</a>
+
+<h3 id="image_type">image_type</h3>
+<code class="signature">public  mixed <strong>$image_type</strong> = ''</code>
+<div class="details">
+</div>
+
+<hr>
+
+<a href="../source/libraries/upload.php.html#line44" class="location">libraries/Upload.php at line 44</a>
+
+<h3 id="image_width">image_width</h3>
+<code class="signature">public  mixed <strong>$image_width</strong> = ''</code>
+<div class="details">
+</div>
+
+<hr>
+
+<a href="../source/libraries/upload.php.html#line43" class="location">libraries/Upload.php at line 43</a>
+
+<h3 id="is_image">is_image</h3>
+<code class="signature">public  mixed <strong>$is_image</strong> = FALSE</code>
+<div class="details">
+</div>
+
+<hr>
+
+<a href="../source/libraries/upload.php.html#line32" class="location">libraries/Upload.php at line 32</a>
+
+<h3 id="max_filename">max_filename</h3>
+<code class="signature">public  mixed <strong>$max_filename</strong></code>
+<div class="details">
+</div>
+
+<hr>
+
+<a href="../source/libraries/upload.php.html#line31" class="location">libraries/Upload.php at line 31</a>
+
+<h3 id="max_height">max_height</h3>
+<code class="signature">public  mixed <strong>$max_height</strong></code>
+<div class="details">
+</div>
+
+<hr>
+
+<a href="../source/libraries/upload.php.html#line29" class="location">libraries/Upload.php at line 29</a>
+
+<h3 id="max_size">max_size</h3>
+<code class="signature">public  mixed <strong>$max_size</strong></code>
+<div class="details">
+</div>
+
+<hr>
+
+<a href="../source/libraries/upload.php.html#line30" class="location">libraries/Upload.php at line 30</a>
+
+<h3 id="max_width">max_width</h3>
+<code class="signature">public  mixed <strong>$max_width</strong></code>
+<div class="details">
+</div>
+
+<hr>
+
+<a href="../source/libraries/upload.php.html#line49" class="location">libraries/Upload.php at line 49</a>
+
+<h3 id="mimes">mimes</h3>
+<code class="signature">public  mixed <strong>$mimes</strong> = array()</code>
+<div class="details">
+</div>
+
+<hr>
+
+<a href="../source/libraries/upload.php.html#line36" class="location">libraries/Upload.php at line 36</a>
+
+<h3 id="orig_name">orig_name</h3>
+<code class="signature">public  mixed <strong>$orig_name</strong> = &quot;&quot;</code>
+<div class="details">
+</div>
+
+<hr>
+
+<a href="../source/libraries/upload.php.html#line41" class="location">libraries/Upload.php at line 41</a>
+
+<h3 id="overwrite">overwrite</h3>
+<code class="signature">public  mixed <strong>$overwrite</strong> = FALSE</code>
+<div class="details">
+</div>
+
+<hr>
+
+<a href="../source/libraries/upload.php.html#line50" class="location">libraries/Upload.php at line 50</a>
+
+<h3 id="remove_spaces">remove_spaces</h3>
+<code class="signature">public  mixed <strong>$remove_spaces</strong> = TRUE</code>
+<div class="details">
+</div>
+
+<hr>
+
+<a href="../source/libraries/upload.php.html#line52" class="location">libraries/Upload.php at line 52</a>
+
+<h3 id="temp_prefix">temp_prefix</h3>
+<code class="signature">public  mixed <strong>$temp_prefix</strong> = &quot;temp_file_&quot;</code>
+<div class="details">
+</div>
+
+<hr>
+
+<a href="../source/libraries/upload.php.html#line40" class="location">libraries/Upload.php at line 40</a>
+
+<h3 id="upload_path">upload_path</h3>
+<code class="signature">public  mixed <strong>$upload_path</strong> = &quot;&quot;</code>
+<div class="details">
+</div>
+
+<hr>
+
+<a href="../source/libraries/upload.php.html#line51" class="location">libraries/Upload.php at line 51</a>
+
+<h3 id="xss_clean">xss_clean</h3>
+<code class="signature">public  mixed <strong>$xss_clean</strong> = FALSE</code>
+<div class="details">
+</div>
+
+<hr>
+
+<h2 id="detail_method">Method Detail</h2><div class="method_detail">
+<div class='method'><a href="../source/libraries/upload.php.html#line59" class="location">libraries/Upload.php at line 59</a>
+
+<h3 id="__construct()">__construct</h3>
+<code class="signature">public  void <strong>__construct</strong>(mixed props)</code>
+<div class="details">
+<p>Constructor</p><dl>
+<dt>Access	public.</dt>
+</dl>
+</div></div>
+
+
+
+<div class='method'><a href="../source/libraries/upload.php.html#line908" class="location">libraries/Upload.php at line 908</a>
+
+<h3 id="_prep_filename()">_prep_filename</h3>
+<code class="signature">private  void <strong>_prep_filename</strong>(mixed filename)</code>
+<div class="details">
+<p>Prep Filename</p><p>Prevents possible script execution from Apache's handling of files multiple extensions
+http://httpd.apache.org/docs/1.3/mod/mod_mime.html#multipleext</p><dl>
+<dt>Access	private.</dt>
+<dt>Param	string.</dt>
+<dt>Return	string.</dt>
+</dl>
+</div></div>
+
+
+
+<div class='method'><a href="../source/libraries/upload.php.html#line713" class="location">libraries/Upload.php at line 713</a>
+
+<h3 id="clean_file_name()">clean_file_name</h3>
+<code class="signature">public  void <strong>clean_file_name</strong>(mixed filename)</code>
+<div class="details">
+<p>Clean the file name for security</p><dl>
+<dt>Access	public.</dt>
+<dt>Param	string.</dt>
+<dt>Return	string.</dt>
+</dl>
+</div></div>
+
+
+
+<div class='method'><a href="../source/libraries/upload.php.html#line306" class="location">libraries/Upload.php at line 306</a>
+
+<h3 id="data()">data</h3>
+<code class="signature">public  void <strong>data</strong>()</code>
+<div class="details">
+<p>Finalized Data Array</p><p>Returns an associative array containing all of the information
+related to the upload, allowing the developer easy access in one array.</p><dl>
+<dt>Access	public.</dt>
+<dt>Return	array.</dt>
+</dl>
+</div></div>
+
+
+
+<div class='method'><a href="../source/libraries/upload.php.html#line857" class="location">libraries/Upload.php at line 857</a>
+
+<h3 id="display_errors()">display_errors</h3>
+<code class="signature">public  void <strong>display_errors</strong>(str open, str close)</code>
+<div class="details">
+<p>Display the error message</p><dl>
+<dt>Access	public.</dt>
+<dt>Return	string.</dt>
+</dl>
+</div></div>
+
+
+
+<div class='method'><a href="../source/libraries/upload.php.html#line137" class="location">libraries/Upload.php at line 137</a>
+
+<h3 id="do_upload()">do_upload</h3>
+<code class="signature">public  void <strong>do_upload</strong>(str field)</code>
+<div class="details">
+<p>Perform the file upload</p><dl>
+<dt>Access	public.</dt>
+<dt>Return	bool.</dt>
+</dl>
+</div></div>
+
+
+
+<div class='method'><a href="../source/libraries/upload.php.html#line788" class="location">libraries/Upload.php at line 788</a>
+
+<h3 id="do_xss_clean()">do_xss_clean</h3>
+<code class="signature">public  void <strong>do_xss_clean</strong>()</code>
+<div class="details">
+<p>Runs the file through the XSS clean function</p><p>This prevents people from embedding malicious code in their files.
+I'm not sure that it won't negatively affect certain files in unexpected ways,
+but so far I haven't found that it causes trouble.</p><dl>
+<dt>Access	public.</dt>
+<dt>Return	void.</dt>
+</dl>
+</div></div>
+
+
+
+<div class='method'><a href="../source/libraries/upload.php.html#line698" class="location">libraries/Upload.php at line 698</a>
+
+<h3 id="get_extension()">get_extension</h3>
+<code class="signature">public  void <strong>get_extension</strong>(mixed filename)</code>
+<div class="details">
+<p>Extract the file extension</p><dl>
+<dt>Access	public.</dt>
+<dt>Param	string.</dt>
+<dt>Return	string.</dt>
+</dl>
+</div></div>
+
+
+
+<div class='method'><a href="../source/libraries/upload.php.html#line78" class="location">libraries/Upload.php at line 78</a>
+
+<h3 id="initialize()">initialize</h3>
+<code class="signature">public  void <strong>initialize</strong>(mixed config)</code>
+<div class="details">
+<p>Initialize preferences</p><dl>
+<dt>Access	public.</dt>
+<dt>Param	array.</dt>
+<dt>Return	void.</dt>
+</dl>
+</div></div>
+
+
+
+<div class='method'><a href="../source/libraries/upload.php.html#line622" class="location">libraries/Upload.php at line 622</a>
+
+<h3 id="is_allowed_dimensions()">is_allowed_dimensions</h3>
+<code class="signature">public  void <strong>is_allowed_dimensions</strong>()</code>
+<div class="details">
+<p>Verify that the image is within the allowed width/height</p><dl>
+<dt>Access	public.</dt>
+<dt>Return	bool.</dt>
+</dl>
+</div></div>
+
+
+
+<div class='method'><a href="../source/libraries/upload.php.html#line602" class="location">libraries/Upload.php at line 602</a>
+
+<h3 id="is_allowed_filesize()">is_allowed_filesize</h3>
+<code class="signature">public  void <strong>is_allowed_filesize</strong>()</code>
+<div class="details">
+<p>Verify that the file is within the allowed size</p><dl>
+<dt>Access	public.</dt>
+<dt>Return	bool.</dt>
+</dl>
+</div></div>
+
+
+
+<div class='method'><a href="../source/libraries/upload.php.html#line552" class="location">libraries/Upload.php at line 552</a>
+
+<h3 id="is_allowed_filetype()">is_allowed_filetype</h3>
+<code class="signature">public  void <strong>is_allowed_filetype</strong>()</code>
+<div class="details">
+<p>Verify that the filetype is allowed</p><dl>
+<dt>Access	public.</dt>
+<dt>Return	bool.</dt>
+</dl>
+</div></div>
+
+
+
+<div class='method'><a href="../source/libraries/upload.php.html#line517" class="location">libraries/Upload.php at line 517</a>
+
+<h3 id="is_image()">is_image</h3>
+<code class="signature">public  void <strong>is_image</strong>()</code>
+<div class="details">
+<p>Validate the image</p><dl>
+<dt>Access	public.</dt>
+<dt>Return	bool.</dt>
+</dl>
+</div></div>
+
+
+
+<div class='method'><a href="../source/libraries/upload.php.html#line758" class="location">libraries/Upload.php at line 758</a>
+
+<h3 id="limit_filename_length()">limit_filename_length</h3>
+<code class="signature">public  void <strong>limit_filename_length</strong>(mixed filename, mixed length)</code>
+<div class="details">
+<p>Limit the File Name Length</p><dl>
+<dt>Access	public.</dt>
+<dt>Param	string.</dt>
+<dt>Return	string.</dt>
+</dl>
+</div></div>
+
+
+
+<div class='method'><a href="../source/libraries/upload.php.html#line880" class="location">libraries/Upload.php at line 880</a>
+
+<h3 id="mimes_types()">mimes_types</h3>
+<code class="signature">public  void <strong>mimes_types</strong>(mixed mime)</code>
+<div class="details">
+<p>List of Mime Types</p><p>This is a list of mime types.  We use it to validate
+the "allowed types" set by the developer</p><dl>
+<dt>Access	public.</dt>
+<dt>Param	string.</dt>
+<dt>Return	string.</dt>
+</dl>
+</div></div>
+
+
+
+<div class='method'><a href="../source/libraries/upload.php.html#line455" class="location">libraries/Upload.php at line 455</a>
+
+<h3 id="set_allowed_types()">set_allowed_types</h3>
+<code class="signature">public  void <strong>set_allowed_types</strong>(mixed types)</code>
+<div class="details">
+<p>Set Allowed File Types</p><dl>
+<dt>Access	public.</dt>
+<dt>Param	string.</dt>
+<dt>Return	void.</dt>
+</dl>
+</div></div>
+
+
+
+<div class='method'><a href="../source/libraries/upload.php.html#line825" class="location">libraries/Upload.php at line 825</a>
+
+<h3 id="set_error()">set_error</h3>
+<code class="signature">public  void <strong>set_error</strong>(mixed msg)</code>
+<div class="details">
+<p>Set an error message</p><dl>
+<dt>Access	public.</dt>
+<dt>Param	string.</dt>
+<dt>Return	void.</dt>
+</dl>
+</div></div>
+
+
+
+<div class='method'><a href="../source/libraries/upload.php.html#line354" class="location">libraries/Upload.php at line 354</a>
+
+<h3 id="set_filename()">set_filename</h3>
+<code class="signature">public  void <strong>set_filename</strong>(mixed path, mixed filename)</code>
+<div class="details">
+<p>Set the file name</p><p>This function takes a filename/path as input and looks for the
+existence of a file with the same name. If found, it will append a
+number to the end of the filename to avoid overwriting a pre-existing file.</p><dl>
+<dt>Access	public.</dt>
+<dt>Return	string.</dt>
+</dl>
+</div></div>
+
+
+
+<div class='method'><a href="../source/libraries/upload.php.html#line471" class="location">libraries/Upload.php at line 471</a>
+
+<h3 id="set_image_properties()">set_image_properties</h3>
+<code class="signature">public  void <strong>set_image_properties</strong>(str path)</code>
+<div class="details">
+<p>Set Image Properties</p><p>Uses GD to determine the width/height/type of image</p><dl>
+<dt>Access	public.</dt>
+<dt>Param	string.</dt>
+<dt>Return	void.</dt>
+</dl>
+</div></div>
+
+
+
+<div class='method'><a href="../source/libraries/upload.php.html#line413" class="location">libraries/Upload.php at line 413</a>
+
+<h3 id="set_max_filename()">set_max_filename</h3>
+<code class="signature">public  void <strong>set_max_filename</strong>(mixed n)</code>
+<div class="details">
+<p>Set Maximum File Name Length</p><dl>
+<dt>Access	public.</dt>
+<dt>Param	integer.</dt>
+<dt>Return	void.</dt>
+</dl>
+</div></div>
+
+
+
+<div class='method'><a href="../source/libraries/upload.php.html#line399" class="location">libraries/Upload.php at line 399</a>
+
+<h3 id="set_max_filesize()">set_max_filesize</h3>
+<code class="signature">public  void <strong>set_max_filesize</strong>(mixed n)</code>
+<div class="details">
+<p>Set Maximum File Size</p><dl>
+<dt>Access	public.</dt>
+<dt>Param	integer.</dt>
+<dt>Return	void.</dt>
+</dl>
+</div></div>
+
+
+
+<div class='method'><a href="../source/libraries/upload.php.html#line441" class="location">libraries/Upload.php at line 441</a>
+
+<h3 id="set_max_height()">set_max_height</h3>
+<code class="signature">public  void <strong>set_max_height</strong>(mixed n)</code>
+<div class="details">
+<p>Set Maximum Image Height</p><dl>
+<dt>Access	public.</dt>
+<dt>Param	integer.</dt>
+<dt>Return	void.</dt>
+</dl>
+</div></div>
+
+
+
+<div class='method'><a href="../source/libraries/upload.php.html#line427" class="location">libraries/Upload.php at line 427</a>
+
+<h3 id="set_max_width()">set_max_width</h3>
+<code class="signature">public  void <strong>set_max_width</strong>(mixed n)</code>
+<div class="details">
+<p>Set Maximum Image Width</p><dl>
+<dt>Access	public.</dt>
+<dt>Param	integer.</dt>
+<dt>Return	void.</dt>
+</dl>
+</div></div>
+
+
+
+<div class='method'><a href="../source/libraries/upload.php.html#line334" class="location">libraries/Upload.php at line 334</a>
+
+<h3 id="set_upload_path()">set_upload_path</h3>
+<code class="signature">public  void <strong>set_upload_path</strong>(mixed path)</code>
+<div class="details">
+<p>Set Upload Path</p><dl>
+<dt>Access	public.</dt>
+<dt>Param	string.</dt>
+<dt>Return	void.</dt>
+</dl>
+</div></div>
+
+
+
+<div class='method'><a href="../source/libraries/upload.php.html#line504" class="location">libraries/Upload.php at line 504</a>
+
+<h3 id="set_xss_clean()">set_xss_clean</h3>
+<code class="signature">public  void <strong>set_xss_clean</strong>(bool flag)</code>
+<div class="details">
+<p>Set XSS Clean</p><p>Enables the XSS flag so that the file that was uploaded
+will be run through the XSS filter.</p><dl>
+<dt>Access	public.</dt>
+<dt>Param	bool.</dt>
+<dt>Return	void.</dt>
+</dl>
+</div></div>
+
+
+
+<div class='method'><a href="../source/libraries/upload.php.html#line660" class="location">libraries/Upload.php at line 660</a>
+
+<h3 id="validate_upload_path()">validate_upload_path</h3>
+<code class="signature">public  void <strong>validate_upload_path</strong>()</code>
+<div class="details">
+<p>Validate Upload Path</p><p>Verifies that it is a valid upload path with proper permissions.</p><dl>
+<dt>Access	public.</dt>
+<dt>Return	bool.</dt>
+</dl>
+</div></div>
+
+
+
+</div><div class="header">
+<h1>GiftFlow API</h1>
+<ul>
+<li><a href="../overview-summary.html">Overview</a></li>
+<li><a href="../giftflow/package-summary.html">Package</a></li>
+<li class="active">Class</li>
+<li><a href="../giftflow/package-tree.html">Tree</a></li>
+<li><a href="../overview-files.html">Files</a></li>
+<li><a href="../deprecated-list.html">Deprecated</a></li>
+<li><a href="../index-all.html">Index</a></li>
+</ul>
+</div>
+
+<div class="small_links">
+<a href="../index.html" target="_top">Frames</a>
+<a href="../giftflow/ci_upload.html" target="_top">No frames</a>
+</div>
+<div class="small_links">
+Summary: <a href="#summary_field">Field</a> | <a href="#summary_method">Method</a> | <a href="#summary_constr">Constr</a>
+Detail: <a href="#detail_field">Field</a> | <a href="#detail_method">Method</a> | <a href="#summary_constr">Constr</a>
+</div>
+<hr>
+
+<p id="footer">This document was generated by <a href="http://peej.github.com/phpdoctor/">PHPDoctor: The PHP Documentation Creator</a></p>
+
+</body>
+
+</html>

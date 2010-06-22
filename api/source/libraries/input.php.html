@@ -1,0 +1,1127 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+
+<html lang="en">
+<head>
+
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
+<meta name="generator" content="PHPDoctor 2RC4 (http://peej.github.com/phpdoctor/)">
+<meta name="when" content="Sun, 20 Jun 2010 17:43:51 +0000">
+
+<link rel="stylesheet" type="text/css" href="../../stylesheet.css">
+<link rel="start" href="../../overview-summary.html">
+
+<title>libraries/Input.php (GiftFlow API)</title>
+
+</head>
+<body id="file" onload="parent.document.title=document.title;">
+
+<div class="header">
+<h1>GiftFlow API</h1>
+<ul>
+<li><a href="../../overview-summary.html">Overview</a></li>
+<li>Package</li><li>Class</li><li>Tree</li><li><a href="../../overview-files.html">Files</a></li>
+<li><a href="../../deprecated-list.html">Deprecated</a></li>
+<li><a href="../../index-all.html">Index</a></li>
+</ul>
+</div>
+
+<div class="small_links">
+<a href="../../index.html" target="_top">Frames</a>
+<a href="../../source/libraries/input.php.html" target="_top">No frames</a>
+</div>
+<hr>
+
+<h1>libraries/Input.php</h1>
+<div class="comment" id="overview_description"><p>CodeIgniter</p><p>An open source application development framework for PHP 4.3.2 or newer</p></div>
+
+<hr>
+
+<a name="line1"></a><pre><?php  if ( ! defined('BASEPATH')) exit('No direct script access allowed');
+<a name="line2"></a>/**
+<a name="line3"></a> * CodeIgniter
+<a name="line4"></a> *
+<a name="line5"></a> * An open source application development framework for PHP 4.3.2 or newer
+<a name="line6"></a> *
+<a name="line7"></a> * @package		CodeIgniter
+<a name="line8"></a> * @author		ExpressionEngine Dev Team
+<a name="line9"></a> * @copyright	Copyright (c) 2008 - 2009, EllisLab, Inc.
+<a name="line10"></a> * @license		http://codeigniter.com/user_guide/license.html
+<a name="line11"></a> * @link		http://codeigniter.com
+<a name="line12"></a> * @since		Version 1.0
+<a name="line13"></a> * @filesource
+<a name="line14"></a> */
+<a name="line15"></a>
+<a name="line16"></a>// ------------------------------------------------------------------------
+<a name="line17"></a>
+<a name="line18"></a>/**
+<a name="line19"></a> * Input Class
+<a name="line20"></a> *
+<a name="line21"></a> * Pre-processes global input data for security
+<a name="line22"></a> *
+<a name="line23"></a> * @package		CodeIgniter
+<a name="line24"></a> * @subpackage	Libraries
+<a name="line25"></a> * @category	Input
+<a name="line26"></a> * @author		ExpressionEngine Dev Team
+<a name="line27"></a> * @link		http://codeigniter.com/user_guide/libraries/input.html
+<a name="line28"></a> */
+<a name="line29"></a>class CI_Input {
+<a name="line30"></a>	var $use_xss_clean		= FALSE;
+<a name="line31"></a>	var $xss_hash			= '';
+<a name="line32"></a>	var $ip_address			= FALSE;
+<a name="line33"></a>	var $user_agent			= FALSE;
+<a name="line34"></a>	var $allow_get_array	= FALSE;
+<a name="line35"></a>
+<a name="line36"></a>	/* never allowed, string replacement */
+<a name="line37"></a>	var $never_allowed_str = array(
+<a name="line38"></a>									'document.cookie'	=> '[removed]',
+<a name="line39"></a>									'document.write'	=> '[removed]',
+<a name="line40"></a>									'.parentNode'		=> '[removed]',
+<a name="line41"></a>									'.innerHTML'		=> '[removed]',
+<a name="line42"></a>									'window.location'	=> '[removed]',
+<a name="line43"></a>									'-moz-binding'		=> '[removed]',
+<a name="line44"></a>									'<!--'				=> '&lt;!--',
+<a name="line45"></a>									'-->'				=> '--&gt;',
+<a name="line46"></a>									'<![CDATA['			=> '&lt;![CDATA['
+<a name="line47"></a>									);
+<a name="line48"></a>	/* never allowed, regex replacement */
+<a name="line49"></a>	var $never_allowed_regex = array(
+<a name="line50"></a>										"javascript\s*:"			=> '[removed]',
+<a name="line51"></a>										"expression\s*(\(|&\#40;)"	=> '[removed]', // CSS and IE
+<a name="line52"></a>										"vbscript\s*:"				=> '[removed]', // IE, surprise!
+<a name="line53"></a>										"Redirect\s+302"			=> '[removed]'
+<a name="line54"></a>									);
+<a name="line55"></a>
+<a name="line56"></a>	/**
+<a name="line57"></a>	* Constructor
+<a name="line58"></a>	*
+<a name="line59"></a>	* Sets whether to globally enable the XSS processing
+<a name="line60"></a>	* and whether to allow the $_GET array
+<a name="line61"></a>	*
+<a name="line62"></a>	* @access	public
+<a name="line63"></a>	*/
+<a name="line64"></a>	function CI_Input()
+<a name="line65"></a>	{
+<a name="line66"></a>		log_message('debug', "Input Class Initialized");
+<a name="line67"></a>
+<a name="line68"></a>		$CFG =& load_class('Config');
+<a name="line69"></a>		$this->use_xss_clean	= ($CFG->item('global_xss_filtering') === TRUE) ? TRUE : FALSE;
+<a name="line70"></a>		$this->allow_get_array	= ($CFG->item('enable_query_strings') === TRUE) ? TRUE : FALSE;
+<a name="line71"></a>		$this->_sanitize_globals();
+<a name="line72"></a>	}
+<a name="line73"></a>
+<a name="line74"></a>	// --------------------------------------------------------------------
+<a name="line75"></a>
+<a name="line76"></a>	/**
+<a name="line77"></a>	* Sanitize Globals
+<a name="line78"></a>	*
+<a name="line79"></a>	* This function does the following:
+<a name="line80"></a>	*
+<a name="line81"></a>	* Unsets $_GET data (if query strings are not enabled)
+<a name="line82"></a>	*
+<a name="line83"></a>	* Unsets all globals if register_globals is enabled
+<a name="line84"></a>	*
+<a name="line85"></a>	* Standardizes newline characters to \n
+<a name="line86"></a>	*
+<a name="line87"></a>	* @access	private
+<a name="line88"></a>	* @return	void
+<a name="line89"></a>	*/
+<a name="line90"></a>	function _sanitize_globals()
+<a name="line91"></a>	{
+<a name="line92"></a>		// Would kind of be "wrong" to unset any of these GLOBALS
+<a name="line93"></a>		$protected = array('_SERVER', '_GET', '_POST', '_FILES', '_REQUEST', '_SESSION', '_ENV', 'GLOBALS', 'HTTP_RAW_POST_DATA',
+<a name="line94"></a>							'system_folder', 'application_folder', 'BM', 'EXT', 'CFG', 'URI', 'RTR', 'OUT', 'IN');
+<a name="line95"></a>
+<a name="line96"></a>		// Unset globals for security. 
+<a name="line97"></a>		// This is effectively the same as register_globals = off
+<a name="line98"></a>		foreach (array($_GET, $_POST, $_COOKIE, $_SERVER, $_FILES, $_ENV, (isset($_SESSION) && is_array($_SESSION)) ? $_SESSION : array()) as $global)
+<a name="line99"></a>		{
+<a name="line100"></a>			if ( ! is_array($global))
+<a name="line101"></a>			{
+<a name="line102"></a>				if ( ! in_array($global, $protected))
+<a name="line103"></a>				{
+<a name="line104"></a>					unset($GLOBALS[$global]);
+<a name="line105"></a>				}
+<a name="line106"></a>			}
+<a name="line107"></a>			else
+<a name="line108"></a>			{
+<a name="line109"></a>				foreach ($global as $key => $val)
+<a name="line110"></a>				{
+<a name="line111"></a>					if ( ! in_array($key, $protected))
+<a name="line112"></a>					{
+<a name="line113"></a>						unset($GLOBALS[$key]);
+<a name="line114"></a>					}
+<a name="line115"></a>
+<a name="line116"></a>					if (is_array($val))
+<a name="line117"></a>					{
+<a name="line118"></a>						foreach($val as $k => $v)
+<a name="line119"></a>						{
+<a name="line120"></a>							if ( ! in_array($k, $protected))
+<a name="line121"></a>							{
+<a name="line122"></a>								unset($GLOBALS[$k]);
+<a name="line123"></a>							}
+<a name="line124"></a>						}
+<a name="line125"></a>					}
+<a name="line126"></a>				}
+<a name="line127"></a>			}
+<a name="line128"></a>		}
+<a name="line129"></a>
+<a name="line130"></a>		// Is $_GET data allowed? If not we'll set the $_GET to an empty array
+<a name="line131"></a>		if ($this->allow_get_array == FALSE)
+<a name="line132"></a>		{
+<a name="line133"></a>			$_GET = array();
+<a name="line134"></a>		}
+<a name="line135"></a>		else
+<a name="line136"></a>		{
+<a name="line137"></a>			$_GET = $this->_clean_input_data($_GET);
+<a name="line138"></a>		}
+<a name="line139"></a>
+<a name="line140"></a>		// Clean $_POST Data
+<a name="line141"></a>		$_POST = $this->_clean_input_data($_POST);
+<a name="line142"></a>
+<a name="line143"></a>		// Clean $_COOKIE Data
+<a name="line144"></a>		// Also get rid of specially treated cookies that might be set by a server
+<a name="line145"></a>		// or silly application, that are of no use to a CI application anyway
+<a name="line146"></a>		// but that when present will trip our 'Disallowed Key Characters' alarm
+<a name="line147"></a>		// http://www.ietf.org/rfc/rfc2109.txt
+<a name="line148"></a>		// note that the key names below are single quoted strings, and are not PHP variables
+<a name="line149"></a>		unset($_COOKIE['$Version']);
+<a name="line150"></a>		unset($_COOKIE['$Path']);
+<a name="line151"></a>		unset($_COOKIE['$Domain']);
+<a name="line152"></a>		$_COOKIE = $this->_clean_input_data($_COOKIE);
+<a name="line153"></a>
+<a name="line154"></a>		log_message('debug', "Global POST and COOKIE data sanitized");
+<a name="line155"></a>	}
+<a name="line156"></a>
+<a name="line157"></a>	// --------------------------------------------------------------------
+<a name="line158"></a>
+<a name="line159"></a>	/**
+<a name="line160"></a>	* Clean Input Data
+<a name="line161"></a>	*
+<a name="line162"></a>	* This is a helper function. It escapes data and
+<a name="line163"></a>	* standardizes newline characters to \n
+<a name="line164"></a>	*
+<a name="line165"></a>	* @access	private
+<a name="line166"></a>	* @param	string
+<a name="line167"></a>	* @return	string
+<a name="line168"></a>	*/
+<a name="line169"></a>	function _clean_input_data($str)
+<a name="line170"></a>	{
+<a name="line171"></a>		if (is_array($str))
+<a name="line172"></a>		{
+<a name="line173"></a>			$new_array = array();
+<a name="line174"></a>			foreach ($str as $key => $val)
+<a name="line175"></a>			{
+<a name="line176"></a>				$new_array[$this->_clean_input_keys($key)] = $this->_clean_input_data($val);
+<a name="line177"></a>			}
+<a name="line178"></a>			return $new_array;
+<a name="line179"></a>		}
+<a name="line180"></a>
+<a name="line181"></a>		// We strip slashes if magic quotes is on to keep things consistent
+<a name="line182"></a>		if (get_magic_quotes_gpc())
+<a name="line183"></a>		{
+<a name="line184"></a>			$str = stripslashes($str);
+<a name="line185"></a>		}
+<a name="line186"></a>
+<a name="line187"></a>		// Should we filter the input data?
+<a name="line188"></a>		if ($this->use_xss_clean === TRUE)
+<a name="line189"></a>		{
+<a name="line190"></a>			$str = $this->xss_clean($str);
+<a name="line191"></a>		}
+<a name="line192"></a>
+<a name="line193"></a>		// Standardize newlines
+<a name="line194"></a>		if (strpos($str, "\r") !== FALSE)
+<a name="line195"></a>		{
+<a name="line196"></a>			$str = str_replace(array("\r\n", "\r"), "\n", $str);
+<a name="line197"></a>		}
+<a name="line198"></a>
+<a name="line199"></a>		return $str;
+<a name="line200"></a>	}
+<a name="line201"></a>
+<a name="line202"></a>	// --------------------------------------------------------------------
+<a name="line203"></a>
+<a name="line204"></a>	/**
+<a name="line205"></a>	* Clean Keys
+<a name="line206"></a>	*
+<a name="line207"></a>	* This is a helper function. To prevent malicious users
+<a name="line208"></a>	* from trying to exploit keys we make sure that keys are
+<a name="line209"></a>	* only named with alpha-numeric text and a few other items.
+<a name="line210"></a>	*
+<a name="line211"></a>	* @access	private
+<a name="line212"></a>	* @param	string
+<a name="line213"></a>	* @return	string
+<a name="line214"></a>	*/
+<a name="line215"></a>	function _clean_input_keys($str)
+<a name="line216"></a>	{
+<a name="line217"></a>		if ( ! preg_match("/^[a-z0-9:_\/-]+$/i", $str))
+<a name="line218"></a>		{
+<a name="line219"></a>			exit('Disallowed Key Characters.');
+<a name="line220"></a>		}
+<a name="line221"></a>
+<a name="line222"></a>		return $str;
+<a name="line223"></a>	}
+<a name="line224"></a>
+<a name="line225"></a>	// --------------------------------------------------------------------
+<a name="line226"></a>
+<a name="line227"></a>	/**
+<a name="line228"></a>	* Fetch from array
+<a name="line229"></a>	*
+<a name="line230"></a>	* This is a helper function to retrieve values from global arrays
+<a name="line231"></a>	*
+<a name="line232"></a>	* @access	private
+<a name="line233"></a>	* @param	array
+<a name="line234"></a>	* @param	string
+<a name="line235"></a>	* @param	bool
+<a name="line236"></a>	* @return	string
+<a name="line237"></a>	*/
+<a name="line238"></a>	function _fetch_from_array(&$array, $index = '', $xss_clean = FALSE)
+<a name="line239"></a>	{
+<a name="line240"></a>		if ( ! isset($array[$index]))
+<a name="line241"></a>		{
+<a name="line242"></a>			return FALSE;
+<a name="line243"></a>		}
+<a name="line244"></a>
+<a name="line245"></a>		if ($xss_clean === TRUE)
+<a name="line246"></a>		{
+<a name="line247"></a>			return $this->xss_clean($array[$index]);
+<a name="line248"></a>		}
+<a name="line249"></a>
+<a name="line250"></a>		return $array[$index];
+<a name="line251"></a>	}
+<a name="line252"></a>
+<a name="line253"></a>	// --------------------------------------------------------------------
+<a name="line254"></a>
+<a name="line255"></a>	/**
+<a name="line256"></a>	* Fetch an item from the GET array
+<a name="line257"></a>	*
+<a name="line258"></a>	* @access	public
+<a name="line259"></a>	* @param	string
+<a name="line260"></a>	* @param	bool
+<a name="line261"></a>	* @return	string
+<a name="line262"></a>	*/
+<a name="line263"></a>	function get($index = '', $xss_clean = FALSE)
+<a name="line264"></a>	{
+<a name="line265"></a>		return $this->_fetch_from_array($_GET, $index, $xss_clean);
+<a name="line266"></a>	}
+<a name="line267"></a>
+<a name="line268"></a>	// --------------------------------------------------------------------
+<a name="line269"></a>
+<a name="line270"></a>	/**
+<a name="line271"></a>	* Fetch an item from the POST array
+<a name="line272"></a>	*
+<a name="line273"></a>	* @access	public
+<a name="line274"></a>	* @param	string
+<a name="line275"></a>	* @param	bool
+<a name="line276"></a>	* @return	string
+<a name="line277"></a>	*/
+<a name="line278"></a>	function post($index = '', $xss_clean = FALSE)
+<a name="line279"></a>	{
+<a name="line280"></a>		return $this->_fetch_from_array($_POST, $index, $xss_clean);
+<a name="line281"></a>	}
+<a name="line282"></a>
+<a name="line283"></a>	// --------------------------------------------------------------------
+<a name="line284"></a>
+<a name="line285"></a>	/**
+<a name="line286"></a>	* Fetch an item from either the GET array or the POST
+<a name="line287"></a>	*
+<a name="line288"></a>	* @access	public
+<a name="line289"></a>	* @param	string	The index key
+<a name="line290"></a>	* @param	bool	XSS cleaning
+<a name="line291"></a>	* @return	string
+<a name="line292"></a>	*/
+<a name="line293"></a>	function get_post($index = '', $xss_clean = FALSE)
+<a name="line294"></a>	{
+<a name="line295"></a>		if ( ! isset($_POST[$index]) )
+<a name="line296"></a>		{
+<a name="line297"></a>			return $this->get($index, $xss_clean);
+<a name="line298"></a>		}
+<a name="line299"></a>		else
+<a name="line300"></a>		{
+<a name="line301"></a>			return $this->post($index, $xss_clean);
+<a name="line302"></a>		}
+<a name="line303"></a>	}
+<a name="line304"></a>
+<a name="line305"></a>	// --------------------------------------------------------------------
+<a name="line306"></a>
+<a name="line307"></a>	/**
+<a name="line308"></a>	* Fetch an item from the COOKIE array
+<a name="line309"></a>	*
+<a name="line310"></a>	* @access	public
+<a name="line311"></a>	* @param	string
+<a name="line312"></a>	* @param	bool
+<a name="line313"></a>	* @return	string
+<a name="line314"></a>	*/
+<a name="line315"></a>	function cookie($index = '', $xss_clean = FALSE)
+<a name="line316"></a>	{
+<a name="line317"></a>		return $this->_fetch_from_array($_COOKIE, $index, $xss_clean);
+<a name="line318"></a>	}
+<a name="line319"></a>
+<a name="line320"></a>	// --------------------------------------------------------------------
+<a name="line321"></a>
+<a name="line322"></a>	/**
+<a name="line323"></a>	* Fetch an item from the SERVER array
+<a name="line324"></a>	*
+<a name="line325"></a>	* @access	public
+<a name="line326"></a>	* @param	string
+<a name="line327"></a>	* @param	bool
+<a name="line328"></a>	* @return	string
+<a name="line329"></a>	*/
+<a name="line330"></a>	function server($index = '', $xss_clean = FALSE)
+<a name="line331"></a>	{
+<a name="line332"></a>		return $this->_fetch_from_array($_SERVER, $index, $xss_clean);
+<a name="line333"></a>	}
+<a name="line334"></a>
+<a name="line335"></a>	// --------------------------------------------------------------------
+<a name="line336"></a>
+<a name="line337"></a>	/**
+<a name="line338"></a>	* Fetch the IP Address
+<a name="line339"></a>	*
+<a name="line340"></a>	* @access	public
+<a name="line341"></a>	* @return	string
+<a name="line342"></a>	*/
+<a name="line343"></a>	function ip_address()
+<a name="line344"></a>	{
+<a name="line345"></a>		if ($this->ip_address !== FALSE)
+<a name="line346"></a>		{
+<a name="line347"></a>			return $this->ip_address;
+<a name="line348"></a>		}
+<a name="line349"></a>		
+<a name="line350"></a>		if (config_item('proxy_ips') != '' && $this->server('HTTP_X_FORWARDED_FOR') && $this->server('REMOTE_ADDR'))
+<a name="line351"></a>		{
+<a name="line352"></a>			$proxies = preg_split('/[\s,]/', config_item('proxy_ips'), -1, PREG_SPLIT_NO_EMPTY);
+<a name="line353"></a>			$proxies = is_array($proxies) ? $proxies : array($proxies);
+<a name="line354"></a>
+<a name="line355"></a>			$this->ip_address = in_array($_SERVER['REMOTE_ADDR'], $proxies) ? $_SERVER['HTTP_X_FORWARDED_FOR'] : $_SERVER['REMOTE_ADDR'];
+<a name="line356"></a>		}
+<a name="line357"></a>		elseif ($this->server('REMOTE_ADDR') AND $this->server('HTTP_CLIENT_IP'))
+<a name="line358"></a>		{
+<a name="line359"></a>			$this->ip_address = $_SERVER['HTTP_CLIENT_IP'];
+<a name="line360"></a>		}
+<a name="line361"></a>		elseif ($this->server('REMOTE_ADDR'))
+<a name="line362"></a>		{
+<a name="line363"></a>			$this->ip_address = $_SERVER['REMOTE_ADDR'];
+<a name="line364"></a>		}
+<a name="line365"></a>		elseif ($this->server('HTTP_CLIENT_IP'))
+<a name="line366"></a>		{
+<a name="line367"></a>			$this->ip_address = $_SERVER['HTTP_CLIENT_IP'];
+<a name="line368"></a>		}
+<a name="line369"></a>		elseif ($this->server('HTTP_X_FORWARDED_FOR'))
+<a name="line370"></a>		{
+<a name="line371"></a>			$this->ip_address = $_SERVER['HTTP_X_FORWARDED_FOR'];
+<a name="line372"></a>		}
+<a name="line373"></a>
+<a name="line374"></a>		if ($this->ip_address === FALSE)
+<a name="line375"></a>		{
+<a name="line376"></a>			$this->ip_address = '0.0.0.0';
+<a name="line377"></a>			return $this->ip_address;
+<a name="line378"></a>		}
+<a name="line379"></a>
+<a name="line380"></a>		if (strstr($this->ip_address, ','))
+<a name="line381"></a>		{
+<a name="line382"></a>			$x = explode(',', $this->ip_address);
+<a name="line383"></a>			$this->ip_address = trim(end($x));
+<a name="line384"></a>		}
+<a name="line385"></a>
+<a name="line386"></a>		if ( ! $this->valid_ip($this->ip_address))
+<a name="line387"></a>		{
+<a name="line388"></a>			$this->ip_address = '0.0.0.0';
+<a name="line389"></a>		}
+<a name="line390"></a>
+<a name="line391"></a>		return $this->ip_address;
+<a name="line392"></a>	}
+<a name="line393"></a>
+<a name="line394"></a>	// --------------------------------------------------------------------
+<a name="line395"></a>
+<a name="line396"></a>	/**
+<a name="line397"></a>	* Validate IP Address
+<a name="line398"></a>	*
+<a name="line399"></a>	* Updated version suggested by Geert De Deckere
+<a name="line400"></a>	* 
+<a name="line401"></a>	* @access	public
+<a name="line402"></a>	* @param	string
+<a name="line403"></a>	* @return	string
+<a name="line404"></a>	*/
+<a name="line405"></a>	function valid_ip($ip)
+<a name="line406"></a>	{
+<a name="line407"></a>		$ip_segments = explode('.', $ip);
+<a name="line408"></a>
+<a name="line409"></a>		// Always 4 segments needed
+<a name="line410"></a>		if (count($ip_segments) != 4)
+<a name="line411"></a>		{
+<a name="line412"></a>			return FALSE;
+<a name="line413"></a>		}
+<a name="line414"></a>		// IP can not start with 0
+<a name="line415"></a>		if ($ip_segments[0][0] == '0')
+<a name="line416"></a>		{
+<a name="line417"></a>			return FALSE;
+<a name="line418"></a>		}
+<a name="line419"></a>		// Check each segment
+<a name="line420"></a>		foreach ($ip_segments as $segment)
+<a name="line421"></a>		{
+<a name="line422"></a>			// IP segments must be digits and can not be 
+<a name="line423"></a>			// longer than 3 digits or greater then 255
+<a name="line424"></a>			if ($segment == '' OR preg_match("/[^0-9]/", $segment) OR $segment > 255 OR strlen($segment) > 3)
+<a name="line425"></a>			{
+<a name="line426"></a>				return FALSE;
+<a name="line427"></a>			}
+<a name="line428"></a>		}
+<a name="line429"></a>
+<a name="line430"></a>		return TRUE;
+<a name="line431"></a>	}
+<a name="line432"></a>
+<a name="line433"></a>	// --------------------------------------------------------------------
+<a name="line434"></a>
+<a name="line435"></a>	/**
+<a name="line436"></a>	* User Agent
+<a name="line437"></a>	*
+<a name="line438"></a>	* @access	public
+<a name="line439"></a>	* @return	string
+<a name="line440"></a>	*/
+<a name="line441"></a>	function user_agent()
+<a name="line442"></a>	{
+<a name="line443"></a>		if ($this->user_agent !== FALSE)
+<a name="line444"></a>		{
+<a name="line445"></a>			return $this->user_agent;
+<a name="line446"></a>		}
+<a name="line447"></a>
+<a name="line448"></a>		$this->user_agent = ( ! isset($_SERVER['HTTP_USER_AGENT'])) ? FALSE : $_SERVER['HTTP_USER_AGENT'];
+<a name="line449"></a>
+<a name="line450"></a>		return $this->user_agent;
+<a name="line451"></a>	}
+<a name="line452"></a>
+<a name="line453"></a>	// --------------------------------------------------------------------
+<a name="line454"></a>
+<a name="line455"></a>	/**
+<a name="line456"></a>	* Filename Security
+<a name="line457"></a>	*
+<a name="line458"></a>	* @access	public
+<a name="line459"></a>	* @param	string
+<a name="line460"></a>	* @return	string
+<a name="line461"></a>	*/
+<a name="line462"></a>	function filename_security($str)
+<a name="line463"></a>	{
+<a name="line464"></a>		$bad = array(
+<a name="line465"></a>						"../",
+<a name="line466"></a>						"./",
+<a name="line467"></a>						"<!--",
+<a name="line468"></a>						"-->",
+<a name="line469"></a>						"<",
+<a name="line470"></a>						">",
+<a name="line471"></a>						"'",
+<a name="line472"></a>						'"',
+<a name="line473"></a>						'&',
+<a name="line474"></a>						'$',
+<a name="line475"></a>						'#',
+<a name="line476"></a>						'{',
+<a name="line477"></a>						'}',
+<a name="line478"></a>						'[',
+<a name="line479"></a>						']',
+<a name="line480"></a>						'=',
+<a name="line481"></a>						';',
+<a name="line482"></a>						'?',
+<a name="line483"></a>						"%20",
+<a name="line484"></a>						"%22",
+<a name="line485"></a>						"%3c",		// <
+<a name="line486"></a>						"%253c", 	// <
+<a name="line487"></a>						"%3e", 		// >
+<a name="line488"></a>						"%0e", 		// >
+<a name="line489"></a>						"%28", 		// (  
+<a name="line490"></a>						"%29", 		// ) 
+<a name="line491"></a>						"%2528", 	// (
+<a name="line492"></a>						"%26", 		// &
+<a name="line493"></a>						"%24", 		// $
+<a name="line494"></a>						"%3f", 		// ?
+<a name="line495"></a>						"%3b", 		// ;
+<a name="line496"></a>						"%3d"		// =
+<a name="line497"></a>					);
+<a name="line498"></a>
+<a name="line499"></a>		return stripslashes(str_replace($bad, '', $str));
+<a name="line500"></a>	}
+<a name="line501"></a>
+<a name="line502"></a>	// --------------------------------------------------------------------
+<a name="line503"></a>
+<a name="line504"></a>	/**
+<a name="line505"></a>	* XSS Clean
+<a name="line506"></a>	*
+<a name="line507"></a>	* Sanitizes data so that Cross Site Scripting Hacks can be
+<a name="line508"></a>	* prevented.  This function does a fair amount of work but
+<a name="line509"></a>	* it is extremely thorough, designed to prevent even the
+<a name="line510"></a>	* most obscure XSS attempts.  Nothing is ever 100% foolproof,
+<a name="line511"></a>	* of course, but I haven't been able to get anything passed
+<a name="line512"></a>	* the filter.
+<a name="line513"></a>	*
+<a name="line514"></a>	* Note: This function should only be used to deal with data
+<a name="line515"></a>	* upon submission.  It's not something that should
+<a name="line516"></a>	* be used for general runtime processing.
+<a name="line517"></a>	*
+<a name="line518"></a>	* This function was based in part on some code and ideas I
+<a name="line519"></a>	* got from Bitflux: http://blog.bitflux.ch/wiki/XSS_Prevention
+<a name="line520"></a>	*
+<a name="line521"></a>	* To help develop this script I used this great list of
+<a name="line522"></a>	* vulnerabilities along with a few other hacks I've
+<a name="line523"></a>	* harvested from examining vulnerabilities in other programs:
+<a name="line524"></a>	* http://ha.ckers.org/xss.html
+<a name="line525"></a>	*
+<a name="line526"></a>	* @access	public
+<a name="line527"></a>	* @param	string
+<a name="line528"></a>	* @return	string
+<a name="line529"></a>	*/
+<a name="line530"></a>	function xss_clean($str, $is_image = FALSE)
+<a name="line531"></a>	{
+<a name="line532"></a>		/*
+<a name="line533"></a>		* Is the string an array?
+<a name="line534"></a>		*
+<a name="line535"></a>		*/
+<a name="line536"></a>		if (is_array($str))
+<a name="line537"></a>		{
+<a name="line538"></a>			while (list($key) = each($str))
+<a name="line539"></a>			{
+<a name="line540"></a>				$str[$key] = $this->xss_clean($str[$key]);
+<a name="line541"></a>			}
+<a name="line542"></a>
+<a name="line543"></a>			return $str;
+<a name="line544"></a>		}
+<a name="line545"></a>
+<a name="line546"></a>		/*
+<a name="line547"></a>		* Remove Invisible Characters
+<a name="line548"></a>		*/
+<a name="line549"></a>		$str = $this->_remove_invisible_characters($str);
+<a name="line550"></a>
+<a name="line551"></a>		/*
+<a name="line552"></a>		* Protect GET variables in URLs
+<a name="line553"></a>		*/
+<a name="line554"></a>
+<a name="line555"></a>		// 901119URL5918AMP18930PROTECT8198
+<a name="line556"></a>
+<a name="line557"></a>		$str = preg_replace('|\&([a-z\_0-9]+)\=([a-z\_0-9]+)|i', $this->xss_hash()."\\1=\\2", $str);
+<a name="line558"></a>
+<a name="line559"></a>		/*
+<a name="line560"></a>		* Validate standard character entities
+<a name="line561"></a>		*
+<a name="line562"></a>		* Add a semicolon if missing.  We do this to enable
+<a name="line563"></a>		* the conversion of entities to ASCII later.
+<a name="line564"></a>		*
+<a name="line565"></a>		*/
+<a name="line566"></a>		$str = preg_replace('#(&\#?[0-9a-z]{2,})([\x00-\x20])*;?#i', "\\1;\\2", $str);
+<a name="line567"></a>
+<a name="line568"></a>		/*
+<a name="line569"></a>		* Validate UTF16 two byte encoding (x00) 
+<a name="line570"></a>		*
+<a name="line571"></a>		* Just as above, adds a semicolon if missing.
+<a name="line572"></a>		*
+<a name="line573"></a>		*/
+<a name="line574"></a>		$str = preg_replace('#(&\#x?)([0-9A-F]+);?#i',"\\1\\2;",$str);
+<a name="line575"></a>
+<a name="line576"></a>		/*
+<a name="line577"></a>		* Un-Protect GET variables in URLs
+<a name="line578"></a>		*/
+<a name="line579"></a>		$str = str_replace($this->xss_hash(), '&', $str);
+<a name="line580"></a>
+<a name="line581"></a>		/*
+<a name="line582"></a>		* URL Decode
+<a name="line583"></a>		*
+<a name="line584"></a>		* Just in case stuff like this is submitted:
+<a name="line585"></a>		*
+<a name="line586"></a>		* <a href="http://%77%77%77%2E%67%6F%6F%67%6C%65%2E%63%6F%6D">Google</a>
+<a name="line587"></a>		*
+<a name="line588"></a>		* Note: Use rawurldecode() so it does not remove plus signs
+<a name="line589"></a>		*
+<a name="line590"></a>		*/
+<a name="line591"></a>		$str = rawurldecode($str);
+<a name="line592"></a>
+<a name="line593"></a>		/*
+<a name="line594"></a>		* Convert character entities to ASCII 
+<a name="line595"></a>		*
+<a name="line596"></a>		* This permits our tests below to work reliably.
+<a name="line597"></a>		* We only convert entities that are within tags since
+<a name="line598"></a>		* these are the ones that will pose security problems.
+<a name="line599"></a>		*
+<a name="line600"></a>		*/
+<a name="line601"></a>
+<a name="line602"></a>		$str = preg_replace_callback("/[a-z]+=([\'\"]).*?\\1/si", array($this, '_convert_attribute'), $str);
+<a name="line603"></a>
+<a name="line604"></a>		$str = preg_replace_callback("/<\w+.*?(?=>|<|$)/si", array($this, '_html_entity_decode_callback'), $str);
+<a name="line605"></a>
+<a name="line606"></a>		/*
+<a name="line607"></a>		* Remove Invisible Characters Again!
+<a name="line608"></a>		*/
+<a name="line609"></a>		$str = $this->_remove_invisible_characters($str);
+<a name="line610"></a>
+<a name="line611"></a>		/*
+<a name="line612"></a>		* Convert all tabs to spaces
+<a name="line613"></a>		*
+<a name="line614"></a>		* This prevents strings like this: ja	vascript
+<a name="line615"></a>		* NOTE: we deal with spaces between characters later.
+<a name="line616"></a>		* NOTE: preg_replace was found to be amazingly slow here on large blocks of data,
+<a name="line617"></a>		* so we use str_replace.
+<a name="line618"></a>		*
+<a name="line619"></a>		*/
+<a name="line620"></a>
+<a name="line621"></a> 		if (strpos($str, "\t") !== FALSE)
+<a name="line622"></a>		{
+<a name="line623"></a>			$str = str_replace("\t", ' ', $str);
+<a name="line624"></a>		}
+<a name="line625"></a>
+<a name="line626"></a>		/*
+<a name="line627"></a>		* Capture converted string for later comparison
+<a name="line628"></a>		*/
+<a name="line629"></a>		$converted_string = $str;
+<a name="line630"></a>
+<a name="line631"></a>		/*
+<a name="line632"></a>		* Not Allowed Under Any Conditions
+<a name="line633"></a>		*/
+<a name="line634"></a>
+<a name="line635"></a>		foreach ($this->never_allowed_str as $key => $val)
+<a name="line636"></a>		{
+<a name="line637"></a>			$str = str_replace($key, $val, $str);   
+<a name="line638"></a>		}
+<a name="line639"></a>
+<a name="line640"></a>		foreach ($this->never_allowed_regex as $key => $val)
+<a name="line641"></a>		{
+<a name="line642"></a>			$str = preg_replace("#".$key."#i", $val, $str);   
+<a name="line643"></a>		}
+<a name="line644"></a>
+<a name="line645"></a>		/*
+<a name="line646"></a>		* Makes PHP tags safe
+<a name="line647"></a>		*
+<a name="line648"></a>		*  Note: XML tags are inadvertently replaced too:
+<a name="line649"></a>		*
+<a name="line650"></a>		*	<?xml
+<a name="line651"></a>		*
+<a name="line652"></a>		* But it doesn't seem to pose a problem.
+<a name="line653"></a>		*
+<a name="line654"></a>		*/
+<a name="line655"></a>		if ($is_image === TRUE)
+<a name="line656"></a>		{
+<a name="line657"></a>			// Images have a tendency to have the PHP short opening and closing tags every so often
+<a name="line658"></a>			// so we skip those and only do the long opening tags.
+<a name="line659"></a>			$str = preg_replace('/<\?(php)/i', "&lt;?\\1", $str);
+<a name="line660"></a>		}
+<a name="line661"></a>		else
+<a name="line662"></a>		{
+<a name="line663"></a>			$str = str_replace(array('<?', '?'.'>'),  array('&lt;?', '?&gt;'), $str);
+<a name="line664"></a>		}
+<a name="line665"></a>
+<a name="line666"></a>		/*
+<a name="line667"></a>		* Compact any exploded words
+<a name="line668"></a>		*
+<a name="line669"></a>		* This corrects words like:  j a v a s c r i p t
+<a name="line670"></a>		* These words are compacted back to their correct state.
+<a name="line671"></a>		*
+<a name="line672"></a>		*/
+<a name="line673"></a>		$words = array('javascript', 'expression', 'vbscript', 'script', 'applet', 'alert', 'document', 'write', 'cookie', 'window');
+<a name="line674"></a>		foreach ($words as $word)
+<a name="line675"></a>		{
+<a name="line676"></a>			$temp = '';
+<a name="line677"></a>
+<a name="line678"></a>			for ($i = 0, $wordlen = strlen($word); $i < $wordlen; $i++)
+<a name="line679"></a>			{
+<a name="line680"></a>				$temp .= substr($word, $i, 1)."\s*";
+<a name="line681"></a>			}
+<a name="line682"></a>
+<a name="line683"></a>			// We only want to do this when it is followed by a non-word character
+<a name="line684"></a>			// That way valid stuff like "dealer to" does not become "dealerto"
+<a name="line685"></a>			$str = preg_replace_callback('#('.substr($temp, 0, -3).')(\W)#is', array($this, '_compact_exploded_words'), $str);
+<a name="line686"></a>		}
+<a name="line687"></a>
+<a name="line688"></a>		/*
+<a name="line689"></a>		* Remove disallowed Javascript in links or img tags
+<a name="line690"></a>		* We used to do some version comparisons and use of stripos for PHP5, but it is dog slow compared
+<a name="line691"></a>		* to these simplified non-capturing preg_match(), especially if the pattern exists in the string
+<a name="line692"></a>		*/
+<a name="line693"></a>		do
+<a name="line694"></a>		{
+<a name="line695"></a>			$original = $str;
+<a name="line696"></a>
+<a name="line697"></a>			if (preg_match("/<a/i", $str))
+<a name="line698"></a>			{
+<a name="line699"></a>				$str = preg_replace_callback("#<a\s+([^>]*?)(>|$)#si", array($this, '_js_link_removal'), $str);
+<a name="line700"></a>			}
+<a name="line701"></a>
+<a name="line702"></a>			if (preg_match("/<img/i", $str))
+<a name="line703"></a>			{
+<a name="line704"></a>				$str = preg_replace_callback("#<img\s+([^>]*?)(\s?/?>|$)#si", array($this, '_js_img_removal'), $str);
+<a name="line705"></a>			}
+<a name="line706"></a>
+<a name="line707"></a>			if (preg_match("/script/i", $str) OR preg_match("/xss/i", $str))
+<a name="line708"></a>			{
+<a name="line709"></a>				$str = preg_replace("#<(/*)(script|xss)(.*?)\>#si", '[removed]', $str);
+<a name="line710"></a>			}
+<a name="line711"></a>		}
+<a name="line712"></a>		while($original != $str);
+<a name="line713"></a>
+<a name="line714"></a>		unset($original);
+<a name="line715"></a>
+<a name="line716"></a>		/*
+<a name="line717"></a>		* Remove JavaScript Event Handlers
+<a name="line718"></a>		*
+<a name="line719"></a>		* Note: This code is a little blunt.  It removes
+<a name="line720"></a>		* the event handler and anything up to the closing >,
+<a name="line721"></a>		* but it's unlikely to be a problem.
+<a name="line722"></a>		*
+<a name="line723"></a>		*/
+<a name="line724"></a>		$event_handlers = array('[^a-z_\-]on\w*','xmlns');
+<a name="line725"></a>
+<a name="line726"></a>		if ($is_image === TRUE)
+<a name="line727"></a>		{
+<a name="line728"></a>			/*
+<a name="line729"></a>			* Adobe Photoshop puts XML metadata into JFIF images, including namespacing, 
+<a name="line730"></a>			* so we have to allow this for images. -Paul
+<a name="line731"></a>			*/
+<a name="line732"></a>			unset($event_handlers[array_search('xmlns', $event_handlers)]);
+<a name="line733"></a>		}
+<a name="line734"></a>
+<a name="line735"></a>		$str = preg_replace("#<([^><]+?)(".implode('|', $event_handlers).")(\s*=\s*[^><]*)([><]*)#i", "<\\1\\4", $str);
+<a name="line736"></a>
+<a name="line737"></a>		/*
+<a name="line738"></a>		* Sanitize naughty HTML elements
+<a name="line739"></a>		*
+<a name="line740"></a>		* If a tag containing any of the words in the list
+<a name="line741"></a>		* below is found, the tag gets converted to entities.
+<a name="line742"></a>		*
+<a name="line743"></a>		* So this: <blink>
+<a name="line744"></a>		* Becomes: &lt;blink&gt;
+<a name="line745"></a>		*
+<a name="line746"></a>		*/
+<a name="line747"></a>		$naughty = 'alert|applet|audio|basefont|base|behavior|bgsound|blink|body|embed|expression|form|frameset|frame|head|html|ilayer|iframe|input|isindex|layer|link|meta|object|plaintext|style|script|textarea|title|video|xml|xss';
+<a name="line748"></a>		$str = preg_replace_callback('#<(/*\s*)('.$naughty.')([^><]*)([><]*)#is', array($this, '_sanitize_naughty_html'), $str);
+<a name="line749"></a>
+<a name="line750"></a>		/*
+<a name="line751"></a>		* Sanitize naughty scripting elements
+<a name="line752"></a>		*
+<a name="line753"></a>		* Similar to above, only instead of looking for
+<a name="line754"></a>		* tags it looks for PHP and JavaScript commands
+<a name="line755"></a>		* that are disallowed.  Rather than removing the
+<a name="line756"></a>		* code, it simply converts the parenthesis to entities
+<a name="line757"></a>		* rendering the code un-executable.
+<a name="line758"></a>		*
+<a name="line759"></a>		* For example:	eval('some code')
+<a name="line760"></a>		* Becomes:		eval&#40;'some code'&#41;
+<a name="line761"></a>		*
+<a name="line762"></a>		*/
+<a name="line763"></a>		$str = preg_replace('#(alert|cmd|passthru|eval|exec|expression|system|fopen|fsockopen|file|file_get_contents|readfile|unlink)(\s*)\((.*?)\)#si', "\\1\\2&#40;\\3&#41;", $str);
+<a name="line764"></a>
+<a name="line765"></a>		/*
+<a name="line766"></a>		* Final clean up
+<a name="line767"></a>		*
+<a name="line768"></a>		* This adds a bit of extra precaution in case
+<a name="line769"></a>		* something got through the above filters
+<a name="line770"></a>		*
+<a name="line771"></a>		*/
+<a name="line772"></a>		foreach ($this->never_allowed_str as $key => $val)
+<a name="line773"></a>		{
+<a name="line774"></a>			$str = str_replace($key, $val, $str);   
+<a name="line775"></a>		}
+<a name="line776"></a>
+<a name="line777"></a>		foreach ($this->never_allowed_regex as $key => $val)
+<a name="line778"></a>		{
+<a name="line779"></a>			$str = preg_replace("#".$key."#i", $val, $str);
+<a name="line780"></a>		}
+<a name="line781"></a>
+<a name="line782"></a>		/*
+<a name="line783"></a>		*  Images are Handled in a Special Way
+<a name="line784"></a>		*  - Essentially, we want to know that after all of the character conversion is done whether
+<a name="line785"></a>		*  any unwanted, likely XSS, code was found.  If not, we return TRUE, as the image is clean.
+<a name="line786"></a>		*  However, if the string post-conversion does not matched the string post-removal of XSS,
+<a name="line787"></a>		*  then it fails, as there was unwanted XSS code found and removed/changed during processing.
+<a name="line788"></a>		*/
+<a name="line789"></a>
+<a name="line790"></a>		if ($is_image === TRUE)
+<a name="line791"></a>		{
+<a name="line792"></a>			if ($str == $converted_string)
+<a name="line793"></a>			{
+<a name="line794"></a>				return TRUE;
+<a name="line795"></a>			}
+<a name="line796"></a>			else
+<a name="line797"></a>			{
+<a name="line798"></a>				return FALSE;
+<a name="line799"></a>			}
+<a name="line800"></a>		}
+<a name="line801"></a>
+<a name="line802"></a>		log_message('debug', "XSS Filtering completed");
+<a name="line803"></a>		return $str;
+<a name="line804"></a>	}
+<a name="line805"></a>
+<a name="line806"></a>	// --------------------------------------------------------------------
+<a name="line807"></a>
+<a name="line808"></a>	/**
+<a name="line809"></a>	* Random Hash for protecting URLs
+<a name="line810"></a>	*
+<a name="line811"></a>	* @access	public
+<a name="line812"></a>	* @return	string
+<a name="line813"></a>	*/
+<a name="line814"></a>	function xss_hash()
+<a name="line815"></a>	{
+<a name="line816"></a>		if ($this->xss_hash == '')
+<a name="line817"></a>		{
+<a name="line818"></a>			if (phpversion() >= 4.2)
+<a name="line819"></a>				mt_srand();
+<a name="line820"></a>			else
+<a name="line821"></a>				mt_srand(hexdec(substr(md5(microtime()), -8)) & 0x7fffffff);
+<a name="line822"></a>
+<a name="line823"></a>			$this->xss_hash = md5(time() + mt_rand(0, 1999999999));
+<a name="line824"></a>		}
+<a name="line825"></a>
+<a name="line826"></a>		return $this->xss_hash;
+<a name="line827"></a>	}
+<a name="line828"></a>
+<a name="line829"></a>	// --------------------------------------------------------------------
+<a name="line830"></a>
+<a name="line831"></a>	/**
+<a name="line832"></a>	* Remove Invisible Characters
+<a name="line833"></a>	*
+<a name="line834"></a>	* This prevents sandwiching null characters
+<a name="line835"></a>	* between ascii characters, like Java\0script.
+<a name="line836"></a>	*
+<a name="line837"></a>	* @access	public
+<a name="line838"></a>	* @param	string
+<a name="line839"></a>	* @return	string
+<a name="line840"></a>	*/
+<a name="line841"></a>	function _remove_invisible_characters($str)
+<a name="line842"></a>	{
+<a name="line843"></a>		static $non_displayables;
+<a name="line844"></a>
+<a name="line845"></a>		if ( ! isset($non_displayables))
+<a name="line846"></a>		{
+<a name="line847"></a>			// every control character except newline (dec 10), carriage return (dec 13), and horizontal tab (dec 09),
+<a name="line848"></a>			$non_displayables = array(
+<a name="line849"></a>										'/%0[0-8bcef]/',			// url encoded 00-08, 11, 12, 14, 15
+<a name="line850"></a>										'/%1[0-9a-f]/',				// url encoded 16-31
+<a name="line851"></a>										'/[\x00-\x08]/',			// 00-08
+<a name="line852"></a>										'/\x0b/', '/\x0c/',			// 11, 12
+<a name="line853"></a>										'/[\x0e-\x1f]/'				// 14-31
+<a name="line854"></a>									);
+<a name="line855"></a>		}
+<a name="line856"></a>
+<a name="line857"></a>		do
+<a name="line858"></a>		{
+<a name="line859"></a>			$cleaned = $str;
+<a name="line860"></a>			$str = preg_replace($non_displayables, '', $str);
+<a name="line861"></a>		}
+<a name="line862"></a>		while ($cleaned != $str);
+<a name="line863"></a>
+<a name="line864"></a>		return $str;
+<a name="line865"></a>	}
+<a name="line866"></a>
+<a name="line867"></a>	// --------------------------------------------------------------------
+<a name="line868"></a>
+<a name="line869"></a>	/**
+<a name="line870"></a>	* Compact Exploded Words
+<a name="line871"></a>	*
+<a name="line872"></a>	* Callback function for xss_clean() to remove whitespace from
+<a name="line873"></a>	* things like j a v a s c r i p t
+<a name="line874"></a>	*
+<a name="line875"></a>	* @access	public
+<a name="line876"></a>	* @param	type
+<a name="line877"></a>	* @return	type
+<a name="line878"></a>	*/
+<a name="line879"></a>	function _compact_exploded_words($matches)
+<a name="line880"></a>	{
+<a name="line881"></a>		return preg_replace('/\s+/s', '', $matches[1]).$matches[2];
+<a name="line882"></a>	}
+<a name="line883"></a>
+<a name="line884"></a>	// --------------------------------------------------------------------
+<a name="line885"></a>
+<a name="line886"></a>	/**
+<a name="line887"></a>	* Sanitize Naughty HTML
+<a name="line888"></a>	*
+<a name="line889"></a>	* Callback function for xss_clean() to remove naughty HTML elements
+<a name="line890"></a>	*
+<a name="line891"></a>	* @access	private
+<a name="line892"></a>	* @param	array
+<a name="line893"></a>	* @return	string
+<a name="line894"></a>	*/
+<a name="line895"></a>	function _sanitize_naughty_html($matches)
+<a name="line896"></a>	{
+<a name="line897"></a>		// encode opening brace
+<a name="line898"></a>		$str = '&lt;'.$matches[1].$matches[2].$matches[3];
+<a name="line899"></a>
+<a name="line900"></a>		// encode captured opening or closing brace to prevent recursive vectors
+<a name="line901"></a>		$str .= str_replace(array('>', '<'), array('&gt;', '&lt;'), $matches[4]);
+<a name="line902"></a>
+<a name="line903"></a>		return $str;
+<a name="line904"></a>	}
+<a name="line905"></a>
+<a name="line906"></a>	// --------------------------------------------------------------------
+<a name="line907"></a>
+<a name="line908"></a>	/**
+<a name="line909"></a>	* JS Link Removal
+<a name="line910"></a>	*
+<a name="line911"></a>	* Callback function for xss_clean() to sanitize links
+<a name="line912"></a>	* This limits the PCRE backtracks, making it more performance friendly
+<a name="line913"></a>	* and prevents PREG_BACKTRACK_LIMIT_ERROR from being triggered in
+<a name="line914"></a>	* PHP 5.2+ on link-heavy strings
+<a name="line915"></a>	*
+<a name="line916"></a>	* @access	private
+<a name="line917"></a>	* @param	array
+<a name="line918"></a>	* @return	string
+<a name="line919"></a>	*/
+<a name="line920"></a>	function _js_link_removal($match)
+<a name="line921"></a>	{
+<a name="line922"></a>		$attributes = $this->_filter_attributes(str_replace(array('<', '>'), '', $match[1]));
+<a name="line923"></a>		return str_replace($match[1], preg_replace("#href=.*?(alert\(|alert&\#40;|javascript\:|charset\=|window\.|document\.|\.cookie|<script|<xss|base64\s*,)#si", "", $attributes), $match[0]);
+<a name="line924"></a>	}
+<a name="line925"></a>
+<a name="line926"></a>	/**
+<a name="line927"></a>	* JS Image Removal
+<a name="line928"></a>	*
+<a name="line929"></a>	* Callback function for xss_clean() to sanitize image tags
+<a name="line930"></a>	* This limits the PCRE backtracks, making it more performance friendly
+<a name="line931"></a>	* and prevents PREG_BACKTRACK_LIMIT_ERROR from being triggered in
+<a name="line932"></a>	* PHP 5.2+ on image tag heavy strings
+<a name="line933"></a>	*
+<a name="line934"></a>	* @access	private
+<a name="line935"></a>	* @param	array
+<a name="line936"></a>	* @return	string
+<a name="line937"></a>	*/
+<a name="line938"></a>	function _js_img_removal($match)
+<a name="line939"></a>	{
+<a name="line940"></a>		$attributes = $this->_filter_attributes(str_replace(array('<', '>'), '', $match[1]));
+<a name="line941"></a>		return str_replace($match[1], preg_replace("#src=.*?(alert\(|alert&\#40;|javascript\:|charset\=|window\.|document\.|\.cookie|<script|<xss|base64\s*,)#si", "", $attributes), $match[0]);
+<a name="line942"></a>	}
+<a name="line943"></a>
+<a name="line944"></a>	// --------------------------------------------------------------------
+<a name="line945"></a>
+<a name="line946"></a>	/**
+<a name="line947"></a>	* Attribute Conversion
+<a name="line948"></a>	*
+<a name="line949"></a>	* Used as a callback for XSS Clean
+<a name="line950"></a>	*
+<a name="line951"></a>	* @access	public
+<a name="line952"></a>	* @param	array
+<a name="line953"></a>	* @return	string
+<a name="line954"></a>	*/
+<a name="line955"></a>	function _convert_attribute($match)
+<a name="line956"></a>	{
+<a name="line957"></a>		return str_replace(array('>', '<', '\\'), array('&gt;', '&lt;', '\\\\'), $match[0]);
+<a name="line958"></a>	}
+<a name="line959"></a>
+<a name="line960"></a>	// --------------------------------------------------------------------
+<a name="line961"></a>
+<a name="line962"></a>	/**
+<a name="line963"></a>	* HTML Entity Decode Callback
+<a name="line964"></a>	*
+<a name="line965"></a>	* Used as a callback for XSS Clean
+<a name="line966"></a>	*
+<a name="line967"></a>	* @access	public
+<a name="line968"></a>	* @param	array
+<a name="line969"></a>	* @return	string
+<a name="line970"></a>	*/
+<a name="line971"></a>	function _html_entity_decode_callback($match)
+<a name="line972"></a>	{
+<a name="line973"></a>		$CFG =& load_class('Config');
+<a name="line974"></a>		$charset = $CFG->item('charset');
+<a name="line975"></a>
+<a name="line976"></a>		return $this->_html_entity_decode($match[0], strtoupper($charset));
+<a name="line977"></a>	}
+<a name="line978"></a>
+<a name="line979"></a>	// --------------------------------------------------------------------
+<a name="line980"></a>
+<a name="line981"></a>	/**
+<a name="line982"></a>	* HTML Entities Decode
+<a name="line983"></a>	*
+<a name="line984"></a>	* This function is a replacement for html_entity_decode()
+<a name="line985"></a>	*
+<a name="line986"></a>	* In some versions of PHP the native function does not work
+<a name="line987"></a>	* when UTF-8 is the specified character set, so this gives us
+<a name="line988"></a>	* a work-around.  More info here:
+<a name="line989"></a>	* http://bugs.php.net/bug.php?id=25670
+<a name="line990"></a>	*
+<a name="line991"></a>	* @access	private
+<a name="line992"></a>	* @param	string
+<a name="line993"></a>	* @param	string
+<a name="line994"></a>	* @return	string
+<a name="line995"></a>	*/
+<a name="line996"></a>	/* -------------------------------------------------
+<a name="line997"></a>	/*  Replacement for html_entity_decode()
+<a name="line998"></a>	/* -------------------------------------------------*/
+<a name="line999"></a>
+<a name="line1000"></a>	/*
+<a name="line1001"></a>	NOTE: html_entity_decode() has a bug in some PHP versions when UTF-8 is the
+<a name="line1002"></a>	character set, and the PHP developers said they were not back porting the
+<a name="line1003"></a>	fix to versions other than PHP 5.x.
+<a name="line1004"></a>	*/
+<a name="line1005"></a>	function _html_entity_decode($str, $charset='UTF-8')
+<a name="line1006"></a>	{
+<a name="line1007"></a>		if (stristr($str, '&') === FALSE) return $str;
+<a name="line1008"></a>
+<a name="line1009"></a>		// The reason we are not using html_entity_decode() by itself is because
+<a name="line1010"></a>		// while it is not technically correct to leave out the semicolon
+<a name="line1011"></a>		// at the end of an entity most browsers will still interpret the entity
+<a name="line1012"></a>		// correctly.  html_entity_decode() does not convert entities without
+<a name="line1013"></a>		// semicolons, so we are left with our own little solution here. Bummer.
+<a name="line1014"></a>
+<a name="line1015"></a>		if (function_exists('html_entity_decode') && (strtolower($charset) != 'utf-8' OR version_compare(phpversion(), '5.0.0', '>=')))
+<a name="line1016"></a>		{
+<a name="line1017"></a>			$str = html_entity_decode($str, ENT_COMPAT, $charset);
+<a name="line1018"></a>			$str = preg_replace('~&#x(0*[0-9a-f]{2,5})~ei', 'chr(hexdec("\\1"))', $str);
+<a name="line1019"></a>			return preg_replace('~&#([0-9]{2,4})~e', 'chr(\\1)', $str);
+<a name="line1020"></a>		}
+<a name="line1021"></a>
+<a name="line1022"></a>		// Numeric Entities
+<a name="line1023"></a>		$str = preg_replace('~&#x(0*[0-9a-f]{2,5});{0,1}~ei', 'chr(hexdec("\\1"))', $str);
+<a name="line1024"></a>		$str = preg_replace('~&#([0-9]{2,4});{0,1}~e', 'chr(\\1)', $str);
+<a name="line1025"></a>
+<a name="line1026"></a>		// Literal Entities - Slightly slow so we do another check
+<a name="line1027"></a>		if (stristr($str, '&') === FALSE)
+<a name="line1028"></a>		{
+<a name="line1029"></a>			$str = strtr($str, array_flip(get_html_translation_table(HTML_ENTITIES)));
+<a name="line1030"></a>		}
+<a name="line1031"></a>
+<a name="line1032"></a>		return $str;
+<a name="line1033"></a>	}
+<a name="line1034"></a>
+<a name="line1035"></a>	// --------------------------------------------------------------------
+<a name="line1036"></a>
+<a name="line1037"></a>	/**
+<a name="line1038"></a>	* Filter Attributes
+<a name="line1039"></a>	*
+<a name="line1040"></a>	* Filters tag attributes for consistency and safety
+<a name="line1041"></a>	*
+<a name="line1042"></a>	* @access	public
+<a name="line1043"></a>	* @param	string
+<a name="line1044"></a>	* @return	string
+<a name="line1045"></a>	*/
+<a name="line1046"></a>	function _filter_attributes($str)
+<a name="line1047"></a>	{
+<a name="line1048"></a>		$out = '';
+<a name="line1049"></a>
+<a name="line1050"></a>		if (preg_match_all('#\s*[a-z\-]+\s*=\s*(\042|\047)([^\\1]*?)\\1#is', $str, $matches))
+<a name="line1051"></a>		{
+<a name="line1052"></a>			foreach ($matches[0] as $match)
+<a name="line1053"></a>			{
+<a name="line1054"></a>				$out .= preg_replace("#/\*.*?\*/#s", '', $match);
+<a name="line1055"></a>			}
+<a name="line1056"></a>		}
+<a name="line1057"></a>
+<a name="line1058"></a>		return $out;
+<a name="line1059"></a>	}
+<a name="line1060"></a>
+<a name="line1061"></a>	// --------------------------------------------------------------------
+<a name="line1062"></a>
+<a name="line1063"></a>}
+<a name="line1064"></a>// END Input class
+<a name="line1065"></a>
+<a name="line1066"></a>/* End of file Input.php */
+<a name="line1067"></a>/* Location: ./system/libraries/Input.php */</pre>
+<div class="header">
+<h1>GiftFlow API</h1>
+<ul>
+<li><a href="../../overview-summary.html">Overview</a></li>
+<li>Package</li><li>Class</li><li>Tree</li><li><a href="../../overview-files.html">Files</a></li>
+<li><a href="../../deprecated-list.html">Deprecated</a></li>
+<li><a href="../../index-all.html">Index</a></li>
+</ul>
+</div>
+
+<div class="small_links">
+<a href="../../index.html" target="_top">Frames</a>
+<a href="../../source/libraries/input.php.html" target="_top">No frames</a>
+</div>
+<hr>
+
+<p id="footer">This document was generated by <a href="http://peej.github.com/phpdoctor/">PHPDoctor: The PHP Documentation Creator</a></p>
+
+</body>
+
+</html>

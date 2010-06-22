@@ -1,0 +1,167 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+
+<html lang="en">
+<head>
+
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
+<meta name="generator" content="PHPDoctor 2RC4 (http://peej.github.com/phpdoctor/)">
+<meta name="when" content="Sun, 20 Jun 2010 17:43:51 +0000">
+
+<link rel="stylesheet" type="text/css" href="../../../../stylesheet.css">
+<link rel="start" href="../../../../overview-summary.html">
+
+<title>application/views/gift/view.php (GiftFlow API)</title>
+
+</head>
+<body id="file" onload="parent.document.title=document.title;">
+
+<div class="header">
+<h1>GiftFlow API</h1>
+<ul>
+<li><a href="../../../../overview-summary.html">Overview</a></li>
+<li>Package</li><li>Class</li><li>Tree</li><li><a href="../../../../overview-files.html">Files</a></li>
+<li><a href="../../../../deprecated-list.html">Deprecated</a></li>
+<li><a href="../../../../index-all.html">Index</a></li>
+</ul>
+</div>
+
+<div class="small_links">
+<a href="../../../../index.html" target="_top">Frames</a>
+<a href="../../../../source/application/views/gift/view.php.html" target="_top">No frames</a>
+</div>
+<hr>
+
+<h1>application/views/gift/view.php</h1>
+<hr>
+
+<a name="line1"></a><pre><?php
+<a name="line2"></a>/*
+<a name="line3"></a>* The Gift & Need Template 
+<a name="line4"></a>*/
+<a name="line5"></a>?>
+<a name="line6"></a><div class='gift_module' id='view_gift'>
+<a name="line7"></a>	<div class='top'></div>
+<a name="line8"></a>	<div class='middle'>
+<a name="line9"></a>		<img src='<?php echo good_thumb( $G->id, FALSE); ?>' />
+<a name="line10"></a>		<div class='right'>
+<a name="line11"></a>		
+<a name="line12"></a>			<?php echo $right; ?>
+<a name="line13"></a>	
+<a name="line14"></a>			<?php if(!empty($requested)&&$requested) { ?>
+<a name="line15"></a>			<a  id='request_gift_button' class='requested' style='margin: 40px 0px 0px;'></a>
+<a name="line16"></a>			<a href="<?php echo site_url('gift/'.$G->id.'/unrequest'); ?>">Cancel</a>
+<a name="line17"></a>	
+<a name="line18"></a>			<?php } else { ?>
+<a name="line19"></a>			<a href="#" id='request_gift_button' class='open' style='margin: 40px 0px 0px;'></a>
+<a name="line20"></a>			<?php } ?>
+<a name="line21"></a>	
+<a name="line22"></a>		</div>
+<a name="line23"></a>		<div style='clear: both;'></div>
+<a name="line24"></a>	</div>
+<a name="line25"></a>	
+<a name="line26"></a>	<div class='bottom' style='display: none;'></div>
+<a name="line27"></a>	<div id='request_form' class='ui-widget'>
+<a name="line28"></a>		<h1>Request Gift</h1>
+<a name="line29"></a>		<form method='post' action="<?php echo current_url().'/request'; ?>">
+<a name="line30"></a>		<p>
+<a name="line31"></a>		<label>I need this gift because...</label><br />
+<a name="line32"></a>		<textarea name='reason'></textarea>
+<a name="line33"></a>		</p>
+<a name="line34"></a>		<input type='submit' class='blue' value='Request This Gift' />
+<a name="line35"></a>		</form>
+<a name="line36"></a>	</div>
+<a name="line37"></a>	<div class='alt_bottom'></div>
+<a name="line38"></a></div>
+<a name="line39"></a>
+<a name="line40"></a><?php 
+<a name="line41"></a>$giver_options['title'] = "More About The Giver";
+<a name="line42"></a>$giver_options['id'] = "giver";
+<a name="line43"></a>$giver_options['content'] = "
+<a name="line44"></a>		<img src='".site_url('api/member/'.$G->user->id.'/photo/thumb')."' />
+<a name="line45"></a>		<a href='".site_url('profile/'.$G->user->id)."'>".$G->user->screen_name."</a>
+<a name="line46"></a>		<span class='location'>".$G->location->city.", ".$G->location->state."</span>
+<a name="line47"></a>		<div style='clear: both;'></div>";
+<a name="line48"></a>echo sidebar($giver_options);
+<a name="line49"></a>echo sharing_sidebar(); 
+<a name="line50"></a>?>
+<a name="line51"></a>
+<a name="line52"></a>
+<a name="line53"></a><div id='request_gift' class='jqmWindow'>
+<a name="line54"></a></div>
+<a name="line55"></a><script>
+<a name="line56"></a>var tags = new Array();
+<a name="line57"></a>$(function(){
+<a name="line58"></a>	$("#request_form").hide();
+<a name="line59"></a>	$("#request_gift_button.open").click(function(){
+<a name="line60"></a>		$(this).slideUp();
+<a name="line61"></a>		$(".gift_module .middle").addClass("shadow");
+<a name="line62"></a>		$(".gift_module .bottom").addClass('shadow').slideDown();
+<a name="line63"></a>		$("#request_form").delay(500).slideDown("slow");
+<a name="line64"></a>		return false;
+<a name="line65"></a>	});
+<a name="line66"></a>	$("#request_gift").jqm( { 	ajax: '<?php echo site_url('gift/'.$G->id.'/request/ajax'); ?>', 
+<a name="line67"></a>								trigger: '#request_this_gift',
+<a name="line68"></a>								onLoad: function(){
+<a name="line69"></a>									$(".buttonset").buttonset();
+<a name="line70"></a>									$("#request_gift").jqmAddClose("#cancel_request");
+<a name="line71"></a>								}
+<a name="line72"></a>							});
+<a name="line73"></a>
+<a name="line74"></a>	$("ul#good_buttons li a, .button").button();
+<a name="line75"></a>	$(".buttonset").buttonset();
+<a name="line76"></a>
+<a name="line77"></a>	$(".ignore_request").live('click', function(){ 
+<a name="line78"></a>		var div = $(this).parent().parent().parent();
+<a name="line79"></a>		
+<a name="line80"></a>		$.post("<?php echo site_url('ajax/request'); ?>", { type: 'ignore', 'request_id': $(this).attr('rel') }, function ( data ) {
+<a name="line81"></a>			div.hide().delay(500);
+<a name="line82"></a>			$.notifyBar( { html: data, cls: 'success', delay: 4000, animationSpeed: 'slow'});
+<a name="line83"></a>		}, 'html');
+<a name="line84"></a>		return false;
+<a name="line85"></a>	});
+<a name="line86"></a>	$("a.accept_request").live("click", function(){
+<a name="line87"></a>		var div = $(this).parent();
+<a name="line88"></a>		var divdiv = $(this).parent().parent();
+<a name="line89"></a>		$.post("<?php echo site_url('ajax/request'); ?>", { type: 'accept', 'request_id': $(this).attr('rel') }, function ( data ) {
+<a name="line90"></a>			div.hide();
+<a name="line91"></a>			divdiv.append(data);
+<a name="line92"></a>		}, 'html');
+<a name="line93"></a>		return false;
+<a name="line94"></a>	});
+<a name="line95"></a>	$("a#view_requests").live("click", function(){
+<a name="line96"></a>		var div = $(this).parent().parent();
+<a name="line97"></a>		$.post(	"<?php echo site_url('gift/'.$G->id.'/requests'); ?>", 
+<a name="line98"></a>				{ ajax: 'TRUE' }, 
+<a name="line99"></a>				function( data )
+<a name="line100"></a>				{ 
+<a name="line101"></a>					div.html(data);
+<a name="line102"></a>					$(".button").button();
+<a name="line103"></a>				}, 
+<a name="line104"></a>				'html');
+<a name="line105"></a>		return false;
+<a name="line106"></a>	});
+<a name="line107"></a>	<?php echo notify(); ?>
+<a name="line108"></a>});
+<a name="line109"></a></script></pre>
+<div class="header">
+<h1>GiftFlow API</h1>
+<ul>
+<li><a href="../../../../overview-summary.html">Overview</a></li>
+<li>Package</li><li>Class</li><li>Tree</li><li><a href="../../../../overview-files.html">Files</a></li>
+<li><a href="../../../../deprecated-list.html">Deprecated</a></li>
+<li><a href="../../../../index-all.html">Index</a></li>
+</ul>
+</div>
+
+<div class="small_links">
+<a href="../../../../index.html" target="_top">Frames</a>
+<a href="../../../../source/application/views/gift/view.php.html" target="_top">No frames</a>
+</div>
+<hr>
+
+<p id="footer">This document was generated by <a href="http://peej.github.com/phpdoctor/">PHPDoctor: The PHP Documentation Creator</a></p>
+
+</body>
+
+</html>

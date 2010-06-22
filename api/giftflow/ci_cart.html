@@ -1,0 +1,385 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+
+<html lang="en">
+<head>
+
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
+<meta name="generator" content="PHPDoctor 2RC4 (http://peej.github.com/phpdoctor/)">
+<meta name="when" content="Sun, 20 Jun 2010 17:43:50 +0000">
+
+<link rel="stylesheet" type="text/css" href="../stylesheet.css">
+<link rel="start" href="../overview-summary.html">
+
+<title>CI_Cart (GiftFlow API)</title>
+
+</head>
+<body id="definition" onload="parent.document.title=document.title;">
+
+<div class="header">
+<h1>GiftFlow API</h1>
+<ul>
+<li><a href="../overview-summary.html">Overview</a></li>
+<li><a href="../giftflow/package-summary.html">Package</a></li>
+<li class="active">Class</li>
+<li><a href="../giftflow/package-tree.html">Tree</a></li>
+<li><a href="../overview-files.html">Files</a></li>
+<li><a href="../deprecated-list.html">Deprecated</a></li>
+<li><a href="../index-all.html">Index</a></li>
+</ul>
+</div>
+
+<div class="small_links">
+<a href="../index.html" target="_top">Frames</a>
+<a href="../giftflow/ci_cart.html" target="_top">No frames</a>
+</div>
+<div class="small_links">
+Summary: <a href="#summary_field">Field</a> | <a href="#summary_method">Method</a> | <a href="#summary_constr">Constr</a>
+Detail: <a href="#detail_field">Field</a> | <a href="#detail_method">Method</a> | <a href="#summary_constr">Constr</a>
+</div>
+<hr>
+
+<div class="qualifiedName">GiftFlow\CI_Cart</div>
+<a href="../source/libraries/cart.php.html#line27" class="location">libraries/Cart.php at line 27</a>
+
+<h1>Class CI_Cart</h1>
+
+<pre class="tree"><strong>CI_Cart</strong><br /></pre>
+
+<hr>
+
+<p class="signature">public  class <strong>CI_Cart</strong></p>
+
+<div class="comment" id="overview_description"><p>Shopping Cart Class</p></div>
+
+<dl>
+<dt>Package		CodeIgniter.</dt>
+<dt>Subpackage	Libraries.</dt>
+<dt>Category	Shopping:</dt>
+<dd>Cart</dd>
+<dt>Author		ExpressionEngine:</dt>
+<dd>Dev Team</dd>
+<dt>Link		http://codeigniter.com/user_guide/libraries/cart.html.</dt>
+</dl>
+<hr>
+
+<table id="summary_field">
+<tr><th colspan="2">Field Summary</th></tr>
+<tr>
+<td class="type"> mixed</td>
+<td class="description"><p class="name"><a href="#CI">$CI</a></p></td>
+</tr>
+<tr>
+<td class="type">private  mixed</td>
+<td class="description"><p class="name"><a href="#_cart_contents">$_cart_contents</a></p></td>
+</tr>
+<tr>
+<td class="type"> mixed</td>
+<td class="description"><p class="name"><a href="#product_id_rules">$product_id_rules</a></p></td>
+</tr>
+<tr>
+<td class="type"> mixed</td>
+<td class="description"><p class="name"><a href="#product_name_rules">$product_name_rules</a></p></td>
+</tr>
+</table>
+
+<table id="summary_method">
+<tr><th colspan="2">Method Summary</th></tr>
+<tr>
+<td class="type"> void</td>
+<td class="description"><p class="name"><a href="#__construct()">__construct</a>(mixed params)</p><p class="description">Shopping Class ConstructorThe constructor loads the Session class, used to store the shopping cart contents.</p></td>
+</tr>
+<tr>
+<td class="type">private  void</td>
+<td class="description"><p class="name"><a href="#_insert()">_insert</a>(mixed items)</p><p class="description">Insert</p></td>
+</tr>
+<tr>
+<td class="type">private  void</td>
+<td class="description"><p class="name"><a href="#_save_cart()">_save_cart</a>()</p><p class="description">Save the cart array to the session DB</p></td>
+</tr>
+<tr>
+<td class="type">private  void</td>
+<td class="description"><p class="name"><a href="#_update()">_update</a>(mixed items)</p><p class="description">Update the cartThis function permits the quantity of a given item to be changed. </p></td>
+</tr>
+<tr>
+<td class="type"> void</td>
+<td class="description"><p class="name"><a href="#contents()">contents</a>()</p><p class="description">Cart ContentsReturns the entire cart array</p></td>
+</tr>
+<tr>
+<td class="type"> void</td>
+<td class="description"><p class="name"><a href="#destroy()">destroy</a>()</p><p class="description">Destroy the cartEmpties the cart and kills the session</p></td>
+</tr>
+<tr>
+<td class="type"> void</td>
+<td class="description"><p class="name"><a href="#format_number()">format_number</a>(str n)</p><p class="description">Format NumberReturns the supplied number with commas and a decimal point.</p></td>
+</tr>
+<tr>
+<td class="type"> void</td>
+<td class="description"><p class="name"><a href="#has_options()">has_options</a>(str rowid)</p><p class="description">Has optionsReturns TRUE if the rowid passed to this function correlates to an item
+that has options associated with it.</p></td>
+</tr>
+<tr>
+<td class="type"> void</td>
+<td class="description"><p class="name"><a href="#insert()">insert</a>(mixed items)</p><p class="description">Insert items into the cart and save it to the session table</p></td>
+</tr>
+<tr>
+<td class="type"> void</td>
+<td class="description"><p class="name"><a href="#product_options()">product_options</a>(str rowid)</p><p class="description">Product optionsReturns the an array of options, for a particular product row ID</p></td>
+</tr>
+<tr>
+<td class="type"> void</td>
+<td class="description"><p class="name"><a href="#total()">total</a>()</p><p class="description">Cart Total</p></td>
+</tr>
+<tr>
+<td class="type"> void</td>
+<td class="description"><p class="name"><a href="#total_items()">total_items</a>()</p><p class="description">Total ItemsReturns the total item count</p></td>
+</tr>
+<tr>
+<td class="type"> void</td>
+<td class="description"><p class="name"><a href="#update()">update</a>(mixed items)</p><p class="description">Update the cartThis function permits the quantity of a given item to be changed. </p></td>
+</tr>
+</table>
+
+<h2 id="detail_field">Field Detail</h2>
+<a href="../source/libraries/cart.php.html#line34" class="location">libraries/Cart.php at line 34</a>
+
+<h3 id="CI">CI</h3>
+<code class="signature">public  mixed <strong>$CI</strong></code>
+<div class="details">
+</div>
+
+<hr>
+
+<a href="../source/libraries/cart.php.html#line35" class="location">libraries/Cart.php at line 35</a>
+
+<h3 id="_cart_contents">_cart_contents</h3>
+<code class="signature">private  mixed <strong>$_cart_contents</strong> = array()</code>
+<div class="details">
+</div>
+
+<hr>
+
+<a href="../source/libraries/cart.php.html#line30" class="location">libraries/Cart.php at line 30</a>
+
+<h3 id="product_id_rules">product_id_rules</h3>
+<code class="signature">public  mixed <strong>$product_id_rules</strong> = '\.a-z0-9_-'</code>
+<div class="details">
+</div>
+
+<hr>
+
+<a href="../source/libraries/cart.php.html#line31" class="location">libraries/Cart.php at line 31</a>
+
+<h3 id="product_name_rules">product_name_rules</h3>
+<code class="signature">public  mixed <strong>$product_name_rules</strong> = '\.\:\-_ a-z0-9'</code>
+<div class="details">
+</div>
+
+<hr>
+
+<h2 id="detail_method">Method Detail</h2><div class="method_detail">
+<div class='method'><a href="../source/libraries/cart.php.html#line43" class="location">libraries/Cart.php at line 43</a>
+
+<h3 id="__construct()">__construct</h3>
+<code class="signature">public  void <strong>__construct</strong>(mixed params)</code>
+<div class="details">
+<p>Shopping Class Constructor</p><p>The constructor loads the Session class, used to store the shopping cart contents.</p></div></div>
+
+
+
+<div class='method'><a href="../source/libraries/cart.php.html#line140" class="location">libraries/Cart.php at line 140</a>
+
+<h3 id="_insert()">_insert</h3>
+<code class="signature">private  void <strong>_insert</strong>(mixed items)</code>
+<div class="details">
+<p>Insert</p><dl>
+<dt>Access	private.</dt>
+<dt>Param	array.</dt>
+<dt>Return	bool.</dt>
+</dl>
+</div></div>
+
+
+
+<div class='method'><a href="../source/libraries/cart.php.html#line369" class="location">libraries/Cart.php at line 369</a>
+
+<h3 id="_save_cart()">_save_cart</h3>
+<code class="signature">private  void <strong>_save_cart</strong>()</code>
+<div class="details">
+<p>Save the cart array to the session DB</p><dl>
+<dt>Access	private.</dt>
+<dt>Return	bool.</dt>
+</dl>
+</div></div>
+
+
+
+<div class='method'><a href="../source/libraries/cart.php.html#line323" class="location">libraries/Cart.php at line 323</a>
+
+<h3 id="_update()">_update</h3>
+<code class="signature">private  void <strong>_update</strong>(mixed items)</code>
+<div class="details">
+<p>Update the cart</p><p>This function permits the quantity of a given item to be changed. 
+Typically it is called from the "view cart" page if a user makes
+changes to the quantity before checkout. That array must contain the
+product ID and quantity for each item.</p><dl>
+<dt>Access	private.</dt>
+<dt>Param	array.</dt>
+<dt>Return	bool.</dt>
+</dl>
+</div></div>
+
+
+
+<div class='method'><a href="../source/libraries/cart.php.html#line450" class="location">libraries/Cart.php at line 450</a>
+
+<h3 id="contents()">contents</h3>
+<code class="signature">public  void <strong>contents</strong>()</code>
+<div class="details">
+<p>Cart Contents</p><p>Returns the entire cart array</p><dl>
+<dt>Access	public.</dt>
+<dt>Return	array.</dt>
+</dl>
+</div></div>
+
+
+
+<div class='method'><a href="../source/libraries/cart.php.html#line535" class="location">libraries/Cart.php at line 535</a>
+
+<h3 id="destroy()">destroy</h3>
+<code class="signature">public  void <strong>destroy</strong>()</code>
+<div class="details">
+<p>Destroy the cart</p><p>Empties the cart and kills the session</p><dl>
+<dt>Access	public.</dt>
+<dt>Return	null.</dt>
+</dl>
+</div></div>
+
+
+
+<div class='method'><a href="../source/libraries/cart.php.html#line512" class="location">libraries/Cart.php at line 512</a>
+
+<h3 id="format_number()">format_number</h3>
+<code class="signature">public  void <strong>format_number</strong>(str n)</code>
+<div class="details">
+<p>Format Number</p><p>Returns the supplied number with commas and a decimal point.</p><dl>
+<dt>Access	public.</dt>
+<dt>Return	integer.</dt>
+</dl>
+</div></div>
+
+
+
+<div class='method'><a href="../source/libraries/cart.php.html#line472" class="location">libraries/Cart.php at line 472</a>
+
+<h3 id="has_options()">has_options</h3>
+<code class="signature">public  void <strong>has_options</strong>(str rowid)</code>
+<div class="details">
+<p>Has options</p><p>Returns TRUE if the rowid passed to this function correlates to an item
+that has options associated with it.</p><dl>
+<dt>Access	public.</dt>
+<dt>Return	array.</dt>
+</dl>
+</div></div>
+
+
+
+<div class='method'><a href="../source/libraries/cart.php.html#line85" class="location">libraries/Cart.php at line 85</a>
+
+<h3 id="insert()">insert</h3>
+<code class="signature">public  void <strong>insert</strong>(mixed items)</code>
+<div class="details">
+<p>Insert items into the cart and save it to the session table</p><dl>
+<dt>Access	public.</dt>
+<dt>Param	array.</dt>
+<dt>Return	bool.</dt>
+</dl>
+</div></div>
+
+
+
+<div class='method'><a href="../source/libraries/cart.php.html#line492" class="location">libraries/Cart.php at line 492</a>
+
+<h3 id="product_options()">product_options</h3>
+<code class="signature">public  void <strong>product_options</strong>(str rowid)</code>
+<div class="details">
+<p>Product options</p><p>Returns the an array of options, for a particular product row ID</p><dl>
+<dt>Access	public.</dt>
+<dt>Return	array.</dt>
+</dl>
+</div></div>
+
+
+
+<div class='method'><a href="../source/libraries/cart.php.html#line420" class="location">libraries/Cart.php at line 420</a>
+
+<h3 id="total()">total</h3>
+<code class="signature">public  void <strong>total</strong>()</code>
+<div class="details">
+<p>Cart Total</p><dl>
+<dt>Access	public.</dt>
+<dt>Return	integer.</dt>
+</dl>
+</div></div>
+
+
+
+<div class='method'><a href="../source/libraries/cart.php.html#line435" class="location">libraries/Cart.php at line 435</a>
+
+<h3 id="total_items()">total_items</h3>
+<code class="signature">public  void <strong>total_items</strong>()</code>
+<div class="details">
+<p>Total Items</p><p>Returns the total item count</p><dl>
+<dt>Access	public.</dt>
+<dt>Return	integer.</dt>
+</dl>
+</div></div>
+
+
+
+<div class='method'><a href="../source/libraries/cart.php.html#line265" class="location">libraries/Cart.php at line 265</a>
+
+<h3 id="update()">update</h3>
+<code class="signature">public  void <strong>update</strong>(mixed items)</code>
+<div class="details">
+<p>Update the cart</p><p>This function permits the quantity of a given item to be changed. 
+Typically it is called from the "view cart" page if a user makes
+changes to the quantity before checkout. That array must contain the
+product ID and quantity for each item.</p><dl>
+<dt>Access	public.</dt>
+<dt>Param	array.</dt>
+<dt>Param	string.</dt>
+<dt>Return	bool.</dt>
+</dl>
+</div></div>
+
+
+
+</div><div class="header">
+<h1>GiftFlow API</h1>
+<ul>
+<li><a href="../overview-summary.html">Overview</a></li>
+<li><a href="../giftflow/package-summary.html">Package</a></li>
+<li class="active">Class</li>
+<li><a href="../giftflow/package-tree.html">Tree</a></li>
+<li><a href="../overview-files.html">Files</a></li>
+<li><a href="../deprecated-list.html">Deprecated</a></li>
+<li><a href="../index-all.html">Index</a></li>
+</ul>
+</div>
+
+<div class="small_links">
+<a href="../index.html" target="_top">Frames</a>
+<a href="../giftflow/ci_cart.html" target="_top">No frames</a>
+</div>
+<div class="small_links">
+Summary: <a href="#summary_field">Field</a> | <a href="#summary_method">Method</a> | <a href="#summary_constr">Constr</a>
+Detail: <a href="#detail_field">Field</a> | <a href="#detail_method">Method</a> | <a href="#summary_constr">Constr</a>
+</div>
+<hr>
+
+<p id="footer">This document was generated by <a href="http://peej.github.com/phpdoctor/">PHPDoctor: The PHP Documentation Creator</a></p>
+
+</body>
+
+</html>

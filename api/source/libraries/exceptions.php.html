@@ -1,0 +1,234 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+
+<html lang="en">
+<head>
+
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
+<meta name="generator" content="PHPDoctor 2RC4 (http://peej.github.com/phpdoctor/)">
+<meta name="when" content="Sun, 20 Jun 2010 17:43:51 +0000">
+
+<link rel="stylesheet" type="text/css" href="../../stylesheet.css">
+<link rel="start" href="../../overview-summary.html">
+
+<title>libraries/Exceptions.php (GiftFlow API)</title>
+
+</head>
+<body id="file" onload="parent.document.title=document.title;">
+
+<div class="header">
+<h1>GiftFlow API</h1>
+<ul>
+<li><a href="../../overview-summary.html">Overview</a></li>
+<li>Package</li><li>Class</li><li>Tree</li><li><a href="../../overview-files.html">Files</a></li>
+<li><a href="../../deprecated-list.html">Deprecated</a></li>
+<li><a href="../../index-all.html">Index</a></li>
+</ul>
+</div>
+
+<div class="small_links">
+<a href="../../index.html" target="_top">Frames</a>
+<a href="../../source/libraries/exceptions.php.html" target="_top">No frames</a>
+</div>
+<hr>
+
+<h1>libraries/Exceptions.php</h1>
+<div class="comment" id="overview_description"><p>CodeIgniter</p><p>An open source application development framework for PHP 4.3.2 or newer</p></div>
+
+<hr>
+
+<a name="line1"></a><pre><?php  if ( ! defined('BASEPATH')) exit('No direct script access allowed');
+<a name="line2"></a>/**
+<a name="line3"></a> * CodeIgniter
+<a name="line4"></a> *
+<a name="line5"></a> * An open source application development framework for PHP 4.3.2 or newer
+<a name="line6"></a> *
+<a name="line7"></a> * @package		CodeIgniter
+<a name="line8"></a> * @author		ExpressionEngine Dev Team
+<a name="line9"></a> * @copyright	Copyright (c) 2008 - 2009, EllisLab, Inc.
+<a name="line10"></a> * @license		http://codeigniter.com/user_guide/license.html
+<a name="line11"></a> * @link		http://codeigniter.com
+<a name="line12"></a> * @since		Version 1.0
+<a name="line13"></a> * @filesource
+<a name="line14"></a> */
+<a name="line15"></a>
+<a name="line16"></a>// ------------------------------------------------------------------------
+<a name="line17"></a>
+<a name="line18"></a>/**
+<a name="line19"></a> * Exceptions Class
+<a name="line20"></a> *
+<a name="line21"></a> * @package		CodeIgniter
+<a name="line22"></a> * @subpackage	Libraries
+<a name="line23"></a> * @category	Exceptions
+<a name="line24"></a> * @author		ExpressionEngine Dev Team
+<a name="line25"></a> * @link		http://codeigniter.com/user_guide/libraries/exceptions.html
+<a name="line26"></a> */
+<a name="line27"></a>class CI_Exceptions {
+<a name="line28"></a>	var $action;
+<a name="line29"></a>	var $severity;
+<a name="line30"></a>	var $message;
+<a name="line31"></a>	var $filename;
+<a name="line32"></a>	var $line;
+<a name="line33"></a>	var $ob_level;
+<a name="line34"></a>
+<a name="line35"></a>	var $levels = array(
+<a name="line36"></a>						E_ERROR				=>	'Error',
+<a name="line37"></a>						E_WARNING			=>	'Warning',
+<a name="line38"></a>						E_PARSE				=>	'Parsing Error',
+<a name="line39"></a>						E_NOTICE			=>	'Notice',
+<a name="line40"></a>						E_CORE_ERROR		=>	'Core Error',
+<a name="line41"></a>						E_CORE_WARNING		=>	'Core Warning',
+<a name="line42"></a>						E_COMPILE_ERROR		=>	'Compile Error',
+<a name="line43"></a>						E_COMPILE_WARNING	=>	'Compile Warning',
+<a name="line44"></a>						E_USER_ERROR		=>	'User Error',
+<a name="line45"></a>						E_USER_WARNING		=>	'User Warning',
+<a name="line46"></a>						E_USER_NOTICE		=>	'User Notice',
+<a name="line47"></a>						E_STRICT			=>	'Runtime Notice'
+<a name="line48"></a>					);
+<a name="line49"></a>
+<a name="line50"></a>
+<a name="line51"></a>	/**
+<a name="line52"></a>	 * Constructor
+<a name="line53"></a>	 *
+<a name="line54"></a>	 */	
+<a name="line55"></a>	function CI_Exceptions()
+<a name="line56"></a>	{
+<a name="line57"></a>		$this->ob_level = ob_get_level();
+<a name="line58"></a>		// Note:  Do not log messages from this constructor.
+<a name="line59"></a>	}
+<a name="line60"></a>  	
+<a name="line61"></a>	// --------------------------------------------------------------------
+<a name="line62"></a>
+<a name="line63"></a>	/**
+<a name="line64"></a>	 * Exception Logger
+<a name="line65"></a>	 *
+<a name="line66"></a>	 * This function logs PHP generated error messages
+<a name="line67"></a>	 *
+<a name="line68"></a>	 * @access	private
+<a name="line69"></a>	 * @param	string	the error severity
+<a name="line70"></a>	 * @param	string	the error string
+<a name="line71"></a>	 * @param	string	the error filepath
+<a name="line72"></a>	 * @param	string	the error line number
+<a name="line73"></a>	 * @return	string
+<a name="line74"></a>	 */
+<a name="line75"></a>	function log_exception($severity, $message, $filepath, $line)
+<a name="line76"></a>	{	
+<a name="line77"></a>		$severity = ( ! isset($this->levels[$severity])) ? $severity : $this->levels[$severity];
+<a name="line78"></a>		
+<a name="line79"></a>		log_message('error', 'Severity: '.$severity.'  --> '.$message. ' '.$filepath.' '.$line, TRUE);
+<a name="line80"></a>	}
+<a name="line81"></a>
+<a name="line82"></a>	// --------------------------------------------------------------------
+<a name="line83"></a>
+<a name="line84"></a>	/**
+<a name="line85"></a>	 * 404 Page Not Found Handler
+<a name="line86"></a>	 *
+<a name="line87"></a>	 * @access	private
+<a name="line88"></a>	 * @param	string
+<a name="line89"></a>	 * @return	string
+<a name="line90"></a>	 */
+<a name="line91"></a>	function show_404($page = '')
+<a name="line92"></a>	{	
+<a name="line93"></a>		$heading = "404 Page Not Found";
+<a name="line94"></a>		$message = "The page you requested was not found.";
+<a name="line95"></a>
+<a name="line96"></a>		log_message('error', '404 Page Not Found --> '.$page);
+<a name="line97"></a>		echo $this->show_error($heading, $message, 'error_404', 404);
+<a name="line98"></a>		exit;
+<a name="line99"></a>	}
+<a name="line100"></a>  	
+<a name="line101"></a>	// --------------------------------------------------------------------
+<a name="line102"></a>
+<a name="line103"></a>	/**
+<a name="line104"></a>	 * General Error Page
+<a name="line105"></a>	 *
+<a name="line106"></a>	 * This function takes an error message as input
+<a name="line107"></a>	 * (either as a string or an array) and displays
+<a name="line108"></a>	 * it using the specified template.
+<a name="line109"></a>	 *
+<a name="line110"></a>	 * @access	private
+<a name="line111"></a>	 * @param	string	the heading
+<a name="line112"></a>	 * @param	string	the message
+<a name="line113"></a>	 * @param	string	the template name
+<a name="line114"></a>	 * @return	string
+<a name="line115"></a>	 */
+<a name="line116"></a>	function show_error($heading, $message, $template = 'error_general', $status_code = 500)
+<a name="line117"></a>	{
+<a name="line118"></a>		set_status_header($status_code);
+<a name="line119"></a>		
+<a name="line120"></a>		$message = '<p>'.implode('</p><p>', ( ! is_array($message)) ? array($message) : $message).'</p>';
+<a name="line121"></a>
+<a name="line122"></a>		if (ob_get_level() > $this->ob_level + 1)
+<a name="line123"></a>		{
+<a name="line124"></a>			ob_end_flush();	
+<a name="line125"></a>		}
+<a name="line126"></a>		ob_start();
+<a name="line127"></a>		include(APPPATH.'errors/'.$template.EXT);
+<a name="line128"></a>		$buffer = ob_get_contents();
+<a name="line129"></a>		ob_end_clean();
+<a name="line130"></a>		return $buffer;
+<a name="line131"></a>	}
+<a name="line132"></a>
+<a name="line133"></a>	// --------------------------------------------------------------------
+<a name="line134"></a>
+<a name="line135"></a>	/**
+<a name="line136"></a>	 * Native PHP error handler
+<a name="line137"></a>	 *
+<a name="line138"></a>	 * @access	private
+<a name="line139"></a>	 * @param	string	the error severity
+<a name="line140"></a>	 * @param	string	the error string
+<a name="line141"></a>	 * @param	string	the error filepath
+<a name="line142"></a>	 * @param	string	the error line number
+<a name="line143"></a>	 * @return	string
+<a name="line144"></a>	 */
+<a name="line145"></a>	function show_php_error($severity, $message, $filepath, $line)
+<a name="line146"></a>	{	
+<a name="line147"></a>		$severity = ( ! isset($this->levels[$severity])) ? $severity : $this->levels[$severity];
+<a name="line148"></a>	
+<a name="line149"></a>		$filepath = str_replace("\\", "/", $filepath);
+<a name="line150"></a>		
+<a name="line151"></a>		// For safety reasons we do not show the full file path
+<a name="line152"></a>		if (FALSE !== strpos($filepath, '/'))
+<a name="line153"></a>		{
+<a name="line154"></a>			$x = explode('/', $filepath);
+<a name="line155"></a>			$filepath = $x[count($x)-2].'/'.end($x);
+<a name="line156"></a>		}
+<a name="line157"></a>		
+<a name="line158"></a>		if (ob_get_level() > $this->ob_level + 1)
+<a name="line159"></a>		{
+<a name="line160"></a>			ob_end_flush();	
+<a name="line161"></a>		}
+<a name="line162"></a>		ob_start();
+<a name="line163"></a>		include(APPPATH.'errors/error_php'.EXT);
+<a name="line164"></a>		$buffer = ob_get_contents();
+<a name="line165"></a>		ob_end_clean();
+<a name="line166"></a>		echo $buffer;
+<a name="line167"></a>	}
+<a name="line168"></a>
+<a name="line169"></a>
+<a name="line170"></a>}
+<a name="line171"></a>// END Exceptions Class
+<a name="line172"></a>
+<a name="line173"></a>/* End of file Exceptions.php */
+<a name="line174"></a>/* Location: ./system/libraries/Exceptions.php */</pre>
+<div class="header">
+<h1>GiftFlow API</h1>
+<ul>
+<li><a href="../../overview-summary.html">Overview</a></li>
+<li>Package</li><li>Class</li><li>Tree</li><li><a href="../../overview-files.html">Files</a></li>
+<li><a href="../../deprecated-list.html">Deprecated</a></li>
+<li><a href="../../index-all.html">Index</a></li>
+</ul>
+</div>
+
+<div class="small_links">
+<a href="../../index.html" target="_top">Frames</a>
+<a href="../../source/libraries/exceptions.php.html" target="_top">No frames</a>
+</div>
+<hr>
+
+<p id="footer">This document was generated by <a href="http://peej.github.com/phpdoctor/">PHPDoctor: The PHP Documentation Creator</a></p>
+
+</body>
+
+</html>

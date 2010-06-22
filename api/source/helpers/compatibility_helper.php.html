@@ -1,0 +1,558 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+
+<html lang="en">
+<head>
+
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
+<meta name="generator" content="PHPDoctor 2RC4 (http://peej.github.com/phpdoctor/)">
+<meta name="when" content="Sun, 20 Jun 2010 17:43:51 +0000">
+
+<link rel="stylesheet" type="text/css" href="../../stylesheet.css">
+<link rel="start" href="../../overview-summary.html">
+
+<title>helpers/compatibility_helper.php (GiftFlow API)</title>
+
+</head>
+<body id="file" onload="parent.document.title=document.title;">
+
+<div class="header">
+<h1>GiftFlow API</h1>
+<ul>
+<li><a href="../../overview-summary.html">Overview</a></li>
+<li>Package</li><li>Class</li><li>Tree</li><li><a href="../../overview-files.html">Files</a></li>
+<li><a href="../../deprecated-list.html">Deprecated</a></li>
+<li><a href="../../index-all.html">Index</a></li>
+</ul>
+</div>
+
+<div class="small_links">
+<a href="../../index.html" target="_top">Frames</a>
+<a href="../../source/helpers/compatibility_helper.php.html" target="_top">No frames</a>
+</div>
+<hr>
+
+<h1>helpers/compatibility_helper.php</h1>
+<div class="comment" id="overview_description"><p>CodeIgniter</p><p>An open source application development framework for PHP 4.3.2 or newer</p></div>
+
+<hr>
+
+<a name="line1"></a><pre><?php  if ( ! defined('BASEPATH')) exit('No direct script access allowed');
+<a name="line2"></a>/**
+<a name="line3"></a> * CodeIgniter
+<a name="line4"></a> *
+<a name="line5"></a> * An open source application development framework for PHP 4.3.2 or newer
+<a name="line6"></a> *
+<a name="line7"></a> * @package		CodeIgniter
+<a name="line8"></a> * @author		ExpressionEngine Dev Team
+<a name="line9"></a> * @copyright	Copyright (c) 2008 - 2009, EllisLab, Inc.
+<a name="line10"></a> * @license		http://codeigniter.com/user_guide/license.html
+<a name="line11"></a> * @link		http://codeigniter.com
+<a name="line12"></a> * @since		Version 1.0
+<a name="line13"></a> * @filesource
+<a name="line14"></a> */
+<a name="line15"></a>
+<a name="line16"></a>// ------------------------------------------------------------------------
+<a name="line17"></a>
+<a name="line18"></a>/**
+<a name="line19"></a> * CodeIgniter Compatibility Helpers
+<a name="line20"></a> *
+<a name="line21"></a> * This helper contains some functions based on the PEAR PHP_Compat library
+<a name="line22"></a> * http://pear.php.net/package/PHP_Compat
+<a name="line23"></a> * 
+<a name="line24"></a> * The PEAR compat library is a little bloated and the code doesn't harmonize
+<a name="line25"></a> * well with CodeIgniter, so those functions have been refactored.
+<a name="line26"></a> * We cheat a little and use CI's _exception_handler() to output our own PHP errors
+<a name="line27"></a> * so that the behavior fully mimicks the PHP 5 counterparts.  -- Derek Jones
+<a name="line28"></a> * 
+<a name="line29"></a> * @package		CodeIgniter
+<a name="line30"></a> * @subpackage	Helpers
+<a name="line31"></a> * @category	Helpers
+<a name="line32"></a> * @author		ExpressionEngine Dev Team
+<a name="line33"></a> * @link		http://codeigniter.com/user_guide/helpers/compatibility_helper.html
+<a name="line34"></a> */
+<a name="line35"></a>
+<a name="line36"></a>// ------------------------------------------------------------------------
+<a name="line37"></a>
+<a name="line38"></a>if ( ! defined('PHP_EOL'))
+<a name="line39"></a>{
+<a name="line40"></a>	define('PHP_EOL', (DIRECTORY_SEPARATOR == '/') ? "\n" : "\r\n");
+<a name="line41"></a>} 
+<a name="line42"></a>
+<a name="line43"></a>// ------------------------------------------------------------------------
+<a name="line44"></a>
+<a name="line45"></a>/**
+<a name="line46"></a> * file_put_contents()
+<a name="line47"></a> *
+<a name="line48"></a> * Writes a string to a file
+<a name="line49"></a> * http://us.php.net/manual/en/function.file_put_contents.php
+<a name="line50"></a> * argument 4, $context, not supported
+<a name="line51"></a> *
+<a name="line52"></a> * @access	public
+<a name="line53"></a> * @param	string		file name
+<a name="line54"></a> * @param	mixed		data to be written
+<a name="line55"></a> * @param	int			flags
+<a name="line56"></a> * @return	int			length of written string
+<a name="line57"></a> */
+<a name="line58"></a>if ( ! function_exists('file_put_contents'))
+<a name="line59"></a>{
+<a name="line60"></a>	function file_put_contents($filename, $data, $flags = NULL)
+<a name="line61"></a>	{
+<a name="line62"></a>		if (is_scalar($data))
+<a name="line63"></a>		{
+<a name="line64"></a>			settype($data, 'STRING');
+<a name="line65"></a>		}
+<a name="line66"></a>
+<a name="line67"></a>		if ( ! is_string($data) && ! is_array($data) && ! is_resource($data))
+<a name="line68"></a>		{
+<a name="line69"></a>			$backtrace = debug_backtrace();
+<a name="line70"></a>			_exception_handler(E_USER_WARNING, 'file_put_contents(): the 2nd parameter should be either a string or an array', $backtrace[0]['file'], $backtrace[0]['line']);
+<a name="line71"></a>			return FALSE;
+<a name="line72"></a>		}
+<a name="line73"></a>
+<a name="line74"></a>		// read stream if given a stream resource
+<a name="line75"></a>		if (is_resource($data))
+<a name="line76"></a>		{
+<a name="line77"></a>			if (get_resource_type($data) !== 'stream')
+<a name="line78"></a>			{
+<a name="line79"></a>				$backtrace = debug_backtrace();
+<a name="line80"></a>				_exception_handler(E_USER_WARNING, 'file_put_contents(): supplied resource is not a valid stream resource', $backtrace[0]['file'], $backtrace[0]['line']);
+<a name="line81"></a>				return FALSE;
+<a name="line82"></a>			}
+<a name="line83"></a>
+<a name="line84"></a>			$text = '';
+<a name="line85"></a>			
+<a name="line86"></a>			while ( ! feof($data))
+<a name="line87"></a>			{
+<a name="line88"></a>				$text .= fread($data, 4096);
+<a name="line89"></a>			}
+<a name="line90"></a>			
+<a name="line91"></a>			$data = $text;
+<a name="line92"></a>			unset($text);
+<a name="line93"></a>		}
+<a name="line94"></a>	
+<a name="line95"></a>		// strings only please!
+<a name="line96"></a>		if (is_array($data))
+<a name="line97"></a>		{
+<a name="line98"></a>			$data = implode('', $data);
+<a name="line99"></a>		}
+<a name="line100"></a>
+<a name="line101"></a>		// Set the appropriate mode
+<a name="line102"></a>		if (($flags & 8) > 0) // 8 = FILE_APPEND flag
+<a name="line103"></a>		{
+<a name="line104"></a>			$mode = FOPEN_WRITE_CREATE;
+<a name="line105"></a>		}
+<a name="line106"></a>		else
+<a name="line107"></a>		{
+<a name="line108"></a>			$mode = FOPEN_WRITE_CREATE_DESTRUCTIVE;
+<a name="line109"></a>		}
+<a name="line110"></a>	
+<a name="line111"></a>		// Check if we're using the include path
+<a name="line112"></a>		if (($flags & 1) > 0) // 1 = FILE_USE_INCLUDE_PATH flag
+<a name="line113"></a>		{
+<a name="line114"></a>			$use_include_path = TRUE;
+<a name="line115"></a>		}
+<a name="line116"></a>		else
+<a name="line117"></a>		{
+<a name="line118"></a>			$use_include_path = FALSE;
+<a name="line119"></a>		}
+<a name="line120"></a>	
+<a name="line121"></a>		$fp = @fopen($filename, $mode, $use_include_path);
+<a name="line122"></a>	
+<a name="line123"></a>		if ($fp === FALSE)
+<a name="line124"></a>		{
+<a name="line125"></a>			$backtrace = debug_backtrace();
+<a name="line126"></a>			_exception_handler(E_USER_WARNING, 'file_put_contents('.htmlentities($filename).') failed to open stream', $backtrace[0]['file'], $backtrace[0]['line']);
+<a name="line127"></a>			return FALSE;
+<a name="line128"></a>		}
+<a name="line129"></a>	
+<a name="line130"></a>		if (($flags & LOCK_EX) > 0)
+<a name="line131"></a>		{
+<a name="line132"></a>			if ( ! flock($fp, LOCK_EX))
+<a name="line133"></a>			{
+<a name="line134"></a>				$backtrace = debug_backtrace();
+<a name="line135"></a>				_exception_handler(E_USER_WARNING, 'file_put_contents('.htmlentities($filename).') unable to acquire an exclusive lock on file', $backtrace[0]['file'], $backtrace[0]['line']);
+<a name="line136"></a>				return FALSE;
+<a name="line137"></a>			}
+<a name="line138"></a>		}
+<a name="line139"></a>		
+<a name="line140"></a>		// write it
+<a name="line141"></a>		if (($written = @fwrite($fp, $data)) === FALSE)
+<a name="line142"></a>		{
+<a name="line143"></a>			$backtrace = debug_backtrace();
+<a name="line144"></a>			_exception_handler(E_USER_WARNING, 'file_put_contents('.htmlentities($filename).') failed to write to '.htmlentities($filename), $backtrace[0]['file'], $backtrace[0]['line']);
+<a name="line145"></a>		}
+<a name="line146"></a>	
+<a name="line147"></a>		// Close the handle
+<a name="line148"></a>		@fclose($fp);
+<a name="line149"></a>	
+<a name="line150"></a>		// Return length
+<a name="line151"></a>		return $written;
+<a name="line152"></a>	}
+<a name="line153"></a>}
+<a name="line154"></a>
+<a name="line155"></a>// ------------------------------------------------------------------------
+<a name="line156"></a>
+<a name="line157"></a>/**
+<a name="line158"></a> * fputcsv()
+<a name="line159"></a> *
+<a name="line160"></a> * Format line as CSV and write to file pointer
+<a name="line161"></a> * http://us.php.net/manual/en/function.fputcsv.php
+<a name="line162"></a> *
+<a name="line163"></a> * @access	public
+<a name="line164"></a> * @param	resource	file pointer
+<a name="line165"></a> * @param	array		data to be written
+<a name="line166"></a> * @param	string		delimiter
+<a name="line167"></a> * @param	string		enclosure
+<a name="line168"></a> * @return	int			length of written string
+<a name="line169"></a> */
+<a name="line170"></a>if ( ! function_exists('fputcsv'))
+<a name="line171"></a>{
+<a name="line172"></a>	function fputcsv($handle, $fields, $delimiter = ',', $enclosure = '"')
+<a name="line173"></a>	{
+<a name="line174"></a>		// Checking for a handle resource
+<a name="line175"></a>		if ( ! is_resource($handle))
+<a name="line176"></a>		{
+<a name="line177"></a>			$backtrace = debug_backtrace();
+<a name="line178"></a>			_exception_handler(E_USER_WARNING, 'fputcsv() expects parameter 1 to be stream resource, '.gettype($handle).' given', $backtrace[0]['file'], $backtrace[0]['line']);
+<a name="line179"></a>			return FALSE;
+<a name="line180"></a>		}
+<a name="line181"></a>	
+<a name="line182"></a>		// OK, it is a resource, but is it a stream?
+<a name="line183"></a>		if (get_resource_type($handle) !== 'stream')
+<a name="line184"></a>		{
+<a name="line185"></a>			$backtrace = debug_backtrace();
+<a name="line186"></a>			_exception_handler(E_USER_WARNING, 'fputcsv() expects parameter 1 to be stream resource, '.get_resource_type($handle).' given', $backtrace[0]['file'], $backtrace[0]['line']);
+<a name="line187"></a>			return FALSE;
+<a name="line188"></a>		}
+<a name="line189"></a>	
+<a name="line190"></a>		// Checking for an array of fields
+<a name="line191"></a>		if ( ! is_array($fields))
+<a name="line192"></a>		{
+<a name="line193"></a>			$backtrace = debug_backtrace();
+<a name="line194"></a>			_exception_handler(E_USER_WARNING, 'fputcsv() expects parameter 2 to be array, '.gettype($fields).' given', $backtrace[0]['file'], $backtrace[0]['line']);
+<a name="line195"></a>			return FALSE;
+<a name="line196"></a>		}
+<a name="line197"></a>	
+<a name="line198"></a>		// validate delimiter
+<a name="line199"></a>		if (strlen($delimiter) > 1)
+<a name="line200"></a>		{
+<a name="line201"></a>			$delimiter = substr($delimiter, 0, 1);
+<a name="line202"></a>			$backtrace = debug_backtrace();
+<a name="line203"></a>			_exception_handler(E_NOTICE, 'fputcsv() delimiter must be one character long, "'.htmlentities($delimiter).'" used', $backtrace[0]['file'], $backtrace[0]['line']);
+<a name="line204"></a>		}
+<a name="line205"></a>	
+<a name="line206"></a>		// validate enclosure
+<a name="line207"></a>		if (strlen($enclosure) > 1)
+<a name="line208"></a>		{
+<a name="line209"></a>			$enclosure = substr($enclosure, 0, 1);
+<a name="line210"></a>			$backtrace = debug_backtrace();
+<a name="line211"></a>			_exception_handler(E_NOTICE, 'fputcsv() enclosure must be one character long, "'.htmlentities($enclosure).'" used', $backtrace[0]['file'], $backtrace[0]['line']);
+<a name="line212"></a>
+<a name="line213"></a>		}
+<a name="line214"></a>	
+<a name="line215"></a>		$out = '';
+<a name="line216"></a>	
+<a name="line217"></a>		foreach ($fields as $cell)
+<a name="line218"></a>		{
+<a name="line219"></a>			$cell = str_replace($enclosure, $enclosure.$enclosure, $cell);
+<a name="line220"></a>
+<a name="line221"></a>			if (strpos($cell, $delimiter) !== FALSE OR strpos($cell, $enclosure) !== FALSE OR strpos($cell, "\n") !== FALSE)
+<a name="line222"></a>			{
+<a name="line223"></a>				$out .= $enclosure.$cell.$enclosure.$delimiter;
+<a name="line224"></a>			}
+<a name="line225"></a>			else
+<a name="line226"></a>			{
+<a name="line227"></a>				$out .= $cell.$delimiter;
+<a name="line228"></a>			}
+<a name="line229"></a>		}
+<a name="line230"></a>	
+<a name="line231"></a>		$length = @fwrite($handle, substr($out, 0, -1)."\n");
+<a name="line232"></a>	
+<a name="line233"></a>		return $length;
+<a name="line234"></a>	}
+<a name="line235"></a>}
+<a name="line236"></a>
+<a name="line237"></a>// ------------------------------------------------------------------------
+<a name="line238"></a>
+<a name="line239"></a>/**
+<a name="line240"></a> * stripos()
+<a name="line241"></a> *
+<a name="line242"></a> * Find position of first occurrence of a case-insensitive string
+<a name="line243"></a> * http://us.php.net/manual/en/function.stripos.php
+<a name="line244"></a> *
+<a name="line245"></a> * @access	public
+<a name="line246"></a> * @param	string		haystack
+<a name="line247"></a> * @param	string		needle
+<a name="line248"></a> * @param	int			offset
+<a name="line249"></a> * @return	int			numeric position of the first occurrence of needle in the haystack
+<a name="line250"></a> */
+<a name="line251"></a>if ( ! function_exists('stripos'))
+<a name="line252"></a>{
+<a name="line253"></a>	function stripos($haystack, $needle, $offset = NULL)
+<a name="line254"></a>	{
+<a name="line255"></a>		// Cast non string scalar values
+<a name="line256"></a>		if (is_scalar($haystack))
+<a name="line257"></a>		{
+<a name="line258"></a>			settype($haystack, 'STRING');
+<a name="line259"></a>		}
+<a name="line260"></a>	
+<a name="line261"></a>		if ( ! is_string($haystack))
+<a name="line262"></a>		{
+<a name="line263"></a>			$backtrace = debug_backtrace();
+<a name="line264"></a>			_exception_handler(E_USER_WARNING, 'stripos() expects parameter 1 to be string, '.gettype($haystack).' given', $backtrace[0]['file'], $backtrace[0]['line']);
+<a name="line265"></a>			return FALSE;
+<a name="line266"></a>		}
+<a name="line267"></a>	
+<a name="line268"></a>		if ( ! is_scalar($needle))
+<a name="line269"></a>		{
+<a name="line270"></a>			$backtrace = debug_backtrace();
+<a name="line271"></a>			_exception_handler(E_USER_WARNING, 'stripos() needle is not a string or an integer in '.$backtrace[0]['file'], $backtrace[0]['line']);
+<a name="line272"></a>			return FALSE;
+<a name="line273"></a>		}
+<a name="line274"></a>	
+<a name="line275"></a>		if (is_float($offset))
+<a name="line276"></a>		{
+<a name="line277"></a>			$offset = (int)$offset;
+<a name="line278"></a>		}
+<a name="line279"></a>	
+<a name="line280"></a>		if ( ! is_int($offset) && ! is_bool($offset) && ! is_null($offset))
+<a name="line281"></a>		{
+<a name="line282"></a>			$backtrace = debug_backtrace();
+<a name="line283"></a>			_exception_handler(E_USER_WARNING, 'stripos() expects parameter 3 to be long, '.gettype($offset).' given', $backtrace[0]['file'], $backtrace[0]['line']);
+<a name="line284"></a>			return NULL;
+<a name="line285"></a>		}
+<a name="line286"></a>	
+<a name="line287"></a>		return strpos(strtolower($haystack), strtolower($needle), $offset);
+<a name="line288"></a>	}
+<a name="line289"></a>}
+<a name="line290"></a>
+<a name="line291"></a>// ------------------------------------------------------------------------
+<a name="line292"></a>
+<a name="line293"></a>/**
+<a name="line294"></a> * str_ireplace()
+<a name="line295"></a> *
+<a name="line296"></a> * Find position of first occurrence of a case-insensitive string
+<a name="line297"></a> * http://us.php.net/manual/en/function.str-ireplace.php
+<a name="line298"></a> * (parameter 4, $count, is not supported as to do so in PHP 4 would make
+<a name="line299"></a> * it a required parameter)
+<a name="line300"></a> *
+<a name="line301"></a> * @access	public
+<a name="line302"></a> * @param	mixed		search
+<a name="line303"></a> * @param	mixed		replace
+<a name="line304"></a> * @param	mixed		subject
+<a name="line305"></a> * @return	int			numeric position of the first occurrence of needle in the haystack
+<a name="line306"></a> */
+<a name="line307"></a>if ( ! function_exists('str_ireplace'))
+<a name="line308"></a>{
+<a name="line309"></a>	function str_ireplace($search, $replace, $subject)
+<a name="line310"></a>	{
+<a name="line311"></a>		// Nothing to do here
+<a name="line312"></a>		if ($search === NULL OR $subject === NULL)
+<a name="line313"></a>		{
+<a name="line314"></a>			return $subject;
+<a name="line315"></a>		}
+<a name="line316"></a>	
+<a name="line317"></a>		// Crazy arguments
+<a name="line318"></a>		if (is_scalar($search) && is_array($replace))
+<a name="line319"></a>		{
+<a name="line320"></a>			$backtrace = debug_backtrace();
+<a name="line321"></a>
+<a name="line322"></a>			if (is_object($replace))
+<a name="line323"></a>			{
+<a name="line324"></a>				show_error('Object of class '.get_class($replace).' could not be converted to string in '.$backtrace[0]['file'].' on line '.$backtrace[0]['line']);
+<a name="line325"></a>			}
+<a name="line326"></a>			else
+<a name="line327"></a>			{
+<a name="line328"></a>				_exception_handler(E_USER_NOTICE, 'Array to string conversion in '.$backtrace[0]['file'], $backtrace[0]['line']);
+<a name="line329"></a>			}
+<a name="line330"></a>		}
+<a name="line331"></a>	
+<a name="line332"></a>		// Searching for an array
+<a name="line333"></a>		if (is_array($search))
+<a name="line334"></a>		{
+<a name="line335"></a>			// Replacing with an array
+<a name="line336"></a>			if (is_array($replace))
+<a name="line337"></a>			{
+<a name="line338"></a>				$search = array_values($search);
+<a name="line339"></a>				$replace = array_values($replace);
+<a name="line340"></a>
+<a name="line341"></a>				if (count($search) >= count($replace))
+<a name="line342"></a>				{
+<a name="line343"></a>					$replace = array_pad($replace, count($search), '');
+<a name="line344"></a>				}
+<a name="line345"></a>				else
+<a name="line346"></a>				{
+<a name="line347"></a>					$replace = array_slice($replace, 0, count($search));
+<a name="line348"></a>				}
+<a name="line349"></a>			}
+<a name="line350"></a>			else
+<a name="line351"></a>			{
+<a name="line352"></a>				// Replacing with a string all positions
+<a name="line353"></a>				$replace = array_fill(0, count($search), $replace);
+<a name="line354"></a>			}
+<a name="line355"></a>		}
+<a name="line356"></a>		else
+<a name="line357"></a>		{
+<a name="line358"></a>			//Searching for a string and replacing with a string.
+<a name="line359"></a>			$search  = array((string)$search);
+<a name="line360"></a>			$replace = array((string)$replace);
+<a name="line361"></a>		}
+<a name="line362"></a>		
+<a name="line363"></a>		// Prepare the search array
+<a name="line364"></a>		foreach ($search as $search_key => $search_value)
+<a name="line365"></a>		{
+<a name="line366"></a>			$search[$search_key] = '/'.preg_quote($search_value, '/').'/i';
+<a name="line367"></a>		}
+<a name="line368"></a>		
+<a name="line369"></a>		// Prepare the replace array (escape backreferences)
+<a name="line370"></a>		foreach ($replace as $k => $v)
+<a name="line371"></a>		{
+<a name="line372"></a>			$replace[$k] = str_replace(array(chr(92), '$'), array(chr(92).chr(92), '\$'), $v);
+<a name="line373"></a>		}
+<a name="line374"></a>	
+<a name="line375"></a>		// do the replacement
+<a name="line376"></a>		$result = preg_replace($search, $replace, (array)$subject);
+<a name="line377"></a>	
+<a name="line378"></a>		// Check if subject was initially a string and return it as a string
+<a name="line379"></a>		if ( ! is_array($subject))
+<a name="line380"></a>		{
+<a name="line381"></a>			return current($result);
+<a name="line382"></a>		}
+<a name="line383"></a>	
+<a name="line384"></a>		// Otherwise, just return the array
+<a name="line385"></a>		return $result;
+<a name="line386"></a>	}
+<a name="line387"></a>}
+<a name="line388"></a>
+<a name="line389"></a>// ------------------------------------------------------------------------
+<a name="line390"></a>
+<a name="line391"></a>/**
+<a name="line392"></a> * http_build_query()
+<a name="line393"></a> *
+<a name="line394"></a> * Generate URL-encoded query string
+<a name="line395"></a> * http://us.php.net/manual/en/function.http-build-query.php
+<a name="line396"></a> *
+<a name="line397"></a> * @access	public
+<a name="line398"></a> * @param	array		form data
+<a name="line399"></a> * @param	string		numeric prefix
+<a name="line400"></a> * @param	string		argument separator
+<a name="line401"></a> * @return	string		URL-encoded string
+<a name="line402"></a> */
+<a name="line403"></a>if ( ! function_exists('http_build_query'))
+<a name="line404"></a>{
+<a name="line405"></a>	function http_build_query($formdata, $numeric_prefix = NULL, $separator = NULL)
+<a name="line406"></a>	{
+<a name="line407"></a>		// Check the data
+<a name="line408"></a>		if ( ! is_array($formdata) && ! is_object($formdata))
+<a name="line409"></a>		{
+<a name="line410"></a>			$backtrace = debug_backtrace();
+<a name="line411"></a>			_exception_handler(E_USER_WARNING, 'http_build_query() Parameter 1 expected to be Array or Object. Incorrect value given', $backtrace[0]['file'], $backtrace[0]['line']);
+<a name="line412"></a>			return FALSE;
+<a name="line413"></a>		}
+<a name="line414"></a>	
+<a name="line415"></a>		// Cast it as array
+<a name="line416"></a>		if (is_object($formdata))
+<a name="line417"></a>		{
+<a name="line418"></a>			$formdata = get_object_vars($formdata);
+<a name="line419"></a>		}
+<a name="line420"></a>	
+<a name="line421"></a>		// If the array is empty, return NULL
+<a name="line422"></a>		if (empty($formdata))
+<a name="line423"></a>		{
+<a name="line424"></a>			return NULL;
+<a name="line425"></a>		}
+<a name="line426"></a>	
+<a name="line427"></a>		// Argument separator
+<a name="line428"></a>		if ($separator === NULL)
+<a name="line429"></a>		{
+<a name="line430"></a>			$separator = ini_get('arg_separator.output');
+<a name="line431"></a>
+<a name="line432"></a>			if (strlen($separator) == 0)
+<a name="line433"></a>			{
+<a name="line434"></a>				$separator = '&';
+<a name="line435"></a>			}
+<a name="line436"></a>		}
+<a name="line437"></a>	
+<a name="line438"></a>		// Start building the query
+<a name="line439"></a>		$tmp = array();
+<a name="line440"></a>
+<a name="line441"></a>		foreach ($formdata as $key => $val)
+<a name="line442"></a>		{
+<a name="line443"></a>			if ($val === NULL)
+<a name="line444"></a>			{
+<a name="line445"></a>				continue;
+<a name="line446"></a>			}
+<a name="line447"></a>	
+<a name="line448"></a>			if (is_integer($key) && $numeric_prefix != NULL)
+<a name="line449"></a>			{
+<a name="line450"></a>				$key = $numeric_prefix.$key;
+<a name="line451"></a>			}
+<a name="line452"></a>	
+<a name="line453"></a>			if (is_resource($val))
+<a name="line454"></a>			{
+<a name="line455"></a>				return NULL;
+<a name="line456"></a>			}
+<a name="line457"></a>			
+<a name="line458"></a>			// hand it off to a recursive parser
+<a name="line459"></a>			$tmp[] = _http_build_query_helper($key, $val, $separator);
+<a name="line460"></a>		}
+<a name="line461"></a>	
+<a name="line462"></a>		return implode($separator, $tmp);
+<a name="line463"></a>	}
+<a name="line464"></a>	
+<a name="line465"></a>	
+<a name="line466"></a>	// Helper helper.  Remind anyone of college?
+<a name="line467"></a>	// Required to handle recursion in nested arrays.
+<a name="line468"></a>	// 
+<a name="line469"></a>	// You could shave fractions of fractions of a second by moving where
+<a name="line470"></a>	// the urlencoding takes place, but it's much less intuitive, and if
+<a name="line471"></a>	// your application has 10,000 form fields, well, you have other problems ;)
+<a name="line472"></a>	function _http_build_query_helper($key, $val, $separator = '&')
+<a name="line473"></a>	{	
+<a name="line474"></a>		if (is_scalar($val))
+<a name="line475"></a>		{
+<a name="line476"></a>			return urlencode($key).'='.urlencode($val);			
+<a name="line477"></a>		}
+<a name="line478"></a>		else
+<a name="line479"></a>		{
+<a name="line480"></a>			// arrays please
+<a name="line481"></a>			if (is_object($val))
+<a name="line482"></a>			{
+<a name="line483"></a>				$val = get_object_vars($val);
+<a name="line484"></a>			}
+<a name="line485"></a>			
+<a name="line486"></a>			foreach ($val as $k => $v)
+<a name="line487"></a>			{
+<a name="line488"></a>				$tmp[] = _http_build_query_helper($key.'['.$k.']', $v, $separator);
+<a name="line489"></a>			}
+<a name="line490"></a>		}
+<a name="line491"></a>			
+<a name="line492"></a>		return implode($separator, $tmp);
+<a name="line493"></a>	}
+<a name="line494"></a>}
+<a name="line495"></a>
+<a name="line496"></a>
+<a name="line497"></a>/* End of file compatibility_helper.php */
+<a name="line498"></a>/* Location: ./system/helpers/compatibility_helper.php */</pre>
+<div class="header">
+<h1>GiftFlow API</h1>
+<ul>
+<li><a href="../../overview-summary.html">Overview</a></li>
+<li>Package</li><li>Class</li><li>Tree</li><li><a href="../../overview-files.html">Files</a></li>
+<li><a href="../../deprecated-list.html">Deprecated</a></li>
+<li><a href="../../index-all.html">Index</a></li>
+</ul>
+</div>
+
+<div class="small_links">
+<a href="../../index.html" target="_top">Frames</a>
+<a href="../../source/helpers/compatibility_helper.php.html" target="_top">No frames</a>
+</div>
+<hr>
+
+<p id="footer">This document was generated by <a href="http://peej.github.com/phpdoctor/">PHPDoctor: The PHP Documentation Creator</a></p>
+
+</body>
+
+</html>

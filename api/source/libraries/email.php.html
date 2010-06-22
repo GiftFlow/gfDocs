@@ -1,0 +1,2101 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+
+<html lang="en">
+<head>
+
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
+<meta name="generator" content="PHPDoctor 2RC4 (http://peej.github.com/phpdoctor/)">
+<meta name="when" content="Sun, 20 Jun 2010 17:43:51 +0000">
+
+<link rel="stylesheet" type="text/css" href="../../stylesheet.css">
+<link rel="start" href="../../overview-summary.html">
+
+<title>libraries/Email.php (GiftFlow API)</title>
+
+</head>
+<body id="file" onload="parent.document.title=document.title;">
+
+<div class="header">
+<h1>GiftFlow API</h1>
+<ul>
+<li><a href="../../overview-summary.html">Overview</a></li>
+<li>Package</li><li>Class</li><li>Tree</li><li><a href="../../overview-files.html">Files</a></li>
+<li><a href="../../deprecated-list.html">Deprecated</a></li>
+<li><a href="../../index-all.html">Index</a></li>
+</ul>
+</div>
+
+<div class="small_links">
+<a href="../../index.html" target="_top">Frames</a>
+<a href="../../source/libraries/email.php.html" target="_top">No frames</a>
+</div>
+<hr>
+
+<h1>libraries/Email.php</h1>
+<div class="comment" id="overview_description"><p>CodeIgniter</p><p>An open source application development framework for PHP 4.3.2 or newer</p></div>
+
+<hr>
+
+<a name="line1"></a><pre><?php  if ( ! defined('BASEPATH')) exit('No direct script access allowed');
+<a name="line2"></a>/**
+<a name="line3"></a> * CodeIgniter
+<a name="line4"></a> *
+<a name="line5"></a> * An open source application development framework for PHP 4.3.2 or newer
+<a name="line6"></a> *
+<a name="line7"></a> * @package		CodeIgniter
+<a name="line8"></a> * @author		ExpressionEngine Dev Team
+<a name="line9"></a> * @copyright	Copyright (c) 2008 - 2009, EllisLab, Inc.
+<a name="line10"></a> * @license		http://codeigniter.com/user_guide/license.html
+<a name="line11"></a> * @link		http://codeigniter.com
+<a name="line12"></a> * @since		Version 1.0
+<a name="line13"></a> * @filesource
+<a name="line14"></a> */
+<a name="line15"></a>
+<a name="line16"></a>// ------------------------------------------------------------------------
+<a name="line17"></a>
+<a name="line18"></a>/**
+<a name="line19"></a> * CodeIgniter Email Class
+<a name="line20"></a> *
+<a name="line21"></a> * Permits email to be sent using Mail, Sendmail, or SMTP.
+<a name="line22"></a> *
+<a name="line23"></a> * @package		CodeIgniter
+<a name="line24"></a> * @subpackage	Libraries
+<a name="line25"></a> * @category	Libraries
+<a name="line26"></a> * @author		ExpressionEngine Dev Team
+<a name="line27"></a> * @link		http://codeigniter.com/user_guide/libraries/email.html
+<a name="line28"></a> */
+<a name="line29"></a>class CI_Email {
+<a name="line30"></a>
+<a name="line31"></a>	var	$useragent		= "CodeIgniter";
+<a name="line32"></a>	var	$mailpath		= "/usr/sbin/sendmail";	// Sendmail path
+<a name="line33"></a>	var	$protocol		= "mail";	// mail/sendmail/smtp
+<a name="line34"></a>	var	$smtp_host		= "";		// SMTP Server.  Example: mail.earthlink.net
+<a name="line35"></a>	var	$smtp_user		= "";		// SMTP Username
+<a name="line36"></a>	var	$smtp_pass		= "";		// SMTP Password
+<a name="line37"></a>	var	$smtp_port		= "25";		// SMTP Port
+<a name="line38"></a>	var	$smtp_timeout	= 5;		// SMTP Timeout in seconds
+<a name="line39"></a>	var	$wordwrap		= TRUE;		// TRUE/FALSE  Turns word-wrap on/off
+<a name="line40"></a>	var	$wrapchars		= "76";		// Number of characters to wrap at.
+<a name="line41"></a>	var	$mailtype		= "text";	// text/html  Defines email formatting
+<a name="line42"></a>	var	$charset		= "utf-8";	// Default char set: iso-8859-1 or us-ascii
+<a name="line43"></a>	var	$multipart		= "mixed";	// "mixed" (in the body) or "related" (separate)
+<a name="line44"></a>	var $alt_message	= '';		// Alternative message for HTML emails
+<a name="line45"></a>	var	$validate		= FALSE;	// TRUE/FALSE.  Enables email validation
+<a name="line46"></a>	var	$priority		= "3";		// Default priority (1 - 5)
+<a name="line47"></a>	var	$newline		= "\n";		// Default newline. "\r\n" or "\n" (Use "\r\n" to comply with RFC 822)
+<a name="line48"></a>	var $crlf			= "\n";		// The RFC 2045 compliant CRLF for quoted-printable is "\r\n".  Apparently some servers,
+<a name="line49"></a>									// even on the receiving end think they need to muck with CRLFs, so using "\n", while
+<a name="line50"></a>									// distasteful, is the only thing that seems to work for all environments.
+<a name="line51"></a>	var $send_multipart	= TRUE;		// TRUE/FALSE - Yahoo does not like multipart alternative, so this is an override.  Set to FALSE for Yahoo.
+<a name="line52"></a>	var	$bcc_batch_mode	= FALSE;	// TRUE/FALSE  Turns on/off Bcc batch feature
+<a name="line53"></a>	var	$bcc_batch_size	= 200;		// If bcc_batch_mode = TRUE, sets max number of Bccs in each batch
+<a name="line54"></a>	var $_safe_mode		= FALSE;
+<a name="line55"></a>	var	$_subject		= "";
+<a name="line56"></a>	var	$_body			= "";
+<a name="line57"></a>	var	$_finalbody		= "";
+<a name="line58"></a>	var	$_alt_boundary	= "";
+<a name="line59"></a>	var	$_atc_boundary	= "";
+<a name="line60"></a>	var	$_header_str	= "";
+<a name="line61"></a>	var	$_smtp_connect	= "";
+<a name="line62"></a>	var	$_encoding		= "8bit";
+<a name="line63"></a>	var $_IP			= FALSE;
+<a name="line64"></a>	var	$_smtp_auth		= FALSE;
+<a name="line65"></a>	var $_replyto_flag	= FALSE;
+<a name="line66"></a>	var	$_debug_msg		= array();
+<a name="line67"></a>	var	$_recipients	= array();
+<a name="line68"></a>	var	$_cc_array		= array();
+<a name="line69"></a>	var	$_bcc_array		= array();
+<a name="line70"></a>	var	$_headers		= array();
+<a name="line71"></a>	var	$_attach_name	= array();
+<a name="line72"></a>	var	$_attach_type	= array();
+<a name="line73"></a>	var	$_attach_disp	= array();
+<a name="line74"></a>	var	$_protocols		= array('mail', 'sendmail', 'smtp');
+<a name="line75"></a>	var	$_base_charsets	= array('us-ascii', 'iso-2022-');	// 7-bit charsets (excluding language suffix)
+<a name="line76"></a>	var	$_bit_depths	= array('7bit', '8bit');
+<a name="line77"></a>	var	$_priorities	= array('1 (Highest)', '2 (High)', '3 (Normal)', '4 (Low)', '5 (Lowest)');
+<a name="line78"></a>
+<a name="line79"></a>
+<a name="line80"></a>	/**
+<a name="line81"></a>	 * Constructor - Sets Email Preferences
+<a name="line82"></a>	 *
+<a name="line83"></a>	 * The constructor can be passed an array of config values
+<a name="line84"></a>	 */
+<a name="line85"></a>	function CI_Email($config = array())
+<a name="line86"></a>	{
+<a name="line87"></a>		if (count($config) > 0)
+<a name="line88"></a>		{
+<a name="line89"></a>			$this->initialize($config);
+<a name="line90"></a>		}
+<a name="line91"></a>		else
+<a name="line92"></a>		{
+<a name="line93"></a>			$this->_smtp_auth = ($this->smtp_user == '' AND $this->smtp_pass == '') ? FALSE : TRUE;
+<a name="line94"></a>			$this->_safe_mode = ((boolean)@ini_get("safe_mode") === FALSE) ? FALSE : TRUE;
+<a name="line95"></a>		}
+<a name="line96"></a>
+<a name="line97"></a>		log_message('debug', "Email Class Initialized");
+<a name="line98"></a>	}
+<a name="line99"></a>
+<a name="line100"></a>	// --------------------------------------------------------------------
+<a name="line101"></a>
+<a name="line102"></a>	/**
+<a name="line103"></a>	 * Initialize preferences
+<a name="line104"></a>	 *
+<a name="line105"></a>	 * @access	public
+<a name="line106"></a>	 * @param	array
+<a name="line107"></a>	 * @return	void
+<a name="line108"></a>	 */
+<a name="line109"></a>	function initialize($config = array())
+<a name="line110"></a>	{
+<a name="line111"></a>		$this->clear();
+<a name="line112"></a>		foreach ($config as $key => $val)
+<a name="line113"></a>		{
+<a name="line114"></a>			if (isset($this->$key))
+<a name="line115"></a>			{
+<a name="line116"></a>				$method = 'set_'.$key;
+<a name="line117"></a>
+<a name="line118"></a>				if (method_exists($this, $method))
+<a name="line119"></a>				{
+<a name="line120"></a>					$this->$method($val);
+<a name="line121"></a>				}
+<a name="line122"></a>				else
+<a name="line123"></a>				{
+<a name="line124"></a>					$this->$key = $val;
+<a name="line125"></a>				}
+<a name="line126"></a>			}
+<a name="line127"></a>		}
+<a name="line128"></a>
+<a name="line129"></a>		$this->_smtp_auth = ($this->smtp_user == '' AND $this->smtp_pass == '') ? FALSE : TRUE;
+<a name="line130"></a>		$this->_safe_mode = ((boolean)@ini_get("safe_mode") === FALSE) ? FALSE : TRUE;
+<a name="line131"></a>	}
+<a name="line132"></a>  
+<a name="line133"></a>	// --------------------------------------------------------------------
+<a name="line134"></a>
+<a name="line135"></a>	/**
+<a name="line136"></a>	 * Initialize the Email Data
+<a name="line137"></a>	 *
+<a name="line138"></a>	 * @access	public
+<a name="line139"></a>	 * @return	void
+<a name="line140"></a>	 */
+<a name="line141"></a>	function clear($clear_attachments = FALSE)
+<a name="line142"></a>	{
+<a name="line143"></a>		$this->_subject		= "";
+<a name="line144"></a>		$this->_body		= "";
+<a name="line145"></a>		$this->_finalbody	= "";
+<a name="line146"></a>		$this->_header_str	= "";
+<a name="line147"></a>		$this->_replyto_flag = FALSE;
+<a name="line148"></a>		$this->_recipients	= array();
+<a name="line149"></a>		$this->_headers		= array();
+<a name="line150"></a>		$this->_debug_msg	= array();
+<a name="line151"></a>
+<a name="line152"></a>		$this->_set_header('User-Agent', $this->useragent);
+<a name="line153"></a>		$this->_set_header('Date', $this->_set_date());
+<a name="line154"></a>
+<a name="line155"></a>		if ($clear_attachments !== FALSE)
+<a name="line156"></a>		{
+<a name="line157"></a>			$this->_attach_name = array();
+<a name="line158"></a>			$this->_attach_type = array();
+<a name="line159"></a>			$this->_attach_disp = array();
+<a name="line160"></a>		}
+<a name="line161"></a>	}
+<a name="line162"></a>  
+<a name="line163"></a>	// --------------------------------------------------------------------
+<a name="line164"></a>
+<a name="line165"></a>	/**
+<a name="line166"></a>	 * Set FROM
+<a name="line167"></a>	 *
+<a name="line168"></a>	 * @access	public
+<a name="line169"></a>	 * @param	string
+<a name="line170"></a>	 * @param	string
+<a name="line171"></a>	 * @return	void
+<a name="line172"></a>	 */
+<a name="line173"></a>	function from($from, $name = '')
+<a name="line174"></a>	{
+<a name="line175"></a>		if (preg_match( '/\<(.*)\>/', $from, $match))
+<a name="line176"></a>		{
+<a name="line177"></a>			$from = $match['1'];
+<a name="line178"></a>		}
+<a name="line179"></a>
+<a name="line180"></a>		if ($this->validate)
+<a name="line181"></a>		{
+<a name="line182"></a>			$this->validate_email($this->_str_to_array($from));
+<a name="line183"></a>		}
+<a name="line184"></a>
+<a name="line185"></a>		// prepare the display name
+<a name="line186"></a>		if ($name != '')
+<a name="line187"></a>		{
+<a name="line188"></a>			// only use Q encoding if there are characters that would require it
+<a name="line189"></a>			if ( ! preg_match('/[\200-\377]/', $name))
+<a name="line190"></a>			{
+<a name="line191"></a>				// add slashes for non-printing characters, slashes, and double quotes, and surround it in double quotes
+<a name="line192"></a>				$name = '"'.addcslashes($name, "\0..\37\177'\"\\").'"';
+<a name="line193"></a>			}
+<a name="line194"></a>			else
+<a name="line195"></a>			{
+<a name="line196"></a>				$name = $this->_prep_q_encoding($name, TRUE);
+<a name="line197"></a>			}
+<a name="line198"></a>		}
+<a name="line199"></a>
+<a name="line200"></a>		$this->_set_header('From', $name.' <'.$from.'>');
+<a name="line201"></a>		$this->_set_header('Return-Path', '<'.$from.'>');
+<a name="line202"></a>	}
+<a name="line203"></a>  
+<a name="line204"></a>	// --------------------------------------------------------------------
+<a name="line205"></a>
+<a name="line206"></a>	/**
+<a name="line207"></a>	 * Set Reply-to
+<a name="line208"></a>	 *
+<a name="line209"></a>	 * @access	public
+<a name="line210"></a>	 * @param	string
+<a name="line211"></a>	 * @param	string
+<a name="line212"></a>	 * @return	void
+<a name="line213"></a>	 */
+<a name="line214"></a>	function reply_to($replyto, $name = '')
+<a name="line215"></a>	{
+<a name="line216"></a>		if (preg_match( '/\<(.*)\>/', $replyto, $match))
+<a name="line217"></a>		{
+<a name="line218"></a>			$replyto = $match['1'];
+<a name="line219"></a>		}
+<a name="line220"></a>
+<a name="line221"></a>		if ($this->validate)
+<a name="line222"></a>		{
+<a name="line223"></a>			$this->validate_email($this->_str_to_array($replyto));
+<a name="line224"></a>		}
+<a name="line225"></a>
+<a name="line226"></a>		if ($name == '')
+<a name="line227"></a>		{
+<a name="line228"></a>			$name = $replyto;
+<a name="line229"></a>		}
+<a name="line230"></a>
+<a name="line231"></a>		if (strncmp($name, '"', 1) != 0)
+<a name="line232"></a>		{
+<a name="line233"></a>			$name = '"'.$name.'"';
+<a name="line234"></a>		}
+<a name="line235"></a>
+<a name="line236"></a>		$this->_set_header('Reply-To', $name.' <'.$replyto.'>');
+<a name="line237"></a>		$this->_replyto_flag = TRUE;
+<a name="line238"></a>	}
+<a name="line239"></a>  
+<a name="line240"></a>	// --------------------------------------------------------------------
+<a name="line241"></a>
+<a name="line242"></a>	/**
+<a name="line243"></a>	 * Set Recipients
+<a name="line244"></a>	 *
+<a name="line245"></a>	 * @access	public
+<a name="line246"></a>	 * @param	string
+<a name="line247"></a>	 * @return	void
+<a name="line248"></a>	 */
+<a name="line249"></a>	function to($to)
+<a name="line250"></a>	{
+<a name="line251"></a>		$to = $this->_str_to_array($to);
+<a name="line252"></a>		$to = $this->clean_email($to);
+<a name="line253"></a>
+<a name="line254"></a>		if ($this->validate)
+<a name="line255"></a>		{
+<a name="line256"></a>			$this->validate_email($to);
+<a name="line257"></a>		}
+<a name="line258"></a>
+<a name="line259"></a>		if ($this->_get_protocol() != 'mail')
+<a name="line260"></a>		{
+<a name="line261"></a>			$this->_set_header('To', implode(", ", $to));
+<a name="line262"></a>		}
+<a name="line263"></a>
+<a name="line264"></a>		switch ($this->_get_protocol())
+<a name="line265"></a>		{
+<a name="line266"></a>			case 'smtp'		: $this->_recipients = $to;
+<a name="line267"></a>			break;
+<a name="line268"></a>			case 'sendmail'	: $this->_recipients = implode(", ", $to);
+<a name="line269"></a>			break;
+<a name="line270"></a>			case 'mail'		: $this->_recipients = implode(", ", $to);
+<a name="line271"></a>			break;
+<a name="line272"></a>		}
+<a name="line273"></a>	}
+<a name="line274"></a>  
+<a name="line275"></a>	// --------------------------------------------------------------------
+<a name="line276"></a>
+<a name="line277"></a>	/**
+<a name="line278"></a>	 * Set CC
+<a name="line279"></a>	 *
+<a name="line280"></a>	 * @access	public
+<a name="line281"></a>	 * @param	string
+<a name="line282"></a>	 * @return	void
+<a name="line283"></a>	 */
+<a name="line284"></a>	function cc($cc)
+<a name="line285"></a>	{
+<a name="line286"></a>		$cc = $this->_str_to_array($cc);
+<a name="line287"></a>		$cc = $this->clean_email($cc);
+<a name="line288"></a>
+<a name="line289"></a>		if ($this->validate)
+<a name="line290"></a>		{
+<a name="line291"></a>			$this->validate_email($cc);
+<a name="line292"></a>		}
+<a name="line293"></a>
+<a name="line294"></a>		$this->_set_header('Cc', implode(", ", $cc));
+<a name="line295"></a>
+<a name="line296"></a>		if ($this->_get_protocol() == "smtp")
+<a name="line297"></a>		{
+<a name="line298"></a>			$this->_cc_array = $cc;
+<a name="line299"></a>		}
+<a name="line300"></a>	}
+<a name="line301"></a>  
+<a name="line302"></a>	// --------------------------------------------------------------------
+<a name="line303"></a>
+<a name="line304"></a>	/**
+<a name="line305"></a>	 * Set BCC
+<a name="line306"></a>	 *
+<a name="line307"></a>	 * @access	public
+<a name="line308"></a>	 * @param	string
+<a name="line309"></a>	 * @param	string
+<a name="line310"></a>	 * @return	void
+<a name="line311"></a>	 */
+<a name="line312"></a>	function bcc($bcc, $limit = '')
+<a name="line313"></a>	{
+<a name="line314"></a>		if ($limit != '' && is_numeric($limit))
+<a name="line315"></a>		{
+<a name="line316"></a>			$this->bcc_batch_mode = TRUE;
+<a name="line317"></a>			$this->bcc_batch_size = $limit;
+<a name="line318"></a>		}
+<a name="line319"></a>
+<a name="line320"></a>		$bcc = $this->_str_to_array($bcc);
+<a name="line321"></a>		$bcc = $this->clean_email($bcc);
+<a name="line322"></a>
+<a name="line323"></a>		if ($this->validate)
+<a name="line324"></a>		{
+<a name="line325"></a>			$this->validate_email($bcc);
+<a name="line326"></a>		}
+<a name="line327"></a>
+<a name="line328"></a>		if (($this->_get_protocol() == "smtp") OR ($this->bcc_batch_mode && count($bcc) > $this->bcc_batch_size))
+<a name="line329"></a>		{
+<a name="line330"></a>			$this->_bcc_array = $bcc;
+<a name="line331"></a>		}
+<a name="line332"></a>		else
+<a name="line333"></a>		{
+<a name="line334"></a>			$this->_set_header('Bcc', implode(", ", $bcc));
+<a name="line335"></a>		}
+<a name="line336"></a>	}
+<a name="line337"></a>  
+<a name="line338"></a>	// --------------------------------------------------------------------
+<a name="line339"></a>
+<a name="line340"></a>	/**
+<a name="line341"></a>	 * Set Email Subject
+<a name="line342"></a>	 *
+<a name="line343"></a>	 * @access	public
+<a name="line344"></a>	 * @param	string
+<a name="line345"></a>	 * @return	void
+<a name="line346"></a>	 */
+<a name="line347"></a>	function subject($subject)
+<a name="line348"></a>	{
+<a name="line349"></a>		$subject = $this->_prep_q_encoding($subject);
+<a name="line350"></a>		$this->_set_header('Subject', $subject);
+<a name="line351"></a>	}
+<a name="line352"></a>  
+<a name="line353"></a>	// --------------------------------------------------------------------
+<a name="line354"></a>
+<a name="line355"></a>	/**
+<a name="line356"></a>	 * Set Body
+<a name="line357"></a>	 *
+<a name="line358"></a>	 * @access	public
+<a name="line359"></a>	 * @param	string
+<a name="line360"></a>	 * @return	void
+<a name="line361"></a>	 */
+<a name="line362"></a>	function message($body)
+<a name="line363"></a>	{
+<a name="line364"></a>		$this->_body = stripslashes(rtrim(str_replace("\r", "", $body)));
+<a name="line365"></a>	}
+<a name="line366"></a> 
+<a name="line367"></a>	// --------------------------------------------------------------------
+<a name="line368"></a>
+<a name="line369"></a>	/**
+<a name="line370"></a>	 * Assign file attachments
+<a name="line371"></a>	 *
+<a name="line372"></a>	 * @access	public
+<a name="line373"></a>	 * @param	string
+<a name="line374"></a>	 * @return	void
+<a name="line375"></a>	 */
+<a name="line376"></a>	function attach($filename, $disposition = 'attachment')
+<a name="line377"></a>	{
+<a name="line378"></a>		$this->_attach_name[] = $filename;
+<a name="line379"></a>		$this->_attach_type[] = $this->_mime_types(next(explode('.', basename($filename))));
+<a name="line380"></a>		$this->_attach_disp[] = $disposition; // Can also be 'inline'  Not sure if it matters
+<a name="line381"></a>	}
+<a name="line382"></a>
+<a name="line383"></a>	// --------------------------------------------------------------------
+<a name="line384"></a>
+<a name="line385"></a>	/**
+<a name="line386"></a>	 * Add a Header Item
+<a name="line387"></a>	 *
+<a name="line388"></a>	 * @access	private
+<a name="line389"></a>	 * @param	string
+<a name="line390"></a>	 * @param	string
+<a name="line391"></a>	 * @return	void
+<a name="line392"></a>	 */
+<a name="line393"></a>	function _set_header($header, $value)
+<a name="line394"></a>	{
+<a name="line395"></a>		$this->_headers[$header] = $value;
+<a name="line396"></a>	}
+<a name="line397"></a>  
+<a name="line398"></a>	// --------------------------------------------------------------------
+<a name="line399"></a>
+<a name="line400"></a>	/**
+<a name="line401"></a>	 * Convert a String to an Array
+<a name="line402"></a>	 *
+<a name="line403"></a>	 * @access	private
+<a name="line404"></a>	 * @param	string
+<a name="line405"></a>	 * @return	array
+<a name="line406"></a>	 */
+<a name="line407"></a>	function _str_to_array($email)
+<a name="line408"></a>	{
+<a name="line409"></a>		if ( ! is_array($email))
+<a name="line410"></a>		{
+<a name="line411"></a>			if (strpos($email, ',') !== FALSE)
+<a name="line412"></a>			{
+<a name="line413"></a>				$email = preg_split('/[\s,]/', $email, -1, PREG_SPLIT_NO_EMPTY);
+<a name="line414"></a>			}
+<a name="line415"></a>			else
+<a name="line416"></a>			{
+<a name="line417"></a>				$email = trim($email);
+<a name="line418"></a>				settype($email, "array");
+<a name="line419"></a>			}
+<a name="line420"></a>		}
+<a name="line421"></a>		return $email;
+<a name="line422"></a>	}
+<a name="line423"></a>  
+<a name="line424"></a>	// --------------------------------------------------------------------
+<a name="line425"></a>
+<a name="line426"></a>	/**
+<a name="line427"></a>	 * Set Multipart Value
+<a name="line428"></a>	 *
+<a name="line429"></a>	 * @access	public
+<a name="line430"></a>	 * @param	string
+<a name="line431"></a>	 * @return	void
+<a name="line432"></a>	 */
+<a name="line433"></a>	function set_alt_message($str = '')
+<a name="line434"></a>	{
+<a name="line435"></a>		$this->alt_message = ($str == '') ? '' : $str;
+<a name="line436"></a>	}
+<a name="line437"></a>  
+<a name="line438"></a>	// --------------------------------------------------------------------
+<a name="line439"></a>
+<a name="line440"></a>	/**
+<a name="line441"></a>	 * Set Mailtype
+<a name="line442"></a>	 *
+<a name="line443"></a>	 * @access	public
+<a name="line444"></a>	 * @param	string
+<a name="line445"></a>	 * @return	void
+<a name="line446"></a>	 */
+<a name="line447"></a>	function set_mailtype($type = 'text')
+<a name="line448"></a>	{
+<a name="line449"></a>		$this->mailtype = ($type == 'html') ? 'html' : 'text';
+<a name="line450"></a>	}
+<a name="line451"></a>  
+<a name="line452"></a>	// --------------------------------------------------------------------
+<a name="line453"></a>
+<a name="line454"></a>	/**
+<a name="line455"></a>	 * Set Wordwrap
+<a name="line456"></a>	 *
+<a name="line457"></a>	 * @access	public
+<a name="line458"></a>	 * @param	string
+<a name="line459"></a>	 * @return	void
+<a name="line460"></a>	 */
+<a name="line461"></a>	function set_wordwrap($wordwrap = TRUE)
+<a name="line462"></a>	{
+<a name="line463"></a>		$this->wordwrap = ($wordwrap === FALSE) ? FALSE : TRUE;
+<a name="line464"></a>	}
+<a name="line465"></a>  
+<a name="line466"></a>	// --------------------------------------------------------------------
+<a name="line467"></a>
+<a name="line468"></a>	/**
+<a name="line469"></a>	 * Set Protocol
+<a name="line470"></a>	 *
+<a name="line471"></a>	 * @access	public
+<a name="line472"></a>	 * @param	string
+<a name="line473"></a>	 * @return	void
+<a name="line474"></a>	 */
+<a name="line475"></a>	function set_protocol($protocol = 'mail')
+<a name="line476"></a>	{
+<a name="line477"></a>		$this->protocol = ( ! in_array($protocol, $this->_protocols, TRUE)) ? 'mail' : strtolower($protocol);
+<a name="line478"></a>	}
+<a name="line479"></a>  
+<a name="line480"></a>	// --------------------------------------------------------------------
+<a name="line481"></a>
+<a name="line482"></a>	/**
+<a name="line483"></a>	 * Set Priority
+<a name="line484"></a>	 *
+<a name="line485"></a>	 * @access	public
+<a name="line486"></a>	 * @param	integer
+<a name="line487"></a>	 * @return	void
+<a name="line488"></a>	 */
+<a name="line489"></a>	function set_priority($n = 3)
+<a name="line490"></a>	{
+<a name="line491"></a>		if ( ! is_numeric($n))
+<a name="line492"></a>		{
+<a name="line493"></a>			$this->priority = 3;
+<a name="line494"></a>			return;
+<a name="line495"></a>		}
+<a name="line496"></a>
+<a name="line497"></a>		if ($n < 1 OR $n > 5)
+<a name="line498"></a>		{
+<a name="line499"></a>			$this->priority = 3;
+<a name="line500"></a>			return;
+<a name="line501"></a>		}
+<a name="line502"></a>
+<a name="line503"></a>		$this->priority = $n;
+<a name="line504"></a>	}
+<a name="line505"></a>  
+<a name="line506"></a>	// --------------------------------------------------------------------
+<a name="line507"></a>
+<a name="line508"></a>	/**
+<a name="line509"></a>	 * Set Newline Character
+<a name="line510"></a>	 *
+<a name="line511"></a>	 * @access	public
+<a name="line512"></a>	 * @param	string
+<a name="line513"></a>	 * @return	void
+<a name="line514"></a>	 */
+<a name="line515"></a>	function set_newline($newline = "\n")
+<a name="line516"></a>	{
+<a name="line517"></a>		if ($newline != "\n" AND $newline != "\r\n" AND $newline != "\r")
+<a name="line518"></a>		{
+<a name="line519"></a>			$this->newline	= "\n";
+<a name="line520"></a>			return;
+<a name="line521"></a>		}
+<a name="line522"></a>
+<a name="line523"></a>		$this->newline	= $newline;
+<a name="line524"></a>	}
+<a name="line525"></a>  
+<a name="line526"></a>	// --------------------------------------------------------------------
+<a name="line527"></a>
+<a name="line528"></a>	/**
+<a name="line529"></a>	 * Set CRLF
+<a name="line530"></a>	 *
+<a name="line531"></a>	 * @access	public
+<a name="line532"></a>	 * @param	string
+<a name="line533"></a>	 * @return	void
+<a name="line534"></a>	 */
+<a name="line535"></a>	function set_crlf($crlf = "\n")
+<a name="line536"></a>	{
+<a name="line537"></a>		if ($crlf != "\n" AND $crlf != "\r\n" AND $crlf != "\r")
+<a name="line538"></a>		{
+<a name="line539"></a>			$this->crlf	= "\n";
+<a name="line540"></a>			return;
+<a name="line541"></a>		}
+<a name="line542"></a>
+<a name="line543"></a>		$this->crlf	= $crlf;
+<a name="line544"></a>	}
+<a name="line545"></a>  
+<a name="line546"></a>	// --------------------------------------------------------------------
+<a name="line547"></a>
+<a name="line548"></a>	/**
+<a name="line549"></a>	 * Set Message Boundary
+<a name="line550"></a>	 *
+<a name="line551"></a>	 * @access	private
+<a name="line552"></a>	 * @return	void
+<a name="line553"></a>	 */
+<a name="line554"></a>	function _set_boundaries()
+<a name="line555"></a>	{
+<a name="line556"></a>		$this->_alt_boundary = "B_ALT_".uniqid(''); // multipart/alternative
+<a name="line557"></a>		$this->_atc_boundary = "B_ATC_".uniqid(''); // attachment boundary
+<a name="line558"></a>	}
+<a name="line559"></a>  
+<a name="line560"></a>	// --------------------------------------------------------------------
+<a name="line561"></a>
+<a name="line562"></a>	/**
+<a name="line563"></a>	 * Get the Message ID
+<a name="line564"></a>	 *
+<a name="line565"></a>	 * @access	private
+<a name="line566"></a>	 * @return	string
+<a name="line567"></a>	 */
+<a name="line568"></a>	function _get_message_id()
+<a name="line569"></a>	{
+<a name="line570"></a>		$from = $this->_headers['Return-Path'];
+<a name="line571"></a>		$from = str_replace(">", "", $from);
+<a name="line572"></a>		$from = str_replace("<", "", $from);
+<a name="line573"></a>
+<a name="line574"></a>		return  "<".uniqid('').strstr($from, '@').">";
+<a name="line575"></a>	}
+<a name="line576"></a>  
+<a name="line577"></a>	// --------------------------------------------------------------------
+<a name="line578"></a>
+<a name="line579"></a>	/**
+<a name="line580"></a>	 * Get Mail Protocol
+<a name="line581"></a>	 *
+<a name="line582"></a>	 * @access	private
+<a name="line583"></a>	 * @param	bool
+<a name="line584"></a>	 * @return	string
+<a name="line585"></a>	 */
+<a name="line586"></a>	function _get_protocol($return = TRUE)
+<a name="line587"></a>	{
+<a name="line588"></a>		$this->protocol = strtolower($this->protocol);
+<a name="line589"></a>		$this->protocol = ( ! in_array($this->protocol, $this->_protocols, TRUE)) ? 'mail' : $this->protocol;
+<a name="line590"></a>
+<a name="line591"></a>		if ($return == TRUE)
+<a name="line592"></a>		{
+<a name="line593"></a>			return $this->protocol;
+<a name="line594"></a>		}
+<a name="line595"></a>	}
+<a name="line596"></a>  
+<a name="line597"></a>	// --------------------------------------------------------------------
+<a name="line598"></a>
+<a name="line599"></a>	/**
+<a name="line600"></a>	 * Get Mail Encoding
+<a name="line601"></a>	 *
+<a name="line602"></a>	 * @access	private
+<a name="line603"></a>	 * @param	bool
+<a name="line604"></a>	 * @return	string
+<a name="line605"></a>	 */
+<a name="line606"></a>	function _get_encoding($return = TRUE)
+<a name="line607"></a>	{
+<a name="line608"></a>		$this->_encoding = ( ! in_array($this->_encoding, $this->_bit_depths)) ? '8bit' : $this->_encoding;
+<a name="line609"></a>
+<a name="line610"></a>		foreach ($this->_base_charsets as $charset)
+<a name="line611"></a>		{
+<a name="line612"></a>			if (strncmp($charset, $this->charset, strlen($charset)) == 0)
+<a name="line613"></a>			{
+<a name="line614"></a>				$this->_encoding = '7bit';
+<a name="line615"></a>			}
+<a name="line616"></a>		}
+<a name="line617"></a>
+<a name="line618"></a>		if ($return == TRUE)
+<a name="line619"></a>		{
+<a name="line620"></a>			return $this->_encoding;
+<a name="line621"></a>		}
+<a name="line622"></a>	}
+<a name="line623"></a>
+<a name="line624"></a>	// --------------------------------------------------------------------
+<a name="line625"></a>
+<a name="line626"></a>	/**
+<a name="line627"></a>	 * Get content type (text/html/attachment)
+<a name="line628"></a>	 *
+<a name="line629"></a>	 * @access	private
+<a name="line630"></a>	 * @return	string
+<a name="line631"></a>	 */
+<a name="line632"></a>	function _get_content_type()
+<a name="line633"></a>	{
+<a name="line634"></a>		if	($this->mailtype == 'html' &&  count($this->_attach_name) == 0)
+<a name="line635"></a>		{
+<a name="line636"></a>			return 'html';
+<a name="line637"></a>		}
+<a name="line638"></a>		elseif	($this->mailtype == 'html' &&  count($this->_attach_name)  > 0)
+<a name="line639"></a>		{
+<a name="line640"></a>			return 'html-attach';
+<a name="line641"></a>		}
+<a name="line642"></a>		elseif	($this->mailtype == 'text' &&  count($this->_attach_name)  > 0)
+<a name="line643"></a>		{
+<a name="line644"></a>			return 'plain-attach';
+<a name="line645"></a>		}
+<a name="line646"></a>		else
+<a name="line647"></a>		{
+<a name="line648"></a>			return 'plain';
+<a name="line649"></a>		}
+<a name="line650"></a>	}
+<a name="line651"></a>  
+<a name="line652"></a>	// --------------------------------------------------------------------
+<a name="line653"></a>
+<a name="line654"></a>	/**
+<a name="line655"></a>	 * Set RFC 822 Date
+<a name="line656"></a>	 *
+<a name="line657"></a>	 * @access	private
+<a name="line658"></a>	 * @return	string
+<a name="line659"></a>	 */
+<a name="line660"></a>	function _set_date()
+<a name="line661"></a>	{
+<a name="line662"></a>		$timezone = date("Z");
+<a name="line663"></a>		$operator = (strncmp($timezone, '-', 1) == 0) ? '-' : '+';
+<a name="line664"></a>		$timezone = abs($timezone);
+<a name="line665"></a>		$timezone = floor($timezone/3600) * 100 + ($timezone % 3600 ) / 60;
+<a name="line666"></a>
+<a name="line667"></a>		return sprintf("%s %s%04d", date("D, j M Y H:i:s"), $operator, $timezone);
+<a name="line668"></a>	}
+<a name="line669"></a>  
+<a name="line670"></a>	// --------------------------------------------------------------------
+<a name="line671"></a>
+<a name="line672"></a>	/**
+<a name="line673"></a>	 * Mime message
+<a name="line674"></a>	 *
+<a name="line675"></a>	 * @access	private
+<a name="line676"></a>	 * @return	string
+<a name="line677"></a>	 */
+<a name="line678"></a>	function _get_mime_message()
+<a name="line679"></a>	{
+<a name="line680"></a>		return "This is a multi-part message in MIME format.".$this->newline."Your email application may not support this format.";
+<a name="line681"></a>	}
+<a name="line682"></a>  
+<a name="line683"></a>	// --------------------------------------------------------------------
+<a name="line684"></a>
+<a name="line685"></a>	/**
+<a name="line686"></a>	 * Validate Email Address
+<a name="line687"></a>	 *
+<a name="line688"></a>	 * @access	public
+<a name="line689"></a>	 * @param	string
+<a name="line690"></a>	 * @return	bool
+<a name="line691"></a>	 */
+<a name="line692"></a>	function validate_email($email)
+<a name="line693"></a>	{
+<a name="line694"></a>		if ( ! is_array($email))
+<a name="line695"></a>		{
+<a name="line696"></a>			$this->_set_error_message('email_must_be_array');
+<a name="line697"></a>			return FALSE;
+<a name="line698"></a>		}
+<a name="line699"></a>
+<a name="line700"></a>		foreach ($email as $val)
+<a name="line701"></a>		{
+<a name="line702"></a>			if ( ! $this->valid_email($val))
+<a name="line703"></a>			{
+<a name="line704"></a>				$this->_set_error_message('email_invalid_address', $val);
+<a name="line705"></a>				return FALSE;
+<a name="line706"></a>			}
+<a name="line707"></a>		}
+<a name="line708"></a>
+<a name="line709"></a>		return TRUE;
+<a name="line710"></a>	}
+<a name="line711"></a>  
+<a name="line712"></a>	// --------------------------------------------------------------------
+<a name="line713"></a>
+<a name="line714"></a>	/**
+<a name="line715"></a>	 * Email Validation
+<a name="line716"></a>	 *
+<a name="line717"></a>	 * @access	public
+<a name="line718"></a>	 * @param	string
+<a name="line719"></a>	 * @return	bool
+<a name="line720"></a>	 */
+<a name="line721"></a>	function valid_email($address)
+<a name="line722"></a>	{
+<a name="line723"></a>		return ( ! preg_match("/^([a-z0-9\+_\-]+)(\.[a-z0-9\+_\-]+)*@([a-z0-9\-]+\.)+[a-z]{2,6}$/ix", $address)) ? FALSE : TRUE;
+<a name="line724"></a>	}
+<a name="line725"></a>  
+<a name="line726"></a>	// --------------------------------------------------------------------
+<a name="line727"></a>
+<a name="line728"></a>	/**
+<a name="line729"></a>	 * Clean Extended Email Address: Joe Smith <joe@smith.com>
+<a name="line730"></a>	 *
+<a name="line731"></a>	 * @access	public
+<a name="line732"></a>	 * @param	string
+<a name="line733"></a>	 * @return	string
+<a name="line734"></a>	 */
+<a name="line735"></a>	function clean_email($email)
+<a name="line736"></a>	{
+<a name="line737"></a>		if ( ! is_array($email))
+<a name="line738"></a>		{
+<a name="line739"></a>			if (preg_match('/\<(.*)\>/', $email, $match))
+<a name="line740"></a>			{
+<a name="line741"></a>		   		return $match['1'];
+<a name="line742"></a>			}
+<a name="line743"></a>		   	else
+<a name="line744"></a>			{
+<a name="line745"></a>		   		return $email;
+<a name="line746"></a>			}
+<a name="line747"></a>		}
+<a name="line748"></a>
+<a name="line749"></a>		$clean_email = array();
+<a name="line750"></a>
+<a name="line751"></a>		foreach ($email as $addy)
+<a name="line752"></a>		{
+<a name="line753"></a>			if (preg_match( '/\<(.*)\>/', $addy, $match))
+<a name="line754"></a>			{
+<a name="line755"></a>		   		$clean_email[] = $match['1'];
+<a name="line756"></a>			}
+<a name="line757"></a>		   	else
+<a name="line758"></a>			{
+<a name="line759"></a>		   		$clean_email[] = $addy;
+<a name="line760"></a>			}
+<a name="line761"></a>		}
+<a name="line762"></a>
+<a name="line763"></a>		return $clean_email;
+<a name="line764"></a>	}
+<a name="line765"></a>  
+<a name="line766"></a>	// --------------------------------------------------------------------
+<a name="line767"></a>
+<a name="line768"></a>	/**
+<a name="line769"></a>	 * Build alternative plain text message
+<a name="line770"></a>	 *
+<a name="line771"></a>	 * This function provides the raw message for use
+<a name="line772"></a>	 * in plain-text headers of HTML-formatted emails.
+<a name="line773"></a>	 * If the user hasn't specified his own alternative message
+<a name="line774"></a>	 * it creates one by stripping the HTML
+<a name="line775"></a>	 *
+<a name="line776"></a>	 * @access	private
+<a name="line777"></a>	 * @return	string
+<a name="line778"></a>	 */
+<a name="line779"></a>	function _get_alt_message()
+<a name="line780"></a>	{
+<a name="line781"></a>		if ($this->alt_message != "")
+<a name="line782"></a>		{
+<a name="line783"></a>			return $this->word_wrap($this->alt_message, '76');
+<a name="line784"></a>		}
+<a name="line785"></a>
+<a name="line786"></a>		if (preg_match('/\<body.*?\>(.*)\<\/body\>/si', $this->_body, $match))
+<a name="line787"></a>		{
+<a name="line788"></a>			$body = $match['1'];
+<a name="line789"></a>		}
+<a name="line790"></a>		else
+<a name="line791"></a>		{
+<a name="line792"></a>			$body = $this->_body;
+<a name="line793"></a>		}
+<a name="line794"></a>
+<a name="line795"></a>		$body = trim(strip_tags($body));
+<a name="line796"></a>		$body = preg_replace( '#<!--(.*)--\>#', "", $body);
+<a name="line797"></a>		$body = str_replace("\t", "", $body);
+<a name="line798"></a>
+<a name="line799"></a>		for ($i = 20; $i >= 3; $i--)
+<a name="line800"></a>		{
+<a name="line801"></a>			$n = "";
+<a name="line802"></a>
+<a name="line803"></a>			for ($x = 1; $x <= $i; $x ++)
+<a name="line804"></a>			{
+<a name="line805"></a>				 $n .= "\n";
+<a name="line806"></a>			}
+<a name="line807"></a>
+<a name="line808"></a>			$body = str_replace($n, "\n\n", $body);
+<a name="line809"></a>		}
+<a name="line810"></a>
+<a name="line811"></a>		return $this->word_wrap($body, '76');
+<a name="line812"></a>	}
+<a name="line813"></a>  
+<a name="line814"></a>	// --------------------------------------------------------------------
+<a name="line815"></a>
+<a name="line816"></a>	/**
+<a name="line817"></a>	 * Word Wrap
+<a name="line818"></a>	 *
+<a name="line819"></a>	 * @access	public
+<a name="line820"></a>	 * @param	string
+<a name="line821"></a>	 * @param	integer
+<a name="line822"></a>	 * @return	string
+<a name="line823"></a>	 */
+<a name="line824"></a>	function word_wrap($str, $charlim = '')
+<a name="line825"></a>	{
+<a name="line826"></a>		// Se the character limit
+<a name="line827"></a>		if ($charlim == '')
+<a name="line828"></a>		{
+<a name="line829"></a>			$charlim = ($this->wrapchars == "") ? "76" : $this->wrapchars;
+<a name="line830"></a>		}
+<a name="line831"></a>
+<a name="line832"></a>		// Reduce multiple spaces
+<a name="line833"></a>		$str = preg_replace("| +|", " ", $str);
+<a name="line834"></a>
+<a name="line835"></a>		// Standardize newlines
+<a name="line836"></a>		if (strpos($str, "\r") !== FALSE)
+<a name="line837"></a>		{
+<a name="line838"></a>			$str = str_replace(array("\r\n", "\r"), "\n", $str);
+<a name="line839"></a>		}
+<a name="line840"></a>
+<a name="line841"></a>		// If the current word is surrounded by {unwrap} tags we'll
+<a name="line842"></a>		// strip the entire chunk and replace it with a marker.
+<a name="line843"></a>		$unwrap = array();
+<a name="line844"></a>		if (preg_match_all("|(\{unwrap\}.+?\{/unwrap\})|s", $str, $matches))
+<a name="line845"></a>		{
+<a name="line846"></a>			for ($i = 0; $i < count($matches['0']); $i++)
+<a name="line847"></a>			{
+<a name="line848"></a>				$unwrap[] = $matches['1'][$i];
+<a name="line849"></a>				$str = str_replace($matches['1'][$i], "{{unwrapped".$i."}}", $str);
+<a name="line850"></a>			}
+<a name="line851"></a>		}
+<a name="line852"></a>
+<a name="line853"></a>		// Use PHP's native function to do the initial wordwrap.
+<a name="line854"></a>		// We set the cut flag to FALSE so that any individual words that are
+<a name="line855"></a>		// too long get left alone.  In the next step we'll deal with them.
+<a name="line856"></a>		$str = wordwrap($str, $charlim, "\n", FALSE);
+<a name="line857"></a>
+<a name="line858"></a>		// Split the string into individual lines of text and cycle through them
+<a name="line859"></a>		$output = "";
+<a name="line860"></a>		foreach (explode("\n", $str) as $line)
+<a name="line861"></a>		{
+<a name="line862"></a>			// Is the line within the allowed character count?
+<a name="line863"></a>			// If so we'll join it to the output and continue
+<a name="line864"></a>			if (strlen($line) <= $charlim)
+<a name="line865"></a>			{
+<a name="line866"></a>				$output .= $line.$this->newline;
+<a name="line867"></a>				continue;
+<a name="line868"></a>			}
+<a name="line869"></a>
+<a name="line870"></a>			$temp = '';
+<a name="line871"></a>			while((strlen($line)) > $charlim)
+<a name="line872"></a>			{
+<a name="line873"></a>				// If the over-length word is a URL we won't wrap it
+<a name="line874"></a>				if (preg_match("!\[url.+\]|://|wwww.!", $line))
+<a name="line875"></a>				{
+<a name="line876"></a>					break;
+<a name="line877"></a>				}
+<a name="line878"></a>
+<a name="line879"></a>				// Trim the word down
+<a name="line880"></a>				$temp .= substr($line, 0, $charlim-1);
+<a name="line881"></a>				$line = substr($line, $charlim-1);
+<a name="line882"></a>			}
+<a name="line883"></a>
+<a name="line884"></a>			// If $temp contains data it means we had to split up an over-length
+<a name="line885"></a>			// word into smaller chunks so we'll add it back to our current line
+<a name="line886"></a>			if ($temp != '')
+<a name="line887"></a>			{
+<a name="line888"></a>				$output .= $temp.$this->newline.$line;
+<a name="line889"></a>			}
+<a name="line890"></a>			else
+<a name="line891"></a>			{
+<a name="line892"></a>				$output .= $line;
+<a name="line893"></a>			}
+<a name="line894"></a>
+<a name="line895"></a>			$output .= $this->newline;
+<a name="line896"></a>		}
+<a name="line897"></a>
+<a name="line898"></a>		// Put our markers back
+<a name="line899"></a>		if (count($unwrap) > 0)
+<a name="line900"></a>		{
+<a name="line901"></a>			foreach ($unwrap as $key => $val)
+<a name="line902"></a>			{
+<a name="line903"></a>				$output = str_replace("{{unwrapped".$key."}}", $val, $output);
+<a name="line904"></a>			}
+<a name="line905"></a>		}
+<a name="line906"></a>
+<a name="line907"></a>		return $output;
+<a name="line908"></a>	}
+<a name="line909"></a>  
+<a name="line910"></a>	// --------------------------------------------------------------------
+<a name="line911"></a>
+<a name="line912"></a>	/**
+<a name="line913"></a>	 * Build final headers
+<a name="line914"></a>	 *
+<a name="line915"></a>	 * @access	private
+<a name="line916"></a>	 * @param	string
+<a name="line917"></a>	 * @return	string
+<a name="line918"></a>	 */
+<a name="line919"></a>	function _build_headers()
+<a name="line920"></a>	{
+<a name="line921"></a>		$this->_set_header('X-Sender', $this->clean_email($this->_headers['From']));
+<a name="line922"></a>		$this->_set_header('X-Mailer', $this->useragent);
+<a name="line923"></a>		$this->_set_header('X-Priority', $this->_priorities[$this->priority - 1]);
+<a name="line924"></a>		$this->_set_header('Message-ID', $this->_get_message_id());
+<a name="line925"></a>		$this->_set_header('Mime-Version', '1.0');
+<a name="line926"></a>	}
+<a name="line927"></a>  
+<a name="line928"></a>	// --------------------------------------------------------------------
+<a name="line929"></a>
+<a name="line930"></a>	/**
+<a name="line931"></a>	 * Write Headers as a string
+<a name="line932"></a>	 *
+<a name="line933"></a>	 * @access	private
+<a name="line934"></a>	 * @return	void
+<a name="line935"></a>	 */
+<a name="line936"></a>	function _write_headers()
+<a name="line937"></a>	{
+<a name="line938"></a>		if ($this->protocol == 'mail')
+<a name="line939"></a>		{
+<a name="line940"></a>			$this->_subject = $this->_headers['Subject'];
+<a name="line941"></a>			unset($this->_headers['Subject']);
+<a name="line942"></a>		}
+<a name="line943"></a>
+<a name="line944"></a>		reset($this->_headers);
+<a name="line945"></a>		$this->_header_str = "";
+<a name="line946"></a>
+<a name="line947"></a>		foreach($this->_headers as $key => $val)
+<a name="line948"></a>		{
+<a name="line949"></a>			$val = trim($val);
+<a name="line950"></a>
+<a name="line951"></a>			if ($val != "")
+<a name="line952"></a>			{
+<a name="line953"></a>				$this->_header_str .= $key.": ".$val.$this->newline;
+<a name="line954"></a>			}
+<a name="line955"></a>		}
+<a name="line956"></a>
+<a name="line957"></a>		if ($this->_get_protocol() == 'mail')
+<a name="line958"></a>		{
+<a name="line959"></a>			$this->_header_str = rtrim($this->_header_str);
+<a name="line960"></a>		}
+<a name="line961"></a>	}
+<a name="line962"></a>  
+<a name="line963"></a>	// --------------------------------------------------------------------
+<a name="line964"></a>
+<a name="line965"></a>	/**
+<a name="line966"></a>	 * Build Final Body and attachments
+<a name="line967"></a>	 *
+<a name="line968"></a>	 * @access	private
+<a name="line969"></a>	 * @return	void
+<a name="line970"></a>	 */
+<a name="line971"></a>	function _build_message()
+<a name="line972"></a>	{
+<a name="line973"></a>		if ($this->wordwrap === TRUE  AND  $this->mailtype != 'html')
+<a name="line974"></a>		{
+<a name="line975"></a>			$this->_body = $this->word_wrap($this->_body);
+<a name="line976"></a>		}
+<a name="line977"></a>
+<a name="line978"></a>		$this->_set_boundaries();
+<a name="line979"></a>		$this->_write_headers();
+<a name="line980"></a>
+<a name="line981"></a>		$hdr = ($this->_get_protocol() == 'mail') ? $this->newline : '';
+<a name="line982"></a>
+<a name="line983"></a>		switch ($this->_get_content_type())
+<a name="line984"></a>		{
+<a name="line985"></a>			case 'plain' :
+<a name="line986"></a>
+<a name="line987"></a>				$hdr .= "Content-Type: text/plain; charset=" . $this->charset . $this->newline;
+<a name="line988"></a>				$hdr .= "Content-Transfer-Encoding: " . $this->_get_encoding();
+<a name="line989"></a>
+<a name="line990"></a>				if ($this->_get_protocol() == 'mail')
+<a name="line991"></a>				{
+<a name="line992"></a>					$this->_header_str .= $hdr;
+<a name="line993"></a>					$this->_finalbody = $this->_body;
+<a name="line994"></a>
+<a name="line995"></a>					return;
+<a name="line996"></a>				}
+<a name="line997"></a>
+<a name="line998"></a>				$hdr .= $this->newline . $this->newline . $this->_body;
+<a name="line999"></a>
+<a name="line1000"></a>				$this->_finalbody = $hdr;
+<a name="line1001"></a>				return;
+<a name="line1002"></a>
+<a name="line1003"></a>			break;
+<a name="line1004"></a>			case 'html' :
+<a name="line1005"></a>
+<a name="line1006"></a>				if ($this->send_multipart === FALSE)
+<a name="line1007"></a>				{
+<a name="line1008"></a>					$hdr .= "Content-Type: text/html; charset=" . $this->charset . $this->newline;
+<a name="line1009"></a>					$hdr .= "Content-Transfer-Encoding: quoted-printable";
+<a name="line1010"></a>				}
+<a name="line1011"></a>				else
+<a name="line1012"></a>				{
+<a name="line1013"></a>					$hdr .= "Content-Type: multipart/alternative; boundary=\"" . $this->_alt_boundary . "\"" . $this->newline . $this->newline;
+<a name="line1014"></a>					$hdr .= $this->_get_mime_message() . $this->newline . $this->newline;
+<a name="line1015"></a>					$hdr .= "--" . $this->_alt_boundary . $this->newline;
+<a name="line1016"></a>
+<a name="line1017"></a>					$hdr .= "Content-Type: text/plain; charset=" . $this->charset . $this->newline;
+<a name="line1018"></a>					$hdr .= "Content-Transfer-Encoding: " . $this->_get_encoding() . $this->newline . $this->newline;
+<a name="line1019"></a>					$hdr .= $this->_get_alt_message() . $this->newline . $this->newline . "--" . $this->_alt_boundary . $this->newline;
+<a name="line1020"></a>
+<a name="line1021"></a>					$hdr .= "Content-Type: text/html; charset=" . $this->charset . $this->newline;
+<a name="line1022"></a>					$hdr .= "Content-Transfer-Encoding: quoted-printable";
+<a name="line1023"></a>				}
+<a name="line1024"></a>
+<a name="line1025"></a>				$this->_body = $this->_prep_quoted_printable($this->_body);
+<a name="line1026"></a>
+<a name="line1027"></a>				if ($this->_get_protocol() == 'mail')
+<a name="line1028"></a>				{
+<a name="line1029"></a>					$this->_header_str .= $hdr;
+<a name="line1030"></a>					$this->_finalbody = $this->_body . $this->newline . $this->newline;
+<a name="line1031"></a>
+<a name="line1032"></a>					if ($this->send_multipart !== FALSE)
+<a name="line1033"></a>					{
+<a name="line1034"></a>						$this->_finalbody .= "--" . $this->_alt_boundary . "--";
+<a name="line1035"></a>					}
+<a name="line1036"></a>
+<a name="line1037"></a>					return;
+<a name="line1038"></a>				}
+<a name="line1039"></a>
+<a name="line1040"></a>				$hdr .= $this->newline . $this->newline;
+<a name="line1041"></a>				$hdr .= $this->_body . $this->newline . $this->newline;
+<a name="line1042"></a>
+<a name="line1043"></a>				if ($this->send_multipart !== FALSE)
+<a name="line1044"></a>				{
+<a name="line1045"></a>					$hdr .= "--" . $this->_alt_boundary . "--";
+<a name="line1046"></a>				}
+<a name="line1047"></a>
+<a name="line1048"></a>				$this->_finalbody = $hdr;
+<a name="line1049"></a>				return;
+<a name="line1050"></a>
+<a name="line1051"></a>			break;
+<a name="line1052"></a>			case 'plain-attach' :
+<a name="line1053"></a>
+<a name="line1054"></a>				$hdr .= "Content-Type: multipart/".$this->multipart."; boundary=\"" . $this->_atc_boundary."\"" . $this->newline . $this->newline;
+<a name="line1055"></a>				$hdr .= $this->_get_mime_message() . $this->newline . $this->newline;
+<a name="line1056"></a>				$hdr .= "--" . $this->_atc_boundary . $this->newline;
+<a name="line1057"></a>
+<a name="line1058"></a>				$hdr .= "Content-Type: text/plain; charset=" . $this->charset . $this->newline;
+<a name="line1059"></a>				$hdr .= "Content-Transfer-Encoding: " . $this->_get_encoding();
+<a name="line1060"></a>
+<a name="line1061"></a>				if ($this->_get_protocol() == 'mail')
+<a name="line1062"></a>				{
+<a name="line1063"></a>					$this->_header_str .= $hdr;
+<a name="line1064"></a>
+<a name="line1065"></a>					$body  = $this->_body . $this->newline . $this->newline;
+<a name="line1066"></a>				}
+<a name="line1067"></a>
+<a name="line1068"></a>				$hdr .= $this->newline . $this->newline;
+<a name="line1069"></a>				$hdr .= $this->_body . $this->newline . $this->newline;
+<a name="line1070"></a>
+<a name="line1071"></a>			break;
+<a name="line1072"></a>			case 'html-attach' :
+<a name="line1073"></a>
+<a name="line1074"></a>				$hdr .= "Content-Type: multipart/".$this->multipart."; boundary=\"" . $this->_atc_boundary."\"" . $this->newline . $this->newline;
+<a name="line1075"></a>				$hdr .= $this->_get_mime_message() . $this->newline . $this->newline;
+<a name="line1076"></a>				$hdr .= "--" . $this->_atc_boundary . $this->newline;
+<a name="line1077"></a>
+<a name="line1078"></a>				$hdr .= "Content-Type: multipart/alternative; boundary=\"" . $this->_alt_boundary . "\"" . $this->newline .$this->newline;
+<a name="line1079"></a>				$hdr .= "--" . $this->_alt_boundary . $this->newline;
+<a name="line1080"></a>
+<a name="line1081"></a>				$hdr .= "Content-Type: text/plain; charset=" . $this->charset . $this->newline;
+<a name="line1082"></a>				$hdr .= "Content-Transfer-Encoding: " . $this->_get_encoding() . $this->newline . $this->newline;
+<a name="line1083"></a>				$hdr .= $this->_get_alt_message() . $this->newline . $this->newline . "--" . $this->_alt_boundary . $this->newline;
+<a name="line1084"></a>
+<a name="line1085"></a>				$hdr .= "Content-Type: text/html; charset=" . $this->charset . $this->newline;
+<a name="line1086"></a>				$hdr .= "Content-Transfer-Encoding: quoted-printable";
+<a name="line1087"></a>
+<a name="line1088"></a>				$this->_body = $this->_prep_quoted_printable($this->_body);
+<a name="line1089"></a>
+<a name="line1090"></a>				if ($this->_get_protocol() == 'mail')
+<a name="line1091"></a>				{
+<a name="line1092"></a>					$this->_header_str .= $hdr;
+<a name="line1093"></a>
+<a name="line1094"></a>					$body  = $this->_body . $this->newline . $this->newline;
+<a name="line1095"></a>					$body .= "--" . $this->_alt_boundary . "--" . $this->newline . $this->newline;
+<a name="line1096"></a>				}
+<a name="line1097"></a>
+<a name="line1098"></a>				$hdr .= $this->newline . $this->newline;
+<a name="line1099"></a>				$hdr .= $this->_body . $this->newline . $this->newline;
+<a name="line1100"></a>				$hdr .= "--" . $this->_alt_boundary . "--" . $this->newline . $this->newline;
+<a name="line1101"></a>
+<a name="line1102"></a>			break;
+<a name="line1103"></a>		}
+<a name="line1104"></a>
+<a name="line1105"></a>		$attachment = array();
+<a name="line1106"></a>
+<a name="line1107"></a>		$z = 0;
+<a name="line1108"></a>
+<a name="line1109"></a>		for ($i=0; $i < count($this->_attach_name); $i++)
+<a name="line1110"></a>		{
+<a name="line1111"></a>			$filename = $this->_attach_name[$i];
+<a name="line1112"></a>			$basename = basename($filename);
+<a name="line1113"></a>			$ctype = $this->_attach_type[$i];
+<a name="line1114"></a>
+<a name="line1115"></a>			if ( ! file_exists($filename))
+<a name="line1116"></a>			{
+<a name="line1117"></a>				$this->_set_error_message('email_attachment_missing', $filename);
+<a name="line1118"></a>				return FALSE;
+<a name="line1119"></a>			}
+<a name="line1120"></a>
+<a name="line1121"></a>			$h  = "--".$this->_atc_boundary.$this->newline;
+<a name="line1122"></a>			$h .= "Content-type: ".$ctype."; ";
+<a name="line1123"></a>			$h .= "name=\"".$basename."\"".$this->newline;
+<a name="line1124"></a>			$h .= "Content-Disposition: ".$this->_attach_disp[$i].";".$this->newline;
+<a name="line1125"></a>			$h .= "Content-Transfer-Encoding: base64".$this->newline;
+<a name="line1126"></a>
+<a name="line1127"></a>			$attachment[$z++] = $h;
+<a name="line1128"></a>			$file = filesize($filename) +1;
+<a name="line1129"></a>
+<a name="line1130"></a>			if ( ! $fp = fopen($filename, FOPEN_READ))
+<a name="line1131"></a>			{
+<a name="line1132"></a>				$this->_set_error_message('email_attachment_unreadable', $filename);
+<a name="line1133"></a>				return FALSE;
+<a name="line1134"></a>			}
+<a name="line1135"></a>
+<a name="line1136"></a>			$attachment[$z++] = chunk_split(base64_encode(fread($fp, $file)));
+<a name="line1137"></a>			fclose($fp);
+<a name="line1138"></a>		}
+<a name="line1139"></a>
+<a name="line1140"></a>		if ($this->_get_protocol() == 'mail')
+<a name="line1141"></a>		{
+<a name="line1142"></a>			$this->_finalbody = $body . implode($this->newline, $attachment).$this->newline."--".$this->_atc_boundary."--";
+<a name="line1143"></a>
+<a name="line1144"></a>			return;
+<a name="line1145"></a>		}
+<a name="line1146"></a>
+<a name="line1147"></a>		$this->_finalbody = $hdr.implode($this->newline, $attachment).$this->newline."--".$this->_atc_boundary."--";
+<a name="line1148"></a>
+<a name="line1149"></a>		return;
+<a name="line1150"></a>	}
+<a name="line1151"></a>  
+<a name="line1152"></a>	// --------------------------------------------------------------------
+<a name="line1153"></a>
+<a name="line1154"></a>	/**
+<a name="line1155"></a>	 * Prep Quoted Printable
+<a name="line1156"></a>	 *
+<a name="line1157"></a>	 * Prepares string for Quoted-Printable Content-Transfer-Encoding
+<a name="line1158"></a>	 * Refer to RFC 2045 http://www.ietf.org/rfc/rfc2045.txt
+<a name="line1159"></a>	 *
+<a name="line1160"></a>	 * @access	private
+<a name="line1161"></a>	 * @param	string
+<a name="line1162"></a>	 * @param	integer
+<a name="line1163"></a>	 * @return	string
+<a name="line1164"></a>	 */
+<a name="line1165"></a>	function _prep_quoted_printable($str, $charlim = '')
+<a name="line1166"></a>	{
+<a name="line1167"></a>		// Set the character limit
+<a name="line1168"></a>		// Don't allow over 76, as that will make servers and MUAs barf
+<a name="line1169"></a>		// all over quoted-printable data
+<a name="line1170"></a>		if ($charlim == '' OR $charlim > '76')
+<a name="line1171"></a>		{
+<a name="line1172"></a>			$charlim = '76';
+<a name="line1173"></a>		}
+<a name="line1174"></a>
+<a name="line1175"></a>		// Reduce multiple spaces
+<a name="line1176"></a>		$str = preg_replace("| +|", " ", $str);
+<a name="line1177"></a>
+<a name="line1178"></a>		// kill nulls
+<a name="line1179"></a>		$str = preg_replace('/\x00+/', '', $str);
+<a name="line1180"></a>
+<a name="line1181"></a>		// Standardize newlines
+<a name="line1182"></a>		if (strpos($str, "\r") !== FALSE)
+<a name="line1183"></a>		{
+<a name="line1184"></a>			$str = str_replace(array("\r\n", "\r"), "\n", $str);
+<a name="line1185"></a>		}
+<a name="line1186"></a>
+<a name="line1187"></a>		// We are intentionally wrapping so mail servers will encode characters
+<a name="line1188"></a>		// properly and MUAs will behave, so {unwrap} must go!
+<a name="line1189"></a>		$str = str_replace(array('{unwrap}', '{/unwrap}'), '', $str);
+<a name="line1190"></a>
+<a name="line1191"></a>		// Break into an array of lines
+<a name="line1192"></a>		$lines = explode("\n", $str);
+<a name="line1193"></a>
+<a name="line1194"></a>		$escape = '=';
+<a name="line1195"></a>		$output = '';
+<a name="line1196"></a>
+<a name="line1197"></a>		foreach ($lines as $line)
+<a name="line1198"></a>		{
+<a name="line1199"></a>			$length = strlen($line);
+<a name="line1200"></a>			$temp = '';
+<a name="line1201"></a>
+<a name="line1202"></a>			// Loop through each character in the line to add soft-wrap
+<a name="line1203"></a>			// characters at the end of a line " =\r\n" and add the newly
+<a name="line1204"></a>			// processed line(s) to the output (see comment on $crlf class property)
+<a name="line1205"></a>			for ($i = 0; $i < $length; $i++)
+<a name="line1206"></a>			{
+<a name="line1207"></a>				// Grab the next character
+<a name="line1208"></a>				$char = substr($line, $i, 1);
+<a name="line1209"></a>				$ascii = ord($char);
+<a name="line1210"></a>
+<a name="line1211"></a>				// Convert spaces and tabs but only if it's the end of the line
+<a name="line1212"></a>				if ($i == ($length - 1))
+<a name="line1213"></a>				{
+<a name="line1214"></a>					$char = ($ascii == '32' OR $ascii == '9') ? $escape.sprintf('%02s', dechex($ascii)) : $char;
+<a name="line1215"></a>				}
+<a name="line1216"></a>
+<a name="line1217"></a>				// encode = signs
+<a name="line1218"></a>				if ($ascii == '61')
+<a name="line1219"></a>				{
+<a name="line1220"></a>					$char = $escape.strtoupper(sprintf('%02s', dechex($ascii)));  // =3D
+<a name="line1221"></a>				}
+<a name="line1222"></a>
+<a name="line1223"></a>				// If we're at the character limit, add the line to the output,
+<a name="line1224"></a>				// reset our temp variable, and keep on chuggin'
+<a name="line1225"></a>				if ((strlen($temp) + strlen($char)) >= $charlim)
+<a name="line1226"></a>				{
+<a name="line1227"></a>					$output .= $temp.$escape.$this->crlf;
+<a name="line1228"></a>					$temp = '';
+<a name="line1229"></a>				}
+<a name="line1230"></a>
+<a name="line1231"></a>				// Add the character to our temporary line
+<a name="line1232"></a>				$temp .= $char;
+<a name="line1233"></a>			}
+<a name="line1234"></a>
+<a name="line1235"></a>			// Add our completed line to the output
+<a name="line1236"></a>			$output .= $temp.$this->crlf;
+<a name="line1237"></a>		}
+<a name="line1238"></a>
+<a name="line1239"></a>		// get rid of extra CRLF tacked onto the end
+<a name="line1240"></a>		$output = substr($output, 0, strlen($this->crlf) * -1);
+<a name="line1241"></a>
+<a name="line1242"></a>		return $output;
+<a name="line1243"></a>	}
+<a name="line1244"></a>
+<a name="line1245"></a>	// --------------------------------------------------------------------
+<a name="line1246"></a>	
+<a name="line1247"></a>	/**
+<a name="line1248"></a>	 * Prep Q Encoding
+<a name="line1249"></a>	 *
+<a name="line1250"></a>	 * Performs "Q Encoding" on a string for use in email headers.  It's related
+<a name="line1251"></a>	 * but not identical to quoted-printable, so it has its own method
+<a name="line1252"></a>	 *
+<a name="line1253"></a>	 * @access	public
+<a name="line1254"></a>	 * @param	str
+<a name="line1255"></a>	 * @param	bool	// set to TRUE for processing From: headers
+<a name="line1256"></a>	 * @return	str
+<a name="line1257"></a>	 */
+<a name="line1258"></a>	function _prep_q_encoding($str, $from = FALSE)
+<a name="line1259"></a>	{
+<a name="line1260"></a>		$str = str_replace(array("\r", "\n"), array('', ''), $str);
+<a name="line1261"></a>
+<a name="line1262"></a>		// Line length must not exceed 76 characters, so we adjust for
+<a name="line1263"></a>		// a space, 7 extra characters =??Q??=, and the charset that we will add to each line
+<a name="line1264"></a>		$limit = 75 - 7 - strlen($this->charset);
+<a name="line1265"></a>
+<a name="line1266"></a>		// these special characters must be converted too
+<a name="line1267"></a>		$convert = array('_', '=', '?');
+<a name="line1268"></a>
+<a name="line1269"></a>		if ($from === TRUE)
+<a name="line1270"></a>		{
+<a name="line1271"></a>			$convert[] = ',';
+<a name="line1272"></a>			$convert[] = ';';
+<a name="line1273"></a>		}
+<a name="line1274"></a>
+<a name="line1275"></a>		$output = '';
+<a name="line1276"></a>		$temp = '';
+<a name="line1277"></a>
+<a name="line1278"></a>		for ($i = 0, $length = strlen($str); $i < $length; $i++)
+<a name="line1279"></a>		{
+<a name="line1280"></a>			// Grab the next character
+<a name="line1281"></a>			$char = substr($str, $i, 1);
+<a name="line1282"></a>			$ascii = ord($char);
+<a name="line1283"></a>
+<a name="line1284"></a>			// convert ALL non-printable ASCII characters and our specials
+<a name="line1285"></a>			if ($ascii < 32 OR $ascii > 126 OR in_array($char, $convert))
+<a name="line1286"></a>			{
+<a name="line1287"></a>				$char = '='.dechex($ascii);
+<a name="line1288"></a>			}
+<a name="line1289"></a>
+<a name="line1290"></a>			// handle regular spaces a bit more compactly than =20
+<a name="line1291"></a>			if ($ascii == 32)
+<a name="line1292"></a>			{
+<a name="line1293"></a>				$char = '_';
+<a name="line1294"></a>			}
+<a name="line1295"></a>
+<a name="line1296"></a>			// If we're at the character limit, add the line to the output,
+<a name="line1297"></a>			// reset our temp variable, and keep on chuggin'
+<a name="line1298"></a>			if ((strlen($temp) + strlen($char)) >= $limit)
+<a name="line1299"></a>			{
+<a name="line1300"></a>				$output .= $temp.$this->crlf;
+<a name="line1301"></a>				$temp = '';
+<a name="line1302"></a>			}
+<a name="line1303"></a>
+<a name="line1304"></a>			// Add the character to our temporary line
+<a name="line1305"></a>			$temp .= $char;
+<a name="line1306"></a>		}
+<a name="line1307"></a>
+<a name="line1308"></a>		$str = $output.$temp;
+<a name="line1309"></a>
+<a name="line1310"></a>		// wrap each line with the shebang, charset, and transfer encoding
+<a name="line1311"></a>		// the preceding space on successive lines is required for header "folding"
+<a name="line1312"></a>		$str = trim(preg_replace('/^(.*)$/m', ' =?'.$this->charset.'?Q?$1?=', $str));
+<a name="line1313"></a>
+<a name="line1314"></a>		return $str;
+<a name="line1315"></a>	}
+<a name="line1316"></a>
+<a name="line1317"></a>	// --------------------------------------------------------------------
+<a name="line1318"></a>	
+<a name="line1319"></a>	/**
+<a name="line1320"></a>	 * Send Email
+<a name="line1321"></a>	 *
+<a name="line1322"></a>	 * @access	public
+<a name="line1323"></a>	 * @return	bool
+<a name="line1324"></a>	 */
+<a name="line1325"></a>	function send()
+<a name="line1326"></a>	{
+<a name="line1327"></a>		if ($this->_replyto_flag == FALSE)
+<a name="line1328"></a>		{
+<a name="line1329"></a>			$this->reply_to($this->_headers['From']);
+<a name="line1330"></a>		}
+<a name="line1331"></a>
+<a name="line1332"></a>		if (( ! isset($this->_recipients) AND ! isset($this->_headers['To']))  AND
+<a name="line1333"></a>			( ! isset($this->_bcc_array) AND ! isset($this->_headers['Bcc'])) AND
+<a name="line1334"></a>			( ! isset($this->_headers['Cc'])))
+<a name="line1335"></a>		{
+<a name="line1336"></a>			$this->_set_error_message('email_no_recipients');
+<a name="line1337"></a>			return FALSE;
+<a name="line1338"></a>		}
+<a name="line1339"></a>
+<a name="line1340"></a>		$this->_build_headers();
+<a name="line1341"></a>
+<a name="line1342"></a>		if ($this->bcc_batch_mode  AND  count($this->_bcc_array) > 0)
+<a name="line1343"></a>		{
+<a name="line1344"></a>			if (count($this->_bcc_array) > $this->bcc_batch_size)
+<a name="line1345"></a>				return $this->batch_bcc_send();
+<a name="line1346"></a>		}
+<a name="line1347"></a>
+<a name="line1348"></a>		$this->_build_message();
+<a name="line1349"></a>
+<a name="line1350"></a>		if ( ! $this->_spool_email())
+<a name="line1351"></a>		{
+<a name="line1352"></a>			return FALSE;
+<a name="line1353"></a>		}
+<a name="line1354"></a>		else
+<a name="line1355"></a>		{
+<a name="line1356"></a>			return TRUE;
+<a name="line1357"></a>		}
+<a name="line1358"></a>	}
+<a name="line1359"></a>  
+<a name="line1360"></a>	// --------------------------------------------------------------------
+<a name="line1361"></a>
+<a name="line1362"></a>	/**
+<a name="line1363"></a>	 * Batch Bcc Send.  Sends groups of BCCs in batches
+<a name="line1364"></a>	 *
+<a name="line1365"></a>	 * @access	public
+<a name="line1366"></a>	 * @return	bool
+<a name="line1367"></a>	 */
+<a name="line1368"></a>	function batch_bcc_send()
+<a name="line1369"></a>	{
+<a name="line1370"></a>		$float = $this->bcc_batch_size -1;
+<a name="line1371"></a>
+<a name="line1372"></a>		$set = "";
+<a name="line1373"></a>
+<a name="line1374"></a>		$chunk = array();
+<a name="line1375"></a>
+<a name="line1376"></a>		for ($i = 0; $i < count($this->_bcc_array); $i++)
+<a name="line1377"></a>		{
+<a name="line1378"></a>			if (isset($this->_bcc_array[$i]))
+<a name="line1379"></a>			{
+<a name="line1380"></a>				$set .= ", ".$this->_bcc_array[$i];
+<a name="line1381"></a>			}
+<a name="line1382"></a>
+<a name="line1383"></a>			if ($i == $float)
+<a name="line1384"></a>			{
+<a name="line1385"></a>				$chunk[] = substr($set, 1);
+<a name="line1386"></a>				$float = $float + $this->bcc_batch_size;
+<a name="line1387"></a>				$set = "";
+<a name="line1388"></a>			}
+<a name="line1389"></a>
+<a name="line1390"></a>			if ($i == count($this->_bcc_array)-1)
+<a name="line1391"></a>			{
+<a name="line1392"></a>				$chunk[] = substr($set, 1);
+<a name="line1393"></a>			}
+<a name="line1394"></a>		}
+<a name="line1395"></a>
+<a name="line1396"></a>		for ($i = 0; $i < count($chunk); $i++)
+<a name="line1397"></a>		{
+<a name="line1398"></a>			unset($this->_headers['Bcc']);
+<a name="line1399"></a>			unset($bcc);
+<a name="line1400"></a>
+<a name="line1401"></a>			$bcc = $this->_str_to_array($chunk[$i]);
+<a name="line1402"></a>			$bcc = $this->clean_email($bcc);
+<a name="line1403"></a>
+<a name="line1404"></a>			if ($this->protocol != 'smtp')
+<a name="line1405"></a>			{
+<a name="line1406"></a>				$this->_set_header('Bcc', implode(", ", $bcc));
+<a name="line1407"></a>			}
+<a name="line1408"></a>			else
+<a name="line1409"></a>			{
+<a name="line1410"></a>				$this->_bcc_array = $bcc;
+<a name="line1411"></a>			}
+<a name="line1412"></a>
+<a name="line1413"></a>			$this->_build_message();
+<a name="line1414"></a>			$this->_spool_email();
+<a name="line1415"></a>		}
+<a name="line1416"></a>	}
+<a name="line1417"></a>  
+<a name="line1418"></a>	// --------------------------------------------------------------------
+<a name="line1419"></a>
+<a name="line1420"></a>	/**
+<a name="line1421"></a>	 * Unwrap special elements
+<a name="line1422"></a>	 *
+<a name="line1423"></a>	 * @access	private
+<a name="line1424"></a>	 * @return	void
+<a name="line1425"></a>	 */
+<a name="line1426"></a>	function _unwrap_specials()
+<a name="line1427"></a>	{
+<a name="line1428"></a>		$this->_finalbody = preg_replace_callback("/\{unwrap\}(.*?)\{\/unwrap\}/si", array($this, '_remove_nl_callback'), $this->_finalbody);
+<a name="line1429"></a>	}
+<a name="line1430"></a>  
+<a name="line1431"></a>	// --------------------------------------------------------------------
+<a name="line1432"></a>
+<a name="line1433"></a>	/**
+<a name="line1434"></a>	 * Strip line-breaks via callback
+<a name="line1435"></a>	 *
+<a name="line1436"></a>	 * @access	private
+<a name="line1437"></a>	 * @return	string
+<a name="line1438"></a>	 */
+<a name="line1439"></a>	function _remove_nl_callback($matches)
+<a name="line1440"></a>	{
+<a name="line1441"></a>		if (strpos($matches[1], "\r") !== FALSE OR strpos($matches[1], "\n") !== FALSE)
+<a name="line1442"></a>		{
+<a name="line1443"></a>			$matches[1] = str_replace(array("\r\n", "\r", "\n"), '', $matches[1]);
+<a name="line1444"></a>		}
+<a name="line1445"></a>
+<a name="line1446"></a>		return $matches[1];
+<a name="line1447"></a>	}
+<a name="line1448"></a>  
+<a name="line1449"></a>	// --------------------------------------------------------------------
+<a name="line1450"></a>
+<a name="line1451"></a>	/**
+<a name="line1452"></a>	 * Spool mail to the mail server
+<a name="line1453"></a>	 *
+<a name="line1454"></a>	 * @access	private
+<a name="line1455"></a>	 * @return	bool
+<a name="line1456"></a>	 */
+<a name="line1457"></a>	function _spool_email()
+<a name="line1458"></a>	{
+<a name="line1459"></a>		$this->_unwrap_specials();
+<a name="line1460"></a>
+<a name="line1461"></a>		switch ($this->_get_protocol())
+<a name="line1462"></a>		{
+<a name="line1463"></a>			case 'mail'	:
+<a name="line1464"></a>
+<a name="line1465"></a>					if ( ! $this->_send_with_mail())
+<a name="line1466"></a>					{
+<a name="line1467"></a>						$this->_set_error_message('email_send_failure_phpmail');
+<a name="line1468"></a>						return FALSE;
+<a name="line1469"></a>					}
+<a name="line1470"></a>			break;
+<a name="line1471"></a>			case 'sendmail'	:
+<a name="line1472"></a>
+<a name="line1473"></a>					if ( ! $this->_send_with_sendmail())
+<a name="line1474"></a>					{
+<a name="line1475"></a>						$this->_set_error_message('email_send_failure_sendmail');
+<a name="line1476"></a>						return FALSE;
+<a name="line1477"></a>					}
+<a name="line1478"></a>			break;
+<a name="line1479"></a>			case 'smtp'	:
+<a name="line1480"></a>
+<a name="line1481"></a>					if ( ! $this->_send_with_smtp())
+<a name="line1482"></a>					{
+<a name="line1483"></a>						$this->_set_error_message('email_send_failure_smtp');
+<a name="line1484"></a>						return FALSE;
+<a name="line1485"></a>					}
+<a name="line1486"></a>			break;
+<a name="line1487"></a>
+<a name="line1488"></a>		}
+<a name="line1489"></a>
+<a name="line1490"></a>		$this->_set_error_message('email_sent', $this->_get_protocol());
+<a name="line1491"></a>		return TRUE;
+<a name="line1492"></a>	}
+<a name="line1493"></a>  
+<a name="line1494"></a>	// --------------------------------------------------------------------
+<a name="line1495"></a>
+<a name="line1496"></a>	/**
+<a name="line1497"></a>	 * Send using mail()
+<a name="line1498"></a>	 *
+<a name="line1499"></a>	 * @access	private
+<a name="line1500"></a>	 * @return	bool
+<a name="line1501"></a>	 */
+<a name="line1502"></a>	function _send_with_mail()
+<a name="line1503"></a>	{
+<a name="line1504"></a>		if ($this->_safe_mode == TRUE)
+<a name="line1505"></a>		{
+<a name="line1506"></a>			if ( ! mail($this->_recipients, $this->_subject, $this->_finalbody, $this->_header_str))
+<a name="line1507"></a>			{
+<a name="line1508"></a>				return FALSE;
+<a name="line1509"></a>			}
+<a name="line1510"></a>			else
+<a name="line1511"></a>			{
+<a name="line1512"></a>				return TRUE;
+<a name="line1513"></a>			}
+<a name="line1514"></a>		}
+<a name="line1515"></a>		else
+<a name="line1516"></a>		{
+<a name="line1517"></a>			// most documentation of sendmail using the "-f" flag lacks a space after it, however
+<a name="line1518"></a>			// we've encountered servers that seem to require it to be in place.
+<a name="line1519"></a>			if ( ! mail($this->_recipients, $this->_subject, $this->_finalbody, $this->_header_str, "-f ".$this->clean_email($this->_headers['From'])))
+<a name="line1520"></a>			{
+<a name="line1521"></a>				return FALSE;
+<a name="line1522"></a>			}
+<a name="line1523"></a>			else
+<a name="line1524"></a>			{
+<a name="line1525"></a>				return TRUE;
+<a name="line1526"></a>			}
+<a name="line1527"></a>		}
+<a name="line1528"></a>	}
+<a name="line1529"></a>  
+<a name="line1530"></a>	// --------------------------------------------------------------------
+<a name="line1531"></a>
+<a name="line1532"></a>	/**
+<a name="line1533"></a>	 * Send using Sendmail
+<a name="line1534"></a>	 *
+<a name="line1535"></a>	 * @access	private
+<a name="line1536"></a>	 * @return	bool
+<a name="line1537"></a>	 */
+<a name="line1538"></a>	function _send_with_sendmail()
+<a name="line1539"></a>	{
+<a name="line1540"></a>		$fp = @popen($this->mailpath . " -oi -f ".$this->clean_email($this->_headers['From'])." -t", 'w');
+<a name="line1541"></a>
+<a name="line1542"></a>		if ($fp === FALSE OR $fp === NULL)
+<a name="line1543"></a>		{
+<a name="line1544"></a>			// server probably has popen disabled, so nothing we can do to get a verbose error.
+<a name="line1545"></a>			return FALSE;
+<a name="line1546"></a>		}
+<a name="line1547"></a>		
+<a name="line1548"></a>		fputs($fp, $this->_header_str);
+<a name="line1549"></a>		fputs($fp, $this->_finalbody);
+<a name="line1550"></a>
+<a name="line1551"></a>	    $status = pclose($fp);
+<a name="line1552"></a>	    
+<a name="line1553"></a>		if (version_compare(PHP_VERSION, '4.2.3') == -1)
+<a name="line1554"></a>		{
+<a name="line1555"></a>			$status = $status >> 8 & 0xFF;
+<a name="line1556"></a>	    }
+<a name="line1557"></a>	
+<a name="line1558"></a>		if ($status != 0)
+<a name="line1559"></a>		{
+<a name="line1560"></a>			$this->_set_error_message('email_exit_status', $status);
+<a name="line1561"></a>			$this->_set_error_message('email_no_socket');
+<a name="line1562"></a>			return FALSE;
+<a name="line1563"></a>		}
+<a name="line1564"></a>
+<a name="line1565"></a>		return TRUE;
+<a name="line1566"></a>	}
+<a name="line1567"></a>  
+<a name="line1568"></a>	// --------------------------------------------------------------------
+<a name="line1569"></a>
+<a name="line1570"></a>	/**
+<a name="line1571"></a>	 * Send using SMTP
+<a name="line1572"></a>	 *
+<a name="line1573"></a>	 * @access	private
+<a name="line1574"></a>	 * @return	bool
+<a name="line1575"></a>	 */
+<a name="line1576"></a>	function _send_with_smtp()
+<a name="line1577"></a>	{
+<a name="line1578"></a>		if ($this->smtp_host == '')
+<a name="line1579"></a>		{
+<a name="line1580"></a>			$this->_set_error_message('email_no_hostname');
+<a name="line1581"></a>			return FALSE;
+<a name="line1582"></a>		}
+<a name="line1583"></a>
+<a name="line1584"></a>		$this->_smtp_connect();
+<a name="line1585"></a>		$this->_smtp_authenticate();
+<a name="line1586"></a>
+<a name="line1587"></a>		$this->_send_command('from', $this->clean_email($this->_headers['From']));
+<a name="line1588"></a>
+<a name="line1589"></a>		foreach($this->_recipients as $val)
+<a name="line1590"></a>		{
+<a name="line1591"></a>			$this->_send_command('to', $val);
+<a name="line1592"></a>		}
+<a name="line1593"></a>
+<a name="line1594"></a>		if (count($this->_cc_array) > 0)
+<a name="line1595"></a>		{
+<a name="line1596"></a>			foreach($this->_cc_array as $val)
+<a name="line1597"></a>			{
+<a name="line1598"></a>				if ($val != "")
+<a name="line1599"></a>				{
+<a name="line1600"></a>					$this->_send_command('to', $val);
+<a name="line1601"></a>				}
+<a name="line1602"></a>			}
+<a name="line1603"></a>		}
+<a name="line1604"></a>
+<a name="line1605"></a>		if (count($this->_bcc_array) > 0)
+<a name="line1606"></a>		{
+<a name="line1607"></a>			foreach($this->_bcc_array as $val)
+<a name="line1608"></a>			{
+<a name="line1609"></a>				if ($val != "")
+<a name="line1610"></a>				{
+<a name="line1611"></a>					$this->_send_command('to', $val);
+<a name="line1612"></a>				}
+<a name="line1613"></a>			}
+<a name="line1614"></a>		}
+<a name="line1615"></a>
+<a name="line1616"></a>		$this->_send_command('data');
+<a name="line1617"></a>
+<a name="line1618"></a>		// perform dot transformation on any lines that begin with a dot
+<a name="line1619"></a>		$this->_send_data($this->_header_str . preg_replace('/^\./m', '..$1', $this->_finalbody));
+<a name="line1620"></a>
+<a name="line1621"></a>		$this->_send_data('.');
+<a name="line1622"></a>
+<a name="line1623"></a>		$reply = $this->_get_smtp_data();
+<a name="line1624"></a>
+<a name="line1625"></a>		$this->_set_error_message($reply);
+<a name="line1626"></a>
+<a name="line1627"></a>		if (strncmp($reply, '250', 3) != 0)
+<a name="line1628"></a>		{
+<a name="line1629"></a>			$this->_set_error_message('email_smtp_error', $reply);
+<a name="line1630"></a>			return FALSE;
+<a name="line1631"></a>		}
+<a name="line1632"></a>
+<a name="line1633"></a>		$this->_send_command('quit');
+<a name="line1634"></a>		return TRUE;
+<a name="line1635"></a>	}
+<a name="line1636"></a>  
+<a name="line1637"></a>	// --------------------------------------------------------------------
+<a name="line1638"></a>
+<a name="line1639"></a>	/**
+<a name="line1640"></a>	 * SMTP Connect
+<a name="line1641"></a>	 *
+<a name="line1642"></a>	 * @access	private
+<a name="line1643"></a>	 * @param	string
+<a name="line1644"></a>	 * @return	string
+<a name="line1645"></a>	 */
+<a name="line1646"></a>	function _smtp_connect()
+<a name="line1647"></a>	{
+<a name="line1648"></a>		$this->_smtp_connect = fsockopen($this->smtp_host,
+<a name="line1649"></a>										$this->smtp_port,
+<a name="line1650"></a>										$errno,
+<a name="line1651"></a>										$errstr,
+<a name="line1652"></a>										$this->smtp_timeout);
+<a name="line1653"></a>
+<a name="line1654"></a>		if( ! is_resource($this->_smtp_connect))
+<a name="line1655"></a>		{
+<a name="line1656"></a>			$this->_set_error_message('email_smtp_error', $errno." ".$errstr);
+<a name="line1657"></a>			return FALSE;
+<a name="line1658"></a>		}
+<a name="line1659"></a>
+<a name="line1660"></a>		$this->_set_error_message($this->_get_smtp_data());
+<a name="line1661"></a>		return $this->_send_command('hello');
+<a name="line1662"></a>	}
+<a name="line1663"></a>  
+<a name="line1664"></a>	// --------------------------------------------------------------------
+<a name="line1665"></a>
+<a name="line1666"></a>	/**
+<a name="line1667"></a>	 * Send SMTP command
+<a name="line1668"></a>	 *
+<a name="line1669"></a>	 * @access	private
+<a name="line1670"></a>	 * @param	string
+<a name="line1671"></a>	 * @param	string
+<a name="line1672"></a>	 * @return	string
+<a name="line1673"></a>	 */
+<a name="line1674"></a>	function _send_command($cmd, $data = '')
+<a name="line1675"></a>	{
+<a name="line1676"></a>		switch ($cmd)
+<a name="line1677"></a>		{
+<a name="line1678"></a>			case 'hello' :
+<a name="line1679"></a>
+<a name="line1680"></a>					if ($this->_smtp_auth OR $this->_get_encoding() == '8bit')
+<a name="line1681"></a>						$this->_send_data('EHLO '.$this->_get_hostname());
+<a name="line1682"></a>					else
+<a name="line1683"></a>						$this->_send_data('HELO '.$this->_get_hostname());
+<a name="line1684"></a>
+<a name="line1685"></a>						$resp = 250;
+<a name="line1686"></a>			break;
+<a name="line1687"></a>			case 'from' :
+<a name="line1688"></a>
+<a name="line1689"></a>						$this->_send_data('MAIL FROM:<'.$data.'>');
+<a name="line1690"></a>
+<a name="line1691"></a>						$resp = 250;
+<a name="line1692"></a>			break;
+<a name="line1693"></a>			case 'to'	:
+<a name="line1694"></a>
+<a name="line1695"></a>						$this->_send_data('RCPT TO:<'.$data.'>');
+<a name="line1696"></a>
+<a name="line1697"></a>						$resp = 250;
+<a name="line1698"></a>			break;
+<a name="line1699"></a>			case 'data'	:
+<a name="line1700"></a>
+<a name="line1701"></a>						$this->_send_data('DATA');
+<a name="line1702"></a>
+<a name="line1703"></a>						$resp = 354;
+<a name="line1704"></a>			break;
+<a name="line1705"></a>			case 'quit'	:
+<a name="line1706"></a>
+<a name="line1707"></a>						$this->_send_data('QUIT');
+<a name="line1708"></a>
+<a name="line1709"></a>						$resp = 221;
+<a name="line1710"></a>			break;
+<a name="line1711"></a>		}
+<a name="line1712"></a>
+<a name="line1713"></a>		$reply = $this->_get_smtp_data();
+<a name="line1714"></a>
+<a name="line1715"></a>		$this->_debug_msg[] = "<pre>".$cmd.": ".$reply."</pre>";
+<a name="line1716"></a>
+<a name="line1717"></a>		if (substr($reply, 0, 3) != $resp)
+<a name="line1718"></a>		{
+<a name="line1719"></a>			$this->_set_error_message('email_smtp_error', $reply);
+<a name="line1720"></a>			return FALSE;
+<a name="line1721"></a>		}
+<a name="line1722"></a>
+<a name="line1723"></a>		if ($cmd == 'quit')
+<a name="line1724"></a>		{
+<a name="line1725"></a>			fclose($this->_smtp_connect);
+<a name="line1726"></a>		}
+<a name="line1727"></a>
+<a name="line1728"></a>		return TRUE;
+<a name="line1729"></a>	}
+<a name="line1730"></a>  
+<a name="line1731"></a>	// --------------------------------------------------------------------
+<a name="line1732"></a>
+<a name="line1733"></a>	/**
+<a name="line1734"></a>	 *  SMTP Authenticate
+<a name="line1735"></a>	 *
+<a name="line1736"></a>	 * @access	private
+<a name="line1737"></a>	 * @return	bool
+<a name="line1738"></a>	 */
+<a name="line1739"></a>	function _smtp_authenticate()
+<a name="line1740"></a>	{
+<a name="line1741"></a>		if ( ! $this->_smtp_auth)
+<a name="line1742"></a>		{
+<a name="line1743"></a>			return TRUE;
+<a name="line1744"></a>		}
+<a name="line1745"></a>
+<a name="line1746"></a>		if ($this->smtp_user == ""  AND  $this->smtp_pass == "")
+<a name="line1747"></a>		{
+<a name="line1748"></a>			$this->_set_error_message('email_no_smtp_unpw');
+<a name="line1749"></a>			return FALSE;
+<a name="line1750"></a>		}
+<a name="line1751"></a>
+<a name="line1752"></a>		$this->_send_data('AUTH LOGIN');
+<a name="line1753"></a>
+<a name="line1754"></a>		$reply = $this->_get_smtp_data();
+<a name="line1755"></a>
+<a name="line1756"></a>		if (strncmp($reply, '334', 3) != 0)
+<a name="line1757"></a>		{
+<a name="line1758"></a>			$this->_set_error_message('email_failed_smtp_login', $reply);
+<a name="line1759"></a>			return FALSE;
+<a name="line1760"></a>		}
+<a name="line1761"></a>
+<a name="line1762"></a>		$this->_send_data(base64_encode($this->smtp_user));
+<a name="line1763"></a>
+<a name="line1764"></a>		$reply = $this->_get_smtp_data();
+<a name="line1765"></a>
+<a name="line1766"></a>		if (strncmp($reply, '334', 3) != 0)
+<a name="line1767"></a>		{
+<a name="line1768"></a>			$this->_set_error_message('email_smtp_auth_un', $reply);
+<a name="line1769"></a>			return FALSE;
+<a name="line1770"></a>		}
+<a name="line1771"></a>
+<a name="line1772"></a>		$this->_send_data(base64_encode($this->smtp_pass));
+<a name="line1773"></a>
+<a name="line1774"></a>		$reply = $this->_get_smtp_data();
+<a name="line1775"></a>
+<a name="line1776"></a>		if (strncmp($reply, '235', 3) != 0)
+<a name="line1777"></a>		{
+<a name="line1778"></a>			$this->_set_error_message('email_smtp_auth_pw', $reply);
+<a name="line1779"></a>			return FALSE;
+<a name="line1780"></a>		}
+<a name="line1781"></a>
+<a name="line1782"></a>		return TRUE;
+<a name="line1783"></a>	}
+<a name="line1784"></a>  
+<a name="line1785"></a>	// --------------------------------------------------------------------
+<a name="line1786"></a>
+<a name="line1787"></a>	/**
+<a name="line1788"></a>	 * Send SMTP data
+<a name="line1789"></a>	 *
+<a name="line1790"></a>	 * @access	private
+<a name="line1791"></a>	 * @return	bool
+<a name="line1792"></a>	 */
+<a name="line1793"></a>	function _send_data($data)
+<a name="line1794"></a>	{
+<a name="line1795"></a>		if ( ! fwrite($this->_smtp_connect, $data . $this->newline))
+<a name="line1796"></a>		{
+<a name="line1797"></a>			$this->_set_error_message('email_smtp_data_failure', $data);
+<a name="line1798"></a>			return FALSE;
+<a name="line1799"></a>		}
+<a name="line1800"></a>		else
+<a name="line1801"></a>		{
+<a name="line1802"></a>			return TRUE;
+<a name="line1803"></a>		}
+<a name="line1804"></a>	}
+<a name="line1805"></a>  
+<a name="line1806"></a>	// --------------------------------------------------------------------
+<a name="line1807"></a>
+<a name="line1808"></a>	/**
+<a name="line1809"></a>	 * Get SMTP data
+<a name="line1810"></a>	 *
+<a name="line1811"></a>	 * @access	private
+<a name="line1812"></a>	 * @return	string
+<a name="line1813"></a>	 */
+<a name="line1814"></a>	function _get_smtp_data()
+<a name="line1815"></a>	{
+<a name="line1816"></a>		$data = "";
+<a name="line1817"></a>
+<a name="line1818"></a>		while ($str = fgets($this->_smtp_connect, 512))
+<a name="line1819"></a>		{
+<a name="line1820"></a>			$data .= $str;
+<a name="line1821"></a>
+<a name="line1822"></a>			if (substr($str, 3, 1) == " ")
+<a name="line1823"></a>			{
+<a name="line1824"></a>				break;
+<a name="line1825"></a>			}
+<a name="line1826"></a>		}
+<a name="line1827"></a>
+<a name="line1828"></a>		return $data;
+<a name="line1829"></a>	}
+<a name="line1830"></a>  
+<a name="line1831"></a>	// --------------------------------------------------------------------
+<a name="line1832"></a>
+<a name="line1833"></a>	/**
+<a name="line1834"></a>	 * Get Hostname
+<a name="line1835"></a>	 *
+<a name="line1836"></a>	 * @access	private
+<a name="line1837"></a>	 * @return	string
+<a name="line1838"></a>	 */
+<a name="line1839"></a>	function _get_hostname()
+<a name="line1840"></a>	{
+<a name="line1841"></a>		return (isset($_SERVER['SERVER_NAME'])) ? $_SERVER['SERVER_NAME'] : 'localhost.localdomain';
+<a name="line1842"></a>	}
+<a name="line1843"></a>  
+<a name="line1844"></a>	// --------------------------------------------------------------------
+<a name="line1845"></a>
+<a name="line1846"></a>	/**
+<a name="line1847"></a>	 * Get IP
+<a name="line1848"></a>	 *
+<a name="line1849"></a>	 * @access	private
+<a name="line1850"></a>	 * @return	string
+<a name="line1851"></a>	 */
+<a name="line1852"></a>	function _get_ip()
+<a name="line1853"></a>	{
+<a name="line1854"></a>		if ($this->_IP !== FALSE)
+<a name="line1855"></a>		{
+<a name="line1856"></a>			return $this->_IP;
+<a name="line1857"></a>		}
+<a name="line1858"></a>
+<a name="line1859"></a>		$cip = (isset($_SERVER['HTTP_CLIENT_IP']) AND $_SERVER['HTTP_CLIENT_IP'] != "") ? $_SERVER['HTTP_CLIENT_IP'] : FALSE;
+<a name="line1860"></a>		$rip = (isset($_SERVER['REMOTE_ADDR']) AND $_SERVER['REMOTE_ADDR'] != "") ? $_SERVER['REMOTE_ADDR'] : FALSE;
+<a name="line1861"></a>		$fip = (isset($_SERVER['HTTP_X_FORWARDED_FOR']) AND $_SERVER['HTTP_X_FORWARDED_FOR'] != "") ? $_SERVER['HTTP_X_FORWARDED_FOR'] : FALSE;
+<a name="line1862"></a>
+<a name="line1863"></a>		if ($cip && $rip) 	$this->_IP = $cip;
+<a name="line1864"></a>		elseif ($rip)		$this->_IP = $rip;
+<a name="line1865"></a>		elseif ($cip)		$this->_IP = $cip;
+<a name="line1866"></a>		elseif ($fip)		$this->_IP = $fip;
+<a name="line1867"></a>
+<a name="line1868"></a>		if (strstr($this->_IP, ','))
+<a name="line1869"></a>		{
+<a name="line1870"></a>			$x = explode(',', $this->_IP);
+<a name="line1871"></a>			$this->_IP = end($x);
+<a name="line1872"></a>		}
+<a name="line1873"></a>
+<a name="line1874"></a>		if ( ! preg_match( "/^[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}$/", $this->_IP))
+<a name="line1875"></a>		{
+<a name="line1876"></a>			$this->_IP = '0.0.0.0';
+<a name="line1877"></a>		}
+<a name="line1878"></a>
+<a name="line1879"></a>		unset($cip);
+<a name="line1880"></a>		unset($rip);
+<a name="line1881"></a>		unset($fip);
+<a name="line1882"></a>
+<a name="line1883"></a>		return $this->_IP;
+<a name="line1884"></a>	}
+<a name="line1885"></a>  
+<a name="line1886"></a>	// --------------------------------------------------------------------
+<a name="line1887"></a>
+<a name="line1888"></a>	/**
+<a name="line1889"></a>	 * Get Debug Message
+<a name="line1890"></a>	 *
+<a name="line1891"></a>	 * @access	public
+<a name="line1892"></a>	 * @return	string
+<a name="line1893"></a>	 */
+<a name="line1894"></a>	function print_debugger()
+<a name="line1895"></a>	{
+<a name="line1896"></a>		$msg = '';
+<a name="line1897"></a>
+<a name="line1898"></a>		if (count($this->_debug_msg) > 0)
+<a name="line1899"></a>		{
+<a name="line1900"></a>			foreach ($this->_debug_msg as $val)
+<a name="line1901"></a>			{
+<a name="line1902"></a>				$msg .= $val;
+<a name="line1903"></a>			}
+<a name="line1904"></a>		}
+<a name="line1905"></a>
+<a name="line1906"></a>		$msg .= "<pre>".$this->_header_str."\n".htmlspecialchars($this->_subject)."\n".htmlspecialchars($this->_finalbody).'</pre>';
+<a name="line1907"></a>		return $msg;
+<a name="line1908"></a>	}
+<a name="line1909"></a>  
+<a name="line1910"></a>	// --------------------------------------------------------------------
+<a name="line1911"></a>
+<a name="line1912"></a>	/**
+<a name="line1913"></a>	 * Set Message
+<a name="line1914"></a>	 *
+<a name="line1915"></a>	 * @access	private
+<a name="line1916"></a>	 * @param	string
+<a name="line1917"></a>	 * @return	string
+<a name="line1918"></a>	 */
+<a name="line1919"></a>	function _set_error_message($msg, $val = '')
+<a name="line1920"></a>	{
+<a name="line1921"></a>		$CI =& get_instance();
+<a name="line1922"></a>		$CI->lang->load('email');
+<a name="line1923"></a>
+<a name="line1924"></a>		if (FALSE === ($line = $CI->lang->line($msg)))
+<a name="line1925"></a>		{
+<a name="line1926"></a>			$this->_debug_msg[] = str_replace('%s', $val, $msg)."<br />";
+<a name="line1927"></a>		}
+<a name="line1928"></a>		else
+<a name="line1929"></a>		{
+<a name="line1930"></a>			$this->_debug_msg[] = str_replace('%s', $val, $line)."<br />";
+<a name="line1931"></a>		}
+<a name="line1932"></a>	}
+<a name="line1933"></a>  
+<a name="line1934"></a>	// --------------------------------------------------------------------
+<a name="line1935"></a>
+<a name="line1936"></a>	/**
+<a name="line1937"></a>	 * Mime Types
+<a name="line1938"></a>	 *
+<a name="line1939"></a>	 * @access	private
+<a name="line1940"></a>	 * @param	string
+<a name="line1941"></a>	 * @return	string
+<a name="line1942"></a>	 */
+<a name="line1943"></a>	function _mime_types($ext = "")
+<a name="line1944"></a>	{
+<a name="line1945"></a>		$mimes = array(	'hqx'	=>	'application/mac-binhex40',
+<a name="line1946"></a>						'cpt'	=>	'application/mac-compactpro',
+<a name="line1947"></a>						'doc'	=>	'application/msword',
+<a name="line1948"></a>						'bin'	=>	'application/macbinary',
+<a name="line1949"></a>						'dms'	=>	'application/octet-stream',
+<a name="line1950"></a>						'lha'	=>	'application/octet-stream',
+<a name="line1951"></a>						'lzh'	=>	'application/octet-stream',
+<a name="line1952"></a>						'exe'	=>	'application/octet-stream',
+<a name="line1953"></a>						'class'	=>	'application/octet-stream',
+<a name="line1954"></a>						'psd'	=>	'application/octet-stream',
+<a name="line1955"></a>						'so'	=>	'application/octet-stream',
+<a name="line1956"></a>						'sea'	=>	'application/octet-stream',
+<a name="line1957"></a>						'dll'	=>	'application/octet-stream',
+<a name="line1958"></a>						'oda'	=>	'application/oda',
+<a name="line1959"></a>						'pdf'	=>	'application/pdf',
+<a name="line1960"></a>						'ai'	=>	'application/postscript',
+<a name="line1961"></a>						'eps'	=>	'application/postscript',
+<a name="line1962"></a>						'ps'	=>	'application/postscript',
+<a name="line1963"></a>						'smi'	=>	'application/smil',
+<a name="line1964"></a>						'smil'	=>	'application/smil',
+<a name="line1965"></a>						'mif'	=>	'application/vnd.mif',
+<a name="line1966"></a>						'xls'	=>	'application/vnd.ms-excel',
+<a name="line1967"></a>						'ppt'	=>	'application/vnd.ms-powerpoint',
+<a name="line1968"></a>						'wbxml'	=>	'application/vnd.wap.wbxml',
+<a name="line1969"></a>						'wmlc'	=>	'application/vnd.wap.wmlc',
+<a name="line1970"></a>						'dcr'	=>	'application/x-director',
+<a name="line1971"></a>						'dir'	=>	'application/x-director',
+<a name="line1972"></a>						'dxr'	=>	'application/x-director',
+<a name="line1973"></a>						'dvi'	=>	'application/x-dvi',
+<a name="line1974"></a>						'gtar'	=>	'application/x-gtar',
+<a name="line1975"></a>						'php'	=>	'application/x-httpd-php',
+<a name="line1976"></a>						'php4'	=>	'application/x-httpd-php',
+<a name="line1977"></a>						'php3'	=>	'application/x-httpd-php',
+<a name="line1978"></a>						'phtml'	=>	'application/x-httpd-php',
+<a name="line1979"></a>						'phps'	=>	'application/x-httpd-php-source',
+<a name="line1980"></a>						'js'	=>	'application/x-javascript',
+<a name="line1981"></a>						'swf'	=>	'application/x-shockwave-flash',
+<a name="line1982"></a>						'sit'	=>	'application/x-stuffit',
+<a name="line1983"></a>						'tar'	=>	'application/x-tar',
+<a name="line1984"></a>						'tgz'	=>	'application/x-tar',
+<a name="line1985"></a>						'xhtml'	=>	'application/xhtml+xml',
+<a name="line1986"></a>						'xht'	=>	'application/xhtml+xml',
+<a name="line1987"></a>						'zip'	=>	'application/zip',
+<a name="line1988"></a>						'mid'	=>	'audio/midi',
+<a name="line1989"></a>						'midi'	=>	'audio/midi',
+<a name="line1990"></a>						'mpga'	=>	'audio/mpeg',
+<a name="line1991"></a>						'mp2'	=>	'audio/mpeg',
+<a name="line1992"></a>						'mp3'	=>	'audio/mpeg',
+<a name="line1993"></a>						'aif'	=>	'audio/x-aiff',
+<a name="line1994"></a>						'aiff'	=>	'audio/x-aiff',
+<a name="line1995"></a>						'aifc'	=>	'audio/x-aiff',
+<a name="line1996"></a>						'ram'	=>	'audio/x-pn-realaudio',
+<a name="line1997"></a>						'rm'	=>	'audio/x-pn-realaudio',
+<a name="line1998"></a>						'rpm'	=>	'audio/x-pn-realaudio-plugin',
+<a name="line1999"></a>						'ra'	=>	'audio/x-realaudio',
+<a name="line2000"></a>						'rv'	=>	'video/vnd.rn-realvideo',
+<a name="line2001"></a>						'wav'	=>	'audio/x-wav',
+<a name="line2002"></a>						'bmp'	=>	'image/bmp',
+<a name="line2003"></a>						'gif'	=>	'image/gif',
+<a name="line2004"></a>						'jpeg'	=>	'image/jpeg',
+<a name="line2005"></a>						'jpg'	=>	'image/jpeg',
+<a name="line2006"></a>						'jpe'	=>	'image/jpeg',
+<a name="line2007"></a>						'png'	=>	'image/png',
+<a name="line2008"></a>						'tiff'	=>	'image/tiff',
+<a name="line2009"></a>						'tif'	=>	'image/tiff',
+<a name="line2010"></a>						'css'	=>	'text/css',
+<a name="line2011"></a>						'html'	=>	'text/html',
+<a name="line2012"></a>						'htm'	=>	'text/html',
+<a name="line2013"></a>						'shtml'	=>	'text/html',
+<a name="line2014"></a>						'txt'	=>	'text/plain',
+<a name="line2015"></a>						'text'	=>	'text/plain',
+<a name="line2016"></a>						'log'	=>	'text/plain',
+<a name="line2017"></a>						'rtx'	=>	'text/richtext',
+<a name="line2018"></a>						'rtf'	=>	'text/rtf',
+<a name="line2019"></a>						'xml'	=>	'text/xml',
+<a name="line2020"></a>						'xsl'	=>	'text/xml',
+<a name="line2021"></a>						'mpeg'	=>	'video/mpeg',
+<a name="line2022"></a>						'mpg'	=>	'video/mpeg',
+<a name="line2023"></a>						'mpe'	=>	'video/mpeg',
+<a name="line2024"></a>						'qt'	=>	'video/quicktime',
+<a name="line2025"></a>						'mov'	=>	'video/quicktime',
+<a name="line2026"></a>						'avi'	=>	'video/x-msvideo',
+<a name="line2027"></a>						'movie'	=>	'video/x-sgi-movie',
+<a name="line2028"></a>						'doc'	=>	'application/msword',
+<a name="line2029"></a>						'word'	=>	'application/msword',
+<a name="line2030"></a>						'xl'	=>	'application/excel',
+<a name="line2031"></a>						'eml'	=>	'message/rfc822'
+<a name="line2032"></a>					);
+<a name="line2033"></a>
+<a name="line2034"></a>		return ( ! isset($mimes[strtolower($ext)])) ? "application/x-unknown-content-type" : $mimes[strtolower($ext)];
+<a name="line2035"></a>	}
+<a name="line2036"></a>
+<a name="line2037"></a>}
+<a name="line2038"></a>// END CI_Email class
+<a name="line2039"></a>
+<a name="line2040"></a>/* End of file Email.php */
+<a name="line2041"></a>/* Location: ./system/libraries/Email.php */</pre>
+<div class="header">
+<h1>GiftFlow API</h1>
+<ul>
+<li><a href="../../overview-summary.html">Overview</a></li>
+<li>Package</li><li>Class</li><li>Tree</li><li><a href="../../overview-files.html">Files</a></li>
+<li><a href="../../deprecated-list.html">Deprecated</a></li>
+<li><a href="../../index-all.html">Index</a></li>
+</ul>
+</div>
+
+<div class="small_links">
+<a href="../../index.html" target="_top">Frames</a>
+<a href="../../source/libraries/email.php.html" target="_top">No frames</a>
+</div>
+<hr>
+
+<p id="footer">This document was generated by <a href="http://peej.github.com/phpdoctor/">PHPDoctor: The PHP Documentation Creator</a></p>
+
+</body>
+
+</html>

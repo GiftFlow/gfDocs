@@ -1,0 +1,422 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+
+<html lang="en">
+<head>
+
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
+<meta name="generator" content="PHPDoctor 2RC4 (http://peej.github.com/phpdoctor/)">
+<meta name="when" content="Fri, 18 Jun 2010 15:58:03 +0000">
+
+<link rel="stylesheet" type="text/css" href="../../stylesheet.css">
+<link rel="start" href="../../overview-summary.html">
+
+<title>controllers/account.php (GiftFlow API)</title>
+
+</head>
+<body id="file" onload="parent.document.title=document.title;">
+
+<div class="header">
+<h1>GiftFlow API</h1>
+<ul>
+<li><a href="../../overview-summary.html">Overview</a></li>
+<li>Package</li><li>Class</li><li>Tree</li><li><a href="../../overview-files.html">Files</a></li>
+<li><a href="../../deprecated-list.html">Deprecated</a></li>
+<li><a href="../../index-all.html">Index</a></li>
+</ul>
+</div>
+
+<div class="small_links">
+<a href="../../index.html" target="_top">Frames</a>
+<a href="../../source/controllers/account.php.html" target="_top">No frames</a>
+</div>
+<hr>
+
+<h1>controllers/account.php</h1>
+<hr>
+
+<a name="line1"></a><pre><?php
+<a name="line2"></a>
+<a name="line3"></a>class Account extends Controller {
+<a name="line4"></a>
+<a name="line5"></a>	var $U;
+<a name="line6"></a>	var $data;
+<a name="line7"></a>	
+<a name="line8"></a>	function __construct()
+<a name="line9"></a>	{
+<a name="line10"></a>		parent::__construct();
+<a name="line11"></a>		$this->auth->bouncer(1);
+<a name="line12"></a>		$this->U = new User($this->session->userdata('user_id'));
+<a name="line13"></a>		$this->data = $this->util->parse_globals();
+<a name="line14"></a>		$this->util->config();
+<a name="line15"></a>	}
+<a name="line16"></a>
+<a name="line17"></a>	// Basic account statistics, list of options
+<a name="line18"></a>	function index()
+<a name="line19"></a>	{
+<a name="line20"></a>		$this->profile();
+<a name="line21"></a>	}
+<a name="line22"></a>	
+<a name="line23"></a>	// Edit Profile
+<a name="line24"></a>	function profile()
+<a name="line25"></a>	{
+<a name="line26"></a>		if(!empty($_POST))
+<a name="line27"></a>		{
+<a name="line28"></a>			foreach($_POST as $key=>$val)
+<a name="line29"></a>			{
+<a name="line30"></a>				$this->U->{$key} = $val;
+<a name="line31"></a>			}
+<a name="line32"></a>			if ( $this->U->save() )
+<a name="line33"></a>			{
+<a name="line34"></a>				$this->session->set_flashdata('success', 'Your profile has been updated.');
+<a name="line35"></a>				redirect('account/profile');
+<a name="line36"></a>			}
+<a name="line37"></a>			else
+<a name="line38"></a>			{
+<a name="line39"></a>				$this->data['alert_error'] = $this->U->error->string;
+<a name="line40"></a>				$this->_profile_edit();
+<a name="line41"></a>			}
+<a name="line42"></a>		}
+<a name="line43"></a>		else
+<a name="line44"></a>		{
+<a name="line45"></a>			$this->_profile_edit();
+<a name="line46"></a>		}
+<a name="line47"></a>			 
+<a name="line48"></a>	}
+<a name="line49"></a>	
+<a name="line50"></a>	// Manage locations
+<a name="line51"></a>	function locations( $segment = NULL, $action = NULL  )
+<a name="line52"></a>	{
+<a name="line53"></a>		switch( $segment )
+<a name="line54"></a>		{
+<a name="line55"></a>			// Empty 3rd segment. List locations.
+<a name="line56"></a>			case FALSE:
+<a name="line57"></a>				$this->_locations_list();
+<a name="line58"></a>				break;
+<a name="line59"></a>				
+<a name="line60"></a>			// Add new location
+<a name="line61"></a>			case "add":
+<a name="line62"></a>				$this->_locations_add();
+<a name="line63"></a>				break;
+<a name="line64"></a>				
+<a name="line65"></a>			// Edit location of ID passed in 3rd segment
+<a name="line66"></a>			default:
+<a name="line67"></a>				if($action=='delete') $this->_locations_delete( $segment );
+<a name="line68"></a>				elseif($action=='edit') $this->_locations_edit( $segment );
+<a name="line69"></a>				elseif($action=="default") $this->_locations_default( $segment );
+<a name="line70"></a>				break;
+<a name="line71"></a>		}
+<a name="line72"></a>	}
+<a name="line73"></a>	
+<a name="line74"></a>	// Manage Photos [routing function]
+<a name="line75"></a>	function photos( $segment = FALSE, $param = FALSE )
+<a name="line76"></a>	{
+<a name="line77"></a>		switch( $segment )
+<a name="line78"></a>		{
+<a name="line79"></a>			// Empty 3rd segment. List photos.
+<a name="line80"></a>			case FALSE:
+<a name="line81"></a>				$this->_photos_list();
+<a name="line82"></a>				break;
+<a name="line83"></a>				
+<a name="line84"></a>			// Add new photo
+<a name="line85"></a>			case "add":
+<a name="line86"></a>				$this->_photos_add();
+<a name="line87"></a>				break;
+<a name="line88"></a>				
+<a name="line89"></a>			// Edit photo of ID passed in 3rd segment
+<a name="line90"></a>			default:
+<a name="line91"></a>				$this->_photos_edit($segment, $param);
+<a name="line92"></a>				break;
+<a name="line93"></a>		}
+<a name="line94"></a>	}
+<a name="line95"></a>	
+<a name="line96"></a>	// General settings - including privacy, timezones and language selection
+<a name="line97"></a>	function settings()
+<a name="line98"></a>	{
+<a name="line99"></a>		if(!empty($_POST))
+<a name="line100"></a>			$this->_process_settings();
+<a name="line101"></a>		else
+<a name="line102"></a>		{
+<a name="line103"></a>			$this->data['title'] = "Your Settings";
+<a name="line104"></a>			$this->load->view('header', $this->data);
+<a name="line105"></a>			$this->data['active_link'] = 'settings';
+<a name="line106"></a>			$this->data['U'] = $this->U;
+<a name="line107"></a>			$this->load->view('account/menu', $this->data);
+<a name="line108"></a>			$this->load->view('account/settings', $this->data);
+<a name="line109"></a>			$this->load->view('footer', $this->data);
+<a name="line110"></a>		}
+<a name="line111"></a>	}
+<a name="line112"></a>	
+<a name="line113"></a>	// Manage email settings
+<a name="line114"></a>	function email()
+<a name="line115"></a>	{
+<a name="line116"></a>	
+<a name="line117"></a>	}
+<a name="line118"></a>	// Manage password
+<a name="line119"></a>	function password()
+<a name="line120"></a>	{
+<a name="line121"></a>	
+<a name="line122"></a>	}
+<a name="line123"></a>	protected function _profile_edit()
+<a name="line124"></a>	{
+<a name="line125"></a>		// Load the htmlform extension, so we can generate the form.
+<a name="line126"></a>		$this->U->load_extension('htmlform');
+<a name="line127"></a>		if($this->U->type=="individual")
+<a name="line128"></a>		{
+<a name="line129"></a>			// This is how are form will be rendered
+<a name="line130"></a>			$this->data['form_fields'] = array(
+<a name="line131"></a>				'screen_name',
+<a name="line132"></a>				'type',
+<a name="line133"></a>				'first_name',
+<a name="line134"></a>				'last_name',
+<a name="line135"></a>				'email',
+<a name="line136"></a>				'bio',
+<a name="line137"></a>				'phone',
+<a name="line138"></a>				'occupation',
+<a name="line139"></a>				'url');
+<a name="line140"></a>		}
+<a name="line141"></a>		else
+<a name="line142"></a>		{
+<a name="line143"></a>			// This is how are form will be rendered
+<a name="line144"></a>			$this->data['form_fields'] = array(
+<a name="line145"></a>				'screen_name',
+<a name="line146"></a>				'type',
+<a name="line147"></a>				'email',
+<a name="line148"></a>				'bio',
+<a name="line149"></a>				'phone',
+<a name="line150"></a>				'url');
+<a name="line151"></a>		
+<a name="line152"></a>		}
+<a name="line153"></a>		$this->data['title'] = "Edit Profile";
+<a name="line154"></a>		$this->load->view('header', $this->data );
+<a name="line155"></a>		$this->data['active_link'] = 'profile';
+<a name="line156"></a>		$this->load->view('account/menu', $this->data);
+<a name="line157"></a>		$this->load->view('account/profile', $this->data);
+<a name="line158"></a>		$this->load->view('footer', $this->data );
+<a name="line159"></a>	}
+<a name="line160"></a>	protected function _locations_list()
+<a name="line161"></a>	{
+<a name="line162"></a>		$this->data['googlemaps'] = TRUE;
+<a name="line163"></a>		$this->U->location->get();
+<a name="line164"></a>		$this->U->default_location->get();
+<a name="line165"></a>		$this->data['locations'] = array();
+<a name="line166"></a>		foreach ( $this->U->location->all as $loc)
+<a name="line167"></a>		{
+<a name="line168"></a>			$data = array (
+<a name="line169"></a>				"id" => $loc->id,
+<a name="line170"></a>				"address" => $loc->address,
+<a name="line171"></a>				"city" => $loc->city,
+<a name="line172"></a>				"state" => $loc->state,
+<a name="line173"></a>				"title" => $loc->title,
+<a name="line174"></a>				"default"=>FALSE
+<a name="line175"></a>				);
+<a name="line176"></a>			if($this->U->default_location->id == $loc->id) $data['default'] = TRUE;
+<a name="line177"></a>			$this->data['locations'][] = $data;
+<a name="line178"></a>		}
+<a name="line179"></a>		$this->data['title'] = "My Account";
+<a name="line180"></a>		$this->data['active_link'] = 'locations';
+<a name="line181"></a>		$this->load->view('header', $this->data);
+<a name="line182"></a>		$this->load->view('account/menu', $this->data);
+<a name="line183"></a>		$this->parser->parse('account/locations/list', $this->data);
+<a name="line184"></a>		$this->load->view('footer', $this->data);
+<a name="line185"></a>	}
+<a name="line186"></a>	
+<a name="line187"></a>	protected function _locations_add()
+<a name="line188"></a>	{
+<a name="line189"></a>		if(!empty($_POST))
+<a name="line190"></a>		{
+<a name="line191"></a>			
+<a name="line192"></a>		}
+<a name="line193"></a>		else
+<a name="line194"></a>		{
+<a name="line195"></a>			$this->data['title'] = "Add A New Location";
+<a name="line196"></a>			$this->load->view('header', $this->data);
+<a name="line197"></a>			$this->data['active_link'] = 'profile';
+<a name="line198"></a>			$this->load->view('account/menu', $this->data);
+<a name="line199"></a>			$this->parser->parse('account/locations/add', $this->data);
+<a name="line200"></a>			$this->load->view('footer', $this->data);
+<a name="line201"></a>		}
+<a name="line202"></a>	}
+<a name="line203"></a>	
+<a name="line204"></a>	protected function _locations_edit( $id )
+<a name="line205"></a>	{
+<a name="line206"></a>		if(!empty($_POST))
+<a name="line207"></a>		{
+<a name="line208"></a>			$L = new Location( $id );
+<a name="line209"></a>			$L->title = $_POST['title'];
+<a name="line210"></a>			$L->save();
+<a name="line211"></a>			$this->session->set_flashdata('success', 'Location title edited successfully!');
+<a name="line212"></a>			redirect('account/locations');
+<a name="line213"></a>		}
+<a name="line214"></a>		else
+<a name="line215"></a>		{
+<a name="line216"></a>			$L = new Location( $id );
+<a name="line217"></a>			$this->data['L'] = $L;
+<a name="line218"></a>			// @todo: make sure this location belongs to this user
+<a name="line219"></a>			$this->data['title'] = "Edit Location";
+<a name="line220"></a>			//$this->load->view('header', $this->data);
+<a name="line221"></a>			$this->load->view('account/locations/edit', $this->data);
+<a name="line222"></a>			//$this->load->view('footer', $this->data);
+<a name="line223"></a>		}
+<a name="line224"></a>	}
+<a name="line225"></a>	protected function _locations_delete( $id )
+<a name="line226"></a>	{
+<a name="line227"></a>		$L = new Location( $id );
+<a name="line228"></a>		$L->delete();
+<a name="line229"></a>		$this->session->set_flashdata('success', 'Location deleted!');
+<a name="line230"></a>		redirect('account/locations');
+<a name="line231"></a>	}
+<a name="line232"></a>	protected function _locations_default( $id )
+<a name="line233"></a>	{
+<a name="line234"></a>		$L = new Location( $id );
+<a name="line235"></a>		$U = new User($this->data['logged_in_user_id']);
+<a name="line236"></a>		$U->save_default_location($L);
+<a name="line237"></a>		$this->session->set_flashdata('success', 'Location made default.');
+<a name="line238"></a>		redirect('account/locations');
+<a name="line239"></a>	}
+<a name="line240"></a>	protected function _photos_list()
+<a name="line241"></a>	{
+<a name="line242"></a>		$this->U->photo->get();
+<a name="line243"></a>		$this->data['photos'] = $this->U->photo->all;
+<a name="line244"></a>		
+<a name="line245"></a>		// Is this person connected via facebook
+<a name="line246"></a>		if(!empty($this->U->facebook_id)) $this->data['facebook_connected'] = TRUE;
+<a name="line247"></a>		else $this->data['facebook_connected'] = FALSE;
+<a name="line248"></a>		
+<a name="line249"></a>		if($this->U->facebook_photo == 1) $this->data['facebook_photo'] = TRUE;
+<a name="line250"></a>		else $this->data['facebook_photo'] = FALSE;
+<a name="line251"></a>		$this->data['title'] = "Photos";
+<a name="line252"></a>		$this->load->view('header', $this->data);
+<a name="line253"></a>		$this->data['active_link'] = 'photos';
+<a name="line254"></a>		$this->data['U'] = $this->U;
+<a name="line255"></a>		$this->load->view('account/menu', $this->data);
+<a name="line256"></a>		$this->parser->parse('account/photos/list', $this->data);
+<a name="line257"></a>		$this->load->view('footer', $this->data);
+<a name="line258"></a>	}
+<a name="line259"></a>	protected function _photos_add()
+<a name="line260"></a>	{
+<a name="line261"></a>		$this->data['title'] = "Add a New Photo";
+<a name="line262"></a>		$this->load->view('header', $this->data);
+<a name="line263"></a>		$this->data['active_link'] = 'photos';
+<a name="line264"></a>		$this->load->view('account/menu', $this->data);
+<a name="line265"></a>		$this->parser->parse('account/photos/add', $this->data);
+<a name="line266"></a>		$this->load->view('footer', $this->data);
+<a name="line267"></a>	}
+<a name="line268"></a>	
+<a name="line269"></a>	protected function _photos_edit( $id, $param = NULL )
+<a name="line270"></a>	{
+<a name="line271"></a>		if(!empty($_POST))
+<a name="line272"></a>		{
+<a name="line273"></a>			$P = new Photo($_POST['photo_id']);
+<a name="line274"></a>			$P->caption = $_POST['caption'];
+<a name="line275"></a>			$P->save();
+<a name="line276"></a>			if(!empty($_POST['default'])&&$_POST['default']==true)
+<a name="line277"></a>			{
+<a name="line278"></a>				$this->U->save_default_photo($P);
+<a name="line279"></a>			}
+<a name="line280"></a>			$this->session->set_flashdata('success', 'Photo edited successfully!');
+<a name="line281"></a>			redirect('account/photos/'.$id.'/edit');
+<a name="line282"></a>		}
+<a name="line283"></a>		else
+<a name="line284"></a>		{
+<a name="line285"></a>			if( $param == "delete" )
+<a name="line286"></a>			{
+<a name="line287"></a>				$P = new Photo($id);
+<a name="line288"></a>				$P->delete();
+<a name="line289"></a>				
+<a name="line290"></a>				$this->session->set_flashdata('success', 'Photo deleted!');
+<a name="line291"></a>				redirect('account/photos');
+<a name="line292"></a>			}
+<a name="line293"></a>			else
+<a name="line294"></a>			{
+<a name="line295"></a>				$this->U->default_photo->get();
+<a name="line296"></a>				if($this->U->default_photo->id==$id) $this->data['default'] = TRUE;
+<a name="line297"></a>				$this->data['photo'] = new Photo($id);
+<a name="line298"></a>				$this->data['title'] = "Edit Photo";
+<a name="line299"></a>				$this->load->view('header', $this->data);
+<a name="line300"></a>				$this->data['active_link'] = 'photos';
+<a name="line301"></a>				$this->load->view('account/menu', $this->data);
+<a name="line302"></a>				$this->load->view('account/photos/edit', $this->data);
+<a name="line303"></a>				$this->load->view('footer', $this->data);
+<a name="line304"></a>			}
+<a name="line305"></a>		}
+<a name="line306"></a>	}
+<a name="line307"></a>	
+<a name="line308"></a>	function do_upload()
+<a name="line309"></a>	{
+<a name="line310"></a>		// set config details
+<a name="line311"></a>		$config['upload_path'] = './uploads/';
+<a name="line312"></a>		$config['allowed_types'] = 'gif|jpg|png';
+<a name="line313"></a>		$config['max_size']	= '500';
+<a name="line314"></a>		$config['max_width']  = '1024';
+<a name="line315"></a>		$config['max_height']  = '768';
+<a name="line316"></a>		$config['file_name'] = uniqid();
+<a name="line317"></a>		
+<a name="line318"></a>		// load library
+<a name="line319"></a>		$this->load->library('upload', $config);
+<a name="line320"></a>	
+<a name="line321"></a>		if ( ! $this->upload->do_upload())
+<a name="line322"></a>		{
+<a name="line323"></a>			$error = $this->upload->display_errors();
+<a name="line324"></a>			$this->session->set_flashdata('error', $error);
+<a name="line325"></a>			redirect('account/photos/add');
+<a name="line326"></a>		}	
+<a name="line327"></a>		else
+<a name="line328"></a>		{
+<a name="line329"></a>			$this->data['upload'] = $this->upload->data();
+<a name="line330"></a>
+<a name="line331"></a>			$P = new Photo();
+<a name="line332"></a>			$P->user_id = $this->U->id;
+<a name="line333"></a>			$P->data = $this->data['upload'];
+<a name="line334"></a>			$P->add();
+<a name="line335"></a>			
+<a name="line336"></a>			$this->session->set_flashdata('success', 'Photo uploaded. Finish adding data here.');
+<a name="line337"></a>			redirect('account/photos/'.$P->id."/edit");
+<a name="line338"></a>		}
+<a name="line339"></a>	}
+<a name="line340"></a>	function _process_settings()
+<a name="line341"></a>	{
+<a name="line342"></a>		if(!empty($_POST['email'])) $this->U->email = $_POST['email'];
+<a name="line343"></a>		if(!empty($_POST['new_password'])) $this->U->password = $_POST['new_password'];
+<a name="line344"></a>		if(!empty($_POST['confirm_new_password'])) $this->U->confirm_password = $_POST['confirm_new_password'];
+<a name="line345"></a>
+<a name="line346"></a>		if($this->U->save())
+<a name="line347"></a>		{
+<a name="line348"></a>			//echo 'success@'.$this->U->email;
+<a name="line349"></a>			$this->session->set_flashdata('success', 'Settings saved successfully.');
+<a name="line350"></a>		}
+<a name="line351"></a>		else
+<a name="line352"></a>		{
+<a name="line353"></a>			//echo 'fail@'.$this->U->email;
+<a name="line354"></a>			//echo $this->U->error->string;
+<a name="line355"></a>			$this->session->set_flashdata('error', $this->U->error->string);
+<a name="line356"></a>		}
+<a name="line357"></a>		
+<a name="line358"></a>		redirect('account/settings');
+<a name="line359"></a>	}
+<a name="line360"></a>}
+<a name="line361"></a>
+<a name="line362"></a>/* End of file settings.php */
+<a name="line363"></a>/* Location: ./system/application/controllers/settings.php */
+<a name="line364"></a></pre>
+<div class="header">
+<h1>GiftFlow API</h1>
+<ul>
+<li><a href="../../overview-summary.html">Overview</a></li>
+<li>Package</li><li>Class</li><li>Tree</li><li><a href="../../overview-files.html">Files</a></li>
+<li><a href="../../deprecated-list.html">Deprecated</a></li>
+<li><a href="../../index-all.html">Index</a></li>
+</ul>
+</div>
+
+<div class="small_links">
+<a href="../../index.html" target="_top">Frames</a>
+<a href="../../source/controllers/account.php.html" target="_top">No frames</a>
+</div>
+<hr>
+
+<p id="footer">This document was generated by <a href="http://peej.github.com/phpdoctor/">PHPDoctor: The PHP Documentation Creator</a></p>
+
+</body>
+
+</html>

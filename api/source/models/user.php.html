@@ -1,0 +1,515 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+
+<html lang="en">
+<head>
+
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
+<meta name="generator" content="PHPDoctor 2RC4 (http://peej.github.com/phpdoctor/)">
+<meta name="when" content="Fri, 18 Jun 2010 15:58:03 +0000">
+
+<link rel="stylesheet" type="text/css" href="../../stylesheet.css">
+<link rel="start" href="../../overview-summary.html">
+
+<title>models/user.php (GiftFlow API)</title>
+
+</head>
+<body id="file" onload="parent.document.title=document.title;">
+
+<div class="header">
+<h1>GiftFlow API</h1>
+<ul>
+<li><a href="../../overview-summary.html">Overview</a></li>
+<li>Package</li><li>Class</li><li>Tree</li><li><a href="../../overview-files.html">Files</a></li>
+<li><a href="../../deprecated-list.html">Deprecated</a></li>
+<li><a href="../../index-all.html">Index</a></li>
+</ul>
+</div>
+
+<div class="small_links">
+<a href="../../index.html" target="_top">Frames</a>
+<a href="../../source/models/user.php.html" target="_top">No frames</a>
+</div>
+<hr>
+
+<h1>models/user.php</h1>
+<hr>
+
+<a name="line1"></a><pre><?php
+<a name="line2"></a>
+<a name="line3"></a>class User extends DataMapperExtension {
+<a name="line4"></a>	
+<a name="line5"></a>	var $ci;
+<a name="line6"></a>	
+<a name="line7"></a>	var $mail_inbox;
+<a name="line8"></a>	var $mail_sent;
+<a name="line9"></a>	var $inbox;
+<a name="line10"></a>	var $default_photo;
+<a name="line11"></a>	
+<a name="line12"></a>	var $created_field = 'created';	
+<a name="line13"></a>	var $updated_field = 'updated';
+<a name="line14"></a>	
+<a name="line15"></a>	var $error_prefix = ' ';
+<a name="line16"></a>   	var $error_suffix = ' ';
+<a name="line17"></a>   	
+<a name="line18"></a>   	var $total_completed_gifts;
+<a name="line19"></a>   	var $total_completed_requests;
+<a name="line20"></a>   	var $total_interactions;
+<a name="line21"></a>   	var $total_followers;
+<a name="line22"></a>   	var $total_following;
+<a name="line23"></a>
+<a name="line24"></a>
+<a name="line25"></a>	// --------------------------------------------------------------------
+<a name="line26"></a>	// Relationships
+<a name="line27"></a>	//   Configure your relationships below
+<a name="line28"></a>	// --------------------------------------------------------------------
+<a name="line29"></a>	
+<a name="line30"></a>	var $has_one = array(
+<a name="line31"></a>        	'default_photo' => array(
+<a name="line32"></a>            		'class' => 'photo',
+<a name="line33"></a>            		'other_field'=>'default_user'
+<a name="line34"></a>            		),
+<a name="line35"></a>            	'default_location' => array(
+<a name="line36"></a>            		'class' => 'location',
+<a name="line37"></a>            		'other_field'=>'default_user'
+<a name="line38"></a>            		),
+<a name="line39"></a>            	'role',
+<a name="line40"></a>            	'user_setting'
+<a name="line41"></a>            	);
+<a name="line42"></a>	
+<a name="line43"></a>	
+<a name="line44"></a>	var $has_many = array(	  
+<a name="line45"></a>		'photo',
+<a name="line46"></a>		'location',
+<a name="line47"></a>		'message_delivery' => array(
+<a name="line48"></a>			'class' => 'message_delivery',
+<a name="line49"></a>			'other_field' => 'recipient'
+<a name="line50"></a>			),
+<a name="line51"></a>		'thread' => array(
+<a name="line52"></a>			'class' => 'thread',
+<a name="line53"></a>			'other_field' => 'recipient'
+<a name="line54"></a>			),
+<a name="line55"></a>		'good' => array(
+<a name="line56"></a>			'class' => 'good',
+<a name="line57"></a>			'other_field' => 'user'
+<a name="line58"></a>			),
+<a name="line59"></a>		'comment' => array(
+<a name="line60"></a>			'class' => 'comment',
+<a name="line61"></a>			'other_field' => 'author'
+<a name="line62"></a>			),
+<a name="line63"></a>		"transaction"=>array(
+<a name="line64"></a>			"class"=>"transaction",
+<a name="line65"></a>			"other_field"=>"recipient"
+<a name="line66"></a>			),
+<a name="line67"></a>		'following'=>array(
+<a name="line68"></a>			'class'=>'user',
+<a name="line69"></a>			'other_field'=>'user'
+<a name="line70"></a>			),
+<a name="line71"></a>		'user'=>array(
+<a name="line72"></a>			'other_field'=>'following'
+<a name="line73"></a>			)
+<a name="line74"></a>		);
+<a name="line75"></a>	
+<a name="line76"></a>	// --------------------------------------------------------------------
+<a name="line77"></a>	// Validation
+<a name="line78"></a>	//   Add validation requirements, such as 'required', for your fields.
+<a name="line79"></a>	// --------------------------------------------------------------------
+<a name="line80"></a>	
+<a name="line81"></a>	var $validation = array(
+<a name="line82"></a>		'username' => array(
+<a name="line83"></a>			'rules' => array(
+<a name="line84"></a>				'trim',
+<a name="line85"></a>				'strtolower',
+<a name="line86"></a>				'min_length' => 4,
+<a name="line87"></a>				'max_length' => 25,
+<a name="line88"></a>				'unique'
+<a name="line89"></a>			),
+<a name="line90"></a>			'label' => 'Username'
+<a name="line91"></a>		),
+<a name="line92"></a>		'email' => array(
+<a name="line93"></a>			'rules' => array(
+<a name="line94"></a>				'required',
+<a name="line95"></a>				'trim',
+<a name="line96"></a>				'valid_email',
+<a name="line97"></a>				'max_length' => 255,
+<a name="line98"></a>				'unique'
+<a name="line99"></a>			),
+<a name="line100"></a>			'label' => 'Email Address'
+<a name="line101"></a>		),
+<a name="line102"></a>		'password' => array(
+<a name="line103"></a>			'rules' => array(
+<a name="line104"></a>				'trim',
+<a name="line105"></a>				'min_length' => 5,
+<a name="line106"></a>				'max_length' => 45,
+<a name="line107"></a>				'encrypt',
+<a name="line108"></a>				'required'
+<a name="line109"></a>			),
+<a name="line110"></a>			'label' => 'Password',
+<a name="line111"></a>			'type' => 'password'
+<a name="line112"></a>		),
+<a name="line113"></a>		'confirm_password' => array(
+<a name="line114"></a>			'rules' => array(
+<a name="line115"></a>				'trim',
+<a name="line116"></a>				'encrypt',
+<a name="line117"></a>			),
+<a name="line118"></a>			'label' => 'Confirm Password',
+<a name="line119"></a>			'type' => 'password'
+<a name="line120"></a>		),
+<a name="line121"></a>		'type'=> array(
+<a name="line122"></a>			'label'=>'Profile Type',
+<a name="line123"></a>			'type'=>'dropdown',
+<a name="line124"></a>			'values' => array ( "individual"=>"Personal / Individual", 'nonprofit'=>"Non-Profit Institution", 'business'=>"Business")
+<a name="line125"></a>		),
+<a name="line126"></a>		'screen_name' => array(
+<a name="line127"></a>			'rules' => array( "trim" ),
+<a name="line128"></a>			'label' => "Name"
+<a name="line129"></a>		),
+<a name="line130"></a>		'bio' => array(
+<a name="line131"></a>			'label' => 'About Me',
+<a name="line132"></a>			'type' => 'textarea'
+<a name="line133"></a>		),
+<a name="line134"></a>		'first_name' => array( 'label' => 'First Name'),
+<a name="line135"></a>		'last_name' => array ( 'label'=>'Last Name'),
+<a name="line136"></a>		'occupation' => array ('label'=>'Occupation'),
+<a name="line137"></a>		'phone' => array ('label' => 'Phone Number'),
+<a name="line138"></a>		'url' => array( 'label' => "URL"),
+<a name="line139"></a>		'aim' => array ('label' => 'AIM Screen Name'),
+<a name="line140"></a>		'skype' => array ('label' => "Skype Name"),
+<a name="line141"></a>		'facebook' => array ('label'=>'Facebook URL'),
+<a name="line142"></a>		'myspace' => array('label'=>'MySpace URL'),
+<a name="line143"></a>		'linkedin'=> array ('label' => 'LinkedIn URL'),
+<a name="line144"></a>		
+<a name="line145"></a>	);
+<a name="line146"></a>
+<a name="line147"></a>    	function __construct( $id = NULL )
+<a name="line148"></a>		{
+<a name="line149"></a>			parent::__construct( $id );
+<a name="line150"></a>    	}
+<a name="line151"></a>	
+<a name="line152"></a>
+<a name="line153"></a>    	function login()
+<a name="line154"></a>    	{
+<a name="line155"></a>        	// Create a temporary user object
+<a name="line156"></a>        	$u = new User();
+<a name="line157"></a>
+<a name="line158"></a>        	// Get this users stored record via their username
+<a name="line159"></a>        	$u->where('email', $this->email)->get();
+<a name="line160"></a>		
+<a name="line161"></a>		if (empty($u->all))
+<a name="line162"></a>		{
+<a name="line163"></a>			$this->error_message('login', 'Email not found.');
+<a name="line164"></a>			return FALSE;
+<a name="line165"></a>		}
+<a name="line166"></a>			
+<a name="line167"></a>        	// Give this user their stored salt
+<a name="line168"></a>        	$this->salt = $u->salt;
+<a name="line169"></a>
+<a name="line170"></a>        	// Validate and get this user by their property values,
+<a name="line171"></a>       		// this will see the 'encrypt' validation run, encrypting the password with the salt
+<a name="line172"></a>        	$this->validate()->get();
+<a name="line173"></a>
+<a name="line174"></a>        	// If the username and encrypted password matched a record in the database,
+<a name="line175"></a>        	// this user object would be fully populated, complete with their ID.
+<a name="line176"></a>
+<a name="line177"></a>        	// If there was no matching record, this user would be completely cleared so their id would be empty.
+<a name="line178"></a>        	if (empty($this->id))
+<a name="line179"></a>        	{
+<a name="line180"></a>            		// Login failed, so set a custom error message
+<a name="line181"></a>            		$this->error_message('login', 'Email or password invalid');
+<a name="line182"></a>            		return FALSE;
+<a name="line183"></a>        	}
+<a name="line184"></a>        	
+<a name="line185"></a>        	// Tests to see if this account has been activated
+<a name="line186"></a>        	elseif (!empty($this->activation_code))
+<a name="line187"></a>        	{
+<a name="line188"></a>        		$this->error_message('login', 'This account has not yet been activated.');
+<a name="line189"></a>            		return FALSE;
+<a name="line190"></a>        	}
+<a name="line191"></a>        	else
+<a name="line192"></a>        	{
+<a name="line193"></a>            		// Login succeeded
+<a name="line194"></a>            		return TRUE;
+<a name="line195"></a>        	}
+<a name="line196"></a>    	}
+<a name="line197"></a>    	
+<a name="line198"></a>    	function deactivate()
+<a name="line199"></a>    	{
+<a name="line200"></a>    		$activation_code = sha1(md5(microtime()));
+<a name="line201"></a>		$this->activation_code = $activation_code;
+<a name="line202"></a>		$this->save();
+<a name="line203"></a>	}
+<a name="line204"></a>	
+<a name="line205"></a>	function activate()
+<a name="line206"></a>	{
+<a name="line207"></a>		// remove the activation code, to indicate it is been activated
+<a name="line208"></a>		$this->activation_code = "0";
+<a name="line209"></a>		$this->save();
+<a name="line210"></a>	}
+<a name="line211"></a>	
+<a name="line212"></a>	function load_mail( $limit = 10, $offset = 0, $folder = "inbox")
+<a name="line213"></a>	{
+<a name="line214"></a>		$this->ci =& get_instance();
+<a name="line215"></a>		$query = $this->ci->db->join('messages AS m ', 'm.id = d.message_id')
+<a name="line216"></a>							->from('message_deliveries AS d ')
+<a name="line217"></a>							->where('recipient_id',$this->id)
+<a name="line218"></a>							->order_by('d.thread', 'desc')
+<a name="line219"></a>							->get();
+<a name="line220"></a>		
+<a name="line221"></a>		foreach($query->result() as $val)
+<a name="line222"></a>		{
+<a name="line223"></a>			if ( $folder=="sent" && $val->author_id == $this->id )
+<a name="line224"></a>				$mail[$val->thread][] = $val->id;
+<a name="line225"></a>			elseif ( $folder == "inbox" )
+<a name="line226"></a>				$mail[$val->thread][] = $val->id; // new Message($val->message_id);//$val->id;
+<a name="line227"></a>		}
+<a name="line228"></a>		$mail = array_slice($mail, $offset, $limit, TRUE);
+<a name="line229"></a>		//$this->load->library('thread');
+<a name="line230"></a>		foreach($mail as $key=>$val)
+<a name="line231"></a>		{
+<a name="line232"></a>			//$t = new Thread(); //   (object) array (	'thread_id' => $key, 'messages' => $val );
+<a name="line233"></a>			$t->id = $key;
+<a name="line234"></a>			$t->messages = $val;
+<a name="line235"></a>			$mail_two[] = $t;
+<a name="line236"></a>		}
+<a name="line237"></a>		
+<a name="line238"></a>		return $mail_two;
+<a name="line239"></a>	}
+<a name="line240"></a>	
+<a name="line241"></a>	/*
+<a name="line242"></a>	* Returns the user's current gifts
+<a name="line243"></a>	*/
+<a name="line244"></a>	function gifts()
+<a name="line245"></a>	{
+<a name="line246"></a>		$G = new Good();
+<a name="line247"></a>		// Get gift objects
+<a name="line248"></a>		$G	->where_related_user('id', $this->id)
+<a name="line249"></a>			->where('type', 'gift')
+<a name="line250"></a>			->include_related('location', "*", NULL, TRUE)
+<a name="line251"></a>			->order_by('created', 'desc')
+<a name="line252"></a>			->get();
+<a name="line253"></a>		$r = array();
+<a name="line254"></a>		
+<a name="line255"></a>		// Build related has-many fields
+<a name="line256"></a>		foreach($G->all as $key=>$val)
+<a name="line257"></a>		{
+<a name="line258"></a>			$T = new Transaction();
+<a name="line259"></a>			$T	->where_related_gift('id', $val->id)
+<a name="line260"></a>				->where('status', 'pending')
+<a name="line261"></a>				->get();
+<a name="line262"></a>			$val->requests = $T;
+<a name="line263"></a>			$P = new Photo();
+<a name="line264"></a>			$P->where_related_good('id', $val->id)->get();
+<a name="line265"></a>			$val->photo = $P;
+<a name="line266"></a>			$r[] = $val;
+<a name="line267"></a>		}
+<a name="line268"></a>		
+<a name="line269"></a>		return $r;
+<a name="line270"></a>	}
+<a name="line271"></a>	
+<a name="line272"></a>	/*
+<a name="line273"></a>	* Returns the user's current needs
+<a name="line274"></a>	*/
+<a name="line275"></a>	function needs()
+<a name="line276"></a>	{
+<a name="line277"></a>		$G = new Good();
+<a name="line278"></a>		// Get gift objects
+<a name="line279"></a>		$G	->where_related_user('id', $this->id)
+<a name="line280"></a>			->where('type', 'need')
+<a name="line281"></a>			->include_related('location', "*", NULL, TRUE)
+<a name="line282"></a>			->order_by('created', 'desc')
+<a name="line283"></a>			->get();
+<a name="line284"></a>		$r = array();
+<a name="line285"></a>
+<a name="line286"></a>		// Build related has-many fields
+<a name="line287"></a>		foreach($G->all as $key=>$val)
+<a name="line288"></a>		{
+<a name="line289"></a>			$T = new Transaction();
+<a name="line290"></a>			$T	->where_related_gift('id', $val->id)
+<a name="line291"></a>				->where('status', 'pending')
+<a name="line292"></a>				->get();
+<a name="line293"></a>			$val->requests = $T;
+<a name="line294"></a>			$P = new Photo();
+<a name="line295"></a>			$P->where_related_good('id', $val->id)->get();
+<a name="line296"></a>			$val->photo = $P;
+<a name="line297"></a>			$r[] = $val;
+<a name="line298"></a>		}
+<a name="line299"></a>
+<a name="line300"></a>		return $r;
+<a name="line301"></a>	}
+<a name="line302"></a>
+<a name="line303"></a>	/*
+<a name="line304"></a>	* Returns the user's current pending requests
+<a name="line305"></a>	*/
+<a name="line306"></a>	function requests()
+<a name="line307"></a>	{
+<a name="line308"></a>		$T = new Transaction();
+<a name="line309"></a>		$T	->where_related_recipient('id', $this->id)
+<a name="line310"></a>			->where('status','pending')
+<a name="line311"></a>			->order_by('created', 'desc')
+<a name="line312"></a>			->include_related('recipient', "*", NULL, TRUE)
+<a name="line313"></a>			->include_related('gift', '*', NULL, TRUE)
+<a name="line314"></a>			->get();
+<a name="line315"></a>		return $T->all;
+<a name="line316"></a>	}
+<a name="line317"></a>	
+<a name="line318"></a>	/*
+<a name="line319"></a>	* Returns the user's completed gifts
+<a name="line320"></a>	*/
+<a name="line321"></a>	function completed_gifts()
+<a name="line322"></a>	{
+<a name="line323"></a>		$G = new Good();
+<a name="line324"></a>		$G	->where_related_user('id', $this->id)
+<a name="line325"></a>			->where('winning_transaction_id !=', '0' )
+<a name="line326"></a>			->include_related('user', '*', NULL, TRUE)
+<a name="line327"></a>			->include_related('winning_transaction','*', NULL, TRUE)
+<a name="line328"></a>			->get();
+<a name="line329"></a>		return $G->all;
+<a name="line330"></a>	}
+<a name="line331"></a>
+<a name="line332"></a>	/*
+<a name="line333"></a>	* Returns the user's completed requests (ie gifts that the user has received)
+<a name="line334"></a>	*/
+<a name="line335"></a>	function completed_requests()
+<a name="line336"></a>	{
+<a name="line337"></a>		$T = new Transaction();
+<a name="line338"></a>		$T	->where('status','completed')
+<a name="line339"></a>			->order_by('created', 'desc')
+<a name="line340"></a>			->include_related('recipient', "*", NULL, TRUE)
+<a name="line341"></a>			->include_related('gift', '*', NULL, TRUE)
+<a name="line342"></a>			->get();
+<a name="line343"></a>		return $T->all;
+<a name="line344"></a>	}	
+<a name="line345"></a>	
+<a name="line346"></a>	/*
+<a name="line347"></a>	* Compiles stats about the user
+<a name="line348"></a>	*/
+<a name="line349"></a>	function stats()
+<a name="line350"></a>	{
+<a name="line351"></a>		if(empty($this->id)) return false;
+<a name="line352"></a>		$this->total_completed_gifts = count($this->completed_gifts());
+<a name="line353"></a>		$this->total_completed_requests = count($this->completed_requests());
+<a name="line354"></a>		$this->total_interactions = $this->total_completed_requests + $this->total_completed_gifts;
+<a name="line355"></a>		
+<a name="line356"></a>		$F = new User();
+<a name="line357"></a>		$this->total_followers = $F->where_related_following('id', $this->id)->count();
+<a name="line358"></a>		$this->total_following =$this->following->count();
+<a name="line359"></a>		
+<a name="line360"></a>		return true;
+<a name="line361"></a>	}
+<a name="line362"></a>
+<a name="line363"></a>	/*
+<a name="line364"></a>	* 	Gets data about all of the people this user is following
+<a name="line365"></a>	*/
+<a name="line366"></a>	function following()
+<a name="line367"></a>	{
+<a name="line368"></a>		$this->following->include_related('default_photo', '*', null, 'true')->get();
+<a name="line369"></a>		return $this->following->all;
+<a name="line370"></a>	}
+<a name="line371"></a>	
+<a name="line372"></a>	/*
+<a name="line373"></a>	*	Boolean test that tells whether this user is following a certain $id
+<a name="line374"></a>	*/
+<a name="line375"></a>	function is_following ( $id )
+<a name="line376"></a>	{
+<a name="line377"></a>		$U = new User();
+<a name="line378"></a>		if($U->where_related_following('id', $id)->where('id', $this->id)->count()==0) return false;
+<a name="line379"></a>		else return true;
+<a name="line380"></a>	}
+<a name="line381"></a>	
+<a name="line382"></a>	/*
+<a name="line383"></a>	*	Boolean test that tells whether this user is being followed by a user with the id $id
+<a name="line384"></a>	*/
+<a name="line385"></a>	function is_followed_by ( $id )
+<a name="line386"></a>	{
+<a name="line387"></a>		$U = new User();
+<a name="line388"></a>		if($U->where_related_following('id', $this->id)->where('id', $id)->count()==0) return false;
+<a name="line389"></a>		else return true;
+<a name="line390"></a>	}
+<a name="line391"></a>	
+<a name="line392"></a>	/*
+<a name="line393"></a>	* 	Facebook sync function
+<a name="line394"></a>	* 	This is used each time a user logs in via Facebook. It checks to see if there are any empty 
+<a name="line395"></a>	*  	fields in the database which could be populated by Facebook data. If so, it fills them. It does
+<a name="line396"></a>	*    not, however, overwrite any database data with Facebook data.
+<a name="line397"></a>	*
+<a name="line398"></a>	*	@param $data: JSON object returned by Facebook
+<a name="line399"></a>	*/
+<a name="line400"></a>	
+<a name="line401"></a>	function facebook_sync( $data )
+<a name="line402"></a>	{
+<a name="line403"></a>		if(!empty($data->id)&&empty($this->facebook_id))
+<a name="line404"></a>			$this->facebook_id = $data->id;
+<a name="line405"></a>		if(!empty($data->token)&&empty($this->facebook_token))
+<a name="line406"></a>			$this->facebook_token = $data->token;
+<a name="line407"></a>		if(!empty($data->email)&&empty($this->email))
+<a name="line408"></a>			$this->email = $data->email;
+<a name="line409"></a>		if(!empty($data->name)&&empty($this->screen_name))
+<a name="line410"></a>			$this->screen_name = $data->name;
+<a name="line411"></a>		if(!empty($data->first_name)&&empty($this->first_name))
+<a name="line412"></a>			$this->first_name = $data->first_name;
+<a name="line413"></a>		if(!empty($data->last_name)&&empty($this->last_name))
+<a name="line414"></a>			$this->last_name = $data->last_name;	
+<a name="line415"></a>		if(!empty($data->link)&&empty($this->facebook_link))
+<a name="line416"></a>			$this->facebook_link = $data->link;					
+<a name="line417"></a>		if(empty($this->facebook_data))
+<a name="line418"></a>			$this->facebook_data = json_encode($data);
+<a name="line419"></a>		if(empty($this->password))
+<a name="line420"></a>			$this->password = uniqid();
+<a name="line421"></a>		if(empty($this->role_id))
+<a name="line422"></a>			$this->role_id = 1;
+<a name="line423"></a>		if(empty($this->ip_address))
+<a name="line424"></a>			$this->ip_address = $this->ci->input->ip_address();
+<a name="line425"></a>		if(empty($this->salt))
+<a name="line426"></a>			$this->salt = sha1('~'.$this->email.'~'.microtime(TRUE));
+<a name="line427"></a>		if(empty($this->registration_type))
+<a name="line428"></a>			$this->registration_type = 'facebook';
+<a name="line429"></a>		if(!isset($this->facebook_photo))
+<a name="line430"></a>			$this->facebook_photo = 1;
+<a name="line431"></a>		$this->validate();
+<a name="line432"></a>		if($this->save())
+<a name="line433"></a>			return true;
+<a name="line434"></a>		else
+<a name="line435"></a>			return false;
+<a name="line436"></a>	}
+<a name="line437"></a>	
+<a name="line438"></a>	
+<a name="line439"></a>	// --------------------------------------------------------------------
+<a name="line440"></a>	// Custom Validation Rules
+<a name="line441"></a>	//   Add custom validation rules for this model here.
+<a name="line442"></a>	// --------------------------------------------------------------------
+<a name="line443"></a>	
+<a name="line444"></a>    	function _encrypt($field)
+<a name="line445"></a>    	{
+<a name="line446"></a>       		if (!empty($this->{$field}))
+<a name="line447"></a>        		{
+<a name="line448"></a>            		if (empty($this->salt))
+<a name="line449"></a>            		{
+<a name="line450"></a>                			$this->salt = md5(uniqid(rand(), true));
+<a name="line451"></a>            		}
+<a name="line452"></a>
+<a name="line453"></a>            		$this->{$field} = sha1($this->salt . $this->{$field});
+<a name="line454"></a>        	}
+<a name="line455"></a>    	}
+<a name="line456"></a>
+<a name="line457"></a>}</pre>
+<div class="header">
+<h1>GiftFlow API</h1>
+<ul>
+<li><a href="../../overview-summary.html">Overview</a></li>
+<li>Package</li><li>Class</li><li>Tree</li><li><a href="../../overview-files.html">Files</a></li>
+<li><a href="../../deprecated-list.html">Deprecated</a></li>
+<li><a href="../../index-all.html">Index</a></li>
+</ul>
+</div>
+
+<div class="small_links">
+<a href="../../index.html" target="_top">Frames</a>
+<a href="../../source/models/user.php.html" target="_top">No frames</a>
+</div>
+<hr>
+
+<p id="footer">This document was generated by <a href="http://peej.github.com/phpdoctor/">PHPDoctor: The PHP Documentation Creator</a></p>
+
+</body>
+
+</html>

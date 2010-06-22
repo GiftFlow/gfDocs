@@ -1,0 +1,292 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+
+<html lang="en">
+<head>
+
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
+<meta name="generator" content="PHPDoctor 2RC4 (http://peej.github.com/phpdoctor/)">
+<meta name="when" content="Fri, 18 Jun 2010 15:58:03 +0000">
+
+<link rel="stylesheet" type="text/css" href="../../stylesheet.css">
+<link rel="start" href="../../overview-summary.html">
+
+<title>libraries/redux_auth.php (GiftFlow API)</title>
+
+</head>
+<body id="file" onload="parent.document.title=document.title;">
+
+<div class="header">
+<h1>GiftFlow API</h1>
+<ul>
+<li><a href="../../overview-summary.html">Overview</a></li>
+<li>Package</li><li>Class</li><li>Tree</li><li><a href="../../overview-files.html">Files</a></li>
+<li><a href="../../deprecated-list.html">Deprecated</a></li>
+<li><a href="../../index-all.html">Index</a></li>
+</ul>
+</div>
+
+<div class="small_links">
+<a href="../../index.html" target="_top">Frames</a>
+<a href="../../source/libraries/redux_auth.php.html" target="_top">No frames</a>
+</div>
+<hr>
+
+<h1>libraries/redux_auth.php</h1>
+<hr>
+
+<a name="line1"></a><pre><?php  if ( ! defined('BASEPATH')) exit('No direct script access allowed');
+<a name="line2"></a>
+<a name="line3"></a>/**
+<a name="line4"></a>* Redux Authentication 2
+<a name="line5"></a>*/
+<a name="line6"></a>class redux_auth
+<a name="line7"></a>{
+<a name="line8"></a>	/**
+<a name="line9"></a>	 * CodeIgniter global
+<a name="line10"></a>	 *
+<a name="line11"></a>	 * @var string
+<a name="line12"></a>	 **/
+<a name="line13"></a>	protected $ci;
+<a name="line14"></a>
+<a name="line15"></a>	/**
+<a name="line16"></a>	 * account status ('not_activated', etc ...)
+<a name="line17"></a>	 *
+<a name="line18"></a>	 * @var string
+<a name="line19"></a>	 **/
+<a name="line20"></a>	protected $status;
+<a name="line21"></a>
+<a name="line22"></a>	/**
+<a name="line23"></a>	 * __construct
+<a name="line24"></a>	 *
+<a name="line25"></a>	 * @return void
+<a name="line26"></a>	 * @author Mathew
+<a name="line27"></a>	 **/
+<a name="line28"></a>	public function __construct()
+<a name="line29"></a>	{
+<a name="line30"></a>		$this->ci =& get_instance();
+<a name="line31"></a>		$email = $this->ci->config->item('email');
+<a name="line32"></a>		$this->ci->load->library('email', $email);
+<a name="line33"></a>		$this->ci->load->model('user');
+<a name="line34"></a>	}
+<a name="line35"></a>	
+<a name="line36"></a>	/**
+<a name="line37"></a>	 * Activate user.
+<a name="line38"></a>	 *
+<a name="line39"></a>	 * @return void
+<a name="line40"></a>	 * @author Mathew
+<a name="line41"></a>	 **/
+<a name="line42"></a>	public function activate($code)
+<a name="line43"></a>	{
+<a name="line44"></a>		return $this->ci->user->activate($code);
+<a name="line45"></a>	}
+<a name="line46"></a>	
+<a name="line47"></a>	/**
+<a name="line48"></a>	 * Deactivate user.
+<a name="line49"></a>	 *
+<a name="line50"></a>	 * @return void
+<a name="line51"></a>	 * @author Mathew
+<a name="line52"></a>	 **/
+<a name="line53"></a>	public function deactivate($email)
+<a name="line54"></a>	{
+<a name="line55"></a>	    return $this->ci->user->deactivate($email);
+<a name="line56"></a>	}
+<a name="line57"></a>	
+<a name="line58"></a>	/**
+<a name="line59"></a>	 * Change password.
+<a name="line60"></a>	 *
+<a name="line61"></a>	 * @return void
+<a name="line62"></a>	 * @author Mathew
+<a name="line63"></a>	 **/
+<a name="line64"></a>	public function change_password($identity, $old, $new)
+<a name="line65"></a>	{
+<a name="line66"></a>        return $this->ci->user->change_password($identity, $old, $new);
+<a name="line67"></a>	}
+<a name="line68"></a>
+<a name="line69"></a>	/**
+<a name="line70"></a>	 * forgotten password feature
+<a name="line71"></a>	 *
+<a name="line72"></a>	 * @return void
+<a name="line73"></a>	 * @author Mathew
+<a name="line74"></a>	 **/
+<a name="line75"></a>	public function forgotten_password( $email )
+<a name="line76"></a>	{
+<a name="line77"></a>		$forgotten_password = $this->ci->user->forgotten_password_key($email);
+<a name="line78"></a>		
+<a name="line79"></a>		
+<a name="line80"></a>		// Get user information.
+<a name="line81"></a>		$profile = $this->ci->user->profile($email);
+<a name="line82"></a>
+<a name="line83"></a>		$message = $this->ci->load->view($this->ci->config->item('email_templates').'forgotten_password', $data, true);
+<a name="line84"></a>			
+<a name="line85"></a>		$this->ci->email->clear();
+<a name="line86"></a>		$this->ci->email->set_newline("\r\n");
+<a name="line87"></a>		$this->ci->email->from('', '');
+<a name="line88"></a>		$this->ci->email->to($profile->email);
+<a name="line89"></a>		$this->ci->email->subject('Email Verification (Forgotten Password)');
+<a name="line90"></a>		$this->ci->email->message($message);
+<a name="line91"></a>		
+<a name="line92"></a>		// Return true if email successfully sent
+<a name="line93"></a>		if($this->ci->email->send())
+<a name="line94"></a>			return true;
+<a name="line95"></a>		else
+<a name="line96"></a>			return false;
+<a name="line97"></a>	}
+<a name="line98"></a>	
+<a name="line99"></a>	/**
+<a name="line100"></a>	 * undocumented function
+<a name="line101"></a>	 *
+<a name="line102"></a>	 * @return void
+<a name="line103"></a>	 * @author Mathew
+<a name="line104"></a>	 **/
+<a name="line105"></a>	public function forgotten_password_complete($code)
+<a name="line106"></a>	{
+<a name="line107"></a>	    	$identity    	= $this->ci->config->item('identity');
+<a name="line108"></a>	    	$profile          	= $this->ci->user->profile($code);
+<a name="line109"></a>		$forgotten_password_complete = $this->ci->user->forgotten_password_complete($code);
+<a name="line110"></a>
+<a name="line111"></a>		if ($forgotten_password_complete)
+<a name="line112"></a>		{
+<a name="line113"></a>			$data = array('identity'    => $profile->{$identity},
+<a name="line114"></a>				         'new_password' => $this->ci->user->new_password);
+<a name="line115"></a>            
+<a name="line116"></a>			$message = $this->ci->load->view($this->ci->config->item('email_templates').'new_password', $data, true);
+<a name="line117"></a>				
+<a name="line118"></a>			$this->ci->email->clear();
+<a name="line119"></a>			$this->ci->email->set_newline("\r\n");
+<a name="line120"></a>			$this->ci->email->from('', '');
+<a name="line121"></a>			$this->ci->email->to($profile->email);
+<a name="line122"></a>			$this->ci->email->subject('New Password');
+<a name="line123"></a>			$this->ci->email->message($message);
+<a name="line124"></a>			return $this->ci->email->send();
+<a name="line125"></a>		}
+<a name="line126"></a>		else
+<a name="line127"></a>			return false;
+<a name="line128"></a>	}
+<a name="line129"></a>
+<a name="line130"></a>	/**
+<a name="line131"></a>	 * register
+<a name="line132"></a>	 *
+<a name="line133"></a>	 * @return void
+<a name="line134"></a>	 * @author Mathew
+<a name="line135"></a>	 **/
+<a name="line136"></a>	public function register($email, $password, $name)
+<a name="line137"></a>	{
+<a name="line138"></a>	    	$email_activation = $this->ci->config->item('email_activation');
+<a name="line139"></a>	    	$email_folder     = $this->ci->config->item('email_templates');
+<a name="line140"></a>		
+<a name="line141"></a>		// Skip email validation?
+<a name="line142"></a>		if (!$email_activation)
+<a name="line143"></a>		{
+<a name="line144"></a>			return $this->ci->user->register($email, $password, $name);
+<a name="line145"></a>		}
+<a name="line146"></a>		// Email validation routine
+<a name="line147"></a>		else
+<a name="line148"></a>		{
+<a name="line149"></a>			// create db entry
+<a name="line150"></a>			$register = $this->ci->user->register($email, $password, $name);
+<a name="line151"></a>            
+<a name="line152"></a>			if (!$register) 
+<a name="line153"></a>				return false;
+<a name="line154"></a>			
+<a name="line155"></a>			// deactive new user
+<a name="line156"></a>			$deactivate = $this->ci->user->deactivate($email);
+<a name="line157"></a>
+<a name="line158"></a>			if (!$deactivate)
+<a name="line159"></a>				return false;
+<a name="line160"></a>
+<a name="line161"></a>			$activation_code = $this->ci->user->activation_code;
+<a name="line162"></a>
+<a name="line163"></a>			$data = array(  'password'   	=> $password,
+<a name="line164"></a>        					'email'      	=> $email,
+<a name="line165"></a>        					'name'		=> $name,
+<a name="line166"></a>        					'activation' 	=> $activation_code);
+<a name="line167"></a>            
+<a name="line168"></a>            		// load email template, activation. fill with data array.
+<a name="line169"></a>			$message = $this->ci->load->view($email_folder.'activation', $data, true);
+<a name="line170"></a>            		
+<a name="line171"></a>			$this->ci->email->clear();
+<a name="line172"></a>			$this->ci->email->set_newline("\r\n");
+<a name="line173"></a>			$this->ci->email->from($this->ci->config->item('email_from_address'), $this->ci->config->item('email_from_name'));
+<a name="line174"></a>			$this->ci->email->to($email);
+<a name="line175"></a>			$this->ci->email->subject($this->ci->config->item('email_subject'));
+<a name="line176"></a>			$this->ci->email->message($message);
+<a name="line177"></a>			
+<a name="line178"></a>			$status = $this->ci->email->send();
+<a name="line179"></a>			echo $this->ci->email->print_debugger();
+<a name="line180"></a>			return $status;
+<a name="line181"></a>		}
+<a name="line182"></a>	}
+<a name="line183"></a>	
+<a name="line184"></a>	/**
+<a name="line185"></a>	 * login
+<a name="line186"></a>	 *
+<a name="line187"></a>	 * @return void
+<a name="line188"></a>	 * @author Mathew
+<a name="line189"></a>	 **/
+<a name="line190"></a>	public function login($identity, $password)
+<a name="line191"></a>	{
+<a name="line192"></a>		return $this->ci->user->login($identity, $password);
+<a name="line193"></a>	}
+<a name="line194"></a>	
+<a name="line195"></a>	/**
+<a name="line196"></a>	 * logout
+<a name="line197"></a>	 *
+<a name="line198"></a>	 * @return void
+<a name="line199"></a>	 * @author Mathew
+<a name="line200"></a>	 **/
+<a name="line201"></a>	public function logout()
+<a name="line202"></a>	{
+<a name="line203"></a>	    $identity = $this->ci->config->item('identity');
+<a name="line204"></a>	    $this->ci->session->unset_userdata($identity);
+<a name="line205"></a>		$this->ci->session->sess_destroy();
+<a name="line206"></a>	}
+<a name="line207"></a>	
+<a name="line208"></a>	/**
+<a name="line209"></a>	 * logged_in
+<a name="line210"></a>	 *
+<a name="line211"></a>	 * @return void
+<a name="line212"></a>	 * @author Mathew
+<a name="line213"></a>	 **/
+<a name="line214"></a>	public function logged_in()
+<a name="line215"></a>	{
+<a name="line216"></a>	    	$identity = $this->ci->config->item('identity');
+<a name="line217"></a>		return ($this->ci->session->userdata($identity)) ? true : false;
+<a name="line218"></a>	}
+<a name="line219"></a>	
+<a name="line220"></a>	/**
+<a name="line221"></a>	 * Profile
+<a name="line222"></a>	 *
+<a name="line223"></a>	 * @return void
+<a name="line224"></a>	 * @author Mathew
+<a name="line225"></a>	 **/
+<a name="line226"></a>	public function profile()
+<a name="line227"></a>	{
+<a name="line228"></a>	    $session  = $this->ci->config->item('identity');
+<a name="line229"></a>	    $identity = $this->ci->session->userdata($session);
+<a name="line230"></a>	    return $this->ci->user->profile($identity);
+<a name="line231"></a>	}
+<a name="line232"></a>	
+<a name="line233"></a>}
+<a name="line234"></a></pre>
+<div class="header">
+<h1>GiftFlow API</h1>
+<ul>
+<li><a href="../../overview-summary.html">Overview</a></li>
+<li>Package</li><li>Class</li><li>Tree</li><li><a href="../../overview-files.html">Files</a></li>
+<li><a href="../../deprecated-list.html">Deprecated</a></li>
+<li><a href="../../index-all.html">Index</a></li>
+</ul>
+</div>
+
+<div class="small_links">
+<a href="../../index.html" target="_top">Frames</a>
+<a href="../../source/libraries/redux_auth.php.html" target="_top">No frames</a>
+</div>
+<hr>
+
+<p id="footer">This document was generated by <a href="http://peej.github.com/phpdoctor/">PHPDoctor: The PHP Documentation Creator</a></p>
+
+</body>
+
+</html>

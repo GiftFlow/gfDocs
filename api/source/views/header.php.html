@@ -1,0 +1,291 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+
+<html lang="en">
+<head>
+
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
+<meta name="generator" content="PHPDoctor 2RC4 (http://peej.github.com/phpdoctor/)">
+<meta name="when" content="Fri, 18 Jun 2010 15:58:03 +0000">
+
+<link rel="stylesheet" type="text/css" href="../../stylesheet.css">
+<link rel="start" href="../../overview-summary.html">
+
+<title>views/header.php (GiftFlow API)</title>
+
+</head>
+<body id="file" onload="parent.document.title=document.title;">
+
+<div class="header">
+<h1>GiftFlow API</h1>
+<ul>
+<li><a href="../../overview-summary.html">Overview</a></li>
+<li>Package</li><li>Class</li><li>Tree</li><li><a href="../../overview-files.html">Files</a></li>
+<li><a href="../../deprecated-list.html">Deprecated</a></li>
+<li><a href="../../index-all.html">Index</a></li>
+</ul>
+</div>
+
+<div class="small_links">
+<a href="../../index.html" target="_top">Frames</a>
+<a href="../../source/views/header.php.html" target="_top">No frames</a>
+</div>
+<hr>
+
+<h1>views/header.php</h1>
+<hr>
+
+<a name="line1"></a><pre><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<a name="line2"></a><html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<a name="line3"></a><head>
+<a name="line4"></a>	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<a name="line5"></a>	<meta name="google-site-verification" content="2ILeElWPtRUAwihUuo_10yI5t1wSD-I4cKTXdapL7n8" />
+<a name="line6"></a>
+<a name="line7"></a>	<?php 
+<a name="line8"></a>	// This function outputs the special meta tags used by the Facebook Open Graph. 
+<a name="line9"></a>	// Location: helpers/elements_helper.php
+<a name="line10"></a>	echo facebook_open_graph();
+<a name="line11"></a>	?>
+<a name="line12"></a>
+<a name="line13"></a>	<title><?php echo $title; ?> | GiftFlow</title>
+<a name="line14"></a>	<link rel='stylesheet' href='<?php echo base_url(); ?>assets/css/style.css' />
+<a name="line15"></a>	<link rel='stylesheet' href='<?php echo base_url(); ?>assets/css/green/jquery-ui.php' />
+<a name="line16"></a>
+<a name="line17"></a>
+<a name="line18"></a><?php
+<a name="line19"></a>if(isset($css))
+<a name="line20"></a>{
+<a name="line21"></a>	foreach($css as $val)
+<a name="line22"></a>	{
+<a name="line23"></a>		echo '<link rel="stylesheet" href="'.base_url().'assets/css/'.$val.'" />';
+<a name="line24"></a>	}
+<a name="line25"></a>}
+<a name="line26"></a>?>
+<a name="line27"></a><script type="text/javascript" src="<?php echo base_url(); ?>assets/javascript/jquery.php"></script>
+<a name="line28"></a><script type="text/javascript" src="<?php echo base_url(); ?>assets/javascript/ui.php"></script>
+<a name="line29"></a><script type="text/javascript">
+<a name="line30"></a>var addthis_config = {
+<a name="line31"></a>						username: 'giftflow',
+<a name="line32"></a>						ui_email_note: 'you custom message here',
+<a name="line33"></a>						ui_email_to: 'you@yahoo.com',
+<a name="line34"></a>						ui_email_from: 'me@yahoo.com'
+<a name="line35"></a>					};
+<a name="line36"></a></script>
+<a name="line37"></a><script type="text/javascript" src="http://s7.addthis.com/js/250/addthis_widget.js"></script>
+<a name="line38"></a>
+<a name="line39"></a><?php
+<a name="line40"></a>if(!empty($googlemaps)&&$googlemaps==TRUE)
+<a name="line41"></a>{
+<a name="line42"></a>	echo "<script type='text/javascript' src='http://maps.google.com/maps/api/js?sensor=false'></script>";
+<a name="line43"></a>}
+<a name="line44"></a>if(isset($js))
+<a name="line45"></a>{
+<a name="line46"></a>	foreach($js as $val)
+<a name="line47"></a>	{
+<a name="line48"></a>		echo '<script type="text/javascript" src="'.base_url().'assets/javascript/'.$val.'"></script>';
+<a name="line49"></a>	}
+<a name="line50"></a>}
+<a name="line51"></a>?>
+<a name="line52"></a>
+<a name="line53"></a><script type="text/javascript">
+<a name="line54"></a>
+<a name="line55"></a>	function deleteTag_old(id, name, count) {
+<a name="line56"></a>	  var answer = confirm("Are you sure you want to delete tag '" + name + "'? If you do, it will be removed from the "+ count +" goods that use it.");
+<a name="line57"></a>
+<a name="line58"></a>		if (answer)
+<a name="line59"></a>		  $.post("<?php echo site_url('/admin/deleteTag/') ?>" + "/" + id,
+<a name="line60"></a>				{ }, function(data)
+<a name="line61"></a>				{ location.reload(); }
+<a name="line62"></a>			);
+<a name="line63"></a>	}
+<a name="line64"></a>
+<a name="line65"></a>	function deleteTag(id, name, count) {
+<a name="line66"></a>		var txt = "Are you sure you want to delete tag '" + name + "'? If you do, it will be removed from the "+ count +" goods that use it.";
+<a name="line67"></a>		$.prompt(txt,{ callback: function(v,m,f){
+<a name="line68"></a>				if (v)
+<a name="line69"></a>					$.post("<?php echo site_url('/admin/deleteTag/') ?>" + "/" + id,
+<a name="line70"></a>					{ }, function(data)
+<a name="line71"></a>					{ location.reload(); }
+<a name="line72"></a>			)
+<a name="line73"></a>		},  buttons: { Ok: true, Cancel: false }, focus: 1 });
+<a name="line74"></a>	}
+<a name="line75"></a>
+<a name="line76"></a>	function renameTag(id, name, count){
+<a name="line77"></a>		var txt = "Rename tag '" + name + "' to <input type=\"text\" id=\"renameTo\" name=\"renameTo\" />";
+<a name="line78"></a>		$.prompt(txt,{ callback: function(v,m,f){
+<a name="line79"></a>				if (v)
+<a name="line80"></a>					$.post("<?php echo site_url('/admin/renameTag/') ?>" + "/" + id + "/" + f.renameTo,
+<a name="line81"></a>					{ }, function(data)
+<a name="line82"></a>					{ location.reload(); }
+<a name="line83"></a>			)
+<a name="line84"></a>		},  buttons: { Ok: true, Cancel: false }, focus: 1 });
+<a name="line85"></a>	}
+<a name="line86"></a>	
+<a name="line87"></a>	function mergeTag(id, name, count){
+<a name="line88"></a>	
+<a name="line89"></a>		$.post("<?php echo site_url('/admin/tagSelectList') ?>", {}, function(tagSelectList){
+<a name="line90"></a>
+<a name="line91"></a>			var txt = "Merge tag '" + name + "' into <select id=\"mergeTo\" name=\"mergeTo\" >" + tagSelectList + "</select>";
+<a name="line92"></a>			$.prompt(txt,{ callback: function(v,m,f){
+<a name="line93"></a>
+<a name="line94"></a>					if (v)
+<a name="line95"></a>						$.post("<?php echo site_url('/admin/mergeTag/') ?>" + "/" + id + "/" + f.mergeTo,
+<a name="line96"></a>						{ }, function(data)
+<a name="line97"></a>						{ location.reload(); }
+<a name="line98"></a>				)
+<a name="line99"></a>
+<a name="line100"></a>			},  buttons: { Ok: true, Cancel: false }, focus: 1 });
+<a name="line101"></a>
+<a name="line102"></a>		});
+<a name="line103"></a>		
+<a name="line104"></a>	}
+<a name="line105"></a>
+<a name="line106"></a></script>
+<a name="line107"></a>
+<a name="line108"></a></head>
+<a name="line109"></a><body>
+<a name="line110"></a>
+<a name="line111"></a><div id='header'>
+<a name="line112"></a>	<div class='header_centered'>
+<a name="line113"></a>		<a href="<?php echo site_url(); ?>" id='logo'><img src="<?php echo base_url(); ?>assets/images/gift_flow_new_navbar.png" /></a>
+<a name="line114"></a>		<div id='session'>
+<a name="line115"></a>			<?php 
+<a name="line116"></a>			if(!empty($logged_in)&&$logged_in)
+<a name="line117"></a>			{
+<a name="line118"></a>			?>
+<a name="line119"></a>				<ul id='you_menu'>
+<a name="line120"></a>					<li>
+<a name="line121"></a>						<a href='<?php echo site_url(''); ?>' id='you'>
+<a name="line122"></a>							<?php if(!empty($userdata['photo_thumb_url'])){ echo "<img src='".$userdata['photo_thumb_url']."' id='you_img'  />"; }  ?>
+<a name="line123"></a>							<span style='float: left;'>You</span>
+<a name="line124"></a>							<span class='ui-icon ui-icon-triangle-1-s left' style="background-image: url('<?php echo base_url(); ?>assets/css/green/images/ui-icons_ffffff_256x240.png'); margin-left: 10px;"></span>
+<a name="line125"></a>							<div style='clear: both;'></div>
+<a name="line126"></a>						</a>
+<a name="line127"></a>						<ul id='you_dropdown'>
+<a name="line128"></a>							<li><a href='<?php echo site_url(''); ?>'>Dashboard</a></li>
+<a name="line129"></a>
+<a name="line130"></a>								<?php if ($this->auth->validate(100)) { ?>
+<a name="line131"></a>									<li><a href='<?php echo site_url('admin'); ?>'>Admin Area</a></li>
+<a name="line132"></a>								<?php } ?>
+<a name="line133"></a>								
+<a name="line134"></a>							<li><a href='<?php echo site_url('give'); ?>'>Your Gifts</a></li>
+<a name="line135"></a>							<li><a  href='<?php echo site_url('get'); ?>'>Your Needs</a></li>
+<a name="line136"></a>							<li><a  href='<?php echo site_url('account'); ?>'>Settings</a></li>
+<a name="line137"></a>							<li><a href='<?php echo site_url('logout'); ?>'>Log Out</a></li>
+<a name="line138"></a>						</ul>
+<a name="line139"></a>					</li>
+<a name="line140"></a>				</ul>
+<a name="line141"></a>			<?php 
+<a name="line142"></a>			}
+<a name="line143"></a>			else
+<a name="line144"></a>			{
+<a name="line145"></a>			?>
+<a name="line146"></a>				<ul id='you_menu'>
+<a name="line147"></a>					<li><a href='<?php echo site_url('login'); ?>' id='login'>Login</a></li>
+<a name="line148"></a>					<li><a href='<?php echo site_url('register'); ?>' id='signup'>Sign Up</a></li>
+<a name="line149"></a>				</ul>
+<a name="line150"></a>			<?php
+<a name="line151"></a>			}
+<a name="line152"></a>			?>
+<a name="line153"></a>		</div>
+<a name="line154"></a>		<?php $segment = $this->uri->segment(1); ?>
+<a name="line155"></a>		<ul id='nav'>
+<a name="line156"></a>			<li><a href="<?php echo site_url(); if($segment==false) echo '" class="active'; ?>">Home</a></li>
+<a name="line157"></a>			<li><a href="<?php echo site_url('find'); if($segment=="find") echo '" class="active'; ?>">Find</a></li>
+<a name="line158"></a>			<li><a href="<?php echo site_url('give'); if($segment=="give") echo '" class="active'; ?>">Give</a></li>
+<a name="line159"></a>			<li><a href="<?php echo site_url('get'); if($segment=="get") echo '" class="active'; ?>">Get</a></li>
+<a name="line160"></a>			<li><a href="<?php echo site_url('about'); if($segment=="about") echo '" class="active'; ?>">About</a></li>
+<a name="line161"></a>		</ul>
+<a name="line162"></a>		<div style='clear:both;display: block;'></div>
+<a name="line163"></a>	</div>		
+<a name="line164"></a></div>
+<a name="line165"></a><div id='subheader'>
+<a name="line166"></a>	<div class='header_centered'>
+<a name="line167"></a>	</div>
+<a name="line168"></a></div>
+<a name="line169"></a><div class='wrapper'>
+<a name="line170"></a>
+<a name="line171"></a><?php
+<a name="line172"></a>// Output flashdata as javascript variable so that it can be displayed in jQuery
+<a name="line173"></a>$flashdata_success = $this->session->flashdata('success');
+<a name="line174"></a>$flashdata_error = $this->session->flashdata('error');
+<a name="line175"></a>
+<a name="line176"></a>if (!empty($flashdata_success)) 
+<a name="line177"></a>{
+<a name="line178"></a>	if(is_array($flashdata_success))
+<a name="line179"></a>	{
+<a name="line180"></a>		$array = $flashdata_success;
+<a name="line181"></a>		$flashdata_success = '';
+<a name="line182"></a>		foreach($array as $val) $flashdata_success .= $val." ";
+<a name="line183"></a>	}
+<a name="line184"></a>	echo "<noscript><p class='alert_success'>";
+<a name="line185"></a>	echo $flashdata_success;
+<a name="line186"></a>	echo "</p></noscript>";
+<a name="line187"></a>	echo '<script> var alert_success = "';
+<a name="line188"></a>	echo $flashdata_success;
+<a name="line189"></a>	echo '";</script>';
+<a name="line190"></a>}
+<a name="line191"></a>else
+<a name="line192"></a>{
+<a name="line193"></a>	echo "<script>var alert_success=false;</script>";
+<a name="line194"></a>}
+<a name="line195"></a>if (!empty($flashdata_error)) 
+<a name="line196"></a>{
+<a name="line197"></a>	if(is_array($flashdata_error))
+<a name="line198"></a>	{
+<a name="line199"></a>		$array = $flashdata_error;
+<a name="line200"></a>		$flashdata_error = '';
+<a name="line201"></a>		foreach($array as $val) $flashdata_error .= $val." ";
+<a name="line202"></a>	}
+<a name="line203"></a>	echo "<noscript><p class='alert_error'>";
+<a name="line204"></a>	echo $flashdata_error;
+<a name="line205"></a>	echo "</p></noscript>";
+<a name="line206"></a>	echo '<script> var alert_error = "';
+<a name="line207"></a>	echo $flashdata_error;
+<a name="line208"></a>	echo '";</script>';
+<a name="line209"></a>}
+<a name="line210"></a>else
+<a name="line211"></a>{
+<a name="line212"></a>	echo "<script>var alert_error=false;</script>";
+<a name="line213"></a>}
+<a name="line214"></a>?>
+<a name="line215"></a>
+<a name="line216"></a>
+<a name="line217"></a><?php
+<a name="line218"></a>// Display breadcrumbs
+<a name="line219"></a>if(!empty($breadcrumbs)) { ?>
+<a name="line220"></a>	<ul class="breadcrumbs">
+<a name="line221"></a>		<?php foreach($breadcrumbs as $crumb) { ?>
+<a name="line222"></a>		<li>
+<a name="line223"></a>			<?php if(!empty($crumb['href'])) { ?>
+<a name="line224"></a>				<a href='<?php echo $crumb['href']; ?>'><?php echo $crumb['title']; ?></a><span class='ui-icon ui-icon-triangle-1-e' id='breadcrumb_delimiter'></span>
+<a name="line225"></a>			<?php } else { ?>
+<a name="line226"></a>				<span class='current'><?php echo $crumb['title']; ?></span>
+<a name="line227"></a>			<?php } ?>
+<a name="line228"></a>		</li>
+<a name="line229"></a>		<?php } ?>
+<a name="line230"></a>	</ul>
+<a name="line231"></a><div style="clear: both;"></div>
+<a name="line232"></a>
+<a name="line233"></a><?php } ?></pre>
+<div class="header">
+<h1>GiftFlow API</h1>
+<ul>
+<li><a href="../../overview-summary.html">Overview</a></li>
+<li>Package</li><li>Class</li><li>Tree</li><li><a href="../../overview-files.html">Files</a></li>
+<li><a href="../../deprecated-list.html">Deprecated</a></li>
+<li><a href="../../index-all.html">Index</a></li>
+</ul>
+</div>
+
+<div class="small_links">
+<a href="../../index.html" target="_top">Frames</a>
+<a href="../../source/views/header.php.html" target="_top">No frames</a>
+</div>
+<hr>
+
+<p id="footer">This document was generated by <a href="http://peej.github.com/phpdoctor/">PHPDoctor: The PHP Documentation Creator</a></p>
+
+</body>
+
+</html>

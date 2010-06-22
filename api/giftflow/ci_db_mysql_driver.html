@@ -1,0 +1,735 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+
+<html lang="en">
+<head>
+
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
+<meta name="generator" content="PHPDoctor 2RC4 (http://peej.github.com/phpdoctor/)">
+<meta name="when" content="Sun, 20 Jun 2010 17:43:50 +0000">
+
+<link rel="stylesheet" type="text/css" href="../stylesheet.css">
+<link rel="start" href="../overview-summary.html">
+
+<title>CI_DB_mysql_driver (GiftFlow API)</title>
+
+</head>
+<body id="definition" onload="parent.document.title=document.title;">
+
+<div class="header">
+<h1>GiftFlow API</h1>
+<ul>
+<li><a href="../overview-summary.html">Overview</a></li>
+<li><a href="../giftflow/package-summary.html">Package</a></li>
+<li class="active">Class</li>
+<li><a href="../giftflow/package-tree.html">Tree</a></li>
+<li><a href="../overview-files.html">Files</a></li>
+<li><a href="../deprecated-list.html">Deprecated</a></li>
+<li><a href="../index-all.html">Index</a></li>
+</ul>
+</div>
+
+<div class="small_links">
+<a href="../index.html" target="_top">Frames</a>
+<a href="../giftflow/ci_db_mysql_driver.html" target="_top">No frames</a>
+</div>
+<div class="small_links">
+Summary: <a href="#summary_field">Field</a> | <a href="#summary_method">Method</a> | <a href="#summary_constr">Constr</a>
+Detail: <a href="#detail_field">Field</a> | <a href="#detail_method">Method</a> | <a href="#summary_constr">Constr</a>
+</div>
+<hr>
+
+<div class="qualifiedName">GiftFlow\CI_DB_mysql_driver</div>
+<a href="../source/database/drivers/mysql/mysql_driver.php.html#line31" class="location">database/drivers/mysql/mysql_driver.php at line 31</a>
+
+<h1>Class CI_DB_mysql_driver</h1>
+
+<pre class="tree">CI_DB<br> └─<strong>CI_DB_mysql_driver</strong><br /></pre>
+
+<hr>
+
+<p class="signature">public  class <strong>CI_DB_mysql_driver</strong><br>extends CI_DB
+
+</p>
+
+<div class="comment" id="overview_description"><p>MySQL Database Adapter Class</p><p>Note: _DB is an extender class that the app controller
+creates dynamically based on whether the active record
+class is being used or not.</p></div>
+
+<dl>
+<dt>Package		CodeIgniter.</dt>
+<dt>Subpackage	Drivers.</dt>
+<dt>Category	Database.</dt>
+<dt>Author		ExpressionEngine:</dt>
+<dd>Dev Team</dd>
+<dt>Link		http://codeigniter.com/user_guide/database/.</dt>
+</dl>
+<hr>
+
+<table id="summary_field">
+<tr><th colspan="2">Field Summary</th></tr>
+<tr>
+<td class="type">private  mixed</td>
+<td class="description"><p class="name"><a href="#_count_string">$_count_string</a></p><p class="description">The syntax to count rows is slightly different across different
+database engines, so this string appears in each driver and is
+used for the count_all() and count_all_results() functions.</p></td>
+</tr>
+<tr>
+<td class="type">private  mixed</td>
+<td class="description"><p class="name"><a href="#_escape_char">$_escape_char</a></p></td>
+</tr>
+<tr>
+<td class="type">private  mixed</td>
+<td class="description"><p class="name"><a href="#_like_escape_chr">$_like_escape_chr</a></p></td>
+</tr>
+<tr>
+<td class="type">private  mixed</td>
+<td class="description"><p class="name"><a href="#_like_escape_str">$_like_escape_str</a></p></td>
+</tr>
+<tr>
+<td class="type">private  mixed</td>
+<td class="description"><p class="name"><a href="#_random_keyword">$_random_keyword</a></p></td>
+</tr>
+<tr>
+<td class="type"> mixed</td>
+<td class="description"><p class="name"><a href="#dbdriver">$dbdriver</a></p></td>
+</tr>
+<tr>
+<td class="type"> mixed</td>
+<td class="description"><p class="name"><a href="#delete_hack">$delete_hack</a></p><p class="description">Whether to use the MySQL "delete hack" which allows the number
+of affected rows to be shown. </p></td>
+</tr>
+</table>
+
+<table id="summary_method">
+<tr><th colspan="2">Method Summary</th></tr>
+<tr>
+<td class="type">private  void</td>
+<td class="description"><p class="name"><a href="#_close()">_close</a>(mixed conn_id)</p><p class="description">Close DB Connection</p></td>
+</tr>
+<tr>
+<td class="type">private  void</td>
+<td class="description"><p class="name"><a href="#_delete()">_delete</a>(mixed table, mixed where)</p><p class="description">Delete statementGenerates a platform-specific delete string from the supplied data</p></td>
+</tr>
+<tr>
+<td class="type">private  void</td>
+<td class="description"><p class="name"><a href="#_error_message()">_error_message</a>()</p><p class="description">The error message string</p></td>
+</tr>
+<tr>
+<td class="type">private  void</td>
+<td class="description"><p class="name"><a href="#_error_number()">_error_number</a>()</p><p class="description">The error message number</p></td>
+</tr>
+<tr>
+<td class="type">private  void</td>
+<td class="description"><p class="name"><a href="#_escape_identifiers()">_escape_identifiers</a>(mixed item)</p><p class="description">Escape the SQL IdentifiersThis function escapes column and table names</p></td>
+</tr>
+<tr>
+<td class="type">private  void</td>
+<td class="description"><p class="name"><a href="#_execute()">_execute</a>(mixed sql)</p><p class="description">Execute the query</p></td>
+</tr>
+<tr>
+<td class="type">private  void</td>
+<td class="description"><p class="name"><a href="#_field_data()">_field_data</a>(mixed table)</p><p class="description">Field data queryGenerates a platform-specific query so that the column data can be retrieved</p></td>
+</tr>
+<tr>
+<td class="type">private  void</td>
+<td class="description"><p class="name"><a href="#_from_tables()">_from_tables</a>(mixed tables)</p><p class="description">From TablesThis function implicitly groups FROM tables so there is no confusion
+about operator precedence in harmony with SQL standards</p></td>
+</tr>
+<tr>
+<td class="type">private  void</td>
+<td class="description"><p class="name"><a href="#_insert()">_insert</a>(mixed table, mixed keys, mixed values)</p><p class="description">Insert statementGenerates a platform-specific insert string from the supplied data</p></td>
+</tr>
+<tr>
+<td class="type">private  void</td>
+<td class="description"><p class="name"><a href="#_limit()">_limit</a>(mixed sql, mixed limit, mixed offset)</p><p class="description">Limit stringGenerates a platform-specific LIMIT clause</p></td>
+</tr>
+<tr>
+<td class="type">private  void</td>
+<td class="description"><p class="name"><a href="#_list_columns()">_list_columns</a>(str table)</p><p class="description">Show column queryGenerates a platform-specific query string so that the column names can be fetched</p></td>
+</tr>
+<tr>
+<td class="type">private  void</td>
+<td class="description"><p class="name"><a href="#_list_tables()">_list_tables</a>(bool prefix_limit)</p><p class="description">List table queryGenerates a platform-specific query string so that the table names can be fetched</p></td>
+</tr>
+<tr>
+<td class="type">private  void</td>
+<td class="description"><p class="name"><a href="#_prep_query()">_prep_query</a>(mixed sql)</p><p class="description">Prep the queryIf needed, each database adapter can prep the query string</p></td>
+</tr>
+<tr>
+<td class="type">private  void</td>
+<td class="description"><p class="name"><a href="#_truncate()">_truncate</a>(mixed table)</p><p class="description">Truncate statementGenerates a platform-specific truncate string from the supplied data
+If the database does not support the truncate() command
+This function maps to "DELETE FROM table"</p></td>
+</tr>
+<tr>
+<td class="type">private  void</td>
+<td class="description"><p class="name"><a href="#_update()">_update</a>(mixed table, mixed values, mixed where, mixed orderby)</p><p class="description">Update statementGenerates a platform-specific update string from the supplied data</p></td>
+</tr>
+<tr>
+<td class="type">private  void</td>
+<td class="description"><p class="name"><a href="#_version()">_version</a>()</p><p class="description">Version number query string</p></td>
+</tr>
+<tr>
+<td class="type"> void</td>
+<td class="description"><p class="name"><a href="#affected_rows()">affected_rows</a>()</p><p class="description">Affected Rows</p></td>
+</tr>
+<tr>
+<td class="type"> void</td>
+<td class="description"><p class="name"><a href="#count_all()">count_all</a>(str table)</p><p class="description">"Count All" queryGenerates a platform-specific query string that counts all records in
+the specified database</p></td>
+</tr>
+<tr>
+<td class="type"> void</td>
+<td class="description"><p class="name"><a href="#db_connect()">db_connect</a>()</p><p class="description">Non-persistent database connection</p></td>
+</tr>
+<tr>
+<td class="type"> void</td>
+<td class="description"><p class="name"><a href="#db_pconnect()">db_pconnect</a>()</p><p class="description">Persistent database connection</p></td>
+</tr>
+<tr>
+<td class="type"> void</td>
+<td class="description"><p class="name"><a href="#db_select()">db_select</a>()</p><p class="description">Select the database</p></td>
+</tr>
+<tr>
+<td class="type"> void</td>
+<td class="description"><p class="name"><a href="#db_set_charset()">db_set_charset</a>(mixed charset, mixed collation)</p><p class="description">Set client character set</p></td>
+</tr>
+<tr>
+<td class="type"> void</td>
+<td class="description"><p class="name"><a href="#escape_str()">escape_str</a>(mixed str, bool like)</p><p class="description">Escape String</p></td>
+</tr>
+<tr>
+<td class="type"> void</td>
+<td class="description"><p class="name"><a href="#insert_id()">insert_id</a>()</p><p class="description">Insert ID</p></td>
+</tr>
+<tr>
+<td class="type"> void</td>
+<td class="description"><p class="name"><a href="#reconnect()">reconnect</a>()</p><p class="description">ReconnectKeep / reestablish the db connection if no queries have been
+sent for a length of time exceeding the server's idle timeout</p></td>
+</tr>
+<tr>
+<td class="type"> void</td>
+<td class="description"><p class="name"><a href="#trans_begin()">trans_begin</a>(bool test_mode)</p><p class="description">Begin Transaction</p></td>
+</tr>
+<tr>
+<td class="type"> void</td>
+<td class="description"><p class="name"><a href="#trans_commit()">trans_commit</a>()</p><p class="description">Commit Transaction</p></td>
+</tr>
+<tr>
+<td class="type"> void</td>
+<td class="description"><p class="name"><a href="#trans_rollback()">trans_rollback</a>()</p><p class="description">Rollback Transaction</p></td>
+</tr>
+</table>
+
+<h2 id="detail_field">Field Detail</h2>
+<a href="../source/database/drivers/mysql/mysql_driver.php.html#line54" class="location">database/drivers/mysql/mysql_driver.php at line 54</a>
+
+<h3 id="_count_string">_count_string</h3>
+<code class="signature">private  mixed <strong>$_count_string</strong> = 'SELECT COUNT(*) AS '</code>
+<div class="details">
+<p>The syntax to count rows is slightly different across different
+database engines, so this string appears in each driver and is
+used for the count_all() and count_all_results() functions.</p></div>
+
+<hr>
+
+<a href="../source/database/drivers/mysql/mysql_driver.php.html#line36" class="location">database/drivers/mysql/mysql_driver.php at line 36</a>
+
+<h3 id="_escape_char">_escape_char</h3>
+<code class="signature">private  mixed <strong>$_escape_char</strong> = '`'</code>
+<div class="details">
+</div>
+
+<hr>
+
+<a href="../source/database/drivers/mysql/mysql_driver.php.html#line40" class="location">database/drivers/mysql/mysql_driver.php at line 40</a>
+
+<h3 id="_like_escape_chr">_like_escape_chr</h3>
+<code class="signature">private  mixed <strong>$_like_escape_chr</strong> = ''</code>
+<div class="details">
+</div>
+
+<hr>
+
+<a href="../source/database/drivers/mysql/mysql_driver.php.html#line39" class="location">database/drivers/mysql/mysql_driver.php at line 39</a>
+
+<h3 id="_like_escape_str">_like_escape_str</h3>
+<code class="signature">private  mixed <strong>$_like_escape_str</strong> = ''</code>
+<div class="details">
+</div>
+
+<hr>
+
+<a href="../source/database/drivers/mysql/mysql_driver.php.html#line55" class="location">database/drivers/mysql/mysql_driver.php at line 55</a>
+
+<h3 id="_random_keyword">_random_keyword</h3>
+<code class="signature">private  mixed <strong>$_random_keyword</strong> = ' RAND()'</code>
+<div class="details">
+</div>
+
+<hr>
+
+<a href="../source/database/drivers/mysql/mysql_driver.php.html#line33" class="location">database/drivers/mysql/mysql_driver.php at line 33</a>
+
+<h3 id="dbdriver">dbdriver</h3>
+<code class="signature">public  mixed <strong>$dbdriver</strong> = 'mysql'</code>
+<div class="details">
+</div>
+
+<hr>
+
+<a href="../source/database/drivers/mysql/mysql_driver.php.html#line47" class="location">database/drivers/mysql/mysql_driver.php at line 47</a>
+
+<h3 id="delete_hack">delete_hack</h3>
+<code class="signature">public  mixed <strong>$delete_hack</strong> = TRUE</code>
+<div class="details">
+<p>Whether to use the MySQL "delete hack" which allows the number
+of affected rows to be shown. Uses a preg_replace when enabled,
+adding a bit more processing to all queries.</p></div>
+
+<hr>
+
+<h2 id="detail_method">Method Detail</h2><div class="method_detail">
+<div class='method'><a href="../source/database/drivers/mysql/mysql_driver.php.html#line661" class="location">database/drivers/mysql/mysql_driver.php at line 661</a>
+
+<h3 id="_close()">_close</h3>
+<code class="signature">private  void <strong>_close</strong>(mixed conn_id)</code>
+<div class="details">
+<p>Close DB Connection</p><dl>
+<dt>Access	public.</dt>
+<dt>Param	resource.</dt>
+<dt>Return	void.</dt>
+</dl>
+</div></div>
+
+
+
+<div class='method'><a href="../source/database/drivers/mysql/mysql_driver.php.html#line604" class="location">database/drivers/mysql/mysql_driver.php at line 604</a>
+
+<h3 id="_delete()">_delete</h3>
+<code class="signature">private  void <strong>_delete</strong>(mixed table, mixed where)</code>
+<div class="details">
+<p>Delete statement</p><p>Generates a platform-specific delete string from the supplied data</p><dl>
+<dt>Access	public.</dt>
+<dt>Param	string	the:</dt>
+<dd>table name</dd>
+<dd>limit clause</dd>
+<dt>Param	array	the:</dt>
+<dd>where clause</dd>
+<dt>Return	string.</dt>
+</dl>
+</div></div>
+
+
+
+<div class='method'><a href="../source/database/drivers/mysql/mysql_driver.php.html#line438" class="location">database/drivers/mysql/mysql_driver.php at line 438</a>
+
+<h3 id="_error_message()">_error_message</h3>
+<code class="signature">private  void <strong>_error_message</strong>()</code>
+<div class="details">
+<p>The error message string</p><dl>
+<dt>Access	private.</dt>
+<dt>Return	string.</dt>
+</dl>
+</div></div>
+
+
+
+<div class='method'><a href="../source/database/drivers/mysql/mysql_driver.php.html#line451" class="location">database/drivers/mysql/mysql_driver.php at line 451</a>
+
+<h3 id="_error_number()">_error_number</h3>
+<code class="signature">private  void <strong>_error_number</strong>()</code>
+<div class="details">
+<p>The error message number</p><dl>
+<dt>Access	private.</dt>
+<dt>Return	integer.</dt>
+</dl>
+</div></div>
+
+
+
+<div class='method'><a href="../source/database/drivers/mysql/mysql_driver.php.html#line467" class="location">database/drivers/mysql/mysql_driver.php at line 467</a>
+
+<h3 id="_escape_identifiers()">_escape_identifiers</h3>
+<code class="signature">private  void <strong>_escape_identifiers</strong>(mixed item)</code>
+<div class="details">
+<p>Escape the SQL Identifiers</p><p>This function escapes column and table names</p><dl>
+<dt>Access	private.</dt>
+<dt>Param	string.</dt>
+<dt>Return	string.</dt>
+</dl>
+</div></div>
+
+
+
+<div class='method'><a href="../source/database/drivers/mysql/mysql_driver.php.html#line160" class="location">database/drivers/mysql/mysql_driver.php at line 160</a>
+
+<h3 id="_execute()">_execute</h3>
+<code class="signature">private  void <strong>_execute</strong>(mixed sql)</code>
+<div class="details">
+<p>Execute the query</p><dl>
+<dt>Access	private:</dt>
+<dd>called by the base class</dd>
+<dt>Param	string	an:</dt>
+<dd>SQL query</dd>
+<dt>Return	resource.</dt>
+</dl>
+</div></div>
+
+
+
+<div class='method'><a href="../source/database/drivers/mysql/mysql_driver.php.html#line425" class="location">database/drivers/mysql/mysql_driver.php at line 425</a>
+
+<h3 id="_field_data()">_field_data</h3>
+<code class="signature">private  void <strong>_field_data</strong>(mixed table)</code>
+<div class="details">
+<p>Field data query</p><p>Generates a platform-specific query so that the column data can be retrieved</p><dl>
+<dt>Access	public.</dt>
+<dt>Param	string	the:</dt>
+<dd>table name</dd>
+<dt>Return	object.</dt>
+</dl>
+</div></div>
+
+
+
+<div class='method'><a href="../source/database/drivers/mysql/mysql_driver.php.html#line510" class="location">database/drivers/mysql/mysql_driver.php at line 510</a>
+
+<h3 id="_from_tables()">_from_tables</h3>
+<code class="signature">private  void <strong>_from_tables</strong>(mixed tables)</code>
+<div class="details">
+<p>From Tables</p><p>This function implicitly groups FROM tables so there is no confusion
+about operator precedence in harmony with SQL standards</p><dl>
+<dt>Access	public.</dt>
+<dt>Param	type.</dt>
+<dt>Return	type.</dt>
+</dl>
+</div></div>
+
+
+
+<div class='method'><a href="../source/database/drivers/mysql/mysql_driver.php.html#line533" class="location">database/drivers/mysql/mysql_driver.php at line 533</a>
+
+<h3 id="_insert()">_insert</h3>
+<code class="signature">private  void <strong>_insert</strong>(mixed table, mixed keys, mixed values)</code>
+<div class="details">
+<p>Insert statement</p><p>Generates a platform-specific insert string from the supplied data</p><dl>
+<dt>Access	public.</dt>
+<dt>Param	string	the:</dt>
+<dd>table name</dd>
+<dt>Param	array	the:</dt>
+<dd>insert keys</dd>
+<dd>insert values</dd>
+<dt>Return	string.</dt>
+</dl>
+</div></div>
+
+
+
+<div class='method'><a href="../source/database/drivers/mysql/mysql_driver.php.html#line638" class="location">database/drivers/mysql/mysql_driver.php at line 638</a>
+
+<h3 id="_limit()">_limit</h3>
+<code class="signature">private  void <strong>_limit</strong>(mixed sql, mixed limit, mixed offset)</code>
+<div class="details">
+<p>Limit string</p><p>Generates a platform-specific LIMIT clause</p><dl>
+<dt>Access	public.</dt>
+<dt>Param	string	the:</dt>
+<dd>sql query string</dd>
+<dt>Param	integer	the:</dt>
+<dd>number of rows to limit the query to</dd>
+<dd>offset value</dd>
+<dt>Return	string.</dt>
+</dl>
+</div></div>
+
+
+
+<div class='method'><a href="../source/database/drivers/mysql/mysql_driver.php.html#line409" class="location">database/drivers/mysql/mysql_driver.php at line 409</a>
+
+<h3 id="_list_columns()">_list_columns</h3>
+<code class="signature">private  void <strong>_list_columns</strong>(str table)</code>
+<div class="details">
+<p>Show column query</p><p>Generates a platform-specific query string so that the column names can be fetched</p><dl>
+<dt>Access	public.</dt>
+<dt>Param	string	the:</dt>
+<dd>table name</dd>
+<dt>Return	string.</dt>
+</dl>
+</div></div>
+
+
+
+<div class='method'><a href="../source/database/drivers/mysql/mysql_driver.php.html#line386" class="location">database/drivers/mysql/mysql_driver.php at line 386</a>
+
+<h3 id="_list_tables()">_list_tables</h3>
+<code class="signature">private  void <strong>_list_tables</strong>(bool prefix_limit)</code>
+<div class="details">
+<p>List table query</p><p>Generates a platform-specific query string so that the table names can be fetched</p><dl>
+<dt>Access	private.</dt>
+<dt>Param	boolean.</dt>
+<dt>Return	string.</dt>
+</dl>
+</div></div>
+
+
+
+<div class='method'><a href="../source/database/drivers/mysql/mysql_driver.php.html#line177" class="location">database/drivers/mysql/mysql_driver.php at line 177</a>
+
+<h3 id="_prep_query()">_prep_query</h3>
+<code class="signature">private  void <strong>_prep_query</strong>(mixed sql)</code>
+<div class="details">
+<p>Prep the query</p><p>If needed, each database adapter can prep the query string</p><dl>
+<dt>Access	private:</dt>
+<dd>called by execute()</dd>
+<dt>Param	string	an:</dt>
+<dd>SQL query</dd>
+<dt>Return	string.</dt>
+</dl>
+</div></div>
+
+
+
+<div class='method'><a href="../source/database/drivers/mysql/mysql_driver.php.html#line586" class="location">database/drivers/mysql/mysql_driver.php at line 586</a>
+
+<h3 id="_truncate()">_truncate</h3>
+<code class="signature">private  void <strong>_truncate</strong>(mixed table)</code>
+<div class="details">
+<p>Truncate statement</p><p>Generates a platform-specific truncate string from the supplied data
+If the database does not support the truncate() command
+This function maps to "DELETE FROM table"</p><dl>
+<dt>Access	public.</dt>
+<dt>Param	string	the:</dt>
+<dd>table name</dd>
+<dt>Return	string.</dt>
+</dl>
+</div></div>
+
+
+
+<div class='method'><a href="../source/database/drivers/mysql/mysql_driver.php.html#line553" class="location">database/drivers/mysql/mysql_driver.php at line 553</a>
+
+<h3 id="_update()">_update</h3>
+<code class="signature">private  void <strong>_update</strong>(mixed table, mixed values, mixed where, mixed orderby)</code>
+<div class="details">
+<p>Update statement</p><p>Generates a platform-specific update string from the supplied data</p><dl>
+<dt>Access	public.</dt>
+<dt>Param	string	the:</dt>
+<dd>table name</dd>
+<dt>Param	array	the:</dt>
+<dd>update data</dd>
+<dd>where clause</dd>
+<dd>orderby clause</dd>
+<dd>limit clause</dd>
+<dt>Return	string.</dt>
+</dl>
+</div></div>
+
+
+
+<div class='method'><a href="../source/database/drivers/mysql/mysql_driver.php.html#line146" class="location">database/drivers/mysql/mysql_driver.php at line 146</a>
+
+<h3 id="_version()">_version</h3>
+<code class="signature">private  void <strong>_version</strong>()</code>
+<div class="details">
+<p>Version number query string</p><dl>
+<dt>Access	public.</dt>
+<dt>Return	string.</dt>
+</dl>
+</div></div>
+
+
+
+<div class='method'><a href="../source/database/drivers/mysql/mysql_driver.php.html#line327" class="location">database/drivers/mysql/mysql_driver.php at line 327</a>
+
+<h3 id="affected_rows()">affected_rows</h3>
+<code class="signature">public  void <strong>affected_rows</strong>()</code>
+<div class="details">
+<p>Affected Rows</p><dl>
+<dt>Access	public.</dt>
+<dt>Return	integer.</dt>
+</dl>
+</div></div>
+
+
+
+<div class='method'><a href="../source/database/drivers/mysql/mysql_driver.php.html#line357" class="location">database/drivers/mysql/mysql_driver.php at line 357</a>
+
+<h3 id="count_all()">count_all</h3>
+<code class="signature">public  void <strong>count_all</strong>(str table)</code>
+<div class="details">
+<p>"Count All" query</p><p>Generates a platform-specific query string that counts all records in
+the specified database</p><dl>
+<dt>Access	public.</dt>
+<dt>Param	string.</dt>
+<dt>Return	string.</dt>
+</dl>
+</div></div>
+
+
+
+<div class='method'><a href="../source/database/drivers/mysql/mysql_driver.php.html#line63" class="location">database/drivers/mysql/mysql_driver.php at line 63</a>
+
+<h3 id="db_connect()">db_connect</h3>
+<code class="signature">public  void <strong>db_connect</strong>()</code>
+<div class="details">
+<p>Non-persistent database connection</p><dl>
+<dt>Access	private:</dt>
+<dd>called by the base class</dd>
+<dt>Return	resource.</dt>
+</dl>
+</div></div>
+
+
+
+<div class='method'><a href="../source/database/drivers/mysql/mysql_driver.php.html#line81" class="location">database/drivers/mysql/mysql_driver.php at line 81</a>
+
+<h3 id="db_pconnect()">db_pconnect</h3>
+<code class="signature">public  void <strong>db_pconnect</strong>()</code>
+<div class="details">
+<p>Persistent database connection</p><dl>
+<dt>Access	private:</dt>
+<dd>called by the base class</dd>
+<dt>Return	resource.</dt>
+</dl>
+</div></div>
+
+
+
+<div class='method'><a href="../source/database/drivers/mysql/mysql_driver.php.html#line118" class="location">database/drivers/mysql/mysql_driver.php at line 118</a>
+
+<h3 id="db_select()">db_select</h3>
+<code class="signature">public  void <strong>db_select</strong>()</code>
+<div class="details">
+<p>Select the database</p><dl>
+<dt>Access	private:</dt>
+<dd>called by the base class</dd>
+<dt>Return	resource.</dt>
+</dl>
+</div></div>
+
+
+
+<div class='method'><a href="../source/database/drivers/mysql/mysql_driver.php.html#line133" class="location">database/drivers/mysql/mysql_driver.php at line 133</a>
+
+<h3 id="db_set_charset()">db_set_charset</h3>
+<code class="signature">public  void <strong>db_set_charset</strong>(mixed charset, mixed collation)</code>
+<div class="details">
+<p>Set client character set</p><dl>
+<dt>Access	public.</dt>
+<dt>Return	resource.</dt>
+</dl>
+</div></div>
+
+
+
+<div class='method'><a href="../source/database/drivers/mysql/mysql_driver.php.html#line285" class="location">database/drivers/mysql/mysql_driver.php at line 285</a>
+
+<h3 id="escape_str()">escape_str</h3>
+<code class="signature">public  void <strong>escape_str</strong>(mixed str, bool like)</code>
+<div class="details">
+<p>Escape String</p><dl>
+<dt>Access	public.</dt>
+<dt>Param	string.</dt>
+<dt>Param	bool	whether:</dt>
+<dd>or not the string will be used in a LIKE condition</dd>
+<dt>Return	string.</dt>
+</dl>
+</div></div>
+
+
+
+<div class='method'><a href="../source/database/drivers/mysql/mysql_driver.php.html#line340" class="location">database/drivers/mysql/mysql_driver.php at line 340</a>
+
+<h3 id="insert_id()">insert_id</h3>
+<code class="signature">public  void <strong>insert_id</strong>()</code>
+<div class="details">
+<p>Insert ID</p><dl>
+<dt>Access	public.</dt>
+<dt>Return	integer.</dt>
+</dl>
+</div></div>
+
+
+
+<div class='method'><a href="../source/database/drivers/mysql/mysql_driver.php.html#line102" class="location">database/drivers/mysql/mysql_driver.php at line 102</a>
+
+<h3 id="reconnect()">reconnect</h3>
+<code class="signature">public  void <strong>reconnect</strong>()</code>
+<div class="details">
+<p>Reconnect</p><p>Keep / reestablish the db connection if no queries have been
+sent for a length of time exceeding the server's idle timeout</p><dl>
+<dt>Access	public.</dt>
+<dt>Return	void.</dt>
+</dl>
+</div></div>
+
+
+
+<div class='method'><a href="../source/database/drivers/mysql/mysql_driver.php.html#line200" class="location">database/drivers/mysql/mysql_driver.php at line 200</a>
+
+<h3 id="trans_begin()">trans_begin</h3>
+<code class="signature">public  void <strong>trans_begin</strong>(bool test_mode)</code>
+<div class="details">
+<p>Begin Transaction</p><dl>
+<dt>Access	public.</dt>
+<dt>Return	bool.</dt>
+</dl>
+</div></div>
+
+
+
+<div class='method'><a href="../source/database/drivers/mysql/mysql_driver.php.html#line231" class="location">database/drivers/mysql/mysql_driver.php at line 231</a>
+
+<h3 id="trans_commit()">trans_commit</h3>
+<code class="signature">public  void <strong>trans_commit</strong>()</code>
+<div class="details">
+<p>Commit Transaction</p><dl>
+<dt>Access	public.</dt>
+<dt>Return	bool.</dt>
+</dl>
+</div></div>
+
+
+
+<div class='method'><a href="../source/database/drivers/mysql/mysql_driver.php.html#line257" class="location">database/drivers/mysql/mysql_driver.php at line 257</a>
+
+<h3 id="trans_rollback()">trans_rollback</h3>
+<code class="signature">public  void <strong>trans_rollback</strong>()</code>
+<div class="details">
+<p>Rollback Transaction</p><dl>
+<dt>Access	public.</dt>
+<dt>Return	bool.</dt>
+</dl>
+</div></div>
+
+
+
+</div><div class="header">
+<h1>GiftFlow API</h1>
+<ul>
+<li><a href="../overview-summary.html">Overview</a></li>
+<li><a href="../giftflow/package-summary.html">Package</a></li>
+<li class="active">Class</li>
+<li><a href="../giftflow/package-tree.html">Tree</a></li>
+<li><a href="../overview-files.html">Files</a></li>
+<li><a href="../deprecated-list.html">Deprecated</a></li>
+<li><a href="../index-all.html">Index</a></li>
+</ul>
+</div>
+
+<div class="small_links">
+<a href="../index.html" target="_top">Frames</a>
+<a href="../giftflow/ci_db_mysql_driver.html" target="_top">No frames</a>
+</div>
+<div class="small_links">
+Summary: <a href="#summary_field">Field</a> | <a href="#summary_method">Method</a> | <a href="#summary_constr">Constr</a>
+Detail: <a href="#detail_field">Field</a> | <a href="#detail_method">Method</a> | <a href="#summary_constr">Constr</a>
+</div>
+<hr>
+
+<p id="footer">This document was generated by <a href="http://peej.github.com/phpdoctor/">PHPDoctor: The PHP Documentation Creator</a></p>
+
+</body>
+
+</html>

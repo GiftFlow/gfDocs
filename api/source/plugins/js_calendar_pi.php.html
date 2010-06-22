@@ -1,0 +1,689 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+
+<html lang="en">
+<head>
+
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
+<meta name="generator" content="PHPDoctor 2RC4 (http://peej.github.com/phpdoctor/)">
+<meta name="when" content="Sun, 20 Jun 2010 17:43:51 +0000">
+
+<link rel="stylesheet" type="text/css" href="../../stylesheet.css">
+<link rel="start" href="../../overview-summary.html">
+
+<title>plugins/js_calendar_pi.php (GiftFlow API)</title>
+
+</head>
+<body id="file" onload="parent.document.title=document.title;">
+
+<div class="header">
+<h1>GiftFlow API</h1>
+<ul>
+<li><a href="../../overview-summary.html">Overview</a></li>
+<li>Package</li><li>Class</li><li>Tree</li><li><a href="../../overview-files.html">Files</a></li>
+<li><a href="../../deprecated-list.html">Deprecated</a></li>
+<li><a href="../../index-all.html">Index</a></li>
+</ul>
+</div>
+
+<div class="small_links">
+<a href="../../index.html" target="_top">Frames</a>
+<a href="../../source/plugins/js_calendar_pi.php.html" target="_top">No frames</a>
+</div>
+<hr>
+
+<h1>plugins/js_calendar_pi.php</h1>
+<div class="comment" id="overview_description"><p>CodeIgniter</p><p>An open source application development framework for PHP 4.3.2 or newer</p></div>
+
+<hr>
+
+<a name="line1"></a><pre><?php  if ( ! defined('BASEPATH')) exit('No direct script access allowed');
+<a name="line2"></a>/**
+<a name="line3"></a> * CodeIgniter
+<a name="line4"></a> *
+<a name="line5"></a> * An open source application development framework for PHP 4.3.2 or newer
+<a name="line6"></a> *
+<a name="line7"></a> * @package		CodeIgniter
+<a name="line8"></a> * @author		ExpressionEngine Dev Team
+<a name="line9"></a> * @copyright	Copyright (c) 2008 - 2009, EllisLab, Inc.
+<a name="line10"></a> * @license		http://codeigniter.com/user_guide/license.html
+<a name="line11"></a> * @link		http://codeigniter.com
+<a name="line12"></a> * @since		Version 1.0
+<a name="line13"></a> * @filesource
+<a name="line14"></a> */
+<a name="line15"></a>
+<a name="line16"></a>// ------------------------------------------------------------------------
+<a name="line17"></a>
+<a name="line18"></a>/*
+<a name="line19"></a>Instructions:
+<a name="line20"></a>
+<a name="line21"></a>Load the plugin using:
+<a name="line22"></a>
+<a name="line23"></a> 	$this->load->plugin('js_calendar');
+<a name="line24"></a>
+<a name="line25"></a>Once loaded you'll add the calendar script to the <head> of your page like this:
+<a name="line26"></a>
+<a name="line27"></a><?php echo js_calendar_script('my_form');  ?>
+<a name="line28"></a>
+<a name="line29"></a>The above function will be passed the name of your form.
+<a name="line30"></a>
+<a name="line31"></a>Then to show the actual calendar you'll do this:
+<a name="line32"></a>
+<a name="line33"></a><?php echo js_calendar_write('entry_date', time(), true);?>
+<a name="line34"></a><form name="my_form">
+<a name="line35"></a><input type="text" name="entry_date" value="" onblur="update_calendar(this.name, this.value);" />
+<a name="line36"></a><p><a href="javascript:void(0);" onClick="set_to_time('entry_date', '<?php echo time();?>')" >Today</a></p>
+<a name="line37"></a></form>
+<a name="line38"></a>
+<a name="line39"></a>
+<a name="line40"></a>Note:  The first parameter is the name of the field containing your date, the second parameter contains the "now" time,
+<a name="line41"></a>and the third tells the calendar whether to highlight the current day or not.
+<a name="line42"></a>
+<a name="line43"></a>Lastly, you'll need some CSS for your calendar:
+<a name="line44"></a>
+<a name="line45"></a>.calendar {
+<a name="line46"></a>	border: 1px #6975A3 solid;
+<a name="line47"></a>	background-color: transparent;
+<a name="line48"></a>}
+<a name="line49"></a>.calheading {
+<a name="line50"></a>	background-color: #7C8BC0;
+<a name="line51"></a>	color: #fff;
+<a name="line52"></a>	font-family: Lucida Grande, Verdana, Geneva, Sans-serif;
+<a name="line53"></a>	font-size: 11px;
+<a name="line54"></a>	font-weight: bold;
+<a name="line55"></a>	text-align: center;
+<a name="line56"></a>}
+<a name="line57"></a>.calnavleft {
+<a name="line58"></a>	background-color: #7C8BC0;
+<a name="line59"></a>	font-family: Lucida Grande, Verdana, Geneva, Sans-serif;
+<a name="line60"></a>	font-size: 10px;
+<a name="line61"></a>	font-weight: bold;
+<a name="line62"></a>	color: #fff;
+<a name="line63"></a>	padding: 4px;
+<a name="line64"></a>	cursor: pointer;
+<a name="line65"></a>}
+<a name="line66"></a>.calnavright {
+<a name="line67"></a>	background-color: #7C8BC0;
+<a name="line68"></a>	font-family: Lucida Grande, Verdana, Geneva, Sans-serif;
+<a name="line69"></a>	font-size: 10px;
+<a name="line70"></a>	font-weight: bold;
+<a name="line71"></a>	color: #fff;
+<a name="line72"></a>	text-align:  right;
+<a name="line73"></a>	padding: 4px;
+<a name="line74"></a>	cursor: pointer;
+<a name="line75"></a>}
+<a name="line76"></a>.caldayheading {
+<a name="line77"></a>	background-color: #000;
+<a name="line78"></a>	color: #fff;
+<a name="line79"></a>	font-family: Lucida Grande, Verdana, Geneva, Sans-serif;
+<a name="line80"></a>	font-size: 10px;
+<a name="line81"></a>	text-align: center;
+<a name="line82"></a>	padding: 6px 2px 6px 2px;
+<a name="line83"></a>}
+<a name="line84"></a>.caldaycells{
+<a name="line85"></a>	color: #000;
+<a name="line86"></a>	background-color: #D1D7E6;
+<a name="line87"></a>	font-family: Lucida Grande, Verdana, Geneva, Sans-serif;
+<a name="line88"></a>	font-size: 11px;
+<a name="line89"></a>	text-align: center;
+<a name="line90"></a>	padding: 4px;
+<a name="line91"></a>	border: 1px #E0E5F1 solid;
+<a name="line92"></a>	cursor: pointer;
+<a name="line93"></a>}
+<a name="line94"></a>.caldaycellhover{
+<a name="line95"></a>	color: #fff;
+<a name="line96"></a>	background-color: #B3BCD4;
+<a name="line97"></a>	font-family: Lucida Grande, Verdana, Geneva, Sans-serif;
+<a name="line98"></a>	font-size: 11px;
+<a name="line99"></a>	text-align: center;
+<a name="line100"></a>	padding: 4px;
+<a name="line101"></a>	border: 1px #B3BCD4 solid;
+<a name="line102"></a>	cursor: pointer;
+<a name="line103"></a>}
+<a name="line104"></a>.caldayselected{
+<a name="line105"></a>	background-color: #737FAC;
+<a name="line106"></a>	color:	#fff;
+<a name="line107"></a>	font-family: Lucida Grande, Verdana, Geneva, Sans-serif;
+<a name="line108"></a>	font-size: 11px;
+<a name="line109"></a>	font-weight: bold;
+<a name="line110"></a>	text-align: center;
+<a name="line111"></a>	border: 1px #566188 solid;
+<a name="line112"></a>	padding: 3px;
+<a name="line113"></a>	cursor: pointer;
+<a name="line114"></a>}
+<a name="line115"></a>.calblanktop {
+<a name="line116"></a>	background-color: #fff;
+<a name="line117"></a>	padding: 4px;
+<a name="line118"></a>}
+<a name="line119"></a>.calblankbot {
+<a name="line120"></a>	background-color: #fff;
+<a name="line121"></a>	padding: 4px;
+<a name="line122"></a>}
+<a name="line123"></a>
+<a name="line124"></a>
+<a name="line125"></a>*/
+<a name="line126"></a>
+<a name="line127"></a>function js_calendar_script($form_name = 'entryform')
+<a name="line128"></a>{		
+<a name="line129"></a>$CI =& get_instance();
+<a name="line130"></a>$CI->load->language('calendar');
+<a name="line131"></a>ob_start();
+<a name="line132"></a>?>
+<a name="line133"></a><script type="text/javascript">
+<a name="line134"></a><!--
+<a name="line135"></a>var form_name	= "<?php echo $form_name; ?>";
+<a name="line136"></a>var format		= 'us'; // eu or us
+<a name="line137"></a>var days		= new Array(
+<a name="line138"></a>					'<?php echo $CI->lang->line('cal_su');?>', // Sunday, short name
+<a name="line139"></a>					'<?php echo $CI->lang->line('cal_mo');?>', // Monday, short name
+<a name="line140"></a>					'<?php echo $CI->lang->line('cal_tu');?>', // Tuesday, short name
+<a name="line141"></a>					'<?php echo $CI->lang->line('cal_wed');?>', // Wednesday, short name
+<a name="line142"></a>					'<?php echo $CI->lang->line('cal_thu');?>', // Thursday, short name
+<a name="line143"></a>					'<?php echo $CI->lang->line('cal_fri');?>', // Friday, short name
+<a name="line144"></a>					'<?php echo $CI->lang->line('cal_sat');?>' // Saturday, short name
+<a name="line145"></a>				);
+<a name="line146"></a>var months		= new Array(
+<a name="line147"></a>					'<?php echo $CI->lang->line('cal_january');?>',
+<a name="line148"></a>					'<?php echo $CI->lang->line('cal_february');?>',
+<a name="line149"></a>					'<?php echo $CI->lang->line('cal_march');?>',
+<a name="line150"></a>					'<?php echo $CI->lang->line('cal_april');?>',
+<a name="line151"></a>					'<?php echo $CI->lang->line('cal_mayl');?>',
+<a name="line152"></a>					'<?php echo $CI->lang->line('cal_june');?>',
+<a name="line153"></a>					'<?php echo $CI->lang->line('cal_july');?>',
+<a name="line154"></a>					'<?php echo $CI->lang->line('cal_august');?>',
+<a name="line155"></a>					'<?php echo $CI->lang->line('cal_september');?>',
+<a name="line156"></a>					'<?php echo $CI->lang->line('cal_october');?>',
+<a name="line157"></a>					'<?php echo $CI->lang->line('cal_november');?>',
+<a name="line158"></a>					'<?php echo $CI->lang->line('cal_december');?>'
+<a name="line159"></a>				);
+<a name="line160"></a>var last_click	= new Array();
+<a name="line161"></a>var current_month  = '';
+<a name="line162"></a>var current_year   = '';
+<a name="line163"></a>var last_date  = '';
+<a name="line164"></a>	
+<a name="line165"></a>function calendar(id, d, highlight, adjusted)
+<a name="line166"></a>{		
+<a name="line167"></a>	if (adjusted == undefined)
+<a name="line168"></a>	{	
+<a name="line169"></a>		var d = new Date(d * 1000);
+<a name="line170"></a>	}
+<a name="line171"></a>
+<a name="line172"></a>	this.id			= id;
+<a name="line173"></a>	this.highlight	= highlight;
+<a name="line174"></a>	this.date_obj	= d;
+<a name="line175"></a>	this.write		= build_calendar;
+<a name="line176"></a>	this.total_days	= total_days;
+<a name="line177"></a>	this.month		= d.getMonth();
+<a name="line178"></a>	this.date		= d.getDate();
+<a name="line179"></a>	this.day		= d.getDay();
+<a name="line180"></a>	this.year		= d.getFullYear();
+<a name="line181"></a>	this.hours		= d.getHours();
+<a name="line182"></a>	this.minutes	= d.getMinutes();
+<a name="line183"></a>	this.seconds	= d.getSeconds();
+<a name="line184"></a>	this.date_str	= date_str;
+<a name="line185"></a>				
+<a name="line186"></a>	if (highlight == false)
+<a name="line187"></a>	{
+<a name="line188"></a>		this.selected_date = '';
+<a name="line189"></a>	}
+<a name="line190"></a>	else
+<a name="line191"></a>	{
+<a name="line192"></a>		this.selected_date = this.year + '' + this.month + '' + this.date;
+<a name="line193"></a>	}
+<a name="line194"></a>			
+<a name="line195"></a>	//	Set the "selected date"
+<a name="line196"></a>	d.setDate(1);
+<a name="line197"></a>	this.firstDay = d.getDay();
+<a name="line198"></a>	
+<a name="line199"></a>	//then reset the date object to the correct date
+<a name="line200"></a>	d.setDate(this.date);
+<a name="line201"></a>}
+<a name="line202"></a>		
+<a name="line203"></a>//	Build the body of the calendar
+<a name="line204"></a>function build_calendar()
+<a name="line205"></a>{
+<a name="line206"></a>	var str = '';
+<a name="line207"></a>	
+<a name="line208"></a>	//	Calendar Heading
+<a name="line209"></a>	
+<a name="line210"></a>	str += '<div id="cal' + this.id + '">';
+<a name="line211"></a>	str += '<table class="calendar" cellspacing="0" cellpadding="0" border="0" >';
+<a name="line212"></a>	str += '<tr>';
+<a name="line213"></a>	str += '<td class="calnavleft" onClick="change_month(-1, \'' + this.id + '\')">&lt;&lt;<\/td>';
+<a name="line214"></a>	str += '<td colspan="5" class="calheading">' + months[this.month] + ' ' + this.year + '<\/td>';
+<a name="line215"></a>	str += '<td class="calnavright" onClick="change_month(1, \'' + this.id + '\')">&gt;&gt;<\/td>';
+<a name="line216"></a>	str += '<\/tr>';
+<a name="line217"></a>	
+<a name="line218"></a>	//	Day Names
+<a name="line219"></a>	
+<a name="line220"></a>	str += '<tr>';
+<a name="line221"></a>	
+<a name="line222"></a>	for (i = 0; i < 7; i++)
+<a name="line223"></a>	{
+<a name="line224"></a>		str += '<td class="caldayheading">' + days[i] + '<\/td>';
+<a name="line225"></a>	}
+<a name="line226"></a>	
+<a name="line227"></a>	str += '<\/tr>';
+<a name="line228"></a>	
+<a name="line229"></a>	//	Day Cells
+<a name="line230"></a>		
+<a name="line231"></a>	str += '<tr>';
+<a name="line232"></a>	
+<a name="line233"></a>	selDate = (last_date != '') ? last_date : this.date;
+<a name="line234"></a>	
+<a name="line235"></a>	for (j = 0; j < 42; j++)
+<a name="line236"></a>	{
+<a name="line237"></a>		var displayNum = (j - this.firstDay + 1);
+<a name="line238"></a>		
+<a name="line239"></a>		if (j < this.firstDay) // leading empty cells
+<a name="line240"></a>		{
+<a name="line241"></a>			str += '<td class="calblanktop">&nbsp;<\/td>';
+<a name="line242"></a>		}
+<a name="line243"></a>		else if (displayNum == selDate && this.highlight == true) // Selected date
+<a name="line244"></a>		{
+<a name="line245"></a>			str += '<td id="' + this.id +'selected" class="caldayselected" onClick="set_date(this,\'' + this.id + '\')">' + displayNum + '<\/td>';
+<a name="line246"></a>		}
+<a name="line247"></a>		else if (displayNum > this.total_days())
+<a name="line248"></a>		{
+<a name="line249"></a>			str += '<td class="calblankbot">&nbsp;<\/td>'; // trailing empty cells
+<a name="line250"></a>		}
+<a name="line251"></a>		else  // Unselected days
+<a name="line252"></a>		{
+<a name="line253"></a>			str += '<td id="" class="caldaycells" onClick="set_date(this,\'' + this.id + '\'); return false;"  onMouseOver="javascript:cell_highlight(this,\'' + displayNum + '\',\'' + this.id + '\');" onMouseOut="javascript:cell_reset(this,\'' + displayNum + '\',\'' + this.id + '\');" >' + displayNum + '<\/td>';
+<a name="line254"></a>		}
+<a name="line255"></a>		
+<a name="line256"></a>		if (j % 7 == 6)
+<a name="line257"></a>		{
+<a name="line258"></a>			str += '<\/tr><tr>';
+<a name="line259"></a>		}
+<a name="line260"></a>	}
+<a name="line261"></a>
+<a name="line262"></a>	str += '<\/tr>';	
+<a name="line263"></a>	str += '<\/table>';
+<a name="line264"></a>	str += '<\/div>';
+<a name="line265"></a>	
+<a name="line266"></a>	return str;
+<a name="line267"></a>}
+<a name="line268"></a>
+<a name="line269"></a>//	Total number of days in a month
+<a name="line270"></a>function total_days()
+<a name="line271"></a>{	
+<a name="line272"></a>	switch(this.month)
+<a name="line273"></a>	{
+<a name="line274"></a>		case 1: // Check for leap year
+<a name="line275"></a>			if ((  this.date_obj.getFullYear() % 4 == 0
+<a name="line276"></a>				&& this.date_obj.getFullYear() % 100 != 0)
+<a name="line277"></a>				|| this.date_obj.getFullYear() % 400 == 0)
+<a name="line278"></a>				return 29;
+<a name="line279"></a>			else
+<a name="line280"></a>				return 28;
+<a name="line281"></a>		case 3:
+<a name="line282"></a>			return 30;
+<a name="line283"></a>		case 5:
+<a name="line284"></a>			return 30;
+<a name="line285"></a>		case 8:
+<a name="line286"></a>			return 30;
+<a name="line287"></a>		case 10:
+<a name="line288"></a>			return 30
+<a name="line289"></a>		default:
+<a name="line290"></a>			return 31;
+<a name="line291"></a>	}
+<a name="line292"></a>}
+<a name="line293"></a>
+<a name="line294"></a>//	Highlight Cell on Mouseover
+<a name="line295"></a>function cell_highlight(td, num, cal)
+<a name="line296"></a>{
+<a name="line297"></a>	cal = eval(cal);
+<a name="line298"></a>
+<a name="line299"></a>	if (last_click[cal.id]  != num)
+<a name="line300"></a>	{
+<a name="line301"></a>		td.className = "caldaycellhover";
+<a name="line302"></a>	}
+<a name="line303"></a>}		
+<a name="line304"></a>
+<a name="line305"></a>//	Reset Cell on MouseOut
+<a name="line306"></a>function cell_reset(td, num, cal)
+<a name="line307"></a>{	
+<a name="line308"></a>	cal = eval(cal);
+<a name="line309"></a>
+<a name="line310"></a>	if (last_click[cal.id] == num)
+<a name="line311"></a>	{
+<a name="line312"></a>		td.className = "caldayselected";
+<a name="line313"></a>	}
+<a name="line314"></a>	else
+<a name="line315"></a>	{
+<a name="line316"></a>		td.className = "caldaycells";
+<a name="line317"></a>	}
+<a name="line318"></a>}		
+<a name="line319"></a>
+<a name="line320"></a>//	Clear Field
+<a name="line321"></a>function clear_field(id)
+<a name="line322"></a>{				
+<a name="line323"></a>	eval("document." + form_name + "." + id + ".value = ''");
+<a name="line324"></a>	
+<a name="line325"></a>	document.getElementById(id + "selected").className = "caldaycells";
+<a name="line326"></a>	document.getElementById(id + "selected").id = "";	
+<a name="line327"></a>	
+<a name="line328"></a>	cal = eval(id);
+<a name="line329"></a>	cal.selected_date = '';		
+<a name="line330"></a>}		
+<a name="line331"></a>
+<a name="line332"></a>
+<a name="line333"></a>//	Set date to specified time
+<a name="line334"></a>function set_to_time(id, raw)
+<a name="line335"></a>{			
+<a name="line336"></a>	if (document.getElementById(id + "selected"))
+<a name="line337"></a>	{			
+<a name="line338"></a>		document.getElementById(id + "selected").className = "caldaycells";
+<a name="line339"></a>		document.getElementById(id + "selected").id = "";	
+<a name="line340"></a>	}
+<a name="line341"></a>	
+<a name="line342"></a>	document.getElementById('cal' + id).innerHTML = '<div id="tempcal'+id+'">&nbsp;<'+'/div>';				
+<a name="line343"></a>		
+<a name="line344"></a>	var nowDate = new Date();
+<a name="line345"></a>	nowDate.setTime = raw * 1000;
+<a name="line346"></a>	
+<a name="line347"></a>	current_month	= nowDate.getMonth();
+<a name="line348"></a>	current_year	= nowDate.getFullYear();
+<a name="line349"></a>	current_date	= nowDate.getDate();
+<a name="line350"></a>	
+<a name="line351"></a>	oldcal = eval(id);
+<a name="line352"></a>	oldcal.selected_date = current_year + '' + current_month + '' + current_date;				
+<a name="line353"></a>
+<a name="line354"></a>	cal = new calendar(id, nowDate, true, true);		
+<a name="line355"></a>	cal.selected_date = current_year + '' + current_month + '' + current_date;	
+<a name="line356"></a>	
+<a name="line357"></a>	last_date = cal.date;
+<a name="line358"></a>	
+<a name="line359"></a>	document.getElementById('tempcal'+id).innerHTML = cal.write();	
+<a name="line360"></a>	
+<a name="line361"></a>	insert_date(cal);
+<a name="line362"></a>}
+<a name="line363"></a>
+<a name="line364"></a>//	Set date to what is in the field
+<a name="line365"></a>var lastDates = new Array();
+<a name="line366"></a>
+<a name="line367"></a>function update_calendar(id, dateValue)
+<a name="line368"></a>{
+<a name="line369"></a>	if (lastDates[id] == dateValue) return;
+<a name="line370"></a>	
+<a name="line371"></a>	lastDates[id] = dateValue;
+<a name="line372"></a>	
+<a name="line373"></a>	var fieldString = dateValue.replace(/\s+/g, ' ');
+<a name="line374"></a>	
+<a name="line375"></a>	while (fieldString.substring(0,1) == ' ')
+<a name="line376"></a>	{
+<a name="line377"></a>		fieldString = fieldString.substring(1, fieldString.length);
+<a name="line378"></a>	}
+<a name="line379"></a>	
+<a name="line380"></a>	var dateString = fieldString.split(' ');
+<a name="line381"></a>	var dateParts = dateString[0].split('-')
+<a name="line382"></a>
+<a name="line383"></a>	if (dateParts.length < 3) return;
+<a name="line384"></a>	var newYear  = dateParts[0];
+<a name="line385"></a>	var newMonth = dateParts[1];
+<a name="line386"></a>	var newDay   = dateParts[2];
+<a name="line387"></a>	
+<a name="line388"></a>	if (isNaN(newDay)  || newDay < 1 || (newDay.length != 1 && newDay.length != 2)) return;
+<a name="line389"></a>	if (isNaN(newYear) || newYear < 1 || newYear.length != 4) return;
+<a name="line390"></a>	if (isNaN(newMonth) || newMonth < 1 || (newMonth.length != 1 && newMonth.length != 2)) return;
+<a name="line391"></a>	
+<a name="line392"></a>	if (newMonth > 12) newMonth = 12;
+<a name="line393"></a>	
+<a name="line394"></a>	if (newDay > 28)
+<a name="line395"></a>	{
+<a name="line396"></a>		switch(newMonth - 1)
+<a name="line397"></a>		{
+<a name="line398"></a>			case 1: // Check for leap year
+<a name="line399"></a>				if ((newYear % 4 == 0 && newYear % 100 != 0) || newYear % 400 == 0)
+<a name="line400"></a>				{
+<a name="line401"></a>					if (newDay > 29) newDay = 29;
+<a name="line402"></a>				}
+<a name="line403"></a>				else
+<a name="line404"></a>				{
+<a name="line405"></a>					if (newDay > 28) newDay = 28;
+<a name="line406"></a>				}
+<a name="line407"></a>			case 3:
+<a name="line408"></a>				if (newDay > 30) newDay = 30;
+<a name="line409"></a>			case 5:
+<a name="line410"></a>				if (newDay > 30) newDay = 30;
+<a name="line411"></a>			case 8:
+<a name="line412"></a>				if (newDay > 30) newDay = 30;
+<a name="line413"></a>			case 10:
+<a name="line414"></a>				if (newDay > 30) newDay = 30;
+<a name="line415"></a>			default:
+<a name="line416"></a>				if (newDay > 31) newDay = 31;
+<a name="line417"></a>		}
+<a name="line418"></a>	}
+<a name="line419"></a>	
+<a name="line420"></a>	if (document.getElementById(id + "selected"))
+<a name="line421"></a>	{			
+<a name="line422"></a>		document.getElementById(id + "selected").className = "caldaycells";
+<a name="line423"></a>		document.getElementById(id + "selected").id = "";	
+<a name="line424"></a>	}
+<a name="line425"></a>	
+<a name="line426"></a>	document.getElementById('cal' + id).innerHTML = '<div id="tempcal'+id+'">&nbsp;<'+'/div>';				
+<a name="line427"></a>		
+<a name="line428"></a>	var nowDate = new Date();
+<a name="line429"></a>	nowDate.setDate(newDay);
+<a name="line430"></a>	nowDate.setMonth(newMonth - 1);
+<a name="line431"></a>	nowDate.setYear(newYear);
+<a name="line432"></a>	nowDate.setHours(12);
+<a name="line433"></a>	
+<a name="line434"></a>	current_month	= nowDate.getMonth();
+<a name="line435"></a>	current_year	= nowDate.getFullYear();
+<a name="line436"></a>
+<a name="line437"></a>	cal = new calendar(id, nowDate, true, true);						
+<a name="line438"></a>	document.getElementById('tempcal'+id).innerHTML = cal.write();	
+<a name="line439"></a>}
+<a name="line440"></a>
+<a name="line441"></a>//	Set the date
+<a name="line442"></a>function set_date(td, cal)
+<a name="line443"></a>{					
+<a name="line444"></a>
+<a name="line445"></a>	cal = eval(cal);
+<a name="line446"></a>	
+<a name="line447"></a>	// If the user is clicking a cell that is already
+<a name="line448"></a>	// selected we'll de-select it and clear the form field
+<a name="line449"></a>	
+<a name="line450"></a>	if (last_click[cal.id] == td.firstChild.nodeValue)
+<a name="line451"></a>	{
+<a name="line452"></a>		td.className = "caldaycells";
+<a name="line453"></a>		last_click[cal.id] = '';
+<a name="line454"></a>		remove_date(cal);
+<a name="line455"></a>		cal.selected_date =  '';
+<a name="line456"></a>		return;
+<a name="line457"></a>	}
+<a name="line458"></a>				
+<a name="line459"></a>	// Onward!
+<a name="line460"></a>	if (document.getElementById(cal.id + "selected"))
+<a name="line461"></a>	{
+<a name="line462"></a>		document.getElementById(cal.id + "selected").className = "caldaycells";
+<a name="line463"></a>		document.getElementById(cal.id + "selected").id = "";
+<a name="line464"></a>	}
+<a name="line465"></a>									
+<a name="line466"></a>	td.className = "caldayselected";
+<a name="line467"></a>	td.id = cal.id + "selected";
+<a name="line468"></a>
+<a name="line469"></a>	cal.selected_date = cal.date_obj.getFullYear() + '' + cal.date_obj.getMonth() + '' + cal.date;			
+<a name="line470"></a>	cal.date_obj.setDate(td.firstChild.nodeValue);
+<a name="line471"></a>	cal = new calendar(cal.id, cal.date_obj, true, true);
+<a name="line472"></a>	cal.selected_date = cal.date_obj.getFullYear() + '' + cal.date_obj.getMonth() + '' + cal.date;			
+<a name="line473"></a>	
+<a name="line474"></a>	last_date = cal.date;
+<a name="line475"></a>
+<a name="line476"></a>	//cal.date
+<a name="line477"></a>	last_click[cal.id] = cal.date;
+<a name="line478"></a>				
+<a name="line479"></a>	// Insert the date into the form
+<a name="line480"></a>	insert_date(cal);
+<a name="line481"></a>}
+<a name="line482"></a>/*
+<a name="line483"></a>//	Insert the date into the form field
+<a name="line484"></a>function insert_date(cal)
+<a name="line485"></a>{
+<a name="line486"></a>	cal = eval(cal);
+<a name="line487"></a>	fval = eval("document." + form_name + "." + cal.id);	
+<a name="line488"></a>	
+<a name="line489"></a>	if (fval.value == '')
+<a name="line490"></a>	{
+<a name="line491"></a>		fval.value = cal.date_str('y');
+<a name="line492"></a>	}
+<a name="line493"></a>	else
+<a name="line494"></a>	{
+<a name="line495"></a>		time = fval.value.substring(10);
+<a name="line496"></a>		new_date = cal.date_str('n') + time;
+<a name="line497"></a>		fval.value = new_date;
+<a name="line498"></a>	}	
+<a name="line499"></a>}
+<a name="line500"></a>*/		
+<a name="line501"></a>//	Remove the date from the form field
+<a name="line502"></a>function remove_date(cal)
+<a name="line503"></a>{
+<a name="line504"></a>	cal = eval(cal);
+<a name="line505"></a>	fval = eval("document." + form_name + "." + cal.id);	
+<a name="line506"></a>	fval.value = '';
+<a name="line507"></a>}
+<a name="line508"></a>
+<a name="line509"></a>//	Change to a new month
+<a name="line510"></a>function change_month(mo, cal)
+<a name="line511"></a>{		
+<a name="line512"></a>	cal = eval(cal);
+<a name="line513"></a>
+<a name="line514"></a>	if (current_month != '')
+<a name="line515"></a>	{
+<a name="line516"></a>		cal.date_obj.setMonth(current_month);
+<a name="line517"></a>		cal.date_obj.setYear(current_year);
+<a name="line518"></a>	
+<a name="line519"></a>		current_month	= '';
+<a name="line520"></a>		current_year	= '';
+<a name="line521"></a>	}
+<a name="line522"></a>				
+<a name="line523"></a>	var newMonth = cal.date_obj.getMonth() + mo;
+<a name="line524"></a>	var newDate  = cal.date_obj.getDate();
+<a name="line525"></a>	
+<a name="line526"></a>	if (newMonth == 12)
+<a name="line527"></a>	{
+<a name="line528"></a>		cal.date_obj.setYear(cal.date_obj.getFullYear() + 1)
+<a name="line529"></a>		newMonth = 0;
+<a name="line530"></a>	}
+<a name="line531"></a>	else if (newMonth == -1)
+<a name="line532"></a>	{
+<a name="line533"></a>		cal.date_obj.setYear(cal.date_obj.getFullYear() - 1)
+<a name="line534"></a>		newMonth = 11;
+<a name="line535"></a>	}
+<a name="line536"></a>	
+<a name="line537"></a>	if (newDate > 28)
+<a name="line538"></a>	{
+<a name="line539"></a>		var newYear = cal.date_obj.getFullYear();
+<a name="line540"></a>		
+<a name="line541"></a>		switch(newMonth)
+<a name="line542"></a>		{
+<a name="line543"></a>			case 1: // Check for leap year
+<a name="line544"></a>				if ((newYear % 4 == 0 && newYear % 100 != 0) || newYear % 400 == 0)
+<a name="line545"></a>				{
+<a name="line546"></a>					if (newDate > 29) newDate = 29;
+<a name="line547"></a>				}
+<a name="line548"></a>				else
+<a name="line549"></a>				{
+<a name="line550"></a>					if (newDate > 28) newDate = 28;
+<a name="line551"></a>				}
+<a name="line552"></a>			case 3:
+<a name="line553"></a>				if (newDate > 30) newDate = 30;
+<a name="line554"></a>			case 5:
+<a name="line555"></a>				if (newDate > 30) newDate = 30;
+<a name="line556"></a>			case 8:
+<a name="line557"></a>				if (newDate > 30) newDate = 30;
+<a name="line558"></a>			case 10:
+<a name="line559"></a>				if (newDate > 30) newDate = 30;
+<a name="line560"></a>			default:
+<a name="line561"></a>				if (newDate > 31) newDate = 31;
+<a name="line562"></a>		}
+<a name="line563"></a>	}
+<a name="line564"></a>	
+<a name="line565"></a>	cal.date_obj.setDate(newDate);
+<a name="line566"></a>	cal.date_obj.setMonth(newMonth);
+<a name="line567"></a>	new_mdy	= cal.date_obj.getFullYear() + '' + cal.date_obj.getMonth() + '' + cal.date;
+<a name="line568"></a>	
+<a name="line569"></a>	highlight = (cal.selected_date == new_mdy) ? true : false;			
+<a name="line570"></a>	cal = new calendar(cal.id, cal.date_obj, highlight, true); 			
+<a name="line571"></a>	document.getElementById('cal' + cal.id).innerHTML = cal.write();	
+<a name="line572"></a>}
+<a name="line573"></a>
+<a name="line574"></a>//	Finalize the date string
+<a name="line575"></a>function date_str(time)
+<a name="line576"></a>{
+<a name="line577"></a>	var month = this.month + 1;
+<a name="line578"></a>	if (month < 10)
+<a name="line579"></a>		month = '0' + month;
+<a name="line580"></a>		
+<a name="line581"></a>	var day		= (this.date  < 10) 	?  '0' + this.date		: this.date;
+<a name="line582"></a>	var minutes	= (this.minutes  < 10)	?  '0' + this.minutes	: this.minutes;
+<a name="line583"></a>		
+<a name="line584"></a>	if (format == 'us')
+<a name="line585"></a>	{
+<a name="line586"></a>		var hours	= (this.hours > 12) ? this.hours - 12 : this.hours;
+<a name="line587"></a>		var ampm	= (this.hours > 11) ? 'PM' : 'AM'
+<a name="line588"></a>	}
+<a name="line589"></a>	else
+<a name="line590"></a>	{
+<a name="line591"></a>		var hours	= this.hours;
+<a name="line592"></a>		var ampm	= '';
+<a name="line593"></a>	}
+<a name="line594"></a>	
+<a name="line595"></a>	if (time == 'y')
+<a name="line596"></a>	{
+<a name="line597"></a>		return this.year + '-' + month + '-' + day + '  ' + hours + ':' + minutes + ' ' + ampm;		
+<a name="line598"></a>	}
+<a name="line599"></a>	else
+<a name="line600"></a>	{
+<a name="line601"></a>		return this.year + '-' + month + '-' + day;
+<a name="line602"></a>	}
+<a name="line603"></a>}
+<a name="line604"></a>
+<a name="line605"></a>//-->
+<a name="line606"></a></script>
+<a name="line607"></a><?php
+<a name="line608"></a>
+<a name="line609"></a>$r = ob_get_contents();
+<a name="line610"></a>ob_end_clean();
+<a name="line611"></a>return $r;
+<a name="line612"></a>}
+<a name="line613"></a>
+<a name="line614"></a>
+<a name="line615"></a>function js_calendar_write($field_id, $time = '', $highlight = TRUE)
+<a name="line616"></a>{
+<a name="line617"></a>	if ($time == '')
+<a name="line618"></a>		$time = time();
+<a name="line619"></a>
+<a name="line620"></a>	return
+<a name="line621"></a>	'<script type="text/javascript">
+<a name="line622"></a>		var '.$field_id.' = new calendar("'.$field_id.'", '.$time.', '.(($highlight == TRUE) ? 'true' : 'false').');
+<a name="line623"></a>		document.write('.$field_id.'.write());
+<a name="line624"></a>	</script>';	
+<a name="line625"></a>}	
+<a name="line626"></a>
+<a name="line627"></a>
+<a name="line628"></a>/* End of file js_calendar_pi.php */
+<a name="line629"></a>/* Location: ./system/plugins/js_calendar_pi.php */</pre>
+<div class="header">
+<h1>GiftFlow API</h1>
+<ul>
+<li><a href="../../overview-summary.html">Overview</a></li>
+<li>Package</li><li>Class</li><li>Tree</li><li><a href="../../overview-files.html">Files</a></li>
+<li><a href="../../deprecated-list.html">Deprecated</a></li>
+<li><a href="../../index-all.html">Index</a></li>
+</ul>
+</div>
+
+<div class="small_links">
+<a href="../../index.html" target="_top">Frames</a>
+<a href="../../source/plugins/js_calendar_pi.php.html" target="_top">No frames</a>
+</div>
+<hr>
+
+<p id="footer">This document was generated by <a href="http://peej.github.com/phpdoctor/">PHPDoctor: The PHP Documentation Creator</a></p>
+
+</body>
+
+</html>

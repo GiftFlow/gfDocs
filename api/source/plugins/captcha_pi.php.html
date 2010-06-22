@@ -1,0 +1,416 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+
+<html lang="en">
+<head>
+
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
+<meta name="generator" content="PHPDoctor 2RC4 (http://peej.github.com/phpdoctor/)">
+<meta name="when" content="Sun, 20 Jun 2010 17:43:51 +0000">
+
+<link rel="stylesheet" type="text/css" href="../../stylesheet.css">
+<link rel="start" href="../../overview-summary.html">
+
+<title>plugins/captcha_pi.php (GiftFlow API)</title>
+
+</head>
+<body id="file" onload="parent.document.title=document.title;">
+
+<div class="header">
+<h1>GiftFlow API</h1>
+<ul>
+<li><a href="../../overview-summary.html">Overview</a></li>
+<li>Package</li><li>Class</li><li>Tree</li><li><a href="../../overview-files.html">Files</a></li>
+<li><a href="../../deprecated-list.html">Deprecated</a></li>
+<li><a href="../../index-all.html">Index</a></li>
+</ul>
+</div>
+
+<div class="small_links">
+<a href="../../index.html" target="_top">Frames</a>
+<a href="../../source/plugins/captcha_pi.php.html" target="_top">No frames</a>
+</div>
+<hr>
+
+<h1>plugins/captcha_pi.php</h1>
+<div class="comment" id="overview_description"><p>CodeIgniter</p><p>An open source application development framework for PHP 4.3.2 or newer</p></div>
+
+<hr>
+
+<a name="line1"></a><pre><?php  if ( ! defined('BASEPATH')) exit('No direct script access allowed');
+<a name="line2"></a>/**
+<a name="line3"></a> * CodeIgniter
+<a name="line4"></a> *
+<a name="line5"></a> * An open source application development framework for PHP 4.3.2 or newer
+<a name="line6"></a> *
+<a name="line7"></a> * @package		CodeIgniter
+<a name="line8"></a> * @author		ExpressionEngine Dev Team
+<a name="line9"></a> * @copyright	Copyright (c) 2008 - 2009, EllisLab, Inc.
+<a name="line10"></a> * @license		http://codeigniter.com/user_guide/license.html
+<a name="line11"></a> * @link		http://codeigniter.com
+<a name="line12"></a> * @since		Version 1.0
+<a name="line13"></a> * @filesource
+<a name="line14"></a> */
+<a name="line15"></a>
+<a name="line16"></a>// ------------------------------------------------------------------------
+<a name="line17"></a>
+<a name="line18"></a>/*
+<a name="line19"></a>Instructions:
+<a name="line20"></a>
+<a name="line21"></a>Load the plugin using:
+<a name="line22"></a>
+<a name="line23"></a> 	$this->load->plugin('captcha');
+<a name="line24"></a>
+<a name="line25"></a>Once loaded you can generate a captcha like this:
+<a name="line26"></a>	
+<a name="line27"></a>	$vals = array(
+<a name="line28"></a>					'word'		 => 'Random word',
+<a name="line29"></a>					'img_path'	 => './captcha/',
+<a name="line30"></a>					'img_url'	 => 'http://example.com/captcha/',
+<a name="line31"></a>					'font_path'	 => './system/fonts/texb.ttf',
+<a name="line32"></a>					'img_width'	 => '150',
+<a name="line33"></a>					'img_height' => 30,
+<a name="line34"></a>					'expiration' => 7200
+<a name="line35"></a>				);
+<a name="line36"></a>	
+<a name="line37"></a>	$cap = create_captcha($vals);
+<a name="line38"></a>	echo $cap['image'];
+<a name="line39"></a>	
+<a name="line40"></a>
+<a name="line41"></a>NOTES:
+<a name="line42"></a>	
+<a name="line43"></a>	The captcha function requires the GD image library.
+<a name="line44"></a>	
+<a name="line45"></a>	Only the img_path and img_url are required.
+<a name="line46"></a>	
+<a name="line47"></a>	If a "word" is not supplied, the function will generate a random
+<a name="line48"></a>	ASCII string.  You might put together your own word library that
+<a name="line49"></a>	you can draw randomly from.
+<a name="line50"></a>	
+<a name="line51"></a>	If you do not specify a path to a TRUE TYPE font, the native ugly GD
+<a name="line52"></a>	font will be used.
+<a name="line53"></a>	
+<a name="line54"></a>	The "captcha" folder must be writable (666, or 777)
+<a name="line55"></a>	
+<a name="line56"></a>	The "expiration" (in seconds) signifies how long an image will
+<a name="line57"></a>	remain in the captcha folder before it will be deleted.  The default
+<a name="line58"></a>	is two hours.
+<a name="line59"></a>
+<a name="line60"></a>RETURNED DATA
+<a name="line61"></a>
+<a name="line62"></a>The create_captcha() function returns an associative array with this data:
+<a name="line63"></a>
+<a name="line64"></a>  [array]
+<a name="line65"></a>  (
+<a name="line66"></a>	'image' => IMAGE TAG
+<a name="line67"></a>	'time'	=> TIMESTAMP (in microtime)
+<a name="line68"></a>	'word'	=> CAPTCHA WORD
+<a name="line69"></a>  )
+<a name="line70"></a>
+<a name="line71"></a>The "image" is the actual image tag:
+<a name="line72"></a><img src="http://example.com/captcha/12345.jpg" width="140" height="50" />
+<a name="line73"></a>
+<a name="line74"></a>The "time" is the micro timestamp used as the image name without the file
+<a name="line75"></a>extension.  It will be a number like this:  1139612155.3422
+<a name="line76"></a>
+<a name="line77"></a>The "word" is the word that appears in the captcha image, which if not
+<a name="line78"></a>supplied to the function, will be a random string.
+<a name="line79"></a>
+<a name="line80"></a>
+<a name="line81"></a>ADDING A DATABASE
+<a name="line82"></a>
+<a name="line83"></a>In order for the captcha function to prevent someone from posting, you will need
+<a name="line84"></a>to add the information returned from create_captcha() function to your database.
+<a name="line85"></a>Then, when the data from the form is submitted by the user you will need to verify
+<a name="line86"></a>that the data exists in the database and has not expired.
+<a name="line87"></a>
+<a name="line88"></a>Here is a table prototype:
+<a name="line89"></a>
+<a name="line90"></a>	CREATE TABLE captcha (
+<a name="line91"></a>	 captcha_id bigint(13) unsigned NOT NULL auto_increment,
+<a name="line92"></a>	 captcha_time int(10) unsigned NOT NULL,
+<a name="line93"></a>	 ip_address varchar(16) default '0' NOT NULL,
+<a name="line94"></a>	 word varchar(20) NOT NULL,
+<a name="line95"></a>	 PRIMARY KEY `captcha_id` (`captcha_id`),
+<a name="line96"></a>	 KEY `word` (`word`)
+<a name="line97"></a>	)
+<a name="line98"></a>
+<a name="line99"></a>
+<a name="line100"></a>Here is an example of usage with a DB.
+<a name="line101"></a>
+<a name="line102"></a>On the page where the captcha will be shown you'll have something like this:
+<a name="line103"></a>
+<a name="line104"></a>	$this->load->plugin('captcha');
+<a name="line105"></a>	$vals = array(
+<a name="line106"></a>					'img_path'	 => './captcha/',
+<a name="line107"></a>					'img_url'	 => 'http://example.com/captcha/'
+<a name="line108"></a>				);
+<a name="line109"></a>	
+<a name="line110"></a>	$cap = create_captcha($vals);
+<a name="line111"></a>
+<a name="line112"></a>	$data = array(
+<a name="line113"></a>					'captcha_id'	=> '',
+<a name="line114"></a>					'captcha_time'	=> $cap['time'],
+<a name="line115"></a>					'ip_address'	=> $this->input->ip_address(),
+<a name="line116"></a>					'word'			=> $cap['word']
+<a name="line117"></a>				);
+<a name="line118"></a>
+<a name="line119"></a>	$query = $this->db->insert_string('captcha', $data);
+<a name="line120"></a>	$this->db->query($query);
+<a name="line121"></a>		
+<a name="line122"></a>	echo 'Submit the word you see below:';
+<a name="line123"></a>	echo $cap['image'];
+<a name="line124"></a>	echo '<input type="text" name="captcha" value="" />';
+<a name="line125"></a>
+<a name="line126"></a>
+<a name="line127"></a>Then, on the page that accepts the submission you'll have something like this:
+<a name="line128"></a>
+<a name="line129"></a>	// First, delete old captchas
+<a name="line130"></a>	$expiration = time()-7200; // Two hour limit
+<a name="line131"></a>	$DB->query("DELETE FROM captcha WHERE captcha_time < ".$expiration);		
+<a name="line132"></a>
+<a name="line133"></a>	// Then see if a captcha exists:
+<a name="line134"></a>	$sql = "SELECT COUNT(*) AS count FROM captcha WHERE word = ? AND ip_address = ? AND date > ?";
+<a name="line135"></a>	$binds = array($_POST['captcha'], $this->input->ip_address(), $expiration);
+<a name="line136"></a>	$query = $this->db->query($sql, $binds);
+<a name="line137"></a>	$row = $query->row();
+<a name="line138"></a>
+<a name="line139"></a>	if ($row->count == 0)
+<a name="line140"></a>	{
+<a name="line141"></a>		echo "You must submit the word that appears in the image";
+<a name="line142"></a>	}
+<a name="line143"></a>
+<a name="line144"></a>*/
+<a name="line145"></a>
+<a name="line146"></a>
+<a name="line147"></a>	
+<a name="line148"></a>/**
+<a name="line149"></a>|==========================================================
+<a name="line150"></a>| Create Captcha
+<a name="line151"></a>|==========================================================
+<a name="line152"></a>|
+<a name="line153"></a>*/
+<a name="line154"></a>function create_captcha($data = '', $img_path = '', $img_url = '', $font_path = '')
+<a name="line155"></a>{		
+<a name="line156"></a>	$defaults = array('word' => '', 'img_path' => '', 'img_url' => '', 'img_width' => '150', 'img_height' => '30', 'font_path' => '', 'expiration' => 7200);		
+<a name="line157"></a>	
+<a name="line158"></a>	foreach ($defaults as $key => $val)
+<a name="line159"></a>	{
+<a name="line160"></a>		if ( ! is_array($data))
+<a name="line161"></a>		{
+<a name="line162"></a>			if ( ! isset($$key) OR $$key == '')
+<a name="line163"></a>			{
+<a name="line164"></a>				$$key = $val;
+<a name="line165"></a>			}
+<a name="line166"></a>		}
+<a name="line167"></a>		else
+<a name="line168"></a>		{			
+<a name="line169"></a>			$$key = ( ! isset($data[$key])) ? $val : $data[$key];
+<a name="line170"></a>		}
+<a name="line171"></a>	}
+<a name="line172"></a>	
+<a name="line173"></a>	if ($img_path == '' OR $img_url == '')
+<a name="line174"></a>	{
+<a name="line175"></a>		return FALSE;
+<a name="line176"></a>	}
+<a name="line177"></a>
+<a name="line178"></a>	if ( ! @is_dir($img_path))
+<a name="line179"></a>	{
+<a name="line180"></a>		return FALSE;
+<a name="line181"></a>	}
+<a name="line182"></a>	
+<a name="line183"></a>	if ( ! is_really_writable($img_path))
+<a name="line184"></a>	{
+<a name="line185"></a>		return FALSE;
+<a name="line186"></a>	}
+<a name="line187"></a>			
+<a name="line188"></a>	if ( ! extension_loaded('gd'))
+<a name="line189"></a>	{
+<a name="line190"></a>		return FALSE;
+<a name="line191"></a>	}		
+<a name="line192"></a>	
+<a name="line193"></a>	// -----------------------------------
+<a name="line194"></a>	// Remove old images	
+<a name="line195"></a>	// -----------------------------------
+<a name="line196"></a>			
+<a name="line197"></a>	list($usec, $sec) = explode(" ", microtime());
+<a name="line198"></a>	$now = ((float)$usec + (float)$sec);
+<a name="line199"></a>			
+<a name="line200"></a>	$current_dir = @opendir($img_path);
+<a name="line201"></a>	
+<a name="line202"></a>	while($filename = @readdir($current_dir))
+<a name="line203"></a>	{
+<a name="line204"></a>		if ($filename != "." and $filename != ".." and $filename != "index.html")
+<a name="line205"></a>		{
+<a name="line206"></a>			$name = str_replace(".jpg", "", $filename);
+<a name="line207"></a>		
+<a name="line208"></a>			if (($name + $expiration) < $now)
+<a name="line209"></a>			{
+<a name="line210"></a>				@unlink($img_path.$filename);
+<a name="line211"></a>			}
+<a name="line212"></a>		}
+<a name="line213"></a>	}
+<a name="line214"></a>	
+<a name="line215"></a>	@closedir($current_dir);
+<a name="line216"></a>
+<a name="line217"></a>	// -----------------------------------
+<a name="line218"></a>	// Do we have a "word" yet?
+<a name="line219"></a>	// -----------------------------------
+<a name="line220"></a>	
+<a name="line221"></a>   if ($word == '')
+<a name="line222"></a>   {
+<a name="line223"></a>		$pool = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
+<a name="line224"></a>
+<a name="line225"></a>		$str = '';
+<a name="line226"></a>		for ($i = 0; $i < 8; $i++)
+<a name="line227"></a>		{
+<a name="line228"></a>			$str .= substr($pool, mt_rand(0, strlen($pool) -1), 1);
+<a name="line229"></a>		}
+<a name="line230"></a>		
+<a name="line231"></a>		$word = $str;
+<a name="line232"></a>   }
+<a name="line233"></a>	
+<a name="line234"></a>	// -----------------------------------
+<a name="line235"></a>	// Determine angle and position	
+<a name="line236"></a>	// -----------------------------------
+<a name="line237"></a>	
+<a name="line238"></a>	$length	= strlen($word);
+<a name="line239"></a>	$angle	= ($length >= 6) ? rand(-($length-6), ($length-6)) : 0;
+<a name="line240"></a>	$x_axis	= rand(6, (360/$length)-16);			
+<a name="line241"></a>	$y_axis = ($angle >= 0 ) ? rand($img_height, $img_width) : rand(6, $img_height);
+<a name="line242"></a>	
+<a name="line243"></a>	// -----------------------------------
+<a name="line244"></a>	// Create image
+<a name="line245"></a>	// -----------------------------------
+<a name="line246"></a>			
+<a name="line247"></a>	// PHP.net recommends imagecreatetruecolor(), but it isn't always available
+<a name="line248"></a>	if (function_exists('imagecreatetruecolor'))
+<a name="line249"></a>	{
+<a name="line250"></a>		$im = imagecreatetruecolor($img_width, $img_height);
+<a name="line251"></a>	}
+<a name="line252"></a>	else
+<a name="line253"></a>	{
+<a name="line254"></a>		$im = imagecreate($img_width, $img_height);
+<a name="line255"></a>	}
+<a name="line256"></a>			
+<a name="line257"></a>	// -----------------------------------
+<a name="line258"></a>	//  Assign colors
+<a name="line259"></a>	// -----------------------------------
+<a name="line260"></a>	
+<a name="line261"></a>	$bg_color		= imagecolorallocate ($im, 255, 255, 255);
+<a name="line262"></a>	$border_color	= imagecolorallocate ($im, 153, 102, 102);
+<a name="line263"></a>	$text_color		= imagecolorallocate ($im, 204, 153, 153);
+<a name="line264"></a>	$grid_color		= imagecolorallocate($im, 255, 182, 182);
+<a name="line265"></a>	$shadow_color	= imagecolorallocate($im, 255, 240, 240);
+<a name="line266"></a>
+<a name="line267"></a>	// -----------------------------------
+<a name="line268"></a>	//  Create the rectangle
+<a name="line269"></a>	// -----------------------------------
+<a name="line270"></a>	
+<a name="line271"></a>	ImageFilledRectangle($im, 0, 0, $img_width, $img_height, $bg_color);
+<a name="line272"></a>	
+<a name="line273"></a>	// -----------------------------------
+<a name="line274"></a>	//  Create the spiral pattern
+<a name="line275"></a>	// -----------------------------------
+<a name="line276"></a>	
+<a name="line277"></a>	$theta		= 1;
+<a name="line278"></a>	$thetac		= 7;
+<a name="line279"></a>	$radius		= 16;
+<a name="line280"></a>	$circles	= 20;
+<a name="line281"></a>	$points		= 32;
+<a name="line282"></a>
+<a name="line283"></a>	for ($i = 0; $i < ($circles * $points) - 1; $i++)
+<a name="line284"></a>	{
+<a name="line285"></a>		$theta = $theta + $thetac;
+<a name="line286"></a>		$rad = $radius * ($i / $points );
+<a name="line287"></a>		$x = ($rad * cos($theta)) + $x_axis;
+<a name="line288"></a>		$y = ($rad * sin($theta)) + $y_axis;
+<a name="line289"></a>		$theta = $theta + $thetac;
+<a name="line290"></a>		$rad1 = $radius * (($i + 1) / $points);
+<a name="line291"></a>		$x1 = ($rad1 * cos($theta)) + $x_axis;
+<a name="line292"></a>		$y1 = ($rad1 * sin($theta )) + $y_axis;
+<a name="line293"></a>		imageline($im, $x, $y, $x1, $y1, $grid_color);
+<a name="line294"></a>		$theta = $theta - $thetac;
+<a name="line295"></a>	}
+<a name="line296"></a>
+<a name="line297"></a>	// -----------------------------------
+<a name="line298"></a>	//  Write the text
+<a name="line299"></a>	// -----------------------------------
+<a name="line300"></a>	
+<a name="line301"></a>	$use_font = ($font_path != '' AND file_exists($font_path) AND function_exists('imagettftext')) ? TRUE : FALSE;
+<a name="line302"></a>		
+<a name="line303"></a>	if ($use_font == FALSE)
+<a name="line304"></a>	{
+<a name="line305"></a>		$font_size = 5;
+<a name="line306"></a>		$x = rand(0, $img_width/($length/3));
+<a name="line307"></a>		$y = 0;
+<a name="line308"></a>	}
+<a name="line309"></a>	else
+<a name="line310"></a>	{
+<a name="line311"></a>		$font_size	= 16;
+<a name="line312"></a>		$x = rand(0, $img_width/($length/1.5));
+<a name="line313"></a>		$y = $font_size+2;
+<a name="line314"></a>	}
+<a name="line315"></a>
+<a name="line316"></a>	for ($i = 0; $i < strlen($word); $i++)
+<a name="line317"></a>	{
+<a name="line318"></a>		if ($use_font == FALSE)
+<a name="line319"></a>		{
+<a name="line320"></a>			$y = rand(0 , $img_height/2);
+<a name="line321"></a>			imagestring($im, $font_size, $x, $y, substr($word, $i, 1), $text_color);
+<a name="line322"></a>			$x += ($font_size*2);
+<a name="line323"></a>		}
+<a name="line324"></a>		else
+<a name="line325"></a>		{		
+<a name="line326"></a>			$y = rand($img_height/2, $img_height-3);
+<a name="line327"></a>			imagettftext($im, $font_size, $angle, $x, $y, $text_color, $font_path, substr($word, $i, 1));
+<a name="line328"></a>			$x += $font_size;
+<a name="line329"></a>		}
+<a name="line330"></a>	}
+<a name="line331"></a>	
+<a name="line332"></a>
+<a name="line333"></a>	// -----------------------------------
+<a name="line334"></a>	//  Create the border
+<a name="line335"></a>	// -----------------------------------
+<a name="line336"></a>
+<a name="line337"></a>	imagerectangle($im, 0, 0, $img_width-1, $img_height-1, $border_color);		
+<a name="line338"></a>
+<a name="line339"></a>	// -----------------------------------
+<a name="line340"></a>	//  Generate the image
+<a name="line341"></a>	// -----------------------------------
+<a name="line342"></a>	
+<a name="line343"></a>	$img_name = $now.'.jpg';
+<a name="line344"></a>
+<a name="line345"></a>	ImageJPEG($im, $img_path.$img_name);
+<a name="line346"></a>	
+<a name="line347"></a>	$img = "<img src=\"$img_url$img_name\" width=\"$img_width\" height=\"$img_height\" style=\"border:0;\" alt=\" \" />";
+<a name="line348"></a>	
+<a name="line349"></a>	ImageDestroy($im);
+<a name="line350"></a>		
+<a name="line351"></a>	return array('word' => $word, 'time' => $now, 'image' => $img);
+<a name="line352"></a>}
+<a name="line353"></a>
+<a name="line354"></a>
+<a name="line355"></a>/* End of file captcha_pi.php */
+<a name="line356"></a>/* Location: ./system/plugins/captcha_pi.php */</pre>
+<div class="header">
+<h1>GiftFlow API</h1>
+<ul>
+<li><a href="../../overview-summary.html">Overview</a></li>
+<li>Package</li><li>Class</li><li>Tree</li><li><a href="../../overview-files.html">Files</a></li>
+<li><a href="../../deprecated-list.html">Deprecated</a></li>
+<li><a href="../../index-all.html">Index</a></li>
+</ul>
+</div>
+
+<div class="small_links">
+<a href="../../index.html" target="_top">Frames</a>
+<a href="../../source/plugins/captcha_pi.php.html" target="_top">No frames</a>
+</div>
+<hr>
+
+<p id="footer">This document was generated by <a href="http://peej.github.com/phpdoctor/">PHPDoctor: The PHP Documentation Creator</a></p>
+
+</body>
+
+</html>

@@ -1,0 +1,121 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+
+<html lang="en">
+<head>
+
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
+<meta name="generator" content="PHPDoctor 2RC4 (http://peej.github.com/phpdoctor/)">
+<meta name="when" content="Fri, 18 Jun 2010 15:58:03 +0000">
+
+<link rel="stylesheet" type="text/css" href="../../../stylesheet.css">
+<link rel="start" href="../../../overview-summary.html">
+
+<title>views/member/login.php (GiftFlow API)</title>
+
+</head>
+<body id="file" onload="parent.document.title=document.title;">
+
+<div class="header">
+<h1>GiftFlow API</h1>
+<ul>
+<li><a href="../../../overview-summary.html">Overview</a></li>
+<li>Package</li><li>Class</li><li>Tree</li><li><a href="../../../overview-files.html">Files</a></li>
+<li><a href="../../../deprecated-list.html">Deprecated</a></li>
+<li><a href="../../../index-all.html">Index</a></li>
+</ul>
+</div>
+
+<div class="small_links">
+<a href="../../../index.html" target="_top">Frames</a>
+<a href="../../../source/views/member/login.php.html" target="_top">No frames</a>
+</div>
+<hr>
+
+<h1>views/member/login.php</h1>
+<hr>
+
+<a name="line1"></a><pre><div id='login'>
+<a name="line2"></a><?php echo heading('login', array('id'=>'login_heading')); ?>
+<a name="line3"></a><?php echo form_open('member/login'); ?>
+<a name="line4"></a><table>
+<a name="line5"></a><tr>
+<a name="line6"></a>	<td><h3>Use Facebook</h3></td>
+<a name="line7"></a>	<td style='padding: 0px 70px; vertical-align: bottom;'><span>or</span></td>
+<a name="line8"></a>	<td><h3>Use Your GiftFlow Account</h3></td>
+<a name="line9"></a></tr>
+<a name="line10"></a><tr>
+<a name="line11"></a>	<td style='vertical-align: top;'>
+<a name="line12"></a>		<p>
+<a name="line13"></a>			<a style='border-bottom: 0px;' href='<?php echo site_url('member/facebook'); ?>'>
+<a name="line14"></a>				<img src='<?php echo base_url(); ?>assets/images/facebook_login.png' style='border: 0;' />
+<a name="line15"></a>			</a>
+<a name="line16"></a>		</p>
+<a name="line17"></a>	</td>
+<a name="line18"></a>	<td></td>
+<a name="line19"></a>	<td style='width: 500px;'>
+<a name="line20"></a>	<!--
+<a name="line21"></a><center><h3>Use Facebook</h3>
+<a name="line22"></a>
+<a name="line23"></a><h3>Use Your Email</h3>
+<a name="line24"></a><p>No account? <a href="<?php echo site_url('register'); ?>">Click here to sign up.</a></p></center>
+<a name="line25"></a><table class='form ui-widget' id='login_table'>
+<a name="line26"></a>    <tbody>
+<a name="line27"></a>        <tr>
+<a name="line28"></a>            <td><label>Email Address</label></td>
+<a name="line29"></a>            <td class='field'><?php echo form_input('email', set_value('email')); ?></td>
+<a name="line30"></a>        </tr>
+<a name="line31"></a>        <tr>
+<a name="line32"></a>            <td><label>Password</label></td>
+<a name="line33"></a>            <td class='field'><?php echo form_password('password'); ?></td>
+<a name="line34"></a>        </tr>
+<a name="line35"></a>    </tbody>
+<a name="line36"></a> </table>
+<a name="line37"></a>
+<a name="line38"></a>
+<a name="line39"></a><input type='hidden' name='redirect' value="<?php if(!empty($redirect)) echo $redirect; ?>" />
+<a name="line40"></a><input type='submit' class='submit' value="Login Now" />
+<a name="line41"></a>
+<a name="line42"></a>-->
+<a name="line43"></a><p style='font-size: .8em;'>No account? <a href="<?php echo site_url('register'); ?>">Click here to sign up.</a></p>
+<a name="line44"></a><p><label>Email Address</label>
+<a name="line45"></a><p><?php echo form_input('email', set_value('email')); ?>
+<a name="line46"></a>           <p><label>Password</label>
+<a name="line47"></a>            <p><?php echo form_password('password'); ?>
+<a name="line48"></a>            <p>
+<a name="line49"></a><input type='hidden' name='redirect' value="<?php if(!empty($redirect)) echo $redirect; ?>" />
+<a name="line50"></a><input type='submit' class='submit' value="Login Now" />
+<a name="line51"></a>
+<a name="line52"></a>
+<a name="line53"></a><?php echo form_close(''); ?>
+<a name="line54"></a></td>
+<a name="line55"></a></tr>
+<a name="line56"></a></table>
+<a name="line57"></a></div>
+<a name="line58"></a><script>
+<a name="line59"></a>$(function(){
+<a name="line60"></a>	$("input:submit").button();
+<a name="line61"></a>	<?php echo notify(); ?>
+<a name="line62"></a>});
+<a name="line63"></a></script></pre>
+<div class="header">
+<h1>GiftFlow API</h1>
+<ul>
+<li><a href="../../../overview-summary.html">Overview</a></li>
+<li>Package</li><li>Class</li><li>Tree</li><li><a href="../../../overview-files.html">Files</a></li>
+<li><a href="../../../deprecated-list.html">Deprecated</a></li>
+<li><a href="../../../index-all.html">Index</a></li>
+</ul>
+</div>
+
+<div class="small_links">
+<a href="../../../index.html" target="_top">Frames</a>
+<a href="../../../source/views/member/login.php.html" target="_top">No frames</a>
+</div>
+<hr>
+
+<p id="footer">This document was generated by <a href="http://peej.github.com/phpdoctor/">PHPDoctor: The PHP Documentation Creator</a></p>
+
+</body>
+
+</html>

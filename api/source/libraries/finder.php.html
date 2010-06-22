@@ -1,0 +1,290 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+
+<html lang="en">
+<head>
+
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
+<meta name="generator" content="PHPDoctor 2RC4 (http://peej.github.com/phpdoctor/)">
+<meta name="when" content="Fri, 18 Jun 2010 15:58:03 +0000">
+
+<link rel="stylesheet" type="text/css" href="../../stylesheet.css">
+<link rel="start" href="../../overview-summary.html">
+
+<title>libraries/finder.php (GiftFlow API)</title>
+
+</head>
+<body id="file" onload="parent.document.title=document.title;">
+
+<div class="header">
+<h1>GiftFlow API</h1>
+<ul>
+<li><a href="../../overview-summary.html">Overview</a></li>
+<li>Package</li><li>Class</li><li>Tree</li><li><a href="../../overview-files.html">Files</a></li>
+<li><a href="../../deprecated-list.html">Deprecated</a></li>
+<li><a href="../../index-all.html">Index</a></li>
+</ul>
+</div>
+
+<div class="small_links">
+<a href="../../index.html" target="_top">Frames</a>
+<a href="../../source/libraries/finder.php.html" target="_top">No frames</a>
+</div>
+<hr>
+
+<h1>libraries/finder.php</h1>
+<hr>
+
+<a name="line1"></a><pre><?php  if ( ! defined('BASEPATH')) exit('No direct script access allowed');
+<a name="line2"></a>
+<a name="line3"></a>class Finder
+<a name="line4"></a>{
+<a name="line5"></a>
+<a name="line6"></a>	protected $ci;
+<a name="line7"></a>	
+<a name="line8"></a>	// Typical search parameters
+<a name="line9"></a>	var $keyword;
+<a name="line10"></a>	var $location;
+<a name="line11"></a>	
+<a name="line12"></a>	// Location details
+<a name="line13"></a>	var $address;
+<a name="line14"></a>	var $latitude;
+<a name="line15"></a>	var $longitude;
+<a name="line16"></a>	
+<a name="line17"></a>	// Search radius
+<a name="line18"></a>	var $radius = 10000;
+<a name="line19"></a>	
+<a name="line20"></a>	// LatLng bounds defined using search radius
+<a name="line21"></a>	var $bounds;
+<a name="line22"></a>	
+<a name="line23"></a>	// Type of search
+<a name="line24"></a>	var $type = 'gift';
+<a name="line25"></a>	
+<a name="line26"></a>	// Tag ID
+<a name="line27"></a>	var $tag_id;
+<a name="line28"></a>	
+<a name="line29"></a>	// Stores subquery strings which will be merged in a union
+<a name="line30"></a>	var $subquery;
+<a name="line31"></a>
+<a name="line32"></a>	// Result
+<a name="line33"></a>	var $result;
+<a name="line34"></a>	
+<a name="line35"></a>	// Return data format
+<a name="line36"></a>	var $format;
+<a name="line37"></a>	
+<a name="line38"></a>	public function __construct()
+<a name="line39"></a>	{
+<a name="line40"></a>		$this->ci =& get_instance();
+<a name="line41"></a>	}
+<a name="line42"></a>	
+<a name="line43"></a>	public function locate_ip( $ip = NULL )
+<a name="line44"></a>	{
+<a name="line45"></a>		if(empty($ip)) $ip = $this->ci->input->ip_address();
+<a name="line46"></a>		$url = "http://ipinfodb.com/ip_query.php?ip=".$ip."&timezone=false";
+<a name="line47"></a>		$xml = simplexml_load_file( $url );
+<a name="line48"></a>		if(!empty($xml->City)&&!empty($xml->RegionName))
+<a name="line49"></a>		{
+<a name="line50"></a>			$data['city'] = $xml->City;
+<a name="line51"></a>			$data['state'] = $xml->RegionName;
+<a name="line52"></a>			$data['latitude'] = $xml->Latitude;
+<a name="line53"></a>			$data['longitude'] = $xml->Longitude;
+<a name="line54"></a>			return $data;
+<a name="line55"></a>		}
+<a name="line56"></a>		else return false;
+<a name="line57"></a>	}
+<a name="line58"></a>	
+<a name="line59"></a>	protected function _set_bounds()
+<a name="line60"></a>	{
+<a name="line61"></a>		if(!isset($this->latitude)||!isset($this->longitude)) return false;
+<a name="line62"></a>		
+<a name="line63"></a>		// How wide is one degree?
+<a name="line64"></a>		$latitude_degree = 69;
+<a name="line65"></a>		$longitude_degree = ( ( 3.14 * cos(deg2rad($this->latitude)) * 6367449 ) / (180 * 1000 ) ) / 1.609;
+<a name="line66"></a>		
+<a name="line67"></a>		// How wide is the search radius (in degrees)?
+<a name="line68"></a>		$latitude_radius = $this->radius  / $latitude_degree;
+<a name="line69"></a>		$longitude_radius = $this->radius / $latitude_degree;
+<a name="line70"></a>		$this->bounds = array ( "latitude"=>array ( 	"upper"=> ( $this->latitude + $latitude_radius ),
+<a name="line71"></a>										"lower" => ( $this->latitude - $latitude_radius ) ),
+<a name="line72"></a>						"longitude"=>array(	"upper"=> ( $this->longitude + $longitude_radius ),
+<a name="line73"></a>										"lower" => ( $this->longitude - $longitude_radius ) ) );		
+<a name="line74"></a>		$this->ci->db->where("L.latitude BETWEEN ".$this->bounds['latitude']['lower']." AND ".$this->bounds['latitude']['upper']);
+<a name="line75"></a>		$this->ci->db->where("L.longitude BETWEEN ".$this->bounds['longitude']['lower']." AND ".$this->bounds['longitude']['upper']);
+<a name="line76"></a>		$this->ci->db->select("( 3959 * acos( cos( radians( ".$this->latitude." ) ) * cos( radians( L.latitude ) ) * cos( radians( L.longitude ) - radians(".$this->longitude.") ) + sin( radians(".$this->latitude.") ) * sin( radians( L.latitude ) ) ) ) AS distance");
+<a name="line77"></a>
+<a name="line78"></a>	}
+<a name="line79"></a>	public function popular_tags()
+<a name="line80"></a>	{
+<a name="line81"></a>		$tags = array();
+<a name="line82"></a>		$this->_set_bounds();
+<a name="line83"></a>		$this->ci->db	->select('t.name AS tag, COUNT(g.id) AS count')
+<a name="line84"></a>					->from('goods_tags AS gt ')
+<a name="line85"></a>					->join('goods AS g ', 'g.id=gt.good_id')
+<a name="line86"></a>					->join('tags AS t ', 't.id = gt.tag_id')
+<a name="line87"></a>					->join('locations AS L ','L.id=g.location_id')
+<a name="line88"></a>					->where('g.winning_transaction_id',0)
+<a name="line89"></a>					->where('g.type','gift')
+<a name="line90"></a>					->group_by('t.name')
+<a name="line91"></a>					->order_by('count', 'desc');
+<a name="line92"></a>		$this->ci->db->select('t.id AS tag_id');
+<a name="line93"></a>		$query = $this->ci->db->get();
+<a name="line94"></a>
+<a name="line95"></a>		return $query->result();
+<a name="line96"></a>	}
+<a name="line97"></a>	
+<a name="line98"></a>	
+<a name="line99"></a>	public function tag_search ( $tag = NULL )
+<a name="line100"></a>	{
+<a name="line101"></a>		if(!empty($tag))
+<a name="line102"></a>		{
+<a name="line103"></a>			// Find the tag_id
+<a name="line104"></a>			$tag_query = $this->ci->db->select("id")->like('name', $tag)->get('tags');
+<a name="line105"></a>			if($tag_query->num_rows==0) return false;
+<a name="line106"></a>			$tag = $tag_query->row();
+<a name="line107"></a>			$this->tag_id = $tag->id;
+<a name="line108"></a>		}
+<a name="line109"></a>		$this->query();
+<a name="line110"></a>		$this->format_result();
+<a name="line111"></a>		return $this->result;
+<a name="line112"></a>	}
+<a name="line113"></a>	
+<a name="line114"></a>	
+<a name="line115"></a>	public function search()
+<a name="line116"></a>	{
+<a name="line117"></a>		$this->query();
+<a name="line118"></a>		
+<a name="line119"></a>		if( $this->format == "JSON" )
+<a name="line120"></a>		{
+<a name="line121"></a>			$this->_format_result();
+<a name="line122"></a>			if(!empty($this->latitude)&&!empty($this->longitude)&&!empty($this->address))
+<a name="line123"></a>				$data['center'] = (object) array ( "latitude"=>$this->latitude, "longitude"=> $this->longitude, "address"=>$this->address);
+<a name="line124"></a>			$data['results'] = $this->result;
+<a name="line125"></a>			return json_encode( $data );
+<a name="line126"></a>		}
+<a name="line127"></a>		else
+<a name="line128"></a>		{
+<a name="line129"></a>			$this->_format_result();
+<a name="line130"></a>			return $this->result;
+<a name="line131"></a>		}
+<a name="line132"></a>	}
+<a name="line133"></a>	
+<a name="line134"></a>	public function query()
+<a name="line135"></a>	{
+<a name="line136"></a>		// Geocode if needed
+<a name="line137"></a>		if(!empty($this->location)&&(empty($this->latitude)||empty($this->longitude)))
+<a name="line138"></a>		{
+<a name="line139"></a>			$L = new Location();
+<a name="line140"></a>			if(!$L->geocode( $this->location )) return false;
+<a name="line141"></a>			$this->latitude = $L->latitude;
+<a name="line142"></a>			$this->longitude = $L->longitude;
+<a name="line143"></a>			$this->address = $L->address;
+<a name="line144"></a>		}
+<a name="line145"></a>
+<a name="line146"></a>		// Find any matching tags
+<a name="line147"></a>		$this->_set_tag( $this->keyword );
+<a name="line148"></a>		
+<a name="line149"></a>		// Search by keyword
+<a name="line150"></a>		$this->subquery[] = $this->_title_query();
+<a name="line151"></a>
+<a name="line152"></a>		// If keyword matches a tag, filter by it
+<a name="line153"></a>		if ( !empty($this->tag_id) )
+<a name="line154"></a>			$this->subquery[] = $this->_tag_query();
+<a name="line155"></a>
+<a name="line156"></a>		if(count($this->subquery)==2)
+<a name="line157"></a>		{
+<a name="line158"></a>			
+<a name="line159"></a>			$union = "(".$this->subquery[0]." ) UNION ( ".$this->subquery[1].")";
+<a name="line160"></a>			$query = $this->ci->db->query($union);
+<a name="line161"></a>		}
+<a name="line162"></a>		elseif(count($this->subquery)==1)
+<a name="line163"></a>			$query = $this->ci->db->query($this->subquery[0]);
+<a name="line164"></a>			
+<a name="line165"></a>		// Store result
+<a name="line166"></a>		$this->result = $query->result();
+<a name="line167"></a>	}
+<a name="line168"></a>	
+<a name="line169"></a>	
+<a name="line170"></a>	private function _basic_query()
+<a name="line171"></a>	{
+<a name="line172"></a>		// Determine geographic boundaries
+<a name="line173"></a>		$this->_set_bounds();
+<a name="line174"></a>		// Find goods
+<a name="line175"></a>		$this->ci->db	->select('G.id, G.title, G.id, L.latitude, L.longitude, U.screen_name AS author')
+<a name="line176"></a>						->from('goods AS G ')
+<a name="line177"></a>						->join("locations AS L ", "L.id = G.location_id")
+<a name="line178"></a>						->join('users AS U ', 'G.user_id = U.id')
+<a name="line179"></a>						->where('G.type', $this->type);
+<a name="line180"></a>		
+<a name="line181"></a>		// If bounds are set, then add where clauses
+<a name="line182"></a>		if ( !empty($this->bounds))
+<a name="line183"></a>		{
+<a name="line184"></a>			$this->ci->db->where("L.latitude BETWEEN ".$this->bounds['latitude']['lower']." AND ".$this->bounds['latitude']['upper']);
+<a name="line185"></a>			$this->ci->db->where("L.longitude BETWEEN ".$this->bounds['longitude']['lower']." AND ".$this->bounds['longitude']['upper']);		
+<a name="line186"></a>		}
+<a name="line187"></a>	}
+<a name="line188"></a>	
+<a name="line189"></a>	
+<a name="line190"></a>	private function _tag_query()
+<a name="line191"></a>	{
+<a name="line192"></a>		$this->ci->db->_reset_select();
+<a name="line193"></a>		$this->_basic_query();
+<a name="line194"></a>		$this->ci->db->join("goods_tags AS GT ", "GT.good_id=G.id")
+<a name="line195"></a>			->join("tags AS T ", "GT.tag_id=T.id")
+<a name="line196"></a>			->where('T.id = '.$this->tag_id);
+<a name="line197"></a>		$subquery = $this->ci->db->_compile_select();
+<a name="line198"></a>		$this->ci->db->_reset_select();
+<a name="line199"></a>		return $subquery;
+<a name="line200"></a>	}
+<a name="line201"></a>	
+<a name="line202"></a>	
+<a name="line203"></a>	private function _title_query()
+<a name="line204"></a>	{
+<a name="line205"></a>		$this->ci->db->_reset_select();
+<a name="line206"></a>		$this->_basic_query();
+<a name="line207"></a>		$this->ci->db->like("G.title", $this->keyword);
+<a name="line208"></a>		$subquery = $this->ci->db->_compile_select();
+<a name="line209"></a>		$this->ci->db->_reset_select();
+<a name="line210"></a>		
+<a name="line211"></a>		return $subquery;
+<a name="line212"></a>	}
+<a name="line213"></a>	
+<a name="line214"></a>	private function _format_result()
+<a name="line215"></a>	{
+<a name="line216"></a>		foreach($this->result as $key=>$val)
+<a name="line217"></a>		{
+<a name="line218"></a>			$val->html = result_row($val->id, array("author", "location"));
+<a name="line219"></a>		}
+<a name="line220"></a>	}
+<a name="line221"></a>	
+<a name="line222"></a>	private function _set_tag( $tag )
+<a name="line223"></a>	{
+<a name="line224"></a>		// Find the tag_id
+<a name="line225"></a>		$tag_query = $this->ci->db->select("id")->like('name', $tag)->get('tags');
+<a name="line226"></a>		if($tag_query->num_rows==0) return false;
+<a name="line227"></a>		$tag = $tag_query->row();
+<a name="line228"></a>		$this->tag_id = $tag->id;
+<a name="line229"></a>	}
+<a name="line230"></a>
+<a name="line231"></a>}
+<a name="line232"></a></pre>
+<div class="header">
+<h1>GiftFlow API</h1>
+<ul>
+<li><a href="../../overview-summary.html">Overview</a></li>
+<li>Package</li><li>Class</li><li>Tree</li><li><a href="../../overview-files.html">Files</a></li>
+<li><a href="../../deprecated-list.html">Deprecated</a></li>
+<li><a href="../../index-all.html">Index</a></li>
+</ul>
+</div>
+
+<div class="small_links">
+<a href="../../index.html" target="_top">Frames</a>
+<a href="../../source/libraries/finder.php.html" target="_top">No frames</a>
+</div>
+<hr>
+
+<p id="footer">This document was generated by <a href="http://peej.github.com/phpdoctor/">PHPDoctor: The PHP Documentation Creator</a></p>
+
+</body>
+
+</html>

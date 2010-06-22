@@ -1,0 +1,800 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+
+<html lang="en">
+<head>
+
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
+<meta name="generator" content="PHPDoctor 2RC4 (http://peej.github.com/phpdoctor/)">
+<meta name="when" content="Sun, 20 Jun 2010 17:43:50 +0000">
+
+<link rel="stylesheet" type="text/css" href="../stylesheet.css">
+<link rel="start" href="../overview-summary.html">
+
+<title>CI_Validation (GiftFlow API)</title>
+
+</head>
+<body id="definition" onload="parent.document.title=document.title;">
+
+<div class="header">
+<h1>GiftFlow API</h1>
+<ul>
+<li><a href="../overview-summary.html">Overview</a></li>
+<li><a href="../giftflow/package-summary.html">Package</a></li>
+<li class="active">Class</li>
+<li><a href="../giftflow/package-tree.html">Tree</a></li>
+<li><a href="../overview-files.html">Files</a></li>
+<li><a href="../deprecated-list.html">Deprecated</a></li>
+<li><a href="../index-all.html">Index</a></li>
+</ul>
+</div>
+
+<div class="small_links">
+<a href="../index.html" target="_top">Frames</a>
+<a href="../giftflow/ci_validation.html" target="_top">No frames</a>
+</div>
+<div class="small_links">
+Summary: <a href="#summary_field">Field</a> | <a href="#summary_method">Method</a> | <a href="#summary_constr">Constr</a>
+Detail: <a href="#detail_field">Field</a> | <a href="#detail_method">Method</a> | <a href="#summary_constr">Constr</a>
+</div>
+<hr>
+
+<div class="qualifiedName">GiftFlow\CI_Validation</div>
+<a href="../source/libraries/validation.php.html#line27" class="location">libraries/Validation.php at line 27</a>
+
+<h1>Class CI_Validation</h1>
+
+<pre class="tree"><strong>CI_Validation</strong><br /></pre>
+
+<hr>
+
+<p class="signature">public  class <strong>CI_Validation</strong></p>
+
+<div class="comment" id="overview_description"><p>Validation Class</p></div>
+
+<dl>
+<dt>Package		CodeIgniter.</dt>
+<dt>Subpackage	Libraries.</dt>
+<dt>Category	Validation.</dt>
+<dt>Author		ExpressionEngine:</dt>
+<dd>Dev Team</dd>
+<dt>Link		http://codeigniter.com/user_guide/libraries/validation.html.</dt>
+</dl>
+<hr>
+
+<table id="summary_field">
+<tr><th colspan="2">Field Summary</th></tr>
+<tr>
+<td class="type">private  mixed</td>
+<td class="description"><p class="name"><a href="#_current_field">$_current_field</a></p></td>
+</tr>
+<tr>
+<td class="type">private  mixed</td>
+<td class="description"><p class="name"><a href="#_error_array">$_error_array</a></p></td>
+</tr>
+<tr>
+<td class="type">private  mixed</td>
+<td class="description"><p class="name"><a href="#_error_messages">$_error_messages</a></p></td>
+</tr>
+<tr>
+<td class="type">private  mixed</td>
+<td class="description"><p class="name"><a href="#_error_prefix">$_error_prefix</a></p></td>
+</tr>
+<tr>
+<td class="type">private  mixed</td>
+<td class="description"><p class="name"><a href="#_error_suffix">$_error_suffix</a></p></td>
+</tr>
+<tr>
+<td class="type">private  mixed</td>
+<td class="description"><p class="name"><a href="#_fields">$_fields</a></p></td>
+</tr>
+<tr>
+<td class="type">private  mixed</td>
+<td class="description"><p class="name"><a href="#_rules">$_rules</a></p></td>
+</tr>
+<tr>
+<td class="type">private  mixed</td>
+<td class="description"><p class="name"><a href="#_safe_form_data">$_safe_form_data</a></p></td>
+</tr>
+<tr>
+<td class="type"> mixed</td>
+<td class="description"><p class="name"><a href="#accept_charset">$accept_charset</a></p></td>
+</tr>
+<tr>
+<td class="type"> mixed</td>
+<td class="description"><p class="name"><a href="#error_string">$error_string</a></p></td>
+</tr>
+</table>
+
+<table id="summary_method">
+<tr><th colspan="2">Method Summary</th></tr>
+<tr>
+<td class="type"> void</td>
+<td class="description"><p class="name"><a href="#__construct()">__construct</a>()</p><p class="description">Constructor</p></td>
+</tr>
+<tr>
+<td class="type"> void</td>
+<td class="description"><p class="name"><a href="#alpha()">alpha</a>(mixed str)</p><p class="description">Alpha</p></td>
+</tr>
+<tr>
+<td class="type"> void</td>
+<td class="description"><p class="name"><a href="#alpha_dash()">alpha_dash</a>(mixed str)</p><p class="description">Alpha-numeric with underscores and dashes</p></td>
+</tr>
+<tr>
+<td class="type"> void</td>
+<td class="description"><p class="name"><a href="#alpha_numeric()">alpha_numeric</a>(mixed str)</p><p class="description">Alpha-numeric</p></td>
+</tr>
+<tr>
+<td class="type"> void</td>
+<td class="description"><p class="name"><a href="#encode_php_tags()">encode_php_tags</a>(mixed str)</p><p class="description">Convert PHP tags to entities</p></td>
+</tr>
+<tr>
+<td class="type"> void</td>
+<td class="description"><p class="name"><a href="#exact_length()">exact_length</a>(mixed str, mixed val)</p><p class="description">Exact Length</p></td>
+</tr>
+<tr>
+<td class="type"> void</td>
+<td class="description"><p class="name"><a href="#integer()">integer</a>(mixed str)</p><p class="description">Integer</p></td>
+</tr>
+<tr>
+<td class="type"> void</td>
+<td class="description"><p class="name"><a href="#is_natural()">is_natural</a>(mixed str)</p><p class="description">Is a Natural number  (0,1,2,3, etc.)</p></td>
+</tr>
+<tr>
+<td class="type"> void</td>
+<td class="description"><p class="name"><a href="#is_natural_no_zero()">is_natural_no_zero</a>(mixed str)</p><p class="description">Is a Natural number, but not a zero  (1,2,3, etc.)</p></td>
+</tr>
+<tr>
+<td class="type"> void</td>
+<td class="description"><p class="name"><a href="#is_numeric()">is_numeric</a>(mixed str)</p><p class="description">Is Numeric</p></td>
+</tr>
+<tr>
+<td class="type"> void</td>
+<td class="description"><p class="name"><a href="#matches()">matches</a>(mixed str, mixed field)</p><p class="description">Match one field to another</p></td>
+</tr>
+<tr>
+<td class="type"> void</td>
+<td class="description"><p class="name"><a href="#max_length()">max_length</a>(mixed str, mixed val)</p><p class="description">Max Length</p></td>
+</tr>
+<tr>
+<td class="type"> void</td>
+<td class="description"><p class="name"><a href="#min_length()">min_length</a>(mixed str, mixed val)</p><p class="description">Minimum Length</p></td>
+</tr>
+<tr>
+<td class="type"> void</td>
+<td class="description"><p class="name"><a href="#numeric()">numeric</a>(mixed str)</p><p class="description">Numeric</p></td>
+</tr>
+<tr>
+<td class="type"> void</td>
+<td class="description"><p class="name"><a href="#prep_for_form()">prep_for_form</a>(str data)</p><p class="description">Prep data for formThis function allows HTML to be safely shown in a form.
+</p></td>
+</tr>
+<tr>
+<td class="type"> void</td>
+<td class="description"><p class="name"><a href="#prep_url()">prep_url</a>(str str)</p><p class="description">Prep URL</p></td>
+</tr>
+<tr>
+<td class="type"> void</td>
+<td class="description"><p class="name"><a href="#required()">required</a>(mixed str)</p><p class="description">Required</p></td>
+</tr>
+<tr>
+<td class="type"> void</td>
+<td class="description"><p class="name"><a href="#run()">run</a>()</p><p class="description">Run the ValidatorThis function does all the work.</p></td>
+</tr>
+<tr>
+<td class="type"> void</td>
+<td class="description"><p class="name"><a href="#set_checkbox()">set_checkbox</a>(str field, str value)</p><p class="description">Set CheckboxEnables checkboxes to be set to the value the user
+selected in the event of an error</p></td>
+</tr>
+<tr>
+<td class="type"> void</td>
+<td class="description"><p class="name"><a href="#set_error_delimiters()">set_error_delimiters</a>(str prefix, str suffix)</p><p class="description">Set The Error DelimiterPermits a prefix/suffix to be added to each error message</p></td>
+</tr>
+<tr>
+<td class="type"> void</td>
+<td class="description"><p class="name"><a href="#set_fields()">set_fields</a>(str data, str field)</p><p class="description">Set FieldsThis function takes an array of field names as input
+and generates class variables with the same name, which will
+either be blank or contain the $_POST value corresponding to it</p></td>
+</tr>
+<tr>
+<td class="type"> void</td>
+<td class="description"><p class="name"><a href="#set_message()">set_message</a>(mixed lang, str val)</p><p class="description">Set Error MessageLets users set their own error messages on the fly. </p></td>
+</tr>
+<tr>
+<td class="type"> void</td>
+<td class="description"><p class="name"><a href="#set_radio()">set_radio</a>(str field, str value)</p><p class="description">Set RadioEnables radio buttons to be set to the value the user
+selected in the event of an error</p></td>
+</tr>
+<tr>
+<td class="type"> void</td>
+<td class="description"><p class="name"><a href="#set_rules()">set_rules</a>(mixed data, str rules)</p><p class="description">Set RulesThis function takes an array of field names and validation
+rules as input ad simply stores is for use later.</p></td>
+</tr>
+<tr>
+<td class="type"> void</td>
+<td class="description"><p class="name"><a href="#set_select()">set_select</a>(str field, str value)</p><p class="description">Set SelectEnables pull-down lists to be set to the value the user
+selected in the event of an error</p></td>
+</tr>
+<tr>
+<td class="type"> void</td>
+<td class="description"><p class="name"><a href="#strip_image_tags()">strip_image_tags</a>(mixed str)</p><p class="description">Strip Image Tags</p></td>
+</tr>
+<tr>
+<td class="type"> void</td>
+<td class="description"><p class="name"><a href="#valid_base64()">valid_base64</a>(mixed str)</p><p class="description">Valid Base64Tests a string for characters outside of the Base64 alphabet
+as defined by RFC 2045 http://www.faqs.org/rfcs/rfc2045</p></td>
+</tr>
+<tr>
+<td class="type"> void</td>
+<td class="description"><p class="name"><a href="#valid_email()">valid_email</a>(mixed str)</p><p class="description">Valid Email</p></td>
+</tr>
+<tr>
+<td class="type"> void</td>
+<td class="description"><p class="name"><a href="#valid_emails()">valid_emails</a>(mixed str)</p><p class="description">Valid Emails</p></td>
+</tr>
+<tr>
+<td class="type"> void</td>
+<td class="description"><p class="name"><a href="#valid_ip()">valid_ip</a>(mixed ip)</p><p class="description">Validate IP Address</p></td>
+</tr>
+<tr>
+<td class="type"> void</td>
+<td class="description"><p class="name"><a href="#xss_clean()">xss_clean</a>(mixed str)</p><p class="description">XSS Clean</p></td>
+</tr>
+</table>
+
+<h2 id="detail_field">Field Detail</h2>
+<a href="../source/libraries/validation.php.html#line35" class="location">libraries/Validation.php at line 35</a>
+
+<h3 id="_current_field">_current_field</h3>
+<code class="signature">private  mixed <strong>$_current_field</strong> = ''</code>
+<div class="details">
+</div>
+
+<hr>
+
+<a href="../source/libraries/validation.php.html#line31" class="location">libraries/Validation.php at line 31</a>
+
+<h3 id="_error_array">_error_array</h3>
+<code class="signature">private  mixed <strong>$_error_array</strong> = array()</code>
+<div class="details">
+</div>
+
+<hr>
+
+<a href="../source/libraries/validation.php.html#line34" class="location">libraries/Validation.php at line 34</a>
+
+<h3 id="_error_messages">_error_messages</h3>
+<code class="signature">private  mixed <strong>$_error_messages</strong> = array()</code>
+<div class="details">
+</div>
+
+<hr>
+
+<a href="../source/libraries/validation.php.html#line37" class="location">libraries/Validation.php at line 37</a>
+
+<h3 id="_error_prefix">_error_prefix</h3>
+<code class="signature">private  mixed <strong>$_error_prefix</strong> = '&lt;p&gt;'</code>
+<div class="details">
+</div>
+
+<hr>
+
+<a href="../source/libraries/validation.php.html#line38" class="location">libraries/Validation.php at line 38</a>
+
+<h3 id="_error_suffix">_error_suffix</h3>
+<code class="signature">private  mixed <strong>$_error_suffix</strong> = '&lt;/p&gt;'</code>
+<div class="details">
+</div>
+
+<hr>
+
+<a href="../source/libraries/validation.php.html#line33" class="location">libraries/Validation.php at line 33</a>
+
+<h3 id="_fields">_fields</h3>
+<code class="signature">private  mixed <strong>$_fields</strong> = array()</code>
+<div class="details">
+</div>
+
+<hr>
+
+<a href="../source/libraries/validation.php.html#line32" class="location">libraries/Validation.php at line 32</a>
+
+<h3 id="_rules">_rules</h3>
+<code class="signature">private  mixed <strong>$_rules</strong> = array()</code>
+<div class="details">
+</div>
+
+<hr>
+
+<a href="../source/libraries/validation.php.html#line36" class="location">libraries/Validation.php at line 36</a>
+
+<h3 id="_safe_form_data">_safe_form_data</h3>
+<code class="signature">private  mixed <strong>$_safe_form_data</strong> = FALSE</code>
+<div class="details">
+</div>
+
+<hr>
+
+<a href="../source/libraries/validation.php.html#line29" class="location">libraries/Validation.php at line 29</a>
+
+<h3 id="accept_charset">accept_charset</h3>
+<code class="signature">public  mixed <strong>$accept_charset</strong> = 'utf-8'</code>
+<div class="details">
+</div>
+
+<hr>
+
+<a href="../source/libraries/validation.php.html#line30" class="location">libraries/Validation.php at line 30</a>
+
+<h3 id="error_string">error_string</h3>
+<code class="signature">public  mixed <strong>$error_string</strong> = ''</code>
+<div class="details">
+</div>
+
+<hr>
+
+<h2 id="detail_method">Method Detail</h2><div class="method_detail">
+<div class='method'><a href="../source/libraries/validation.php.html#line46" class="location">libraries/Validation.php at line 46</a>
+
+<h3 id="__construct()">__construct</h3>
+<code class="signature">public  void <strong>__construct</strong>()</code>
+<div class="details">
+<p>Constructor</p></div></div>
+
+
+
+<div class='method'><a href="../source/libraries/validation.php.html#line563" class="location">libraries/Validation.php at line 563</a>
+
+<h3 id="alpha()">alpha</h3>
+<code class="signature">public  void <strong>alpha</strong>(mixed str)</code>
+<div class="details">
+<p>Alpha</p><dl>
+<dt>Access	public.</dt>
+<dt>Param	string.</dt>
+<dt>Return	bool.</dt>
+</dl>
+</div></div>
+
+
+
+<div class='method'><a href="../source/libraries/validation.php.html#line591" class="location">libraries/Validation.php at line 591</a>
+
+<h3 id="alpha_dash()">alpha_dash</h3>
+<code class="signature">public  void <strong>alpha_dash</strong>(mixed str)</code>
+<div class="details">
+<p>Alpha-numeric with underscores and dashes</p><dl>
+<dt>Access	public.</dt>
+<dt>Param	string.</dt>
+<dt>Return	bool.</dt>
+</dl>
+</div></div>
+
+
+
+<div class='method'><a href="../source/libraries/validation.php.html#line577" class="location">libraries/Validation.php at line 577</a>
+
+<h3 id="alpha_numeric()">alpha_numeric</h3>
+<code class="signature">public  void <strong>alpha_numeric</strong>(mixed str)</code>
+<div class="details">
+<p>Alpha-numeric</p><dl>
+<dt>Access	public.</dt>
+<dt>Param	string.</dt>
+<dt>Return	bool.</dt>
+</dl>
+</div></div>
+
+
+
+<div class='method'><a href="../source/libraries/validation.php.html#line866" class="location">libraries/Validation.php at line 866</a>
+
+<h3 id="encode_php_tags()">encode_php_tags</h3>
+<code class="signature">public  void <strong>encode_php_tags</strong>(mixed str)</code>
+<div class="details">
+<p>Convert PHP tags to entities</p><dl>
+<dt>Access	public.</dt>
+<dt>Param	string.</dt>
+<dt>Return	string.</dt>
+</dl>
+</div></div>
+
+
+
+<div class='method'><a href="../source/libraries/validation.php.html#line484" class="location">libraries/Validation.php at line 484</a>
+
+<h3 id="exact_length()">exact_length</h3>
+<code class="signature">public  void <strong>exact_length</strong>(mixed str, mixed val)</code>
+<div class="details">
+<p>Exact Length</p><dl>
+<dt>Access	public.</dt>
+<dt>Param	string.</dt>
+<dt>Param	value.</dt>
+<dt>Return	bool.</dt>
+</dl>
+</div></div>
+
+
+
+<div class='method'><a href="../source/libraries/validation.php.html#line634" class="location">libraries/Validation.php at line 634</a>
+
+<h3 id="integer()">integer</h3>
+<code class="signature">public  void <strong>integer</strong>(mixed str)</code>
+<div class="details">
+<p>Integer</p><dl>
+<dt>Access	public.</dt>
+<dt>Param	string.</dt>
+<dt>Return	bool.</dt>
+</dl>
+</div></div>
+
+
+
+<div class='method'><a href="../source/libraries/validation.php.html#line648" class="location">libraries/Validation.php at line 648</a>
+
+<h3 id="is_natural()">is_natural</h3>
+<code class="signature">public  void <strong>is_natural</strong>(mixed str)</code>
+<div class="details">
+<p>Is a Natural number  (0,1,2,3, etc.)</p><dl>
+<dt>Access	public.</dt>
+<dt>Param	string.</dt>
+<dt>Return	bool.</dt>
+</dl>
+</div></div>
+
+
+
+<div class='method'><a href="../source/libraries/validation.php.html#line662" class="location">libraries/Validation.php at line 662</a>
+
+<h3 id="is_natural_no_zero()">is_natural_no_zero</h3>
+<code class="signature">public  void <strong>is_natural_no_zero</strong>(mixed str)</code>
+<div class="details">
+<p>Is a Natural number, but not a zero  (1,2,3, etc.)</p><dl>
+<dt>Access	public.</dt>
+<dt>Param	string.</dt>
+<dt>Return	bool.</dt>
+</dl>
+</div></div>
+
+
+
+<div class='method'><a href="../source/libraries/validation.php.html#line620" class="location">libraries/Validation.php at line 620</a>
+
+<h3 id="is_numeric()">is_numeric</h3>
+<code class="signature">public  void <strong>is_numeric</strong>(mixed str)</code>
+<div class="details">
+<p>Is Numeric</p><dl>
+<dt>Access	public.</dt>
+<dt>Param	string.</dt>
+<dt>Return	bool.</dt>
+</dl>
+</div></div>
+
+
+
+<div class='method'><a href="../source/libraries/validation.php.html#line414" class="location">libraries/Validation.php at line 414</a>
+
+<h3 id="matches()">matches</h3>
+<code class="signature">public  void <strong>matches</strong>(mixed str, mixed field)</code>
+<div class="details">
+<p>Match one field to another</p><dl>
+<dt>Access	public.</dt>
+<dt>Param	string.</dt>
+<dt>Param	field.</dt>
+<dt>Return	bool.</dt>
+</dl>
+</div></div>
+
+
+
+<div class='method'><a href="../source/libraries/validation.php.html#line459" class="location">libraries/Validation.php at line 459</a>
+
+<h3 id="max_length()">max_length</h3>
+<code class="signature">public  void <strong>max_length</strong>(mixed str, mixed val)</code>
+<div class="details">
+<p>Max Length</p><dl>
+<dt>Access	public.</dt>
+<dt>Param	string.</dt>
+<dt>Param	value.</dt>
+<dt>Return	bool.</dt>
+</dl>
+</div></div>
+
+
+
+<div class='method'><a href="../source/libraries/validation.php.html#line434" class="location">libraries/Validation.php at line 434</a>
+
+<h3 id="min_length()">min_length</h3>
+<code class="signature">public  void <strong>min_length</strong>(mixed str, mixed val)</code>
+<div class="details">
+<p>Minimum Length</p><dl>
+<dt>Access	public.</dt>
+<dt>Param	string.</dt>
+<dt>Param	value.</dt>
+<dt>Return	bool.</dt>
+</dl>
+</div></div>
+
+
+
+<div class='method'><a href="../source/libraries/validation.php.html#line605" class="location">libraries/Validation.php at line 605</a>
+
+<h3 id="numeric()">numeric</h3>
+<code class="signature">public  void <strong>numeric</strong>(mixed str)</code>
+<div class="details">
+<p>Numeric</p><dl>
+<dt>Access	public.</dt>
+<dt>Param	string.</dt>
+<dt>Return	bool.</dt>
+</dl>
+</div></div>
+
+
+
+<div class='method'><a href="../source/libraries/validation.php.html#line784" class="location">libraries/Validation.php at line 784</a>
+
+<h3 id="prep_for_form()">prep_for_form</h3>
+<code class="signature">public  void <strong>prep_for_form</strong>(str data)</code>
+<div class="details">
+<p>Prep data for form</p><p>This function allows HTML to be safely shown in a form.
+Special characters are converted.</p><dl>
+<dt>Access	public.</dt>
+<dt>Param	string.</dt>
+<dt>Return	string.</dt>
+</dl>
+</div></div>
+
+
+
+<div class='method'><a href="../source/libraries/validation.php.html#line813" class="location">libraries/Validation.php at line 813</a>
+
+<h3 id="prep_url()">prep_url</h3>
+<code class="signature">public  void <strong>prep_url</strong>(str str)</code>
+<div class="details">
+<p>Prep URL</p><dl>
+<dt>Access	public.</dt>
+<dt>Param	string.</dt>
+<dt>Return	string.</dt>
+</dl>
+</div></div>
+
+
+
+<div class='method'><a href="../source/libraries/validation.php.html#line392" class="location">libraries/Validation.php at line 392</a>
+
+<h3 id="required()">required</h3>
+<code class="signature">public  void <strong>required</strong>(mixed str)</code>
+<div class="details">
+<p>Required</p><dl>
+<dt>Access	public.</dt>
+<dt>Param	string.</dt>
+<dt>Return	bool.</dt>
+</dl>
+</div></div>
+
+
+
+<div class='method'><a href="../source/libraries/validation.php.html#line186" class="location">libraries/Validation.php at line 186</a>
+
+<h3 id="run()">run</h3>
+<code class="signature">public  void <strong>run</strong>()</code>
+<div class="details">
+<p>Run the Validator</p><p>This function does all the work.</p><dl>
+<dt>Access	public.</dt>
+<dt>Return	bool.</dt>
+</dl>
+</div></div>
+
+
+
+<div class='method'><a href="../source/libraries/validation.php.html#line759" class="location">libraries/Validation.php at line 759</a>
+
+<h3 id="set_checkbox()">set_checkbox</h3>
+<code class="signature">public  void <strong>set_checkbox</strong>(str field, str value)</code>
+<div class="details">
+<p>Set Checkbox</p><p>Enables checkboxes to be set to the value the user
+selected in the event of an error</p><dl>
+<dt>Access	public.</dt>
+<dt>Return	string.</dt>
+</dl>
+</div></div>
+
+
+
+<div class='method'><a href="../source/libraries/validation.php.html#line170" class="location">libraries/Validation.php at line 170</a>
+
+<h3 id="set_error_delimiters()">set_error_delimiters</h3>
+<code class="signature">public  void <strong>set_error_delimiters</strong>(str prefix, str suffix)</code>
+<div class="details">
+<p>Set The Error Delimiter</p><p>Permits a prefix/suffix to be added to each error message</p><dl>
+<dt>Access	public.</dt>
+<dt>Return	void.</dt>
+</dl>
+</div></div>
+
+
+
+<div class='method'><a href="../source/libraries/validation.php.html#line72" class="location">libraries/Validation.php at line 72</a>
+
+<h3 id="set_fields()">set_fields</h3>
+<code class="signature">public  void <strong>set_fields</strong>(str data, str field)</code>
+<div class="details">
+<p>Set Fields</p><p>This function takes an array of field names as input
+and generates class variables with the same name, which will
+either be blank or contain the $_POST value corresponding to it</p><dl>
+<dt>Access	public.</dt>
+<dt>Return	void.</dt>
+</dl>
+</div></div>
+
+
+
+<div class='method'><a href="../source/libraries/validation.php.html#line148" class="location">libraries/Validation.php at line 148</a>
+
+<h3 id="set_message()">set_message</h3>
+<code class="signature">public  void <strong>set_message</strong>(mixed lang, str val)</code>
+<div class="details">
+<p>Set Error Message</p><p>Lets users set their own error messages on the fly.  Note:  The key
+name has to match the  function name that it corresponds to.</p><dl>
+<dt>Access	public.</dt>
+<dt>Return	string.</dt>
+</dl>
+</div></div>
+
+
+
+<div class='method'><a href="../source/libraries/validation.php.html#line733" class="location">libraries/Validation.php at line 733</a>
+
+<h3 id="set_radio()">set_radio</h3>
+<code class="signature">public  void <strong>set_radio</strong>(str field, str value)</code>
+<div class="details">
+<p>Set Radio</p><p>Enables radio buttons to be set to the value the user
+selected in the event of an error</p><dl>
+<dt>Access	public.</dt>
+<dt>Return	string.</dt>
+</dl>
+</div></div>
+
+
+
+<div class='method'><a href="../source/libraries/validation.php.html#line119" class="location">libraries/Validation.php at line 119</a>
+
+<h3 id="set_rules()">set_rules</h3>
+<code class="signature">public  void <strong>set_rules</strong>(mixed data, str rules)</code>
+<div class="details">
+<p>Set Rules</p><p>This function takes an array of field names and validation
+rules as input ad simply stores is for use later.</p><dl>
+<dt>Access	public.</dt>
+<dt>Param	mixed.</dt>
+<dt>Param	string.</dt>
+<dt>Return	void.</dt>
+</dl>
+</div></div>
+
+
+
+<div class='method'><a href="../source/libraries/validation.php.html#line707" class="location">libraries/Validation.php at line 707</a>
+
+<h3 id="set_select()">set_select</h3>
+<code class="signature">public  void <strong>set_select</strong>(str field, str value)</code>
+<div class="details">
+<p>Set Select</p><p>Enables pull-down lists to be set to the value the user
+selected in the event of an error</p><dl>
+<dt>Access	public.</dt>
+<dt>Return	string.</dt>
+</dl>
+</div></div>
+
+
+
+<div class='method'><a href="../source/libraries/validation.php.html#line838" class="location">libraries/Validation.php at line 838</a>
+
+<h3 id="strip_image_tags()">strip_image_tags</h3>
+<code class="signature">public  void <strong>strip_image_tags</strong>(mixed str)</code>
+<div class="details">
+<p>Strip Image Tags</p><dl>
+<dt>Access	public.</dt>
+<dt>Param	string.</dt>
+<dt>Return	string.</dt>
+</dl>
+</div></div>
+
+
+
+<div class='method'><a href="../source/libraries/validation.php.html#line689" class="location">libraries/Validation.php at line 689</a>
+
+<h3 id="valid_base64()">valid_base64</h3>
+<code class="signature">public  void <strong>valid_base64</strong>(mixed str)</code>
+<div class="details">
+<p>Valid Base64</p><p>Tests a string for characters outside of the Base64 alphabet
+as defined by RFC 2045 http://www.faqs.org/rfcs/rfc2045</p><dl>
+<dt>Access	public.</dt>
+<dt>Param	string.</dt>
+<dt>Return	bool.</dt>
+</dl>
+</div></div>
+
+
+
+<div class='method'><a href="../source/libraries/validation.php.html#line508" class="location">libraries/Validation.php at line 508</a>
+
+<h3 id="valid_email()">valid_email</h3>
+<code class="signature">public  void <strong>valid_email</strong>(mixed str)</code>
+<div class="details">
+<p>Valid Email</p><dl>
+<dt>Access	public.</dt>
+<dt>Param	string.</dt>
+<dt>Return	bool.</dt>
+</dl>
+</div></div>
+
+
+
+<div class='method'><a href="../source/libraries/validation.php.html#line522" class="location">libraries/Validation.php at line 522</a>
+
+<h3 id="valid_emails()">valid_emails</h3>
+<code class="signature">public  void <strong>valid_emails</strong>(mixed str)</code>
+<div class="details">
+<p>Valid Emails</p><dl>
+<dt>Access	public.</dt>
+<dt>Param	string.</dt>
+<dt>Return	bool.</dt>
+</dl>
+</div></div>
+
+
+
+<div class='method'><a href="../source/libraries/validation.php.html#line549" class="location">libraries/Validation.php at line 549</a>
+
+<h3 id="valid_ip()">valid_ip</h3>
+<code class="signature">public  void <strong>valid_ip</strong>(mixed ip)</code>
+<div class="details">
+<p>Validate IP Address</p><dl>
+<dt>Access	public.</dt>
+<dt>Param	string.</dt>
+<dt>Return	string.</dt>
+</dl>
+</div></div>
+
+
+
+<div class='method'><a href="../source/libraries/validation.php.html#line852" class="location">libraries/Validation.php at line 852</a>
+
+<h3 id="xss_clean()">xss_clean</h3>
+<code class="signature">public  void <strong>xss_clean</strong>(mixed str)</code>
+<div class="details">
+<p>XSS Clean</p><dl>
+<dt>Access	public.</dt>
+<dt>Param	string.</dt>
+<dt>Return	string.</dt>
+</dl>
+</div></div>
+
+
+
+</div><div class="header">
+<h1>GiftFlow API</h1>
+<ul>
+<li><a href="../overview-summary.html">Overview</a></li>
+<li><a href="../giftflow/package-summary.html">Package</a></li>
+<li class="active">Class</li>
+<li><a href="../giftflow/package-tree.html">Tree</a></li>
+<li><a href="../overview-files.html">Files</a></li>
+<li><a href="../deprecated-list.html">Deprecated</a></li>
+<li><a href="../index-all.html">Index</a></li>
+</ul>
+</div>
+
+<div class="small_links">
+<a href="../index.html" target="_top">Frames</a>
+<a href="../giftflow/ci_validation.html" target="_top">No frames</a>
+</div>
+<div class="small_links">
+Summary: <a href="#summary_field">Field</a> | <a href="#summary_method">Method</a> | <a href="#summary_constr">Constr</a>
+Detail: <a href="#detail_field">Field</a> | <a href="#detail_method">Method</a> | <a href="#summary_constr">Constr</a>
+</div>
+<hr>
+
+<p id="footer">This document was generated by <a href="http://peej.github.com/phpdoctor/">PHPDoctor: The PHP Documentation Creator</a></p>
+
+</body>
+
+</html>

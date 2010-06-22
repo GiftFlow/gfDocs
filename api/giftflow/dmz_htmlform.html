@@ -1,0 +1,439 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+
+<html lang="en">
+<head>
+
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
+<meta name="generator" content="PHPDoctor 2RC4 (http://peej.github.com/phpdoctor/)">
+<meta name="when" content="Sun, 20 Jun 2010 17:43:50 +0000">
+
+<link rel="stylesheet" type="text/css" href="../stylesheet.css">
+<link rel="start" href="../overview-summary.html">
+
+<title>DMZ_HTMLForm (GiftFlow API)</title>
+
+</head>
+<body id="definition" onload="parent.document.title=document.title;">
+
+<div class="header">
+<h1>GiftFlow API</h1>
+<ul>
+<li><a href="../overview-summary.html">Overview</a></li>
+<li><a href="../giftflow/package-summary.html">Package</a></li>
+<li class="active">Class</li>
+<li><a href="../giftflow/package-tree.html">Tree</a></li>
+<li><a href="../overview-files.html">Files</a></li>
+<li><a href="../deprecated-list.html">Deprecated</a></li>
+<li><a href="../index-all.html">Index</a></li>
+</ul>
+</div>
+
+<div class="small_links">
+<a href="../index.html" target="_top">Frames</a>
+<a href="../giftflow/dmz_htmlform.html" target="_top">No frames</a>
+</div>
+<div class="small_links">
+Summary: <a href="#summary_field">Field</a> | <a href="#summary_method">Method</a> | <a href="#summary_constr">Constr</a>
+Detail: <a href="#detail_field">Field</a> | <a href="#detail_method">Method</a> | <a href="#summary_constr">Constr</a>
+</div>
+<hr>
+
+<div class="qualifiedName">GiftFlow\DMZ_HTMLForm</div>
+<a href="../source/application/datamapper/htmlform.php.html#line25" class="location">application/datamapper/htmlform.php at line 25</a>
+
+<h1>Class DMZ_HTMLForm</h1>
+
+<pre class="tree"><strong>DMZ_HTMLForm</strong><br /></pre>
+
+<hr>
+
+<p class="signature">public  class <strong>DMZ_HTMLForm</strong></p>
+
+<div class="comment" id="overview_description"><p>DMZ_HTMLForm Class</p></div>
+
+<dl>
+<dt>Package		DMZ-Included-Extensions.</dt>
+</dl>
+<hr>
+
+<table id="summary_field">
+<tr><th colspan="2">Field Summary</th></tr>
+<tr>
+<td class="type"> mixed</td>
+<td class="description"><p class="name"><a href="#auto_rule_classes">$auto_rule_classes</a></p></td>
+</tr>
+<tr>
+<td class="type"> mixed</td>
+<td class="description"><p class="name"><a href="#form_template">$form_template</a></p></td>
+</tr>
+<tr>
+<td class="type"> mixed</td>
+<td class="description"><p class="name"><a href="#row_template">$row_template</a></p></td>
+</tr>
+<tr>
+<td class="type"> mixed</td>
+<td class="description"><p class="name"><a href="#section_template">$section_template</a></p></td>
+</tr>
+</table>
+
+<table id="summary_method">
+<tr><th colspan="2">Method Summary</th></tr>
+<tr>
+<td class="type"> void</td>
+<td class="description"><p class="name"><a href="#__construct()">__construct</a>(mixed options)</p></td>
+</tr>
+<tr>
+<td class="type">private  void</td>
+<td class="description"><p class="name"><a href="#_checkbox()">_checkbox</a>(mixed type, mixed id, mixed value, mixed options, str sub_id, str label)</p></td>
+</tr>
+<tr>
+<td class="type">private  void</td>
+<td class="description"><p class="name"><a href="#_get_type()">_get_type</a>(mixed object, mixed field, mixed type)</p></td>
+</tr>
+<tr>
+<td class="type">private  void</td>
+<td class="description"><p class="name"><a href="#_get_validation_info()">_get_validation_info</a>(mixed object, mixed field, mixed val, str default)</p></td>
+</tr>
+<tr>
+<td class="type">private  void</td>
+<td class="description"><p class="name"><a href="#_get_validation_rule()">_get_validation_rule</a>(mixed object, mixed field, mixed rule)</p></td>
+</tr>
+<tr>
+<td class="type">private  void</td>
+<td class="description"><p class="name"><a href="#_input_checkbox()">_input_checkbox</a>(mixed object, mixed id, mixed value, mixed options)</p></td>
+</tr>
+<tr>
+<td class="type">private  void</td>
+<td class="description"><p class="name"><a href="#_input_dropdown()">_input_dropdown</a>(mixed object, mixed id, mixed value, mixed options)</p></td>
+</tr>
+<tr>
+<td class="type">private  void</td>
+<td class="description"><p class="name"><a href="#_input_file()">_input_file</a>(mixed object, mixed id, mixed value, mixed options)</p></td>
+</tr>
+<tr>
+<td class="type">private  void</td>
+<td class="description"><p class="name"><a href="#_input_hidden()">_input_hidden</a>(mixed object, mixed id, mixed value, mixed options)</p></td>
+</tr>
+<tr>
+<td class="type">private  void</td>
+<td class="description"><p class="name"><a href="#_input_password()">_input_password</a>(mixed object, mixed id, mixed value, mixed options)</p></td>
+</tr>
+<tr>
+<td class="type">private  void</td>
+<td class="description"><p class="name"><a href="#_input_radio()">_input_radio</a>(mixed object, mixed id, mixed value, mixed options)</p></td>
+</tr>
+<tr>
+<td class="type">private  void</td>
+<td class="description"><p class="name"><a href="#_input_text()">_input_text</a>(mixed object, mixed id, mixed value, mixed options)</p></td>
+</tr>
+<tr>
+<td class="type">private  void</td>
+<td class="description"><p class="name"><a href="#_input_textarea()">_input_textarea</a>(mixed object, mixed id, mixed value, mixed options)</p></td>
+</tr>
+<tr>
+<td class="type">private  void</td>
+<td class="description"><p class="name"><a href="#_options()">_options</a>(mixed list, mixed sel)</p></td>
+</tr>
+<tr>
+<td class="type">private  void</td>
+<td class="description"><p class="name"><a href="#_render_node()">_render_node</a>(mixed type, mixed attributes, bool content)</p></td>
+</tr>
+<tr>
+<td class="type">private  void</td>
+<td class="description"><p class="name"><a href="#_render_row_from_form()">_render_row_from_form</a>(mixed object, mixed field, mixed options, mixed row_template, bool row)</p></td>
+</tr>
+<tr>
+<td class="type">private  void</td>
+<td class="description"><p class="name"><a href="#_render_simple_input()">_render_simple_input</a>(mixed type, mixed id, mixed value, mixed options)</p></td>
+</tr>
+<tr>
+<td class="type"> Rendered</td>
+<td class="description"><p class="name"><a href="#render_field()">render_field</a>(object object, string field, string type, array options)</p><p class="description">Render a single field. </p></td>
+</tr>
+<tr>
+<td class="type"> Rendered</td>
+<td class="description"><p class="name"><a href="#render_form()">render_form</a>(object object, string fields, str url, mixed options, string row_template, string template, array template_options)</p><p class="description">Renders an entire form.</p></td>
+</tr>
+<tr>
+<td class="type"> Rendered</td>
+<td class="description"><p class="name"><a href="#render_row()">render_row</a>(object object, string field, string type, array options, string row_template)</p><p class="description">Render a row with a single field. </p></td>
+</tr>
+</table>
+
+<h2 id="detail_field">Field Detail</h2>
+<a href="../source/application/datamapper/htmlform.php.html#line34" class="location">application/datamapper/htmlform.php at line 34</a>
+
+<h3 id="auto_rule_classes">auto_rule_classes</h3>
+<code class="signature">public  mixed <strong>$auto_rule_classes</strong> = array(...)</code>
+<div class="details">
+</div>
+
+<hr>
+
+<a href="../source/application/datamapper/htmlform.php.html#line28" class="location">application/datamapper/htmlform.php at line 28</a>
+
+<h3 id="form_template">form_template</h3>
+<code class="signature">public  mixed <strong>$form_template</strong> = 'dmz_htmlform/form'</code>
+<div class="details">
+</div>
+
+<hr>
+
+<a href="../source/application/datamapper/htmlform.php.html#line30" class="location">application/datamapper/htmlform.php at line 30</a>
+
+<h3 id="row_template">row_template</h3>
+<code class="signature">public  mixed <strong>$row_template</strong> = 'dmz_htmlform/row'</code>
+<div class="details">
+</div>
+
+<hr>
+
+<a href="../source/application/datamapper/htmlform.php.html#line32" class="location">application/datamapper/htmlform.php at line 32</a>
+
+<h3 id="section_template">section_template</h3>
+<code class="signature">public  mixed <strong>$section_template</strong> = 'dmz_htmlform/section'</code>
+<div class="details">
+</div>
+
+<hr>
+
+<h2 id="detail_method">Method Detail</h2><div class="method_detail">
+<div class='method'><a href="../source/application/datamapper/htmlform.php.html#line36" class="location">application/datamapper/htmlform.php at line 36</a>
+
+<h3 id="__construct()">__construct</h3>
+<code class="signature">public  void <strong>__construct</strong>(mixed options)</code>
+<div class="details">
+</div></div>
+
+
+
+<div class='method'><a href="../source/application/datamapper/htmlform.php.html#line627" class="location">application/datamapper/htmlform.php at line 627</a>
+
+<h3 id="_checkbox()">_checkbox</h3>
+<code class="signature">private  void <strong>_checkbox</strong>(mixed type, mixed id, mixed value, mixed options, str sub_id, str label)</code>
+<div class="details">
+</div></div>
+
+
+
+<div class='method'><a href="../source/application/datamapper/htmlform.php.html#line469" class="location">application/datamapper/htmlform.php at line 469</a>
+
+<h3 id="_get_type()">_get_type</h3>
+<code class="signature">private  void <strong>_get_type</strong>(mixed object, mixed field, mixed type)</code>
+<div class="details">
+</div></div>
+
+
+
+<div class='method'><a href="../source/application/datamapper/htmlform.php.html#line481" class="location">application/datamapper/htmlform.php at line 481</a>
+
+<h3 id="_get_validation_info()">_get_validation_info</h3>
+<code class="signature">private  void <strong>_get_validation_info</strong>(mixed object, mixed field, mixed val, str default)</code>
+<div class="details">
+</div></div>
+
+
+
+<div class='method'><a href="../source/application/datamapper/htmlform.php.html#line493" class="location">application/datamapper/htmlform.php at line 493</a>
+
+<h3 id="_get_validation_rule()">_get_validation_rule</h3>
+<code class="signature">private  void <strong>_get_validation_rule</strong>(mixed object, mixed field, mixed rule)</code>
+<div class="details">
+</div></div>
+
+
+
+<div class='method'><a href="../source/application/datamapper/htmlform.php.html#line615" class="location">application/datamapper/htmlform.php at line 615</a>
+
+<h3 id="_input_checkbox()">_input_checkbox</h3>
+<code class="signature">private  void <strong>_input_checkbox</strong>(mixed object, mixed id, mixed value, mixed options)</code>
+<div class="details">
+</div></div>
+
+
+
+<div class='method'><a href="../source/application/datamapper/htmlform.php.html#line556" class="location">application/datamapper/htmlform.php at line 556</a>
+
+<h3 id="_input_dropdown()">_input_dropdown</h3>
+<code class="signature">private  void <strong>_input_dropdown</strong>(mixed object, mixed id, mixed value, mixed options)</code>
+<div class="details">
+</div></div>
+
+
+
+<div class='method'><a href="../source/application/datamapper/htmlform.php.html#line721" class="location">application/datamapper/htmlform.php at line 721</a>
+
+<h3 id="_input_file()">_input_file</h3>
+<code class="signature">private  void <strong>_input_file</strong>(mixed object, mixed id, mixed value, mixed options)</code>
+<div class="details">
+</div></div>
+
+
+
+<div class='method'><a href="../source/application/datamapper/htmlform.php.html#line515" class="location">application/datamapper/htmlform.php at line 515</a>
+
+<h3 id="_input_hidden()">_input_hidden</h3>
+<code class="signature">private  void <strong>_input_hidden</strong>(mixed object, mixed id, mixed value, mixed options)</code>
+<div class="details">
+</div></div>
+
+
+
+<div class='method'><a href="../source/application/datamapper/htmlform.php.html#line527" class="location">application/datamapper/htmlform.php at line 527</a>
+
+<h3 id="_input_password()">_input_password</h3>
+<code class="signature">private  void <strong>_input_password</strong>(mixed object, mixed id, mixed value, mixed options)</code>
+<div class="details">
+</div></div>
+
+
+
+<div class='method'><a href="../source/application/datamapper/htmlform.php.html#line621" class="location">application/datamapper/htmlform.php at line 621</a>
+
+<h3 id="_input_radio()">_input_radio</h3>
+<code class="signature">private  void <strong>_input_radio</strong>(mixed object, mixed id, mixed value, mixed options)</code>
+<div class="details">
+</div></div>
+
+
+
+<div class='method'><a href="../source/application/datamapper/htmlform.php.html#line521" class="location">application/datamapper/htmlform.php at line 521</a>
+
+<h3 id="_input_text()">_input_text</h3>
+<code class="signature">private  void <strong>_input_text</strong>(mixed object, mixed id, mixed value, mixed options)</code>
+<div class="details">
+</div></div>
+
+
+
+<div class='method'><a href="../source/application/datamapper/htmlform.php.html#line541" class="location">application/datamapper/htmlform.php at line 541</a>
+
+<h3 id="_input_textarea()">_input_textarea</h3>
+<code class="signature">private  void <strong>_input_textarea</strong>(mixed object, mixed id, mixed value, mixed options)</code>
+<div class="details">
+</div></div>
+
+
+
+<div class='method'><a href="../source/application/datamapper/htmlform.php.html#line590" class="location">application/datamapper/htmlform.php at line 590</a>
+
+<h3 id="_options()">_options</h3>
+<code class="signature">private  void <strong>_options</strong>(mixed list, mixed sel)</code>
+<div class="details">
+</div></div>
+
+
+
+<div class='method'><a href="../source/application/datamapper/htmlform.php.html#line744" class="location">application/datamapper/htmlform.php at line 744</a>
+
+<h3 id="_render_node()">_render_node</h3>
+<code class="signature">private  void <strong>_render_node</strong>(mixed type, mixed attributes, bool content)</code>
+<div class="details">
+</div></div>
+
+
+
+<div class='method'><a href="../source/application/datamapper/htmlform.php.html#line389" class="location">application/datamapper/htmlform.php at line 389</a>
+
+<h3 id="_render_row_from_form()">_render_row_from_form</h3>
+<code class="signature">private  void <strong>_render_row_from_form</strong>(mixed object, mixed field, mixed options, mixed row_template, bool row)</code>
+<div class="details">
+</div></div>
+
+
+
+<div class='method'><a href="../source/application/datamapper/htmlform.php.html#line732" class="location">application/datamapper/htmlform.php at line 732</a>
+
+<h3 id="_render_simple_input()">_render_simple_input</h3>
+<code class="signature">private  void <strong>_render_simple_input</strong>(mixed type, mixed id, mixed value, mixed options)</code>
+<div class="details">
+</div></div>
+
+
+
+<div class='method'><a href="../source/application/datamapper/htmlform.php.html#line56" class="location">application/datamapper/htmlform.php at line 56</a>
+
+<h3 id="render_field()">render_field</h3>
+<code class="signature">public  Rendered <strong>render_field</strong>(object object, string field, string type, array options)</code>
+<div class="details">
+<p>Render a single field.  Can be used to chain together multiple fields in a column.</p><dl>
+<dt>Parameters:</dt>
+<dd>object - The DataMapper Object to use.</dd>
+<dd>field - The field to render.</dd>
+<dd>type - The type of field to render.</dd>
+<dd>options - Various options to modify the output.</dd>
+<dt>Returns:</dt>
+<dd>String.</dd>
+</dl>
+</div></div>
+
+
+
+<div class='method'><a href="../source/application/datamapper/htmlform.php.html#line355" class="location">application/datamapper/htmlform.php at line 355</a>
+
+<h3 id="render_form()">render_form</h3>
+<code class="signature">public  Rendered <strong>render_form</strong>(object object, string fields, str url, mixed options, string row_template, string template, array template_options)</code>
+<div class="details">
+<p>Renders an entire form.</p><dl>
+<dt>Parameters:</dt>
+<dd>object - The DataMapper Object to use.</dd>
+<dd>fields - An associative array that defines the form.</dd>
+<dd>template - The template to use.</dd>
+<dd>row_template - The template to use for rows.</dd>
+<dd>template_options - The template to use for rows.</dd>
+<dt>Returns:</dt>
+<dd>String.</dd>
+</dl>
+</div></div>
+
+
+
+<div class='method'><a href="../source/application/datamapper/htmlform.php.html#line267" class="location">application/datamapper/htmlform.php at line 267</a>
+
+<h3 id="render_row()">render_row</h3>
+<code class="signature">public  Rendered <strong>render_row</strong>(object object, string field, string type, array options, string row_template)</code>
+<div class="details">
+<p>Render a row with a single field.  If $field does not exist on
+$object->validation, then $field is output as-is.</p><dl>
+<dt>Parameters:</dt>
+<dd>object - The DataMapper Object to use.</dd>
+<dd>field - The field to render (or content)</dd>
+<dd>type - The type of field to render.</dd>
+<dd>options - Various options to modify the output.</dd>
+<dd>row_template - The template to use, or NULL to use the default.</dd>
+<dt>Returns:</dt>
+<dd>String.</dd>
+</dl>
+</div></div>
+
+
+
+</div><div class="header">
+<h1>GiftFlow API</h1>
+<ul>
+<li><a href="../overview-summary.html">Overview</a></li>
+<li><a href="../giftflow/package-summary.html">Package</a></li>
+<li class="active">Class</li>
+<li><a href="../giftflow/package-tree.html">Tree</a></li>
+<li><a href="../overview-files.html">Files</a></li>
+<li><a href="../deprecated-list.html">Deprecated</a></li>
+<li><a href="../index-all.html">Index</a></li>
+</ul>
+</div>
+
+<div class="small_links">
+<a href="../index.html" target="_top">Frames</a>
+<a href="../giftflow/dmz_htmlform.html" target="_top">No frames</a>
+</div>
+<div class="small_links">
+Summary: <a href="#summary_field">Field</a> | <a href="#summary_method">Method</a> | <a href="#summary_constr">Constr</a>
+Detail: <a href="#detail_field">Field</a> | <a href="#detail_method">Method</a> | <a href="#summary_constr">Constr</a>
+</div>
+<hr>
+
+<p id="footer">This document was generated by <a href="http://peej.github.com/phpdoctor/">PHPDoctor: The PHP Documentation Creator</a></p>
+
+</body>
+
+</html>

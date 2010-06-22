@@ -1,0 +1,1009 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+
+<html lang="en">
+<head>
+
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
+<meta name="generator" content="PHPDoctor 2RC4 (http://peej.github.com/phpdoctor/)">
+<meta name="when" content="Sun, 20 Jun 2010 17:43:51 +0000">
+
+<link rel="stylesheet" type="text/css" href="../../stylesheet.css">
+<link rel="start" href="../../overview-summary.html">
+
+<title>libraries/Upload.php (GiftFlow API)</title>
+
+</head>
+<body id="file" onload="parent.document.title=document.title;">
+
+<div class="header">
+<h1>GiftFlow API</h1>
+<ul>
+<li><a href="../../overview-summary.html">Overview</a></li>
+<li>Package</li><li>Class</li><li>Tree</li><li><a href="../../overview-files.html">Files</a></li>
+<li><a href="../../deprecated-list.html">Deprecated</a></li>
+<li><a href="../../index-all.html">Index</a></li>
+</ul>
+</div>
+
+<div class="small_links">
+<a href="../../index.html" target="_top">Frames</a>
+<a href="../../source/libraries/upload.php.html" target="_top">No frames</a>
+</div>
+<hr>
+
+<h1>libraries/Upload.php</h1>
+<div class="comment" id="overview_description"><p>CodeIgniter</p><p>An open source application development framework for PHP 4.3.2 or newer</p></div>
+
+<hr>
+
+<a name="line1"></a><pre><?php  if ( ! defined('BASEPATH')) exit('No direct script access allowed');
+<a name="line2"></a>/**
+<a name="line3"></a> * CodeIgniter
+<a name="line4"></a> *
+<a name="line5"></a> * An open source application development framework for PHP 4.3.2 or newer
+<a name="line6"></a> *
+<a name="line7"></a> * @package		CodeIgniter
+<a name="line8"></a> * @author		ExpressionEngine Dev Team
+<a name="line9"></a> * @copyright	Copyright (c) 2008 - 2009, EllisLab, Inc.
+<a name="line10"></a> * @license		http://codeigniter.com/user_guide/license.html
+<a name="line11"></a> * @link		http://codeigniter.com
+<a name="line12"></a> * @since		Version 1.0
+<a name="line13"></a> * @filesource
+<a name="line14"></a> */
+<a name="line15"></a>
+<a name="line16"></a>// ------------------------------------------------------------------------
+<a name="line17"></a>
+<a name="line18"></a>/**
+<a name="line19"></a> * File Uploading Class
+<a name="line20"></a> *
+<a name="line21"></a> * @package		CodeIgniter
+<a name="line22"></a> * @subpackage	Libraries
+<a name="line23"></a> * @category	Uploads
+<a name="line24"></a> * @author		ExpressionEngine Dev Team
+<a name="line25"></a> * @link		http://codeigniter.com/user_guide/libraries/file_uploading.html
+<a name="line26"></a> */
+<a name="line27"></a>class CI_Upload {
+<a name="line28"></a>	
+<a name="line29"></a>	var $max_size		= 0;
+<a name="line30"></a>	var $max_width		= 0;
+<a name="line31"></a>	var $max_height		= 0;
+<a name="line32"></a>	var $max_filename	= 0;
+<a name="line33"></a>	var $allowed_types	= "";
+<a name="line34"></a>	var $file_temp		= "";
+<a name="line35"></a>	var $file_name		= "";
+<a name="line36"></a>	var $orig_name		= "";
+<a name="line37"></a>	var $file_type		= "";
+<a name="line38"></a>	var $file_size		= "";
+<a name="line39"></a>	var $file_ext		= "";
+<a name="line40"></a>	var $upload_path	= "";
+<a name="line41"></a>	var $overwrite		= FALSE;
+<a name="line42"></a>	var $encrypt_name	= FALSE;
+<a name="line43"></a>	var $is_image		= FALSE;
+<a name="line44"></a>	var $image_width	= '';
+<a name="line45"></a>	var $image_height	= '';
+<a name="line46"></a>	var $image_type		= '';
+<a name="line47"></a>	var $image_size_str	= '';
+<a name="line48"></a>	var $error_msg		= array();
+<a name="line49"></a>	var $mimes			= array();
+<a name="line50"></a>	var $remove_spaces	= TRUE;
+<a name="line51"></a>	var $xss_clean		= FALSE;
+<a name="line52"></a>	var $temp_prefix	= "temp_file_";
+<a name="line53"></a>		
+<a name="line54"></a>	/**
+<a name="line55"></a>	 * Constructor
+<a name="line56"></a>	 *
+<a name="line57"></a>	 * @access	public
+<a name="line58"></a>	 */
+<a name="line59"></a>	function CI_Upload($props = array())
+<a name="line60"></a>	{
+<a name="line61"></a>		if (count($props) > 0)
+<a name="line62"></a>		{
+<a name="line63"></a>			$this->initialize($props);
+<a name="line64"></a>		}
+<a name="line65"></a>		
+<a name="line66"></a>		log_message('debug', "Upload Class Initialized");
+<a name="line67"></a>	}
+<a name="line68"></a>	
+<a name="line69"></a>	// --------------------------------------------------------------------
+<a name="line70"></a>	
+<a name="line71"></a>	/**
+<a name="line72"></a>	 * Initialize preferences
+<a name="line73"></a>	 *
+<a name="line74"></a>	 * @access	public
+<a name="line75"></a>	 * @param	array
+<a name="line76"></a>	 * @return	void
+<a name="line77"></a>	 */	
+<a name="line78"></a>	function initialize($config = array())
+<a name="line79"></a>	{
+<a name="line80"></a>		$defaults = array(
+<a name="line81"></a>							'max_size'			=> 0,
+<a name="line82"></a>							'max_width'			=> 0,
+<a name="line83"></a>							'max_height'		=> 0,
+<a name="line84"></a>							'max_filename'		=> 0,
+<a name="line85"></a>							'allowed_types'		=> "",
+<a name="line86"></a>							'file_temp'			=> "",
+<a name="line87"></a>							'file_name'			=> "",
+<a name="line88"></a>							'orig_name'			=> "",
+<a name="line89"></a>							'file_type'			=> "",
+<a name="line90"></a>							'file_size'			=> "",
+<a name="line91"></a>							'file_ext'			=> "",
+<a name="line92"></a>							'upload_path'		=> "",
+<a name="line93"></a>							'overwrite'			=> FALSE,
+<a name="line94"></a>							'encrypt_name'		=> FALSE,
+<a name="line95"></a>							'is_image'			=> FALSE,
+<a name="line96"></a>							'image_width'		=> '',
+<a name="line97"></a>							'image_height'		=> '',
+<a name="line98"></a>							'image_type'		=> '',
+<a name="line99"></a>							'image_size_str'	=> '',
+<a name="line100"></a>							'error_msg'			=> array(),
+<a name="line101"></a>							'mimes'				=> array(),
+<a name="line102"></a>							'remove_spaces'		=> TRUE,
+<a name="line103"></a>							'xss_clean'			=> FALSE,
+<a name="line104"></a>							'temp_prefix'		=> "temp_file_"
+<a name="line105"></a>						);	
+<a name="line106"></a>	
+<a name="line107"></a>	
+<a name="line108"></a>		foreach ($defaults as $key => $val)
+<a name="line109"></a>		{
+<a name="line110"></a>			if (isset($config[$key]))
+<a name="line111"></a>			{
+<a name="line112"></a>				$method = 'set_'.$key;
+<a name="line113"></a>				if (method_exists($this, $method))
+<a name="line114"></a>				{
+<a name="line115"></a>					$this->$method($config[$key]);
+<a name="line116"></a>				}
+<a name="line117"></a>				else
+<a name="line118"></a>				{
+<a name="line119"></a>					$this->$key = $config[$key];
+<a name="line120"></a>				}			
+<a name="line121"></a>			}
+<a name="line122"></a>			else
+<a name="line123"></a>			{
+<a name="line124"></a>				$this->$key = $val;
+<a name="line125"></a>			}
+<a name="line126"></a>		}
+<a name="line127"></a>	}
+<a name="line128"></a>	
+<a name="line129"></a>	// --------------------------------------------------------------------
+<a name="line130"></a>	
+<a name="line131"></a>	/**
+<a name="line132"></a>	 * Perform the file upload
+<a name="line133"></a>	 *
+<a name="line134"></a>	 * @access	public
+<a name="line135"></a>	 * @return	bool
+<a name="line136"></a>	 */	
+<a name="line137"></a>	function do_upload($field = 'userfile')
+<a name="line138"></a>	{
+<a name="line139"></a>		// Is $_FILES[$field] set? If not, no reason to continue.
+<a name="line140"></a>		if ( ! isset($_FILES[$field]))
+<a name="line141"></a>		{
+<a name="line142"></a>			$this->set_error('upload_no_file_selected');
+<a name="line143"></a>			return FALSE;
+<a name="line144"></a>		}
+<a name="line145"></a>		
+<a name="line146"></a>		// Is the upload path valid?
+<a name="line147"></a>		if ( ! $this->validate_upload_path())
+<a name="line148"></a>		{
+<a name="line149"></a>			// errors will already be set by validate_upload_path() so just return FALSE
+<a name="line150"></a>			return FALSE;
+<a name="line151"></a>		}
+<a name="line152"></a>
+<a name="line153"></a>		// Was the file able to be uploaded? If not, determine the reason why.
+<a name="line154"></a>		if ( ! is_uploaded_file($_FILES[$field]['tmp_name']))
+<a name="line155"></a>		{
+<a name="line156"></a>			$error = ( ! isset($_FILES[$field]['error'])) ? 4 : $_FILES[$field]['error'];
+<a name="line157"></a>
+<a name="line158"></a>			switch($error)
+<a name="line159"></a>			{
+<a name="line160"></a>				case 1:	// UPLOAD_ERR_INI_SIZE
+<a name="line161"></a>					$this->set_error('upload_file_exceeds_limit');
+<a name="line162"></a>					break;
+<a name="line163"></a>				case 2: // UPLOAD_ERR_FORM_SIZE
+<a name="line164"></a>					$this->set_error('upload_file_exceeds_form_limit');
+<a name="line165"></a>					break;
+<a name="line166"></a>				case 3: // UPLOAD_ERR_PARTIAL
+<a name="line167"></a>				   $this->set_error('upload_file_partial');
+<a name="line168"></a>					break;
+<a name="line169"></a>				case 4: // UPLOAD_ERR_NO_FILE
+<a name="line170"></a>				   $this->set_error('upload_no_file_selected');
+<a name="line171"></a>					break;
+<a name="line172"></a>				case 6: // UPLOAD_ERR_NO_TMP_DIR
+<a name="line173"></a>					$this->set_error('upload_no_temp_directory');
+<a name="line174"></a>					break;
+<a name="line175"></a>				case 7: // UPLOAD_ERR_CANT_WRITE
+<a name="line176"></a>					$this->set_error('upload_unable_to_write_file');
+<a name="line177"></a>					break;
+<a name="line178"></a>				case 8: // UPLOAD_ERR_EXTENSION
+<a name="line179"></a>					$this->set_error('upload_stopped_by_extension');
+<a name="line180"></a>					break;
+<a name="line181"></a>				default :   $this->set_error('upload_no_file_selected');
+<a name="line182"></a>					break;
+<a name="line183"></a>			}
+<a name="line184"></a>
+<a name="line185"></a>			return FALSE;
+<a name="line186"></a>		}
+<a name="line187"></a>
+<a name="line188"></a>		// Set the uploaded data as class variables
+<a name="line189"></a>		$this->file_temp = $_FILES[$field]['tmp_name'];		
+<a name="line190"></a>		$this->file_name = $this->_prep_filename($_FILES[$field]['name']);
+<a name="line191"></a>		$this->file_size = $_FILES[$field]['size'];		
+<a name="line192"></a>		$this->file_type = preg_replace("/^(.+?);.*$/", "\\1", $_FILES[$field]['type']);
+<a name="line193"></a>		$this->file_type = strtolower($this->file_type);
+<a name="line194"></a>		$this->file_ext	 = $this->get_extension($_FILES[$field]['name']);
+<a name="line195"></a>		
+<a name="line196"></a>		// Convert the file size to kilobytes
+<a name="line197"></a>		if ($this->file_size > 0)
+<a name="line198"></a>		{
+<a name="line199"></a>			$this->file_size = round($this->file_size/1024, 2);
+<a name="line200"></a>		}
+<a name="line201"></a>
+<a name="line202"></a>		// Is the file type allowed to be uploaded?
+<a name="line203"></a>		if ( ! $this->is_allowed_filetype())
+<a name="line204"></a>		{
+<a name="line205"></a>			$this->set_error('upload_invalid_filetype');
+<a name="line206"></a>			return FALSE;
+<a name="line207"></a>		}
+<a name="line208"></a>
+<a name="line209"></a>		// Is the file size within the allowed maximum?
+<a name="line210"></a>		if ( ! $this->is_allowed_filesize())
+<a name="line211"></a>		{
+<a name="line212"></a>			$this->set_error('upload_invalid_filesize');
+<a name="line213"></a>			return FALSE;
+<a name="line214"></a>		}
+<a name="line215"></a>
+<a name="line216"></a>		// Are the image dimensions within the allowed size?
+<a name="line217"></a>		// Note: This can fail if the server has an open_basdir restriction.
+<a name="line218"></a>		if ( ! $this->is_allowed_dimensions())
+<a name="line219"></a>		{
+<a name="line220"></a>			$this->set_error('upload_invalid_dimensions');
+<a name="line221"></a>			return FALSE;
+<a name="line222"></a>		}
+<a name="line223"></a>
+<a name="line224"></a>		// Sanitize the file name for security
+<a name="line225"></a>		$this->file_name = $this->clean_file_name($this->file_name);
+<a name="line226"></a>		
+<a name="line227"></a>		// Truncate the file name if it's too long
+<a name="line228"></a>		if ($this->max_filename > 0)
+<a name="line229"></a>		{
+<a name="line230"></a>			$this->file_name = $this->limit_filename_length($this->file_name, $this->max_filename);
+<a name="line231"></a>		}
+<a name="line232"></a>
+<a name="line233"></a>		// Remove white spaces in the name
+<a name="line234"></a>		if ($this->remove_spaces == TRUE)
+<a name="line235"></a>		{
+<a name="line236"></a>			$this->file_name = preg_replace("/\s+/", "_", $this->file_name);
+<a name="line237"></a>		}
+<a name="line238"></a>
+<a name="line239"></a>		/*
+<a name="line240"></a>		 * Validate the file name
+<a name="line241"></a>		 * This function appends an number onto the end of
+<a name="line242"></a>		 * the file if one with the same name already exists.
+<a name="line243"></a>		 * If it returns false there was a problem.
+<a name="line244"></a>		 */
+<a name="line245"></a>		$this->orig_name = $this->file_name;
+<a name="line246"></a>
+<a name="line247"></a>		if ($this->overwrite == FALSE)
+<a name="line248"></a>		{
+<a name="line249"></a>			$this->file_name = $this->set_filename($this->upload_path, $this->file_name);
+<a name="line250"></a>			
+<a name="line251"></a>			if ($this->file_name === FALSE)
+<a name="line252"></a>			{
+<a name="line253"></a>				return FALSE;
+<a name="line254"></a>			}
+<a name="line255"></a>		}
+<a name="line256"></a>
+<a name="line257"></a>		/*
+<a name="line258"></a>		 * Move the file to the final destination
+<a name="line259"></a>		 * To deal with different server configurations
+<a name="line260"></a>		 * we'll attempt to use copy() first.  If that fails
+<a name="line261"></a>		 * we'll use move_uploaded_file().  One of the two should
+<a name="line262"></a>		 * reliably work in most environments
+<a name="line263"></a>		 */
+<a name="line264"></a>		if ( ! @copy($this->file_temp, $this->upload_path.$this->file_name))
+<a name="line265"></a>		{
+<a name="line266"></a>			if ( ! @move_uploaded_file($this->file_temp, $this->upload_path.$this->file_name))
+<a name="line267"></a>			{
+<a name="line268"></a>				 $this->set_error('upload_destination_error');
+<a name="line269"></a>				 return FALSE;
+<a name="line270"></a>			}
+<a name="line271"></a>		}
+<a name="line272"></a>		
+<a name="line273"></a>		/*
+<a name="line274"></a>		 * Run the file through the XSS hacking filter
+<a name="line275"></a>		 * This helps prevent malicious code from being
+<a name="line276"></a>		 * embedded within a file.  Scripts can easily
+<a name="line277"></a>		 * be disguised as images or other file types.
+<a name="line278"></a>		 */
+<a name="line279"></a>		if ($this->xss_clean == TRUE)
+<a name="line280"></a>		{
+<a name="line281"></a>			$this->do_xss_clean();
+<a name="line282"></a>		}
+<a name="line283"></a>
+<a name="line284"></a>		/*
+<a name="line285"></a>		 * Set the finalized image dimensions
+<a name="line286"></a>		 * This sets the image width/height (assuming the
+<a name="line287"></a>		 * file was an image).  We use this information
+<a name="line288"></a>		 * in the "data" function.
+<a name="line289"></a>		 */
+<a name="line290"></a>		$this->set_image_properties($this->upload_path.$this->file_name);
+<a name="line291"></a>
+<a name="line292"></a>		return TRUE;
+<a name="line293"></a>	}
+<a name="line294"></a>	
+<a name="line295"></a>	// --------------------------------------------------------------------
+<a name="line296"></a>	
+<a name="line297"></a>	/**
+<a name="line298"></a>	 * Finalized Data Array
+<a name="line299"></a>	 *	
+<a name="line300"></a>	 * Returns an associative array containing all of the information
+<a name="line301"></a>	 * related to the upload, allowing the developer easy access in one array.
+<a name="line302"></a>	 *
+<a name="line303"></a>	 * @access	public
+<a name="line304"></a>	 * @return	array
+<a name="line305"></a>	 */	
+<a name="line306"></a>	function data()
+<a name="line307"></a>	{
+<a name="line308"></a>		return array (
+<a name="line309"></a>						'file_name'			=> $this->file_name,
+<a name="line310"></a>						'file_type'			=> $this->file_type,
+<a name="line311"></a>						'file_path'			=> $this->upload_path,
+<a name="line312"></a>						'full_path'			=> $this->upload_path.$this->file_name,
+<a name="line313"></a>						'raw_name'			=> str_replace($this->file_ext, '', $this->file_name),
+<a name="line314"></a>						'orig_name'			=> $this->orig_name,
+<a name="line315"></a>						'file_ext'			=> $this->file_ext,
+<a name="line316"></a>						'file_size'			=> $this->file_size,
+<a name="line317"></a>						'is_image'			=> $this->is_image(),
+<a name="line318"></a>						'image_width'		=> $this->image_width,
+<a name="line319"></a>						'image_height'		=> $this->image_height,
+<a name="line320"></a>						'image_type'		=> $this->image_type,
+<a name="line321"></a>						'image_size_str'	=> $this->image_size_str,
+<a name="line322"></a>					);
+<a name="line323"></a>	}
+<a name="line324"></a>	
+<a name="line325"></a>	// --------------------------------------------------------------------
+<a name="line326"></a>	
+<a name="line327"></a>	/**
+<a name="line328"></a>	 * Set Upload Path
+<a name="line329"></a>	 *
+<a name="line330"></a>	 * @access	public
+<a name="line331"></a>	 * @param	string
+<a name="line332"></a>	 * @return	void
+<a name="line333"></a>	 */	
+<a name="line334"></a>	function set_upload_path($path)
+<a name="line335"></a>	{
+<a name="line336"></a>		// Make sure it has a trailing slash
+<a name="line337"></a>		$this->upload_path = rtrim($path, '/').'/';
+<a name="line338"></a>	}
+<a name="line339"></a>	
+<a name="line340"></a>	// --------------------------------------------------------------------
+<a name="line341"></a>	
+<a name="line342"></a>	/**
+<a name="line343"></a>	 * Set the file name
+<a name="line344"></a>	 *
+<a name="line345"></a>	 * This function takes a filename/path as input and looks for the
+<a name="line346"></a>	 * existence of a file with the same name. If found, it will append a
+<a name="line347"></a>	 * number to the end of the filename to avoid overwriting a pre-existing file.
+<a name="line348"></a>	 *
+<a name="line349"></a>	 * @access	public
+<a name="line350"></a>	 * @param	string
+<a name="line351"></a>	 * @param	string
+<a name="line352"></a>	 * @return	string
+<a name="line353"></a>	 */	
+<a name="line354"></a>	function set_filename($path, $filename)
+<a name="line355"></a>	{
+<a name="line356"></a>		if ($this->encrypt_name == TRUE)
+<a name="line357"></a>		{		
+<a name="line358"></a>			mt_srand();
+<a name="line359"></a>			$filename = md5(uniqid(mt_rand())).$this->file_ext;	
+<a name="line360"></a>		}
+<a name="line361"></a>	
+<a name="line362"></a>		if ( ! file_exists($path.$filename))
+<a name="line363"></a>		{
+<a name="line364"></a>			return $filename;
+<a name="line365"></a>		}
+<a name="line366"></a>	
+<a name="line367"></a>		$filename = str_replace($this->file_ext, '', $filename);
+<a name="line368"></a>		
+<a name="line369"></a>		$new_filename = '';
+<a name="line370"></a>		for ($i = 1; $i < 100; $i++)
+<a name="line371"></a>		{			
+<a name="line372"></a>			if ( ! file_exists($path.$filename.$i.$this->file_ext))
+<a name="line373"></a>			{
+<a name="line374"></a>				$new_filename = $filename.$i.$this->file_ext;
+<a name="line375"></a>				break;
+<a name="line376"></a>			}
+<a name="line377"></a>		}
+<a name="line378"></a>
+<a name="line379"></a>		if ($new_filename == '')
+<a name="line380"></a>		{
+<a name="line381"></a>			$this->set_error('upload_bad_filename');
+<a name="line382"></a>			return FALSE;
+<a name="line383"></a>		}
+<a name="line384"></a>		else
+<a name="line385"></a>		{
+<a name="line386"></a>			return $new_filename;
+<a name="line387"></a>		}
+<a name="line388"></a>	}
+<a name="line389"></a>	
+<a name="line390"></a>	// --------------------------------------------------------------------
+<a name="line391"></a>	
+<a name="line392"></a>	/**
+<a name="line393"></a>	 * Set Maximum File Size
+<a name="line394"></a>	 *
+<a name="line395"></a>	 * @access	public
+<a name="line396"></a>	 * @param	integer
+<a name="line397"></a>	 * @return	void
+<a name="line398"></a>	 */	
+<a name="line399"></a>	function set_max_filesize($n)
+<a name="line400"></a>	{
+<a name="line401"></a>		$this->max_size = ((int) $n < 0) ? 0: (int) $n;
+<a name="line402"></a>	}
+<a name="line403"></a>	
+<a name="line404"></a>	// --------------------------------------------------------------------
+<a name="line405"></a>	
+<a name="line406"></a>	/**
+<a name="line407"></a>	 * Set Maximum File Name Length
+<a name="line408"></a>	 *
+<a name="line409"></a>	 * @access	public
+<a name="line410"></a>	 * @param	integer
+<a name="line411"></a>	 * @return	void
+<a name="line412"></a>	 */	
+<a name="line413"></a>	function set_max_filename($n)
+<a name="line414"></a>	{
+<a name="line415"></a>		$this->max_filename = ((int) $n < 0) ? 0: (int) $n;
+<a name="line416"></a>	}
+<a name="line417"></a>
+<a name="line418"></a>	// --------------------------------------------------------------------
+<a name="line419"></a>	
+<a name="line420"></a>	/**
+<a name="line421"></a>	 * Set Maximum Image Width
+<a name="line422"></a>	 *
+<a name="line423"></a>	 * @access	public
+<a name="line424"></a>	 * @param	integer
+<a name="line425"></a>	 * @return	void
+<a name="line426"></a>	 */	
+<a name="line427"></a>	function set_max_width($n)
+<a name="line428"></a>	{
+<a name="line429"></a>		$this->max_width = ((int) $n < 0) ? 0: (int) $n;
+<a name="line430"></a>	}
+<a name="line431"></a>	
+<a name="line432"></a>	// --------------------------------------------------------------------
+<a name="line433"></a>	
+<a name="line434"></a>	/**
+<a name="line435"></a>	 * Set Maximum Image Height
+<a name="line436"></a>	 *
+<a name="line437"></a>	 * @access	public
+<a name="line438"></a>	 * @param	integer
+<a name="line439"></a>	 * @return	void
+<a name="line440"></a>	 */	
+<a name="line441"></a>	function set_max_height($n)
+<a name="line442"></a>	{
+<a name="line443"></a>		$this->max_height = ((int) $n < 0) ? 0: (int) $n;
+<a name="line444"></a>	}
+<a name="line445"></a>	
+<a name="line446"></a>	// --------------------------------------------------------------------
+<a name="line447"></a>	
+<a name="line448"></a>	/**
+<a name="line449"></a>	 * Set Allowed File Types
+<a name="line450"></a>	 *
+<a name="line451"></a>	 * @access	public
+<a name="line452"></a>	 * @param	string
+<a name="line453"></a>	 * @return	void
+<a name="line454"></a>	 */	
+<a name="line455"></a>	function set_allowed_types($types)
+<a name="line456"></a>	{
+<a name="line457"></a>		$this->allowed_types = explode('|', $types);
+<a name="line458"></a>	}
+<a name="line459"></a>	
+<a name="line460"></a>	// --------------------------------------------------------------------
+<a name="line461"></a>	
+<a name="line462"></a>	/**
+<a name="line463"></a>	 * Set Image Properties
+<a name="line464"></a>	 *
+<a name="line465"></a>	 * Uses GD to determine the width/height/type of image
+<a name="line466"></a>	 *
+<a name="line467"></a>	 * @access	public
+<a name="line468"></a>	 * @param	string
+<a name="line469"></a>	 * @return	void
+<a name="line470"></a>	 */	
+<a name="line471"></a>	function set_image_properties($path = '')
+<a name="line472"></a>	{
+<a name="line473"></a>		if ( ! $this->is_image())
+<a name="line474"></a>		{
+<a name="line475"></a>			return;
+<a name="line476"></a>		}
+<a name="line477"></a>
+<a name="line478"></a>		if (function_exists('getimagesize'))
+<a name="line479"></a>		{
+<a name="line480"></a>			if (FALSE !== ($D = @getimagesize($path)))
+<a name="line481"></a>			{	
+<a name="line482"></a>				$types = array(1 => 'gif', 2 => 'jpeg', 3 => 'png');
+<a name="line483"></a>
+<a name="line484"></a>				$this->image_width		= $D['0'];
+<a name="line485"></a>				$this->image_height		= $D['1'];
+<a name="line486"></a>				$this->image_type		= ( ! isset($types[$D['2']])) ? 'unknown' : $types[$D['2']];
+<a name="line487"></a>				$this->image_size_str	= $D['3'];  // string containing height and width
+<a name="line488"></a>			}
+<a name="line489"></a>		}
+<a name="line490"></a>	}
+<a name="line491"></a>	
+<a name="line492"></a>	// --------------------------------------------------------------------
+<a name="line493"></a>	
+<a name="line494"></a>	/**
+<a name="line495"></a>	 * Set XSS Clean
+<a name="line496"></a>	 *
+<a name="line497"></a>	 * Enables the XSS flag so that the file that was uploaded
+<a name="line498"></a>	 * will be run through the XSS filter.
+<a name="line499"></a>	 *
+<a name="line500"></a>	 * @access	public
+<a name="line501"></a>	 * @param	bool
+<a name="line502"></a>	 * @return	void
+<a name="line503"></a>	 */
+<a name="line504"></a>	function set_xss_clean($flag = FALSE)
+<a name="line505"></a>	{
+<a name="line506"></a>		$this->xss_clean = ($flag == TRUE) ? TRUE : FALSE;
+<a name="line507"></a>	}
+<a name="line508"></a>	
+<a name="line509"></a>	// --------------------------------------------------------------------
+<a name="line510"></a>	
+<a name="line511"></a>	/**
+<a name="line512"></a>	 * Validate the image
+<a name="line513"></a>	 *
+<a name="line514"></a>	 * @access	public
+<a name="line515"></a>	 * @return	bool
+<a name="line516"></a>	 */	
+<a name="line517"></a>	function is_image()
+<a name="line518"></a>	{
+<a name="line519"></a>		// IE will sometimes return odd mime-types during upload, so here we just standardize all
+<a name="line520"></a>		// jpegs or pngs to the same file type.
+<a name="line521"></a>
+<a name="line522"></a>		$png_mimes  = array('image/x-png');
+<a name="line523"></a>		$jpeg_mimes = array('image/jpg', 'image/jpe', 'image/jpeg', 'image/pjpeg');
+<a name="line524"></a>		
+<a name="line525"></a>		if (in_array($this->file_type, $png_mimes))
+<a name="line526"></a>		{
+<a name="line527"></a>			$this->file_type = 'image/png';
+<a name="line528"></a>		}
+<a name="line529"></a>		
+<a name="line530"></a>		if (in_array($this->file_type, $jpeg_mimes))
+<a name="line531"></a>		{
+<a name="line532"></a>			$this->file_type = 'image/jpeg';
+<a name="line533"></a>		}
+<a name="line534"></a>
+<a name="line535"></a>		$img_mimes = array(
+<a name="line536"></a>							'image/gif',
+<a name="line537"></a>							'image/jpeg',
+<a name="line538"></a>							'image/png',
+<a name="line539"></a>						   );
+<a name="line540"></a>
+<a name="line541"></a>		return (in_array($this->file_type, $img_mimes, TRUE)) ? TRUE : FALSE;
+<a name="line542"></a>	}
+<a name="line543"></a>	
+<a name="line544"></a>	// --------------------------------------------------------------------
+<a name="line545"></a>	
+<a name="line546"></a>	/**
+<a name="line547"></a>	 * Verify that the filetype is allowed
+<a name="line548"></a>	 *
+<a name="line549"></a>	 * @access	public
+<a name="line550"></a>	 * @return	bool
+<a name="line551"></a>	 */	
+<a name="line552"></a>	function is_allowed_filetype()
+<a name="line553"></a>	{
+<a name="line554"></a>		if (count($this->allowed_types) == 0 OR ! is_array($this->allowed_types))
+<a name="line555"></a>		{
+<a name="line556"></a>			$this->set_error('upload_no_file_types');
+<a name="line557"></a>			return FALSE;
+<a name="line558"></a>		}
+<a name="line559"></a>
+<a name="line560"></a>		$image_types = array('gif', 'jpg', 'jpeg', 'png', 'jpe');
+<a name="line561"></a>
+<a name="line562"></a>		foreach ($this->allowed_types as $val)
+<a name="line563"></a>		{
+<a name="line564"></a>			$mime = $this->mimes_types(strtolower($val));
+<a name="line565"></a>
+<a name="line566"></a>			// Images get some additional checks
+<a name="line567"></a>			if (in_array($val, $image_types))
+<a name="line568"></a>			{
+<a name="line569"></a>				if (getimagesize($this->file_temp) === FALSE)
+<a name="line570"></a>				{
+<a name="line571"></a>					return FALSE;
+<a name="line572"></a>				}
+<a name="line573"></a>			}
+<a name="line574"></a>
+<a name="line575"></a>			if (is_array($mime))
+<a name="line576"></a>			{
+<a name="line577"></a>				if (in_array($this->file_type, $mime, TRUE))
+<a name="line578"></a>				{
+<a name="line579"></a>					return TRUE;
+<a name="line580"></a>				}
+<a name="line581"></a>			}
+<a name="line582"></a>			else
+<a name="line583"></a>			{
+<a name="line584"></a>				if ($mime == $this->file_type)
+<a name="line585"></a>				{
+<a name="line586"></a>					return TRUE;
+<a name="line587"></a>				}	
+<a name="line588"></a>			}		
+<a name="line589"></a>		}
+<a name="line590"></a>		
+<a name="line591"></a>		return FALSE;
+<a name="line592"></a>	}
+<a name="line593"></a>	
+<a name="line594"></a>	// --------------------------------------------------------------------
+<a name="line595"></a>	
+<a name="line596"></a>	/**
+<a name="line597"></a>	 * Verify that the file is within the allowed size
+<a name="line598"></a>	 *
+<a name="line599"></a>	 * @access	public
+<a name="line600"></a>	 * @return	bool
+<a name="line601"></a>	 */	
+<a name="line602"></a>	function is_allowed_filesize()
+<a name="line603"></a>	{
+<a name="line604"></a>		if ($this->max_size != 0  AND  $this->file_size > $this->max_size)
+<a name="line605"></a>		{
+<a name="line606"></a>			return FALSE;
+<a name="line607"></a>		}
+<a name="line608"></a>		else
+<a name="line609"></a>		{
+<a name="line610"></a>			return TRUE;
+<a name="line611"></a>		}
+<a name="line612"></a>	}
+<a name="line613"></a>	
+<a name="line614"></a>	// --------------------------------------------------------------------
+<a name="line615"></a>	
+<a name="line616"></a>	/**
+<a name="line617"></a>	 * Verify that the image is within the allowed width/height
+<a name="line618"></a>	 *
+<a name="line619"></a>	 * @access	public
+<a name="line620"></a>	 * @return	bool
+<a name="line621"></a>	 */	
+<a name="line622"></a>	function is_allowed_dimensions()
+<a name="line623"></a>	{
+<a name="line624"></a>		if ( ! $this->is_image())
+<a name="line625"></a>		{
+<a name="line626"></a>			return TRUE;
+<a name="line627"></a>		}
+<a name="line628"></a>
+<a name="line629"></a>		if (function_exists('getimagesize'))
+<a name="line630"></a>		{
+<a name="line631"></a>			$D = @getimagesize($this->file_temp);
+<a name="line632"></a>
+<a name="line633"></a>			if ($this->max_width > 0 AND $D['0'] > $this->max_width)
+<a name="line634"></a>			{
+<a name="line635"></a>				return FALSE;
+<a name="line636"></a>			}
+<a name="line637"></a>
+<a name="line638"></a>			if ($this->max_height > 0 AND $D['1'] > $this->max_height)
+<a name="line639"></a>			{
+<a name="line640"></a>				return FALSE;
+<a name="line641"></a>			}
+<a name="line642"></a>
+<a name="line643"></a>			return TRUE;
+<a name="line644"></a>		}
+<a name="line645"></a>
+<a name="line646"></a>		return TRUE;
+<a name="line647"></a>	}
+<a name="line648"></a>	
+<a name="line649"></a>	// --------------------------------------------------------------------
+<a name="line650"></a>	
+<a name="line651"></a>	/**
+<a name="line652"></a>	 * Validate Upload Path
+<a name="line653"></a>	 *
+<a name="line654"></a>	 * Verifies that it is a valid upload path with proper permissions.
+<a name="line655"></a>	 *
+<a name="line656"></a>	 *
+<a name="line657"></a>	 * @access	public
+<a name="line658"></a>	 * @return	bool
+<a name="line659"></a>	 */	
+<a name="line660"></a>	function validate_upload_path()
+<a name="line661"></a>	{
+<a name="line662"></a>		if ($this->upload_path == '')
+<a name="line663"></a>		{
+<a name="line664"></a>			$this->set_error('upload_no_filepath');
+<a name="line665"></a>			return FALSE;
+<a name="line666"></a>		}
+<a name="line667"></a>		
+<a name="line668"></a>		if (function_exists('realpath') AND @realpath($this->upload_path) !== FALSE)
+<a name="line669"></a>		{
+<a name="line670"></a>			$this->upload_path = str_replace("\\", "/", realpath($this->upload_path));
+<a name="line671"></a>		}
+<a name="line672"></a>
+<a name="line673"></a>		if ( ! @is_dir($this->upload_path))
+<a name="line674"></a>		{
+<a name="line675"></a>			$this->set_error('upload_no_filepath');
+<a name="line676"></a>			return FALSE;
+<a name="line677"></a>		}
+<a name="line678"></a>
+<a name="line679"></a>		if ( ! is_really_writable($this->upload_path))
+<a name="line680"></a>		{
+<a name="line681"></a>			$this->set_error('upload_not_writable');
+<a name="line682"></a>			return FALSE;
+<a name="line683"></a>		}
+<a name="line684"></a>
+<a name="line685"></a>		$this->upload_path = preg_replace("/(.+?)\/*$/", "\\1/",  $this->upload_path);
+<a name="line686"></a>		return TRUE;
+<a name="line687"></a>	}
+<a name="line688"></a>	
+<a name="line689"></a>	// --------------------------------------------------------------------
+<a name="line690"></a>	
+<a name="line691"></a>	/**
+<a name="line692"></a>	 * Extract the file extension
+<a name="line693"></a>	 *
+<a name="line694"></a>	 * @access	public
+<a name="line695"></a>	 * @param	string
+<a name="line696"></a>	 * @return	string
+<a name="line697"></a>	 */	
+<a name="line698"></a>	function get_extension($filename)
+<a name="line699"></a>	{
+<a name="line700"></a>		$x = explode('.', $filename);
+<a name="line701"></a>		return '.'.end($x);
+<a name="line702"></a>	}	
+<a name="line703"></a>	
+<a name="line704"></a>	// --------------------------------------------------------------------
+<a name="line705"></a>	
+<a name="line706"></a>	/**
+<a name="line707"></a>	 * Clean the file name for security
+<a name="line708"></a>	 *
+<a name="line709"></a>	 * @access	public
+<a name="line710"></a>	 * @param	string
+<a name="line711"></a>	 * @return	string
+<a name="line712"></a>	 */		
+<a name="line713"></a>	function clean_file_name($filename)
+<a name="line714"></a>	{
+<a name="line715"></a>		$bad = array(
+<a name="line716"></a>						"<!--",
+<a name="line717"></a>						"-->",
+<a name="line718"></a>						"'",
+<a name="line719"></a>						"<",
+<a name="line720"></a>						">",
+<a name="line721"></a>						'"',
+<a name="line722"></a>						'&',
+<a name="line723"></a>						'$',
+<a name="line724"></a>						'=',
+<a name="line725"></a>						';',
+<a name="line726"></a>						'?',
+<a name="line727"></a>						'/',
+<a name="line728"></a>						"%20",
+<a name="line729"></a>						"%22",
+<a name="line730"></a>						"%3c",		// <
+<a name="line731"></a>						"%253c", 	// <
+<a name="line732"></a>						"%3e", 		// >
+<a name="line733"></a>						"%0e", 		// >
+<a name="line734"></a>						"%28", 		// (
+<a name="line735"></a>						"%29", 		// )
+<a name="line736"></a>						"%2528", 	// (
+<a name="line737"></a>						"%26", 		// &
+<a name="line738"></a>						"%24", 		// $
+<a name="line739"></a>						"%3f", 		// ?
+<a name="line740"></a>						"%3b", 		// ;
+<a name="line741"></a>						"%3d"		// =
+<a name="line742"></a>					);
+<a name="line743"></a>					
+<a name="line744"></a>		$filename = str_replace($bad, '', $filename);
+<a name="line745"></a>
+<a name="line746"></a>		return stripslashes($filename);
+<a name="line747"></a>	}
+<a name="line748"></a>
+<a name="line749"></a>	// --------------------------------------------------------------------
+<a name="line750"></a>	
+<a name="line751"></a>	/**
+<a name="line752"></a>	 * Limit the File Name Length
+<a name="line753"></a>	 *
+<a name="line754"></a>	 * @access	public
+<a name="line755"></a>	 * @param	string
+<a name="line756"></a>	 * @return	string
+<a name="line757"></a>	 */		
+<a name="line758"></a>	function limit_filename_length($filename, $length)
+<a name="line759"></a>	{
+<a name="line760"></a>		if (strlen($filename) < $length)
+<a name="line761"></a>		{
+<a name="line762"></a>			return $filename;
+<a name="line763"></a>		}
+<a name="line764"></a>	
+<a name="line765"></a>		$ext = '';
+<a name="line766"></a>		if (strpos($filename, '.') !== FALSE)
+<a name="line767"></a>		{
+<a name="line768"></a>			$parts		= explode('.', $filename);
+<a name="line769"></a>			$ext		= '.'.array_pop($parts);
+<a name="line770"></a>			$filename	= implode('.', $parts);
+<a name="line771"></a>		}
+<a name="line772"></a>	
+<a name="line773"></a>		return substr($filename, 0, ($length - strlen($ext))).$ext;
+<a name="line774"></a>	}
+<a name="line775"></a>
+<a name="line776"></a>	// --------------------------------------------------------------------
+<a name="line777"></a>	
+<a name="line778"></a>	/**
+<a name="line779"></a>	 * Runs the file through the XSS clean function
+<a name="line780"></a>	 *
+<a name="line781"></a>	 * This prevents people from embedding malicious code in their files.
+<a name="line782"></a>	 * I'm not sure that it won't negatively affect certain files in unexpected ways,
+<a name="line783"></a>	 * but so far I haven't found that it causes trouble.
+<a name="line784"></a>	 *
+<a name="line785"></a>	 * @access	public
+<a name="line786"></a>	 * @return	void
+<a name="line787"></a>	 */	
+<a name="line788"></a>	function do_xss_clean()
+<a name="line789"></a>	{		
+<a name="line790"></a>		$file = $this->upload_path.$this->file_name;
+<a name="line791"></a>		
+<a name="line792"></a>		if (filesize($file) == 0)
+<a name="line793"></a>		{
+<a name="line794"></a>			return FALSE;
+<a name="line795"></a>		}
+<a name="line796"></a>
+<a name="line797"></a>		if (($data = @file_get_contents($file)) === FALSE)
+<a name="line798"></a>		{
+<a name="line799"></a>			return FALSE;
+<a name="line800"></a>		}
+<a name="line801"></a>		
+<a name="line802"></a>		if ( ! $fp = @fopen($file, FOPEN_READ_WRITE))
+<a name="line803"></a>		{
+<a name="line804"></a>			return FALSE;
+<a name="line805"></a>		}
+<a name="line806"></a>
+<a name="line807"></a>		$CI =& get_instance();	
+<a name="line808"></a>		$data = $CI->input->xss_clean($data);
+<a name="line809"></a>		
+<a name="line810"></a>		flock($fp, LOCK_EX);
+<a name="line811"></a>		fwrite($fp, $data);
+<a name="line812"></a>		flock($fp, LOCK_UN);
+<a name="line813"></a>		fclose($fp);
+<a name="line814"></a>	}
+<a name="line815"></a>	
+<a name="line816"></a>	// --------------------------------------------------------------------
+<a name="line817"></a>	
+<a name="line818"></a>	/**
+<a name="line819"></a>	 * Set an error message
+<a name="line820"></a>	 *
+<a name="line821"></a>	 * @access	public
+<a name="line822"></a>	 * @param	string
+<a name="line823"></a>	 * @return	void
+<a name="line824"></a>	 */	
+<a name="line825"></a>	function set_error($msg)
+<a name="line826"></a>	{
+<a name="line827"></a>		$CI =& get_instance();	
+<a name="line828"></a>		$CI->lang->load('upload');
+<a name="line829"></a>		
+<a name="line830"></a>		if (is_array($msg))
+<a name="line831"></a>		{
+<a name="line832"></a>			foreach ($msg as $val)
+<a name="line833"></a>			{
+<a name="line834"></a>				$msg = ($CI->lang->line($val) == FALSE) ? $val : $CI->lang->line($val);				
+<a name="line835"></a>				$this->error_msg[] = $msg;
+<a name="line836"></a>				log_message('error', $msg);
+<a name="line837"></a>			}		
+<a name="line838"></a>		}
+<a name="line839"></a>		else
+<a name="line840"></a>		{
+<a name="line841"></a>			$msg = ($CI->lang->line($msg) == FALSE) ? $msg : $CI->lang->line($msg);
+<a name="line842"></a>			$this->error_msg[] = $msg;
+<a name="line843"></a>			log_message('error', $msg);
+<a name="line844"></a>		}
+<a name="line845"></a>	}
+<a name="line846"></a>	
+<a name="line847"></a>	// --------------------------------------------------------------------
+<a name="line848"></a>	
+<a name="line849"></a>	/**
+<a name="line850"></a>	 * Display the error message
+<a name="line851"></a>	 *
+<a name="line852"></a>	 * @access	public
+<a name="line853"></a>	 * @param	string
+<a name="line854"></a>	 * @param	string
+<a name="line855"></a>	 * @return	string
+<a name="line856"></a>	 */	
+<a name="line857"></a>	function display_errors($open = '<p>', $close = '</p>')
+<a name="line858"></a>	{
+<a name="line859"></a>		$str = '';
+<a name="line860"></a>		foreach ($this->error_msg as $val)
+<a name="line861"></a>		{
+<a name="line862"></a>			$str .= $open.$val.$close;
+<a name="line863"></a>		}
+<a name="line864"></a>	
+<a name="line865"></a>		return $str;
+<a name="line866"></a>	}
+<a name="line867"></a>	
+<a name="line868"></a>	// --------------------------------------------------------------------
+<a name="line869"></a>	
+<a name="line870"></a>	/**
+<a name="line871"></a>	 * List of Mime Types
+<a name="line872"></a>	 *
+<a name="line873"></a>	 * This is a list of mime types.  We use it to validate
+<a name="line874"></a>	 * the "allowed types" set by the developer
+<a name="line875"></a>	 *
+<a name="line876"></a>	 * @access	public
+<a name="line877"></a>	 * @param	string
+<a name="line878"></a>	 * @return	string
+<a name="line879"></a>	 */	
+<a name="line880"></a>	function mimes_types($mime)
+<a name="line881"></a>	{
+<a name="line882"></a>		global $mimes;
+<a name="line883"></a>	
+<a name="line884"></a>		if (count($this->mimes) == 0)
+<a name="line885"></a>		{
+<a name="line886"></a>			if (@require_once(APPPATH.'config/mimes'.EXT))
+<a name="line887"></a>			{
+<a name="line888"></a>				$this->mimes = $mimes;
+<a name="line889"></a>				unset($mimes);
+<a name="line890"></a>			}
+<a name="line891"></a>		}
+<a name="line892"></a>	
+<a name="line893"></a>		return ( ! isset($this->mimes[$mime])) ? FALSE : $this->mimes[$mime];
+<a name="line894"></a>	}
+<a name="line895"></a>
+<a name="line896"></a>	// --------------------------------------------------------------------
+<a name="line897"></a>	
+<a name="line898"></a>	/**
+<a name="line899"></a>	 * Prep Filename
+<a name="line900"></a>	 *
+<a name="line901"></a>	 * Prevents possible script execution from Apache's handling of files multiple extensions
+<a name="line902"></a>	 * http://httpd.apache.org/docs/1.3/mod/mod_mime.html#multipleext
+<a name="line903"></a>	 *
+<a name="line904"></a>	 * @access	private
+<a name="line905"></a>	 * @param	string
+<a name="line906"></a>	 * @return	string
+<a name="line907"></a>	 */
+<a name="line908"></a>	function _prep_filename($filename)
+<a name="line909"></a>	{
+<a name="line910"></a>		if (strpos($filename, '.') === FALSE)
+<a name="line911"></a>		{
+<a name="line912"></a>			return $filename;
+<a name="line913"></a>		}
+<a name="line914"></a>
+<a name="line915"></a>		$parts		= explode('.', $filename);
+<a name="line916"></a>		$ext		= array_pop($parts);
+<a name="line917"></a>		$filename	= array_shift($parts);
+<a name="line918"></a>
+<a name="line919"></a>		foreach ($parts as $part)
+<a name="line920"></a>		{
+<a name="line921"></a>			if ($this->mimes_types(strtolower($part)) === FALSE)
+<a name="line922"></a>			{
+<a name="line923"></a>				$filename .= '.'.$part.'_';
+<a name="line924"></a>			}
+<a name="line925"></a>			else
+<a name="line926"></a>			{
+<a name="line927"></a>				$filename .= '.'.$part;
+<a name="line928"></a>			}
+<a name="line929"></a>		}
+<a name="line930"></a>
+<a name="line931"></a>		// file name override, since the exact name is provided, no need to
+<a name="line932"></a>		// run it through a $this->mimes check.
+<a name="line933"></a>		if ($this->file_name != '')
+<a name="line934"></a>		{
+<a name="line935"></a>			$filename = $this->file_name;
+<a name="line936"></a>		}
+<a name="line937"></a>
+<a name="line938"></a>		$filename .= '.'.$ext;
+<a name="line939"></a>		
+<a name="line940"></a>		return $filename;
+<a name="line941"></a>	}
+<a name="line942"></a>
+<a name="line943"></a>	// --------------------------------------------------------------------
+<a name="line944"></a>
+<a name="line945"></a>}
+<a name="line946"></a>// END Upload Class
+<a name="line947"></a>
+<a name="line948"></a>/* End of file Upload.php */
+<a name="line949"></a>/* Location: ./system/libraries/Upload.php */</pre>
+<div class="header">
+<h1>GiftFlow API</h1>
+<ul>
+<li><a href="../../overview-summary.html">Overview</a></li>
+<li>Package</li><li>Class</li><li>Tree</li><li><a href="../../overview-files.html">Files</a></li>
+<li><a href="../../deprecated-list.html">Deprecated</a></li>
+<li><a href="../../index-all.html">Index</a></li>
+</ul>
+</div>
+
+<div class="small_links">
+<a href="../../index.html" target="_top">Frames</a>
+<a href="../../source/libraries/upload.php.html" target="_top">No frames</a>
+</div>
+<hr>
+
+<p id="footer">This document was generated by <a href="http://peej.github.com/phpdoctor/">PHPDoctor: The PHP Documentation Creator</a></p>
+
+</body>
+
+</html>

@@ -1,0 +1,229 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+
+<html lang="en">
+<head>
+
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
+<meta name="generator" content="PHPDoctor 2RC4 (http://peej.github.com/phpdoctor/)">
+<meta name="when" content="Sun, 20 Jun 2010 17:43:51 +0000">
+
+<link rel="stylesheet" type="text/css" href="../../../../stylesheet.css">
+<link rel="start" href="../../../../overview-summary.html">
+
+<title>database/drivers/mysql/mysql_result.php (GiftFlow API)</title>
+
+</head>
+<body id="file" onload="parent.document.title=document.title;">
+
+<div class="header">
+<h1>GiftFlow API</h1>
+<ul>
+<li><a href="../../../../overview-summary.html">Overview</a></li>
+<li>Package</li><li>Class</li><li>Tree</li><li><a href="../../../../overview-files.html">Files</a></li>
+<li><a href="../../../../deprecated-list.html">Deprecated</a></li>
+<li><a href="../../../../index-all.html">Index</a></li>
+</ul>
+</div>
+
+<div class="small_links">
+<a href="../../../../index.html" target="_top">Frames</a>
+<a href="../../../../source/database/drivers/mysql/mysql_result.php.html" target="_top">No frames</a>
+</div>
+<hr>
+
+<h1>database/drivers/mysql/mysql_result.php</h1>
+<div class="comment" id="overview_description"><p>CodeIgniter</p><p>An open source application development framework for PHP 4.3.2 or newer</p></div>
+
+<hr>
+
+<a name="line1"></a><pre><?php  if ( ! defined('BASEPATH')) exit('No direct script access allowed');
+<a name="line2"></a>/**
+<a name="line3"></a> * CodeIgniter
+<a name="line4"></a> *
+<a name="line5"></a> * An open source application development framework for PHP 4.3.2 or newer
+<a name="line6"></a> *
+<a name="line7"></a> * @package		CodeIgniter
+<a name="line8"></a> * @author		ExpressionEngine Dev Team
+<a name="line9"></a> * @copyright	Copyright (c) 2008 - 2009, EllisLab, Inc.
+<a name="line10"></a> * @license		http://codeigniter.com/user_guide/license.html
+<a name="line11"></a> * @link		http://codeigniter.com
+<a name="line12"></a> * @since		Version 1.0
+<a name="line13"></a> * @filesource
+<a name="line14"></a> */
+<a name="line15"></a>
+<a name="line16"></a>// --------------------------------------------------------------------
+<a name="line17"></a>
+<a name="line18"></a>/**
+<a name="line19"></a> * MySQL Result Class
+<a name="line20"></a> *
+<a name="line21"></a> * This class extends the parent result class: CI_DB_result
+<a name="line22"></a> *
+<a name="line23"></a> * @category	Database
+<a name="line24"></a> * @author		ExpressionEngine Dev Team
+<a name="line25"></a> * @link		http://codeigniter.com/user_guide/database/
+<a name="line26"></a> */
+<a name="line27"></a>class CI_DB_mysql_result extends CI_DB_result {
+<a name="line28"></a>
+<a name="line29"></a>	/**
+<a name="line30"></a>	 * Number of rows in the result set
+<a name="line31"></a>	 *
+<a name="line32"></a>	 * @access	public
+<a name="line33"></a>	 * @return	integer
+<a name="line34"></a>	 */
+<a name="line35"></a>	function num_rows()
+<a name="line36"></a>	{
+<a name="line37"></a>		return @mysql_num_rows($this->result_id);
+<a name="line38"></a>	}
+<a name="line39"></a>	
+<a name="line40"></a>	// --------------------------------------------------------------------
+<a name="line41"></a>
+<a name="line42"></a>	/**
+<a name="line43"></a>	 * Number of fields in the result set
+<a name="line44"></a>	 *
+<a name="line45"></a>	 * @access	public
+<a name="line46"></a>	 * @return	integer
+<a name="line47"></a>	 */
+<a name="line48"></a>	function num_fields()
+<a name="line49"></a>	{
+<a name="line50"></a>		return @mysql_num_fields($this->result_id);
+<a name="line51"></a>	}
+<a name="line52"></a>	
+<a name="line53"></a>	// --------------------------------------------------------------------
+<a name="line54"></a>
+<a name="line55"></a>	/**
+<a name="line56"></a>	 * Fetch Field Names
+<a name="line57"></a>	 *
+<a name="line58"></a>	 * Generates an array of column names
+<a name="line59"></a>	 *
+<a name="line60"></a>	 * @access	public
+<a name="line61"></a>	 * @return	array
+<a name="line62"></a>	 */
+<a name="line63"></a>	function list_fields()
+<a name="line64"></a>	{
+<a name="line65"></a>		$field_names = array();
+<a name="line66"></a>		while ($field = mysql_fetch_field($this->result_id))
+<a name="line67"></a>		{
+<a name="line68"></a>			$field_names[] = $field->name;
+<a name="line69"></a>		}
+<a name="line70"></a>		
+<a name="line71"></a>		return $field_names;
+<a name="line72"></a>	}
+<a name="line73"></a>
+<a name="line74"></a>	// --------------------------------------------------------------------
+<a name="line75"></a>
+<a name="line76"></a>	/**
+<a name="line77"></a>	 * Field data
+<a name="line78"></a>	 *
+<a name="line79"></a>	 * Generates an array of objects containing field meta-data
+<a name="line80"></a>	 *
+<a name="line81"></a>	 * @access	public
+<a name="line82"></a>	 * @return	array
+<a name="line83"></a>	 */
+<a name="line84"></a>	function field_data()
+<a name="line85"></a>	{
+<a name="line86"></a>		$retval = array();
+<a name="line87"></a>		while ($field = mysql_fetch_field($this->result_id))
+<a name="line88"></a>		{	
+<a name="line89"></a>			$F				= new stdClass();
+<a name="line90"></a>			$F->name 		= $field->name;
+<a name="line91"></a>			$F->type 		= $field->type;
+<a name="line92"></a>			$F->default		= $field->def;
+<a name="line93"></a>			$F->max_length	= $field->max_length;
+<a name="line94"></a>			$F->primary_key = $field->primary_key;
+<a name="line95"></a>			
+<a name="line96"></a>			$retval[] = $F;
+<a name="line97"></a>		}
+<a name="line98"></a>		
+<a name="line99"></a>		return $retval;
+<a name="line100"></a>	}
+<a name="line101"></a>	
+<a name="line102"></a>	// --------------------------------------------------------------------
+<a name="line103"></a>
+<a name="line104"></a>	/**
+<a name="line105"></a>	 * Free the result
+<a name="line106"></a>	 *
+<a name="line107"></a>	 * @return	null
+<a name="line108"></a>	 */		
+<a name="line109"></a>	function free_result()
+<a name="line110"></a>	{
+<a name="line111"></a>		if (is_resource($this->result_id))
+<a name="line112"></a>		{
+<a name="line113"></a>			mysql_free_result($this->result_id);
+<a name="line114"></a>			$this->result_id = FALSE;
+<a name="line115"></a>		}
+<a name="line116"></a>	}
+<a name="line117"></a>
+<a name="line118"></a>	// --------------------------------------------------------------------
+<a name="line119"></a>
+<a name="line120"></a>	/**
+<a name="line121"></a>	 * Data Seek
+<a name="line122"></a>	 *
+<a name="line123"></a>	 * Moves the internal pointer to the desired offset.  We call
+<a name="line124"></a>	 * this internally before fetching results to make sure the
+<a name="line125"></a>	 * result set starts at zero
+<a name="line126"></a>	 *
+<a name="line127"></a>	 * @access	private
+<a name="line128"></a>	 * @return	array
+<a name="line129"></a>	 */
+<a name="line130"></a>	function _data_seek($n = 0)
+<a name="line131"></a>	{
+<a name="line132"></a>		return mysql_data_seek($this->result_id, $n);
+<a name="line133"></a>	}
+<a name="line134"></a>
+<a name="line135"></a>	// --------------------------------------------------------------------
+<a name="line136"></a>
+<a name="line137"></a>	/**
+<a name="line138"></a>	 * Result - associative array
+<a name="line139"></a>	 *
+<a name="line140"></a>	 * Returns the result set as an array
+<a name="line141"></a>	 *
+<a name="line142"></a>	 * @access	private
+<a name="line143"></a>	 * @return	array
+<a name="line144"></a>	 */
+<a name="line145"></a>	function _fetch_assoc()
+<a name="line146"></a>	{
+<a name="line147"></a>		return mysql_fetch_assoc($this->result_id);
+<a name="line148"></a>	}
+<a name="line149"></a>	
+<a name="line150"></a>	// --------------------------------------------------------------------
+<a name="line151"></a>
+<a name="line152"></a>	/**
+<a name="line153"></a>	 * Result - object
+<a name="line154"></a>	 *
+<a name="line155"></a>	 * Returns the result set as an object
+<a name="line156"></a>	 *
+<a name="line157"></a>	 * @access	private
+<a name="line158"></a>	 * @return	object
+<a name="line159"></a>	 */
+<a name="line160"></a>	function _fetch_object()
+<a name="line161"></a>	{
+<a name="line162"></a>		return mysql_fetch_object($this->result_id);
+<a name="line163"></a>	}
+<a name="line164"></a>	
+<a name="line165"></a>}
+<a name="line166"></a>
+<a name="line167"></a>
+<a name="line168"></a>/* End of file mysql_result.php */
+<a name="line169"></a>/* Location: ./system/database/drivers/mysql/mysql_result.php */</pre>
+<div class="header">
+<h1>GiftFlow API</h1>
+<ul>
+<li><a href="../../../../overview-summary.html">Overview</a></li>
+<li>Package</li><li>Class</li><li>Tree</li><li><a href="../../../../overview-files.html">Files</a></li>
+<li><a href="../../../../deprecated-list.html">Deprecated</a></li>
+<li><a href="../../../../index-all.html">Index</a></li>
+</ul>
+</div>
+
+<div class="small_links">
+<a href="../../../../index.html" target="_top">Frames</a>
+<a href="../../../../source/database/drivers/mysql/mysql_result.php.html" target="_top">No frames</a>
+</div>
+<hr>
+
+<p id="footer">This document was generated by <a href="http://peej.github.com/phpdoctor/">PHPDoctor: The PHP Documentation Creator</a></p>
+
+</body>
+
+</html>

@@ -1,0 +1,610 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+
+<html lang="en">
+<head>
+
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
+<meta name="generator" content="PHPDoctor 2RC4 (http://peej.github.com/phpdoctor/)">
+<meta name="when" content="Sun, 20 Jun 2010 17:43:51 +0000">
+
+<link rel="stylesheet" type="text/css" href="../../stylesheet.css">
+<link rel="start" href="../../overview-summary.html">
+
+<title>libraries/Cart.php (GiftFlow API)</title>
+
+</head>
+<body id="file" onload="parent.document.title=document.title;">
+
+<div class="header">
+<h1>GiftFlow API</h1>
+<ul>
+<li><a href="../../overview-summary.html">Overview</a></li>
+<li>Package</li><li>Class</li><li>Tree</li><li><a href="../../overview-files.html">Files</a></li>
+<li><a href="../../deprecated-list.html">Deprecated</a></li>
+<li><a href="../../index-all.html">Index</a></li>
+</ul>
+</div>
+
+<div class="small_links">
+<a href="../../index.html" target="_top">Frames</a>
+<a href="../../source/libraries/cart.php.html" target="_top">No frames</a>
+</div>
+<hr>
+
+<h1>libraries/Cart.php</h1>
+<div class="comment" id="overview_description"><p>CodeIgniter</p><p>An open source application development framework for PHP 4.3.2 or newer</p></div>
+
+<hr>
+
+<a name="line1"></a><pre><?php  if ( ! defined('BASEPATH')) exit('No direct script access allowed');
+<a name="line2"></a>/**
+<a name="line3"></a> * CodeIgniter
+<a name="line4"></a> *
+<a name="line5"></a> * An open source application development framework for PHP 4.3.2 or newer
+<a name="line6"></a> *
+<a name="line7"></a> * @package		CodeIgniter
+<a name="line8"></a> * @author		ExpressionEngine Dev Team
+<a name="line9"></a> * @copyright	Copyright (c) 2006 - 2009, EllisLab, Inc.
+<a name="line10"></a> * @license		http://codeigniter.com/user_guide/license.html
+<a name="line11"></a> * @link		http://codeigniter.com
+<a name="line12"></a> * @since		Version 1.0
+<a name="line13"></a> * @filesource
+<a name="line14"></a> */
+<a name="line15"></a>
+<a name="line16"></a>// ------------------------------------------------------------------------
+<a name="line17"></a>
+<a name="line18"></a>/**
+<a name="line19"></a> * Shopping Cart Class
+<a name="line20"></a> *
+<a name="line21"></a> * @package		CodeIgniter
+<a name="line22"></a> * @subpackage	Libraries
+<a name="line23"></a> * @category	Shopping Cart
+<a name="line24"></a> * @author		ExpressionEngine Dev Team
+<a name="line25"></a> * @link		http://codeigniter.com/user_guide/libraries/cart.html
+<a name="line26"></a> */
+<a name="line27"></a>class CI_Cart {
+<a name="line28"></a>
+<a name="line29"></a>	// These are the regular expression rules that we use to validate the product ID and product name
+<a name="line30"></a>	var $product_id_rules	= '\.a-z0-9_-'; // alpha-numeric, dashes, underscores, or periods
+<a name="line31"></a>	var $product_name_rules	= '\.\:\-_ a-z0-9'; // alpha-numeric, dashes, underscores, colons or periods
+<a name="line32"></a>	
+<a name="line33"></a>	// Private variables.  Do not change!
+<a name="line34"></a>	var $CI;
+<a name="line35"></a>	var $_cart_contents	= array();
+<a name="line36"></a>
+<a name="line37"></a>
+<a name="line38"></a>	/**
+<a name="line39"></a>	 * Shopping Class Constructor
+<a name="line40"></a>	 *
+<a name="line41"></a>	 * The constructor loads the Session class, used to store the shopping cart contents.
+<a name="line42"></a>	 */		
+<a name="line43"></a>	function CI_Cart($params = array())
+<a name="line44"></a>	{	
+<a name="line45"></a>		// Set the super object to a local variable for use later
+<a name="line46"></a>		$this->CI =& get_instance();
+<a name="line47"></a>		
+<a name="line48"></a>		// Are any config settings being passed manually?  If so, set them
+<a name="line49"></a>		$config = array();
+<a name="line50"></a>		if (count($params) > 0)
+<a name="line51"></a>		{
+<a name="line52"></a>			foreach ($params as $key => $val)
+<a name="line53"></a>			{
+<a name="line54"></a>				$config[$key] = $val;
+<a name="line55"></a>			}
+<a name="line56"></a>		}
+<a name="line57"></a>		
+<a name="line58"></a>		// Load the Sessions class
+<a name="line59"></a>		$this->CI->load->library('session', $config);
+<a name="line60"></a>			
+<a name="line61"></a>		// Grab the shopping cart array from the session table, if it exists
+<a name="line62"></a>		if ($this->CI->session->userdata('cart_contents') !== FALSE)
+<a name="line63"></a>		{
+<a name="line64"></a>			$this->_cart_contents = $this->CI->session->userdata('cart_contents');
+<a name="line65"></a>		}
+<a name="line66"></a>		else
+<a name="line67"></a>		{
+<a name="line68"></a>			// No cart exists so we'll set some base values
+<a name="line69"></a>			$this->_cart_contents['cart_total'] = 0;		
+<a name="line70"></a>			$this->_cart_contents['total_items'] = 0;		
+<a name="line71"></a>		}
+<a name="line72"></a>	
+<a name="line73"></a>		log_message('debug', "Cart Class Initialized");
+<a name="line74"></a>	}
+<a name="line75"></a>
+<a name="line76"></a>	// --------------------------------------------------------------------
+<a name="line77"></a>	
+<a name="line78"></a>	/**
+<a name="line79"></a>	 * Insert items into the cart and save it to the session table
+<a name="line80"></a>	 *
+<a name="line81"></a>	 * @access	public
+<a name="line82"></a>	 * @param	array
+<a name="line83"></a>	 * @return	bool
+<a name="line84"></a>	 */
+<a name="line85"></a>	function insert($items = array())
+<a name="line86"></a>	{
+<a name="line87"></a>		// Was any cart data passed? No? Bah...
+<a name="line88"></a>		if ( ! is_array($items) OR count($items) == 0)
+<a name="line89"></a>		{
+<a name="line90"></a>			log_message('error', 'The insert method must be passed an array containing data.');
+<a name="line91"></a>			return FALSE;
+<a name="line92"></a>		}
+<a name="line93"></a>				
+<a name="line94"></a>		// You can either insert a single product using a one-dimensional array, 
+<a name="line95"></a>		// or multiple products using a multi-dimensional one. The way we
+<a name="line96"></a>		// determine the array type is by looking for a required array key named "id"
+<a name="line97"></a>		// at the top level. If it's not found, we will assume it's a multi-dimensional array.
+<a name="line98"></a>	
+<a name="line99"></a>		$save_cart = FALSE;		
+<a name="line100"></a>		if (isset($items['id']))
+<a name="line101"></a>		{			
+<a name="line102"></a>			if ($this->_insert($items) == TRUE)
+<a name="line103"></a>			{
+<a name="line104"></a>				$save_cart = TRUE;
+<a name="line105"></a>			}
+<a name="line106"></a>		}
+<a name="line107"></a>		else
+<a name="line108"></a>		{
+<a name="line109"></a>			foreach ($items as $val)
+<a name="line110"></a>			{
+<a name="line111"></a>				if (is_array($val) AND isset($val['id']))
+<a name="line112"></a>				{
+<a name="line113"></a>					if ($this->_insert($val) == TRUE)
+<a name="line114"></a>					{
+<a name="line115"></a>						$save_cart = TRUE;
+<a name="line116"></a>					}
+<a name="line117"></a>				}			
+<a name="line118"></a>			}
+<a name="line119"></a>		}
+<a name="line120"></a>
+<a name="line121"></a>		// Save the cart data if the insert was successful
+<a name="line122"></a>		if ($save_cart == TRUE)
+<a name="line123"></a>		{
+<a name="line124"></a>			$this->_save_cart();
+<a name="line125"></a>			return TRUE;
+<a name="line126"></a>		}
+<a name="line127"></a>
+<a name="line128"></a>		return FALSE;
+<a name="line129"></a>	}
+<a name="line130"></a>
+<a name="line131"></a>	// --------------------------------------------------------------------
+<a name="line132"></a>	
+<a name="line133"></a>	/**
+<a name="line134"></a>	 * Insert
+<a name="line135"></a>	 *
+<a name="line136"></a>	 * @access	private
+<a name="line137"></a>	 * @param	array
+<a name="line138"></a>	 * @return	bool
+<a name="line139"></a>	 */
+<a name="line140"></a>	function _insert($items = array())
+<a name="line141"></a>	{
+<a name="line142"></a>		// Was any cart data passed? No? Bah...
+<a name="line143"></a>		if ( ! is_array($items) OR count($items) == 0)
+<a name="line144"></a>		{
+<a name="line145"></a>			log_message('error', 'The insert method must be passed an array containing data.');
+<a name="line146"></a>			return FALSE;
+<a name="line147"></a>		}
+<a name="line148"></a>		
+<a name="line149"></a>		// --------------------------------------------------------------------
+<a name="line150"></a>	
+<a name="line151"></a>		// Does the $items array contain an id, quantity, price, and name?  These are required
+<a name="line152"></a>		if ( ! isset($items['id']) OR ! isset($items['qty']) OR ! isset($items['price']) OR ! isset($items['name']))
+<a name="line153"></a>		{
+<a name="line154"></a>			log_message('error', 'The cart array must contain a product ID, quantity, price, and name.');
+<a name="line155"></a>			return FALSE;
+<a name="line156"></a>		}
+<a name="line157"></a>
+<a name="line158"></a>		// --------------------------------------------------------------------
+<a name="line159"></a>	
+<a name="line160"></a>		// Prep the quantity. It can only be a number.  Duh...
+<a name="line161"></a>		$items['qty'] = trim(preg_replace('/([^0-9])/i', '', $items['qty']));
+<a name="line162"></a>		// Trim any leading zeros
+<a name="line163"></a>		$items['qty'] = trim(preg_replace('/(^[0]+)/i', '', $items['qty']));
+<a name="line164"></a>
+<a name="line165"></a>		// If the quantity is zero or blank there's nothing for us to do
+<a name="line166"></a>		if ( ! is_numeric($items['qty']) OR $items['qty'] == 0)
+<a name="line167"></a>		{
+<a name="line168"></a>			return FALSE;
+<a name="line169"></a>		}
+<a name="line170"></a>				
+<a name="line171"></a>		// --------------------------------------------------------------------
+<a name="line172"></a>	
+<a name="line173"></a>		// Validate the product ID. It can only be alpha-numeric, dashes, underscores or periods
+<a name="line174"></a>		// Not totally sure we should impose this rule, but it seems prudent to standardize IDs.
+<a name="line175"></a>		// Note: These can be user-specified by setting the $this->product_id_rules variable.
+<a name="line176"></a>		if ( ! preg_match("/^[".$this->product_id_rules."]+$/i", $items['id']))
+<a name="line177"></a>		{
+<a name="line178"></a>			log_message('error', 'Invalid product ID.  The product ID can only contain alpha-numeric characters, dashes, and underscores');
+<a name="line179"></a>			return FALSE;
+<a name="line180"></a>		}
+<a name="line181"></a>
+<a name="line182"></a>		// --------------------------------------------------------------------
+<a name="line183"></a>	
+<a name="line184"></a>		// Validate the product name. It can only be alpha-numeric, dashes, underscores, colons or periods.
+<a name="line185"></a>		// Note: These can be user-specified by setting the $this->product_name_rules variable.
+<a name="line186"></a>		if ( ! preg_match("/^[".$this->product_name_rules."]+$/i", $items['name']))
+<a name="line187"></a>		{
+<a name="line188"></a>			log_message('error', 'An invalid name was submitted as the product name: '.$items['name'].' The name can only contain alpha-numeric characters, dashes, underscores, colons, and spaces');
+<a name="line189"></a>			return FALSE;
+<a name="line190"></a>		}
+<a name="line191"></a>
+<a name="line192"></a>		// --------------------------------------------------------------------
+<a name="line193"></a>
+<a name="line194"></a>		// Prep the price.  Remove anything that isn't a number or decimal point.
+<a name="line195"></a>		$items['price'] = trim(preg_replace('/([^0-9\.])/i', '', $items['price']));
+<a name="line196"></a>		// Trim any leading zeros
+<a name="line197"></a>		$items['price'] = trim(preg_replace('/(^[0]+)/i', '', $items['price']));
+<a name="line198"></a>		
+<a name="line199"></a>		// Is the price a valid number?
+<a name="line200"></a>		if ( ! is_numeric($items['price']))
+<a name="line201"></a>		{
+<a name="line202"></a>			log_message('error', 'An invalid price was submitted for product ID: '.$items['id']);
+<a name="line203"></a>			return FALSE;
+<a name="line204"></a>		}
+<a name="line205"></a>
+<a name="line206"></a>		// --------------------------------------------------------------------
+<a name="line207"></a>		
+<a name="line208"></a>		// We now need to create a unique identifier for the item being inserted into the cart.
+<a name="line209"></a>		// Every time something is added to the cart it is stored in the master cart array.  
+<a name="line210"></a>		// Each row in the cart array, however, must have a unique index that identifies not only 
+<a name="line211"></a>		// a particular product, but makes it possible to store identical products with different options.  
+<a name="line212"></a>		// For example, what if someone buys two identical t-shirts (same product ID), but in 
+<a name="line213"></a>		// different sizes?  The product ID (and other attributes, like the name) will be identical for 
+<a name="line214"></a>		// both sizes because it's the same shirt. The only difference will be the size.
+<a name="line215"></a>		// Internally, we need to treat identical submissions, but with different options, as a unique product.
+<a name="line216"></a>		// Our solution is to convert the options array to a string and MD5 it along with the product ID.
+<a name="line217"></a>		// This becomes the unique "row ID"
+<a name="line218"></a>		if (isset($items['options']) AND count($items['options']) > 0)
+<a name="line219"></a>		{
+<a name="line220"></a>			$rowid = md5($items['id'].implode('', $items['options']));
+<a name="line221"></a>		}
+<a name="line222"></a>		else
+<a name="line223"></a>		{
+<a name="line224"></a>			// No options were submitted so we simply MD5 the product ID.
+<a name="line225"></a>			// Technically, we don't need to MD5 the ID in this case, but it makes
+<a name="line226"></a>			// sense to standardize the format of array indexes for both conditions
+<a name="line227"></a>			$rowid = md5($items['id']);
+<a name="line228"></a>		}		
+<a name="line229"></a>
+<a name="line230"></a>		// --------------------------------------------------------------------
+<a name="line231"></a>
+<a name="line232"></a>		// Now that we have our unique "row ID", we'll add our cart items to the master array
+<a name="line233"></a>		
+<a name="line234"></a>		// let's unset this first, just to make sure our index contains only the data from this submission
+<a name="line235"></a>		unset($this->_cart_contents[$rowid]);		
+<a name="line236"></a>		
+<a name="line237"></a>		// Create a new index with our new row ID
+<a name="line238"></a>		$this->_cart_contents[$rowid]['rowid'] = $rowid;
+<a name="line239"></a>	
+<a name="line240"></a>		// And add the new items to the cart array			
+<a name="line241"></a>		foreach ($items as $key => $val)
+<a name="line242"></a>		{
+<a name="line243"></a>			$this->_cart_contents[$rowid][$key] = $val;
+<a name="line244"></a>		}
+<a name="line245"></a>
+<a name="line246"></a>		// Woot!
+<a name="line247"></a>		return TRUE;
+<a name="line248"></a>	}
+<a name="line249"></a>
+<a name="line250"></a>	// --------------------------------------------------------------------
+<a name="line251"></a>	
+<a name="line252"></a>	/**
+<a name="line253"></a>	 * Update the cart
+<a name="line254"></a>	 *
+<a name="line255"></a>	 * This function permits the quantity of a given item to be changed. 
+<a name="line256"></a>	 * Typically it is called from the "view cart" page if a user makes
+<a name="line257"></a>	 * changes to the quantity before checkout. That array must contain the
+<a name="line258"></a>	 * product ID and quantity for each item.
+<a name="line259"></a>	 *
+<a name="line260"></a>	 * @access	public
+<a name="line261"></a>	 * @param	array
+<a name="line262"></a>	 * @param	string
+<a name="line263"></a>	 * @return	bool
+<a name="line264"></a>	 */
+<a name="line265"></a>	function update($items = array())
+<a name="line266"></a>	{
+<a name="line267"></a>		// Was any cart data passed?
+<a name="line268"></a>		if ( ! is_array($items) OR count($items) == 0)
+<a name="line269"></a>		{
+<a name="line270"></a>			return FALSE;
+<a name="line271"></a>		}
+<a name="line272"></a>			
+<a name="line273"></a>		// You can either update a single product using a one-dimensional array, 
+<a name="line274"></a>		// or multiple products using a multi-dimensional one.  The way we
+<a name="line275"></a>		// determine the array type is by looking for a required array key named "id".
+<a name="line276"></a>		// If it's not found we assume it's a multi-dimensional array
+<a name="line277"></a>		$save_cart = FALSE;
+<a name="line278"></a>		if (isset($items['rowid']) AND isset($items['qty']))
+<a name="line279"></a>		{
+<a name="line280"></a>			if ($this->_update($items) == TRUE)
+<a name="line281"></a>			{
+<a name="line282"></a>				$save_cart = TRUE;
+<a name="line283"></a>			}
+<a name="line284"></a>		}
+<a name="line285"></a>		else
+<a name="line286"></a>		{
+<a name="line287"></a>			foreach ($items as $val)
+<a name="line288"></a>			{
+<a name="line289"></a>				if (is_array($val) AND isset($val['rowid']) AND isset($val['qty']))
+<a name="line290"></a>				{
+<a name="line291"></a>					if ($this->_update($val) == TRUE)
+<a name="line292"></a>					{
+<a name="line293"></a>						$save_cart = TRUE;
+<a name="line294"></a>					}
+<a name="line295"></a>				}			
+<a name="line296"></a>			}
+<a name="line297"></a>		}
+<a name="line298"></a>
+<a name="line299"></a>		// Save the cart data if the insert was successful
+<a name="line300"></a>		if ($save_cart == TRUE)
+<a name="line301"></a>		{
+<a name="line302"></a>			$this->_save_cart();
+<a name="line303"></a>			return TRUE;
+<a name="line304"></a>		}
+<a name="line305"></a>
+<a name="line306"></a>		return FALSE;
+<a name="line307"></a>	}
+<a name="line308"></a>
+<a name="line309"></a>	// --------------------------------------------------------------------
+<a name="line310"></a>	
+<a name="line311"></a>	/**
+<a name="line312"></a>	 * Update the cart
+<a name="line313"></a>	 *
+<a name="line314"></a>	 * This function permits the quantity of a given item to be changed. 
+<a name="line315"></a>	 * Typically it is called from the "view cart" page if a user makes
+<a name="line316"></a>	 * changes to the quantity before checkout. That array must contain the
+<a name="line317"></a>	 * product ID and quantity for each item.
+<a name="line318"></a>	 *
+<a name="line319"></a>	 * @access	private
+<a name="line320"></a>	 * @param	array
+<a name="line321"></a>	 * @return	bool
+<a name="line322"></a>	 */	
+<a name="line323"></a>	function _update($items = array())
+<a name="line324"></a>	{
+<a name="line325"></a>		// Without these array indexes there is nothing we can do
+<a name="line326"></a>		if ( ! isset($items['qty']) OR ! isset($items['rowid']) OR ! isset($this->_cart_contents[$items['rowid']]))
+<a name="line327"></a>		{
+<a name="line328"></a>			return FALSE;
+<a name="line329"></a>		}
+<a name="line330"></a>		
+<a name="line331"></a>		// Prep the quantity
+<a name="line332"></a>		$items['qty'] = preg_replace('/([^0-9])/i', '', $items['qty']);
+<a name="line333"></a>
+<a name="line334"></a>		// Is the quantity a number?
+<a name="line335"></a>		if ( ! is_numeric($items['qty']))
+<a name="line336"></a>		{
+<a name="line337"></a>			return FALSE;
+<a name="line338"></a>		}
+<a name="line339"></a>		
+<a name="line340"></a>		// Is the new quantity different than what is already saved in the cart?
+<a name="line341"></a>		// If it's the same there's nothing to do
+<a name="line342"></a>		if ($this->_cart_contents[$items['rowid']]['qty'] == $items['qty'])
+<a name="line343"></a>		{
+<a name="line344"></a>			return FALSE;
+<a name="line345"></a>		}
+<a name="line346"></a>
+<a name="line347"></a>		// Is the quantity zero?  If so we will remove the item from the cart.
+<a name="line348"></a>		// If the quantity is greater than zero we are updating
+<a name="line349"></a>		if ($items['qty'] == 0)
+<a name="line350"></a>		{
+<a name="line351"></a>			unset($this->_cart_contents[$items['rowid']]);		
+<a name="line352"></a>		}
+<a name="line353"></a>		else
+<a name="line354"></a>		{
+<a name="line355"></a>			$this->_cart_contents[$items['rowid']]['qty'] = $items['qty'];
+<a name="line356"></a>		}
+<a name="line357"></a>		
+<a name="line358"></a>		return TRUE;
+<a name="line359"></a>	}
+<a name="line360"></a>
+<a name="line361"></a>	// --------------------------------------------------------------------
+<a name="line362"></a>	
+<a name="line363"></a>	/**
+<a name="line364"></a>	 * Save the cart array to the session DB
+<a name="line365"></a>	 *
+<a name="line366"></a>	 * @access	private
+<a name="line367"></a>	 * @return	bool
+<a name="line368"></a>	 */
+<a name="line369"></a>	function _save_cart()
+<a name="line370"></a>	{
+<a name="line371"></a>		// Unset these so our total can be calculated correctly below
+<a name="line372"></a>		unset($this->_cart_contents['total_items']);
+<a name="line373"></a>		unset($this->_cart_contents['cart_total']);
+<a name="line374"></a>
+<a name="line375"></a>		// Lets add up the individual prices and set the cart sub-total
+<a name="line376"></a>		$total = 0;
+<a name="line377"></a>		foreach ($this->_cart_contents as $key => $val)
+<a name="line378"></a>		{
+<a name="line379"></a>			// We make sure the array contains the proper indexes
+<a name="line380"></a>			if ( ! is_array($val) OR ! isset($val['price']) OR ! isset($val['qty']))
+<a name="line381"></a>			{
+<a name="line382"></a>				continue;
+<a name="line383"></a>			}
+<a name="line384"></a>
+<a name="line385"></a>			$total += ($val['price'] * $val['qty']);
+<a name="line386"></a>			
+<a name="line387"></a>			// Set the subtotal
+<a name="line388"></a>			$this->_cart_contents[$key]['subtotal'] = ($this->_cart_contents[$key]['price'] * $this->_cart_contents[$key]['qty']);
+<a name="line389"></a>		}
+<a name="line390"></a>
+<a name="line391"></a>		// Set the cart total and total items.
+<a name="line392"></a>		$this->_cart_contents['total_items'] = count($this->_cart_contents);			
+<a name="line393"></a>		$this->_cart_contents['cart_total'] = $total;
+<a name="line394"></a>	
+<a name="line395"></a>		// Is our cart empty?  If so we delete it from the session
+<a name="line396"></a>		if (count($this->_cart_contents) <= 2)
+<a name="line397"></a>		{
+<a name="line398"></a>			$this->CI->session->unset_userdata('cart_contents');
+<a name="line399"></a>			
+<a name="line400"></a>			// Nothing more to do... coffee time!
+<a name="line401"></a>			return FALSE;
+<a name="line402"></a>		}
+<a name="line403"></a>
+<a name="line404"></a>		// If we made it this far it means that our cart has data.
+<a name="line405"></a>		// Let's pass it to the Session class so it can be stored
+<a name="line406"></a>		$this->CI->session->set_userdata(array('cart_contents' => $this->_cart_contents));
+<a name="line407"></a>
+<a name="line408"></a>		// Woot!
+<a name="line409"></a>		return TRUE;	
+<a name="line410"></a>	}
+<a name="line411"></a>
+<a name="line412"></a>	// --------------------------------------------------------------------
+<a name="line413"></a>	
+<a name="line414"></a>	/**
+<a name="line415"></a>	 * Cart Total
+<a name="line416"></a>	 *
+<a name="line417"></a>	 * @access	public
+<a name="line418"></a>	 * @return	integer
+<a name="line419"></a>	 */
+<a name="line420"></a>	function total()
+<a name="line421"></a>	{
+<a name="line422"></a>		return $this->_cart_contents['cart_total'];
+<a name="line423"></a>	}
+<a name="line424"></a>
+<a name="line425"></a>	// --------------------------------------------------------------------
+<a name="line426"></a>	
+<a name="line427"></a>	/**
+<a name="line428"></a>	 * Total Items
+<a name="line429"></a>	 *
+<a name="line430"></a>	 * Returns the total item count
+<a name="line431"></a>	 *
+<a name="line432"></a>	 * @access	public
+<a name="line433"></a>	 * @return	integer
+<a name="line434"></a>	 */
+<a name="line435"></a>	function total_items()
+<a name="line436"></a>	{
+<a name="line437"></a>		return $this->_cart_contents['total_items'];
+<a name="line438"></a>	}
+<a name="line439"></a>
+<a name="line440"></a>	// --------------------------------------------------------------------
+<a name="line441"></a>	
+<a name="line442"></a>	/**
+<a name="line443"></a>	 * Cart Contents
+<a name="line444"></a>	 *
+<a name="line445"></a>	 * Returns the entire cart array
+<a name="line446"></a>	 *
+<a name="line447"></a>	 * @access	public
+<a name="line448"></a>	 * @return	array
+<a name="line449"></a>	 */
+<a name="line450"></a>	function contents()
+<a name="line451"></a>	{
+<a name="line452"></a>		$cart = $this->_cart_contents;
+<a name="line453"></a>		
+<a name="line454"></a>		// Remove these so they don't create a problem when showing the cart table
+<a name="line455"></a>		unset($cart['total_items']);
+<a name="line456"></a>		unset($cart['cart_total']);
+<a name="line457"></a>	
+<a name="line458"></a>		return $cart;
+<a name="line459"></a>	}
+<a name="line460"></a>
+<a name="line461"></a>	// --------------------------------------------------------------------
+<a name="line462"></a>	
+<a name="line463"></a>	/**
+<a name="line464"></a>	 * Has options
+<a name="line465"></a>	 *
+<a name="line466"></a>	 * Returns TRUE if the rowid passed to this function correlates to an item
+<a name="line467"></a>	 * that has options associated with it.
+<a name="line468"></a>	 *
+<a name="line469"></a>	 * @access	public
+<a name="line470"></a>	 * @return	array
+<a name="line471"></a>	 */
+<a name="line472"></a>	function has_options($rowid = '')
+<a name="line473"></a>	{
+<a name="line474"></a>		if ( ! isset($this->_cart_contents[$rowid]['options']) OR count($this->_cart_contents[$rowid]['options']) === 0)
+<a name="line475"></a>		{
+<a name="line476"></a>			return FALSE;
+<a name="line477"></a>		}
+<a name="line478"></a>		
+<a name="line479"></a>		return TRUE;
+<a name="line480"></a>	}
+<a name="line481"></a>
+<a name="line482"></a>	// --------------------------------------------------------------------
+<a name="line483"></a>	
+<a name="line484"></a>	/**
+<a name="line485"></a>	 * Product options
+<a name="line486"></a>	 *
+<a name="line487"></a>	 * Returns the an array of options, for a particular product row ID
+<a name="line488"></a>	 *
+<a name="line489"></a>	 * @access	public
+<a name="line490"></a>	 * @return	array
+<a name="line491"></a>	 */
+<a name="line492"></a>	function product_options($rowid = '')
+<a name="line493"></a>	{
+<a name="line494"></a>		if ( ! isset($this->_cart_contents[$rowid]['options']))
+<a name="line495"></a>		{
+<a name="line496"></a>			return array();
+<a name="line497"></a>		}
+<a name="line498"></a>
+<a name="line499"></a>		return $this->_cart_contents[$rowid]['options'];
+<a name="line500"></a>	}
+<a name="line501"></a>
+<a name="line502"></a>	// --------------------------------------------------------------------
+<a name="line503"></a>	
+<a name="line504"></a>	/**
+<a name="line505"></a>	 * Format Number
+<a name="line506"></a>	 *
+<a name="line507"></a>	 * Returns the supplied number with commas and a decimal point.
+<a name="line508"></a>	 *
+<a name="line509"></a>	 * @access	public
+<a name="line510"></a>	 * @return	integer
+<a name="line511"></a>	 */
+<a name="line512"></a>	function format_number($n = '')
+<a name="line513"></a>	{
+<a name="line514"></a>		if ($n == '')
+<a name="line515"></a>		{
+<a name="line516"></a>			return '';
+<a name="line517"></a>		}
+<a name="line518"></a>	
+<a name="line519"></a>		// Remove anything that isn't a number or decimal point.
+<a name="line520"></a>		$n = trim(preg_replace('/([^0-9\.])/i', '', $n));
+<a name="line521"></a>	
+<a name="line522"></a>		return number_format($n, 2, '.', ',');
+<a name="line523"></a>	}
+<a name="line524"></a>		
+<a name="line525"></a>	// --------------------------------------------------------------------
+<a name="line526"></a>	
+<a name="line527"></a>	/**
+<a name="line528"></a>	 * Destroy the cart
+<a name="line529"></a>	 *
+<a name="line530"></a>	 * Empties the cart and kills the session
+<a name="line531"></a>	 *
+<a name="line532"></a>	 * @access	public
+<a name="line533"></a>	 * @return	null
+<a name="line534"></a>	 */
+<a name="line535"></a>	function destroy()
+<a name="line536"></a>	{
+<a name="line537"></a>		unset($this->_cart_contents);
+<a name="line538"></a>	
+<a name="line539"></a>		$this->_cart_contents['cart_total'] = 0;		
+<a name="line540"></a>		$this->_cart_contents['total_items'] = 0;		
+<a name="line541"></a>
+<a name="line542"></a>		$this->CI->session->unset_userdata('cart_contents');
+<a name="line543"></a>	}
+<a name="line544"></a>
+<a name="line545"></a>
+<a name="line546"></a>}
+<a name="line547"></a>// END Cart Class
+<a name="line548"></a>
+<a name="line549"></a>/* End of file Cart.php */
+<a name="line550"></a>/* Location: ./system/libraries/Cart.php */</pre>
+<div class="header">
+<h1>GiftFlow API</h1>
+<ul>
+<li><a href="../../overview-summary.html">Overview</a></li>
+<li>Package</li><li>Class</li><li>Tree</li><li><a href="../../overview-files.html">Files</a></li>
+<li><a href="../../deprecated-list.html">Deprecated</a></li>
+<li><a href="../../index-all.html">Index</a></li>
+</ul>
+</div>
+
+<div class="small_links">
+<a href="../../index.html" target="_top">Frames</a>
+<a href="../../source/libraries/cart.php.html" target="_top">No frames</a>
+</div>
+<hr>
+
+<p id="footer">This document was generated by <a href="http://peej.github.com/phpdoctor/">PHPDoctor: The PHP Documentation Creator</a></p>
+
+</body>
+
+</html>

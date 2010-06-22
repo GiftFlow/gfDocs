@@ -1,0 +1,435 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+
+<html lang="en">
+<head>
+
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
+<meta name="generator" content="PHPDoctor 2RC4 (http://peej.github.com/phpdoctor/)">
+<meta name="when" content="Sun, 20 Jun 2010 17:43:51 +0000">
+
+<link rel="stylesheet" type="text/css" href="../../stylesheet.css">
+<link rel="start" href="../../overview-summary.html">
+
+<title>database/DB_forge.php (GiftFlow API)</title>
+
+</head>
+<body id="file" onload="parent.document.title=document.title;">
+
+<div class="header">
+<h1>GiftFlow API</h1>
+<ul>
+<li><a href="../../overview-summary.html">Overview</a></li>
+<li>Package</li><li>Class</li><li>Tree</li><li><a href="../../overview-files.html">Files</a></li>
+<li><a href="../../deprecated-list.html">Deprecated</a></li>
+<li><a href="../../index-all.html">Index</a></li>
+</ul>
+</div>
+
+<div class="small_links">
+<a href="../../index.html" target="_top">Frames</a>
+<a href="../../source/database/db_forge.php.html" target="_top">No frames</a>
+</div>
+<hr>
+
+<h1>database/DB_forge.php</h1>
+<div class="comment" id="overview_description"><p>Code Igniter</p><p>An open source application development framework for PHP 4.3.2 or newer</p></div>
+
+<hr>
+
+<a name="line1"></a><pre><?php  if ( ! defined('BASEPATH')) exit('No direct script access allowed');
+<a name="line2"></a>/**
+<a name="line3"></a> * Code Igniter
+<a name="line4"></a> *
+<a name="line5"></a> * An open source application development framework for PHP 4.3.2 or newer
+<a name="line6"></a> *
+<a name="line7"></a> * @package		CodeIgniter
+<a name="line8"></a> * @author		ExpressionEngine Dev Team
+<a name="line9"></a> * @copyright	Copyright (c) 2008 - 2009, EllisLab, Inc.
+<a name="line10"></a> * @license		http://codeigniter.com/user_guide/license.html
+<a name="line11"></a> * @link		http://codeigniter.com
+<a name="line12"></a> * @since		Version 1.0
+<a name="line13"></a> * @filesource
+<a name="line14"></a> */
+<a name="line15"></a>
+<a name="line16"></a>// ------------------------------------------------------------------------
+<a name="line17"></a>
+<a name="line18"></a>/**
+<a name="line19"></a> * Database Utility Class
+<a name="line20"></a> *
+<a name="line21"></a> * @category	Database
+<a name="line22"></a> * @author		ExpressionEngine Dev Team
+<a name="line23"></a> * @link		http://codeigniter.com/user_guide/database/
+<a name="line24"></a> */
+<a name="line25"></a>class CI_DB_forge {
+<a name="line26"></a>
+<a name="line27"></a>	var $fields		 	= array();
+<a name="line28"></a>	var $keys			= array();
+<a name="line29"></a>	var $primary_keys 	= array();
+<a name="line30"></a>	var $db_char_set	=	'';
+<a name="line31"></a>
+<a name="line32"></a>	/**
+<a name="line33"></a>	 * Constructor
+<a name="line34"></a>	 *
+<a name="line35"></a>	 * Grabs the CI super object instance so we can access it.
+<a name="line36"></a>	 *
+<a name="line37"></a>	 */	
+<a name="line38"></a>	function CI_DB_forge()
+<a name="line39"></a>	{
+<a name="line40"></a>		// Assign the main database object to $this->db
+<a name="line41"></a>		$CI =& get_instance();
+<a name="line42"></a>		$this->db =& $CI->db;
+<a name="line43"></a>		log_message('debug', "Database Forge Class Initialized");
+<a name="line44"></a>	}
+<a name="line45"></a>
+<a name="line46"></a>	// --------------------------------------------------------------------
+<a name="line47"></a>
+<a name="line48"></a>	/**
+<a name="line49"></a>	 * Create database
+<a name="line50"></a>	 *
+<a name="line51"></a>	 * @access	public
+<a name="line52"></a>	 * @param	string	the database name
+<a name="line53"></a>	 * @return	bool
+<a name="line54"></a>	 */
+<a name="line55"></a>	function create_database($db_name)
+<a name="line56"></a>	{
+<a name="line57"></a>		$sql = $this->_create_database($db_name);
+<a name="line58"></a>		
+<a name="line59"></a>		if (is_bool($sql))
+<a name="line60"></a>		{
+<a name="line61"></a>			return $sql;
+<a name="line62"></a>		}
+<a name="line63"></a>	
+<a name="line64"></a>		return $this->db->query($sql);
+<a name="line65"></a>	}
+<a name="line66"></a>
+<a name="line67"></a>	// --------------------------------------------------------------------
+<a name="line68"></a>
+<a name="line69"></a>	/**
+<a name="line70"></a>	 * Drop database
+<a name="line71"></a>	 *
+<a name="line72"></a>	 * @access	public
+<a name="line73"></a>	 * @param	string	the database name
+<a name="line74"></a>	 * @return	bool
+<a name="line75"></a>	 */
+<a name="line76"></a>	function drop_database($db_name)
+<a name="line77"></a>	{
+<a name="line78"></a>		$sql = $this->_drop_database($db_name);
+<a name="line79"></a>		
+<a name="line80"></a>		if (is_bool($sql))
+<a name="line81"></a>		{
+<a name="line82"></a>			return $sql;
+<a name="line83"></a>		}
+<a name="line84"></a>	
+<a name="line85"></a>		return $this->db->query($sql);
+<a name="line86"></a>	}
+<a name="line87"></a>
+<a name="line88"></a>	// --------------------------------------------------------------------
+<a name="line89"></a>
+<a name="line90"></a>	/**
+<a name="line91"></a>	 * Add Key
+<a name="line92"></a>	 *
+<a name="line93"></a>	 * @access	public
+<a name="line94"></a>	 * @param	string	key
+<a name="line95"></a>	 * @param	string	type
+<a name="line96"></a>	 * @return	void
+<a name="line97"></a>	 */
+<a name="line98"></a>	function add_key($key = '', $primary = FALSE)
+<a name="line99"></a>	{
+<a name="line100"></a>		if (is_array($key))
+<a name="line101"></a>		{
+<a name="line102"></a>			foreach($key as $one)
+<a name="line103"></a>			{
+<a name="line104"></a>				$this->add_key($one, $primary);
+<a name="line105"></a>			}
+<a name="line106"></a>			
+<a name="line107"></a>			return;
+<a name="line108"></a>		}
+<a name="line109"></a>	
+<a name="line110"></a>		if ($key == '')
+<a name="line111"></a>		{
+<a name="line112"></a>			show_error('Key information is required for that operation.');
+<a name="line113"></a>		}
+<a name="line114"></a>		
+<a name="line115"></a>		if ($primary === TRUE)
+<a name="line116"></a>		{
+<a name="line117"></a>			$this->primary_keys[] = $key;
+<a name="line118"></a>		}
+<a name="line119"></a>		else
+<a name="line120"></a>		{
+<a name="line121"></a>			$this->keys[] = $key;
+<a name="line122"></a>		}
+<a name="line123"></a>	}
+<a name="line124"></a>
+<a name="line125"></a>	// --------------------------------------------------------------------
+<a name="line126"></a>
+<a name="line127"></a>	/**
+<a name="line128"></a>	 * Add Field
+<a name="line129"></a>	 *
+<a name="line130"></a>	 * @access	public
+<a name="line131"></a>	 * @param	string	collation
+<a name="line132"></a>	 * @return	void
+<a name="line133"></a>	 */
+<a name="line134"></a>	function add_field($field = '')
+<a name="line135"></a>	{
+<a name="line136"></a>		if ($field == '')
+<a name="line137"></a>		{
+<a name="line138"></a>			show_error('Field information is required.');
+<a name="line139"></a>		}
+<a name="line140"></a>		
+<a name="line141"></a>		if (is_string($field))
+<a name="line142"></a>		{
+<a name="line143"></a>			if ($field == 'id')
+<a name="line144"></a>			{
+<a name="line145"></a>				$this->add_field(array(
+<a name="line146"></a>										'id' => array(
+<a name="line147"></a>													'type' => 'INT',
+<a name="line148"></a>													'constraint' => 9,
+<a name="line149"></a>													'auto_increment' => TRUE
+<a name="line150"></a>													)
+<a name="line151"></a>								));
+<a name="line152"></a>				$this->add_key('id', TRUE);
+<a name="line153"></a>			}
+<a name="line154"></a>			else
+<a name="line155"></a>			{
+<a name="line156"></a>				if (strpos($field, ' ') === FALSE)
+<a name="line157"></a>				{
+<a name="line158"></a>					show_error('Field information is required for that operation.');
+<a name="line159"></a>				}
+<a name="line160"></a>				
+<a name="line161"></a>				$this->fields[] = $field;
+<a name="line162"></a>			}
+<a name="line163"></a>		}
+<a name="line164"></a>		
+<a name="line165"></a>		if (is_array($field))
+<a name="line166"></a>		{
+<a name="line167"></a>			$this->fields = array_merge($this->fields, $field);
+<a name="line168"></a>		}
+<a name="line169"></a>		
+<a name="line170"></a>	}
+<a name="line171"></a>
+<a name="line172"></a>	// --------------------------------------------------------------------
+<a name="line173"></a>
+<a name="line174"></a>	/**
+<a name="line175"></a>	 * Create Table
+<a name="line176"></a>	 *
+<a name="line177"></a>	 * @access	public
+<a name="line178"></a>	 * @param	string	the table name
+<a name="line179"></a>	 * @return	bool
+<a name="line180"></a>	 */
+<a name="line181"></a>	function create_table($table = '', $if_not_exists = FALSE)
+<a name="line182"></a>	{	
+<a name="line183"></a>		if ($table == '')
+<a name="line184"></a>		{
+<a name="line185"></a>			show_error('A table name is required for that operation.');
+<a name="line186"></a>		}
+<a name="line187"></a>			
+<a name="line188"></a>		if (count($this->fields) == 0)
+<a name="line189"></a>		{	
+<a name="line190"></a>			show_error('Field information is required.');
+<a name="line191"></a>		}
+<a name="line192"></a>
+<a name="line193"></a>		$sql = $this->_create_table($this->db->dbprefix.$table, $this->fields, $this->primary_keys, $this->keys, $if_not_exists);
+<a name="line194"></a>		
+<a name="line195"></a>		$this->_reset();
+<a name="line196"></a>		return $this->db->query($sql);
+<a name="line197"></a>	}
+<a name="line198"></a>
+<a name="line199"></a>	// --------------------------------------------------------------------
+<a name="line200"></a>
+<a name="line201"></a>	/**
+<a name="line202"></a>	 * Drop Table
+<a name="line203"></a>	 *
+<a name="line204"></a>	 * @access	public
+<a name="line205"></a>	 * @param	string	the table name
+<a name="line206"></a>	 * @return	bool
+<a name="line207"></a>	 */
+<a name="line208"></a>	function drop_table($table_name)
+<a name="line209"></a>	{
+<a name="line210"></a>		$sql = $this->_drop_table($this->db->dbprefix.$table_name);
+<a name="line211"></a>		
+<a name="line212"></a>		if (is_bool($sql))
+<a name="line213"></a>		{
+<a name="line214"></a>			return $sql;
+<a name="line215"></a>		}
+<a name="line216"></a>	
+<a name="line217"></a>		return $this->db->query($sql);
+<a name="line218"></a>	}
+<a name="line219"></a>
+<a name="line220"></a>	// --------------------------------------------------------------------
+<a name="line221"></a>
+<a name="line222"></a>	/**
+<a name="line223"></a>	 * Rename Table
+<a name="line224"></a>	 *
+<a name="line225"></a>	 * @access	public
+<a name="line226"></a>	 * @param	string	the old table name
+<a name="line227"></a>	 * @param	string	the new table name
+<a name="line228"></a>	 * @return	bool
+<a name="line229"></a>	 */
+<a name="line230"></a>	function rename_table($table_name, $new_table_name)
+<a name="line231"></a>	{
+<a name="line232"></a>		if ($table_name == '' OR $new_table_name == '')
+<a name="line233"></a>		{
+<a name="line234"></a>			show_error('A table name is required for that operation.');
+<a name="line235"></a>		}
+<a name="line236"></a>			
+<a name="line237"></a>		$sql = $this->_rename_table($table_name, $new_table_name);
+<a name="line238"></a>		return $this->db->query($sql);
+<a name="line239"></a>	}
+<a name="line240"></a>
+<a name="line241"></a>	// --------------------------------------------------------------------
+<a name="line242"></a>
+<a name="line243"></a>	/**
+<a name="line244"></a>	 * Column Add
+<a name="line245"></a>	 *
+<a name="line246"></a>	 * @access	public
+<a name="line247"></a>	 * @param	string	the table name
+<a name="line248"></a>	 * @param	string	the column name
+<a name="line249"></a>	 * @param	string	the column definition
+<a name="line250"></a>	 * @return	bool
+<a name="line251"></a>	 */
+<a name="line252"></a>	function add_column($table = '', $field = array(), $after_field = '')
+<a name="line253"></a>	{
+<a name="line254"></a>		if ($table == '')
+<a name="line255"></a>		{
+<a name="line256"></a>			show_error('A table name is required for that operation.');
+<a name="line257"></a>		}
+<a name="line258"></a>
+<a name="line259"></a>		// add field info into field array, but we can only do one at a time
+<a name="line260"></a>		// so we cycle through
+<a name="line261"></a>
+<a name="line262"></a>		foreach ($field as $k => $v)
+<a name="line263"></a>		{
+<a name="line264"></a>			$this->add_field(array($k => $field[$k]));		
+<a name="line265"></a>
+<a name="line266"></a>			if (count($this->fields) == 0)
+<a name="line267"></a>			{	
+<a name="line268"></a>				show_error('Field information is required.');
+<a name="line269"></a>			}
+<a name="line270"></a>			
+<a name="line271"></a>			$sql = $this->_alter_table('ADD', $this->db->dbprefix.$table, $this->fields, $after_field);
+<a name="line272"></a>
+<a name="line273"></a>			$this->_reset();
+<a name="line274"></a>	
+<a name="line275"></a>			if ($this->db->query($sql) === FALSE)
+<a name="line276"></a>			{
+<a name="line277"></a>				return FALSE;
+<a name="line278"></a>			}
+<a name="line279"></a>		}
+<a name="line280"></a>		
+<a name="line281"></a>		return TRUE;
+<a name="line282"></a>	}
+<a name="line283"></a>
+<a name="line284"></a>	// --------------------------------------------------------------------
+<a name="line285"></a>
+<a name="line286"></a>	/**
+<a name="line287"></a>	 * Column Drop
+<a name="line288"></a>	 *
+<a name="line289"></a>	 * @access	public
+<a name="line290"></a>	 * @param	string	the table name
+<a name="line291"></a>	 * @param	string	the column name
+<a name="line292"></a>	 * @return	bool
+<a name="line293"></a>	 */
+<a name="line294"></a>	function drop_column($table = '', $column_name = '')
+<a name="line295"></a>	{
+<a name="line296"></a>	
+<a name="line297"></a>		if ($table == '')
+<a name="line298"></a>		{
+<a name="line299"></a>			show_error('A table name is required for that operation.');
+<a name="line300"></a>		}
+<a name="line301"></a>
+<a name="line302"></a>		if ($column_name == '')
+<a name="line303"></a>		{
+<a name="line304"></a>			show_error('A column name is required for that operation.');
+<a name="line305"></a>		}
+<a name="line306"></a>
+<a name="line307"></a>		$sql = $this->_alter_table('DROP', $this->db->dbprefix.$table, $column_name);
+<a name="line308"></a>	
+<a name="line309"></a>		return $this->db->query($sql);
+<a name="line310"></a>	}
+<a name="line311"></a>
+<a name="line312"></a>	// --------------------------------------------------------------------
+<a name="line313"></a>
+<a name="line314"></a>	/**
+<a name="line315"></a>	 * Column Modify
+<a name="line316"></a>	 *
+<a name="line317"></a>	 * @access	public
+<a name="line318"></a>	 * @param	string	the table name
+<a name="line319"></a>	 * @param	string	the column name
+<a name="line320"></a>	 * @param	string	the column definition
+<a name="line321"></a>	 * @return	bool
+<a name="line322"></a>	 */
+<a name="line323"></a>	function modify_column($table = '', $field = array())
+<a name="line324"></a>	{
+<a name="line325"></a>		if ($table == '')
+<a name="line326"></a>		{
+<a name="line327"></a>			show_error('A table name is required for that operation.');
+<a name="line328"></a>		}
+<a name="line329"></a>
+<a name="line330"></a>		// add field info into field array, but we can only do one at a time
+<a name="line331"></a>		// so we cycle through
+<a name="line332"></a>
+<a name="line333"></a>		foreach ($field as $k => $v)
+<a name="line334"></a>		{
+<a name="line335"></a>			$this->add_field(array($k => $field[$k]));
+<a name="line336"></a>
+<a name="line337"></a>			if (count($this->fields) == 0)
+<a name="line338"></a>			{	
+<a name="line339"></a>				show_error('Field information is required.');
+<a name="line340"></a>			}
+<a name="line341"></a>		
+<a name="line342"></a>			$sql = $this->_alter_table('CHANGE', $this->db->dbprefix.$table, $this->fields);
+<a name="line343"></a>
+<a name="line344"></a>			$this->_reset();
+<a name="line345"></a>	
+<a name="line346"></a>			if ($this->db->query($sql) === FALSE)
+<a name="line347"></a>			{
+<a name="line348"></a>				return FALSE;
+<a name="line349"></a>			}
+<a name="line350"></a>		}
+<a name="line351"></a>		
+<a name="line352"></a>		return TRUE;
+<a name="line353"></a>	}
+<a name="line354"></a>
+<a name="line355"></a>	// --------------------------------------------------------------------
+<a name="line356"></a>
+<a name="line357"></a>	/**
+<a name="line358"></a>	 * Reset
+<a name="line359"></a>	 *
+<a name="line360"></a>	 * Resets table creation vars
+<a name="line361"></a>	 *
+<a name="line362"></a>	 * @access	private
+<a name="line363"></a>	 * @return	void
+<a name="line364"></a>	 */
+<a name="line365"></a>	function _reset()
+<a name="line366"></a>	{
+<a name="line367"></a>		$this->fields 		= array();
+<a name="line368"></a>		$this->keys			= array();
+<a name="line369"></a>		$this->primary_keys 	= array();
+<a name="line370"></a>	}
+<a name="line371"></a>
+<a name="line372"></a>}
+<a name="line373"></a>
+<a name="line374"></a>/* End of file DB_forge.php */
+<a name="line375"></a>/* Location: ./system/database/DB_forge.php */</pre>
+<div class="header">
+<h1>GiftFlow API</h1>
+<ul>
+<li><a href="../../overview-summary.html">Overview</a></li>
+<li>Package</li><li>Class</li><li>Tree</li><li><a href="../../overview-files.html">Files</a></li>
+<li><a href="../../deprecated-list.html">Deprecated</a></li>
+<li><a href="../../index-all.html">Index</a></li>
+</ul>
+</div>
+
+<div class="small_links">
+<a href="../../index.html" target="_top">Frames</a>
+<a href="../../source/database/db_forge.php.html" target="_top">No frames</a>
+</div>
+<hr>
+
+<p id="footer">This document was generated by <a href="http://peej.github.com/phpdoctor/">PHPDoctor: The PHP Documentation Creator</a></p>
+
+</body>
+
+</html>
