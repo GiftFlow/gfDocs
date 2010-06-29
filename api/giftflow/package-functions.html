@@ -6,7 +6,7 @@
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 
 <meta name="generator" content="PHPDoctor 2RC4 (http://peej.github.com/phpdoctor/)">
-<meta name="when" content="Sun, 20 Jun 2010 17:43:50 +0000">
+<meta name="when" content="Tue, 29 Jun 2010 21:10:09 +0000">
 
 <link rel="stylesheet" type="text/css" href="../stylesheet.css">
 <link rel="start" href="../overview-summary.html">
@@ -97,6 +97,18 @@ the object and returns it.</p></td>
 <tr>
 <td class="type"> void</td>
 <td class="description"><p class="name"><a href="#ascii_to_entities()">ascii_to_entities</a>(mixed str)</p><p class="description">High ASCII to EntitiesConverts High ascii text and MS Word special characters to character entities</p></td>
+</tr>
+<tr>
+<td class="type"> void</td>
+<td class="description"><p class="name"><a href="#assert_logged_in()">assert_logged_in</a>()</p></td>
+</tr>
+<tr>
+<td class="type"> void</td>
+<td class="description"><p class="name"><a href="#assert_request_vars()">assert_request_vars</a>()</p></td>
+</tr>
+<tr>
+<td class="type"> void</td>
+<td class="description"><p class="name"><a href="#assert_request_vars_all()">assert_request_vars_all</a>()</p></td>
 </tr>
 <tr>
 <td class="type"> void</td>
@@ -322,6 +334,10 @@ Returns FALSE if the file cannot be found.</p></td>
 </tr>
 <tr>
 <td class="type"> void</td>
+<td class="description"><p class="name"><a href="#getallheaders()">getallheaders</a>()</p><p class="description">Tests of OAuth implementation.</p></td>
+</tr>
+<tr>
+<td class="type"> void</td>
 <td class="description"><p class="name"><a href="#gmt_to_local()">gmt_to_local</a>(str time, str timezone, bool dst)</p><p class="description">Converts GMT time to a localized valueTakes a Unix timestamp (in GMT) as input, and returns
 at the local value based on the timezone and DST setting
 submitted</p></td>
@@ -449,6 +465,14 @@ with a percent sign:  %Y %m %d etc...
 </tr>
 <tr>
 <td class="type"> void</td>
+<td class="description"><p class="name"><a href="#oauth_assert_handler()">oauth_assert_handler</a>(mixed file, mixed line, mixed code)</p></td>
+</tr>
+<tr>
+<td class="type"> void</td>
+<td class="description"><p class="name"><a href="#oauth_test()">oauth_test</a>()</p></td>
+</tr>
+<tr>
+<td class="type"> void</td>
 <td class="description"><p class="name"><a href="#octal_permissions()">octal_permissions</a>(mixed perms)</p><p class="description">Octal PermissionsTakes a numeric value representing a file's permissions and returns
 a three character string representing the file's octal permissions</p></td>
 </tr>
@@ -505,7 +529,7 @@ except those found in http://http://www.some-site.com//index.phpbecomes:http://w
 </tr>
 <tr>
 <td class="type"> void</td>
-<td class="description"><p class="name"><a href="#result_row()">result_row</a>(mixed id, mixed params)</p></td>
+<td class="description"><p class="name"><a href="#result_row()">result_row</a>(mixed id, mixed params, mixed G)</p></td>
 </tr>
 <tr>
 <td class="type"> void</td>
@@ -514,6 +538,10 @@ except those found in http://http://www.some-site.com//index.phpbecomes:http://w
 <tr>
 <td class="type"> void</td>
 <td class="description"><p class="name"><a href="#send_email()">send_email</a>(mixed recipient, str subject, str message)</p><p class="description">Send an email</p></td>
+</tr>
+<tr>
+<td class="type"> void</td>
+<td class="description"><p class="name"><a href="#session_smarty()">session_smarty</a>()</p></td>
 </tr>
 <tr>
 <td class="type"> void</td>
@@ -672,6 +700,30 @@ word you've submitted.</p></td>
 <td class="description"><p class="name"><a href="#xml_convert()">xml_convert</a>(mixed str)</p><p class="description">Convert Reserved XML characters to Entities</p></td>
 </tr>
 <tr>
+<td class="type"> array</td>
+<td class="description"><p class="name"><a href="#xrds_oauth_service_uris()">xrds_oauth_service_uris</a>(mixed xpath)</p><p class="description">Return the OAuth service uris in order of the priority.</p></td>
+</tr>
+<tr>
+<td class="type"> array</td>
+<td class="description"><p class="name"><a href="#xrds_parse()">xrds_parse</a>(mixed data)</p><p class="description">Parse the xrds file in the argument. </p></td>
+</tr>
+<tr>
+<td class="type"> mixed</td>
+<td class="description"><p class="name"><a href="#xrds_priority()">xrds_priority</a>(mixed elt)</p><p class="description">Fetch the priority of a element</p></td>
+</tr>
+<tr>
+<td class="type"> array</td>
+<td class="description"><p class="name"><a href="#xrds_priority_flatten()">xrds_priority_flatten</a>(mixed ps)</p><p class="description">Flatten an array according to the priority</p></td>
+</tr>
+<tr>
+<td class="type"> array</td>
+<td class="description"><p class="name"><a href="#xrds_xrd_oauth()">xrds_xrd_oauth</a>(mixed xpath, mixed id)</p><p class="description">Parse a XRD definition for OAuth and return the uris etc.</p></td>
+</tr>
+<tr>
+<td class="type"> array</td>
+<td class="description"><p class="name"><a href="#xrds_xrd_oauth_service()">xrds_xrd_oauth_service</a>(mixed n)</p><p class="description">Parse a service definition for OAuth in a simple xrd element</p></td>
+</tr>
+<tr>
 <td class="type"> void</td>
 <td class="description"><p class="name"><a href="#xss_clean()">xss_clean</a>(mixed str, bool is_image)</p><p class="description">XSS Filtering</p></td>
 </tr>
@@ -794,7 +846,7 @@ the object and returns it.</p>
 
 <hr>
 
-<a href="../source/application/helpers/elements_helper.php.html#line278" class="location">application/helpers/elements_helper.php at line 278</a>
+<a href="../source/application/helpers/elements_helper.php.html#line281" class="location">application/helpers/elements_helper.php at line 281</a>
 
 <h3 id="about_menu()">about_menu</h3>
 <code class="signature">public  void <strong>about_menu</strong>(mixed active)</code>
@@ -869,6 +921,33 @@ opens a new window based on the attributes specified.</p>
 <dt>Param	string.</dt>
 <dt>Return	string.</dt>
 </dl>
+</div>
+
+<hr>
+
+<a href="../source/application/libraries/oauth/example/server/core/init.php.html#line89" class="location">application/libraries/oauth/example/server/core/init.php at line 89</a>
+
+<h3 id="assert_logged_in()">assert_logged_in</h3>
+<code class="signature">public  void <strong>assert_logged_in</strong>()</code>
+<div class="details">
+</div>
+
+<hr>
+
+<a href="../source/application/libraries/oauth/example/server/core/init.php.html#line98" class="location">application/libraries/oauth/example/server/core/init.php at line 98</a>
+
+<h3 id="assert_request_vars()">assert_request_vars</h3>
+<code class="signature">public  void <strong>assert_request_vars</strong>()</code>
+<div class="details">
+</div>
+
+<hr>
+
+<a href="../source/application/libraries/oauth/example/server/core/init.php.html#line111" class="location">application/libraries/oauth/example/server/core/init.php at line 111</a>
+
+<h3 id="assert_request_vars_all()">assert_request_vars_all</h3>
+<code class="signature">public  void <strong>assert_request_vars_all</strong>()</code>
+<div class="details">
 </div>
 
 <hr>
@@ -1189,7 +1268,7 @@ If the element is empty it returns FALSE (or whatever you specify as the default
 
 <hr>
 
-<a href="../source/application/helpers/elements_helper.php.html#line369" class="location">application/helpers/elements_helper.php at line 369</a>
+<a href="../source/application/helpers/elements_helper.php.html#line375" class="location">application/helpers/elements_helper.php at line 375</a>
 
 <h3 id="facebook_open_graph()">facebook_open_graph</h3>
 <code class="signature">public  void <strong>facebook_open_graph</strong>(mixed options)</code>
@@ -1198,7 +1277,7 @@ If the element is empty it returns FALSE (or whatever you specify as the default
 
 <hr>
 
-<a href="../source/application/helpers/elements_helper.php.html#line349" class="location">application/helpers/elements_helper.php at line 349</a>
+<a href="../source/application/helpers/elements_helper.php.html#line355" class="location">application/helpers/elements_helper.php at line 355</a>
 
 <h3 id="facebook_sdk()">facebook_sdk</h3>
 <code class="signature">public  void <strong>facebook_sdk</strong>()</code>
@@ -1322,7 +1401,7 @@ form validation class.</p>
 
 <hr>
 
-<a href="../source/application/helpers/elements_helper.php.html#line255" class="location">application/helpers/elements_helper.php at line 255</a>
+<a href="../source/application/helpers/elements_helper.php.html#line258" class="location">application/helpers/elements_helper.php at line 258</a>
 
 <h3 id="form_errors()">form_errors</h3>
 <code class="signature">public  void <strong>form_errors</strong>()</code>
@@ -1707,6 +1786,26 @@ It should NOT be trusted, and should certainly NOT be used for security</p>
 <dt>Param	string	path:</dt>
 <dd>to file</dd>
 <dt>Return	mixed.</dt>
+</dl>
+</div>
+
+<hr>
+
+<a href="../source/application/libraries/oauth/test/oauth_test.php.html#line41" class="location">application/libraries/oauth/test/oauth_test.php at line 41</a>
+
+<h3 id="getallheaders()">getallheaders</h3>
+<code class="signature">public  void <strong>getallheaders</strong>()</code>
+<div class="details">
+<p>Tests of OAuth implementation.</p>
+<dl>
+<dt>Version:</dt>
+<dd>$Id$</dd>
+<dt>Author:</dt>
+<dd>Marc Worrell <marcw@pobox.com></dd>
+<dt>Date:</dt>
+<dd>Nov 29, 2007 3:46:56 PM</dd>
+<dt>See Also:</dt>
+<dd><a href="http://wiki.oauth.net/TestCases">The MIT License Copyright (c) 2007-2008 Mediamatic Lab Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions: The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software. THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.</a></dd>
 </dl>
 </div>
 
@@ -2140,7 +2239,7 @@ match the date codes.</p>
 
 <hr>
 
-<a href="../source/application/helpers/elements_helper.php.html#line214" class="location">application/helpers/elements_helper.php at line 214</a>
+<a href="../source/application/helpers/elements_helper.php.html#line217" class="location">application/helpers/elements_helper.php at line 217</a>
 
 <h3 id="notify()">notify</h3>
 <code class="signature">public  void <strong>notify</strong>()</code>
@@ -2159,6 +2258,24 @@ match the date codes.</p>
 <dt>Access	public.</dt>
 <dt>Return	integer.</dt>
 </dl>
+</div>
+
+<hr>
+
+<a href="../source/application/libraries/oauth/test/oauth_test.php.html#line180" class="location">application/libraries/oauth/test/oauth_test.php at line 180</a>
+
+<h3 id="oauth_assert_handler()">oauth_assert_handler</h3>
+<code class="signature">public  void <strong>oauth_assert_handler</strong>(mixed file, mixed line, mixed code)</code>
+<div class="details">
+</div>
+
+<hr>
+
+<a href="../source/application/libraries/oauth/test/oauth_test.php.html#line50" class="location">application/libraries/oauth/test/oauth_test.php at line 50</a>
+
+<h3 id="oauth_test()">oauth_test</h3>
+<code class="signature">public  void <strong>oauth_test</strong>()</code>
+<div class="details">
 </div>
 
 <hr>
@@ -2380,10 +2497,10 @@ except those found in http://</p><p>http://www.some-site.com//index.php</p><p>be
 
 <hr>
 
-<a href="../source/application/helpers/elements_helper.php.html#line306" class="location">application/helpers/elements_helper.php at line 306</a>
+<a href="../source/application/helpers/elements_helper.php.html#line309" class="location">application/helpers/elements_helper.php at line 309</a>
 
 <h3 id="result_row()">result_row</h3>
-<code class="signature">public  void <strong>result_row</strong>(mixed id, mixed params)</code>
+<code class="signature">public  void <strong>result_row</strong>(mixed id, mixed params, mixed G)</code>
 <div class="details">
 </div>
 
@@ -2418,6 +2535,15 @@ except those found in http://</p><p>http://www.some-site.com//index.php</p><p>be
 <dt>Access	public.</dt>
 <dt>Return	bool.</dt>
 </dl>
+</div>
+
+<hr>
+
+<a href="../source/application/libraries/oauth/example/server/core/init.php.html#line77" class="location">application/libraries/oauth/example/server/core/init.php at line 77</a>
+
+<h3 id="session_smarty()">session_smarty</h3>
+<code class="signature">public  void <strong>session_smarty</strong>()</code>
+<div class="details">
 </div>
 
 <hr>
@@ -2526,7 +2652,7 @@ is active it retrieves the info from the validation class</p>
 
 <hr>
 
-<a href="../source/application/helpers/elements_helper.php.html#line436" class="location">application/helpers/elements_helper.php at line 436</a>
+<a href="../source/application/helpers/elements_helper.php.html#line442" class="location">application/helpers/elements_helper.php at line 442</a>
 
 <h3 id="sharing_sidebar()">sharing_sidebar</h3>
 <code class="signature">public  void <strong>sharing_sidebar</strong>(mixed options)</code>
@@ -2535,7 +2661,7 @@ is active it retrieves the info from the validation class</p>
 
 <hr>
 
-<a href="../source/application/helpers/elements_helper.php.html#line410" class="location">application/helpers/elements_helper.php at line 410</a>
+<a href="../source/application/helpers/elements_helper.php.html#line416" class="location">application/helpers/elements_helper.php at line 416</a>
 
 <h3 id="sidebar()">sidebar</h3>
 <code class="signature">public  void <strong>sidebar</strong>(mixed options)</code>
@@ -2715,7 +2841,7 @@ standard symbolic notation representing that value</p>
 
 <hr>
 
-<a href="../source/application/helpers/elements_helper.php.html#line476" class="location">application/helpers/elements_helper.php at line 476</a>
+<a href="../source/application/helpers/elements_helper.php.html#line482" class="location">application/helpers/elements_helper.php at line 482</a>
 
 <h3 id="time_ago()">time_ago</h3>
 <code class="signature">public  void <strong>time_ago</strong>(mixed datefrom, int dateto)</code>
@@ -2992,6 +3118,88 @@ Creates a new file if non-existent.</p>
 <dt>Access	public.</dt>
 <dt>Param	string.</dt>
 <dt>Return	string.</dt>
+</dl>
+</div>
+
+<hr>
+
+<a href="../source/application/libraries/oauth/discovery/xrds_parse.php.html#line221" class="location">application/libraries/oauth/discovery/xrds_parse.php at line 221</a>
+
+<h3 id="xrds_oauth_service_uris()">xrds_oauth_service_uris</h3>
+<code class="signature">public  array <strong>xrds_oauth_service_uris</strong>(mixed xpath)</code>
+<div class="details">
+<p>Return the OAuth service uris in order of the priority.</p>
+</div>
+
+<hr>
+
+<a href="../source/application/libraries/oauth/discovery/xrds_parse.php.html#line56" class="location">application/libraries/oauth/discovery/xrds_parse.php at line 56</a>
+
+<h3 id="xrds_parse()">xrds_parse</h3>
+<code class="signature">public  array <strong>xrds_parse</strong>(mixed data)</code>
+<div class="details">
+<p>Parse the xrds file in the argument.  The xrds description must have been 
+fetched via curl or something else.</p><p>TODO: more robust checking, support for more service documents
+TODO: support for URIs to definition instead of local xml:id</p>
+<dl>
+<dt>Parameters:</dt>
+<dd>data - contents of xrds file</dd>
+<dt>Exception:</dt>
+<dd>Exception when the file is in an unknown format</dd>
+</dl>
+</div>
+
+<hr>
+
+<a href="../source/application/libraries/oauth/discovery/xrds_parse.php.html#line284" class="location">application/libraries/oauth/discovery/xrds_parse.php at line 284</a>
+
+<h3 id="xrds_priority()">xrds_priority</h3>
+<code class="signature">public  mixed <strong>xrds_priority</strong>(mixed elt)</code>
+<div class="details">
+<p>Fetch the priority of a element</p>
+<dl>
+<dt>Returns:</dt>
+<dd>'null' or int</dd>
+</dl>
+</div>
+
+<hr>
+
+<a href="../source/application/libraries/oauth/discovery/xrds_parse.php.html#line254" class="location">application/libraries/oauth/discovery/xrds_parse.php at line 254</a>
+
+<h3 id="xrds_priority_flatten()">xrds_priority_flatten</h3>
+<code class="signature">public  array <strong>xrds_priority_flatten</strong>(mixed ps)</code>
+<div class="details">
+<p>Flatten an array according to the priority</p>
+<dl>
+<dt>Parameters:</dt>
+<dd>ps - buckets per prio</dd>
+<dt>Returns:</dt>
+<dd>one dimensional array</dd>
+</dl>
+</div>
+
+<hr>
+
+<a href="../source/application/libraries/oauth/discovery/xrds_parse.php.html#line100" class="location">application/libraries/oauth/discovery/xrds_parse.php at line 100</a>
+
+<h3 id="xrds_xrd_oauth()">xrds_xrd_oauth</h3>
+<code class="signature">public  array <strong>xrds_xrd_oauth</strong>(mixed xpath, mixed id)</code>
+<div class="details">
+<p>Parse a XRD definition for OAuth and return the uris etc.</p>
+</div>
+
+<hr>
+
+<a href="../source/application/libraries/oauth/discovery/xrds_parse.php.html#line158" class="location">application/libraries/oauth/discovery/xrds_parse.php at line 158</a>
+
+<h3 id="xrds_xrd_oauth_service()">xrds_xrd_oauth_service</h3>
+<code class="signature">public  array <strong>xrds_xrd_oauth_service</strong>(mixed n)</code>
+<div class="details">
+<p>Parse a service definition for OAuth in a simple xrd element</p>
+<dl>
+<dt>Returns:</dt>
+<dd>(type, service desc)</dd>
 </dl>
 </div>
 

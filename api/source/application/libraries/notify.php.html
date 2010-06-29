@@ -6,7 +6,7 @@
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 
 <meta name="generator" content="PHPDoctor 2RC4 (http://peej.github.com/phpdoctor/)">
-<meta name="when" content="Sun, 20 Jun 2010 17:43:51 +0000">
+<meta name="when" content="Tue, 29 Jun 2010 21:10:10 +0000">
 
 <link rel="stylesheet" type="text/css" href="../../../stylesheet.css">
 <link rel="start" href="../../../overview-summary.html">
@@ -35,27 +35,90 @@
 <h1>application/libraries/notify.php</h1>
 <hr>
 
-<a name="line1"></a><pre><?php  if ( ! defined('BASEPATH')) exit('No direct script access allowed');
-<a name="line2"></a>/**
-<a name="line3"></a>*	The Notify library handles all notifications and alerts
-<a name="line4"></a>*
-<a name="line5"></a>*	@author Brandon Jackson
-<a name="line6"></a>* 	@package Libraries
-<a name="line7"></a>*/
-<a name="line8"></a>
-<a name="line9"></a>class Notify
-<a name="line10"></a>{
-<a name="line11"></a>	
-<a name="line12"></a>	protected $CI;
-<a name="line13"></a>	
-<a name="line14"></a>	public function __construct()
-<a name="line15"></a>	{
-<a name="line16"></a>		$this->CI =& get_instance();
-<a name="line17"></a>		$this->CI->load->library('util');
-<a name="line18"></a>	}
-<a name="line19"></a>	
-<a name="line20"></a>}
-<a name="line21"></a></pre>
+<a name="line1"></a><pre><?php
+<a name="line2"></a>if (!defined('BASEPATH'))
+<a name="line3"></a>      exit('No direct script access allowed');
+<a name="line4"></a>/**
+<a name="line5"></a> *	The Notify library handles all notifications and alerts
+<a name="line6"></a> *
+<a name="line7"></a> *	@author Brandon Jackson
+<a name="line8"></a> * 	@package Libraries
+<a name="line9"></a> */
+<a name="line10"></a>
+<a name="line11"></a>class Notify
+<a name="line12"></a>{
+<a name="line13"></a>      public $from_email;
+<a name="line14"></a>      public $from_name;
+<a name="line15"></a>      public $to;
+<a name="line16"></a>      public $reply_to_email;
+<a name="line17"></a>      public $reply_to_name;
+<a name="line18"></a>      public $cc;
+<a name="line19"></a>      public $bcc;
+<a name="line20"></a>      public $subject;
+<a name="line21"></a>      public $parseables;
+<a name="line22"></a>      public $template;
+<a name="line23"></a>      public $l_delimiter;
+<a name="line24"></a>      public $r_delimiter;
+<a name="line25"></a>      
+<a name="line26"></a>      protected $CI;
+<a name="line27"></a>      
+<a name="line28"></a>      public function __construct($config = array())
+<a name="line29"></a>      {
+<a name="line30"></a>            $this->from_email = $config["from_email"];
+<a name="line31"></a>            $this->from_name  = $config["from_name"];
+<a name="line32"></a>            $this->to  = $config["to"];
+<a name="line33"></a>            $this->reply_to_email = $config["reply_to_email"];
+<a name="line34"></a>            $this->reply_to_name  = $config["reply_to_name"];
+<a name="line35"></a>            $this->cc  = $config["cc"];
+<a name="line36"></a>            $this->bcc  = $config["bcc"];
+<a name="line37"></a>            $this->subject = $config["subject"];
+<a name="line38"></a>            $this->parseables = $config["parseables"];
+<a name="line39"></a>            $this->template   = $config["template"];
+<a name="line40"></a>            $this->l_delimiter  = ($config["l_del"] == "") ? "{{" : $config["l_del"];
+<a name="line41"></a>            $this->r_delimiter   = ($config["r_del"] == "") ? "}}" : $config["r_del"];
+<a name="line42"></a>            
+<a name="line43"></a>            $this->CI =& get_instance();
+<a name="line44"></a>            $this->CI->load->library('util');
+<a name="line45"></a>            $this->CI->load->library('email');
+<a name="line46"></a>      }
+<a name="line47"></a>      
+<a name="line48"></a>      function send_email()
+<a name="line49"></a>      {
+<a name="line50"></a>            $this->CI->email->from($this->from_email, $this->from_name);
+<a name="line51"></a>            $this->CI->email->to($this->to);
+<a name="line52"></a>            
+<a name="line53"></a>            if ($this->reply_to_email != "")
+<a name="line54"></a>                  $this->CI->email->reply_to($this->reply_to_email, $this->reply_to_name);
+<a name="line55"></a>            
+<a name="line56"></a>            if ($this->cc != "")
+<a name="line57"></a>                  $this->CI->email->cc($this->cc);
+<a name="line58"></a>            
+<a name="line59"></a>            if ($this->bcc != "")
+<a name="line60"></a>                  $this->CI->email->bcc($this->bcc);
+<a name="line61"></a>            
+<a name="line62"></a>            $this->CI->email->subject($this->subject);
+<a name="line63"></a>            $this->CI->email->message($this->template_parser());
+<a name="line64"></a>            
+<a name="line65"></a>            if (!$this->CI->email->send())
+<a name="line66"></a>            {
+<a name="line67"></a>                  return TRUE;
+<a name="line68"></a>            }
+<a name="line69"></a>            
+<a name="line70"></a>            return FALSE;
+<a name="line71"></a>      }
+<a name="line72"></a>      
+<a name="line73"></a>      function template_parser()
+<a name="line74"></a>      {
+<a name="line75"></a>            foreach ($this->parseables as $key => $val)
+<a name="line76"></a>            {
+<a name="line77"></a>                  $find_arr[]    = $this->l_delimiter . $key . $this->r_delimiter;
+<a name="line78"></a>                  $replace_arr[] = htmlentities($val);
+<a name="line79"></a>            }
+<a name="line80"></a>            
+<a name="line81"></a>            return str_replace($find_arr, $replace_arr, $this->template);
+<a name="line82"></a>      }
+<a name="line83"></a>}
+<a name="line84"></a></pre>
 <div class="header">
 <h1>GiftFlow API</h1>
 <ul>

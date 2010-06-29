@@ -6,7 +6,7 @@
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 
 <meta name="generator" content="PHPDoctor 2RC4 (http://peej.github.com/phpdoctor/)">
-<meta name="when" content="Sun, 20 Jun 2010 17:43:51 +0000">
+<meta name="when" content="Tue, 29 Jun 2010 21:10:10 +0000">
 
 <link rel="stylesheet" type="text/css" href="../../../stylesheet.css">
 <link rel="start" href="../../../overview-summary.html">
@@ -56,50 +56,48 @@
 <a name="line19"></a>	}
 <a name="line20"></a>	protected function _member_photo( $id, $param = null )
 <a name="line21"></a>	{
-<a name="line22"></a>
-<a name="line23"></a>
-<a name="line24"></a>		$U = new User( $id );
-<a name="line25"></a>		if(!$U->exists())
-<a name="line26"></a>		{
-<a name="line27"></a>			echo "User Does Not Exist.";
-<a name="line28"></a>			return false;
-<a name="line29"></a>		}
-<a name="line30"></a>		if($U->facebook_photo==1)
-<a name="line31"></a>		{
-<a name="line32"></a>			if($param=='thumb') $url = "http://graph.facebook.com/".$U->facebook_id."/picture?type=square";
-<a name="line33"></a>			else $url = "http://graph.facebook.com/".$U->facebook_id."/picture?type=large";
-<a name="line34"></a>		}
-<a name="line35"></a>		else
-<a name="line36"></a>		{
-<a name="line37"></a>			$U->default_photo->get();
-<a name="line38"></a>		 	if($U->default_photo->exists())
-<a name="line39"></a>		 	{
-<a name="line40"></a>		 		if($param == "thumb") $url = $U->default_photo->thumb_url;
-<a name="line41"></a>		 		else $url = $U->default_photo->url;
+<a name="line22"></a>		$U = new User( $id );
+<a name="line23"></a>		if(!$U->exists())
+<a name="line24"></a>		{
+<a name="line25"></a>			echo "User Does Not Exist.";
+<a name="line26"></a>			return false;
+<a name="line27"></a>		}
+<a name="line28"></a>		if($U->facebook_photo==1&& !empty($U->facebook_id))
+<a name="line29"></a>		{
+<a name="line30"></a>			if($param=='thumb') $url = "http://graph.facebook.com/".$U->facebook_id."/picture?type=square";
+<a name="line31"></a>			else $url = "http://graph.facebook.com/".$U->facebook_id."/picture?type=large";
+<a name="line32"></a>		}
+<a name="line33"></a>		else
+<a name="line34"></a>		{
+<a name="line35"></a>			$U->default_photo->get();
+<a name="line36"></a>		 	if($U->default_photo->exists())
+<a name="line37"></a>		 	{
+<a name="line38"></a>		 		if($param == "thumb") $url = $U->default_photo->thumb_url;
+<a name="line39"></a>		 		else $url = $U->default_photo->url;
+<a name="line40"></a>		 		
+<a name="line41"></a>		 		// Check to see if local file exists
 <a name="line42"></a>		 		
-<a name="line43"></a>		 		// Check to see if local file exists
-<a name="line44"></a>		 		
-<a name="line45"></a>		 		// first, generate path
-<a name="line46"></a>		 		$path = $this->config->item('base_path');
-<a name="line47"></a>		 		if($param == "thumb" ) $path  .= "uploads/thumbnails/".basename($url);
-<a name="line48"></a>		 		else $path .= "uploads/".basename($url);
-<a name="line49"></a>		 		
-<a name="line50"></a>		 		// If it doesn't, use default URL
-<a name="line51"></a>		 		if( !file_exists( $path ) )
-<a name="line52"></a>		 		{
-<a name="line53"></a>		 			$url =  base_url()."assets/images/default_user_photo.jpg";
-<a name="line54"></a>		 		}
-<a name="line55"></a>		 	}
-<a name="line56"></a>		 	else
-<a name="line57"></a>		 	{
-<a name="line58"></a>		 		$url =  base_url()."assets/images/default_user_photo.jpg";
-<a name="line59"></a>		 	}
-<a name="line60"></a>		}
-<a name="line61"></a>
-<a name="line62"></a>		header( "Location: ".$url);
-<a name="line63"></a>	
-<a name="line64"></a>	}
-<a name="line65"></a>}</pre>
+<a name="line43"></a>		 		// first, generate path
+<a name="line44"></a>		 		$path = $this->config->item('base_path');
+<a name="line45"></a>		 		if($param == "thumb" ) $path  .= "uploads/thumbnails/".basename($url);
+<a name="line46"></a>		 		else $path .= "uploads/".basename($url);
+<a name="line47"></a>		 		
+<a name="line48"></a>		 		// If it doesn't, use default URL
+<a name="line49"></a>		 		if( !file_exists( $path ) )
+<a name="line50"></a>		 		{
+<a name="line51"></a>		 			$url =  base_url()."assets/images/default_user_photo.jpg";
+<a name="line52"></a>		 		}
+<a name="line53"></a>		 	}
+<a name="line54"></a>		 	else
+<a name="line55"></a>		 	{
+<a name="line56"></a>		 		$url =  base_url()."assets/images/default_user_photo.jpg";
+<a name="line57"></a>		 	}
+<a name="line58"></a>		}
+<a name="line59"></a>
+<a name="line60"></a>		header( "Location: ".$url);
+<a name="line61"></a>	
+<a name="line62"></a>	}
+<a name="line63"></a>}</pre>
 <div class="header">
 <h1>GiftFlow API</h1>
 <ul>

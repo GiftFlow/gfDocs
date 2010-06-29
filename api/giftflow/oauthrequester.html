@@ -1,0 +1,293 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+
+<html lang="en">
+<head>
+
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
+<meta name="generator" content="PHPDoctor 2RC4 (http://peej.github.com/phpdoctor/)">
+<meta name="when" content="Tue, 29 Jun 2010 21:10:09 +0000">
+
+<link rel="stylesheet" type="text/css" href="../stylesheet.css">
+<link rel="start" href="../overview-summary.html">
+
+<title>OAuthRequester (GiftFlow API)</title>
+
+</head>
+<body id="definition" onload="parent.document.title=document.title;">
+
+<div class="header">
+<h1>GiftFlow API</h1>
+<ul>
+<li><a href="../overview-summary.html">Overview</a></li>
+<li><a href="../giftflow/package-summary.html">Package</a></li>
+<li class="active">Class</li>
+<li><a href="../giftflow/package-tree.html">Tree</a></li>
+<li><a href="../overview-files.html">Files</a></li>
+<li><a href="../deprecated-list.html">Deprecated</a></li>
+<li><a href="../index-all.html">Index</a></li>
+</ul>
+</div>
+
+<div class="small_links">
+<a href="../index.html" target="_top">Frames</a>
+<a href="../giftflow/oauthrequester.html" target="_top">No frames</a>
+</div>
+<div class="small_links">
+Summary: <a href="#summary_field">Field</a> | <a href="#summary_method">Method</a> | <a href="#summary_constr">Constr</a>
+Detail: <a href="#detail_field">Field</a> | <a href="#detail_method">Method</a> | <a href="#summary_constr">Constr</a>
+</div>
+<hr>
+
+<div class="qualifiedName">GiftFlow\OAuthRequester</div>
+<a href="../source/application/libraries/oauth/oauthrequester.php.html#line37" class="location">application/libraries/oauth/OAuthRequester.php at line 37</a>
+
+<h1>Class OAuthRequester</h1>
+
+<pre class="tree"><a href="../giftflow/oauthrequest.html">OAuthRequest</a><br>    └─<a href="../giftflow/oauthrequestsigner.html">OAuthRequestSigner</a><br>       └─<strong>OAuthRequester</strong><br /></pre>
+
+<hr>
+
+<p class="signature">public  class <strong>OAuthRequester</strong><br>extends <a href="../giftflow/oauthrequestsigner.html">OAuthRequestSigner</a>
+
+</p>
+
+<div class="comment" id="overview_description"><p>Perform a signed OAuth request with a GET, POST, PUT or DELETE operation.</p></div>
+
+<dl>
+<dt>Version:</dt>
+<dd>$Id: OAuthRequester.php 63 2009-02-25 10:24:33Z marcw@pobox.com $</dd>
+<dt>Author:</dt>
+<dd>Marc Worrell <marcw@pobox.com></dd>
+<dt>Date:</dt>
+<dd>Nov 20, 2007 1:41:38 PM The MIT License Copyright (c) 2007-2008 Mediamatic Lab Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions: The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software. THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.</dd>
+</dl>
+<hr>
+
+<table id="summary_field">
+<tr><th colspan="2">Field Summary</th></tr>
+<tr>
+<td class="type">protected  mixed</td>
+<td class="description"><p class="name"><a href="#verifyDataSignature">$verifyDataSignature</a></p></td>
+</tr>
+</table>
+
+<table class="inherit">
+<tr><th colspan="2">Fields inherited from GiftFlow\OAuthRequestSigner</th></tr>
+<tr><td><a href="../giftflow/oauthrequestsigner.html#getLog">getLog</a>, <a href="../giftflow/oauthrequestsigner.html#signed">signed</a>, <a href="../giftflow/oauthrequestsigner.html#store">store</a>, <a href="../giftflow/oauthrequestsigner.html#usr_id">usr_id</a></td></tr></table>
+
+<table class="inherit">
+<tr><th colspan="2">Fields inherited from GiftFlow\OAuthRequest</th></tr>
+<tr><td><a href="../giftflow/oauthrequest.html#__construct">__construct</a>, <a href="../giftflow/oauthrequest.html#body">body</a>, <a href="../giftflow/oauthrequest.html#headers">headers</a>, <a href="../giftflow/oauthrequest.html#method">method</a>, <a href="../giftflow/oauthrequest.html#param">param</a>, <a href="../giftflow/oauthrequest.html#uri">uri</a>, <a href="../giftflow/oauthrequest.html#uri_parts">uri_parts</a></td></tr></table>
+
+<table id="summary_method">
+<tr><th colspan="2">Method Summary</th></tr>
+<tr>
+<td class="type"> void</td>
+<td class="description"><p class="name"><a href="#__construct()">__construct</a>(string request, string method, array params, string body, array files, string uri, string parameters, array headers)</p><p class="description">Construct a new request signer. </p></td>
+</tr>
+<tr>
+<td class="type">protected  array</td>
+<td class="description"><p class="name"><a href="#curl_parse()">curl_parse</a>(string response)</p><p class="description">Parse an http response</p></td>
+</tr>
+<tr>
+<td class="type">protected  string</td>
+<td class="description"><p class="name"><a href="#curl_raw()">curl_raw</a>(mixed opts, string url)</p><p class="description">Open and close a curl session passing all the options to the curl libs</p></td>
+</tr>
+<tr>
+<td class="type"> array</td>
+<td class="description"><p class="name"><a href="#doRequest()">doRequest</a>(int usr_id, array curl_options, array options)</p><p class="description">Perform the request, returns the response code, headers and body.</p></td>
+</tr>
+<tr>
+<td class="type">protected  array</td>
+<td class="description"><p class="name"><a href="#prepareCurlOptions()">prepareCurlOptions</a>(array curl_options, array extra_headers)</p><p class="description">Mix the given headers into the headers that were given to curl</p></td>
+</tr>
+<tr>
+<td class="type">static  void</td>
+<td class="description"><p class="name"><a href="#requestAccessToken()">requestAccessToken</a>(string consumer_key, string token, int usr_id, string method, array options)</p><p class="description">Request an access token from the site belonging to consumer_key.
+</p></td>
+</tr>
+<tr>
+<td class="type">static  array</td>
+<td class="description"><p class="name"><a href="#requestRequestToken()">requestRequestToken</a>(string consumer_key, int usr_id, array params, string method, array options)</p><p class="description">Request a request token from the site belonging to consumer_key</p></td>
+</tr>
+</table>
+
+<table class="inherit">
+<tr><th colspan="2">Methods inherited from GiftFlow\OAuthRequestSigner</th></tr>
+<tr><td><a href="../giftflow/oauthrequestsigner.html#__construct()">__construct</a>, <a href="../giftflow/oauthrequestsigner.html#getAuthorizationHeader()">getAuthorizationHeader</a>, <a href="../giftflow/oauthrequestsigner.html#getQueryString()">getQueryString</a>, <a href="../giftflow/oauthrequestsigner.html#setUnsigned()">setUnsigned</a>, <a href="../giftflow/oauthrequestsigner.html#sign()">sign</a></td></tr></table>
+
+<table class="inherit">
+<tr><th colspan="2">Methods inherited from GiftFlow\OAuthRequest</th></tr>
+<tr><td><a href="../giftflow/oauthrequest.html#__construct()">__construct</a>, <a href="../giftflow/oauthrequest.html#calculateDataSignature()">calculateDataSignature</a>, <a href="../giftflow/oauthrequest.html#calculateSignature()">calculateSignature</a>, <a href="../giftflow/oauthrequest.html#checks()">checks</a>, <a href="../giftflow/oauthrequest.html#defaultPortForScheme()">defaultPortForScheme</a>, <a href="../giftflow/oauthrequest.html#getBody()">getBody</a>, <a href="../giftflow/oauthrequest.html#getMethod()">getMethod</a>, <a href="../giftflow/oauthrequest.html#getNormalizedParams()">getNormalizedParams</a>, <a href="../giftflow/oauthrequest.html#getParam()">getParam</a>, <a href="../giftflow/oauthrequest.html#getRequestBody()">getRequestBody</a>, <a href="../giftflow/oauthrequest.html#getRequestContentType()">getRequestContentType</a>, <a href="../giftflow/oauthrequest.html#getRequestUrl()">getRequestUrl</a>, <a href="../giftflow/oauthrequest.html#getSignatureMethod()">getSignatureMethod</a>, <a href="../giftflow/oauthrequest.html#parseHeaders()">parseHeaders</a>, <a href="../giftflow/oauthrequest.html#parseUri()">parseUri</a>, <a href="../giftflow/oauthrequest.html#redirect()">redirect</a>, <a href="../giftflow/oauthrequest.html#selectSignatureMethod()">selectSignatureMethod</a>, <a href="../giftflow/oauthrequest.html#setBody()">setBody</a>, <a href="../giftflow/oauthrequest.html#setParam()">setParam</a>, <a href="../giftflow/oauthrequest.html#signatureBaseString()">signatureBaseString</a>, <a href="../giftflow/oauthrequest.html#transcodeParams()">transcodeParams</a>, <a href="../giftflow/oauthrequest.html#urldecode()">urldecode</a>, <a href="../giftflow/oauthrequest.html#urlencode()">urlencode</a>, <a href="../giftflow/oauthrequest.html#urltranscode()">urltranscode</a></td></tr></table>
+
+<h2 id="detail_field">Field Detail</h2>
+<a href="../source/application/libraries/oauth/oauthrequester.php.html#line39" class="location">application/libraries/oauth/OAuthRequester.php at line 39</a>
+
+<h3 id="verifyDataSignature">verifyDataSignature</h3>
+<code class="signature">protected  mixed <strong>$verifyDataSignature</strong> = 'access'</code>
+<div class="details">
+</div>
+
+<hr>
+
+<h2 id="detail_method">Method Detail</h2><div class="method_detail">
+<div class='method'><a href="../source/application/libraries/oauth/oauthrequester.php.html#line61" class="location">application/libraries/oauth/OAuthRequester.php at line 61</a>
+
+<h3 id="__construct()">__construct</h3>
+<code class="signature">public  void <strong>__construct</strong>(string request, string method, array params, string body, array files, string uri, string parameters, array headers)</code>
+<div class="details">
+<p>Construct a new request signer.  Perform the request with the doRequest() method below.</p><p>A request can have either one file or a body, not both. </p><p>The files array consists of arrays:
+- file			the filename/path containing the data for the POST/PUT
+- data			data for the file, omit when you have a file
+- mime			content-type of the file
+- filename		filename for content disposition header</p><p>When OAuth (and PHP) can support multipart/form-data then we can handle more than one file.
+For now max one file, with all the params encoded in the query string.</p><dl>
+<dt>Parameters:</dt>
+<dd></dd>
+<dd>method - http method. GET, PUT, POST etc.</dd>
+<dd>params - name=>value array with request parameters</dd>
+<dd>body - optional body to send</dd>
+<dd>files - optional files to send (max 1 till OAuth support multipart/form-data posts)</dd>
+</dl>
+</div></div>
+
+
+
+<div class='method'><a href="../source/application/libraries/oauth/oauthrequester.php.html#line438" class="location">application/libraries/oauth/OAuthRequester.php at line 438</a>
+
+<h3 id="curl_parse()">curl_parse</h3>
+<code class="signature">protected  array <strong>curl_parse</strong>(string response)</code>
+<div class="details">
+<p>Parse an http response</p><dl>
+<dt>Parameters:</dt>
+<dd>response - the http text to parse</dd>
+<dt>Returns:</dt>
+<dd>(code=>http-code, headers=>http-headers, body=>body)</dd>
+</dl>
+</div></div>
+
+
+
+<div class='method'><a href="../source/application/libraries/oauth/oauthrequester.php.html#line289" class="location">application/libraries/oauth/OAuthRequester.php at line 289</a>
+
+<h3 id="curl_raw()">curl_raw</h3>
+<code class="signature">protected  string <strong>curl_raw</strong>(mixed opts, string url)</code>
+<div class="details">
+<p>Open and close a curl session passing all the options to the curl libs</p><dl>
+<dt>Parameters:</dt>
+<dd>url - the http address to fetch</dd>
+<dt>Exception:</dt>
+<dd>OAuthException when temporary file for PUT operation could not be created</dd>
+<dt>Returns:</dt>
+<dd>the result of the curl action</dd>
+</dl>
+</div></div>
+
+
+
+<div class='method'><a href="../source/application/libraries/oauth/oauthrequester.php.html#line96" class="location">application/libraries/oauth/OAuthRequester.php at line 96</a>
+
+<h3 id="doRequest()">doRequest</h3>
+<code class="signature">public  array <strong>doRequest</strong>(int usr_id, array curl_options, array options)</code>
+<div class="details">
+<p>Perform the request, returns the response code, headers and body.</p><dl>
+<dt>Parameters:</dt>
+<dd>usr_id - optional user id for which we make the request</dd>
+<dd>curl_options - optional extra options for curl request</dd>
+<dd>options - options like name and token_ttl</dd>
+<dt>Exception:</dt>
+<dd>OAuthException when authentication not accepted</dd>
+<dd>OAuthException when signing was not possible</dd>
+<dt>Returns:</dt>
+<dd>(code=>int, headers=>array(), body=>string)</dd>
+</dl>
+</div></div>
+
+
+
+<div class='method'><a href="../source/application/libraries/oauth/oauthrequester.php.html#line483" class="location">application/libraries/oauth/OAuthRequester.php at line 483</a>
+
+<h3 id="prepareCurlOptions()">prepareCurlOptions</h3>
+<code class="signature">protected  array <strong>prepareCurlOptions</strong>(array curl_options, array extra_headers)</code>
+<div class="details">
+<p>Mix the given headers into the headers that were given to curl</p><dl>
+<dt>Returns:</dt>
+<dd>new curl options</dd>
+</dl>
+</div></div>
+
+
+
+<div class='method'><a href="../source/application/libraries/oauth/oauthrequester.php.html#line219" class="location">application/libraries/oauth/OAuthRequester.php at line 219</a>
+
+<h3 id="requestAccessToken()">requestAccessToken</h3>
+<code class="signature">public static  void <strong>requestAccessToken</strong>(string consumer_key, string token, int usr_id, string method, array options)</code>
+<div class="details">
+<p>Request an access token from the site belonging to consumer_key.
+Before this we got an request token, now we want to exchange it for
+an access token.</p><dl>
+<dt>Parameters:</dt>
+<dd></dd>
+<dd></dd>
+<dd>usr_id - user requesting the access token</dd>
+<dd>method - (optional) change the method of the request, defaults to POST (as it should be)</dd>
+<dd>options - (optional) extra options for request, eg token_ttl</dd>
+<dt>Exception:</dt>
+<dd>OAuthException when no key could be fetched</dd>
+<dd>OAuthException when no server with consumer_key registered</dd>
+</dl>
+</div></div>
+
+
+
+<div class='method'><a href="../source/application/libraries/oauth/oauthrequester.php.html#line144" class="location">application/libraries/oauth/OAuthRequester.php at line 144</a>
+
+<h3 id="requestRequestToken()">requestRequestToken</h3>
+<code class="signature">public static  array <strong>requestRequestToken</strong>(string consumer_key, int usr_id, array params, string method, array options)</code>
+<div class="details">
+<p>Request a request token from the site belonging to consumer_key</p><dl>
+<dt>Parameters:</dt>
+<dd></dd>
+<dd></dd>
+<dd>params - (optional) extra arguments for when requesting the request token</dd>
+<dd>method - (optional) change the method of the request, defaults to POST (as it should be)</dd>
+<dd>options - (optional) options like name and token_ttl</dd>
+<dt>Exception:</dt>
+<dd>OAuthException when no key could be fetched</dd>
+<dd>OAuthException when no server with consumer_key registered</dd>
+<dt>Returns:</dt>
+<dd>(authorize_uri, token)</dd>
+</dl>
+</div></div>
+
+
+
+</div><div class="header">
+<h1>GiftFlow API</h1>
+<ul>
+<li><a href="../overview-summary.html">Overview</a></li>
+<li><a href="../giftflow/package-summary.html">Package</a></li>
+<li class="active">Class</li>
+<li><a href="../giftflow/package-tree.html">Tree</a></li>
+<li><a href="../overview-files.html">Files</a></li>
+<li><a href="../deprecated-list.html">Deprecated</a></li>
+<li><a href="../index-all.html">Index</a></li>
+</ul>
+</div>
+
+<div class="small_links">
+<a href="../index.html" target="_top">Frames</a>
+<a href="../giftflow/oauthrequester.html" target="_top">No frames</a>
+</div>
+<div class="small_links">
+Summary: <a href="#summary_field">Field</a> | <a href="#summary_method">Method</a> | <a href="#summary_constr">Constr</a>
+Detail: <a href="#detail_field">Field</a> | <a href="#detail_method">Method</a> | <a href="#summary_constr">Constr</a>
+</div>
+<hr>
+
+<p id="footer">This document was generated by <a href="http://peej.github.com/phpdoctor/">PHPDoctor: The PHP Documentation Creator</a></p>
+
+</body>
+
+</html>

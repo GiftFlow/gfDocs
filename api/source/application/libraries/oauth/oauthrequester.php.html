@@ -1,0 +1,566 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+
+<html lang="en">
+<head>
+
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
+<meta name="generator" content="PHPDoctor 2RC4 (http://peej.github.com/phpdoctor/)">
+<meta name="when" content="Tue, 29 Jun 2010 21:10:10 +0000">
+
+<link rel="stylesheet" type="text/css" href="../../../../stylesheet.css">
+<link rel="start" href="../../../../overview-summary.html">
+
+<title>application/libraries/oauth/OAuthRequester.php (GiftFlow API)</title>
+
+</head>
+<body id="file" onload="parent.document.title=document.title;">
+
+<div class="header">
+<h1>GiftFlow API</h1>
+<ul>
+<li><a href="../../../../overview-summary.html">Overview</a></li>
+<li>Package</li><li>Class</li><li>Tree</li><li><a href="../../../../overview-files.html">Files</a></li>
+<li><a href="../../../../deprecated-list.html">Deprecated</a></li>
+<li><a href="../../../../index-all.html">Index</a></li>
+</ul>
+</div>
+
+<div class="small_links">
+<a href="../../../../index.html" target="_top">Frames</a>
+<a href="../../../../source/application/libraries/oauth/oauthrequester.php.html" target="_top">No frames</a>
+</div>
+<hr>
+
+<h1>application/libraries/oauth/OAuthRequester.php</h1>
+<hr>
+
+<a name="line1"></a><pre><?php
+<a name="line2"></a>
+<a name="line3"></a>/**
+<a name="line4"></a> * Perform a signed OAuth request with a GET, POST, PUT or DELETE operation.
+<a name="line5"></a> * 
+<a name="line6"></a> * @version $Id: OAuthRequester.php 63 2009-02-25 10:24:33Z marcw@pobox.com $
+<a name="line7"></a> * @author Marc Worrell <marcw@pobox.com>
+<a name="line8"></a> * @date  Nov 20, 2007 1:41:38 PM
+<a name="line9"></a> * 
+<a name="line10"></a> * The MIT License
+<a name="line11"></a> * 
+<a name="line12"></a> * Copyright (c) 2007-2008 Mediamatic Lab
+<a name="line13"></a> * 
+<a name="line14"></a> * Permission is hereby granted, free of charge, to any person obtaining a copy
+<a name="line15"></a> * of this software and associated documentation files (the "Software"), to deal
+<a name="line16"></a> * in the Software without restriction, including without limitation the rights
+<a name="line17"></a> * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+<a name="line18"></a> * copies of the Software, and to permit persons to whom the Software is
+<a name="line19"></a> * furnished to do so, subject to the following conditions:
+<a name="line20"></a> * 
+<a name="line21"></a> * The above copyright notice and this permission notice shall be included in
+<a name="line22"></a> * all copies or substantial portions of the Software.
+<a name="line23"></a> * 
+<a name="line24"></a> * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+<a name="line25"></a> * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+<a name="line26"></a> * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+<a name="line27"></a> * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+<a name="line28"></a> * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+<a name="line29"></a> * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+<a name="line30"></a> * THE SOFTWARE.
+<a name="line31"></a> */
+<a name="line32"></a>
+<a name="line33"></a>require_once dirname(__FILE__) . '/OAuthRequestSigner.php';
+<a name="line34"></a>require_once dirname(__FILE__) . '/body/OAuthBodyContentDisposition.php';
+<a name="line35"></a>
+<a name="line36"></a>
+<a name="line37"></a>class OAuthRequester extends OAuthRequestSigner
+<a name="line38"></a>{
+<a name="line39"></a>	protected $files;
+<a name="line40"></a>
+<a name="line41"></a>	/**
+<a name="line42"></a>	 * Construct a new request signer.  Perform the request with the doRequest() method below.
+<a name="line43"></a>	 * 
+<a name="line44"></a>	 * A request can have either one file or a body, not both. 
+<a name="line45"></a>	 * 
+<a name="line46"></a>	 * The files array consists of arrays:
+<a name="line47"></a>	 * - file			the filename/path containing the data for the POST/PUT
+<a name="line48"></a>	 * - data			data for the file, omit when you have a file
+<a name="line49"></a>	 * - mime			content-type of the file
+<a name="line50"></a>	 * - filename		filename for content disposition header
+<a name="line51"></a>	 * 
+<a name="line52"></a>	 * When OAuth (and PHP) can support multipart/form-data then we can handle more than one file.
+<a name="line53"></a>	 * For now max one file, with all the params encoded in the query string.
+<a name="line54"></a>	 * 
+<a name="line55"></a>	 * @param string request
+<a name="line56"></a>	 * @param string method		http method.  GET, PUT, POST etc.
+<a name="line57"></a>	 * @param array params		name=>value array with request parameters
+<a name="line58"></a>	 * @param string body		optional body to send
+<a name="line59"></a>	 * @param array files		optional files to send (max 1 till OAuth support multipart/form-data posts)
+<a name="line60"></a>	 */
+<a name="line61"></a>	function __construct ( $request, $method = 'GET', $params = null, $body = null, $files = null )
+<a name="line62"></a>	{
+<a name="line63"></a>		parent::__construct($request, $method, $params, $body);
+<a name="line64"></a>
+<a name="line65"></a>		// When there are files, then we can construct a POST with a single file
+<a name="line66"></a>		if (!empty($files))
+<a name="line67"></a>		{
+<a name="line68"></a>			$empty = true;
+<a name="line69"></a>			foreach ($files as $f)
+<a name="line70"></a>			{
+<a name="line71"></a>				$empty = $empty && empty($f['file']) && !isset($f['data']);
+<a name="line72"></a>			}
+<a name="line73"></a>			
+<a name="line74"></a>			if (!$empty)
+<a name="line75"></a>			{
+<a name="line76"></a>				if (!is_null($body))
+<a name="line77"></a>				{
+<a name="line78"></a>					throw new OAuthException('When sending files, you can\'t send a body as well.');
+<a name="line79"></a>				}
+<a name="line80"></a>				$this->files = $files;
+<a name="line81"></a>			}
+<a name="line82"></a>		}
+<a name="line83"></a>	}
+<a name="line84"></a>
+<a name="line85"></a>
+<a name="line86"></a>	/**
+<a name="line87"></a>	 * Perform the request, returns the response code, headers and body.
+<a name="line88"></a>	 * 
+<a name="line89"></a>	 * @param int usr_id			optional user id for which we make the request
+<a name="line90"></a>	 * @param array curl_options	optional extra options for curl request
+<a name="line91"></a>	 * @param array options			options like name and token_ttl
+<a name="line92"></a>	 * @exception OAuthException when authentication not accepted
+<a name="line93"></a>	 * @exception OAuthException when signing was not possible
+<a name="line94"></a>	 * @return array (code=>int, headers=>array(), body=>string)
+<a name="line95"></a>	 */
+<a name="line96"></a>	function doRequest ( $usr_id = 0, $curl_options = array(), $options = array() )
+<a name="line97"></a>	{
+<a name="line98"></a>		$name = isset($options['name']) ? $options['name'] : '';
+<a name="line99"></a>		if (isset($options['token_ttl']))
+<a name="line100"></a>		{
+<a name="line101"></a>			$this->setParam('xoauth_token_ttl', intval($options['token_ttl']));
+<a name="line102"></a>		}
+<a name="line103"></a>
+<a name="line104"></a>		if (!empty($this->files))
+<a name="line105"></a>		{
+<a name="line106"></a>			// At the moment OAuth does not support multipart/form-data, so try to encode
+<a name="line107"></a>			// the supplied file (or data) as the request body and add a content-disposition header.
+<a name="line108"></a>			list($extra_headers, $body) = OAuthBodyContentDisposition::encodeBody($this->files);
+<a name="line109"></a>			$this->setBody($body);
+<a name="line110"></a>			$curl_options = $this->prepareCurlOptions($curl_options, $extra_headers);
+<a name="line111"></a>		}
+<a name="line112"></a>		$this->sign($usr_id, null, $name);
+<a name="line113"></a>		$text   = $this->curl_raw($curl_options);
+<a name="line114"></a>		$result = $this->curl_parse($text);	
+<a name="line115"></a>		if ($result['code'] >= 400)
+<a name="line116"></a>		{
+<a name="line117"></a>			throw new OAuthException('Request failed with code ' . $result['code'] . ': ' . $result['body']);
+<a name="line118"></a>		}
+<a name="line119"></a>
+<a name="line120"></a>		// Record the token time to live for this server access token, immediate delete iff ttl <= 0
+<a name="line121"></a>		// Only done on a succesful request.	
+<a name="line122"></a>		$token_ttl = $this->getParam('xoauth_token_ttl', false);
+<a name="line123"></a>		if (is_numeric($token_ttl))
+<a name="line124"></a>		{
+<a name="line125"></a>			$this->store->setServerTokenTtl($this->getParam('oauth_consumer_key',true), $this->getParam('oauth_token',true), $token_ttl);
+<a name="line126"></a>		}
+<a name="line127"></a>
+<a name="line128"></a>		return $result;
+<a name="line129"></a>	}
+<a name="line130"></a>
+<a name="line131"></a>	
+<a name="line132"></a>	/**
+<a name="line133"></a>	 * Request a request token from the site belonging to consumer_key
+<a name="line134"></a>	 * 
+<a name="line135"></a>	 * @param string consumer_key
+<a name="line136"></a>	 * @param int usr_id
+<a name="line137"></a>	 * @param array params (optional) extra arguments for when requesting the request token
+<a name="line138"></a>	 * @param string method (optional) change the method of the request, defaults to POST (as it should be)
+<a name="line139"></a>	 * @param array options (optional) options like name and token_ttl
+<a name="line140"></a>	 * @exception OAuthException when no key could be fetched
+<a name="line141"></a>	 * @exception OAuthException when no server with consumer_key registered
+<a name="line142"></a>	 * @return array (authorize_uri, token)
+<a name="line143"></a>	 */
+<a name="line144"></a>	static function requestRequestToken ( $consumer_key, $usr_id, $params = null, $method = 'POST', $options = array() )
+<a name="line145"></a>	{
+<a name="line146"></a>		OAuthRequestLogger::start();
+<a name="line147"></a>
+<a name="line148"></a>		if (isset($options['token_ttl']) && is_numeric($options['token_ttl']))
+<a name="line149"></a>		{
+<a name="line150"></a>			$params['xoauth_token_ttl'] = intval($options['token_ttl']);
+<a name="line151"></a>		}
+<a name="line152"></a>
+<a name="line153"></a>		$store	= OAuthStore::instance();
+<a name="line154"></a>		$r		= $store->getServer($consumer_key, $usr_id);
+<a name="line155"></a>		$uri 	= $r['request_token_uri'];
+<a name="line156"></a>
+<a name="line157"></a>		$oauth 	= new OAuthRequester($uri, $method, $params);
+<a name="line158"></a>		$oauth->sign($usr_id, $r);
+<a name="line159"></a>		$text	= $oauth->curl_raw();
+<a name="line160"></a>
+<a name="line161"></a>		if (empty($text))
+<a name="line162"></a>		{
+<a name="line163"></a>			throw new OAuthException('No answer from the server "'.$uri.'" while requesting a request token');
+<a name="line164"></a>		}
+<a name="line165"></a>		$data	= $oauth->curl_parse($text);
+<a name="line166"></a>		if ($data['code'] != 200)
+<a name="line167"></a>		{
+<a name="line168"></a>			throw new OAuthException('Unexpected result from the server "'.$uri.'" ('.$data['code'].') while requesting a request token');
+<a name="line169"></a>		}
+<a name="line170"></a>		$token  = array();
+<a name="line171"></a>		$params = explode('&', $data['body']);
+<a name="line172"></a>		foreach ($params as $p)
+<a name="line173"></a>		{
+<a name="line174"></a>			@list($name, $value) = explode('=', $p, 2);
+<a name="line175"></a>			$token[$name] = $oauth->urldecode($value);
+<a name="line176"></a>		}
+<a name="line177"></a>		
+<a name="line178"></a>		if (!empty($token['oauth_token']) && !empty($token['oauth_token_secret']))
+<a name="line179"></a>		{
+<a name="line180"></a>			$opts = array();
+<a name="line181"></a>			if (isset($options['name']))
+<a name="line182"></a>			{
+<a name="line183"></a>				$opts['name'] = $options['name'];
+<a name="line184"></a>			}
+<a name="line185"></a>			if (isset($token['xoauth_token_ttl']))
+<a name="line186"></a>			{
+<a name="line187"></a>				$opts['token_ttl'] = $token['xoauth_token_ttl'];
+<a name="line188"></a>			}
+<a name="line189"></a>			$store->addServerToken($consumer_key, 'request', $token['oauth_token'], $token['oauth_token_secret'], $usr_id, $opts);
+<a name="line190"></a>		}
+<a name="line191"></a>		else
+<a name="line192"></a>		{
+<a name="line193"></a>			throw new OAuthException('The server "'.$uri.'" did not return the oauth_token or the oauth_token_secret');
+<a name="line194"></a>		}
+<a name="line195"></a>
+<a name="line196"></a>		OAuthRequestLogger::flush();
+<a name="line197"></a>
+<a name="line198"></a>		// Now we can direct a browser to the authorize_uri
+<a name="line199"></a>		return array(
+<a name="line200"></a>					'authorize_uri' => $r['authorize_uri'],
+<a name="line201"></a>					'token'			=> $token['oauth_token']
+<a name="line202"></a>				);
+<a name="line203"></a>	}
+<a name="line204"></a>
+<a name="line205"></a>
+<a name="line206"></a>	/**
+<a name="line207"></a>	 * Request an access token from the site belonging to consumer_key.
+<a name="line208"></a>	 * Before this we got an request token, now we want to exchange it for
+<a name="line209"></a>	 * an access token.
+<a name="line210"></a>	 * 
+<a name="line211"></a>	 * @param string consumer_key
+<a name="line212"></a>	 * @param string token
+<a name="line213"></a>	 * @param int usr_id		user requesting the access token
+<a name="line214"></a>	 * @param string method (optional) change the method of the request, defaults to POST (as it should be)
+<a name="line215"></a>	 * @param array options (optional) extra options for request, eg token_ttl
+<a name="line216"></a>	 * @exception OAuthException when no key could be fetched
+<a name="line217"></a>	 * @exception OAuthException when no server with consumer_key registered
+<a name="line218"></a>	 */
+<a name="line219"></a>	static function requestAccessToken ( $consumer_key, $token, $usr_id, $method = 'POST', $options = array() )
+<a name="line220"></a>	{
+<a name="line221"></a>		OAuthRequestLogger::start();
+<a name="line222"></a>
+<a name="line223"></a>		$store	    = OAuthStore::instance();
+<a name="line224"></a>		$r		    = $store->getServerTokenSecrets($consumer_key, $token, 'request', $usr_id);
+<a name="line225"></a>		$uri 	    = $r['access_token_uri'];
+<a name="line226"></a>		$token_name	= $r['token_name'];
+<a name="line227"></a>
+<a name="line228"></a>		// Delete the server request token, this one was for one use only
+<a name="line229"></a>		$store->deleteServerToken($consumer_key, $r['token'], 0, true);
+<a name="line230"></a>
+<a name="line231"></a>		// Try to exchange our request token for an access token
+<a name="line232"></a>		$oauth 	= new OAuthRequester($uri, $method);
+<a name="line233"></a>
+<a name="line234"></a>		if (isset($options['token_ttl']) && is_numeric($options['token_ttl']))
+<a name="line235"></a>		{
+<a name="line236"></a>			$oauth->setParam('xoauth_token_ttl', intval($options['token_ttl']));
+<a name="line237"></a>		}
+<a name="line238"></a>
+<a name="line239"></a>		OAuthRequestLogger::setRequestObject($oauth);
+<a name="line240"></a>
+<a name="line241"></a>		$oauth->sign($usr_id, $r);
+<a name="line242"></a>		$text	= $oauth->curl_raw();
+<a name="line243"></a>		if (empty($text))
+<a name="line244"></a>		{
+<a name="line245"></a>			throw new OAuthException('No answer from the server "'.$uri.'" while requesting a request token');
+<a name="line246"></a>		}
+<a name="line247"></a>		$data	= $oauth->curl_parse($text);
+<a name="line248"></a>
+<a name="line249"></a>		if ($data['code'] != 200)
+<a name="line250"></a>		{
+<a name="line251"></a>			throw new OAuthException('Unexpected result from the server "'.$uri.'" ('.$data['code'].') while requesting a request token');
+<a name="line252"></a>		}
+<a name="line253"></a>
+<a name="line254"></a>		$token  = array();
+<a name="line255"></a>		$params = explode('&', $data['body']);
+<a name="line256"></a>		foreach ($params as $p)
+<a name="line257"></a>		{
+<a name="line258"></a>			@list($name, $value) = explode('=', $p, 2);
+<a name="line259"></a>			$token[$oauth->urldecode($name)] = $oauth->urldecode($value);
+<a name="line260"></a>		}
+<a name="line261"></a>		
+<a name="line262"></a>		if (!empty($token['oauth_token']) && !empty($token['oauth_token_secret']))
+<a name="line263"></a>		{
+<a name="line264"></a>			$opts         = array();
+<a name="line265"></a>			$opts['name'] = $token_name;
+<a name="line266"></a>			if (isset($token['xoauth_token_ttl']))
+<a name="line267"></a>			{
+<a name="line268"></a>				$opts['token_ttl'] = $token['xoauth_token_ttl'];
+<a name="line269"></a>			}
+<a name="line270"></a>			$store->addServerToken($consumer_key, 'access', $token['oauth_token'], $token['oauth_token_secret'], $usr_id, $opts);
+<a name="line271"></a>		}
+<a name="line272"></a>		else
+<a name="line273"></a>		{
+<a name="line274"></a>			throw new OAuthException('The server "'.$uri.'" did not return the oauth_token or the oauth_token_secret');
+<a name="line275"></a>		}
+<a name="line276"></a>
+<a name="line277"></a>		OAuthRequestLogger::flush();
+<a name="line278"></a>	}
+<a name="line279"></a>
+<a name="line280"></a>
+<a name="line281"></a>
+<a name="line282"></a>	/**
+<a name="line283"></a>	 * Open and close a curl session passing all the options to the curl libs
+<a name="line284"></a>	 * 
+<a name="line285"></a>	 * @param string url the http address to fetch
+<a name="line286"></a>	 * @exception OAuthException when temporary file for PUT operation could not be created
+<a name="line287"></a>	 * @return string the result of the curl action
+<a name="line288"></a>	 */
+<a name="line289"></a>	protected function curl_raw ( $opts = array() )
+<a name="line290"></a>	{
+<a name="line291"></a>		if (isset($opts[CURLOPT_HTTPHEADER]))
+<a name="line292"></a>		{
+<a name="line293"></a>			$header = $opts[CURLOPT_HTTPHEADER];
+<a name="line294"></a>		}
+<a name="line295"></a>		else
+<a name="line296"></a>		{
+<a name="line297"></a>			$header = array();
+<a name="line298"></a>		}
+<a name="line299"></a>
+<a name="line300"></a>		$ch 		= curl_init();
+<a name="line301"></a>		$method		= $this->getMethod();
+<a name="line302"></a>		$url		= $this->getRequestUrl();
+<a name="line303"></a>		$header[]	= $this->getAuthorizationHeader();
+<a name="line304"></a>		$query		= $this->getQueryString();
+<a name="line305"></a>		$body		= $this->getBody();
+<a name="line306"></a>
+<a name="line307"></a>		$has_content_type = false;
+<a name="line308"></a>		foreach ($header as $h)
+<a name="line309"></a>		{
+<a name="line310"></a>			if (strncasecmp($h, 'Content-Type:', 13) == 0)
+<a name="line311"></a>			{
+<a name="line312"></a>				$has_content_type = true;
+<a name="line313"></a>			}
+<a name="line314"></a>		}
+<a name="line315"></a>		
+<a name="line316"></a>		if (!is_null($body))
+<a name="line317"></a>		{
+<a name="line318"></a>			if ($method == 'TRACE')
+<a name="line319"></a>			{
+<a name="line320"></a>				throw new OAuthException('A body can not be sent with a TRACE operation');
+<a name="line321"></a>			}
+<a name="line322"></a>
+<a name="line323"></a>			// PUT and POST allow a request body
+<a name="line324"></a>			if (!empty($query))
+<a name="line325"></a>			{
+<a name="line326"></a>				$url .= '?'.$query;
+<a name="line327"></a>			}
+<a name="line328"></a>
+<a name="line329"></a>			// Make sure that the content type of the request is ok
+<a name="line330"></a>			if (!$has_content_type)
+<a name="line331"></a>			{
+<a name="line332"></a>				$header[]         = 'Content-Type: application/octet-stream';
+<a name="line333"></a>				$has_content_type = true;
+<a name="line334"></a>			}
+<a name="line335"></a>			
+<a name="line336"></a>			// When PUTting, we need to use an intermediate file (because of the curl implementation)
+<a name="line337"></a>			if ($method == 'PUT')
+<a name="line338"></a>			{
+<a name="line339"></a>				/*
+<a name="line340"></a>				if (version_compare(phpversion(), '5.2.0') >= 0)
+<a name="line341"></a>				{
+<a name="line342"></a>					// Use the data wrapper to create the file expected by the put method
+<a name="line343"></a>					$put_file = fopen('data://application/octet-stream;base64,'.base64_encode($body));
+<a name="line344"></a>				}
+<a name="line345"></a>				*/
+<a name="line346"></a>				
+<a name="line347"></a>				$put_file = @tmpfile();
+<a name="line348"></a>				if (!$put_file)
+<a name="line349"></a>				{
+<a name="line350"></a>					throw new OAuthException('Could not create tmpfile for PUT operation');
+<a name="line351"></a>				}
+<a name="line352"></a>				fwrite($put_file, $body);
+<a name="line353"></a>				fseek($put_file, 0);
+<a name="line354"></a>
+<a name="line355"></a>				curl_setopt($ch, CURLOPT_PUT, 		  true);
+<a name="line356"></a>  				curl_setopt($ch, CURLOPT_INFILE, 	  $put_file);
+<a name="line357"></a>  				curl_setopt($ch, CURLOPT_INFILESIZE,  strlen($body));
+<a name="line358"></a>			}
+<a name="line359"></a>			else
+<a name="line360"></a>			{
+<a name="line361"></a>				curl_setopt($ch, CURLOPT_POST,		  true);
+<a name="line362"></a>				curl_setopt($ch, CURLOPT_POSTFIELDS,  $body);
+<a name="line363"></a>  			}
+<a name="line364"></a>		}
+<a name="line365"></a>		else
+<a name="line366"></a>		{
+<a name="line367"></a>			// a 'normal' request, no body to be send
+<a name="line368"></a>			if ($method == 'POST')
+<a name="line369"></a>			{
+<a name="line370"></a>				if (!$has_content_type)
+<a name="line371"></a>				{
+<a name="line372"></a>					$header[]         = 'Content-Type: application/x-www-form-urlencoded';
+<a name="line373"></a>					$has_content_type = true;
+<a name="line374"></a>				}
+<a name="line375"></a>
+<a name="line376"></a>				curl_setopt($ch, CURLOPT_POST, 		  true);
+<a name="line377"></a>				curl_setopt($ch, CURLOPT_POSTFIELDS,  $query);
+<a name="line378"></a>			}
+<a name="line379"></a>			else
+<a name="line380"></a>			{
+<a name="line381"></a>				if (!empty($query))
+<a name="line382"></a>				{
+<a name="line383"></a>					$url .= '?'.$query;
+<a name="line384"></a>				}
+<a name="line385"></a>				if ($method != 'GET')
+<a name="line386"></a>				{
+<a name="line387"></a>					curl_setopt($ch, CURLOPT_CUSTOMREQUEST, $method);
+<a name="line388"></a>				}
+<a name="line389"></a>			}
+<a name="line390"></a>		}
+<a name="line391"></a>
+<a name="line392"></a>		curl_setopt($ch, CURLOPT_HTTPHEADER,	 $header);
+<a name="line393"></a>		curl_setopt($ch, CURLOPT_USERAGENT,		 'anyMeta/OAuth 1.0 - ($LastChangedRevision: 63 $)');
+<a name="line394"></a>		curl_setopt($ch, CURLOPT_URL, 			 $url);
+<a name="line395"></a>		curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+<a name="line396"></a>		curl_setopt($ch, CURLOPT_HEADER, 		 true);
+<a name="line397"></a>	
+<a name="line398"></a>		foreach ($opts as $k => $v)
+<a name="line399"></a>		{
+<a name="line400"></a>			if ($k != CURLOPT_HTTPHEADER)
+<a name="line401"></a>			{
+<a name="line402"></a>				curl_setopt($ch, $k, $v);
+<a name="line403"></a>			}
+<a name="line404"></a>		}
+<a name="line405"></a>
+<a name="line406"></a>		$txt = curl_exec($ch);
+<a name="line407"></a>		curl_close($ch);
+<a name="line408"></a>		
+<a name="line409"></a>		if (!empty($put_file))
+<a name="line410"></a>		{
+<a name="line411"></a>			fclose($put_file);
+<a name="line412"></a>		}
+<a name="line413"></a>
+<a name="line414"></a>		// Tell the logger what we requested and what we received back
+<a name="line415"></a>		$data = $method . " $url\n".implode("\n",$header);
+<a name="line416"></a>		if (is_string($body))
+<a name="line417"></a>		{
+<a name="line418"></a>			$data .= "\n\n".$body;
+<a name="line419"></a>		}
+<a name="line420"></a>		else if ($method == 'POST')
+<a name="line421"></a>		{
+<a name="line422"></a>			$data .= "\n\n".$query;
+<a name="line423"></a>		}
+<a name="line424"></a>
+<a name="line425"></a>		OAuthRequestLogger::setSent($data, $body);
+<a name="line426"></a>		OAuthRequestLogger::setReceived($txt);
+<a name="line427"></a>
+<a name="line428"></a>		return $txt;
+<a name="line429"></a>	}
+<a name="line430"></a>	
+<a name="line431"></a>	
+<a name="line432"></a>	/**
+<a name="line433"></a>	 * Parse an http response
+<a name="line434"></a>	 * 
+<a name="line435"></a>	 * @param string response the http text to parse
+<a name="line436"></a>	 * @return array (code=>http-code, headers=>http-headers, body=>body)
+<a name="line437"></a>	 */
+<a name="line438"></a>	protected function curl_parse ( $response )
+<a name="line439"></a>	{
+<a name="line440"></a>		if (empty($response))
+<a name="line441"></a>		{
+<a name="line442"></a>			return array();
+<a name="line443"></a>		}
+<a name="line444"></a>	
+<a name="line445"></a>		@list($headers,$body) = explode("\r\n\r\n",$response,2);
+<a name="line446"></a>		$lines = explode("\r\n",$headers);
+<a name="line447"></a>
+<a name="line448"></a>		if (preg_match('@^HTTP/[0-9]\.[0-9] +100@', $lines[0]))
+<a name="line449"></a>		{
+<a name="line450"></a>			/* HTTP/1.x 100 Continue
+<a name="line451"></a>			 * the real data is on the next line
+<a name="line452"></a>			 */
+<a name="line453"></a>			@list($headers,$body) = explode("\r\n\r\n",$body,2);
+<a name="line454"></a>			$lines = explode("\r\n",$headers);
+<a name="line455"></a>		}
+<a name="line456"></a>	
+<a name="line457"></a>		// first line of headers is the HTTP response code 
+<a name="line458"></a>		$http_line = array_shift($lines);
+<a name="line459"></a>		if (preg_match('@^HTTP/[0-9]\.[0-9] +([0-9]{3})@', $http_line, $matches))
+<a name="line460"></a>		{
+<a name="line461"></a>			$code = $matches[1];
+<a name="line462"></a>		}
+<a name="line463"></a>	
+<a name="line464"></a>		// put the rest of the headers in an array
+<a name="line465"></a>		$headers = array();
+<a name="line466"></a>		foreach ($lines as $l)
+<a name="line467"></a>		{
+<a name="line468"></a>			list($k, $v) = explode(': ', $l, 2);
+<a name="line469"></a>			$headers[strtolower($k)] = $v;
+<a name="line470"></a>		}
+<a name="line471"></a>	
+<a name="line472"></a>		return array( 'code' => $code, 'headers' => $headers, 'body' => $body);
+<a name="line473"></a>	}
+<a name="line474"></a>
+<a name="line475"></a>
+<a name="line476"></a>	/**
+<a name="line477"></a>	 * Mix the given headers into the headers that were given to curl
+<a name="line478"></a>	 * 
+<a name="line479"></a>	 * @param array curl_options
+<a name="line480"></a>	 * @param array extra_headers
+<a name="line481"></a>	 * @return array new curl options
+<a name="line482"></a>	 */
+<a name="line483"></a>	protected function prepareCurlOptions ( $curl_options, $extra_headers )
+<a name="line484"></a>	{
+<a name="line485"></a>		$hs = array();
+<a name="line486"></a>		if (!empty($curl_options[CURLOPT_HTTPHEADER]) && is_array($curl_options[CURLOPT_HTTPHEADER]))
+<a name="line487"></a>		{
+<a name="line488"></a>			foreach ($curl_options[CURLOPT_HTTPHEADER] as $h)
+<a name="line489"></a>			{
+<a name="line490"></a>				list($opt, $val) = explode(':', $h, 2);
+<a name="line491"></a>				$opt      = str_replace(' ', '-', ucwords(str_replace('-', ' ', $opt)));
+<a name="line492"></a>				$hs[$opt] = $val;
+<a name="line493"></a>			}
+<a name="line494"></a>		}
+<a name="line495"></a>
+<a name="line496"></a>		$curl_options[CURLOPT_HTTPHEADER] = array();
+<a name="line497"></a>		$hs = array_merge($hs, $extra_headers);		
+<a name="line498"></a>		foreach ($hs as $h => $v)
+<a name="line499"></a>		{
+<a name="line500"></a>			$curl_options[CURLOPT_HTTPHEADER][] = "$h: $v";
+<a name="line501"></a>		}
+<a name="line502"></a>		return $curl_options;
+<a name="line503"></a>	}
+<a name="line504"></a>}
+<a name="line505"></a>
+<a name="line506"></a>/* vi:set ts=4 sts=4 sw=4 binary noeol: */
+<a name="line507"></a>
+<a name="line508"></a>?></pre>
+<div class="header">
+<h1>GiftFlow API</h1>
+<ul>
+<li><a href="../../../../overview-summary.html">Overview</a></li>
+<li>Package</li><li>Class</li><li>Tree</li><li><a href="../../../../overview-files.html">Files</a></li>
+<li><a href="../../../../deprecated-list.html">Deprecated</a></li>
+<li><a href="../../../../index-all.html">Index</a></li>
+</ul>
+</div>
+
+<div class="small_links">
+<a href="../../../../index.html" target="_top">Frames</a>
+<a href="../../../../source/application/libraries/oauth/oauthrequester.php.html" target="_top">No frames</a>
+</div>
+<hr>
+
+<p id="footer">This document was generated by <a href="http://peej.github.com/phpdoctor/">PHPDoctor: The PHP Documentation Creator</a></p>
+
+</body>
+
+</html>

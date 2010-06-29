@@ -1,0 +1,320 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+
+<html lang="en">
+<head>
+
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
+<meta name="generator" content="PHPDoctor 2RC4 (http://peej.github.com/phpdoctor/)">
+<meta name="when" content="Tue, 29 Jun 2010 21:10:10 +0000">
+
+<link rel="stylesheet" type="text/css" href="../../../../stylesheet.css">
+<link rel="start" href="../../../../overview-summary.html">
+
+<title>application/libraries/oauth/OAuthRequestVerifier.php (GiftFlow API)</title>
+
+</head>
+<body id="file" onload="parent.document.title=document.title;">
+
+<div class="header">
+<h1>GiftFlow API</h1>
+<ul>
+<li><a href="../../../../overview-summary.html">Overview</a></li>
+<li>Package</li><li>Class</li><li>Tree</li><li><a href="../../../../overview-files.html">Files</a></li>
+<li><a href="../../../../deprecated-list.html">Deprecated</a></li>
+<li><a href="../../../../index-all.html">Index</a></li>
+</ul>
+</div>
+
+<div class="small_links">
+<a href="../../../../index.html" target="_top">Frames</a>
+<a href="../../../../source/application/libraries/oauth/oauthrequestverifier.php.html" target="_top">No frames</a>
+</div>
+<hr>
+
+<h1>application/libraries/oauth/OAuthRequestVerifier.php</h1>
+<hr>
+
+<a name="line1"></a><pre><?php
+<a name="line2"></a>
+<a name="line3"></a>/**
+<a name="line4"></a> * Verify the current request.  Checks if signed and if the signature is correct.
+<a name="line5"></a> * When correct then also figures out on behalf of which user this request is being made.
+<a name="line6"></a> *  
+<a name="line7"></a> * @version $Id: OAuthRequestVerifier.php 51 2008-10-15 15:15:47Z marcw@pobox.com $
+<a name="line8"></a> * @author Marc Worrell <marcw@pobox.com>
+<a name="line9"></a> * @date  Nov 16, 2007 4:35:03 PM
+<a name="line10"></a> * 
+<a name="line11"></a> * 
+<a name="line12"></a> * The MIT License
+<a name="line13"></a> * 
+<a name="line14"></a> * Copyright (c) 2007-2008 Mediamatic Lab
+<a name="line15"></a> * 
+<a name="line16"></a> * Permission is hereby granted, free of charge, to any person obtaining a copy
+<a name="line17"></a> * of this software and associated documentation files (the "Software"), to deal
+<a name="line18"></a> * in the Software without restriction, including without limitation the rights
+<a name="line19"></a> * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+<a name="line20"></a> * copies of the Software, and to permit persons to whom the Software is
+<a name="line21"></a> * furnished to do so, subject to the following conditions:
+<a name="line22"></a> * 
+<a name="line23"></a> * The above copyright notice and this permission notice shall be included in
+<a name="line24"></a> * all copies or substantial portions of the Software.
+<a name="line25"></a> * 
+<a name="line26"></a> * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+<a name="line27"></a> * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+<a name="line28"></a> * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+<a name="line29"></a> * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+<a name="line30"></a> * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+<a name="line31"></a> * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+<a name="line32"></a> * THE SOFTWARE.
+<a name="line33"></a> */
+<a name="line34"></a>
+<a name="line35"></a>require_once dirname(__FILE__) . '/OAuthStore.php';
+<a name="line36"></a>require_once dirname(__FILE__) . '/OAuthRequest.php';
+<a name="line37"></a>
+<a name="line38"></a>
+<a name="line39"></a>class OAuthRequestVerifier extends OAuthRequest
+<a name="line40"></a>{
+<a name="line41"></a>	private $request;
+<a name="line42"></a>	private $store;
+<a name="line43"></a>	
+<a name="line44"></a>	/**
+<a name="line45"></a>	 * Construct the request to be verified
+<a name="line46"></a>	 * 
+<a name="line47"></a>	 * @param string request
+<a name="line48"></a>	 * @param string method
+<a name="line49"></a>	 */
+<a name="line50"></a>	function __construct ( $uri = null, $method = 'GET' )
+<a name="line51"></a>	{
+<a name="line52"></a>		$this->store = OAuthStore::instance();
+<a name="line53"></a>		parent::__construct($uri, $method);
+<a name="line54"></a>		
+<a name="line55"></a>		OAuthRequestLogger::start($this);
+<a name="line56"></a>	}
+<a name="line57"></a>	
+<a name="line58"></a>	
+<a name="line59"></a>	/**
+<a name="line60"></a>	 * See if the current request is signed with OAuth
+<a name="line61"></a>	 * 
+<a name="line62"></a>	 * @return boolean
+<a name="line63"></a>	 */
+<a name="line64"></a>	static public function requestIsSigned ()
+<a name="line65"></a>	{
+<a name="line66"></a>		if (isset($_REQUEST['oauth_signature']))
+<a name="line67"></a>		{
+<a name="line68"></a>			$signed = true;
+<a name="line69"></a>		}
+<a name="line70"></a>		else
+<a name="line71"></a>		{
+<a name="line72"></a>			$hs = getallheaders();
+<a name="line73"></a>			if (isset($hs['Authorization']) && strpos($hs['Authorization'], 'oauth_signature') !== false)
+<a name="line74"></a>			{
+<a name="line75"></a>				$signed = true;
+<a name="line76"></a>			}
+<a name="line77"></a>			else
+<a name="line78"></a>			{
+<a name="line79"></a>				$signed = false;
+<a name="line80"></a>			}
+<a name="line81"></a>		}
+<a name="line82"></a>		return $signed;
+<a name="line83"></a>	}
+<a name="line84"></a>
+<a name="line85"></a>
+<a name="line86"></a>	/**
+<a name="line87"></a>	 * Verify the request if it seemed to be signed.
+<a name="line88"></a>	 * 
+<a name="line89"></a>	 * @param string token_type the kind of token needed, defaults to 'access'
+<a name="line90"></a>	 * @exception OAuthException thrown when the request did not verify
+<a name="line91"></a>	 * @return boolean	true when signed, false when not signed
+<a name="line92"></a>	 */
+<a name="line93"></a>	public function verifyIfSigned ( $token_type = 'access' )
+<a name="line94"></a>	{
+<a name="line95"></a>		if ($this->getParam('oauth_consumer_key'))
+<a name="line96"></a>		{
+<a name="line97"></a>			OAuthRequestLogger::start($this);
+<a name="line98"></a>			$this->verify($token_type);
+<a name="line99"></a>			$signed = true;
+<a name="line100"></a>			OAuthRequestLogger::flush();
+<a name="line101"></a>		}
+<a name="line102"></a>		else
+<a name="line103"></a>		{
+<a name="line104"></a>			$signed = false;
+<a name="line105"></a>		}
+<a name="line106"></a>		return $signed;
+<a name="line107"></a>	}
+<a name="line108"></a>
+<a name="line109"></a>	
+<a name="line110"></a>	/**
+<a name="line111"></a>	 * Verify the request
+<a name="line112"></a>	 * 
+<a name="line113"></a>	 * @param string token_type the kind of token needed, defaults to 'access' (false, 'access', 'request')
+<a name="line114"></a>	 * @exception OAuthException thrown when the request did not verify
+<a name="line115"></a>	 * @return int user_id associated with token (false when no user associated)
+<a name="line116"></a>	 */
+<a name="line117"></a>	public function verify ( $token_type = 'access' )
+<a name="line118"></a>	{
+<a name="line119"></a>		$consumer_key = $this->getParam('oauth_consumer_key');
+<a name="line120"></a>		$token        = $this->getParam('oauth_token');
+<a name="line121"></a>		$user_id      = false;
+<a name="line122"></a>
+<a name="line123"></a>		if ($consumer_key && ($token_type === false || $token))
+<a name="line124"></a>		{
+<a name="line125"></a>			$secrets = $this->store->getSecretsForVerify(	$this->urldecode($consumer_key), 
+<a name="line126"></a>															$this->urldecode($token), 
+<a name="line127"></a>															$token_type);
+<a name="line128"></a>
+<a name="line129"></a>			$this->store->checkServerNonce(	$this->urldecode($consumer_key),
+<a name="line130"></a>											$this->urldecode($token),
+<a name="line131"></a>											$this->getParam('oauth_timestamp', true),
+<a name="line132"></a>											$this->getParam('oauth_nonce', true));
+<a name="line133"></a>
+<a name="line134"></a>			$oauth_sig = $this->getParam('oauth_signature');
+<a name="line135"></a>			if (empty($oauth_sig))
+<a name="line136"></a>			{
+<a name="line137"></a>				throw new OAuthException('Verification of signature failed (no oauth_signature in request).');
+<a name="line138"></a>			} 
+<a name="line139"></a>			
+<a name="line140"></a>			try
+<a name="line141"></a>			{
+<a name="line142"></a>				$this->verifySignature($secrets['consumer_secret'], $secrets['token_secret'], $token_type);
+<a name="line143"></a>			}
+<a name="line144"></a>			catch (OAuthException $e)
+<a name="line145"></a>			{
+<a name="line146"></a>				throw new OAuthException('Verification of signature failed (signature base string was "'.$this->signatureBaseString().'").');
+<a name="line147"></a>			}
+<a name="line148"></a>			
+<a name="line149"></a>			// Check the optional body signature
+<a name="line150"></a>			if ($this->getParam('xoauth_body_signature'))
+<a name="line151"></a>			{
+<a name="line152"></a>				$method = $this->getParam('xoauth_body_signature_method');
+<a name="line153"></a>				if (empty($method))
+<a name="line154"></a>				{
+<a name="line155"></a>					$method = $this->getParam('oauth_signature_method');
+<a name="line156"></a>				}
+<a name="line157"></a>
+<a name="line158"></a>				try
+<a name="line159"></a>				{
+<a name="line160"></a>					$this->verifyDataSignature($this->getBody(), $secrets['consumer_secret'], $secrets['token_secret'], $method, $this->getParam('xoauth_body_signature'));
+<a name="line161"></a>				}
+<a name="line162"></a>				catch (OAuthException $e)
+<a name="line163"></a>				{
+<a name="line164"></a>					throw new OAuthException('Verification of body signature failed.');
+<a name="line165"></a>				}
+<a name="line166"></a>			}
+<a name="line167"></a>			
+<a name="line168"></a>			// All ok - fetch the user associated with this request
+<a name="line169"></a>			if (isset($secrets['user_id']))
+<a name="line170"></a>			{
+<a name="line171"></a>				$user_id = $secrets['user_id'];
+<a name="line172"></a>			}
+<a name="line173"></a>			
+<a name="line174"></a>			// Check if the consumer wants us to reset the ttl of this token
+<a name="line175"></a>			$ttl = $this->getParam('xoauth_token_ttl', true);
+<a name="line176"></a>			if (is_numeric($ttl))
+<a name="line177"></a>			{
+<a name="line178"></a>				$this->store->setConsumerAccessTokenTtl($this->urldecode($token), $ttl);
+<a name="line179"></a>			}
+<a name="line180"></a>		}
+<a name="line181"></a>		else
+<a name="line182"></a>		{
+<a name="line183"></a>			throw new OAuthException('Can\'t verify request, missing oauth_consumer_key or oauth_token');
+<a name="line184"></a>		}
+<a name="line185"></a>		return $user_id;
+<a name="line186"></a>	}
+<a name="line187"></a>
+<a name="line188"></a>
+<a name="line189"></a>
+<a name="line190"></a>	/**
+<a name="line191"></a>	 * Verify the signature of the request, using the method in oauth_signature_method.
+<a name="line192"></a>	 * The signature is returned encoded in the form as used in the url.  So the base64 and
+<a name="line193"></a>	 * urlencoding has been done.
+<a name="line194"></a>	 * 
+<a name="line195"></a>	 * @param string consumer_secret
+<a name="line196"></a>	 * @param string token_secret
+<a name="line197"></a>	 * @exception OAuthException thrown when the signature method is unknown 
+<a name="line198"></a>	 * @exception OAuthException when not all parts available
+<a name="line199"></a>	 * @exception OAuthException when signature does not match
+<a name="line200"></a>	 */
+<a name="line201"></a>	public function verifySignature ( $consumer_secret, $token_secret, $token_type = 'access' )
+<a name="line202"></a>	{
+<a name="line203"></a>		$required = array(
+<a name="line204"></a>						'oauth_consumer_key',
+<a name="line205"></a>						'oauth_signature_method',
+<a name="line206"></a>						'oauth_timestamp',
+<a name="line207"></a>						'oauth_nonce',
+<a name="line208"></a>						'oauth_signature'
+<a name="line209"></a>					);
+<a name="line210"></a>
+<a name="line211"></a>		if ($token_type !== false)
+<a name="line212"></a>		{
+<a name="line213"></a>			$required[] = 'oauth_token';
+<a name="line214"></a>		}
+<a name="line215"></a>
+<a name="line216"></a>		foreach ($required as $req)
+<a name="line217"></a>		{
+<a name="line218"></a>			if (!isset($this->param[$req]))
+<a name="line219"></a>			{
+<a name="line220"></a>				throw new OAuthException('Can\'t verify request signature, missing parameter "'.$req.'"');
+<a name="line221"></a>			}
+<a name="line222"></a>		}
+<a name="line223"></a>
+<a name="line224"></a>		$this->checks();
+<a name="line225"></a>
+<a name="line226"></a>		$base = $this->signatureBaseString();
+<a name="line227"></a>		$this->verifyDataSignature($base, $consumer_secret, $token_secret, $this->param['oauth_signature_method'], $this->param['oauth_signature']);
+<a name="line228"></a>	}
+<a name="line229"></a>
+<a name="line230"></a>
+<a name="line231"></a>
+<a name="line232"></a>	/**
+<a name="line233"></a>	 * Verify the signature of a string.
+<a name="line234"></a>	 * 
+<a name="line235"></a>	 * @param string 	data
+<a name="line236"></a>	 * @param string	consumer_secret
+<a name="line237"></a>	 * @param string	token_secret
+<a name="line238"></a>	 * @param string 	signature_method
+<a name="line239"></a>	 * @param string 	signature
+<a name="line240"></a>	 * @exception OAuthException thrown when the signature method is unknown 
+<a name="line241"></a>	 * @exception OAuthException when signature does not match
+<a name="line242"></a>	 */
+<a name="line243"></a>	public function verifyDataSignature ( $data, $consumer_secret, $token_secret, $signature_method, $signature )
+<a name="line244"></a>	{
+<a name="line245"></a>		if (is_null($data))
+<a name="line246"></a>		{
+<a name="line247"></a>			$data = '';
+<a name="line248"></a>		}
+<a name="line249"></a>
+<a name="line250"></a>		$sig = $this->getSignatureMethod($signature_method);
+<a name="line251"></a>		if (!$sig->verify($this, $data, $consumer_secret, $token_secret, $signature))
+<a name="line252"></a>		{
+<a name="line253"></a>			throw new OAuthException('Signature verification failed ('.$signature_method.')');
+<a name="line254"></a>		}
+<a name="line255"></a>	}
+<a name="line256"></a>
+<a name="line257"></a>}
+<a name="line258"></a>
+<a name="line259"></a>
+<a name="line260"></a>/* vi:set ts=4 sts=4 sw=4 binary noeol: */
+<a name="line261"></a>
+<a name="line262"></a>?></pre>
+<div class="header">
+<h1>GiftFlow API</h1>
+<ul>
+<li><a href="../../../../overview-summary.html">Overview</a></li>
+<li>Package</li><li>Class</li><li>Tree</li><li><a href="../../../../overview-files.html">Files</a></li>
+<li><a href="../../../../deprecated-list.html">Deprecated</a></li>
+<li><a href="../../../../index-all.html">Index</a></li>
+</ul>
+</div>
+
+<div class="small_links">
+<a href="../../../../index.html" target="_top">Frames</a>
+<a href="../../../../source/application/libraries/oauth/oauthrequestverifier.php.html" target="_top">No frames</a>
+</div>
+<hr>
+
+<p id="footer">This document was generated by <a href="http://peej.github.com/phpdoctor/">PHPDoctor: The PHP Documentation Creator</a></p>
+
+</body>
+
+</html>

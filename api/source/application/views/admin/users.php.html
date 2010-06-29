@@ -6,7 +6,7 @@
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 
 <meta name="generator" content="PHPDoctor 2RC4 (http://peej.github.com/phpdoctor/)">
-<meta name="when" content="Sun, 20 Jun 2010 17:43:51 +0000">
+<meta name="when" content="Tue, 29 Jun 2010 21:10:10 +0000">
 
 <link rel="stylesheet" type="text/css" href="../../../../stylesheet.css">
 <link rel="start" href="../../../../overview-summary.html">
@@ -44,32 +44,46 @@
 <a name="line7"></a>		<th>Facebook</th>
 <a name="line8"></a>		<th>Joined</th>
 <a name="line9"></a>		<th>Goods</th>
-<a name="line10"></a>	</tr>
-<a name="line11"></a></thead>
-<a name="line12"></a><tbody>
-<a name="line13"></a><?php foreach($users as $key=>$val) { ?>
-<a name="line14"></a><tr>
-<a name="line15"></a>	<td><?php echo $val->id; ?></td>
-<a name="line16"></a>	<td><?php echo "<a href=". site_url('profile/'.urlencode($val->id)) .">" . $val->screen_name . "</a>"; ?></td>
-<a name="line17"></a>	<td><?php echo $val->email; ?></td>
-<a name="line18"></a>	<td><?php if(!empty($val->facebook_id)) echo "Yes"; else echo "No"; ?></td>
-<a name="line19"></a>	<td><?php echo date("m/d/Y", strtotime($val->created)); ?></td>
-<a name="line20"></a>	<td><?php echo $val->good_count; ?></td>
-<a name="line21"></a></tr>
-<a name="line22"></a><?php } ?>
-<a name="line23"></a></tbody>
-<a name="line24"></a></table>
-<a name="line25"></a><script>
-<a name="line26"></a>$(function(){
-<a name="line27"></a>	$("#users").dataTable( {
-<a name="line28"></a>		"bJQueryUI": true,
-<a name="line29"></a>		"sPaginationType": "full_numbers",
-<a name="line30"></a>		"iDisplayLength": 10
-<a name="line31"></a>		}
-<a name="line32"></a>	);
-<a name="line33"></a>});
-<a name="line34"></a></script>
-<a name="line35"></a></pre>
+<a name="line10"></a>		<th>Action</th>
+<a name="line11"></a>	</tr>
+<a name="line12"></a></thead>
+<a name="line13"></a><tbody>
+<a name="line14"></a><?php foreach($users as $key=>$val) { ?>
+<a name="line15"></a><tr>
+<a name="line16"></a>	<td><?php echo $val->id; ?></td>
+<a name="line17"></a>	<td><?php echo "<a href=". site_url('profile/'.urlencode($val->id)) .">" . $val->screen_name . "</a>"; ?></td>
+<a name="line18"></a>	<td><?php echo $val->email; ?></td>
+<a name="line19"></a>	<td><?php if(!empty($val->facebook_id)) echo "Yes"; else echo "No"; ?></td>
+<a name="line20"></a>	<td><?php echo date("m/d/Y", strtotime($val->created)); ?></td>
+<a name="line21"></a>	<td><?php echo $val->good_count; ?></td>
+<a name="line22"></a>	<td>
+<a name="line23"></a>		<?php
+<a name="line24"></a>			if (!$val->is_admin()) {
+<a name="line25"></a>				echo "<a onclick=\"toggleUserDisable( $val->id , '$val->screen_name', '$val->status')\">";
+<a name="line26"></a>				if($val->status == "disabled")
+<a name="line27"></a>					echo "enable";
+<a name="line28"></a>				else echo "disable";
+<a name="line29"></a>				echo "</a>";
+<a name="line30"></a>			}
+<a name="line31"></a>
+<a name="line32"></a>?>
+<a name="line33"></a>
+<a name="line34"></a></td>
+<a name="line35"></a></tr>
+<a name="line36"></a><?php } ?>
+<a name="line37"></a></tbody>
+<a name="line38"></a></table>
+<a name="line39"></a><script>
+<a name="line40"></a>$(function(){
+<a name="line41"></a>	$("#users").dataTable( {
+<a name="line42"></a>		"bJQueryUI": true,
+<a name="line43"></a>		"sPaginationType": "full_numbers",
+<a name="line44"></a>		"iDisplayLength": 10
+<a name="line45"></a>		}
+<a name="line46"></a>	);
+<a name="line47"></a>});
+<a name="line48"></a></script>
+<a name="line49"></a></pre>
 <div class="header">
 <h1>GiftFlow API</h1>
 <ul>

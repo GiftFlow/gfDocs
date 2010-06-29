@@ -6,7 +6,7 @@
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 
 <meta name="generator" content="PHPDoctor 2RC4 (http://peej.github.com/phpdoctor/)">
-<meta name="when" content="Sun, 20 Jun 2010 17:43:50 +0000">
+<meta name="when" content="Tue, 29 Jun 2010 21:10:09 +0000">
 
 <link rel="stylesheet" type="text/css" href="../stylesheet.css">
 <link rel="start" href="../overview-summary.html">
@@ -57,12 +57,12 @@ Detail: <a href="#detail_field">Field</a> | <a href="#detail_method">Method</a> 
 <table id="summary_field">
 <tr><th colspan="2">Field Summary</th></tr>
 <tr>
-<td class="type">private  mixed</td>
-<td class="description"><p class="name"><a href="#_add_form">$_add_form</a></p></td>
+<td class="type"> mixed</td>
+<td class="description"><p class="name"><a href="#U">$U</a></p></td>
 </tr>
 <tr>
-<td class="type"> mixed</td>
-<td class="description"><p class="name"><a href="#u">$u</a></p></td>
+<td class="type">private  mixed</td>
+<td class="description"><p class="name"><a href="#_add_form">$_add_form</a></p></td>
 </tr>
 </table>
 
@@ -79,10 +79,6 @@ Detail: <a href="#detail_field">Field</a> | <a href="#detail_method">Method</a> 
 <tr>
 <td class="type">protected  void</td>
 <td class="description"><p class="name"><a href="#_login_form()">_login_form</a>()</p></td>
-</tr>
-<tr>
-<td class="type">protected  void</td>
-<td class="description"><p class="name"><a href="#_login_success()">_login_success</a>()</p></td>
 </tr>
 <tr>
 <td class="type">protected  void</td>
@@ -106,6 +102,10 @@ Detail: <a href="#detail_field">Field</a> | <a href="#detail_method">Method</a> 
 </tr>
 <tr>
 <td class="type"> void</td>
+<td class="description"><p class="name"><a href="#facebook_welcome()">facebook_welcome</a>()</p></td>
+</tr>
+<tr>
+<td class="type"> void</td>
 <td class="description"><p class="name"><a href="#follow()">follow</a>(mixed id)</p></td>
 </tr>
 <tr>
@@ -122,19 +122,19 @@ Detail: <a href="#detail_field">Field</a> | <a href="#detail_method">Method</a> 
 </tr>
 <tr>
 <td class="type"> void</td>
-<td class="description"><p class="name"><a href="#login()">login</a>(bool redirect)</p></td>
+<td class="description"><p class="name"><a href="#login()">login</a>(string redirect)</p><p class="description">Login page</p></td>
 </tr>
 <tr>
 <td class="type"> void</td>
-<td class="description"><p class="name"><a href="#logout()">logout</a>()</p></td>
+<td class="description"><p class="name"><a href="#logout()">logout</a>()</p><p class="description">Logs user out</p></td>
 </tr>
 <tr>
 <td class="type"> void</td>
-<td class="description"><p class="name"><a href="#profile()">profile</a>()</p></td>
+<td class="description"><p class="name"><a href="#profile()">profile</a>()</p><p class="description">Displays user profile</p></td>
 </tr>
 <tr>
 <td class="type"> void</td>
-<td class="description"><p class="name"><a href="#register()">register</a>()</p></td>
+<td class="description"><p class="name"><a href="#register()">register</a>()</p><p class="description">Registration form display and processing</p></td>
 </tr>
 <tr>
 <td class="type"> void</td>
@@ -147,19 +147,19 @@ Detail: <a href="#detail_field">Field</a> | <a href="#detail_method">Method</a> 
 <tr><td><a href="../giftflow/controller.html#__construct()">__construct</a>, <a href="../giftflow/controller.html#_ci_initialize()">_ci_initialize</a>, <a href="../giftflow/controller.html#_ci_scaffolding()">_ci_scaffolding</a></td></tr></table>
 
 <h2 id="detail_field">Field Detail</h2>
-<a href="../source/application/controllers/member.php.html#line5" class="location">application/controllers/member.php at line 5</a>
+<a href="../source/application/controllers/member.php.html#line6" class="location">application/controllers/member.php at line 6</a>
 
-<h3 id="_add_form">_add_form</h3>
-<code class="signature">private  mixed <strong>$_add_form</strong></code>
+<h3 id="U">U</h3>
+<code class="signature">public  mixed <strong>$U</strong></code>
 <div class="details">
 </div>
 
 <hr>
 
-<a href="../source/application/controllers/member.php.html#line6" class="location">application/controllers/member.php at line 6</a>
+<a href="../source/application/controllers/member.php.html#line5" class="location">application/controllers/member.php at line 5</a>
 
-<h3 id="u">u</h3>
-<code class="signature">public  mixed <strong>$u</strong></code>
+<h3 id="_add_form">_add_form</h3>
+<code class="signature">private  mixed <strong>$_add_form</strong></code>
 <div class="details">
 </div>
 
@@ -175,7 +175,7 @@ Detail: <a href="#detail_field">Field</a> | <a href="#detail_method">Method</a> 
 
 
 
-<div class='method'><a href="../source/application/controllers/member.php.html#line252" class="location">application/controllers/member.php at line 252</a>
+<div class='method'><a href="../source/application/controllers/member.php.html#line322" class="location">application/controllers/member.php at line 322</a>
 
 <h3 id="_login_form()">_login_form</h3>
 <code class="signature">protected  void <strong>_login_form</strong>()</code>
@@ -184,16 +184,7 @@ Detail: <a href="#detail_field">Field</a> | <a href="#detail_method">Method</a> 
 
 
 
-<div class='method'><a href="../source/application/controllers/member.php.html#line260" class="location">application/controllers/member.php at line 260</a>
-
-<h3 id="_login_success()">_login_success</h3>
-<code class="signature">protected  void <strong>_login_success</strong>()</code>
-<div class="details">
-</div></div>
-
-
-
-<div class='method'><a href="../source/application/controllers/member.php.html#line264" class="location">application/controllers/member.php at line 264</a>
+<div class='method'><a href="../source/application/controllers/member.php.html#line331" class="location">application/controllers/member.php at line 331</a>
 
 <h3 id="_register_form()">_register_form</h3>
 <code class="signature">protected  void <strong>_register_form</strong>()</code>
@@ -202,7 +193,7 @@ Detail: <a href="#detail_field">Field</a> | <a href="#detail_method">Method</a> 
 
 
 
-<div class='method'><a href="../source/application/controllers/member.php.html#line275" class="location">application/controllers/member.php at line 275</a>
+<div class='method'><a href="../source/application/controllers/member.php.html#line343" class="location">application/controllers/member.php at line 343</a>
 
 <h3 id="_register_success()">_register_success</h3>
 <code class="signature">protected  void <strong>_register_success</strong>()</code>
@@ -211,7 +202,7 @@ Detail: <a href="#detail_field">Field</a> | <a href="#detail_method">Method</a> 
 
 
 
-<div class='method'><a href="../source/application/controllers/member.php.html#line129" class="location">application/controllers/member.php at line 129</a>
+<div class='method'><a href="../source/application/controllers/member.php.html#line199" class="location">application/controllers/member.php at line 199</a>
 
 <h3 id="activate()">activate</h3>
 <code class="signature">public  void <strong>activate</strong>(mixed code)</code>
@@ -220,7 +211,7 @@ Detail: <a href="#detail_field">Field</a> | <a href="#detail_method">Method</a> 
 
 
 
-<div class='method'><a href="../source/application/controllers/member.php.html#line153" class="location">application/controllers/member.php at line 153</a>
+<div class='method'><a href="../source/application/controllers/member.php.html#line223" class="location">application/controllers/member.php at line 223</a>
 
 <h3 id="change_password()">change_password</h3>
 <code class="signature">public  void <strong>change_password</strong>()</code>
@@ -229,7 +220,7 @@ Detail: <a href="#detail_field">Field</a> | <a href="#detail_method">Method</a> 
 
 
 
-<div class='method'><a href="../source/application/controllers/member.php.html#line301" class="location">application/controllers/member.php at line 301</a>
+<div class='method'><a href="../source/application/controllers/member.php.html#line377" class="location">application/controllers/member.php at line 377</a>
 
 <h3 id="facebook()">facebook</h3>
 <code class="signature">public  void <strong>facebook</strong>(mixed key1, mixed val1, mixed key2, mixed val2)</code>
@@ -238,7 +229,16 @@ Detail: <a href="#detail_field">Field</a> | <a href="#detail_method">Method</a> 
 
 
 
-<div class='method'><a href="../source/application/controllers/member.php.html#line283" class="location">application/controllers/member.php at line 283</a>
+<div class='method'><a href="../source/application/controllers/member.php.html#line399" class="location">application/controllers/member.php at line 399</a>
+
+<h3 id="facebook_welcome()">facebook_welcome</h3>
+<code class="signature">public  void <strong>facebook_welcome</strong>()</code>
+<div class="details">
+</div></div>
+
+
+
+<div class='method'><a href="../source/application/controllers/member.php.html#line351" class="location">application/controllers/member.php at line 351</a>
 
 <h3 id="follow()">follow</h3>
 <code class="signature">public  void <strong>follow</strong>(mixed id)</code>
@@ -247,7 +247,7 @@ Detail: <a href="#detail_field">Field</a> | <a href="#detail_method">Method</a> 
 
 
 
-<div class='method'><a href="../source/application/controllers/member.php.html#line191" class="location">application/controllers/member.php at line 191</a>
+<div class='method'><a href="../source/application/controllers/member.php.html#line261" class="location">application/controllers/member.php at line 261</a>
 
 <h3 id="forgotten_password()">forgotten_password</h3>
 <code class="signature">public  void <strong>forgotten_password</strong>()</code>
@@ -260,7 +260,7 @@ Detail: <a href="#detail_field">Field</a> | <a href="#detail_method">Method</a> 
 
 
 
-<div class='method'><a href="../source/application/controllers/member.php.html#line225" class="location">application/controllers/member.php at line 225</a>
+<div class='method'><a href="../source/application/controllers/member.php.html#line295" class="location">application/controllers/member.php at line 295</a>
 
 <h3 id="forgotten_password_complete()">forgotten_password_complete</h3>
 <code class="signature">public  void <strong>forgotten_password_complete</strong>()</code>
@@ -282,43 +282,43 @@ Detail: <a href="#detail_field">Field</a> | <a href="#detail_method">Method</a> 
 
 
 
-<div class='method'><a href="../source/application/controllers/member.php.html#line20" class="location">application/controllers/member.php at line 20</a>
+<div class='method'><a href="../source/application/controllers/member.php.html#line25" class="location">application/controllers/member.php at line 25</a>
 
 <h3 id="login()">login</h3>
-<code class="signature">public  void <strong>login</strong>(bool redirect)</code>
+<code class="signature">public  void <strong>login</strong>(string redirect)</code>
 <div class="details">
-</div></div>
+<p>Login page</p></div></div>
 
 
 
-<div class='method'><a href="../source/application/controllers/member.php.html#line52" class="location">application/controllers/member.php at line 52</a>
+<div class='method'><a href="../source/application/controllers/member.php.html#line69" class="location">application/controllers/member.php at line 69</a>
 
 <h3 id="logout()">logout</h3>
 <code class="signature">public  void <strong>logout</strong>()</code>
 <div class="details">
-</div></div>
+<p>Logs user out</p></div></div>
 
 
 
-<div class='method'><a href="../source/application/controllers/member.php.html#line86" class="location">application/controllers/member.php at line 86</a>
+<div class='method'><a href="../source/application/controllers/member.php.html#line121" class="location">application/controllers/member.php at line 121</a>
 
 <h3 id="profile()">profile</h3>
 <code class="signature">public  void <strong>profile</strong>()</code>
 <div class="details">
-</div></div>
+<p>Displays user profile</p></div></div>
 
 
 
-<div class='method'><a href="../source/application/controllers/member.php.html#line58" class="location">application/controllers/member.php at line 58</a>
+<div class='method'><a href="../source/application/controllers/member.php.html#line78" class="location">application/controllers/member.php at line 78</a>
 
 <h3 id="register()">register</h3>
 <code class="signature">public  void <strong>register</strong>()</code>
 <div class="details">
-</div></div>
+<p>Registration form display and processing</p></div></div>
 
 
 
-<div class='method'><a href="../source/application/controllers/member.php.html#line292" class="location">application/controllers/member.php at line 292</a>
+<div class='method'><a href="../source/application/controllers/member.php.html#line368" class="location">application/controllers/member.php at line 368</a>
 
 <h3 id="unfollow()">unfollow</h3>
 <code class="signature">public  void <strong>unfollow</strong>(mixed id)</code>

@@ -1,0 +1,861 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+
+<html lang="en">
+<head>
+
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
+<meta name="generator" content="PHPDoctor 2RC4 (http://peej.github.com/phpdoctor/)">
+<meta name="when" content="Tue, 29 Jun 2010 21:10:10 +0000">
+
+<link rel="stylesheet" type="text/css" href="../../../../stylesheet.css">
+<link rel="start" href="../../../../overview-summary.html">
+
+<title>application/libraries/oauth/OAuthRequest.php (GiftFlow API)</title>
+
+</head>
+<body id="file" onload="parent.document.title=document.title;">
+
+<div class="header">
+<h1>GiftFlow API</h1>
+<ul>
+<li><a href="../../../../overview-summary.html">Overview</a></li>
+<li>Package</li><li>Class</li><li>Tree</li><li><a href="../../../../overview-files.html">Files</a></li>
+<li><a href="../../../../deprecated-list.html">Deprecated</a></li>
+<li><a href="../../../../index-all.html">Index</a></li>
+</ul>
+</div>
+
+<div class="small_links">
+<a href="../../../../index.html" target="_top">Frames</a>
+<a href="../../../../source/application/libraries/oauth/oauthrequest.php.html" target="_top">No frames</a>
+</div>
+<hr>
+
+<h1>application/libraries/oauth/OAuthRequest.php</h1>
+<div class="comment" id="overview_description"><p>Request wrapper class.  Prepares a request for consumption by the OAuth routines</p></div>
+
+<hr>
+
+<a name="line1"></a><pre><?php
+<a name="line2"></a>
+<a name="line3"></a>/**
+<a name="line4"></a> * Request wrapper class.  Prepares a request for consumption by the OAuth routines
+<a name="line5"></a> * 
+<a name="line6"></a> * @version $Id: OAuthRequest.php 50 2008-10-01 15:11:08Z marcw@pobox.com $
+<a name="line7"></a> * @author Marc Worrell <marcw@pobox.com>
+<a name="line8"></a> * @date  Nov 16, 2007 12:20:31 PM
+<a name="line9"></a> * 
+<a name="line10"></a> * The MIT License
+<a name="line11"></a> * 
+<a name="line12"></a> * Copyright (c) 2007-2008 Mediamatic Lab
+<a name="line13"></a> * 
+<a name="line14"></a> * Permission is hereby granted, free of charge, to any person obtaining a copy
+<a name="line15"></a> * of this software and associated documentation files (the "Software"), to deal
+<a name="line16"></a> * in the Software without restriction, including without limitation the rights
+<a name="line17"></a> * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+<a name="line18"></a> * copies of the Software, and to permit persons to whom the Software is
+<a name="line19"></a> * furnished to do so, subject to the following conditions:
+<a name="line20"></a> * 
+<a name="line21"></a> * The above copyright notice and this permission notice shall be included in
+<a name="line22"></a> * all copies or substantial portions of the Software.
+<a name="line23"></a> * 
+<a name="line24"></a> * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+<a name="line25"></a> * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+<a name="line26"></a> * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+<a name="line27"></a> * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+<a name="line28"></a> * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+<a name="line29"></a> * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+<a name="line30"></a> * THE SOFTWARE.
+<a name="line31"></a> */
+<a name="line32"></a>
+<a name="line33"></a>
+<a name="line34"></a>require_once dirname(__FILE__) . '/OAuthException.php';
+<a name="line35"></a>
+<a name="line36"></a>/**
+<a name="line37"></a> * Object to parse an incoming OAuth request or prepare an outgoing OAuth request
+<a name="line38"></a> */
+<a name="line39"></a>class OAuthRequest 
+<a name="line40"></a>{
+<a name="line41"></a>	/* the realm for this request */
+<a name="line42"></a>	protected $realm;
+<a name="line43"></a>	
+<a name="line44"></a>	/* all the parameters, RFC3986 encoded name/value pairs */
+<a name="line45"></a>	protected $param = array();
+<a name="line46"></a>
+<a name="line47"></a>	/* the parsed request uri */
+<a name="line48"></a>	protected $uri_parts;
+<a name="line49"></a>
+<a name="line50"></a>	/* the raw request uri */
+<a name="line51"></a>	protected $uri;
+<a name="line52"></a>
+<a name="line53"></a>	/* the request headers */
+<a name="line54"></a>	protected $headers;
+<a name="line55"></a>
+<a name="line56"></a>	/* the request method */
+<a name="line57"></a>	protected $method;
+<a name="line58"></a>	
+<a name="line59"></a>	/* the body of the OAuth request */
+<a name="line60"></a>	protected $body;
+<a name="line61"></a>	
+<a name="line62"></a>
+<a name="line63"></a>	/**
+<a name="line64"></a>	 * Construct from the current request. Useful for checking the signature of a request.
+<a name="line65"></a>	 * When not supplied with any parameters this will use the current request.
+<a name="line66"></a>	 * 
+<a name="line67"></a>	 * @param string	uri				might include parameters
+<a name="line68"></a>	 * @param string	method			GET, PUT, POST etc.
+<a name="line69"></a>	 * @param string	parameters		additional post parameters, urlencoded (RFC1738)
+<a name="line70"></a>	 * @param array		headers			headers for request
+<a name="line71"></a>	 * @param string	body			optional body of the OAuth request (POST or PUT)
+<a name="line72"></a>	 */
+<a name="line73"></a>	function __construct ( $uri = null, $method = 'GET', $parameters = '', $headers = array(), $body = null )
+<a name="line74"></a>	{
+<a name="line75"></a>		if (empty($uri))
+<a name="line76"></a>		{
+<a name="line77"></a>			if (is_object($_SERVER))
+<a name="line78"></a>			{
+<a name="line79"></a>				// Tainted arrays - the normal stuff in anyMeta
+<a name="line80"></a>				$method	= $_SERVER->REQUEST_METHOD->getRawUnsafe();
+<a name="line81"></a>				$uri	= $_SERVER->REQUEST_URI->getRawUnsafe();
+<a name="line82"></a>			}
+<a name="line83"></a>			else
+<a name="line84"></a>			{
+<a name="line85"></a>				// non anyMeta systems
+<a name="line86"></a>				$method	= $_SERVER['REQUEST_METHOD'];
+<a name="line87"></a>				$uri	= $_SERVER['REQUEST_URI'];
+<a name="line88"></a>			}
+<a name="line89"></a>			$headers      = getallheaders();
+<a name="line90"></a>			$parameters   = '';
+<a name="line91"></a>			$this->method = strtoupper($method);
+<a name="line92"></a>			
+<a name="line93"></a>			// If this is a post then also check the posted variables
+<a name="line94"></a>			if (strcasecmp($method, 'POST') == 0)
+<a name="line95"></a>			{
+<a name="line96"></a>				/*
+<a name="line97"></a>				// TODO: what to do with 'multipart/form-data'?
+<a name="line98"></a>				if ($this->getRequestContentType() == 'multipart/form-data')
+<a name="line99"></a>				{
+<a name="line100"></a>					throw new OAuthException('Unsupported POST content type, expected "application/x-www-form-urlencoded" got "'.@$_SERVER['CONTENT_TYPE'].'"');
+<a name="line101"></a>				}
+<a name="line102"></a>				*/
+<a name="line103"></a>				if ($this->getRequestContentType() == 'application/x-www-form-urlencoded')
+<a name="line104"></a>				{
+<a name="line105"></a>					// Get the posted body (when available)
+<a name="line106"></a>					if (!isset($headers['X-OAuth-Test']))
+<a name="line107"></a>					{
+<a name="line108"></a>						$parameters .= $this->getRequestBody();
+<a name="line109"></a>					}
+<a name="line110"></a>				}
+<a name="line111"></a>				else
+<a name="line112"></a>				{
+<a name="line113"></a>					$body = $this->getRequestBody();
+<a name="line114"></a>				}
+<a name="line115"></a>			}
+<a name="line116"></a>			else if (strcasecmp($method, 'PUT') == 0)
+<a name="line117"></a>			{
+<a name="line118"></a>				$body = $this->getRequestBody();
+<a name="line119"></a>			}
+<a name="line120"></a>		}
+<a name="line121"></a>
+<a name="line122"></a>		$this->method  = strtoupper($method);
+<a name="line123"></a>		$this->headers = $headers;
+<a name="line124"></a>		// Store the values, prepare for oauth
+<a name="line125"></a>		$this->uri     = $uri;
+<a name="line126"></a>		$this->body    = $body;
+<a name="line127"></a>		$this->parseUri($parameters);
+<a name="line128"></a>		$this->parseHeaders();
+<a name="line129"></a>		$this->transcodeParams();
+<a name="line130"></a>	}
+<a name="line131"></a>
+<a name="line132"></a>
+<a name="line133"></a>	/**
+<a name="line134"></a>	 * Return the signature base string.
+<a name="line135"></a>	 * Note that we can't use rawurlencode due to specified use of RFC3986.
+<a name="line136"></a>	 * 
+<a name="line137"></a>	 * @return string
+<a name="line138"></a>	 */
+<a name="line139"></a>	function signatureBaseString ()
+<a name="line140"></a>	{
+<a name="line141"></a>		$sig 	= array();
+<a name="line142"></a>		$sig[]	= $this->method;
+<a name="line143"></a>		$sig[]	= $this->getRequestUrl();
+<a name="line144"></a>		$sig[]	= $this->getNormalizedParams();
+<a name="line145"></a>		
+<a name="line146"></a>		return implode('&', array_map(array($this, 'urlencode'), $sig));
+<a name="line147"></a>	}
+<a name="line148"></a>	
+<a name="line149"></a>	
+<a name="line150"></a>	/**
+<a name="line151"></a>	 * Calculate the signature of the request, using the method in oauth_signature_method.
+<a name="line152"></a>	 * The signature is returned encoded in the form as used in the url.  So the base64 and
+<a name="line153"></a>	 * urlencoding has been done.
+<a name="line154"></a>	 * 
+<a name="line155"></a>	 * @param string consumer_secret
+<a name="line156"></a>	 * @param string token_secret
+<a name="line157"></a>	 * @exception when not all parts available
+<a name="line158"></a>	 * @return string
+<a name="line159"></a>	 */
+<a name="line160"></a>	function calculateSignature ( $consumer_secret, $token_secret, $token_type = 'access' )
+<a name="line161"></a>	{
+<a name="line162"></a>		$required = array(
+<a name="line163"></a>						'oauth_consumer_key',
+<a name="line164"></a>						'oauth_signature_method',
+<a name="line165"></a>						'oauth_timestamp',
+<a name="line166"></a>						'oauth_nonce'
+<a name="line167"></a>					);
+<a name="line168"></a>
+<a name="line169"></a>		if ($token_type !== false)
+<a name="line170"></a>		{
+<a name="line171"></a>			$required[] = 'oauth_token';
+<a name="line172"></a>		}
+<a name="line173"></a>
+<a name="line174"></a>		foreach ($required as $req)
+<a name="line175"></a>		{
+<a name="line176"></a>			if (!isset($this->param[$req]))
+<a name="line177"></a>			{
+<a name="line178"></a>				throw new OAuthException('Can\'t sign request, missing parameter "'.$req.'"');
+<a name="line179"></a>			}
+<a name="line180"></a>		}
+<a name="line181"></a>
+<a name="line182"></a>		$this->checks();
+<a name="line183"></a>
+<a name="line184"></a>		$base      = $this->signatureBaseString();
+<a name="line185"></a>		$signature = $this->calculateDataSignature($base, $consumer_secret, $token_secret, $this->param['oauth_signature_method']);
+<a name="line186"></a>		return $signature;
+<a name="line187"></a>	}
+<a name="line188"></a>
+<a name="line189"></a>	
+<a name="line190"></a>	/**
+<a name="line191"></a>	 * Calculate the signature of a string.
+<a name="line192"></a>	 * Uses the signature method from the current parameters.
+<a name="line193"></a>	 * 
+<a name="line194"></a>	 * @param string 	data
+<a name="line195"></a>	 * @param string	consumer_secret
+<a name="line196"></a>	 * @param string	token_secret
+<a name="line197"></a>	 * @param string 	signature_method
+<a name="line198"></a>	 * @exception OAuthException thrown when the signature method is unknown 
+<a name="line199"></a>	 * @return string signature
+<a name="line200"></a>	 */
+<a name="line201"></a>	function calculateDataSignature ( $data, $consumer_secret, $token_secret, $signature_method )
+<a name="line202"></a>	{
+<a name="line203"></a>		if (is_null($data))
+<a name="line204"></a>		{
+<a name="line205"></a>			$data = '';
+<a name="line206"></a>		}
+<a name="line207"></a>
+<a name="line208"></a>		$sig = $this->getSignatureMethod($signature_method);
+<a name="line209"></a>		return $sig->signature($this, $data, $consumer_secret, $token_secret);
+<a name="line210"></a>	}
+<a name="line211"></a>
+<a name="line212"></a>
+<a name="line213"></a>	/**
+<a name="line214"></a>	 * Select a signature method from the list of available methods.
+<a name="line215"></a>	 * We try to check the most secure methods first.
+<a name="line216"></a>	 * 
+<a name="line217"></a>	 * @todo Let the signature method tell us how secure it is
+<a name="line218"></a>	 * @param array methods
+<a name="line219"></a>	 * @exception OAuthException when we don't support any method in the list
+<a name="line220"></a>	 * @return string
+<a name="line221"></a>	 */
+<a name="line222"></a>	public function selectSignatureMethod ( $methods )
+<a name="line223"></a>	{
+<a name="line224"></a>		if (in_array('HMAC-SHA1', $methods))
+<a name="line225"></a>		{
+<a name="line226"></a>			$method = 'HMAC-SHA1';
+<a name="line227"></a>		}
+<a name="line228"></a>		else if (in_array('MD5', $methods))
+<a name="line229"></a>		{
+<a name="line230"></a>			$method = 'MD5';
+<a name="line231"></a>		}
+<a name="line232"></a>		else
+<a name="line233"></a>		{
+<a name="line234"></a>			$method = false;
+<a name="line235"></a>			foreach ($methods as $m)
+<a name="line236"></a>			{
+<a name="line237"></a>				$m = strtoupper($m);
+<a name="line238"></a>				$m = preg_replace('/[^A-Z0-9]/', '_', $m);
+<a name="line239"></a>				if (file_exists(dirname(__FILE__).'/signature_method/OAuthSignatureMethod_'.$m.'.php'))
+<a name="line240"></a>				{
+<a name="line241"></a>					$method = $m;
+<a name="line242"></a>					break;
+<a name="line243"></a>				}
+<a name="line244"></a>			}
+<a name="line245"></a>			
+<a name="line246"></a>			if (empty($method))
+<a name="line247"></a>			{
+<a name="line248"></a>				throw new OAuthException('None of the signing methods is supported.');
+<a name="line249"></a>			}
+<a name="line250"></a>		}
+<a name="line251"></a>		return $method;
+<a name="line252"></a>	}
+<a name="line253"></a>
+<a name="line254"></a>	
+<a name="line255"></a>	/**
+<a name="line256"></a>	 * Fetch the signature object used for calculating and checking the signature base string
+<a name="line257"></a>	 * 
+<a name="line258"></a>	 * @param string method
+<a name="line259"></a>	 * @return OAuthSignatureMethod object
+<a name="line260"></a>	 */
+<a name="line261"></a>	function getSignatureMethod ( $method )
+<a name="line262"></a>	{
+<a name="line263"></a>		$m     = strtoupper($method);
+<a name="line264"></a>		$m     = preg_replace('/[^A-Z0-9]/', '_', $m);
+<a name="line265"></a>		$class = 'OAuthSignatureMethod_'.$m;
+<a name="line266"></a>
+<a name="line267"></a>		if (file_exists(dirname(__FILE__).'/signature_method/'.$class.'.php'))
+<a name="line268"></a>		{
+<a name="line269"></a>			require_once dirname(__FILE__).'/signature_method/'.$class.'.php';
+<a name="line270"></a>			$sig = new $class();
+<a name="line271"></a>		}
+<a name="line272"></a>		else
+<a name="line273"></a>		{
+<a name="line274"></a>			throw new OAuthException('Unsupported signature method "'.$m.'".');
+<a name="line275"></a>		}
+<a name="line276"></a>		return $sig;
+<a name="line277"></a>	}
+<a name="line278"></a>
+<a name="line279"></a>
+<a name="line280"></a>	/**
+<a name="line281"></a>	 * Perform some sanity checks.
+<a name="line282"></a>	 * 
+<a name="line283"></a>	 * @exception OAuthException thrown when sanity checks failed
+<a name="line284"></a>	 */
+<a name="line285"></a>	function checks ()
+<a name="line286"></a>	{
+<a name="line287"></a>		if (isset($this->param['oauth_version']))
+<a name="line288"></a>		{
+<a name="line289"></a>			$version = $this->urldecode($this->param['oauth_version']);
+<a name="line290"></a>			if ($version != '1.0')
+<a name="line291"></a>			{
+<a name="line292"></a>				throw new OAuthException('Expected OAuth version 1.0, got "'.$this->param['oauth_version'].'"');
+<a name="line293"></a>			}
+<a name="line294"></a>		}
+<a name="line295"></a>	}
+<a name="line296"></a>
+<a name="line297"></a>
+<a name="line298"></a>	/**
+<a name="line299"></a>	 * Return the request method
+<a name="line300"></a>	 * 
+<a name="line301"></a>	 * @return string
+<a name="line302"></a>	 */
+<a name="line303"></a>	function getMethod ()
+<a name="line304"></a>	{
+<a name="line305"></a>		return $this->method;
+<a name="line306"></a>	}
+<a name="line307"></a>
+<a name="line308"></a>	/**
+<a name="line309"></a>	 * Return the complete parameter string for the signature check.
+<a name="line310"></a>	 * All parameters are correctly urlencoded and sorted on name and value
+<a name="line311"></a>	 * 
+<a name="line312"></a>	 * @return string
+<a name="line313"></a>	 */
+<a name="line314"></a>	function getNormalizedParams ()
+<a name="line315"></a>	{
+<a name="line316"></a>		/*
+<a name="line317"></a>		// sort by name, then by value 
+<a name="line318"></a>		// (needed when we start allowing multiple values with the same name)
+<a name="line319"></a>		$keys   = array_keys($this->param);
+<a name="line320"></a>		$values = array_values($this->param);
+<a name="line321"></a>		array_multisort($keys, SORT_ASC, $values, SORT_ASC);
+<a name="line322"></a>        */
+<a name="line323"></a>        $params     = $this->param;
+<a name="line324"></a>		$normalized = array();
+<a name="line325"></a>
+<a name="line326"></a>		ksort($params);
+<a name="line327"></a>		foreach ($params as $key => $value)
+<a name="line328"></a>		{
+<a name="line329"></a>		    // all names and values are already urlencoded, exclude the oauth signature
+<a name="line330"></a>		    if ($key != 'oauth_signature')
+<a name="line331"></a>		   	{
+<a name="line332"></a>				if (is_array($value))
+<a name="line333"></a>				{
+<a name="line334"></a>					$value_sort = $value;
+<a name="line335"></a>					sort($value_sort);
+<a name="line336"></a>					foreach ($value_sort as $v)
+<a name="line337"></a>					{
+<a name="line338"></a>						$normalized[] = $key.'='.$v;
+<a name="line339"></a>					}
+<a name="line340"></a>				}
+<a name="line341"></a>				else
+<a name="line342"></a>				{
+<a name="line343"></a>					$normalized[] = $key.'='.$value;
+<a name="line344"></a>				}
+<a name="line345"></a>			}
+<a name="line346"></a>		}
+<a name="line347"></a>		return implode('&', $normalized);
+<a name="line348"></a>	}
+<a name="line349"></a>
+<a name="line350"></a>
+<a name="line351"></a>	/**
+<a name="line352"></a>	 * Return the normalised url for signature checks
+<a name="line353"></a>	 */
+<a name="line354"></a>	function getRequestUrl ()
+<a name="line355"></a>	{
+<a name="line356"></a>        $url =  $this->uri_parts['scheme'] . '://'
+<a name="line357"></a>              . $this->uri_parts['user'] . (!empty($this->uri_parts['pass']) ? ':' : '')
+<a name="line358"></a>              . $this->uri_parts['pass'] . (!empty($this->uri_parts['user']) ? '@' : '')
+<a name="line359"></a>			  . $this->uri_parts['host'];
+<a name="line360"></a>			  
+<a name="line361"></a>		if (	$this->uri_parts['port'] 
+<a name="line362"></a>			&&	$this->uri_parts['port'] != $this->defaultPortForScheme($this->uri_parts['scheme']))
+<a name="line363"></a>		{
+<a name="line364"></a>			$url .= ':'.$this->uri_parts['port'];
+<a name="line365"></a>		}
+<a name="line366"></a>		if (!empty($this->uri_parts['path']))
+<a name="line367"></a>		{
+<a name="line368"></a>			$url .= $this->uri_parts['path'];
+<a name="line369"></a>		}
+<a name="line370"></a>		return $url;
+<a name="line371"></a>	}
+<a name="line372"></a>	
+<a name="line373"></a>	
+<a name="line374"></a>	/**
+<a name="line375"></a>	 * Get a parameter, value is always urlencoded
+<a name="line376"></a>	 * 
+<a name="line377"></a>	 * @param string	name
+<a name="line378"></a>	 * @param boolean	urldecode	set to true to decode the value upon return
+<a name="line379"></a>	 * @return string value		false when not found
+<a name="line380"></a>	 */
+<a name="line381"></a>	function getParam ( $name, $urldecode = false )
+<a name="line382"></a>	{
+<a name="line383"></a>		if (isset($this->param[$name]))
+<a name="line384"></a>		{
+<a name="line385"></a>			$s = $this->param[$name];
+<a name="line386"></a>		}
+<a name="line387"></a>		else if (isset($this->param[$this->urlencode($name)]))
+<a name="line388"></a>		{
+<a name="line389"></a>			$s = $this->param[$this->urlencode($name)];
+<a name="line390"></a>		}
+<a name="line391"></a>		else
+<a name="line392"></a>		{
+<a name="line393"></a>			$s = false;
+<a name="line394"></a>		}
+<a name="line395"></a>		if (!empty($s) && $urldecode)
+<a name="line396"></a>		{
+<a name="line397"></a>			if (is_array($s))
+<a name="line398"></a>			{
+<a name="line399"></a>				$s = array_map(array($this,'urldecode'), $s);
+<a name="line400"></a>			}
+<a name="line401"></a>			else
+<a name="line402"></a>			{
+<a name="line403"></a>				$s = $this->urldecode($s);
+<a name="line404"></a>			}
+<a name="line405"></a>		}
+<a name="line406"></a>		return $s;
+<a name="line407"></a>	}
+<a name="line408"></a>
+<a name="line409"></a>	/**
+<a name="line410"></a>	 * Set a parameter
+<a name="line411"></a>	 * 
+<a name="line412"></a>	 * @param string	name
+<a name="line413"></a>	 * @param string	value
+<a name="line414"></a>	 * @param boolean	encoded	set to true when the values are already encoded
+<a name="line415"></a>	 */
+<a name="line416"></a>	function setParam ( $name, $value, $encoded = false )
+<a name="line417"></a>	{
+<a name="line418"></a>		if (!$encoded)
+<a name="line419"></a>		{
+<a name="line420"></a>			$name_encoded = $this->urlencode($name);
+<a name="line421"></a>			if (is_array($value))
+<a name="line422"></a>			{
+<a name="line423"></a>				foreach ($value as $v)
+<a name="line424"></a>				{
+<a name="line425"></a>					$this->param[$name_encoded][] = $this->urlencode($v);
+<a name="line426"></a>				}
+<a name="line427"></a>			}
+<a name="line428"></a>			else
+<a name="line429"></a>			{
+<a name="line430"></a>				$this->param[$name_encoded] = $this->urlencode($value);
+<a name="line431"></a>			}
+<a name="line432"></a>		}
+<a name="line433"></a>		else
+<a name="line434"></a>		{
+<a name="line435"></a>			$this->param[$name] = $value;
+<a name="line436"></a>		}
+<a name="line437"></a>	}
+<a name="line438"></a>
+<a name="line439"></a>
+<a name="line440"></a>	/**
+<a name="line441"></a>	 * Re-encode all parameters so that they are encoded using RFC3986.
+<a name="line442"></a>	 * Updates the $this->param attribute.
+<a name="line443"></a>	 */
+<a name="line444"></a>	protected function transcodeParams ()
+<a name="line445"></a>	{
+<a name="line446"></a>		$params      = $this->param;
+<a name="line447"></a>		$this->param = array();
+<a name="line448"></a>		
+<a name="line449"></a>		foreach ($params as $name=>$value)
+<a name="line450"></a>		{
+<a name="line451"></a>			if (is_array($value))
+<a name="line452"></a>			{
+<a name="line453"></a>				$this->param[$this->urltranscode($name)] = array_map(array($this,'urltranscode'), $value);
+<a name="line454"></a>			}
+<a name="line455"></a>			else
+<a name="line456"></a>			{
+<a name="line457"></a>				$this->param[$this->urltranscode($name)] = $this->urltranscode($value);
+<a name="line458"></a>			}
+<a name="line459"></a>		}
+<a name="line460"></a>	}
+<a name="line461"></a>
+<a name="line462"></a>
+<a name="line463"></a>
+<a name="line464"></a>	/**
+<a name="line465"></a>	 * Return the body of the OAuth request.
+<a name="line466"></a>	 * 
+<a name="line467"></a>	 * @return string		null when no body
+<a name="line468"></a>	 */
+<a name="line469"></a>	function getBody ()
+<a name="line470"></a>	{
+<a name="line471"></a>		return $this->body;
+<a name="line472"></a>	}
+<a name="line473"></a>
+<a name="line474"></a>
+<a name="line475"></a>	/**
+<a name="line476"></a>	 * Return the body of the OAuth request.
+<a name="line477"></a>	 * 
+<a name="line478"></a>	 * @return string		null when no body
+<a name="line479"></a>	 */
+<a name="line480"></a>	function setBody ( $body )
+<a name="line481"></a>	{
+<a name="line482"></a>		$this->body = $body;
+<a name="line483"></a>	}
+<a name="line484"></a>
+<a name="line485"></a>
+<a name="line486"></a>	/**
+<a name="line487"></a>	 * Parse the uri into its parts.  Fill in the missing parts.
+<a name="line488"></a>	 * 
+<a name="line489"></a>	 * @todo  check for the use of https, right now we default to http
+<a name="line490"></a>	 * @todo  support for multiple occurences of parameters
+<a name="line491"></a>	 * @param string $parameters  optional extra parameters (from eg the http post)
+<a name="line492"></a>	 */
+<a name="line493"></a>	protected function parseUri ( $parameters )
+<a name="line494"></a>	{
+<a name="line495"></a>		$ps = parse_url($this->uri);
+<a name="line496"></a>
+<a name="line497"></a>		// Get the current/requested method
+<a name="line498"></a>		if (empty($ps['scheme']))
+<a name="line499"></a>		{
+<a name="line500"></a>			$ps['scheme'] = 'http';
+<a name="line501"></a>		}
+<a name="line502"></a>		else
+<a name="line503"></a>		{
+<a name="line504"></a>			$ps['scheme'] = strtolower($ps['scheme']);
+<a name="line505"></a>		}
+<a name="line506"></a>
+<a name="line507"></a>		// Get the current/requested host
+<a name="line508"></a>		if (empty($ps['host']))
+<a name="line509"></a>		{
+<a name="line510"></a>			if (isset($_SERVER['HTTP_HOST']))
+<a name="line511"></a>			{
+<a name="line512"></a>				$ps['host'] = $_SERVER['HTTP_HOST'];
+<a name="line513"></a>			}
+<a name="line514"></a>			else
+<a name="line515"></a>			{
+<a name="line516"></a>				$ps['host'] = '';
+<a name="line517"></a>			}
+<a name="line518"></a>		}
+<a name="line519"></a>		$ps['host'] = mb_strtolower($ps['host']);
+<a name="line520"></a>		if (!preg_match('/^[a-z0-9\.\-]+$/', $ps['host']))
+<a name="line521"></a>		{
+<a name="line522"></a>			throw new OAuthException('Unsupported characters in host name');
+<a name="line523"></a>		}
+<a name="line524"></a>
+<a name="line525"></a>		// Get the port we are talking on
+<a name="line526"></a>		if (empty($ps['port']))
+<a name="line527"></a>		{
+<a name="line528"></a>			$ps['port'] = $this->defaultPortForScheme($ps['scheme']);
+<a name="line529"></a>		}
+<a name="line530"></a>
+<a name="line531"></a>		if (empty($ps['user']))
+<a name="line532"></a>		{
+<a name="line533"></a>			$ps['user'] = '';
+<a name="line534"></a>		}
+<a name="line535"></a>		if (empty($ps['pass']))
+<a name="line536"></a>		{
+<a name="line537"></a>			$ps['pass'] = '';
+<a name="line538"></a>		}
+<a name="line539"></a>		if (empty($ps['path']))
+<a name="line540"></a>		{
+<a name="line541"></a>			$ps['path'] = '/';
+<a name="line542"></a>		}
+<a name="line543"></a>		if (empty($ps['query']))
+<a name="line544"></a>		{
+<a name="line545"></a>			$ps['query'] = '';
+<a name="line546"></a>		}
+<a name="line547"></a>		if (empty($ps['fragment']))
+<a name="line548"></a>		{
+<a name="line549"></a>			$ps['fragment'] = '';
+<a name="line550"></a>		}
+<a name="line551"></a>
+<a name="line552"></a>		// Now all is complete - parse all parameters
+<a name="line553"></a>		foreach (array($ps['query'], $parameters) as $params)
+<a name="line554"></a>		{
+<a name="line555"></a>			if (strlen($params) > 0)
+<a name="line556"></a>			{
+<a name="line557"></a>				$params = explode('&', $params);
+<a name="line558"></a>				foreach ($params as $p)
+<a name="line559"></a>				{
+<a name="line560"></a>					@list($name, $value) = explode('=', $p, 2);
+<a name="line561"></a>					$this->param[$name]  = $value;
+<a name="line562"></a>				}
+<a name="line563"></a>			}
+<a name="line564"></a>		}
+<a name="line565"></a>		$this->uri_parts = $ps;
+<a name="line566"></a>	}
+<a name="line567"></a>
+<a name="line568"></a>
+<a name="line569"></a>	/**
+<a name="line570"></a>	 * Return the default port for a scheme
+<a name="line571"></a>	 * 
+<a name="line572"></a>	 * @param string scheme
+<a name="line573"></a>	 * @return int
+<a name="line574"></a>	 */
+<a name="line575"></a>	protected function defaultPortForScheme ( $scheme )
+<a name="line576"></a>	{
+<a name="line577"></a>		switch ($scheme)
+<a name="line578"></a>		{
+<a name="line579"></a>		case 'http':	return 80;
+<a name="line580"></a>		case 'https':	return 43;
+<a name="line581"></a>		default:
+<a name="line582"></a>			throw new OAuthException('Unsupported scheme type, expected http or https, got "'.$scheme.'"');
+<a name="line583"></a>			break;
+<a name="line584"></a>		}
+<a name="line585"></a>	}
+<a name="line586"></a>	
+<a name="line587"></a>	
+<a name="line588"></a>	/**
+<a name="line589"></a>	 * Encode a string according to the RFC3986
+<a name="line590"></a>	 * 
+<a name="line591"></a>	 * @param string s
+<a name="line592"></a>	 * @return string
+<a name="line593"></a>	 */
+<a name="line594"></a>	function urlencode ( $s )
+<a name="line595"></a>	{
+<a name="line596"></a>		if ($s === false)
+<a name="line597"></a>		{
+<a name="line598"></a>			return $s;
+<a name="line599"></a>		}
+<a name="line600"></a>		else
+<a name="line601"></a>		{
+<a name="line602"></a>			return str_replace('%7E', '~', rawurlencode($s));
+<a name="line603"></a>		}
+<a name="line604"></a>	}
+<a name="line605"></a>	
+<a name="line606"></a>	/**
+<a name="line607"></a>	 * Decode a string according to RFC3986.
+<a name="line608"></a>	 * Also correctly decodes RFC1738 urls.
+<a name="line609"></a>	 * 
+<a name="line610"></a>	 * @param string s
+<a name="line611"></a>	 * @return string
+<a name="line612"></a>	 */
+<a name="line613"></a>	function urldecode ( $s )
+<a name="line614"></a>	{
+<a name="line615"></a>		if ($s === false)
+<a name="line616"></a>		{
+<a name="line617"></a>			return $s;
+<a name="line618"></a>		}
+<a name="line619"></a>		else
+<a name="line620"></a>		{
+<a name="line621"></a>			return rawurldecode($s);
+<a name="line622"></a>		}
+<a name="line623"></a>	}
+<a name="line624"></a>
+<a name="line625"></a>	/**
+<a name="line626"></a>	 * urltranscode - make sure that a value is encoded using RFC3986.
+<a name="line627"></a>	 * We use a basic urldecode() function so that any use of '+' as the
+<a name="line628"></a>	 * encoding of the space character is correctly handled.
+<a name="line629"></a>	 * 
+<a name="line630"></a>	 * @param string s
+<a name="line631"></a>	 * @return string
+<a name="line632"></a>	 */
+<a name="line633"></a>	function urltranscode ( $s )
+<a name="line634"></a>	{
+<a name="line635"></a>		if ($s === false)
+<a name="line636"></a>		{
+<a name="line637"></a>			return $s;
+<a name="line638"></a>		}
+<a name="line639"></a>		else
+<a name="line640"></a>		{
+<a name="line641"></a>			return $this->urlencode(urldecode($s));
+<a name="line642"></a>		}
+<a name="line643"></a>	}
+<a name="line644"></a>
+<a name="line645"></a>
+<a name="line646"></a>	/**
+<a name="line647"></a>	 * Parse the oauth parameters from the request headers
+<a name="line648"></a>	 * Looks for something like:
+<a name="line649"></a>	 *
+<a name="line650"></a>     * Authorization: OAuth realm="http://photos.example.net/authorize",
+<a name="line651"></a>     *           oauth_consumer_key="dpf43f3p2l4k3l03",
+<a name="line652"></a>     *           oauth_token="nnch734d00sl2jdk",
+<a name="line653"></a>     *           oauth_signature_method="HMAC-SHA1",
+<a name="line654"></a>     *           oauth_signature="tR3%2BTy81lMeYAr%2FFid0kMTYa%2FWM%3D",
+<a name="line655"></a>     *           oauth_timestamp="1191242096",
+<a name="line656"></a>     *           oauth_nonce="kllo9940pd9333jh",
+<a name="line657"></a>     *           oauth_version="1.0"
+<a name="line658"></a>     */
+<a name="line659"></a>	private function parseHeaders ()
+<a name="line660"></a>	{
+<a name="line661"></a>/*
+<a name="line662"></a>		$this->headers['Authorization'] = 'OAuth realm="http://photos.example.net/authorize",
+<a name="line663"></a>                oauth_consumer_key="dpf43f3p2l4k3l03",
+<a name="line664"></a>                oauth_token="nnch734d00sl2jdk",
+<a name="line665"></a>                oauth_signature_method="HMAC-SHA1",
+<a name="line666"></a>                oauth_signature="tR3%2BTy81lMeYAr%2FFid0kMTYa%2FWM%3D",
+<a name="line667"></a>                oauth_timestamp="1191242096",
+<a name="line668"></a>                oauth_nonce="kllo9940pd9333jh",
+<a name="line669"></a>                oauth_version="1.0"';
+<a name="line670"></a>*/		
+<a name="line671"></a>		if (isset($this->headers['Authorization']))
+<a name="line672"></a>		{
+<a name="line673"></a>			$auth = trim($this->headers['Authorization']);
+<a name="line674"></a>			if (strncasecmp($auth, 'OAuth', 4) == 0)
+<a name="line675"></a>			{
+<a name="line676"></a>				$vs = explode(',', substr($auth, 6));
+<a name="line677"></a>				foreach ($vs as $v)
+<a name="line678"></a>				{
+<a name="line679"></a>					if (strpos($v, '='))
+<a name="line680"></a>					{
+<a name="line681"></a>						$v = trim($v);
+<a name="line682"></a>						list($name,$value) = explode('=', $v, 2);
+<a name="line683"></a>						if (!empty($value) && $value{0} == '"' && substr($value, -1) == '"')
+<a name="line684"></a>						{
+<a name="line685"></a>							$value = substr(substr($value, 1), 0, -1);
+<a name="line686"></a>						}
+<a name="line687"></a>						
+<a name="line688"></a>						if (strcasecmp($name, 'realm') == 0)
+<a name="line689"></a>						{
+<a name="line690"></a>							$this->realm = $value;
+<a name="line691"></a>						}
+<a name="line692"></a>						else
+<a name="line693"></a>						{
+<a name="line694"></a>							$this->param[$name] = $value;
+<a name="line695"></a>						}
+<a name="line696"></a>					}
+<a name="line697"></a>				}
+<a name="line698"></a>			}
+<a name="line699"></a>		}
+<a name="line700"></a>	}
+<a name="line701"></a>
+<a name="line702"></a>
+<a name="line703"></a>	/**
+<a name="line704"></a>	 * Fetch the content type of the current request
+<a name="line705"></a>	 * 
+<a name="line706"></a>	 * @return string
+<a name="line707"></a>	 */
+<a name="line708"></a>	private function getRequestContentType ()
+<a name="line709"></a>	{
+<a name="line710"></a>		$content_type = 'application/octet-stream';
+<a name="line711"></a>		if (!empty($_SERVER) && array_key_exists('CONTENT_TYPE', $_SERVER))
+<a name="line712"></a>		{
+<a name="line713"></a>			list($content_type) = explode(';', $_SERVER['CONTENT_TYPE']);
+<a name="line714"></a>		}
+<a name="line715"></a>		return trim($content_type);
+<a name="line716"></a>	}
+<a name="line717"></a>
+<a name="line718"></a>
+<a name="line719"></a>	/**
+<a name="line720"></a>	 * Get the body of a POST or PUT.
+<a name="line721"></a>	 * 
+<a name="line722"></a>	 * Used for fetching the post parameters and to calculate the body signature.
+<a name="line723"></a>	 * 
+<a name="line724"></a>	 * @return string		null when no body present (or wrong content type for body)
+<a name="line725"></a>	 */
+<a name="line726"></a>	private function getRequestBody ()
+<a name="line727"></a>	{
+<a name="line728"></a>		$body = null;
+<a name="line729"></a>		if ($this->method == 'POST' || $this->method == 'PUT')
+<a name="line730"></a>		{
+<a name="line731"></a>			$body = '';
+<a name="line732"></a>			$fh   = @fopen('php://input', 'r');
+<a name="line733"></a>			if ($fh)
+<a name="line734"></a>			{
+<a name="line735"></a>				while (!feof($fh))
+<a name="line736"></a>				{
+<a name="line737"></a>					$s = fread($fh, 1024);
+<a name="line738"></a>					if (is_string($s))
+<a name="line739"></a>					{
+<a name="line740"></a>						$body .= $s;
+<a name="line741"></a>					}
+<a name="line742"></a>				}
+<a name="line743"></a>				fclose($fh);
+<a name="line744"></a>			}
+<a name="line745"></a>		}
+<a name="line746"></a>		return $body;
+<a name="line747"></a>	}
+<a name="line748"></a>
+<a name="line749"></a>	
+<a name="line750"></a>	/**
+<a name="line751"></a>	 * Simple function to perform a redirect (GET).
+<a name="line752"></a>	 * Redirects the User-Agent, does not return.
+<a name="line753"></a>	 * 
+<a name="line754"></a>	 * @param string uri
+<a name="line755"></a>	 * @param array params		parameters, urlencoded
+<a name="line756"></a>	 * @exception OAuthException when redirect uri is illegal
+<a name="line757"></a>	 */
+<a name="line758"></a>	public function redirect ( $uri, $params )
+<a name="line759"></a>	{
+<a name="line760"></a>		if (!empty($params))
+<a name="line761"></a>		{
+<a name="line762"></a>			$q = array();
+<a name="line763"></a>			foreach ($params as $name=>$value)
+<a name="line764"></a>			{
+<a name="line765"></a>				$q[] = $name.'='.$value;
+<a name="line766"></a>			}
+<a name="line767"></a>			$q_s = implode('&', $q);
+<a name="line768"></a>			
+<a name="line769"></a>			if (strpos($uri, '?'))
+<a name="line770"></a>			{
+<a name="line771"></a>				$uri .= '&'.$q_s;
+<a name="line772"></a>			}
+<a name="line773"></a>			else
+<a name="line774"></a>			{
+<a name="line775"></a>				$uri .= '?'.$q_s;
+<a name="line776"></a>			}
+<a name="line777"></a>		}
+<a name="line778"></a>		
+<a name="line779"></a>		// simple security - multiline location headers can inject all kinds of extras
+<a name="line780"></a>		$uri = preg_replace('/\s/', '%20', $uri);
+<a name="line781"></a>		if (strncasecmp($uri, 'http://', 7) && strncasecmp($uri, 'https://', 8))
+<a name="line782"></a>		{
+<a name="line783"></a>			if (strpos($uri, '://'))
+<a name="line784"></a>			{
+<a name="line785"></a>				throw new OAuthException('Illegal protocol in redirect uri '.$uri);
+<a name="line786"></a>			}
+<a name="line787"></a>			$uri = 'http://'.$uri;
+<a name="line788"></a>		}
+<a name="line789"></a>		
+<a name="line790"></a>		header('HTTP/1.1 302 Found');
+<a name="line791"></a>		header('Location: '.$uri);
+<a name="line792"></a>		echo '';
+<a name="line793"></a>		exit();
+<a name="line794"></a>	}
+<a name="line795"></a>	
+<a name="line796"></a>}
+<a name="line797"></a>
+<a name="line798"></a>
+<a name="line799"></a>/* vi:set ts=4 sts=4 sw=4 binary noeol: */
+<a name="line800"></a>
+<a name="line801"></a>?></pre>
+<div class="header">
+<h1>GiftFlow API</h1>
+<ul>
+<li><a href="../../../../overview-summary.html">Overview</a></li>
+<li>Package</li><li>Class</li><li>Tree</li><li><a href="../../../../overview-files.html">Files</a></li>
+<li><a href="../../../../deprecated-list.html">Deprecated</a></li>
+<li><a href="../../../../index-all.html">Index</a></li>
+</ul>
+</div>
+
+<div class="small_links">
+<a href="../../../../index.html" target="_top">Frames</a>
+<a href="../../../../source/application/libraries/oauth/oauthrequest.php.html" target="_top">No frames</a>
+</div>
+<hr>
+
+<p id="footer">This document was generated by <a href="http://peej.github.com/phpdoctor/">PHPDoctor: The PHP Documentation Creator</a></p>
+
+</body>
+
+</html>

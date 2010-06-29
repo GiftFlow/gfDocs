@@ -6,7 +6,7 @@
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 
 <meta name="generator" content="PHPDoctor 2RC4 (http://peej.github.com/phpdoctor/)">
-<meta name="when" content="Sun, 20 Jun 2010 17:43:51 +0000">
+<meta name="when" content="Tue, 29 Jun 2010 21:10:10 +0000">
 
 <link rel="stylesheet" type="text/css" href="../../../../stylesheet.css">
 <link rel="start" href="../../../../overview-summary.html">
@@ -235,10 +235,10 @@
 <a name="line198"></a>				<ul>
 <a name="line199"></a>					<li>
 <a name="line200"></a>						<div class='info'>
-<a name="line201"></a>							<img src="<?php echo site_url('api/member/'.$active_transaction->recipient->id.'/photo/thumb'); ?>" />
+<a name="line201"></a>							<img src="<?php echo site_url('api/member/'.$active_transaction->recipient_id.'/photo/thumb'); ?>" />
 <a name="line202"></a>							<div class='text css_left'>
-<a name="line203"></a>								<a class='request_recipient' href='<?php echo site_url('profile/'.$active_transaction->recipient->id);?>'>
-<a name="line204"></a>									<?php echo $active_transaction->recipient->screen_name;?>
+<a name="line203"></a>								<a class='request_recipient' href='<?php echo site_url('profile/'.$active_transaction->recipient_id);?>'>
+<a name="line204"></a>									<?php echo $active_transaction->recipient_screen_name;?>
 <a name="line205"></a>								</a>
 <a name="line206"></a>								<p class='request_meta'>Requested on <?php echo date('F jS', strtotime($active_transaction->created)); ?> at  <?php echo date('g:ia', strtotime($active_transaction->created)); ?>.</p>
 <a name="line207"></a>							</div>
@@ -259,10 +259,10 @@
 <a name="line222"></a>				<?php foreach($requests as $key=>$request) { ?>
 <a name="line223"></a>					<li>
 <a name="line224"></a>						<div class='info'>
-<a name="line225"></a>							<img src="<?php echo site_url('api/member/'.$request->recipient->id.'/photo/thumb'); ?>" />
+<a name="line225"></a>							<img src="<?php echo site_url('api/member/'.$request->recipient_id.'/photo/thumb'); ?>" />
 <a name="line226"></a>							<div class='text css_left'>
-<a name="line227"></a>								<a class='request_recipient' href='<?php echo site_url('profile/'.$request->recipient->id);?>'>
-<a name="line228"></a>									<?php echo $request->recipient->screen_name;?>
+<a name="line227"></a>								<a class='request_recipient' href='<?php echo site_url('profile/'.$request->recipient_id);?>'>
+<a name="line228"></a>									<?php echo $request->recipient_screen_name;?>
 <a name="line229"></a>								</a>
 <a name="line230"></a>								<p class='request_meta'>Requested on <?php echo date('F jS', strtotime($request->created)); ?> at  <?php echo date('g:ia', strtotime($request->created)); ?>.</p>
 <a name="line231"></a>								<!--<a class='button' href="<?php echo site_url('profile/'.$request->recipient->id);?>">View Profile</a>-->
@@ -406,7 +406,7 @@
 <a name="line369"></a>	/*
 <a name="line370"></a>	*  Upload / edit photos
 <a name="line371"></a>	*/
-<a name="line372"></a>	$('ul#good_buttons li a, .button').button();
+<a name="line372"></a>	$('.button').button();
 <a name="line373"></a>	$(".buttonset, .photo_edit_toolbar").buttonset();
 <a name="line374"></a>	$("#upload_photo").ajaxForm( { 'success': uploaded } );
 <a name="line375"></a>	$(".edit_dialog #delete").click(function(){ 
@@ -524,7 +524,7 @@
 <a name="line487"></a>	*/ 
 <a name="line488"></a>	
 <a name="line489"></a>	$(".ignore_request").live('click', function(){ 
-<a name="line490"></a>		var div = $(this).parent().parent().parent();
+<a name="line490"></a>		var div = $(this).parent().parent();
 <a name="line491"></a>		
 <a name="line492"></a>		$.post( $(this).attr("href"), { type: 'ignore', 'request_id': $(this).attr('rel') }, function ( data ) {
 <a name="line493"></a>			div.slideUp(500, function(){ div.html(data).fadeIn(500); });
@@ -532,12 +532,13 @@
 <a name="line495"></a>		return false;
 <a name="line496"></a>	});
 <a name="line497"></a>	$("input:submit").button();
-<a name="line498"></a>	/*
-<a name="line499"></a>	* Notifybar code
-<a name="line500"></a>	*/
-<a name="line501"></a>	<?php echo notify(); ?>
-<a name="line502"></a>});
-<a name="line503"></a></script></pre>
+<a name="line498"></a>	$(".button.accept_request").button( { icons: { primary: 'ui-icon-check' } } );
+<a name="line499"></a>	/*
+<a name="line500"></a>	* Notifybar code
+<a name="line501"></a>	*/
+<a name="line502"></a>	<?php echo notify(); ?>
+<a name="line503"></a>});
+<a name="line504"></a></script></pre>
 <div class="header">
 <h1>GiftFlow API</h1>
 <ul>

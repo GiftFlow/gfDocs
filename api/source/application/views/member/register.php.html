@@ -6,7 +6,7 @@
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 
 <meta name="generator" content="PHPDoctor 2RC4 (http://peej.github.com/phpdoctor/)">
-<meta name="when" content="Sun, 20 Jun 2010 17:43:51 +0000">
+<meta name="when" content="Tue, 29 Jun 2010 21:10:10 +0000">
 
 <link rel="stylesheet" type="text/css" href="../../../../stylesheet.css">
 <link rel="start" href="../../../../overview-summary.html">
@@ -56,89 +56,41 @@
 <a name="line19"></a>	</td>
 <a name="line20"></a>	<td></td>
 <a name="line21"></a>	<td style='width: 500px;'><?php echo form_errors(); ?>
-<a name="line22"></a>	<!--<form name='register' id='register' method="post">
-<a name="line23"></a>	<table class="form">
-<a name="line24"></a>		<tr class="row required" id="row_email">
-<a name="line25"></a>			<td class="label" style='vertical-align: middle;'><label for="email">Email Address</label></td>
-<a name="line26"></a>			<td class="field">
-<a name="line27"></a>				<input maxlength="255" size="30" class="email required" type="text" name="email" id="email" value="" />			
-<a name="line28"></a>			</td>
-<a name="line29"></a>	
-<a name="line30"></a>		</tr>
-<a name="line31"></a>		<tr class="row required" id="row_password">
-<a name="line32"></a>			<td class="label"style='vertical-align: middle;' ><label for="password">Password</label></td>
-<a name="line33"></a>			<td class="field">
-<a name="line34"></a>				<input maxlength="45" size="30" class="required" type="password" name="password" id="password" value="" />			
-<a name="line35"></a>			</td>
-<a name="line36"></a>		</tr>
-<a name="line37"></a>		<tr class="row required" id="row_captcha">
-<a name="line38"></a>			<td class="label"><label for="captcha">Are you human?</label></td>
-<a name="line39"></a>			<td class="field">
-<a name="line40"></a>				<?php echo $recaptcha; ?>		
-<a name="line41"></a>			</td>
-<a name="line42"></a>		</tr>
-<a name="line43"></a>		<tr class="buttons">
-<a name="line44"></a>			<td colspan="2"><input type="submit" value="Sign Up" /></td>
-<a name="line45"></a>		</tr>
-<a name="line46"></a>	</table>
-<a name="line47"></a>	</form>-->
-<a name="line48"></a>	<form name='register' id='register' method="post">
-<a name="line49"></a>	
-<a name="line50"></a>			<p><label for="email">Email Address</label>
-<a name="line51"></a>				<p><input maxlength="255" size="30" class="email required" type="text" name="email" id="email" value="" />			
-<a name="line52"></a>			</p>
-<a name="line53"></a>			<p>
-<a name="line54"></a>				<label for="password">Password</label>
-<a name="line55"></a>				<p><input maxlength="45" size="30" class="required" type="password" name="password" id="password" value="" />			
-<a name="line56"></a>			</p>
-<a name="line57"></a>			<p>
-<a name="line58"></a>				<label for="captcha">Type the two words that appear below</label>
-<a name="line59"></a>				<?php echo $recaptcha; ?>		
-<a name="line60"></a>			</p>
-<a name="line61"></a>			<p><input type="submit" value="Sign Up" /></p>
-<a name="line62"></a>	</form>
-<a name="line63"></a></td>
-<a name="line64"></a></tr></table>
-<a name="line65"></a><!--
-<a name="line66"></a><div id='login'>
-<a name="line67"></a><h1>Closed Alpha Testing Underway!</h1>
-<a name="line68"></a><p>Oops! Thanks for checking out GiftFlow. At the moment we are testing the site with a small group of alpha testers. Let us know your email and we will let you know when things are ready to go!</p>
-<a name="line69"></a>
-<a name="line70"></a><form id="ss-form" class='ui-widget' method="POST" action="http://spreadsheets.google.com/formResponse?formkey=dHJfanVMNDNyVGJ6Tm5QSXJFTXhwb1E6MA&amp;ifq">
-<a name="line71"></a>
-<a name="line72"></a><table class='form ui-widget' id='login_table'>
-<a name="line73"></a>    <tbody>
-<a name="line74"></a>        <tr>
-<a name="line75"></a>            <td><label>Name</label></td>
-<a name="line76"></a>            <td class='field'><input type="text" id="entry_0" class="ss-q-short" value="" name="entry.0.single"></td>
-<a name="line77"></a>        </tr>
-<a name="line78"></a>        <tr>
-<a name="line79"></a>            <td><label>Email</label></td>
-<a name="line80"></a>            <td class='field'><input type="text" id="entry_1" class="ss-q-short" value="" name="entry.1.single"></td>
-<a name="line81"></a>        </tr>
-<a name="line82"></a>    </tbody>
-<a name="line83"></a> </table>
-<a name="line84"></a><input type="submit" value="Sign Up" name="submit">
-<a name="line85"></a></form>
-<a name="line86"></a></div>
-<a name="line87"></a>-->
-<a name="line88"></a><?php echo facebook_sdk(); ?>
-<a name="line89"></a><script>
-<a name="line90"></a>$(function(){
-<a name="line91"></a>	$("input:submit").button();
-<a name="line92"></a>	$("table#recaptcha_table").css("cssText", "border: none !important");
-<a name="line93"></a>	$("#recaptcha_image").css("margin", "0px");
-<a name="line94"></a>	//$("#recaptcha_response_field").css("border","").addClass('required').css("width","281px").before("<label>Type the two words:<\/label>");
-<a name="line95"></a>	$(".recaptcha_input_area").parent().css("padding", "15px 0px 0px");
-<a name="line96"></a>	$(".recaptcha_image_cell").removeAttr("width").css("cssText", "padding: 0px !important");
-<a name="line97"></a>	$("#recaptcha_reload").attr("src", "<?php echo base_url(); ?>assets/images/recaptcha_refresh.png");
-<a name="line98"></a>	$("#recaptcha_switch_audio").attr("src", "<?php echo base_url(); ?>assets/images/recaptcha_sound.png");
-<a name="line99"></a>	$("#recaptcha_whatsthis").attr("src", "<?php echo base_url(); ?>assets/images/recaptcha_whatsthis.png");
-<a name="line100"></a>	$("#recaptcha_tagline").hide();
-<a name="line101"></a>	$("#register").validate();
-<a name="line102"></a>	$("p.alert_error").css('margin-bottom', '0px');
-<a name="line103"></a>});
-<a name="line104"></a></script></pre>
+<a name="line22"></a>	<form name='register' id='register' method="post">
+<a name="line23"></a>	
+<a name="line24"></a>			<p><label for="email">Email Address</label>
+<a name="line25"></a>				<p><input maxlength="255" size="30" class="email required" type="text" name="email" id="email" value="" />			
+<a name="line26"></a>			</p>
+<a name="line27"></a>			<p>
+<a name="line28"></a>				<label for="password">Password</label>
+<a name="line29"></a>				<p><input maxlength="45" size="30" class="required" type="password" name="password" id="password" value="" />			
+<a name="line30"></a>			</p>
+<a name="line31"></a>			<p>
+<a name="line32"></a>				<label for="captcha">Type the two words that appear below</label>
+<a name="line33"></a>				<?php echo $recaptcha; ?>		
+<a name="line34"></a>			</p>
+<a name="line35"></a>			<p><input type="submit" value="Sign Up" /></p>
+<a name="line36"></a>	</form>
+<a name="line37"></a></td>
+<a name="line38"></a></tr></table>
+<a name="line39"></a></div>
+<a name="line40"></a><?php echo facebook_sdk(); ?>
+<a name="line41"></a><script>
+<a name="line42"></a>$(function(){
+<a name="line43"></a>	$("input:submit").button();
+<a name="line44"></a>	$("table#recaptcha_table").css("cssText", "border: none !important");
+<a name="line45"></a>	$("#recaptcha_image").css("margin", "0px");
+<a name="line46"></a>	//$("#recaptcha_response_field").css("border","").addClass('required').css("width","281px").before("<label>Type the two words:<\/label>");
+<a name="line47"></a>	$(".recaptcha_input_area").parent().css("padding", "15px 0px 0px");
+<a name="line48"></a>	$(".recaptcha_image_cell").removeAttr("width").css("cssText", "padding: 0px !important");
+<a name="line49"></a>	$("#recaptcha_reload").attr("src", "<?php echo base_url(); ?>assets/images/recaptcha_refresh.png");
+<a name="line50"></a>	$("#recaptcha_switch_audio").attr("src", "<?php echo base_url(); ?>assets/images/recaptcha_sound.png");
+<a name="line51"></a>	$("#recaptcha_whatsthis").attr("src", "<?php echo base_url(); ?>assets/images/recaptcha_whatsthis.png");
+<a name="line52"></a>	$("#recaptcha_tagline").hide();
+<a name="line53"></a>	$("#register").validate();
+<a name="line54"></a>	$("p.alert_error").css('margin-bottom', '0px');
+<a name="line55"></a>});
+<a name="line56"></a></script></pre>
 <div class="header">
 <h1>GiftFlow API</h1>
 <ul>

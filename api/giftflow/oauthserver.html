@@ -1,0 +1,190 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+
+<html lang="en">
+<head>
+
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
+<meta name="generator" content="PHPDoctor 2RC4 (http://peej.github.com/phpdoctor/)">
+<meta name="when" content="Tue, 29 Jun 2010 21:10:09 +0000">
+
+<link rel="stylesheet" type="text/css" href="../stylesheet.css">
+<link rel="start" href="../overview-summary.html">
+
+<title>OAuthServer (GiftFlow API)</title>
+
+</head>
+<body id="definition" onload="parent.document.title=document.title;">
+
+<div class="header">
+<h1>GiftFlow API</h1>
+<ul>
+<li><a href="../overview-summary.html">Overview</a></li>
+<li><a href="../giftflow/package-summary.html">Package</a></li>
+<li class="active">Class</li>
+<li><a href="../giftflow/package-tree.html">Tree</a></li>
+<li><a href="../overview-files.html">Files</a></li>
+<li><a href="../deprecated-list.html">Deprecated</a></li>
+<li><a href="../index-all.html">Index</a></li>
+</ul>
+</div>
+
+<div class="small_links">
+<a href="../index.html" target="_top">Frames</a>
+<a href="../giftflow/oauthserver.html" target="_top">No frames</a>
+</div>
+<div class="small_links">
+Summary: <a href="#summary_field">Field</a> | <a href="#summary_method">Method</a> | <a href="#summary_constr">Constr</a>
+Detail: <a href="#detail_field">Field</a> | <a href="#detail_method">Method</a> | <a href="#summary_constr">Constr</a>
+</div>
+<hr>
+
+<div class="qualifiedName">GiftFlow\OAuthServer</div>
+<a href="../source/application/libraries/oauth/oauthserver.php.html#line36" class="location">application/libraries/oauth/OAuthServer.php at line 36</a>
+
+<h1>Class OAuthServer</h1>
+
+<pre class="tree"><a href="../giftflow/oauthrequest.html">OAuthRequest</a><br>    └─<a href="../giftflow/oauthrequestverifier.html">OAuthRequestVerifier</a><br>       └─<strong>OAuthServer</strong><br /></pre>
+
+<hr>
+
+<p class="signature">public  class <strong>OAuthServer</strong><br>extends <a href="../giftflow/oauthrequestverifier.html">OAuthRequestVerifier</a>
+
+</p>
+
+<div class="comment" id="overview_description"><p>Server layer over the OAuthRequest handler</p></div>
+
+<dl>
+<dt>Version:</dt>
+<dd>$Id: OAuthServer.php 51 2008-10-15 15:15:47Z marcw@pobox.com $</dd>
+<dt>Author:</dt>
+<dd>Marc Worrell <marcw@pobox.com></dd>
+<dt>Date:</dt>
+<dd>Nov 27, 2007 12:36:38 PM The MIT License Copyright (c) 2007-2008 Mediamatic Lab Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions: The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software. THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.</dd>
+</dl>
+<hr>
+
+<table class="inherit">
+<tr><th colspan="2">Fields inherited from GiftFlow\OAuthRequestVerifier</th></tr>
+<tr><td><a href="../giftflow/oauthrequestverifier.html#getQueryString">getQueryString</a>, <a href="../giftflow/oauthrequestverifier.html#store">store</a></td></tr></table>
+
+<table class="inherit">
+<tr><th colspan="2">Fields inherited from GiftFlow\OAuthRequest</th></tr>
+<tr><td><a href="../giftflow/oauthrequest.html#__construct">__construct</a>, <a href="../giftflow/oauthrequest.html#body">body</a>, <a href="../giftflow/oauthrequest.html#headers">headers</a>, <a href="../giftflow/oauthrequest.html#method">method</a>, <a href="../giftflow/oauthrequest.html#param">param</a>, <a href="../giftflow/oauthrequest.html#uri">uri</a>, <a href="../giftflow/oauthrequest.html#uri_parts">uri_parts</a></td></tr></table>
+
+<table id="summary_method">
+<tr><th colspan="2">Method Summary</th></tr>
+<tr>
+<td class="type"> void</td>
+<td class="description"><p class="name"><a href="#accessToken()">accessToken</a>()</p><p class="description">Exchange a request token for an access token.
+</p></td>
+</tr>
+<tr>
+<td class="type"> void</td>
+<td class="description"><p class="name"><a href="#authorizeFinish()">authorizeFinish</a>(boolean authorized, int user_id)</p><p class="description">Overrule this method when you want to display a nice page when
+the authorization is finished. </p></td>
+</tr>
+<tr>
+<td class="type"> array</td>
+<td class="description"><p class="name"><a href="#authorizeVerify()">authorizeVerify</a>()</p><p class="description">Verify the start of an authorization request. </p></td>
+</tr>
+<tr>
+<td class="type"> string</td>
+<td class="description"><p class="name"><a href="#requestToken()">requestToken</a>()</p><p class="description">Handle the request_token request.
+</p></td>
+</tr>
+</table>
+
+<table class="inherit">
+<tr><th colspan="2">Methods inherited from GiftFlow\OAuthRequestVerifier</th></tr>
+<tr><td><a href="../giftflow/oauthrequestverifier.html#__construct()">__construct</a>, <a href="../giftflow/oauthrequestverifier.html#requestIsSigned()">requestIsSigned</a>, <a href="../giftflow/oauthrequestverifier.html#verify()">verify</a>, <a href="../giftflow/oauthrequestverifier.html#verifyDataSignature()">verifyDataSignature</a>, <a href="../giftflow/oauthrequestverifier.html#verifyIfSigned()">verifyIfSigned</a>, <a href="../giftflow/oauthrequestverifier.html#verifySignature()">verifySignature</a></td></tr></table>
+
+<table class="inherit">
+<tr><th colspan="2">Methods inherited from GiftFlow\OAuthRequest</th></tr>
+<tr><td><a href="../giftflow/oauthrequest.html#__construct()">__construct</a>, <a href="../giftflow/oauthrequest.html#calculateDataSignature()">calculateDataSignature</a>, <a href="../giftflow/oauthrequest.html#calculateSignature()">calculateSignature</a>, <a href="../giftflow/oauthrequest.html#checks()">checks</a>, <a href="../giftflow/oauthrequest.html#defaultPortForScheme()">defaultPortForScheme</a>, <a href="../giftflow/oauthrequest.html#getBody()">getBody</a>, <a href="../giftflow/oauthrequest.html#getMethod()">getMethod</a>, <a href="../giftflow/oauthrequest.html#getNormalizedParams()">getNormalizedParams</a>, <a href="../giftflow/oauthrequest.html#getParam()">getParam</a>, <a href="../giftflow/oauthrequest.html#getRequestBody()">getRequestBody</a>, <a href="../giftflow/oauthrequest.html#getRequestContentType()">getRequestContentType</a>, <a href="../giftflow/oauthrequest.html#getRequestUrl()">getRequestUrl</a>, <a href="../giftflow/oauthrequest.html#getSignatureMethod()">getSignatureMethod</a>, <a href="../giftflow/oauthrequest.html#parseHeaders()">parseHeaders</a>, <a href="../giftflow/oauthrequest.html#parseUri()">parseUri</a>, <a href="../giftflow/oauthrequest.html#redirect()">redirect</a>, <a href="../giftflow/oauthrequest.html#selectSignatureMethod()">selectSignatureMethod</a>, <a href="../giftflow/oauthrequest.html#setBody()">setBody</a>, <a href="../giftflow/oauthrequest.html#setParam()">setParam</a>, <a href="../giftflow/oauthrequest.html#signatureBaseString()">signatureBaseString</a>, <a href="../giftflow/oauthrequest.html#transcodeParams()">transcodeParams</a>, <a href="../giftflow/oauthrequest.html#urldecode()">urldecode</a>, <a href="../giftflow/oauthrequest.html#urlencode()">urlencode</a>, <a href="../giftflow/oauthrequest.html#urltranscode()">urltranscode</a></td></tr></table>
+
+<h2 id="detail_method">Method Detail</h2><div class="method_detail">
+<div class='method'><a href="../source/application/libraries/oauth/oauthserver.php.html#line186" class="location">application/libraries/oauth/OAuthServer.php at line 186</a>
+
+<h3 id="accessToken()">accessToken</h3>
+<code class="signature">public  void <strong>accessToken</strong>()</code>
+<div class="details">
+<p>Exchange a request token for an access token.
+The exchange is only succesful iff the request token has been authorized.</p><p>Never returns, calls exit() when token is exchanged or when error is returned.</p></div></div>
+
+
+
+<div class='method'><a href="../source/application/libraries/oauth/oauthserver.php.html#line136" class="location">application/libraries/oauth/OAuthServer.php at line 136</a>
+
+<h3 id="authorizeFinish()">authorizeFinish</h3>
+<code class="signature">public  void <strong>authorizeFinish</strong>(boolean authorized, int user_id)</code>
+<div class="details">
+<p>Overrule this method when you want to display a nice page when
+the authorization is finished.  This function does not know if the authorization was
+succesfull, you need to check the token in the database.</p><dl>
+<dt>Parameters:</dt>
+<dd>authorized - if the current token (oauth_token param) is authorized or not</dd>
+<dd>user_id - user for which the token was authorized (or denied)</dd>
+</dl>
+</div></div>
+
+
+
+<div class='method'><a href="../source/application/libraries/oauth/oauthserver.php.html#line103" class="location">application/libraries/oauth/OAuthServer.php at line 103</a>
+
+<h3 id="authorizeVerify()">authorizeVerify</h3>
+<code class="signature">public  array <strong>authorizeVerify</strong>()</code>
+<div class="details">
+<p>Verify the start of an authorization request.  Verifies if the request token is valid.
+Next step is the method authorizeFinish()</p><p>Nota bene: this stores the current token, consumer key and callback in the _SESSION</p><dl>
+<dt>Exception:</dt>
+<dd>OAuthException thrown when not a valid request</dd>
+<dt>Returns:</dt>
+<dd>token description</dd>
+</dl>
+</div></div>
+
+
+
+<div class='method'><a href="../source/application/libraries/oauth/oauthserver.php.html#line46" class="location">application/libraries/oauth/OAuthServer.php at line 46</a>
+
+<h3 id="requestToken()">requestToken</h3>
+<code class="signature">public  string <strong>requestToken</strong>()</code>
+<div class="details">
+<p>Handle the request_token request.
+Returns the new request token and request token secret.</p><p>TODO: add correct result code to exception</p><dl>
+<dt>Returns:</dt>
+<dd>returned request token, false on an error</dd>
+</dl>
+</div></div>
+
+
+
+</div><div class="header">
+<h1>GiftFlow API</h1>
+<ul>
+<li><a href="../overview-summary.html">Overview</a></li>
+<li><a href="../giftflow/package-summary.html">Package</a></li>
+<li class="active">Class</li>
+<li><a href="../giftflow/package-tree.html">Tree</a></li>
+<li><a href="../overview-files.html">Files</a></li>
+<li><a href="../deprecated-list.html">Deprecated</a></li>
+<li><a href="../index-all.html">Index</a></li>
+</ul>
+</div>
+
+<div class="small_links">
+<a href="../index.html" target="_top">Frames</a>
+<a href="../giftflow/oauthserver.html" target="_top">No frames</a>
+</div>
+<div class="small_links">
+Summary: <a href="#summary_field">Field</a> | <a href="#summary_method">Method</a> | <a href="#summary_constr">Constr</a>
+Detail: <a href="#detail_field">Field</a> | <a href="#detail_method">Method</a> | <a href="#summary_constr">Constr</a>
+</div>
+<hr>
+
+<p id="footer">This document was generated by <a href="http://peej.github.com/phpdoctor/">PHPDoctor: The PHP Documentation Creator</a></p>
+
+</body>
+
+</html>

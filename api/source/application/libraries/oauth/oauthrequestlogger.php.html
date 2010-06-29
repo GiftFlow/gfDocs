@@ -1,0 +1,332 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+
+<html lang="en">
+<head>
+
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
+<meta name="generator" content="PHPDoctor 2RC4 (http://peej.github.com/phpdoctor/)">
+<meta name="when" content="Tue, 29 Jun 2010 21:10:10 +0000">
+
+<link rel="stylesheet" type="text/css" href="../../../../stylesheet.css">
+<link rel="start" href="../../../../overview-summary.html">
+
+<title>application/libraries/oauth/OAuthRequestLogger.php (GiftFlow API)</title>
+
+</head>
+<body id="file" onload="parent.document.title=document.title;">
+
+<div class="header">
+<h1>GiftFlow API</h1>
+<ul>
+<li><a href="../../../../overview-summary.html">Overview</a></li>
+<li>Package</li><li>Class</li><li>Tree</li><li><a href="../../../../overview-files.html">Files</a></li>
+<li><a href="../../../../deprecated-list.html">Deprecated</a></li>
+<li><a href="../../../../index-all.html">Index</a></li>
+</ul>
+</div>
+
+<div class="small_links">
+<a href="../../../../index.html" target="_top">Frames</a>
+<a href="../../../../source/application/libraries/oauth/oauthrequestlogger.php.html" target="_top">No frames</a>
+</div>
+<hr>
+
+<h1>application/libraries/oauth/OAuthRequestLogger.php</h1>
+<hr>
+
+<a name="line1"></a><pre><?php
+<a name="line2"></a>
+<a name="line3"></a>/**
+<a name="line4"></a> * Log OAuth requests
+<a name="line5"></a> * 
+<a name="line6"></a> * @version $Id: OAuthRequestLogger.php 55 2009-01-14 15:27:36Z scherpenisse $
+<a name="line7"></a> * @author Marc Worrell <marcw@pobox.com>
+<a name="line8"></a> * @date  Dec 7, 2007 12:22:43 PM
+<a name="line9"></a> * 
+<a name="line10"></a> * 
+<a name="line11"></a> * The MIT License
+<a name="line12"></a> * 
+<a name="line13"></a> * Copyright (c) 2007-2008 Mediamatic Lab
+<a name="line14"></a> * 
+<a name="line15"></a> * Permission is hereby granted, free of charge, to any person obtaining a copy
+<a name="line16"></a> * of this software and associated documentation files (the "Software"), to deal
+<a name="line17"></a> * in the Software without restriction, including without limitation the rights
+<a name="line18"></a> * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+<a name="line19"></a> * copies of the Software, and to permit persons to whom the Software is
+<a name="line20"></a> * furnished to do so, subject to the following conditions:
+<a name="line21"></a> * 
+<a name="line22"></a> * The above copyright notice and this permission notice shall be included in
+<a name="line23"></a> * all copies or substantial portions of the Software.
+<a name="line24"></a> * 
+<a name="line25"></a> * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+<a name="line26"></a> * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+<a name="line27"></a> * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+<a name="line28"></a> * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+<a name="line29"></a> * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+<a name="line30"></a> * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+<a name="line31"></a> * THE SOFTWARE.
+<a name="line32"></a> */
+<a name="line33"></a>
+<a name="line34"></a>class OAuthRequestLogger 
+<a name="line35"></a>{
+<a name="line36"></a>	static private $logging			= 0;
+<a name="line37"></a>	static private $enable_logging	= null;
+<a name="line38"></a>	static private $store_log		= null;
+<a name="line39"></a>	static private $note 			= '';
+<a name="line40"></a>	static private $user_id			= null;
+<a name="line41"></a>	static private $request_object	= null;
+<a name="line42"></a>	static private $sent			= null;
+<a name="line43"></a>	static private $received		= null;
+<a name="line44"></a>	static private $log				= array();
+<a name="line45"></a>	
+<a name="line46"></a>	/**
+<a name="line47"></a>	 * Start any logging, checks the system configuration if logging is needed.
+<a name="line48"></a>	 * 
+<a name="line49"></a>	 * @param OAuthRequest  $request_object
+<a name="line50"></a>	 */
+<a name="line51"></a>	static function start ( $request_object = null )
+<a name="line52"></a>	{
+<a name="line53"></a>		if (defined('OAUTH_LOG_REQUEST'))
+<a name="line54"></a>		{
+<a name="line55"></a>			if (is_null(OAuthRequestLogger::$enable_logging))
+<a name="line56"></a>			{
+<a name="line57"></a>				OAuthRequestLogger::$enable_logging = true;
+<a name="line58"></a>			}
+<a name="line59"></a>			if (is_null(OAuthRequestLogger::$store_log))
+<a name="line60"></a>			{
+<a name="line61"></a>				OAuthRequestLogger::$store_log = true;
+<a name="line62"></a>			}
+<a name="line63"></a>		}
+<a name="line64"></a>
+<a name="line65"></a>		if (OAuthRequestLogger::$enable_logging && !OAuthRequestLogger::$logging)
+<a name="line66"></a>		{
+<a name="line67"></a>			OAuthRequestLogger::$logging        = true;
+<a name="line68"></a>			OAuthRequestLogger::$request_object = $request_object;
+<a name="line69"></a>			ob_start();
+<a name="line70"></a>
+<a name="line71"></a>			// Make sure we flush our log entry when we stop the request (eg on an exception)
+<a name="line72"></a>			register_shutdown_function(array('OAuthRequestLogger','flush'));		
+<a name="line73"></a>		}
+<a name="line74"></a>	}
+<a name="line75"></a>	
+<a name="line76"></a>
+<a name="line77"></a>	/**
+<a name="line78"></a>	 * Force logging, needed for performing test connects independent from the debugging setting.
+<a name="line79"></a>	 * 
+<a name="line80"></a>	 * @param boolean  store_log		(optional) true to store the log in the db
+<a name="line81"></a>	 */
+<a name="line82"></a>	static function enableLogging ( $store_log = null )
+<a name="line83"></a>	{
+<a name="line84"></a>		OAuthRequestLogger::$enable_logging = true;
+<a name="line85"></a>		if (!is_null($store_log))
+<a name="line86"></a>		{
+<a name="line87"></a>			OAuthRequestLogger::$store_log = $store_log;
+<a name="line88"></a>		}
+<a name="line89"></a>	}	
+<a name="line90"></a>
+<a name="line91"></a>
+<a name="line92"></a>	/**
+<a name="line93"></a>	 * Logs the request to the database, sends any cached output.
+<a name="line94"></a>	 * Also called on shutdown, to make sure we always log the request being handled.
+<a name="line95"></a>	 */
+<a name="line96"></a>	static function flush ()
+<a name="line97"></a>	{
+<a name="line98"></a>		if (OAuthRequestLogger::$logging)
+<a name="line99"></a>		{
+<a name="line100"></a>			OAuthRequestLogger::$logging = false;
+<a name="line101"></a>
+<a name="line102"></a>			if (is_null(OAuthRequestLogger::$sent))
+<a name="line103"></a>			{
+<a name="line104"></a>				// What has been sent to the user-agent?
+<a name="line105"></a>				$data  = ob_get_contents();
+<a name="line106"></a>				if (strlen($data) > 0)
+<a name="line107"></a>				{
+<a name="line108"></a>					ob_end_flush();
+<a name="line109"></a>				}
+<a name="line110"></a>				elseif (ob_get_level())
+<a name="line111"></a>				{
+<a name="line112"></a>					ob_end_clean();
+<a name="line113"></a>				}
+<a name="line114"></a>				$hs    = headers_list();
+<a name="line115"></a>				$sent  = implode("\n", $hs) . "\n\n" . $data;
+<a name="line116"></a>			}
+<a name="line117"></a>			else
+<a name="line118"></a>			{
+<a name="line119"></a>				// The request we sent
+<a name="line120"></a>				$sent  = OAuthRequestLogger::$sent;
+<a name="line121"></a>			}
+<a name="line122"></a>			
+<a name="line123"></a>			if (is_null(OAuthRequestLogger::$received))
+<a name="line124"></a>			{
+<a name="line125"></a>				// Build the request we received
+<a name="line126"></a>				$hs0   = getallheaders();
+<a name="line127"></a>				$hs    = array();
+<a name="line128"></a>				foreach ($hs0 as $h => $v)
+<a name="line129"></a>				{
+<a name="line130"></a>					$hs[] = "$h: $v";
+<a name="line131"></a>				}
+<a name="line132"></a>
+<a name="line133"></a>				$data  = '';
+<a name="line134"></a>				$fh    = @fopen('php://input', 'r');
+<a name="line135"></a>				if ($fh)
+<a name="line136"></a>				{
+<a name="line137"></a>					while (!feof($fh))
+<a name="line138"></a>					{
+<a name="line139"></a>						$s = fread($fh, 1024);
+<a name="line140"></a>						if (is_string($s))
+<a name="line141"></a>						{
+<a name="line142"></a>							$data .= $s;
+<a name="line143"></a>						}
+<a name="line144"></a>					}
+<a name="line145"></a>					fclose($fh);
+<a name="line146"></a>				}
+<a name="line147"></a>				$received = implode("\n", $hs) . "\n\n" . $data;
+<a name="line148"></a>			}
+<a name="line149"></a>			else
+<a name="line150"></a>			{
+<a name="line151"></a>				// The answer we received
+<a name="line152"></a>				$received  = OAuthRequestLogger::$received;
+<a name="line153"></a>			}
+<a name="line154"></a>
+<a name="line155"></a>			// The request base string
+<a name="line156"></a>			if (OAuthRequestLogger::$request_object)
+<a name="line157"></a>			{
+<a name="line158"></a>				$base_string = OAuthRequestLogger::$request_object->signatureBaseString();
+<a name="line159"></a>			}
+<a name="line160"></a>			else
+<a name="line161"></a>			{
+<a name="line162"></a>				$base_string = '';
+<a name="line163"></a>			}
+<a name="line164"></a>
+<a name="line165"></a>			// Figure out to what keys we want to log this request
+<a name="line166"></a>			$keys = array();
+<a name="line167"></a>			if (OAuthRequestLogger::$request_object)
+<a name="line168"></a>			{
+<a name="line169"></a>				$consumer_key = OAuthRequestLogger::$request_object->getParam('oauth_consumer_key', true);
+<a name="line170"></a>				$token        = OAuthRequestLogger::$request_object->getParam('oauth_token',        true);
+<a name="line171"></a>
+<a name="line172"></a>				switch (get_class(OAuthRequestLogger::$request_object))
+<a name="line173"></a>				{
+<a name="line174"></a>				// tokens are access/request tokens by a consumer
+<a name="line175"></a>				case 'OAuthServer':
+<a name="line176"></a>				case 'OAuthRequestVerifier':
+<a name="line177"></a>					$keys['ocr_consumer_key'] = $consumer_key;
+<a name="line178"></a>					$keys['oct_token']        = $token;
+<a name="line179"></a>					break;
+<a name="line180"></a>
+<a name="line181"></a>				// tokens are access/request tokens to a server
+<a name="line182"></a>				case 'OAuthRequester':
+<a name="line183"></a>				case 'OAuthRequestSigner':
+<a name="line184"></a>					$keys['osr_consumer_key'] = $consumer_key;
+<a name="line185"></a>					$keys['ost_token']        = $token;
+<a name="line186"></a>					break;
+<a name="line187"></a>				}
+<a name="line188"></a>			}
+<a name="line189"></a>			
+<a name="line190"></a>			// Log the request
+<a name="line191"></a>			if (OAuthRequestLogger::$store_log)
+<a name="line192"></a>			{
+<a name="line193"></a>				$store = OAuthStore::instance();
+<a name="line194"></a>				$store->addLog($keys, $received, $sent, $base_string, OAuthRequestLogger::$note, OAuthRequestLogger::$user_id);
+<a name="line195"></a>			}
+<a name="line196"></a>			
+<a name="line197"></a>			OAuthRequestLogger::$log[] = array(
+<a name="line198"></a>					'keys'    		=> $keys,
+<a name="line199"></a>					'received'		=> $received,
+<a name="line200"></a>					'sent'			=> $sent,
+<a name="line201"></a>					'base_string'	=> $base_string,
+<a name="line202"></a>					'note'			=> OAuthRequestLogger::$note
+<a name="line203"></a>					);
+<a name="line204"></a>		}
+<a name="line205"></a>	}
+<a name="line206"></a>
+<a name="line207"></a>
+<a name="line208"></a>	/**
+<a name="line209"></a>	 * Add a note, used by the OAuthException to log all exceptions.
+<a name="line210"></a>	 * 
+<a name="line211"></a>	 * @param string note
+<a name="line212"></a>	 */
+<a name="line213"></a>	static function addNote ( $note )
+<a name="line214"></a>	{
+<a name="line215"></a>		OAuthRequestLogger::$note .= $note . "\n\n";
+<a name="line216"></a>	}
+<a name="line217"></a>
+<a name="line218"></a>	/**
+<a name="line219"></a>	 * Set the OAuth request object being used
+<a name="line220"></a>	 * 
+<a name="line221"></a>	 * @param OAuthRequest request_object
+<a name="line222"></a>	 */
+<a name="line223"></a>	static function setRequestObject ( $request_object )
+<a name="line224"></a>	{
+<a name="line225"></a>		OAuthRequestLogger::$request_object = $request_object;
+<a name="line226"></a>	}
+<a name="line227"></a>
+<a name="line228"></a>
+<a name="line229"></a>	/**
+<a name="line230"></a>	 * Set the relevant user (defaults to the current user)
+<a name="line231"></a>	 * 
+<a name="line232"></a>	 * @param int user_id
+<a name="line233"></a>	 */
+<a name="line234"></a>	static function setUser ( $user_id )
+<a name="line235"></a>	{
+<a name="line236"></a>		OAuthRequestLogger::$user_id = $user_id;
+<a name="line237"></a>	}
+<a name="line238"></a>	
+<a name="line239"></a>	
+<a name="line240"></a>	/**
+<a name="line241"></a>	 * Set the request we sent
+<a name="line242"></a>	 * 
+<a name="line243"></a>	 * @param string request
+<a name="line244"></a>	 */
+<a name="line245"></a>	static function setSent ( $request )
+<a name="line246"></a>	{
+<a name="line247"></a>		OAuthRequestLogger::$sent = $request;
+<a name="line248"></a>	}
+<a name="line249"></a>
+<a name="line250"></a>	/**
+<a name="line251"></a>	 * Set the reply we received
+<a name="line252"></a>	 * 
+<a name="line253"></a>	 * @param string request
+<a name="line254"></a>	 */
+<a name="line255"></a>	static function setReceived ( $reply )
+<a name="line256"></a>	{
+<a name="line257"></a>		OAuthRequestLogger::$received = $reply;
+<a name="line258"></a>	}
+<a name="line259"></a>	
+<a name="line260"></a>	
+<a name="line261"></a>	/**
+<a name="line262"></a>	 * Get the the log till now
+<a name="line263"></a>	 * 
+<a name="line264"></a>	 * @return array
+<a name="line265"></a>	 */
+<a name="line266"></a>	static function getLog ()
+<a name="line267"></a>	{
+<a name="line268"></a>		return OAuthRequestLogger::$log;
+<a name="line269"></a>	}
+<a name="line270"></a>}
+<a name="line271"></a>
+<a name="line272"></a>/* vi:set ts=4 sts=4 sw=4 binary noeol: */
+<a name="line273"></a>
+<a name="line274"></a>?></pre>
+<div class="header">
+<h1>GiftFlow API</h1>
+<ul>
+<li><a href="../../../../overview-summary.html">Overview</a></li>
+<li>Package</li><li>Class</li><li>Tree</li><li><a href="../../../../overview-files.html">Files</a></li>
+<li><a href="../../../../deprecated-list.html">Deprecated</a></li>
+<li><a href="../../../../index-all.html">Index</a></li>
+</ul>
+</div>
+
+<div class="small_links">
+<a href="../../../../index.html" target="_top">Frames</a>
+<a href="../../../../source/application/libraries/oauth/oauthrequestlogger.php.html" target="_top">No frames</a>
+</div>
+<hr>
+
+<p id="footer">This document was generated by <a href="http://peej.github.com/phpdoctor/">PHPDoctor: The PHP Documentation Creator</a></p>
+
+</body>
+
+</html>

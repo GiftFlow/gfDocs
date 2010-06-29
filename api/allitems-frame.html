@@ -6,7 +6,7 @@
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 
 <meta name="generator" content="PHPDoctor 2RC4 (http://peej.github.com/phpdoctor/)">
-<meta name="when" content="Sun, 20 Jun 2010 17:43:50 +0000">
+<meta name="when" content="Tue, 29 Jun 2010 21:10:08 +0000">
 
 <link rel="stylesheet" type="text/css" href="stylesheet.css">
 <link rel="start" href="overview-summary.html">
@@ -23,6 +23,8 @@
 <li><a href="app/good.html" target="main">Good</a></li>
 <li><a href="codeigniter/ci_db_oci8_driver.html" target="main">CI_DB_oci8_driver</a></li>
 <li><a href="codeigniter/ci_db_oci8_result.html" target="main">CI_DB_oci8_result</a></li>
+<li><a href="controllers/community.html" target="main">Community</a></li>
+<li><a href="controllers/find.html" target="main">Find</a></li>
 <li><a href="dmz/dm_datasetiterator.html" target="main">DM_DatasetIterator</a></li>
 <li><a href="dmz/dm_error_object.html" target="main">DM_Error_Object</a></li>
 <li><a href="giftflow/about.html" target="main">About</a></li>
@@ -106,23 +108,43 @@
 <li><a href="giftflow/dmz_simplecache.html" target="main">DMZ_SimpleCache</a></li>
 <li><a href="giftflow/datamapper.html" target="main">DataMapper</a></li>
 <li><a href="giftflow/datamapperextension.html" target="main">DataMapperExtension</a></li>
-<li><a href="giftflow/find.html" target="main">Find</a></li>
 <li><a href="giftflow/get.html" target="main">Get</a></li>
 <li><a href="giftflow/gift.html" target="main">Gift</a></li>
 <li><a href="giftflow/give.html" target="main">Give</a></li>
 <li><a href="giftflow/location.html" target="main">Location</a></li>
+<li><a href="giftflow/my_hooks.html" target="main">MY_Hooks</a></li>
 <li><a href="giftflow/mail.html" target="main">Mail</a></li>
 <li><a href="giftflow/market.html" target="main">Market</a></li>
 <li><a href="giftflow/member.html" target="main">Member</a></li>
 <li><a href="giftflow/message.html" target="main">Message</a></li>
 <li><a href="giftflow/message_delivery.html" target="main">Message_delivery</a></li>
 <li><a href="giftflow/model.html" target="main">Model</a></li>
+<li><a href="giftflow/oauthbodycontentdisposition.html" target="main">OAuthBodyContentDisposition</a></li>
+<li><a href="giftflow/oauthbodymultipartformdata.html" target="main">OAuthBodyMultipartFormdata</a></li>
+<li><a href="giftflow/oauthdiscovery.html" target="main">OAuthDiscovery</a></li>
+<li><a href="giftflow/oauthexception.html" target="main">OAuthException</a></li>
+<li><a href="giftflow/oauthrequest.html" target="main">OAuthRequest</a></li>
+<li><a href="giftflow/oauthrequestlogger.html" target="main">OAuthRequestLogger</a></li>
+<li><a href="giftflow/oauthrequestsigner.html" target="main">OAuthRequestSigner</a></li>
+<li><a href="giftflow/oauthrequestverifier.html" target="main">OAuthRequestVerifier</a></li>
+<li><a href="giftflow/oauthrequester.html" target="main">OAuthRequester</a></li>
+<li><a href="giftflow/oauthserver.html" target="main">OAuthServer</a></li>
+<li><a href="giftflow/oauthsignaturemethod.html" target="main">OAuthSignatureMethod</a></li>
+<li><a href="giftflow/oauthsignaturemethod_hmac_sha1.html" target="main">OAuthSignatureMethod_HMAC_SHA1</a></li>
+<li><a href="giftflow/oauthsignaturemethod_md5.html" target="main">OAuthSignatureMethod_MD5</a></li>
+<li><a href="giftflow/oauthsignaturemethod_plaintext.html" target="main">OAuthSignatureMethod_PLAINTEXT</a></li>
+<li><a href="giftflow/oauthsignaturemethod_rsa_sha1.html" target="main">OAuthSignatureMethod_RSA_SHA1</a></li>
+<li><a href="giftflow/oauthstore.html" target="main">OAuthStore</a></li>
+<li><a href="giftflow/oauthstoreabstract.html" target="main">OAuthStoreAbstract</a></li>
+<li><a href="giftflow/oauthstoreanymeta.html" target="main">OAuthStoreAnymeta</a></li>
+<li><a href="giftflow/oauthstoremysql.html" target="main">OAuthStoreMySQL</a></li>
 <li><a href="giftflow/photo.html" target="main">Photo</a></li>
 <li><a href="giftflow/role.html" target="main">Role</a></li>
 <li><a href="giftflow/root.html" target="main">Root</a></li>
 <li><a href="giftflow/scaffolding.html" target="main">Scaffolding</a></li>
 <li><a href="giftflow/tag.html" target="main">Tag</a></li>
 <li><a href="giftflow/template.html" target="main">Template</a></li>
+<li><a href="giftflow/term.html" target="main">Term</a></li>
 <li><a href="giftflow/thread.html" target="main">Thread</a></li>
 <li><a href="giftflow/transaction.html" target="main">Transaction</a></li>
 <li><a href="giftflow/user_setting.html" target="main">User_setting</a></li>
@@ -166,6 +188,9 @@
 <li><a href="giftflow/package-functions.html#anchor()" target="main">anchor</a></li>
 <li><a href="giftflow/package-functions.html#anchor_popup()" target="main">anchor_popup</a></li>
 <li><a href="giftflow/package-functions.html#ascii_to_entities()" target="main">ascii_to_entities</a></li>
+<li><a href="giftflow/package-functions.html#assert_logged_in()" target="main">assert_logged_in</a></li>
+<li><a href="giftflow/package-functions.html#assert_request_vars()" target="main">assert_request_vars</a></li>
+<li><a href="giftflow/package-functions.html#assert_request_vars_all()" target="main">assert_request_vars_all</a></li>
 <li><a href="giftflow/package-functions.html#auto_link()" target="main">auto_link</a></li>
 <li><a href="giftflow/package-functions.html#auto_typography()" target="main">auto_typography</a></li>
 <li><a href="giftflow/package-functions.html#base_url()" target="main">base_url</a></li>
@@ -217,6 +242,7 @@
 <li><a href="giftflow/package-functions.html#get_file_info()" target="main">get_file_info</a></li>
 <li><a href="giftflow/package-functions.html#get_filenames()" target="main">get_filenames</a></li>
 <li><a href="giftflow/package-functions.html#get_mime_by_extension()" target="main">get_mime_by_extension</a></li>
+<li><a href="giftflow/package-functions.html#getallheaders()" target="main">getallheaders</a></li>
 <li><a href="giftflow/package-functions.html#gmt_to_local()" target="main">gmt_to_local</a></li>
 <li><a href="giftflow/package-functions.html#good_header()" target="main">good_header</a></li>
 <li><a href="giftflow/package-functions.html#good_list()" target="main">good_list</a></li>
@@ -247,6 +273,8 @@
 <li><a href="giftflow/package-functions.html#nl2br_except_pre()" target="main">nl2br_except_pre</a></li>
 <li><a href="giftflow/package-functions.html#notify()" target="main">notify</a></li>
 <li><a href="giftflow/package-functions.html#now()" target="main">now</a></li>
+<li><a href="giftflow/package-functions.html#oauth_assert_handler()" target="main">oauth_assert_handler</a></li>
+<li><a href="giftflow/package-functions.html#oauth_test()" target="main">oauth_test</a></li>
 <li><a href="giftflow/package-functions.html#octal_permissions()" target="main">octal_permissions</a></li>
 <li><a href="giftflow/package-functions.html#ol()" target="main">ol</a></li>
 <li><a href="giftflow/package-functions.html#parse_smileys()" target="main">parse_smileys</a></li>
@@ -263,6 +291,7 @@
 <li><a href="giftflow/package-functions.html#result_row()" target="main">result_row</a></li>
 <li><a href="giftflow/package-functions.html#safe_mailto()" target="main">safe_mailto</a></li>
 <li><a href="giftflow/package-functions.html#send_email()" target="main">send_email</a></li>
+<li><a href="giftflow/package-functions.html#session_smarty()" target="main">session_smarty</a></li>
 <li><a href="giftflow/package-functions.html#set_checkbox()" target="main">set_checkbox</a></li>
 <li><a href="giftflow/package-functions.html#set_cookie()" target="main">set_cookie</a></li>
 <li><a href="giftflow/package-functions.html#set_radio()" target="main">set_radio</a></li>
@@ -298,6 +327,12 @@
 <li><a href="giftflow/package-functions.html#word_wrap()" target="main">word_wrap</a></li>
 <li><a href="giftflow/package-functions.html#write_file()" target="main">write_file</a></li>
 <li><a href="giftflow/package-functions.html#xml_convert()" target="main">xml_convert</a></li>
+<li><a href="giftflow/package-functions.html#xrds_oauth_service_uris()" target="main">xrds_oauth_service_uris</a></li>
+<li><a href="giftflow/package-functions.html#xrds_parse()" target="main">xrds_parse</a></li>
+<li><a href="giftflow/package-functions.html#xrds_priority()" target="main">xrds_priority</a></li>
+<li><a href="giftflow/package-functions.html#xrds_priority_flatten()" target="main">xrds_priority_flatten</a></li>
+<li><a href="giftflow/package-functions.html#xrds_xrd_oauth()" target="main">xrds_xrd_oauth</a></li>
+<li><a href="giftflow/package-functions.html#xrds_xrd_oauth_service()" target="main">xrds_xrd_oauth_service</a></li>
 <li><a href="giftflow/package-functions.html#xss_clean()" target="main">xss_clean</a></li>
 </ul>
 
@@ -318,12 +353,17 @@
 <li><a href="giftflow/package-globals.html#FOPEN_WRITE_CREATE_DESTRUCTIVE" target="main">FOPEN_WRITE_CREATE_DESTRUCTIVE</a></li>
 <li><a href="giftflow/package-globals.html#FOPEN_WRITE_CREATE_STRICT" target="main">FOPEN_WRITE_CREATE_STRICT</a></li>
 <li><a href="giftflow/package-globals.html#G" target="main">G</a></li>
+<li><a href="giftflow/package-globals.html#GLOBALS" target="main">GLOBALS</a></li>
 <li><a href="giftflow/package-globals.html#L" target="main">L</a></li>
 <li><a href="giftflow/package-globals.html#N" target="main">N</a></li>
+<li><a href="giftflow/package-globals.html#PASSWORD" target="main">PASSWORD</a></li>
 <li><a href="giftflow/package-globals.html#PHP_EOL" target="main">PHP_EOL</a></li>
 <li><a href="giftflow/package-globals.html#R" target="main">R</a></li>
 <li><a href="giftflow/package-globals.html#THUMBLIB_PLUGIN_PATH" target="main">THUMBLIB_PLUGIN_PATH</a></li>
 <li><a href="giftflow/package-globals.html#U" target="main">U</a></li>
+<li><a href="giftflow/package-globals.html#USERNAME" target="main">USERNAME</a></li>
+<li><a href="giftflow/package-globals.html#_POST" target="main">_POST</a></li>
+<li><a href="giftflow/package-globals.html#_REQUEST" target="main">_REQUEST</a></li>
 <li><a href="giftflow/package-globals.html#_SERVER" target="main">_SERVER</a></li>
 <li><a href="giftflow/package-globals.html#_doctypes" target="main">_doctypes</a></li>
 <li><a href="giftflow/package-globals.html#action" target="main">action</a></li>
@@ -336,10 +376,12 @@
 <li><a href="giftflow/package-globals.html#alert_error" target="main">alert_error</a></li>
 <li><a href="giftflow/package-globals.html#alert_success" target="main">alert_success</a></li>
 <li><a href="giftflow/package-globals.html#array" target="main">array</a></li>
+<li><a href="giftflow/package-globals.html#authorized" target="main">authorized</a></li>
 <li><a href="giftflow/package-globals.html#autoload" target="main">autoload</a></li>
 <li><a href="giftflow/package-globals.html#base_uri" target="main">base_uri</a></li>
 <li><a href="giftflow/package-globals.html#breadcrumbs" target="main">breadcrumbs</a></li>
 <li><a href="giftflow/package-globals.html#browsers" target="main">browsers</a></li>
+<li><a href="giftflow/package-globals.html#c" target="main">c</a></li>
 <li><a href="giftflow/package-globals.html#classes" target="main">classes</a></li>
 <li><a href="giftflow/package-globals.html#completed_gifts" target="main">completed_gifts</a></li>
 <li><a href="giftflow/package-globals.html#completed_requests" target="main">completed_requests</a></li>
@@ -351,6 +393,7 @@
 <li><a href="giftflow/package-globals.html#db" target="main">db</a></li>
 <li><a href="giftflow/package-globals.html#default" target="main">default</a></li>
 <li><a href="giftflow/package-globals.html#display" target="main">display</a></li>
+<li><a href="giftflow/package-globals.html#e" target="main">e</a></li>
 <li><a href="giftflow/package-globals.html#error" target="main">error</a></li>
 <li><a href="giftflow/package-globals.html#errors" target="main">errors</a></li>
 <li><a href="giftflow/package-globals.html#f" target="main">f</a></li>
@@ -375,12 +418,16 @@
 <li><a href="giftflow/package-globals.html#id" target="main">id</a></li>
 <li><a href="giftflow/package-globals.html#identity" target="main">identity</a></li>
 <li><a href="giftflow/package-globals.html#inbox" target="main">inbox</a></li>
+<li><a href="giftflow/package-globals.html#info" target="main">info</a></li>
+<li><a href="giftflow/package-globals.html#is_gift" target="main">is_gift</a></li>
 <li><a href="giftflow/package-globals.html#item" target="main">item</a></li>
 <li><a href="giftflow/package-globals.html#js" target="main">js</a></li>
+<li><a href="giftflow/package-globals.html#key" target="main">key</a></li>
 <li><a href="giftflow/package-globals.html#keyword" target="main">keyword</a></li>
 <li><a href="giftflow/package-globals.html#label_for" target="main">label_for</a></li>
 <li><a href="giftflow/package-globals.html#lang" target="main">lang</a></li>
 <li><a href="giftflow/package-globals.html#line" target="main">line</a></li>
+<li><a href="giftflow/package-globals.html#links" target="main">links</a></li>
 <li><a href="giftflow/package-globals.html#location" target="main">location</a></li>
 <li><a href="giftflow/package-globals.html#location_select" target="main">location_select</a></li>
 <li><a href="giftflow/package-globals.html#locations" target="main">locations</a></li>
@@ -397,17 +444,18 @@
 <li><a href="giftflow/package-globals.html#obj" target="main">obj</a></li>
 <li><a href="giftflow/package-globals.html#object" target="main">object</a></li>
 <li><a href="giftflow/package-globals.html#options" target="main">options</a></li>
+<li><a href="giftflow/package-globals.html#p" target="main">p</a></li>
 <li><a href="giftflow/package-globals.html#page" target="main">page</a></li>
 <li><a href="giftflow/package-globals.html#paginate" target="main">paginate</a></li>
 <li><a href="giftflow/package-globals.html#photo" target="main">photo</a></li>
 <li><a href="giftflow/package-globals.html#photos" target="main">photos</a></li>
 <li><a href="giftflow/package-globals.html#platforms" target="main">platforms</a></li>
 <li><a href="giftflow/package-globals.html#profile" target="main">profile</a></li>
+<li><a href="giftflow/package-globals.html#ps" target="main">ps</a></li>
 <li><a href="giftflow/package-globals.html#query" target="main">query</a></li>
 <li><a href="giftflow/package-globals.html#recaptcha" target="main">recaptcha</a></li>
 <li><a href="giftflow/package-globals.html#redirect" target="main">redirect</a></li>
 <li><a href="giftflow/package-globals.html#request" target="main">request</a></li>
-<li><a href="giftflow/package-globals.html#requested" target="main">requested</a></li>
 <li><a href="giftflow/package-globals.html#requests" target="main">requests</a></li>
 <li><a href="giftflow/package-globals.html#required" target="main">required</a></li>
 <li><a href="giftflow/package-globals.html#reset_button" target="main">reset_button</a></li>
@@ -422,9 +470,13 @@
 <li><a href="giftflow/package-globals.html#scaff_no_data" target="main">scaff_no_data</a></li>
 <li><a href="giftflow/package-globals.html#section_title" target="main">section_title</a></li>
 <li><a href="giftflow/package-globals.html#segment" target="main">segment</a></li>
+<li><a href="giftflow/package-globals.html#server" target="main">server</a></li>
 <li><a href="giftflow/package-globals.html#severity" target="main">severity</a></li>
+<li><a href="giftflow/package-globals.html#smarty" target="main">smarty</a></li>
 <li><a href="giftflow/package-globals.html#smileys" target="main">smileys</a></li>
+<li><a href="giftflow/package-globals.html#sql" target="main">sql</a></li>
 <li><a href="giftflow/package-globals.html#status" target="main">status</a></li>
+<li><a href="giftflow/package-globals.html#store" target="main">store</a></li>
 <li><a href="giftflow/package-globals.html#style" target="main">style</a></li>
 <li><a href="giftflow/package-globals.html#tags" target="main">tags</a></li>
 <li><a href="giftflow/package-globals.html#theme" target="main">theme</a></li>

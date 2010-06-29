@@ -1,0 +1,930 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+
+<html lang="en">
+<head>
+
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
+<meta name="generator" content="PHPDoctor 2RC4 (http://peej.github.com/phpdoctor/)">
+<meta name="when" content="Tue, 29 Jun 2010 21:10:09 +0000">
+
+<link rel="stylesheet" type="text/css" href="../stylesheet.css">
+<link rel="start" href="../overview-summary.html">
+
+<title>OAuthStoreMySQL (GiftFlow API)</title>
+
+</head>
+<body id="definition" onload="parent.document.title=document.title;">
+
+<div class="header">
+<h1>GiftFlow API</h1>
+<ul>
+<li><a href="../overview-summary.html">Overview</a></li>
+<li><a href="../giftflow/package-summary.html">Package</a></li>
+<li class="active">Class</li>
+<li><a href="../giftflow/package-tree.html">Tree</a></li>
+<li><a href="../overview-files.html">Files</a></li>
+<li><a href="../deprecated-list.html">Deprecated</a></li>
+<li><a href="../index-all.html">Index</a></li>
+</ul>
+</div>
+
+<div class="small_links">
+<a href="../index.html" target="_top">Frames</a>
+<a href="../giftflow/oauthstoremysql.html" target="_top">No frames</a>
+</div>
+<div class="small_links">
+Summary: <a href="#summary_field">Field</a> | <a href="#summary_method">Method</a> | <a href="#summary_constr">Constr</a>
+Detail: <a href="#detail_field">Field</a> | <a href="#detail_method">Method</a> | <a href="#summary_constr">Constr</a>
+</div>
+<hr>
+
+<div class="qualifiedName">GiftFlow\OAuthStoreMySQL</div>
+<a href="../source/application/libraries/oauth/store/oauthstoremysql.php.html#line39" class="location">application/libraries/oauth/store/OAuthStoreMySQL.php at line 39</a>
+
+<h1>Class OAuthStoreMySQL</h1>
+
+<pre class="tree"><a href="../giftflow/oauthstoreabstract.html">OAuthStoreAbstract</a><br>    └─<strong>OAuthStoreMySQL</strong><br /></pre>
+
+<hr>
+
+<p class="signature">public  class <strong>OAuthStoreMySQL</strong><br>extends <a href="../giftflow/oauthstoreabstract.html">OAuthStoreAbstract</a>
+
+</p>
+
+<div class="comment" id="overview_description"><p>Storage container for the oauth credentials, both server and consumer side.
+Based on MySQL</p></div>
+
+<dl>
+<dt>Version:</dt>
+<dd>$Id: OAuthStoreMySQL.php 64 2009-08-16 19:37:00Z marcw@pobox.com $</dd>
+<dt>Author:</dt>
+<dd>Marc Worrell <marcw@pobox.com></dd>
+<dt>Date:</dt>
+<dd>Nov 16, 2007 4:03:30 PM The MIT License Copyright (c) 2007-2008 Mediamatic Lab Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions: The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software. THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.</dd>
+</dl>
+<hr>
+
+<table id="summary_field">
+<tr><th colspan="2">Field Summary</th></tr>
+<tr>
+<td class="type">protected  mixed</td>
+<td class="description"><p class="name"><a href="#max_request_token_ttl">$max_request_token_ttl</a></p><p class="description">Default ttl for request tokens</p></td>
+</tr>
+<tr>
+<td class="type">protected  mixed</td>
+<td class="description"><p class="name"><a href="#max_timestamp_skew">$max_timestamp_skew</a></p><p class="description">Maximum delta a timestamp may be off from a previous timestamp.
+</p></td>
+</tr>
+<tr>
+<td class="type">protected  mixed</td>
+<td class="description"><p class="name"><a href="#sql_args">$sql_args</a></p><p class="description">The MySQL connection</p></td>
+</tr>
+</table>
+
+<table id="summary_method">
+<tr><th colspan="2">Method Summary</th></tr>
+<tr>
+<td class="type"> void</td>
+<td class="description"><p class="name"><a href="#__construct()">__construct</a>(array options)</p><p class="description">Construct the OAuthStoreMySQL.
+</p></td>
+</tr>
+<tr>
+<td class="type"> array</td>
+<td class="description"><p class="name"><a href="#addConsumerRequestToken()">addConsumerRequestToken</a>(string consumer_key, array options)</p><p class="description">Add an unautorized request token to our server.</p></td>
+</tr>
+<tr>
+<td class="type"> void</td>
+<td class="description"><p class="name"><a href="#addLog()">addLog</a>(array keys, string received, string sent, string base_string, string notes, mixed user_id, int (optional))</p><p class="description">Add an entry to the log table</p></td>
+</tr>
+<tr>
+<td class="type"> void</td>
+<td class="description"><p class="name"><a href="#addServerToken()">addServerToken</a>(string consumer_key, string token_type, string token, string token_secret, int user_id, array options)</p><p class="description">Add a request token we obtained from a server.</p></td>
+</tr>
+<tr>
+<td class="type"> void</td>
+<td class="description"><p class="name"><a href="#authorizeConsumerRequestToken()">authorizeConsumerRequestToken</a>(string token, int user_id, string referrer_host)</p><p class="description">Upgrade a request token to be an authorized request token.</p></td>
+</tr>
+<tr>
+<td class="type"> void</td>
+<td class="description"><p class="name"><a href="#checkServerNonce()">checkServerNonce</a>(string consumer_key, string token, int timestamp, string nonce)</p><p class="description">Check an nonce/timestamp combination. </p></td>
+</tr>
+<tr>
+<td class="type"> int</td>
+<td class="description"><p class="name"><a href="#countConsumerAccessTokens()">countConsumerAccessTokens</a>(string consumer_key)</p><p class="description">Count the consumer access tokens for the given consumer.</p></td>
+</tr>
+<tr>
+<td class="type"> int</td>
+<td class="description"><p class="name"><a href="#countServerTokens()">countServerTokens</a>(string consumer_key)</p><p class="description">Count how many tokens we have for the given server</p></td>
+</tr>
+<tr>
+<td class="type"> void</td>
+<td class="description"><p class="name"><a href="#deleteConsumer()">deleteConsumer</a>(string consumer_key, int user_id, boolean user_is_admin)</p><p class="description">Delete a consumer key. </p></td>
+</tr>
+<tr>
+<td class="type"> void</td>
+<td class="description"><p class="name"><a href="#deleteConsumerAccessToken()">deleteConsumerAccessToken</a>(string token, int user_id, boolean user_is_admin)</p><p class="description">Delete a consumer access token.</p></td>
+</tr>
+<tr>
+<td class="type"> void</td>
+<td class="description"><p class="name"><a href="#deleteConsumerRequestToken()">deleteConsumerRequestToken</a>(string token)</p><p class="description">Delete a consumer token. </p></td>
+</tr>
+<tr>
+<td class="type"> void</td>
+<td class="description"><p class="name"><a href="#deleteServer()">deleteServer</a>(string consumer_key, int user_id, boolean user_is_admin)</p><p class="description">Delete a server key. </p></td>
+</tr>
+<tr>
+<td class="type"> void</td>
+<td class="description"><p class="name"><a href="#deleteServerToken()">deleteServerToken</a>(string consumer_key, string token, int user_id, boolean user_is_admin)</p><p class="description">Delete a token we obtained from a server.</p></td>
+</tr>
+<tr>
+<td class="type"> array</td>
+<td class="description"><p class="name"><a href="#exchangeConsumerRequestForAccessToken()">exchangeConsumerRequestForAccessToken</a>(string token, array options)</p><p class="description">Exchange an authorized request token for new access token.</p></td>
+</tr>
+<tr>
+<td class="type"> array</td>
+<td class="description"><p class="name"><a href="#getConsumer()">getConsumer</a>(string consumer_key, int user_id, boolean user_is_admin)</p><p class="description">Fetch a consumer of this server, by consumer_key.</p></td>
+</tr>
+<tr>
+<td class="type"> array</td>
+<td class="description"><p class="name"><a href="#getConsumerAccessToken()">getConsumerAccessToken</a>(string token, int user_id)</p><p class="description">Fetch the consumer access token, by access token.</p></td>
+</tr>
+<tr>
+<td class="type"> array</td>
+<td class="description"><p class="name"><a href="#getConsumerRequestToken()">getConsumerRequestToken</a>(string token)</p><p class="description">Fetch the consumer request token, by request token.</p></td>
+</tr>
+<tr>
+<td class="type"> string</td>
+<td class="description"><p class="name"><a href="#getConsumerStatic()">getConsumerStatic</a>()</p><p class="description">Fetch the static consumer key for this provider. </p></td>
+</tr>
+<tr>
+<td class="type"> array</td>
+<td class="description"><p class="name"><a href="#getSecretsForSignature()">getSecretsForSignature</a>(string uri, int user_id, string name)</p><p class="description">Find the server details for signing a request, always looks for an access token.
+</p></td>
+</tr>
+<tr>
+<td class="type"> array</td>
+<td class="description"><p class="name"><a href="#getSecretsForVerify()">getSecretsForVerify</a>(string consumer_key, string token, string token_type)</p><p class="description">Find stored credentials for the consumer key and token. </p></td>
+</tr>
+<tr>
+<td class="type"> array</td>
+<td class="description"><p class="name"><a href="#getServer()">getServer</a>(string consumer_key, int user_id, boolean user_is_admin)</p><p class="description">Get a server from the consumer registry using the consumer key</p></td>
+</tr>
+<tr>
+<td class="type"> array</td>
+<td class="description"><p class="name"><a href="#getServerForUri()">getServerForUri</a>(string uri, int user_id)</p><p class="description">Find the server details that might be used for a requestThe consumer_key must belong to the user or be public (user id is null)</p></td>
+</tr>
+<tr>
+<td class="type"> array</td>
+<td class="description"><p class="name"><a href="#getServerToken()">getServerToken</a>(string consumer_key, string token, int user_id)</p><p class="description">Get a specific server token for the given user</p></td>
+</tr>
+<tr>
+<td class="type"> array</td>
+<td class="description"><p class="name"><a href="#getServerTokenSecrets()">getServerTokenSecrets</a>(string consumer_key, string token, string token_type, int user_id, string name)</p><p class="description">Get the token and token secret we obtained from a server.</p></td>
+</tr>
+<tr>
+<td class="type"> void</td>
+<td class="description"><p class="name"><a href="#install()">install</a>()</p><p class="description">Initialise the database</p></td>
+</tr>
+<tr>
+<td class="type"> array</td>
+<td class="description"><p class="name"><a href="#listConsumerTokens()">listConsumerTokens</a>(int user_id)</p><p class="description">Fetch a list of all consumer tokens accessing the account of the given user.</p></td>
+</tr>
+<tr>
+<td class="type"> array</td>
+<td class="description"><p class="name"><a href="#listConsumers()">listConsumers</a>(int user_id)</p><p class="description">Fetch a list of all consumer keys, secrets etc.
+</p></td>
+</tr>
+<tr>
+<td class="type"> array</td>
+<td class="description"><p class="name"><a href="#listLog()">listLog</a>(array options, int user_id)</p><p class="description">Get a page of entries from the log. </p></td>
+</tr>
+<tr>
+<td class="type"> array</td>
+<td class="description"><p class="name"><a href="#listServerTokens()">listServerTokens</a>(mixed user_id, int usr_id)</p><p class="description">Get a list of all server token this user has access to.</p></td>
+</tr>
+<tr>
+<td class="type"> array</td>
+<td class="description"><p class="name"><a href="#listServers()">listServers</a>(string q, int user_id)</p><p class="description">Get a list of all consumers from the consumer registry.
+</p></td>
+</tr>
+<tr>
+<td class="type">protected  void</td>
+<td class="description"><p class="name"><a href="#query()">query</a>(string sql, vararg arguments)</p><p class="description">Perform a query, ignore the results</p></td>
+</tr>
+<tr>
+<td class="type">protected  void</td>
+<td class="description"><p class="name"><a href="#query_affected_rows()">query_affected_rows</a>()</p><p class="description">Return the number of rows affected in the last query</p></td>
+</tr>
+<tr>
+<td class="type">protected  array</td>
+<td class="description"><p class="name"><a href="#query_all_assoc()">query_all_assoc</a>(string sql, vararg arguments)</p><p class="description">Perform a query, ignore the results</p></td>
+</tr>
+<tr>
+<td class="type">protected  int</td>
+<td class="description"><p class="name"><a href="#query_insert_id()">query_insert_id</a>()</p><p class="description">Return the id of the last inserted row</p></td>
+</tr>
+<tr>
+<td class="type">protected  mixed</td>
+<td class="description"><p class="name"><a href="#query_one()">query_one</a>(string sql, vararg arguments)</p><p class="description">Perform a query, return the first column of the first row</p></td>
+</tr>
+<tr>
+<td class="type">protected  array</td>
+<td class="description"><p class="name"><a href="#query_row()">query_row</a>(string sql, vararg arguments)</p><p class="description">Perform a query, return the first row</p></td>
+</tr>
+<tr>
+<td class="type">protected  array</td>
+<td class="description"><p class="name"><a href="#query_row_assoc()">query_row_assoc</a>(string sql, vararg arguments)</p><p class="description">Perform a query, return the first row</p></td>
+</tr>
+<tr>
+<td class="type"> void</td>
+<td class="description"><p class="name"><a href="#setConsumerAccessTokenTtl()">setConsumerAccessTokenTtl</a>(string token, mixed token_ttl, int ttl)</p><p class="description">Set the ttl of a consumer access token. </p></td>
+</tr>
+<tr>
+<td class="type"> void</td>
+<td class="description"><p class="name"><a href="#setServerTokenTtl()">setServerTokenTtl</a>(string consumer_key, string token, int token_ttl)</p><p class="description">Set the ttl of a server access token. </p></td>
+</tr>
+<tr>
+<td class="type">protected  void</td>
+<td class="description"><p class="name"><a href="#sql_errcheck()">sql_errcheck</a>(mixed sql)</p></td>
+</tr>
+<tr>
+<td class="type">protected  void</td>
+<td class="description"><p class="name"><a href="#sql_escape_string()">sql_escape_string</a>(mixed s)</p></td>
+</tr>
+<tr>
+<td class="type">protected  void</td>
+<td class="description"><p class="name"><a href="#sql_printf()">sql_printf</a>(mixed args)</p></td>
+</tr>
+<tr>
+<td class="type"> string</td>
+<td class="description"><p class="name"><a href="#updateConsumer()">updateConsumer</a>(array consumer, int user_id, boolean user_is_admin)</p><p class="description">Insert/update a new consumer with this server (we will be the server)
+When this is a new consumer, then also generate the consumer key and secret.
+</p></td>
+</tr>
+<tr>
+<td class="type"> consumer_key</td>
+<td class="description"><p class="name"><a href="#updateServer()">updateServer</a>(array server, int user_id, boolean user_is_admin)</p><p class="description">Register or update a server for our site (we will be the consumer)(This is the registry at the consumers, registering servers ;-) )</p></td>
+</tr>
+</table>
+
+<table class="inherit">
+<tr><th colspan="2">Methods inherited from GiftFlow\OAuthStoreAbstract</th></tr>
+<tr><td><a href="../giftflow/oauthstoreabstract.html#addConsumerRequestToken()">addConsumerRequestToken</a>, <a href="../giftflow/oauthstoreabstract.html#addLog()">addLog</a>, <a href="../giftflow/oauthstoreabstract.html#addServerToken()">addServerToken</a>, <a href="../giftflow/oauthstoreabstract.html#authorizeConsumerRequestToken()">authorizeConsumerRequestToken</a>, <a href="../giftflow/oauthstoreabstract.html#checkServerNonce()">checkServerNonce</a>, <a href="../giftflow/oauthstoreabstract.html#countConsumerAccessTokens()">countConsumerAccessTokens</a>, <a href="../giftflow/oauthstoreabstract.html#countServerTokens()">countServerTokens</a>, <a href="../giftflow/oauthstoreabstract.html#deleteConsumer()">deleteConsumer</a>, <a href="../giftflow/oauthstoreabstract.html#deleteConsumerAccessToken()">deleteConsumerAccessToken</a>, <a href="../giftflow/oauthstoreabstract.html#deleteConsumerRequestToken()">deleteConsumerRequestToken</a>, <a href="../giftflow/oauthstoreabstract.html#deleteServer()">deleteServer</a>, <a href="../giftflow/oauthstoreabstract.html#deleteServerToken()">deleteServerToken</a>, <a href="../giftflow/oauthstoreabstract.html#exchangeConsumerRequestForAccessToken()">exchangeConsumerRequestForAccessToken</a>, <a href="../giftflow/oauthstoreabstract.html#generateKey()">generateKey</a>, <a href="../giftflow/oauthstoreabstract.html#getConsumer()">getConsumer</a>, <a href="../giftflow/oauthstoreabstract.html#getConsumerAccessToken()">getConsumerAccessToken</a>, <a href="../giftflow/oauthstoreabstract.html#getConsumerRequestToken()">getConsumerRequestToken</a>, <a href="../giftflow/oauthstoreabstract.html#getConsumerStatic()">getConsumerStatic</a>, <a href="../giftflow/oauthstoreabstract.html#getSecretsForSignature()">getSecretsForSignature</a>, <a href="../giftflow/oauthstoreabstract.html#getSecretsForVerify()">getSecretsForVerify</a>, <a href="../giftflow/oauthstoreabstract.html#getServer()">getServer</a>, <a href="../giftflow/oauthstoreabstract.html#getServerForUri()">getServerForUri</a>, <a href="../giftflow/oauthstoreabstract.html#getServerToken()">getServerToken</a>, <a href="../giftflow/oauthstoreabstract.html#getServerTokenSecrets()">getServerTokenSecrets</a>, <a href="../giftflow/oauthstoreabstract.html#install()">install</a>, <a href="../giftflow/oauthstoreabstract.html#isUTF8()">isUTF8</a>, <a href="../giftflow/oauthstoreabstract.html#listConsumerTokens()">listConsumerTokens</a>, <a href="../giftflow/oauthstoreabstract.html#listConsumers()">listConsumers</a>, <a href="../giftflow/oauthstoreabstract.html#listLog()">listLog</a>, <a href="../giftflow/oauthstoreabstract.html#listServerTokens()">listServerTokens</a>, <a href="../giftflow/oauthstoreabstract.html#listServers()">listServers</a>, <a href="../giftflow/oauthstoreabstract.html#makeUTF8()">makeUTF8</a>, <a href="../giftflow/oauthstoreabstract.html#setConsumerAccessTokenTtl()">setConsumerAccessTokenTtl</a>, <a href="../giftflow/oauthstoreabstract.html#updateConsumer()">updateConsumer</a>, <a href="../giftflow/oauthstoreabstract.html#updateServer()">updateServer</a></td></tr></table>
+
+<h2 id="detail_field">Field Detail</h2>
+<a href="../source/application/libraries/oauth/store/oauthstoremysql.php.html#line56" class="location">application/libraries/oauth/store/OAuthStoreMySQL.php at line 56</a>
+
+<h3 id="max_request_token_ttl">max_request_token_ttl</h3>
+<code class="signature">protected  mixed <strong>$max_request_token_ttl</strong> = 3600</code>
+<div class="details">
+<p>Default ttl for request tokens</p></div>
+
+<hr>
+
+<a href="../source/application/libraries/oauth/store/oauthstoremysql.php.html#line51" class="location">application/libraries/oauth/store/OAuthStoreMySQL.php at line 51</a>
+
+<h3 id="max_timestamp_skew">max_timestamp_skew</h3>
+<code class="signature">protected  mixed <strong>$max_timestamp_skew</strong> = 600</code>
+<div class="details">
+<p>Maximum delta a timestamp may be off from a previous timestamp.
+Allows multiple consumers with some clock skew to work with the same token.
+Unit is seconds, default max skew is 10 minutes.</p></div>
+
+<hr>
+
+<a href="../source/application/libraries/oauth/store/oauthstoremysql.php.html#line44" class="location">application/libraries/oauth/store/OAuthStoreMySQL.php at line 44</a>
+
+<h3 id="sql_args">sql_args</h3>
+<code class="signature">protected  mixed <strong>$sql_args</strong> = null</code>
+<div class="details">
+<p>The MySQL connection</p></div>
+
+<hr>
+
+<h2 id="detail_method">Method Detail</h2><div class="method_detail">
+<div class='method'><a href="../source/application/libraries/oauth/store/oauthstoremysql.php.html#line67" class="location">application/libraries/oauth/store/OAuthStoreMySQL.php at line 67</a>
+
+<h3 id="__construct()">__construct</h3>
+<code class="signature">public  void <strong>__construct</strong>(array options)</code>
+<div class="details">
+<p>Construct the OAuthStoreMySQL.
+In the options you have to supply either:
+- server, username, password and database (for a mysql_connect)
+- conn (for the connection to be used)</p></div></div>
+
+
+
+<div class='method'><a href="../source/application/libraries/oauth/store/oauthstoremysql.php.html#line1184" class="location">application/libraries/oauth/store/OAuthStoreMySQL.php at line 1184</a>
+
+<h3 id="addConsumerRequestToken()">addConsumerRequestToken</h3>
+<code class="signature">public  array <strong>addConsumerRequestToken</strong>(string consumer_key, array options)</code>
+<div class="details">
+<p>Add an unautorized request token to our server.</p><dl>
+<dt>Parameters:</dt>
+<dd></dd>
+<dd>options - (eg. token_ttl)</dd>
+<dt>Returns:</dt>
+<dd>(token, token_secret)</dd>
+</dl>
+</div></div>
+
+
+
+<div class='method'><a href="../source/application/libraries/oauth/store/oauthstoremysql.php.html#line1582" class="location">application/libraries/oauth/store/OAuthStoreMySQL.php at line 1582</a>
+
+<h3 id="addLog()">addLog</h3>
+<code class="signature">public  void <strong>addLog</strong>(array keys, string received, string sent, string base_string, string notes, mixed user_id, int (optional))</code>
+<div class="details">
+<p>Add an entry to the log table</p><dl>
+<dt>Parameters:</dt>
+<dd>keys - (osr_consumer_key, ost_token, ocr_consumer_key, oct_token)</dd>
+<dd></dd>
+<dd></dd>
+<dd></dd>
+<dd></dd>
+<dd>(optional) - user_id</dd>
+</dl>
+</div></div>
+
+
+
+<div class='method'><a href="../source/application/libraries/oauth/store/oauthstoremysql.php.html#line308" class="location">application/libraries/oauth/store/OAuthStoreMySQL.php at line 308</a>
+
+<h3 id="addServerToken()">addServerToken</h3>
+<code class="signature">public  void <strong>addServerToken</strong>(string consumer_key, string token_type, string token, string token_secret, int user_id, array options)</code>
+<div class="details">
+<p>Add a request token we obtained from a server.</p><dl>
+<dt>Todo:</dt>
+<dd>remove old tokens for this user and this ocr_id</dd>
+<dt>Parameters:</dt>
+<dd>consumer_key - key of the server in the consumer registry</dd>
+<dd>token_type - one of 'request' or 'access'</dd>
+<dd></dd>
+<dd></dd>
+<dd>user_id - the user owning the token</dd>
+<dd>options - extra options, name and token_ttl</dd>
+<dt>Exception:</dt>
+<dd>OAuthException when server is not known</dd>
+<dd>OAuthException when we received a duplicate token</dd>
+</dl>
+</div></div>
+
+
+
+<div class='method'><a href="../source/application/libraries/oauth/store/oauthstoremysql.php.html#line1279" class="location">application/libraries/oauth/store/OAuthStoreMySQL.php at line 1279</a>
+
+<h3 id="authorizeConsumerRequestToken()">authorizeConsumerRequestToken</h3>
+<code class="signature">public  void <strong>authorizeConsumerRequestToken</strong>(string token, int user_id, string referrer_host)</code>
+<div class="details">
+<p>Upgrade a request token to be an authorized request token.</p><dl>
+<dt>Parameters:</dt>
+<dd></dd>
+<dd>user_id - user authorizing the token</dd>
+<dd>referrer_host - used to set the referrer host for this token, for user feedback</dd>
+</dl>
+</div></div>
+
+
+
+<div class='method'><a href="../source/application/libraries/oauth/store/oauthstoremysql.php.html#line1534" class="location">application/libraries/oauth/store/OAuthStoreMySQL.php at line 1534</a>
+
+<h3 id="checkServerNonce()">checkServerNonce</h3>
+<code class="signature">public  void <strong>checkServerNonce</strong>(string consumer_key, string token, int timestamp, string nonce)</code>
+<div class="details">
+<p>Check an nonce/timestamp combination.  Clears any nonce combinations
+that are older than the one received.</p><dl>
+<dt>Exception:</dt>
+<dd>OAuthException	thrown when the timestamp is not in sequence or nonce is not unique</dd>
+</dl>
+</div></div>
+
+
+
+<div class='method'><a href="../source/application/libraries/oauth/store/oauthstoremysql.php.html#line1299" class="location">application/libraries/oauth/store/OAuthStoreMySQL.php at line 1299</a>
+
+<h3 id="countConsumerAccessTokens()">countConsumerAccessTokens</h3>
+<code class="signature">public  int <strong>countConsumerAccessTokens</strong>(string consumer_key)</code>
+<div class="details">
+<p>Count the consumer access tokens for the given consumer.</p></div></div>
+
+
+
+<div class='method'><a href="../source/application/libraries/oauth/store/oauthstoremysql.php.html#line553" class="location">application/libraries/oauth/store/OAuthStoreMySQL.php at line 553</a>
+
+<h3 id="countServerTokens()">countServerTokens</h3>
+<code class="signature">public  int <strong>countServerTokens</strong>(string consumer_key)</code>
+<div class="details">
+<p>Count how many tokens we have for the given server</p></div></div>
+
+
+
+<div class='method'><a href="../source/application/libraries/oauth/store/oauthstoremysql.php.html#line1071" class="location">application/libraries/oauth/store/OAuthStoreMySQL.php at line 1071</a>
+
+<h3 id="deleteConsumer()">deleteConsumer</h3>
+<code class="signature">public  void <strong>deleteConsumer</strong>(string consumer_key, int user_id, boolean user_is_admin)</code>
+<div class="details">
+<p>Delete a consumer key.  This removes access to our site for all applications using this key.</p><dl>
+<dt>Parameters:</dt>
+<dd></dd>
+<dd>user_id - user registering this server</dd>
+<dd></dd>
+</dl>
+</div></div>
+
+
+
+<div class='method'><a href="../source/application/libraries/oauth/store/oauthstoremysql.php.html#line1413" class="location">application/libraries/oauth/store/OAuthStoreMySQL.php at line 1413</a>
+
+<h3 id="deleteConsumerAccessToken()">deleteConsumerAccessToken</h3>
+<code class="signature">public  void <strong>deleteConsumerAccessToken</strong>(string token, int user_id, boolean user_is_admin)</code>
+<div class="details">
+<p>Delete a consumer access token.</p></div></div>
+
+
+
+<div class='method'><a href="../source/application/libraries/oauth/store/oauthstoremysql.php.html#line1262" class="location">application/libraries/oauth/store/OAuthStoreMySQL.php at line 1262</a>
+
+<h3 id="deleteConsumerRequestToken()">deleteConsumerRequestToken</h3>
+<code class="signature">public  void <strong>deleteConsumerRequestToken</strong>(string token)</code>
+<div class="details">
+<p>Delete a consumer token.  The token must be a request or authorized token.</p></div></div>
+
+
+
+<div class='method'><a href="../source/application/libraries/oauth/store/oauthstoremysql.php.html#line396" class="location">application/libraries/oauth/store/OAuthStoreMySQL.php at line 396</a>
+
+<h3 id="deleteServer()">deleteServer</h3>
+<code class="signature">public  void <strong>deleteServer</strong>(string consumer_key, int user_id, boolean user_is_admin)</code>
+<div class="details">
+<p>Delete a server key.  This removes access to that site.</p><dl>
+<dt>Parameters:</dt>
+<dd></dd>
+<dd>user_id - user registering this server</dd>
+<dd></dd>
+</dl>
+</div></div>
+
+
+
+<div class='method'><a href="../source/application/libraries/oauth/store/oauthstoremysql.php.html#line620" class="location">application/libraries/oauth/store/OAuthStoreMySQL.php at line 620</a>
+
+<h3 id="deleteServerToken()">deleteServerToken</h3>
+<code class="signature">public  void <strong>deleteServerToken</strong>(string consumer_key, string token, int user_id, boolean user_is_admin)</code>
+<div class="details">
+<p>Delete a token we obtained from a server.</p></div></div>
+
+
+
+<div class='method'><a href="../source/application/libraries/oauth/store/oauthstoremysql.php.html#line1323" class="location">application/libraries/oauth/store/OAuthStoreMySQL.php at line 1323</a>
+
+<h3 id="exchangeConsumerRequestForAccessToken()">exchangeConsumerRequestForAccessToken</h3>
+<code class="signature">public  array <strong>exchangeConsumerRequestForAccessToken</strong>(string token, array options)</code>
+<div class="details">
+<p>Exchange an authorized request token for new access token.</p><dl>
+<dt>Parameters:</dt>
+<dd></dd>
+<dd>options - options for the token, token_ttl</dd>
+<dt>Exception:</dt>
+<dd>OAuthException when token could not be exchanged</dd>
+<dt>Returns:</dt>
+<dd>(token, token_secret)</dd>
+</dl>
+</div></div>
+
+
+
+<div class='method'><a href="../source/application/libraries/oauth/store/oauthstoremysql.php.html#line1102" class="location">application/libraries/oauth/store/OAuthStoreMySQL.php at line 1102</a>
+
+<h3 id="getConsumer()">getConsumer</h3>
+<code class="signature">public  array <strong>getConsumer</strong>(string consumer_key, int user_id, boolean user_is_admin)</code>
+<div class="details">
+<p>Fetch a consumer of this server, by consumer_key.</p><dl>
+<dt>Parameters:</dt>
+<dd></dd>
+<dd></dd>
+<dd>user_is_admin - (optional)</dd>
+<dt>Exception:</dt>
+<dd>OAuthException when consumer not found</dd>
+</dl>
+</div></div>
+
+
+
+<div class='method'><a href="../source/application/libraries/oauth/store/oauthstoremysql.php.html#line1378" class="location">application/libraries/oauth/store/OAuthStoreMySQL.php at line 1378</a>
+
+<h3 id="getConsumerAccessToken()">getConsumerAccessToken</h3>
+<code class="signature">public  array <strong>getConsumerAccessToken</strong>(string token, int user_id)</code>
+<div class="details">
+<p>Fetch the consumer access token, by access token.</p><dl>
+<dt>Exception:</dt>
+<dd>OAuthException when token is not found</dd>
+<dt>Returns:</dt>
+<dd>token and consumer details</dd>
+</dl>
+</div></div>
+
+
+
+<div class='method'><a href="../source/application/libraries/oauth/store/oauthstoremysql.php.html#line1237" class="location">application/libraries/oauth/store/OAuthStoreMySQL.php at line 1237</a>
+
+<h3 id="getConsumerRequestToken()">getConsumerRequestToken</h3>
+<code class="signature">public  array <strong>getConsumerRequestToken</strong>(string token)</code>
+<div class="details">
+<p>Fetch the consumer request token, by request token.</p><dl>
+<dt>Returns:</dt>
+<dd>token and consumer details</dd>
+</dl>
+</div></div>
+
+
+
+<div class='method'><a href="../source/application/libraries/oauth/store/oauthstoremysql.php.html#line1136" class="location">application/libraries/oauth/store/OAuthStoreMySQL.php at line 1136</a>
+
+<h3 id="getConsumerStatic()">getConsumerStatic</h3>
+<code class="signature">public  string <strong>getConsumerStatic</strong>()</code>
+<div class="details">
+<p>Fetch the static consumer key for this provider.  The user for the static consumer 
+key is NULL (no user, shared key).  If the key did not exist then the key is created.</p></div></div>
+
+
+
+<div class='method'><a href="../source/application/libraries/oauth/store/oauthstoremysql.php.html#line195" class="location">application/libraries/oauth/store/OAuthStoreMySQL.php at line 195</a>
+
+<h3 id="getSecretsForSignature()">getSecretsForSignature</h3>
+<code class="signature">public  array <strong>getSecretsForSignature</strong>(string uri, int user_id, string name)</code>
+<div class="details">
+<p>Find the server details for signing a request, always looks for an access token.
+The returned credentials depend on which local user is making the request.</p><p>The consumer_key must belong to the user or be public (user id is null)</p><p>For signing we need all of the following:</p><p>consumer_key			consumer key associated with the server
+consumer_secret		consumer secret associated with this server
+token				access token associated with this server
+token_secret			secret for the access token
+signature_methods	signing methods supported by the server (array)</p><dl>
+<dt>Todo:</dt>
+<dd>filter on token type (we should know how and with what to sign this request, and there might be old access tokens)</dd>
+<dt>Parameters:</dt>
+<dd>uri - uri of the server</dd>
+<dd>user_id - id of the logged on user</dd>
+<dd>name - (optional) name of the token (case sensitive)</dd>
+<dt>Exception:</dt>
+<dd>OAuthException when no credentials found</dd>
+</dl>
+</div></div>
+
+
+
+<div class='method'><a href="../source/application/libraries/oauth/store/oauthstoremysql.php.html#line122" class="location">application/libraries/oauth/store/OAuthStoreMySQL.php at line 122</a>
+
+<h3 id="getSecretsForVerify()">getSecretsForVerify</h3>
+<code class="signature">public  array <strong>getSecretsForVerify</strong>(string consumer_key, string token, string token_type)</code>
+<div class="details">
+<p>Find stored credentials for the consumer key and token. Used by an OAuth server
+when verifying an OAuth request.</p><dl>
+<dt>Parameters:</dt>
+<dd></dd>
+<dd></dd>
+<dd>token_type - false, 'request' or 'access'</dd>
+<dt>Exception:</dt>
+<dd>OAuthException when no secrets where found</dd>
+<dt>Returns:</dt>
+<dd>assoc (consumer_secret, token_secret, osr_id, ost_id, user_id)</dd>
+</dl>
+</div></div>
+
+
+
+<div class='method'><a href="../source/application/libraries/oauth/store/oauthstoremysql.php.html#line426" class="location">application/libraries/oauth/store/OAuthStoreMySQL.php at line 426</a>
+
+<h3 id="getServer()">getServer</h3>
+<code class="signature">public  array <strong>getServer</strong>(string consumer_key, int user_id, boolean user_is_admin)</code>
+<div class="details">
+<p>Get a server from the consumer registry using the consumer key</p><dl>
+<dt>Parameters:</dt>
+<dd></dd>
+<dd></dd>
+<dd>user_is_admin - (optional)</dd>
+<dt>Exception:</dt>
+<dd>OAuthException when server is not found</dd>
+</dl>
+</div></div>
+
+
+
+<div class='method'><a href="../source/application/libraries/oauth/store/oauthstoremysql.php.html#line471" class="location">application/libraries/oauth/store/OAuthStoreMySQL.php at line 471</a>
+
+<h3 id="getServerForUri()">getServerForUri</h3>
+<code class="signature">public  array <strong>getServerForUri</strong>(string uri, int user_id)</code>
+<div class="details">
+<p>Find the server details that might be used for a request</p><p>The consumer_key must belong to the user or be public (user id is null)</p><dl>
+<dt>Parameters:</dt>
+<dd>uri - uri of the server</dd>
+<dd>user_id - id of the logged on user</dd>
+<dt>Exception:</dt>
+<dd>OAuthException when no credentials found</dd>
+</dl>
+</div></div>
+
+
+
+<div class='method'><a href="../source/application/libraries/oauth/store/oauthstoremysql.php.html#line578" class="location">application/libraries/oauth/store/OAuthStoreMySQL.php at line 578</a>
+
+<h3 id="getServerToken()">getServerToken</h3>
+<code class="signature">public  array <strong>getServerToken</strong>(string consumer_key, string token, int user_id)</code>
+<div class="details">
+<p>Get a specific server token for the given user</p><dl>
+<dt>Exception:</dt>
+<dd>OAuthException when no such token found</dd>
+</dl>
+</div></div>
+
+
+
+<div class='method'><a href="../source/application/libraries/oauth/store/oauthstoremysql.php.html#line248" class="location">application/libraries/oauth/store/OAuthStoreMySQL.php at line 248</a>
+
+<h3 id="getServerTokenSecrets()">getServerTokenSecrets</h3>
+<code class="signature">public  array <strong>getServerTokenSecrets</strong>(string consumer_key, string token, string token_type, int user_id, string name)</code>
+<div class="details">
+<p>Get the token and token secret we obtained from a server.</p><dl>
+<dt>Parameters:</dt>
+<dd></dd>
+<dd></dd>
+<dd></dd>
+<dd>user_id - the user owning the token</dd>
+<dd>name - optional name for a named token</dd>
+<dt>Exception:</dt>
+<dd>OAuthException when no credentials found</dd>
+</dl>
+</div></div>
+
+
+
+<div class='method'><a href="../source/application/libraries/oauth/store/oauthstoremysql.php.html#line1683" class="location">application/libraries/oauth/store/OAuthStoreMySQL.php at line 1683</a>
+
+<h3 id="install()">install</h3>
+<code class="signature">public  void <strong>install</strong>()</code>
+<div class="details">
+<p>Initialise the database</p></div></div>
+
+
+
+<div class='method'><a href="../source/application/libraries/oauth/store/oauthstoremysql.php.html#line1498" class="location">application/libraries/oauth/store/OAuthStoreMySQL.php at line 1498</a>
+
+<h3 id="listConsumerTokens()">listConsumerTokens</h3>
+<code class="signature">public  array <strong>listConsumerTokens</strong>(int user_id)</code>
+<div class="details">
+<p>Fetch a list of all consumer tokens accessing the account of the given user.</p></div></div>
+
+
+
+<div class='method'><a href="../source/application/libraries/oauth/store/oauthstoremysql.php.html#line1469" class="location">application/libraries/oauth/store/OAuthStoreMySQL.php at line 1469</a>
+
+<h3 id="listConsumers()">listConsumers</h3>
+<code class="signature">public  array <strong>listConsumers</strong>(int user_id)</code>
+<div class="details">
+<p>Fetch a list of all consumer keys, secrets etc.
+Returns the public (user_id is null) and the keys owned by the user</p></div></div>
+
+
+
+<div class='method'><a href="../source/application/libraries/oauth/store/oauthstoremysql.php.html#line1625" class="location">application/libraries/oauth/store/OAuthStoreMySQL.php at line 1625</a>
+
+<h3 id="listLog()">listLog</h3>
+<code class="signature">public  array <strong>listLog</strong>(array options, int user_id)</code>
+<div class="details">
+<p>Get a page of entries from the log.  Returns the last 100 records
+matching the options given.</p><dl>
+<dt>Parameters:</dt>
+<dd></dd>
+<dd>user_id - current user</dd>
+<dt>Returns:</dt>
+<dd>log records</dd>
+</dl>
+</div></div>
+
+
+
+<div class='method'><a href="../source/application/libraries/oauth/store/oauthstoremysql.php.html#line518" class="location">application/libraries/oauth/store/OAuthStoreMySQL.php at line 518</a>
+
+<h3 id="listServerTokens()">listServerTokens</h3>
+<code class="signature">public  array <strong>listServerTokens</strong>(mixed user_id, int usr_id)</code>
+<div class="details">
+<p>Get a list of all server token this user has access to.</p></div></div>
+
+
+
+<div class='method'><a href="../source/application/libraries/oauth/store/oauthstoremysql.php.html#line685" class="location">application/libraries/oauth/store/OAuthStoreMySQL.php at line 685</a>
+
+<h3 id="listServers()">listServers</h3>
+<code class="signature">public  array <strong>listServers</strong>(string q, int user_id)</code>
+<div class="details">
+<p>Get a list of all consumers from the consumer registry.
+The consumer keys belong to the user or are public (user id is null)</p><dl>
+<dt>Parameters:</dt>
+<dd>q - query term</dd>
+<dd></dd>
+</dl>
+</div></div>
+
+
+
+<div class='method'><a href="../source/application/libraries/oauth/store/oauthstoremysql.php.html#line1697" class="location">application/libraries/oauth/store/OAuthStoreMySQL.php at line 1697</a>
+
+<h3 id="query()">query</h3>
+<code class="signature">protected  void <strong>query</strong>(string sql, vararg arguments)</code>
+<div class="details">
+<p>Perform a query, ignore the results</p><dl>
+<dt>Parameters:</dt>
+<dd></dd>
+<dd>arguments - (for sprintf)</dd>
+</dl>
+</div></div>
+
+
+
+<div class='method'><a href="../source/application/libraries/oauth/store/oauthstoremysql.php.html#line1812" class="location">application/libraries/oauth/store/OAuthStoreMySQL.php at line 1812</a>
+
+<h3 id="query_affected_rows()">query_affected_rows</h3>
+<code class="signature">protected  void <strong>query_affected_rows</strong>()</code>
+<div class="details">
+<p>Return the number of rows affected in the last query</p></div></div>
+
+
+
+<div class='method'><a href="../source/application/libraries/oauth/store/oauthstoremysql.php.html#line1718" class="location">application/libraries/oauth/store/OAuthStoreMySQL.php at line 1718</a>
+
+<h3 id="query_all_assoc()">query_all_assoc</h3>
+<code class="signature">protected  array <strong>query_all_assoc</strong>(string sql, vararg arguments)</code>
+<div class="details">
+<p>Perform a query, ignore the results</p><dl>
+<dt>Parameters:</dt>
+<dd></dd>
+<dd>arguments - (for sprintf)</dd>
+</dl>
+</div></div>
+
+
+
+<div class='method'><a href="../source/application/libraries/oauth/store/oauthstoremysql.php.html#line1823" class="location">application/libraries/oauth/store/OAuthStoreMySQL.php at line 1823</a>
+
+<h3 id="query_insert_id()">query_insert_id</h3>
+<code class="signature">protected  int <strong>query_insert_id</strong>()</code>
+<div class="details">
+<p>Return the id of the last inserted row</p></div></div>
+
+
+
+<div class='method'><a href="../source/application/libraries/oauth/store/oauthstoremysql.php.html#line1796" class="location">application/libraries/oauth/store/OAuthStoreMySQL.php at line 1796</a>
+
+<h3 id="query_one()">query_one</h3>
+<code class="signature">protected  mixed <strong>query_one</strong>(string sql, vararg arguments)</code>
+<div class="details">
+<p>Perform a query, return the first column of the first row</p><dl>
+<dt>Parameters:</dt>
+<dd></dd>
+<dd>arguments - (for sprintf)</dd>
+</dl>
+</div></div>
+
+
+
+<div class='method'><a href="../source/application/libraries/oauth/store/oauthstoremysql.php.html#line1769" class="location">application/libraries/oauth/store/OAuthStoreMySQL.php at line 1769</a>
+
+<h3 id="query_row()">query_row</h3>
+<code class="signature">protected  array <strong>query_row</strong>(string sql, vararg arguments)</code>
+<div class="details">
+<p>Perform a query, return the first row</p><dl>
+<dt>Parameters:</dt>
+<dd></dd>
+<dd>arguments - (for sprintf)</dd>
+</dl>
+</div></div>
+
+
+
+<div class='method'><a href="../source/application/libraries/oauth/store/oauthstoremysql.php.html#line1742" class="location">application/libraries/oauth/store/OAuthStoreMySQL.php at line 1742</a>
+
+<h3 id="query_row_assoc()">query_row_assoc</h3>
+<code class="signature">protected  array <strong>query_row_assoc</strong>(string sql, vararg arguments)</code>
+<div class="details">
+<p>Perform a query, return the first row</p><dl>
+<dt>Parameters:</dt>
+<dd></dd>
+<dd>arguments - (for sprintf)</dd>
+</dl>
+</div></div>
+
+
+
+<div class='method'><a href="../source/application/libraries/oauth/store/oauthstoremysql.php.html#line1442" class="location">application/libraries/oauth/store/OAuthStoreMySQL.php at line 1442</a>
+
+<h3 id="setConsumerAccessTokenTtl()">setConsumerAccessTokenTtl</h3>
+<code class="signature">public  void <strong>setConsumerAccessTokenTtl</strong>(string token, mixed token_ttl, int ttl)</code>
+<div class="details">
+<p>Set the ttl of a consumer access token.  This is done when the
+server receives a valid request with a xoauth_token_ttl parameter in it.</p></div></div>
+
+
+
+<div class='method'><a href="../source/application/libraries/oauth/store/oauthstoremysql.php.html#line656" class="location">application/libraries/oauth/store/OAuthStoreMySQL.php at line 656</a>
+
+<h3 id="setServerTokenTtl()">setServerTokenTtl</h3>
+<code class="signature">public  void <strong>setServerTokenTtl</strong>(string consumer_key, string token, int token_ttl)</code>
+<div class="details">
+<p>Set the ttl of a server access token.  This is done when the
+server receives a valid request with a xoauth_token_ttl parameter in it.</p></div></div>
+
+
+
+<div class='method'><a href="../source/application/libraries/oauth/store/oauthstoremysql.php.html#line1866" class="location">application/libraries/oauth/store/OAuthStoreMySQL.php at line 1866</a>
+
+<h3 id="sql_errcheck()">sql_errcheck</h3>
+<code class="signature">protected  void <strong>sql_errcheck</strong>(mixed sql)</code>
+<div class="details">
+</div></div>
+
+
+
+<div class='method'><a href="../source/application/libraries/oauth/store/oauthstoremysql.php.html#line1841" class="location">application/libraries/oauth/store/OAuthStoreMySQL.php at line 1841</a>
+
+<h3 id="sql_escape_string()">sql_escape_string</h3>
+<code class="signature">protected  void <strong>sql_escape_string</strong>(mixed s)</code>
+<div class="details">
+</div></div>
+
+
+
+<div class='method'><a href="../source/application/libraries/oauth/store/oauthstoremysql.php.html#line1829" class="location">application/libraries/oauth/store/OAuthStoreMySQL.php at line 1829</a>
+
+<h3 id="sql_printf()">sql_printf</h3>
+<code class="signature">protected  void <strong>sql_printf</strong>(mixed args)</code>
+<div class="details">
+</div></div>
+
+
+
+<div class='method'><a href="../source/application/libraries/oauth/store/oauthstoremysql.php.html#line907" class="location">application/libraries/oauth/store/OAuthStoreMySQL.php at line 907</a>
+
+<h3 id="updateConsumer()">updateConsumer</h3>
+<code class="signature">public  string <strong>updateConsumer</strong>(array consumer, int user_id, boolean user_is_admin)</code>
+<div class="details">
+<p>Insert/update a new consumer with this server (we will be the server)
+When this is a new consumer, then also generate the consumer key and secret.
+Never updates the consumer key and secret.
+When the id is set, then the key and secret must correspond to the entry
+being updated.</p><p>(This is the registry at the server, registering consumers ;-) )</p><dl>
+<dt>Parameters:</dt>
+<dd></dd>
+<dd>user_id - user registering this consumer</dd>
+<dd></dd>
+<dt>Returns:</dt>
+<dd>consumer key</dd>
+</dl>
+</div></div>
+
+
+
+<div class='method'><a href="../source/application/libraries/oauth/store/oauthstoremysql.php.html#line742" class="location">application/libraries/oauth/store/OAuthStoreMySQL.php at line 742</a>
+
+<h3 id="updateServer()">updateServer</h3>
+<code class="signature">public  consumer_key <strong>updateServer</strong>(array server, int user_id, boolean user_is_admin)</code>
+<div class="details">
+<p>Register or update a server for our site (we will be the consumer)</p><p>(This is the registry at the consumers, registering servers ;-) )</p><dl>
+<dt>Parameters:</dt>
+<dd></dd>
+<dd>user_id - user registering this server</dd>
+<dd></dd>
+<dt>Exception:</dt>
+<dd>OAuthException when fields are missing or on duplicate consumer_key</dd>
+</dl>
+</div></div>
+
+
+
+</div><div class="header">
+<h1>GiftFlow API</h1>
+<ul>
+<li><a href="../overview-summary.html">Overview</a></li>
+<li><a href="../giftflow/package-summary.html">Package</a></li>
+<li class="active">Class</li>
+<li><a href="../giftflow/package-tree.html">Tree</a></li>
+<li><a href="../overview-files.html">Files</a></li>
+<li><a href="../deprecated-list.html">Deprecated</a></li>
+<li><a href="../index-all.html">Index</a></li>
+</ul>
+</div>
+
+<div class="small_links">
+<a href="../index.html" target="_top">Frames</a>
+<a href="../giftflow/oauthstoremysql.html" target="_top">No frames</a>
+</div>
+<div class="small_links">
+Summary: <a href="#summary_field">Field</a> | <a href="#summary_method">Method</a> | <a href="#summary_constr">Constr</a>
+Detail: <a href="#detail_field">Field</a> | <a href="#detail_method">Method</a> | <a href="#summary_constr">Constr</a>
+</div>
+<hr>
+
+<p id="footer">This document was generated by <a href="http://peej.github.com/phpdoctor/">PHPDoctor: The PHP Documentation Creator</a></p>
+
+</body>
+
+</html>

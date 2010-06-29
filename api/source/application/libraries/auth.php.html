@@ -6,7 +6,7 @@
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 
 <meta name="generator" content="PHPDoctor 2RC4 (http://peej.github.com/phpdoctor/)">
-<meta name="when" content="Sun, 20 Jun 2010 17:43:51 +0000">
+<meta name="when" content="Tue, 29 Jun 2010 21:10:10 +0000">
 
 <link rel="stylesheet" type="text/css" href="../../../stylesheet.css">
 <link rel="start" href="../../../overview-summary.html">
@@ -166,276 +166,297 @@
 <a name="line129"></a>						'location_street_address'=>$this->U->default_location->street_address,
 <a name="line130"></a>						'location_address'=>$this->U->default_location->address,
 <a name="line131"></a>						'location_city'=>$this->U->default_location->city,
-<a name="line132"></a>						'location_state'=>$this->U->default_location->state
-<a name="line133"></a>						);
-<a name="line134"></a>		if($this->U->facebook_photo==1&&!empty($this->U->facebook_id))
-<a name="line135"></a>		{
-<a name="line136"></a>			$userdata['photo_thumb_url'] = "http://graph.facebook.com/".$this->U->facebook_id."/picture?type=square";
-<a name="line137"></a>			$userdata['photo_url'] = "http://graph.facebook.com/".$this->U->facebook_id."/picture?type=large";
-<a name="line138"></a>		}
-<a name="line139"></a>		elseif(!empty($this->U->default_photo->thumb_url)&&!empty($this->U->default_photo->url))
-<a name="line140"></a>		{
-<a name="line141"></a>			$userdata['photo_thumb_url'] = $this->U->default_photo->thumb_url;
-<a name="line142"></a>			$userdata['photo_url'] = $this->U->default_photo->url;
-<a name="line143"></a>		}
-<a name="line144"></a>		else
-<a name="line145"></a>		{
-<a name="line146"></a>			$userdata['photo_thumb_url'] = base_url().'assets/images/default_user_photo_thumb.jpg';
-<a name="line147"></a>			$userdata['photo_url'] = base_url().'assets/images/default_user_photo.jpg';
-<a name="line148"></a>		}
-<a name="line149"></a>		// Save to userdata array
-<a name="line150"></a>		$this->CI->session->set_userdata($userdata);
-<a name="line151"></a>		return TRUE;
-<a name="line152"></a>	}
-<a name="line153"></a>	
+<a name="line132"></a>						'location_state'=>$this->U->default_location->state,
+<a name="line133"></a>						'status'=>$this->U->status
+<a name="line134"></a>						);
+<a name="line135"></a>		if($this->U->facebook_photo==1&&!empty($this->U->facebook_id))
+<a name="line136"></a>		{
+<a name="line137"></a>			$userdata['photo_thumb_url'] = "http://graph.facebook.com/".$this->U->facebook_id."/picture?type=square";
+<a name="line138"></a>			$userdata['photo_url'] = "http://graph.facebook.com/".$this->U->facebook_id."/picture?type=large";
+<a name="line139"></a>		}
+<a name="line140"></a>		elseif(!empty($this->U->default_photo->thumb_url)&&!empty($this->U->default_photo->url))
+<a name="line141"></a>		{
+<a name="line142"></a>			$userdata['photo_thumb_url'] = $this->U->default_photo->thumb_url;
+<a name="line143"></a>			$userdata['photo_url'] = $this->U->default_photo->url;
+<a name="line144"></a>		}
+<a name="line145"></a>		else
+<a name="line146"></a>		{
+<a name="line147"></a>			$userdata['photo_thumb_url'] = base_url().'assets/images/default_user_photo_thumb.jpg';
+<a name="line148"></a>			$userdata['photo_url'] = base_url().'assets/images/default_user_photo.jpg';
+<a name="line149"></a>		}
+<a name="line150"></a>		// Save to userdata array
+<a name="line151"></a>		$this->CI->session->set_userdata($userdata);
+<a name="line152"></a>		return TRUE;
+<a name="line153"></a>	}
 <a name="line154"></a>	
-<a name="line155"></a>	/*
-<a name="line156"></a>	*
-<a name="line157"></a>	*	AUTHORIZATION FUNCTIONS
-<a name="line158"></a>	*
-<a name="line159"></a>	*/
-<a name="line160"></a>
-<a name="line161"></a>	/**
-<a name="line162"></a>	*	Validates whether the user has a high enough authentication level to view a page.
-<a name="line163"></a>	*	
-<a name="line164"></a>	*	@param int $min	The minimum authorization level needed to view this page
-<a name="line165"></a>	*
-<a name="line166"></a>	*	@return boolean
-<a name="line167"></a>	*/
-<a name="line168"></a>	public function validate( $min )
-<a name="line169"></a>	{
-<a name="line170"></a>		if($this->CI->session->userdata('level')) $level = $this->CI->session->userdata('level');
-<a name="line171"></a>		else $level = 0;
-<a name="line172"></a>
-<a name="line173"></a>		if(empty($min))
-<a name="line174"></a>		{
-<a name="line175"></a>			$method = $this->CI->uri->segment(2);
-<a name="line176"></a>			if(empty($method)) $method = 'index';
-<a name="line177"></a>			$where = array ('controller' => $this->CI->uri->segment(1), 'method' => $method );
-<a name="line178"></a>			$query = $this->CI->db->where($where)->get('permissions');
-<a name="line179"></a>			if($query->num_rows() == 1)
-<a name="line180"></a>			{
-<a name="line181"></a>				$row = $query->row();
-<a name="line182"></a>				$min = $row->level;
-<a name="line183"></a>			}
-<a name="line184"></a>			else $min = 100;
-<a name="line185"></a>		}
-<a name="line186"></a>		if ( $level >= $min )
-<a name="line187"></a>			return true;
-<a name="line188"></a>		else
-<a name="line189"></a>			return false;
-<a name="line190"></a>	}
-<a name="line191"></a>	
-<a name="line192"></a>	/**
-<a name="line193"></a>	*	Lets authorized users view a page and redirects unauthorized users
-<a name="line194"></a>	*	to either an access denied page or login page.
-<a name="line195"></a>	*
-<a name="line196"></a>	*	@param int $min 			Minimum auth level
-<a name="line197"></a>	*	@param string $redirect	URL to redirect to
-<a name="line198"></a>	*/
-<a name="line199"></a>	
-<a name="line200"></a>	public function bouncer ($min = NULL, $redirect = 'login')
-<a name="line201"></a>	{
-<a name="line202"></a>		if($this->validate($min))
-<a name="line203"></a>		{
-<a name="line204"></a>			return true;
-<a name="line205"></a>		}
-<a name="line206"></a>		else
-<a name="line207"></a>		{
-<a name="line208"></a>			if($this->CI->session->userdata('logged_in'))
-<a name="line209"></a>			{
-<a name="line210"></a>				redirect('restricted');
-<a name="line211"></a>			}
-<a name="line212"></a>			else
-<a name="line213"></a>			{
-<a name="line214"></a>				$this->CI->db->insert('redirects', array("url"=>$this->CI->uri->uri_string()));
-<a name="line215"></a>				redirect($redirect."/".$this->CI->db->insert_id());
-<a name="line216"></a>			}
-<a name="line217"></a>		}
-<a name="line218"></a>	}
-<a name="line219"></a>	
+<a name="line155"></a>	
+<a name="line156"></a>	/*
+<a name="line157"></a>	*
+<a name="line158"></a>	*	AUTHORIZATION FUNCTIONS
+<a name="line159"></a>	*
+<a name="line160"></a>	*/
+<a name="line161"></a>
+<a name="line162"></a>	/**
+<a name="line163"></a>	*	Validates whether the user has a high enough authentication level to view a page.
+<a name="line164"></a>	*	
+<a name="line165"></a>	*	@param int $min	The minimum authorization level needed to view this page
+<a name="line166"></a>	*
+<a name="line167"></a>	*	@return boolean
+<a name="line168"></a>	*/
+<a name="line169"></a>	public function validate( $min )
+<a name="line170"></a>	{
+<a name="line171"></a>		if($this->CI->session->userdata('level')) $level = $this->CI->session->userdata('level');
+<a name="line172"></a>		else $level = 0;
+<a name="line173"></a>
+<a name="line174"></a>		if(empty($min))
+<a name="line175"></a>		{
+<a name="line176"></a>			$method = $this->CI->uri->segment(2);
+<a name="line177"></a>			if(empty($method)) $method = 'index';
+<a name="line178"></a>			$where = array ('controller' => $this->CI->uri->segment(1), 'method' => $method );
+<a name="line179"></a>			$query = $this->CI->db->where($where)->get('permissions');
+<a name="line180"></a>			if($query->num_rows() == 1)
+<a name="line181"></a>			{
+<a name="line182"></a>				$row = $query->row();
+<a name="line183"></a>				$min = $row->level;
+<a name="line184"></a>			}
+<a name="line185"></a>			else $min = 100;
+<a name="line186"></a>		}
+<a name="line187"></a>		if ( $level >= $min )
+<a name="line188"></a>			return true;
+<a name="line189"></a>		else
+<a name="line190"></a>			return false;
+<a name="line191"></a>	}
+<a name="line192"></a>	
+<a name="line193"></a>	/**
+<a name="line194"></a>	*	Lets authorized users view a page and redirects unauthorized users
+<a name="line195"></a>	*	to either an access denied page or login page.
+<a name="line196"></a>	*
+<a name="line197"></a>	*	@param int $min 			Minimum auth level
+<a name="line198"></a>	*	@param string $redirect	URL to redirect to
+<a name="line199"></a>	*/
+<a name="line200"></a>	
+<a name="line201"></a>	public function bouncer ($min = NULL, $redirect = 'login')
+<a name="line202"></a>	{
+<a name="line203"></a>		if($this->validate($min))
+<a name="line204"></a>		{
+<a name="line205"></a>			return true;
+<a name="line206"></a>		}
+<a name="line207"></a>		else
+<a name="line208"></a>		{
+<a name="line209"></a>			if($this->CI->session->userdata('logged_in'))
+<a name="line210"></a>			{
+<a name="line211"></a>				redirect('restricted');
+<a name="line212"></a>			}
+<a name="line213"></a>			else
+<a name="line214"></a>			{
+<a name="line215"></a>				$this->CI->db->insert('redirects', array("url"=>$this->CI->uri->uri_string()));
+<a name="line216"></a>				redirect($redirect."/".$this->CI->db->insert_id());
+<a name="line217"></a>			}
+<a name="line218"></a>		}
+<a name="line219"></a>	}
 <a name="line220"></a>	
-<a name="line221"></a>	function email_verification()
-<a name="line222"></a>	{
-<a name="line223"></a>		$this->U->deactivate();
-<a name="line224"></a>		$this->CI->load->library('email');
-<a name="line225"></a>		
-<a name="line226"></a>		$config['protocol']  = 'smtp';
-<a name="line227"></a>		$config['newline'] = '\r\n';
-<a name="line228"></a>		$config['crlf'] = '\r\n';
-<a name="line229"></a>		$config['smtp_host'] = 'mail.giftflow.org';
-<a name="line230"></a>		$config['smtp_user'] = 'no-reply@giftflow.org';
-<a name="line231"></a>		$config['smtp_pass'] = 'mon3yis3vil';
-<a name="line232"></a>		$config['smtp_port'] = '26';
-<a name="line233"></a>		$config['mailtype']  = 'text';
-<a name="line234"></a>		$config['charset']   = 'utf-8';
-<a name="line235"></a>
-<a name="line236"></a>		$this->CI->email->initialize($config);
-<a name="line237"></a>		
-<a name="line238"></a>
-<a name="line239"></a>		$this->CI->email->from('no-reply@giftflow.org', 'GiftFlow');
-<a name="line240"></a>		$this->CI->email->to($this->U->email);
-<a name="line241"></a>		
-<a name="line242"></a>		$this->CI->email->subject('[GiftFlow] Activate Your Account');
-<a name="line243"></a>		$message = "Hello! \r\n";
-<a name="line244"></a>		$message .= "Welcome to GiftFlow. Please click the link below to activate your account and verify this email address. \r\n ";
-<a name="line245"></a>		$message .= site_url('member/activate/'.$this->U->activation_code)." \r\n";
-<a name="line246"></a>		$message .= "Thanks! \r\n";
-<a name="line247"></a>		$message .= "The GiftFlow Team";
-<a name="line248"></a>		
-<a name="line249"></a>		$this->CI->email->message($message);
-<a name="line250"></a>		
-<a name="line251"></a>		$this->CI->email->send();		
-<a name="line252"></a>	}
-<a name="line253"></a>	
-<a name="line254"></a>	function facebook( $data )
-<a name="line255"></a>	{
-<a name="line256"></a>		/** 	Outline
-<a name="line257"></a>		* 	1: Is the Facebook data valid?
-<a name="line258"></a>		*    		a: Yes. Proceed to 2.
-<a name="line259"></a>		*    		b: No. Return error message.
-<a name="line260"></a>		* 	2: Is Facebook ID in system?
-<a name="line261"></a>		*     	a: Yes. Create session for that user.
-<a name="line262"></a>		*     	b: No. Facebook ID not in system. Proceed to 3.
-<a name="line263"></a>		* 	3: Is email in system?
-<a name="line264"></a>		*     	a: Yes. Create session for that user. Link Facebook ID with that user. Fill in missing profile fields.
-<a name="line265"></a>		*     	b: No. Create new User.
-<a name="line266"></a>		*/
-<a name="line267"></a>		if(!empty($data->id))
-<a name="line268"></a>		{
-<a name="line269"></a>			$step_two = $this->CI->db->where('facebook_id',$data->id)->from('users')->get();
-<a name="line270"></a>			
-<a name="line271"></a>			// Outcome 2a
-<a name="line272"></a>			if($step_two->num_rows==1)
-<a name="line273"></a>			{
-<a name="line274"></a>				$user = $step_two->row();
-<a name="line275"></a>				$this->U = new User($user->id);
-<a name="line276"></a>				$this->U->facebook_sync( $data );
-<a name="line277"></a>				$this->new_session();
-<a name="line278"></a>				redirect('');
-<a name="line279"></a>			}
-<a name="line280"></a>			// eof 2a
-<a name="line281"></a>			
-<a name="line282"></a>			elseif(!empty($data->email))
-<a name="line283"></a>			{
-<a name="line284"></a>				$step_three = $this->CI->db->where('email',$data->email)->from('users')->get();
-<a name="line285"></a>				// Outcome 3a
-<a name="line286"></a>				if($step_three->num_rows==1)
-<a name="line287"></a>				{
-<a name="line288"></a>					$user = $step_three->row();
-<a name="line289"></a>					$this->U = new User($user->id);
-<a name="line290"></a>					$this->U->facebook_sync($data);
-<a name="line291"></a>					if($this->new_session())
-<a name="line292"></a>					{
-<a name="line293"></a>						$this->U->save();
-<a name="line294"></a>						redirect('');
-<a name="line295"></a>					}
-<a name="line296"></a>				}
-<a name="line297"></a>				// eof 3a
-<a name="line298"></a>				
-<a name="line299"></a>				// Outcome 3b
-<a name="line300"></a>				else
+<a name="line221"></a>	
+<a name="line222"></a>	function email_verification()
+<a name="line223"></a>	{
+<a name="line224"></a>		$this->U->deactivate();
+<a name="line225"></a>		$this->CI->load->library('email');
+<a name="line226"></a>		
+<a name="line227"></a>		$config['protocol']  = 'smtp';
+<a name="line228"></a>		$config['newline'] = '\r\n';
+<a name="line229"></a>		$config['crlf'] = '\r\n';
+<a name="line230"></a>		$config['smtp_host'] = 'mail.giftflow.org';
+<a name="line231"></a>		$config['smtp_user'] = 'no-reply@giftflow.org';
+<a name="line232"></a>		$config['smtp_pass'] = 'mon3yis3vil';
+<a name="line233"></a>		$config['smtp_port'] = '26';
+<a name="line234"></a>		$config['mailtype']  = 'text';
+<a name="line235"></a>		$config['charset']   = 'utf-8';
+<a name="line236"></a>
+<a name="line237"></a>		$this->CI->email->initialize($config);
+<a name="line238"></a>		
+<a name="line239"></a>
+<a name="line240"></a>		$this->CI->email->from('no-reply@giftflow.org', 'GiftFlow');
+<a name="line241"></a>		$this->CI->email->to($this->U->email);
+<a name="line242"></a>		
+<a name="line243"></a>		$this->CI->email->subject('[GiftFlow] Activate Your Account');
+<a name="line244"></a>		$message = "Hello! \r\n";
+<a name="line245"></a>		$message .= "Welcome to GiftFlow. Please click the link below to activate your account and verify this email address. \r\n ";
+<a name="line246"></a>		$message .= site_url('member/activate/'.$this->U->activation_code)." \r\n";
+<a name="line247"></a>		$message .= "Thanks! \r\n";
+<a name="line248"></a>		$message .= "The GiftFlow Team";
+<a name="line249"></a>		
+<a name="line250"></a>		$this->CI->email->message($message);
+<a name="line251"></a>		
+<a name="line252"></a>		$this->CI->email->send();		
+<a name="line253"></a>	}
+<a name="line254"></a>	
+<a name="line255"></a>	function facebook( $data )
+<a name="line256"></a>	{
+<a name="line257"></a>		/** 	Outline
+<a name="line258"></a>		* 	1: Is the Facebook data valid?
+<a name="line259"></a>		*    		a: Yes. Proceed to 2.
+<a name="line260"></a>		*    		b: No. Return error message.
+<a name="line261"></a>		* 	2: Is Facebook ID in system?
+<a name="line262"></a>		*     	a: Yes. Create session for that user.
+<a name="line263"></a>		*     	b: No. Facebook ID not in system. Proceed to 3.
+<a name="line264"></a>		*	3. Is this user already logged in?
+<a name="line265"></a>		*		a. Yes. Link Facebook ID with that user. Fill in missing profile fields.
+<a name="line266"></a>		*		b. No. Proceed to step 4.
+<a name="line267"></a>		* 	4: Is email in system?
+<a name="line268"></a>		*     	a: Yes. Create session for that user. Link Facebook ID with that user. Fill in missing profile fields.
+<a name="line269"></a>		*     	b: No. Create new User.
+<a name="line270"></a>		*/
+<a name="line271"></a>		if(!empty($data->id))
+<a name="line272"></a>		{
+<a name="line273"></a>			$step_two = $this->CI->db->where('facebook_id',$data->id)->from('users')->get();
+<a name="line274"></a>			
+<a name="line275"></a>			// Outcome 2a
+<a name="line276"></a>			if($step_two->num_rows==1)
+<a name="line277"></a>			{
+<a name="line278"></a>				$user = $step_two->row();
+<a name="line279"></a>				$this->U = new User($user->id);
+<a name="line280"></a>				$this->U->facebook_sync( $data );
+<a name="line281"></a>				$this->new_session();
+<a name="line282"></a>				redirect('');
+<a name="line283"></a>			}
+<a name="line284"></a>			// eof 2a
+<a name="line285"></a>			
+<a name="line286"></a>			elseif(!empty($this->CI->session->userdata['user_id']))
+<a name="line287"></a>			{
+<a name="line288"></a>				// Outcome 3a
+<a name="line289"></a>				$this->U = new User( $this->CI->session->userdata['user_id'] );
+<a name="line290"></a>				$this->U->facebook_sync($data);
+<a name="line291"></a>				$this->CI->session->set_flashdata('success', 'Facebook account now linked with GiftFlow');
+<a name="line292"></a>				redirect('account/links');
+<a name="line293"></a>				// eof 3a
+<a name="line294"></a>				
+<a name="line295"></a>			}
+<a name="line296"></a>			elseif(!empty($data->email))
+<a name="line297"></a>			{
+<a name="line298"></a>				$step_four = $this->CI->db->where('email',$data->email)->from('users')->get();
+<a name="line299"></a>				// Outcome 4a
+<a name="line300"></a>				if($step_four->num_rows==1)
 <a name="line301"></a>				{
-<a name="line302"></a>					$this->U = new User();
-<a name="line303"></a>					if($this->U->facebook_sync( $data ))
-<a name="line304"></a>					{
-<a name="line305"></a>						if($this->new_session())
-<a name="line306"></a>						{
-<a name="line307"></a>							$this->U->save();
-<a name="line308"></a>							redirect('');
-<a name="line309"></a>						}
-<a name="line310"></a>					}
-<a name="line311"></a>				}
-<a name="line312"></a>				// eof 3b
-<a name="line313"></a>			}
-<a name="line314"></a>		}
-<a name="line315"></a>		$this->U = new User();
-<a name="line316"></a>		if(!empty($data->id))
-<a name="line317"></a>			$this->U->facebook_id = $data->id;
-<a name="line318"></a>		if(!empty($data->name))
-<a name="line319"></a>			$this->U->screen_name = $data->name;
-<a name="line320"></a>		if(!empty($data->first_name))
-<a name="line321"></a>			$this->U->first_name = $data->first_name;
-<a name="line322"></a>		if(!empty($data->last_name))
-<a name="line323"></a>			$this->U->last_name = $data->last_name;
-<a name="line324"></a>		if(!empty($data->email))
-<a name="line325"></a>			$this->U->email = $data->email;
-<a name="line326"></a>		
-<a name="line327"></a>	}
-<a name="line328"></a>	
-<a name="line329"></a>	/**
-<a name="line330"></a>	*	Lists pages and looks for their permissions. DEPRECATED.
-<a name="line331"></a>	*
-<a name="line332"></a>	*	@deprecated
-<a name="line333"></a>	*/
-<a name="line334"></a>	public function page_lister()
-<a name="line335"></a>	{
-<a name="line336"></a>		$this->invalid_methods = array ("Controller","_ci_initialize","_ci_scaffolding", "CI_Base", "get_instance", "__construct");
-<a name="line337"></a>
-<a name="line338"></a>		$this->APPLICATION_DIRECTORY = "/Applications/XAMPP/xamppfiles/htdocs/gift/system/application/controllers/";
-<a name="line339"></a>		
-<a name="line340"></a>		// Open the Application Directory
-<a name="line341"></a>		$directory = opendir($this->APPLICATION_DIRECTORY);
-<a name="line342"></a>
-<a name="line343"></a>		// loop through all the files and set the name into an array
-<a name="line344"></a>		while (($file = readdir($directory)) !== FALSE)
-<a name="line345"></a>		{
-<a name="line346"></a>			if (preg_match('/.php/i',$file))
-<a name="line347"></a>			{
-<a name="line348"></a>				$temp = explode('.',$file);
-<a name="line349"></a>				$controllers[] = $temp[0];
-<a name="line350"></a>			}
-<a name="line351"></a>		}
-<a name="line352"></a>
-<a name="line353"></a>		// Close the Application Directory
-<a name="line354"></a>		closedir($directory);
-<a name="line355"></a>
-<a name="line356"></a>		// Look through all the controllers for their methods
-<a name="line357"></a>		foreach ($controllers as $c)
-<a name="line358"></a>		{
-<a name="line359"></a>			// Check to see if the class has been loaded
-<a name="line360"></a>			if (!class_exists($c))
-<a name="line361"></a>			{
-<a name="line362"></a>				$this->CI->load->file($this->APPLICATION_DIRECTORY.$c.'.php');
-<a name="line363"></a>			}
-<a name="line364"></a>
-<a name="line365"></a>			// Add the constructors to the values we don't care about
-<a name="line366"></a>			$this->invalid_methods[] = ucfirst($c);
-<a name="line367"></a>
-<a name="line368"></a>			foreach (get_class_methods($c) as $key => $val)
-<a name="line369"></a>			{
-<a name="line370"></a>				  /* Get a reflection object for the class method */
-<a name="line371"></a>       				$reflect = new ReflectionMethod($c, $val);
-<a name="line372"></a>
-<a name="line373"></a>				/* For private, use isPrivate().  For protected, use isProtected() */
-<a name="line374"></a>				
-<a name="line375"></a>				if($reflect->isPublic()) 
-<a name="line376"></a>				{
-<a name="line377"></a>				  	if (!in_array($val,$this->invalid_methods))
-<a name="line378"></a>					{
-<a name="line379"></a>						// Put the methods we care about into an array
-<a name="line380"></a>						$method[$c][] = $val;
-<a name="line381"></a>					}
-<a name="line382"></a>				}
-<a name="line383"></a>			}
-<a name="line384"></a>		}
-<a name="line385"></a>		
-<a name="line386"></a>		// Now lets create the classes and methods and relate them
-<a name="line387"></a>		foreach ($method as $class => $methods)
-<a name="line388"></a>		{
-<a name="line389"></a>			foreach ($methods as $value)
+<a name="line302"></a>					$user = $step_four->row();
+<a name="line303"></a>					$this->U = new User($user->id);
+<a name="line304"></a>					$this->U->facebook_sync($data);
+<a name="line305"></a>					
+<a name="line306"></a>					// Create new session
+<a name="line307"></a>					if($this->new_session())
+<a name="line308"></a>					{
+<a name="line309"></a>						$this->U->save();
+<a name="line310"></a>						// Redirect to dashboard
+<a name="line311"></a>						redirect('');
+<a name="line312"></a>					}
+<a name="line313"></a>				}
+<a name="line314"></a>				// eof 4a
+<a name="line315"></a>				
+<a name="line316"></a>				// Outcome 4b
+<a name="line317"></a>				// New user
+<a name="line318"></a>				else
+<a name="line319"></a>				{
+<a name="line320"></a>					$this->U = new User();
+<a name="line321"></a>					if($this->U->facebook_sync( $data ))
+<a name="line322"></a>					{
+<a name="line323"></a>						if($this->new_session())
+<a name="line324"></a>						{
+<a name="line325"></a>							// Save new user
+<a name="line326"></a>							$this->U->save();
+<a name="line327"></a>							
+<a name="line328"></a>							// Redirect to facebook welcome page
+<a name="line329"></a>							redirect('member/facebook_welcome');
+<a name="line330"></a>						}
+<a name="line331"></a>					}
+<a name="line332"></a>				}
+<a name="line333"></a>				// eof 4b
+<a name="line334"></a>			}
+<a name="line335"></a>		}
+<a name="line336"></a>		$this->U = new User();
+<a name="line337"></a>		if(!empty($data->id))
+<a name="line338"></a>			$this->U->facebook_id = $data->id;
+<a name="line339"></a>		if(!empty($data->name))
+<a name="line340"></a>			$this->U->screen_name = $data->name;
+<a name="line341"></a>		if(!empty($data->first_name))
+<a name="line342"></a>			$this->U->first_name = $data->first_name;
+<a name="line343"></a>		if(!empty($data->last_name))
+<a name="line344"></a>			$this->U->last_name = $data->last_name;
+<a name="line345"></a>		if(!empty($data->email))
+<a name="line346"></a>			$this->U->email = $data->email;
+<a name="line347"></a>		
+<a name="line348"></a>	}
+<a name="line349"></a>	
+<a name="line350"></a>	/**
+<a name="line351"></a>	*	Lists pages and looks for their permissions. DEPRECATED.
+<a name="line352"></a>	*
+<a name="line353"></a>	*	@deprecated
+<a name="line354"></a>	*/
+<a name="line355"></a>	public function page_lister()
+<a name="line356"></a>	{
+<a name="line357"></a>		$this->invalid_methods = array ("Controller","_ci_initialize","_ci_scaffolding", "CI_Base", "get_instance", "__construct");
+<a name="line358"></a>
+<a name="line359"></a>		$this->APPLICATION_DIRECTORY = "/Applications/XAMPP/xamppfiles/htdocs/gift/system/application/controllers/";
+<a name="line360"></a>		
+<a name="line361"></a>		// Open the Application Directory
+<a name="line362"></a>		$directory = opendir($this->APPLICATION_DIRECTORY);
+<a name="line363"></a>
+<a name="line364"></a>		// loop through all the files and set the name into an array
+<a name="line365"></a>		while (($file = readdir($directory)) !== FALSE)
+<a name="line366"></a>		{
+<a name="line367"></a>			if (preg_match('/.php/i',$file))
+<a name="line368"></a>			{
+<a name="line369"></a>				$temp = explode('.',$file);
+<a name="line370"></a>				$controllers[] = $temp[0];
+<a name="line371"></a>			}
+<a name="line372"></a>		}
+<a name="line373"></a>
+<a name="line374"></a>		// Close the Application Directory
+<a name="line375"></a>		closedir($directory);
+<a name="line376"></a>
+<a name="line377"></a>		// Look through all the controllers for their methods
+<a name="line378"></a>		foreach ($controllers as $c)
+<a name="line379"></a>		{
+<a name="line380"></a>			// Check to see if the class has been loaded
+<a name="line381"></a>			if (!class_exists($c))
+<a name="line382"></a>			{
+<a name="line383"></a>				$this->CI->load->file($this->APPLICATION_DIRECTORY.$c.'.php');
+<a name="line384"></a>			}
+<a name="line385"></a>
+<a name="line386"></a>			// Add the constructors to the values we don't care about
+<a name="line387"></a>			$this->invalid_methods[] = ucfirst($c);
+<a name="line388"></a>
+<a name="line389"></a>			foreach (get_class_methods($c) as $key => $val)
 <a name="line390"></a>			{
-<a name="line391"></a>				$where = array('controller'=>$class, 'method'=>$value);
-<a name="line392"></a>				$query = $this->CI->db->where($where)->get('permissions');
-<a name="line393"></a>				if($query->num_rows == 0)
-<a name="line394"></a>				{
-<a name="line395"></a>					$this->CI->db->insert('permissions', $where);
-<a name="line396"></a>				}
-<a name="line397"></a>			}	
-<a name="line398"></a>		}
-<a name="line399"></a>	}
-<a name="line400"></a>}
-<a name="line401"></a></pre>
+<a name="line391"></a>				  /* Get a reflection object for the class method */
+<a name="line392"></a>       				$reflect = new ReflectionMethod($c, $val);
+<a name="line393"></a>
+<a name="line394"></a>				/* For private, use isPrivate().  For protected, use isProtected() */
+<a name="line395"></a>				
+<a name="line396"></a>				if($reflect->isPublic()) 
+<a name="line397"></a>				{
+<a name="line398"></a>				  	if (!in_array($val,$this->invalid_methods))
+<a name="line399"></a>					{
+<a name="line400"></a>						// Put the methods we care about into an array
+<a name="line401"></a>						$method[$c][] = $val;
+<a name="line402"></a>					}
+<a name="line403"></a>				}
+<a name="line404"></a>			}
+<a name="line405"></a>		}
+<a name="line406"></a>		
+<a name="line407"></a>		// Now lets create the classes and methods and relate them
+<a name="line408"></a>		foreach ($method as $class => $methods)
+<a name="line409"></a>		{
+<a name="line410"></a>			foreach ($methods as $value)
+<a name="line411"></a>			{
+<a name="line412"></a>				$where = array('controller'=>$class, 'method'=>$value);
+<a name="line413"></a>				$query = $this->CI->db->where($where)->get('permissions');
+<a name="line414"></a>				if($query->num_rows == 0)
+<a name="line415"></a>				{
+<a name="line416"></a>					$this->CI->db->insert('permissions', $where);
+<a name="line417"></a>				}
+<a name="line418"></a>			}	
+<a name="line419"></a>		}
+<a name="line420"></a>	}
+<a name="line421"></a>}
+<a name="line422"></a></pre>
 <div class="header">
 <h1>GiftFlow API</h1>
 <ul>

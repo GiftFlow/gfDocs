@@ -6,7 +6,7 @@
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 
 <meta name="generator" content="PHPDoctor 2RC4 (http://peej.github.com/phpdoctor/)">
-<meta name="when" content="Sun, 20 Jun 2010 17:43:51 +0000">
+<meta name="when" content="Tue, 29 Jun 2010 21:10:10 +0000">
 
 <link rel="stylesheet" type="text/css" href="../../../stylesheet.css">
 <link rel="start" href="../../../overview-summary.html">
@@ -90,31 +90,28 @@
 <a name="line53"></a>		$this->load->view('member/index', $this->data);
 <a name="line54"></a>		$this->load->view('footer', $this->data);
 <a name="line55"></a>	}
-<a name="line56"></a>	function test()
-<a name="line57"></a>	{
-<a name="line58"></a>		$T = new Transaction(4);
-<a name="line59"></a>	}
-<a name="line60"></a>	function lost()
-<a name="line61"></a>	{
-<a name="line62"></a>		$this->data['title'] = "Oops! Page cannot be found.";
-<a name="line63"></a>
-<a name="line64"></a>		$this->load->view('header', $this->data);
-<a name="line65"></a>		$this->load->view('404', $this->data);
-<a name="line66"></a>		$this->load->view('footer', $this->data);
-<a name="line67"></a>	}
-<a name="line68"></a>	function restricted()
-<a name="line69"></a>	{
-<a name="line70"></a>		$this->data['title'] = "Restricted area";
-<a name="line71"></a>
-<a name="line72"></a>		$this->load->view('header', $this->data);
-<a name="line73"></a>		$this->load->view('restricted', $this->data);
-<a name="line74"></a>		$this->load->view('footer', $this->data);
-<a name="line75"></a>	}
-<a name="line76"></a>}
-<a name="line77"></a>
-<a name="line78"></a>/* End of file member.php */
-<a name="line79"></a>/* Location: ./system/application/controllers/welcome.php */
-<a name="line80"></a></pre>
+<a name="line56"></a>
+<a name="line57"></a>	function lost()
+<a name="line58"></a>	{
+<a name="line59"></a>		$this->data['title'] = "Oops! Page cannot be found.";
+<a name="line60"></a>
+<a name="line61"></a>		$this->load->view('header', $this->data);
+<a name="line62"></a>		$this->load->view('404', $this->data);
+<a name="line63"></a>		$this->load->view('footer', $this->data);
+<a name="line64"></a>	}
+<a name="line65"></a>	function restricted()
+<a name="line66"></a>	{
+<a name="line67"></a>		$this->data['title'] = "Restricted area";
+<a name="line68"></a>
+<a name="line69"></a>		$this->load->view('header', $this->data);
+<a name="line70"></a>		$this->load->view('restricted', $this->data);
+<a name="line71"></a>		$this->load->view('footer', $this->data);
+<a name="line72"></a>	}
+<a name="line73"></a>}
+<a name="line74"></a>
+<a name="line75"></a>/* End of file member.php */
+<a name="line76"></a>/* Location: ./system/application/controllers/welcome.php */
+<a name="line77"></a></pre>
 <div class="header">
 <h1>GiftFlow API</h1>
 <ul>

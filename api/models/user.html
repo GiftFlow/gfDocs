@@ -6,7 +6,7 @@
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 
 <meta name="generator" content="PHPDoctor 2RC4 (http://peej.github.com/phpdoctor/)">
-<meta name="when" content="Sun, 20 Jun 2010 17:43:50 +0000">
+<meta name="when" content="Tue, 29 Jun 2010 21:10:09 +0000">
 
 <link rel="stylesheet" type="text/css" href="../stylesheet.css">
 <link rel="start" href="../overview-summary.html">
@@ -290,12 +290,20 @@ salt.</p></td>
 This is used each time a user logs in via Facebook. </p></td>
 </tr>
 <tr>
+<td class="type"> void</td>
+<td class="description"><p class="name"><a href="#facebook_unlink()">facebook_unlink</a>()</p></td>
+</tr>
+<tr>
 <td class="type"> array</td>
 <td class="description"><p class="name"><a href="#following()">following</a>()</p><p class="description">Gets data about all of the people this user is following</p></td>
 </tr>
 <tr>
 <td class="type"> array</td>
 <td class="description"><p class="name"><a href="#gifts()">gifts</a>()</p><p class="description">Returns the user's current gifts</p></td>
+</tr>
+<tr>
+<td class="type"> void</td>
+<td class="description"><p class="name"><a href="#is_admin()">is_admin</a>()</p></td>
 </tr>
 <tr>
 <td class="type"> boolean</td>
@@ -505,7 +513,7 @@ your fields.</p></div>
 
 
 
-<div class='method'><a href="../source/application/models/user.php.html#line364" class="location">application/models/user.php at line 364</a>
+<div class='method'><a href="../source/application/models/user.php.html#line392" class="location">application/models/user.php at line 392</a>
 
 <h3 id="_encrypt()">_encrypt</h3>
 <code class="signature">private  void <strong>_encrypt</strong>(mixed field)</code>
@@ -515,7 +523,7 @@ salt.</p></div></div>
 
 
 
-<div class='method'><a href="../source/application/models/user.php.html#line114" class="location">application/models/user.php at line 114</a>
+<div class='method'><a href="../source/application/models/user.php.html#line125" class="location">application/models/user.php at line 125</a>
 
 <h3 id="activate()">activate</h3>
 <code class="signature">public  void <strong>activate</strong>()</code>
@@ -524,7 +532,7 @@ salt.</p></div></div>
 
 
 
-<div class='method'><a href="../source/application/models/user.php.html#line234" class="location">application/models/user.php at line 234</a>
+<div class='method'><a href="../source/application/models/user.php.html#line246" class="location">application/models/user.php at line 246</a>
 
 <h3 id="completed_gifts()">completed_gifts</h3>
 <code class="signature">public  array <strong>completed_gifts</strong>()</code>
@@ -533,7 +541,7 @@ salt.</p></div></div>
 
 
 
-<div class='method'><a href="../source/application/models/user.php.html#line249" class="location">application/models/user.php at line 249</a>
+<div class='method'><a href="../source/application/models/user.php.html#line261" class="location">application/models/user.php at line 261</a>
 
 <h3 id="completed_requests()">completed_requests</h3>
 <code class="signature">public  array <strong>completed_requests</strong>()</code>
@@ -551,7 +559,7 @@ salt.</p></div></div>
 
 
 
-<div class='method'><a href="../source/application/models/user.php.html#line322" class="location">application/models/user.php at line 322</a>
+<div class='method'><a href="../source/application/models/user.php.html#line341" class="location">application/models/user.php at line 341</a>
 
 <h3 id="facebook_sync()">facebook_sync</h3>
 <code class="signature">public  void <strong>facebook_sync</strong>(JSON data)</code>
@@ -567,7 +575,16 @@ not, however, overwrite any database data with Facebook data.</p><dl>
 
 
 
-<div class='method'><a href="../source/application/models/user.php.html#line282" class="location">application/models/user.php at line 282</a>
+<div class='method'><a href="../source/application/models/user.php.html#line378" class="location">application/models/user.php at line 378</a>
+
+<h3 id="facebook_unlink()">facebook_unlink</h3>
+<code class="signature">public  void <strong>facebook_unlink</strong>()</code>
+<div class="details">
+</div></div>
+
+
+
+<div class='method'><a href="../source/application/models/user.php.html#line294" class="location">application/models/user.php at line 294</a>
 
 <h3 id="following()">following</h3>
 <code class="signature">public  array <strong>following</strong>()</code>
@@ -576,7 +593,7 @@ not, however, overwrite any database data with Facebook data.</p><dl>
 
 
 
-<div class='method'><a href="../source/application/models/user.php.html#line154" class="location">application/models/user.php at line 154</a>
+<div class='method'><a href="../source/application/models/user.php.html#line166" class="location">application/models/user.php at line 166</a>
 
 <h3 id="gifts()">gifts</h3>
 <code class="signature">public  array <strong>gifts</strong>()</code>
@@ -585,7 +602,16 @@ not, however, overwrite any database data with Facebook data.</p><dl>
 
 
 
-<div class='method'><a href="../source/application/models/user.php.html#line306" class="location">application/models/user.php at line 306</a>
+<div class='method'><a href="../source/application/models/user.php.html#line114" class="location">application/models/user.php at line 114</a>
+
+<h3 id="is_admin()">is_admin</h3>
+<code class="signature">public  void <strong>is_admin</strong>()</code>
+<div class="details">
+</div></div>
+
+
+
+<div class='method'><a href="../source/application/models/user.php.html#line321" class="location">application/models/user.php at line 321</a>
 
 <h3 id="is_followed_by()">is_followed_by</h3>
 <code class="signature">public  boolean <strong>is_followed_by</strong>(int id)</code>
@@ -598,7 +624,7 @@ not, however, overwrite any database data with Facebook data.</p><dl>
 
 
 
-<div class='method'><a href="../source/application/models/user.php.html#line294" class="location">application/models/user.php at line 294</a>
+<div class='method'><a href="../source/application/models/user.php.html#line305" class="location">application/models/user.php at line 305</a>
 
 <h3 id="is_following()">is_following</h3>
 <code class="signature">public  boolean <strong>is_following</strong>(int id)</code>
@@ -611,7 +637,7 @@ not, however, overwrite any database data with Facebook data.</p><dl>
 
 
 
-<div class='method'><a href="../source/application/models/user.php.html#line121" class="location">application/models/user.php at line 121</a>
+<div class='method'><a href="../source/application/models/user.php.html#line133" class="location">application/models/user.php at line 133</a>
 
 <h3 id="load_mail()">load_mail</h3>
 <code class="signature">public  void <strong>load_mail</strong>(int limit, int offset, str folder)</code>
@@ -630,7 +656,7 @@ database entry</p></div></div>
 
 
 
-<div class='method'><a href="../source/application/models/user.php.html#line186" class="location">application/models/user.php at line 186</a>
+<div class='method'><a href="../source/application/models/user.php.html#line198" class="location">application/models/user.php at line 198</a>
 
 <h3 id="needs()">needs</h3>
 <code class="signature">public  array <strong>needs</strong>()</code>
@@ -639,7 +665,7 @@ database entry</p></div></div>
 
 
 
-<div class='method'><a href="../source/application/models/user.php.html#line218" class="location">application/models/user.php at line 218</a>
+<div class='method'><a href="../source/application/models/user.php.html#line230" class="location">application/models/user.php at line 230</a>
 
 <h3 id="requests()">requests</h3>
 <code class="signature">public  array <strong>requests</strong>()</code>
@@ -648,7 +674,7 @@ database entry</p></div></div>
 
 
 
-<div class='method'><a href="../source/application/models/user.php.html#line264" class="location">application/models/user.php at line 264</a>
+<div class='method'><a href="../source/application/models/user.php.html#line276" class="location">application/models/user.php at line 276</a>
 
 <h3 id="stats()">stats</h3>
 <code class="signature">public  boolean <strong>stats</strong>()</code>

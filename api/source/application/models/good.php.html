@@ -6,7 +6,7 @@
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 
 <meta name="generator" content="PHPDoctor 2RC4 (http://peej.github.com/phpdoctor/)">
-<meta name="when" content="Sun, 20 Jun 2010 17:43:51 +0000">
+<meta name="when" content="Tue, 29 Jun 2010 21:10:10 +0000">
 
 <link rel="stylesheet" type="text/css" href="../../../stylesheet.css">
 <link rel="start" href="../../../overview-summary.html">
@@ -164,66 +164,71 @@
 <a name="line127"></a>		// Filter by status
 <a name="line128"></a>		if( !empty( $status) )
 <a name="line129"></a>		{	
-<a name="line130"></a>			// Multiple statii provided to filter by
-<a name="line131"></a>			if( is_array($status))
-<a name="line132"></a>				$T->where_in('status', $status);
-<a name="line133"></a>			
-<a name="line134"></a>			// Single status provided to filter by
-<a name="line135"></a>			else
-<a name="line136"></a>				$T->where('status', $status);
-<a name="line137"></a>		}
-<a name="line138"></a>		
-<a name="line139"></a>		// Execute query
-<a name="line140"></a>		$T	->where_related_gift('id', $this->id)
-<a name="line141"></a>			->order_by('created', 'desc')
-<a name="line142"></a>			->include_related('recipient', "*", NULL, TRUE)
-<a name="line143"></a>			->get();
-<a name="line144"></a>		
-<a name="line145"></a>		// Return result
-<a name="line146"></a>		return $T->all;
-<a name="line147"></a>    	}
-<a name="line148"></a>    	
-<a name="line149"></a>    	/**
-<a name="line150"></a>    	*	@param int $user_id		ID of user whose request you're requesting
-<a name="line151"></a>    	*	@return mixed
-<a name="line152"></a>    	*/
-<a name="line153"></a>    	function request_status( $user_id )
-<a name="line154"></a>    	{
-<a name="line155"></a>		$T = new Transaction();
-<a name="line156"></a>		$T->where_related_recipient('id',$user_id)
-<a name="line157"></a>			->where_related_gift('id', $this->id)
-<a name="line158"></a>			->get();
-<a name="line159"></a>		if($T->exists())
-<a name="line160"></a>		{
-<a name="line161"></a>			return array(	"status"=>$T->all[0]->status,
-<a name="line162"></a>							"request"=>$T->all[0]);
-<a name="line163"></a>		}
-<a name="line164"></a>		else
+<a name="line130"></a>
+<a name="line131"></a>			// Multiple statii provided to filter by
+<a name="line132"></a>			if( is_array($status))
+<a name="line133"></a>			{
+<a name="line134"></a>				$T->where_in('status', $status);
+<a name="line135"></a>			}
+<a name="line136"></a>			
+<a name="line137"></a>			// Single status provided to filter by
+<a name="line138"></a>			else
+<a name="line139"></a>			{
+<a name="line140"></a>				$T->where('status', $status);
+<a name="line141"></a>			}
+<a name="line142"></a>		}
+<a name="line143"></a>		
+<a name="line144"></a>		// Execute query
+<a name="line145"></a>		$T	->where_related_gift('id', $this->id)
+<a name="line146"></a>			->order_by('created', 'desc')
+<a name="line147"></a>			->include_related('recipient', "*", TRUE, TRUE)
+<a name="line148"></a>			->get();
+<a name="line149"></a>
+<a name="line150"></a>		// Return result
+<a name="line151"></a>		return $T->all;
+<a name="line152"></a>    	}
+<a name="line153"></a>    	
+<a name="line154"></a>    	/**
+<a name="line155"></a>    	*	@param int $user_id		ID of user whose request you're requesting
+<a name="line156"></a>    	*	@return mixed
+<a name="line157"></a>    	*/
+<a name="line158"></a>    	function request_status( $user_id )
+<a name="line159"></a>    	{
+<a name="line160"></a>		$T = new Transaction();
+<a name="line161"></a>		$T->where_related_recipient('id',$user_id)
+<a name="line162"></a>			->where_related_gift('id', $this->id)
+<a name="line163"></a>			->get();
+<a name="line164"></a>		if($T->exists())
 <a name="line165"></a>		{
-<a name="line166"></a>			return "unrequested";
-<a name="line167"></a>		}
-<a name="line168"></a>    	}
-<a name="line169"></a>    	/**
-<a name="line170"></a>    	*	Loads the current active transaction for this gift.
-<a name="line171"></a>    	*
-<a name="line172"></a>    	*	@return Transaction
-<a name="line173"></a>    	*	@return Array
-<a name="line174"></a>    	*/
-<a name="line175"></a>    	function active_transaction()
-<a name="line176"></a>    	{
-<a name="line177"></a>		$T = new Transaction();
-<a name="line178"></a>		$T	->where_related_gift('id', $this->id)
-<a name="line179"></a>			->where_in('status',array('accepted', 'exchanged') )
-<a name="line180"></a>			->order_by('created', 'desc')
-<a name="line181"></a>			->include_related('recipient', "*", NULL, TRUE)
-<a name="line182"></a>			->get();
-<a name="line183"></a>		if(count($T->all)==1) return $T->all[0];
-<a name="line184"></a>		else return $T->all;
-<a name="line185"></a>    	}
-<a name="line186"></a>
-<a name="line187"></a>}
-<a name="line188"></a>?>
-<a name="line189"></a></pre>
+<a name="line166"></a>			return array(	"status"=>$T->all[0]->status,
+<a name="line167"></a>							"request"=>$T->all[0]);
+<a name="line168"></a>		}
+<a name="line169"></a>		else
+<a name="line170"></a>		{
+<a name="line171"></a>			return "unrequested";
+<a name="line172"></a>		}
+<a name="line173"></a>    	}
+<a name="line174"></a>    	/**
+<a name="line175"></a>    	*	Loads the current active transaction for this gift.
+<a name="line176"></a>    	*
+<a name="line177"></a>    	*	@return Transaction
+<a name="line178"></a>    	*	@return Array
+<a name="line179"></a>    	*/
+<a name="line180"></a>    	function active_transaction()
+<a name="line181"></a>    	{
+<a name="line182"></a>		$T = new Transaction();
+<a name="line183"></a>		$T	->where_related_gift('id', $this->id)
+<a name="line184"></a>			->where_in('status',array('accepted', 'exchanged') )
+<a name="line185"></a>			->order_by('created', 'desc')
+<a name="line186"></a>			->include_related('recipient', "*", TRUE, TRUE)
+<a name="line187"></a>			->get();
+<a name="line188"></a>		if(count($T->all)==1) return $T->all[0];
+<a name="line189"></a>		else return $T->all;
+<a name="line190"></a>    	}
+<a name="line191"></a>
+<a name="line192"></a>}
+<a name="line193"></a>?>
+<a name="line194"></a></pre>
 <div class="header">
 <h1>GiftFlow API</h1>
 <ul>

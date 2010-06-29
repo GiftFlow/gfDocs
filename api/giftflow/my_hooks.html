@@ -1,0 +1,231 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+
+<html lang="en">
+<head>
+
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
+<meta name="generator" content="PHPDoctor 2RC4 (http://peej.github.com/phpdoctor/)">
+<meta name="when" content="Tue, 29 Jun 2010 21:10:08 +0000">
+
+<link rel="stylesheet" type="text/css" href="../stylesheet.css">
+<link rel="start" href="../overview-summary.html">
+
+<title>MY_Hooks (GiftFlow API)</title>
+
+</head>
+<body id="definition" onload="parent.document.title=document.title;">
+
+<div class="header">
+<h1>GiftFlow API</h1>
+<ul>
+<li><a href="../overview-summary.html">Overview</a></li>
+<li><a href="../giftflow/package-summary.html">Package</a></li>
+<li class="active">Class</li>
+<li><a href="../giftflow/package-tree.html">Tree</a></li>
+<li><a href="../overview-files.html">Files</a></li>
+<li><a href="../deprecated-list.html">Deprecated</a></li>
+<li><a href="../index-all.html">Index</a></li>
+</ul>
+</div>
+
+<div class="small_links">
+<a href="../index.html" target="_top">Frames</a>
+<a href="../giftflow/my_hooks.html" target="_top">No frames</a>
+</div>
+<div class="small_links">
+Summary: <a href="#summary_field">Field</a> | <a href="#summary_method">Method</a> | <a href="#summary_constr">Constr</a>
+Detail: <a href="#detail_field">Field</a> | <a href="#detail_method">Method</a> | <a href="#summary_constr">Constr</a>
+</div>
+<hr>
+
+<div class="qualifiedName">GiftFlow\MY_Hooks</div>
+<a href="../source/application/libraries/my_hooks.php.html#line31" class="location">application/libraries/MY_Hooks.php at line 31</a>
+
+<h1>Class MY_Hooks</h1>
+
+<pre class="tree"><a href="../giftflow/ci_hooks.html">CI_Hooks</a><br>    └─<strong>MY_Hooks</strong><br /></pre>
+
+<hr>
+
+<p class="signature">public  class <strong>MY_Hooks</strong><br>extends <a href="../giftflow/ci_hooks.html">CI_Hooks</a>
+
+</p>
+
+<div class="comment" id="overview_description"><p>CodeIgniter MY_Hooks Class
+
+Provides a mechanism to extend the base plugin system.  This class
+allows other plugin hooks to be created and called without messing
+with the core system hooks.</p></div>
+
+<dl>
+<dt>Package		CodeIgniter.</dt>
+<dt>Subpackage	Libraries.</dt>
+<dt>Category	Libraries.</dt>
+<dt>Author		David:</dt>
+<dd>@ <xeoncross.com></dd>
+<dt>Link		http://codeigniter.com/forums/viewthread/67697/.</dt>
+<dt>Author		ExpressionEngine:</dt>
+<dd>Dev Team</dd>
+<dt>Link		http://codeigniter.com/user_guide/libraries/encryption.html.</dt>
+</dl>
+<hr>
+
+<table id="summary_field">
+<tr><th colspan="2">Field Summary</th></tr>
+<tr>
+<td class="type"> mixed</td>
+<td class="description"><p class="name"><a href="#objects">$objects</a></p></td>
+</tr>
+</table>
+
+<table class="inherit">
+<tr><th colspan="2">Fields inherited from GiftFlow\CI_Hooks</th></tr>
+<tr><td><a href="../giftflow/ci_hooks.html#enabled">enabled</a>, <a href="../giftflow/ci_hooks.html#hooks">hooks</a>, <a href="../giftflow/ci_hooks.html#in_progress">in_progress</a></td></tr></table>
+
+<table id="summary_method">
+<tr><th colspan="2">Method Summary</th></tr>
+<tr>
+<td class="type">private  void</td>
+<td class="description"><p class="name"><a href="#_run_hook()">_run_hook</a>(mixed hook, mixed data)</p><p class="description">Run Hook
+
+Runs a particular hook</p></td>
+</tr>
+<tr>
+<td class="type"> void</td>
+<td class="description"><p class="name"><a href="#call()">call</a>(str which, mixed data)</p><p class="description">Call Hook
+
+Calls a particular hook that return output
+call() is prettier than _call_hook()</p></td>
+</tr>
+<tr>
+<td class="type"> void</td>
+<td class="description"><p class="name"><a href="#filter()">filter</a>(str which, mixed data)</p><p class="description">Filter Hook
+
+Similar to call() but alows data to be filtered
+by multible hooks and the result is returned.</p></td>
+</tr>
+<tr>
+<td class="type"> void</td>
+<td class="description"><p class="name"><a href="#remove()">remove</a>(str hook_name, str function)</p><p class="description">Remove Hook
+
+remove a particular function from the given hook</p></td>
+</tr>
+</table>
+
+<table class="inherit">
+<tr><th colspan="2">Methods inherited from GiftFlow\CI_Hooks</th></tr>
+<tr><td><a href="../giftflow/ci_hooks.html#__construct()">__construct</a>, <a href="../giftflow/ci_hooks.html#_call_hook()">_call_hook</a>, <a href="../giftflow/ci_hooks.html#_initialize()">_initialize</a>, <a href="../giftflow/ci_hooks.html#_run_hook()">_run_hook</a></td></tr></table>
+
+<h2 id="detail_field">Field Detail</h2>
+<a href="../source/application/libraries/my_hooks.php.html#line34" class="location">application/libraries/MY_Hooks.php at line 34</a>
+
+<h3 id="objects">objects</h3>
+<code class="signature">public  mixed <strong>$objects</strong> = array()</code>
+<div class="details">
+</div>
+
+<hr>
+
+<h2 id="detail_method">Method Detail</h2><div class="method_detail">
+<div class='method'><a href="../source/application/libraries/my_hooks.php.html#line100" class="location">application/libraries/MY_Hooks.php at line 100</a>
+
+<h3 id="_run_hook()">_run_hook</h3>
+<code class="signature">private  void <strong>_run_hook</strong>(mixed hook, mixed data)</code>
+<div class="details">
+<p>Run Hook
+
+Runs a particular hook</p><dl>
+<dt>Access	private.</dt>
+<dt>Param	array	the:</dt>
+<dd>hook details</dd>
+<dt>Return	bool.</dt>
+</dl>
+</div></div>
+
+
+
+<div class='method'><a href="../source/application/libraries/my_hooks.php.html#line47" class="location">application/libraries/MY_Hooks.php at line 47</a>
+
+<h3 id="call()">call</h3>
+<code class="signature">public  void <strong>call</strong>(str which, mixed data)</code>
+<div class="details">
+<p>Call Hook
+
+Calls a particular hook that return output
+call() is prettier than _call_hook()</p><dl>
+<dt>Access	public.</dt>
+<dt>Param	string	the:</dt>
+<dd>hook name</dd>
+<dt>Return	void.</dt>
+</dl>
+</div></div>
+
+
+
+<div class='method'><a href="../source/application/libraries/my_hooks.php.html#line63" class="location">application/libraries/MY_Hooks.php at line 63</a>
+
+<h3 id="filter()">filter</h3>
+<code class="signature">public  void <strong>filter</strong>(str which, mixed data)</code>
+<div class="details">
+<p>Filter Hook
+
+Similar to call() but alows data to be filtered
+by multible hooks and the result is returned.</p><dl>
+<dt>Access	public.</dt>
+<dt>Param	string	the:</dt>
+<dd>hook name</dd>
+<dt>Param	mixed	the:</dt>
+<dd>data to filter</dd>
+<dt>Return	mixed.</dt>
+</dl>
+</div></div>
+
+
+
+<div class='method'><a href="../source/application/libraries/my_hooks.php.html#line207" class="location">application/libraries/MY_Hooks.php at line 207</a>
+
+<h3 id="remove()">remove</h3>
+<code class="signature">public  void <strong>remove</strong>(str hook_name, str function)</code>
+<div class="details">
+<p>Remove Hook
+
+remove a particular function from the given hook</p><dl>
+<dt>Access	private.</dt>
+<dt>Param	string	the:</dt>
+<dd>hook name</dd>
+<dd>function name</dd>
+<dt>Return	void.</dt>
+</dl>
+</div></div>
+
+
+
+</div><div class="header">
+<h1>GiftFlow API</h1>
+<ul>
+<li><a href="../overview-summary.html">Overview</a></li>
+<li><a href="../giftflow/package-summary.html">Package</a></li>
+<li class="active">Class</li>
+<li><a href="../giftflow/package-tree.html">Tree</a></li>
+<li><a href="../overview-files.html">Files</a></li>
+<li><a href="../deprecated-list.html">Deprecated</a></li>
+<li><a href="../index-all.html">Index</a></li>
+</ul>
+</div>
+
+<div class="small_links">
+<a href="../index.html" target="_top">Frames</a>
+<a href="../giftflow/my_hooks.html" target="_top">No frames</a>
+</div>
+<div class="small_links">
+Summary: <a href="#summary_field">Field</a> | <a href="#summary_method">Method</a> | <a href="#summary_constr">Constr</a>
+Detail: <a href="#detail_field">Field</a> | <a href="#detail_method">Method</a> | <a href="#summary_constr">Constr</a>
+</div>
+<hr>
+
+<p id="footer">This document was generated by <a href="http://peej.github.com/phpdoctor/">PHPDoctor: The PHP Documentation Creator</a></p>
+
+</body>
+
+</html>

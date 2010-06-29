@@ -1,0 +1,606 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+
+<html lang="en">
+<head>
+
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
+<meta name="generator" content="PHPDoctor 2RC4 (http://peej.github.com/phpdoctor/)">
+<meta name="when" content="Tue, 29 Jun 2010 21:10:09 +0000">
+
+<link rel="stylesheet" type="text/css" href="../stylesheet.css">
+<link rel="start" href="../overview-summary.html">
+
+<title>OAuthRequest (GiftFlow API)</title>
+
+</head>
+<body id="definition" onload="parent.document.title=document.title;">
+
+<div class="header">
+<h1>GiftFlow API</h1>
+<ul>
+<li><a href="../overview-summary.html">Overview</a></li>
+<li><a href="../giftflow/package-summary.html">Package</a></li>
+<li class="active">Class</li>
+<li><a href="../giftflow/package-tree.html">Tree</a></li>
+<li><a href="../overview-files.html">Files</a></li>
+<li><a href="../deprecated-list.html">Deprecated</a></li>
+<li><a href="../index-all.html">Index</a></li>
+</ul>
+</div>
+
+<div class="small_links">
+<a href="../index.html" target="_top">Frames</a>
+<a href="../giftflow/oauthrequest.html" target="_top">No frames</a>
+</div>
+<div class="small_links">
+Summary: <a href="#summary_field">Field</a> | <a href="#summary_method">Method</a> | <a href="#summary_constr">Constr</a>
+Detail: <a href="#detail_field">Field</a> | <a href="#detail_method">Method</a> | <a href="#summary_constr">Constr</a>
+</div>
+<hr>
+
+<div class="qualifiedName">GiftFlow\OAuthRequest</div>
+<a href="../source/application/libraries/oauth/oauthrequest.php.html#line39" class="location">application/libraries/oauth/OAuthRequest.php at line 39</a>
+
+<h1>Class OAuthRequest</h1>
+
+<pre class="tree"><strong>OAuthRequest</strong><br /></pre>
+
+<hr>
+
+<p class="signature">public  class <strong>OAuthRequest</strong></p>
+
+<div class="comment" id="overview_description"><p>Object to parse an incoming OAuth request or prepare an outgoing OAuth request</p></div>
+
+<hr>
+
+<table id="summary_field">
+<tr><th colspan="2">Field Summary</th></tr>
+<tr>
+<td class="type">protected  mixed</td>
+<td class="description"><p class="name"><a href="#__construct">$__construct</a></p></td>
+</tr>
+<tr>
+<td class="type">protected  mixed</td>
+<td class="description"><p class="name"><a href="#body">$body</a></p></td>
+</tr>
+<tr>
+<td class="type">protected  mixed</td>
+<td class="description"><p class="name"><a href="#headers">$headers</a></p></td>
+</tr>
+<tr>
+<td class="type">protected  mixed</td>
+<td class="description"><p class="name"><a href="#method">$method</a></p></td>
+</tr>
+<tr>
+<td class="type">protected  mixed</td>
+<td class="description"><p class="name"><a href="#param">$param</a></p></td>
+</tr>
+<tr>
+<td class="type">protected  mixed</td>
+<td class="description"><p class="name"><a href="#uri">$uri</a></p></td>
+</tr>
+<tr>
+<td class="type">protected  mixed</td>
+<td class="description"><p class="name"><a href="#uri_parts">$uri_parts</a></p></td>
+</tr>
+</table>
+
+<table id="summary_method">
+<tr><th colspan="2">Method Summary</th></tr>
+<tr>
+<td class="type"> void</td>
+<td class="description"><p class="name"><a href="#__construct()">__construct</a>(string uri, string method, string parameters, array headers, string body)</p><p class="description">Construct from the current request. </p></td>
+</tr>
+<tr>
+<td class="type"> string</td>
+<td class="description"><p class="name"><a href="#calculateDataSignature()">calculateDataSignature</a>(string data, string consumer_secret, string token_secret, string signature_method)</p><p class="description">Calculate the signature of a string.
+</p></td>
+</tr>
+<tr>
+<td class="type"> string</td>
+<td class="description"><p class="name"><a href="#calculateSignature()">calculateSignature</a>(string consumer_secret, string token_secret, str token_type)</p><p class="description">Calculate the signature of the request, using the method in oauth_signature_method.
+</p></td>
+</tr>
+<tr>
+<td class="type"> void</td>
+<td class="description"><p class="name"><a href="#checks()">checks</a>()</p><p class="description">Perform some sanity checks.</p></td>
+</tr>
+<tr>
+<td class="type">protected  int</td>
+<td class="description"><p class="name"><a href="#defaultPortForScheme()">defaultPortForScheme</a>(string scheme)</p><p class="description">Return the default port for a scheme</p></td>
+</tr>
+<tr>
+<td class="type"> string</td>
+<td class="description"><p class="name"><a href="#getBody()">getBody</a>()</p><p class="description">Return the body of the OAuth request.</p></td>
+</tr>
+<tr>
+<td class="type"> string</td>
+<td class="description"><p class="name"><a href="#getMethod()">getMethod</a>()</p><p class="description">Return the request method</p></td>
+</tr>
+<tr>
+<td class="type"> string</td>
+<td class="description"><p class="name"><a href="#getNormalizedParams()">getNormalizedParams</a>()</p><p class="description">Return the complete parameter string for the signature check.
+</p></td>
+</tr>
+<tr>
+<td class="type"> string</td>
+<td class="description"><p class="name"><a href="#getParam()">getParam</a>(string name, boolean urldecode)</p><p class="description">Get a parameter, value is always urlencoded</p></td>
+</tr>
+<tr>
+<td class="type">private  string</td>
+<td class="description"><p class="name"><a href="#getRequestBody()">getRequestBody</a>()</p><p class="description">Get the body of a POST or PUT.
+</p></td>
+</tr>
+<tr>
+<td class="type">private  string</td>
+<td class="description"><p class="name"><a href="#getRequestContentType()">getRequestContentType</a>()</p><p class="description">Fetch the content type of the current request</p></td>
+</tr>
+<tr>
+<td class="type"> void</td>
+<td class="description"><p class="name"><a href="#getRequestUrl()">getRequestUrl</a>()</p><p class="description">Return the normalised url for signature checks</p></td>
+</tr>
+<tr>
+<td class="type"> <a href="../giftflow/oauthsignaturemethod.html">OAuthSignatureMethod</a></td>
+<td class="description"><p class="name"><a href="#getSignatureMethod()">getSignatureMethod</a>(string method)</p><p class="description">Fetch the signature object used for calculating and checking the signature base string</p></td>
+</tr>
+<tr>
+<td class="type">private  void</td>
+<td class="description"><p class="name"><a href="#parseHeaders()">parseHeaders</a>()</p><p class="description">Parse the oauth parameters from the request headers
+Looks for something like:Authorization: OAuth realm="http://photos.example.net/authorize",
+oauth_consumer_key="dpf43f3p2l4k3l03",
+oauth_token="nnch734d00sl2jdk",
+oauth_signature_method="HMAC-SHA1",
+oauth_signature="tR3%2BTy81lMeYAr%2FFid0kMTYa%2FWM%3D",
+oauth_timestamp="1191242096",
+oauth_nonce="kllo9940pd9333jh",
+oauth_version="1.0"</p></td>
+</tr>
+<tr>
+<td class="type">protected  void</td>
+<td class="description"><p class="name"><a href="#parseUri()">parseUri</a>(string parameters)</p><p class="description">Parse the uri into its parts. </p></td>
+</tr>
+<tr>
+<td class="type"> void</td>
+<td class="description"><p class="name"><a href="#redirect()">redirect</a>(string uri, array params)</p><p class="description">Simple function to perform a redirect (GET).
+</p></td>
+</tr>
+<tr>
+<td class="type"> string</td>
+<td class="description"><p class="name"><a href="#selectSignatureMethod()">selectSignatureMethod</a>(array methods)</p><p class="description">Select a signature method from the list of available methods.
+</p></td>
+</tr>
+<tr>
+<td class="type"> string</td>
+<td class="description"><p class="name"><a href="#setBody()">setBody</a>(mixed body)</p><p class="description">Return the body of the OAuth request.</p></td>
+</tr>
+<tr>
+<td class="type"> void</td>
+<td class="description"><p class="name"><a href="#setParam()">setParam</a>(string name, string value, boolean encoded)</p><p class="description">Set a parameter</p></td>
+</tr>
+<tr>
+<td class="type"> string</td>
+<td class="description"><p class="name"><a href="#signatureBaseString()">signatureBaseString</a>()</p><p class="description">Return the signature base string.
+</p></td>
+</tr>
+<tr>
+<td class="type">protected  void</td>
+<td class="description"><p class="name"><a href="#transcodeParams()">transcodeParams</a>()</p><p class="description">Re-encode all parameters so that they are encoded using RFC3986.
+</p></td>
+</tr>
+<tr>
+<td class="type"> string</td>
+<td class="description"><p class="name"><a href="#urldecode()">urldecode</a>(string s)</p><p class="description">Decode a string according to RFC3986.
+</p></td>
+</tr>
+<tr>
+<td class="type"> string</td>
+<td class="description"><p class="name"><a href="#urlencode()">urlencode</a>(string s)</p><p class="description">Encode a string according to the RFC3986</p></td>
+</tr>
+<tr>
+<td class="type"> string</td>
+<td class="description"><p class="name"><a href="#urltranscode()">urltranscode</a>(string s)</p><p class="description">urltranscode - make sure that a value is encoded using RFC3986.
+</p></td>
+</tr>
+</table>
+
+<h2 id="detail_field">Field Detail</h2>
+<a href="../source/application/libraries/oauth/oauthrequest.php.html#line42" class="location">application/libraries/oauth/OAuthRequest.php at line 42</a>
+
+<h3 id="__construct">__construct</h3>
+<code class="signature">protected  mixed <strong>$__construct</strong></code>
+<div class="details">
+</div>
+
+<hr>
+
+<a href="../source/application/libraries/oauth/oauthrequest.php.html#line60" class="location">application/libraries/oauth/OAuthRequest.php at line 60</a>
+
+<h3 id="body">body</h3>
+<code class="signature">protected  mixed <strong>$body</strong></code>
+<div class="details">
+</div>
+
+<hr>
+
+<a href="../source/application/libraries/oauth/oauthrequest.php.html#line54" class="location">application/libraries/oauth/OAuthRequest.php at line 54</a>
+
+<h3 id="headers">headers</h3>
+<code class="signature">protected  mixed <strong>$headers</strong></code>
+<div class="details">
+</div>
+
+<hr>
+
+<a href="../source/application/libraries/oauth/oauthrequest.php.html#line57" class="location">application/libraries/oauth/OAuthRequest.php at line 57</a>
+
+<h3 id="method">method</h3>
+<code class="signature">protected  mixed <strong>$method</strong></code>
+<div class="details">
+</div>
+
+<hr>
+
+<a href="../source/application/libraries/oauth/oauthrequest.php.html#line45" class="location">application/libraries/oauth/OAuthRequest.php at line 45</a>
+
+<h3 id="param">param</h3>
+<code class="signature">protected  mixed <strong>$param</strong> = array()</code>
+<div class="details">
+</div>
+
+<hr>
+
+<a href="../source/application/libraries/oauth/oauthrequest.php.html#line51" class="location">application/libraries/oauth/OAuthRequest.php at line 51</a>
+
+<h3 id="uri">uri</h3>
+<code class="signature">protected  mixed <strong>$uri</strong></code>
+<div class="details">
+</div>
+
+<hr>
+
+<a href="../source/application/libraries/oauth/oauthrequest.php.html#line48" class="location">application/libraries/oauth/OAuthRequest.php at line 48</a>
+
+<h3 id="uri_parts">uri_parts</h3>
+<code class="signature">protected  mixed <strong>$uri_parts</strong></code>
+<div class="details">
+</div>
+
+<hr>
+
+<h2 id="detail_method">Method Detail</h2><div class="method_detail">
+<div class='method'><a href="../source/application/libraries/oauth/oauthrequest.php.html#line73" class="location">application/libraries/oauth/OAuthRequest.php at line 73</a>
+
+<h3 id="__construct()">__construct</h3>
+<code class="signature">public  void <strong>__construct</strong>(string uri, string method, string parameters, array headers, string body)</code>
+<div class="details">
+<p>Construct from the current request. Useful for checking the signature of a request.
+When not supplied with any parameters this will use the current request.</p><dl>
+<dt>Parameters:</dt>
+<dd>uri - might include parameters</dd>
+<dd>method - GET, PUT, POST etc.</dd>
+<dd>parameters - additional post parameters, urlencoded (RFC1738)</dd>
+<dd>headers - headers for request</dd>
+<dd>body - optional body of the OAuth request (POST or PUT)</dd>
+</dl>
+</div></div>
+
+
+
+<div class='method'><a href="../source/application/libraries/oauth/oauthrequest.php.html#line201" class="location">application/libraries/oauth/OAuthRequest.php at line 201</a>
+
+<h3 id="calculateDataSignature()">calculateDataSignature</h3>
+<code class="signature">public  string <strong>calculateDataSignature</strong>(string data, string consumer_secret, string token_secret, string signature_method)</code>
+<div class="details">
+<p>Calculate the signature of a string.
+Uses the signature method from the current parameters.</p><dl>
+<dt>Exception:</dt>
+<dd>OAuthException thrown when the signature method is unknown</dd>
+<dt>Returns:</dt>
+<dd>signature</dd>
+</dl>
+</div></div>
+
+
+
+<div class='method'><a href="../source/application/libraries/oauth/oauthrequest.php.html#line160" class="location">application/libraries/oauth/OAuthRequest.php at line 160</a>
+
+<h3 id="calculateSignature()">calculateSignature</h3>
+<code class="signature">public  string <strong>calculateSignature</strong>(string consumer_secret, string token_secret, str token_type)</code>
+<div class="details">
+<p>Calculate the signature of the request, using the method in oauth_signature_method.
+The signature is returned encoded in the form as used in the url.  So the base64 and
+urlencoding has been done.</p><dl>
+<dt>Exception:</dt>
+<dd>when not all parts available</dd>
+</dl>
+</div></div>
+
+
+
+<div class='method'><a href="../source/application/libraries/oauth/oauthrequest.php.html#line285" class="location">application/libraries/oauth/OAuthRequest.php at line 285</a>
+
+<h3 id="checks()">checks</h3>
+<code class="signature">public  void <strong>checks</strong>()</code>
+<div class="details">
+<p>Perform some sanity checks.</p><dl>
+<dt>Exception:</dt>
+<dd>OAuthException thrown when sanity checks failed</dd>
+</dl>
+</div></div>
+
+
+
+<div class='method'><a href="../source/application/libraries/oauth/oauthrequest.php.html#line575" class="location">application/libraries/oauth/OAuthRequest.php at line 575</a>
+
+<h3 id="defaultPortForScheme()">defaultPortForScheme</h3>
+<code class="signature">protected  int <strong>defaultPortForScheme</strong>(string scheme)</code>
+<div class="details">
+<p>Return the default port for a scheme</p></div></div>
+
+
+
+<div class='method'><a href="../source/application/libraries/oauth/oauthrequest.php.html#line469" class="location">application/libraries/oauth/OAuthRequest.php at line 469</a>
+
+<h3 id="getBody()">getBody</h3>
+<code class="signature">public  string <strong>getBody</strong>()</code>
+<div class="details">
+<p>Return the body of the OAuth request.</p><dl>
+<dt>Returns:</dt>
+<dd>null when no body</dd>
+</dl>
+</div></div>
+
+
+
+<div class='method'><a href="../source/application/libraries/oauth/oauthrequest.php.html#line303" class="location">application/libraries/oauth/OAuthRequest.php at line 303</a>
+
+<h3 id="getMethod()">getMethod</h3>
+<code class="signature">public  string <strong>getMethod</strong>()</code>
+<div class="details">
+<p>Return the request method</p></div></div>
+
+
+
+<div class='method'><a href="../source/application/libraries/oauth/oauthrequest.php.html#line314" class="location">application/libraries/oauth/OAuthRequest.php at line 314</a>
+
+<h3 id="getNormalizedParams()">getNormalizedParams</h3>
+<code class="signature">public  string <strong>getNormalizedParams</strong>()</code>
+<div class="details">
+<p>Return the complete parameter string for the signature check.
+All parameters are correctly urlencoded and sorted on name and value</p></div></div>
+
+
+
+<div class='method'><a href="../source/application/libraries/oauth/oauthrequest.php.html#line381" class="location">application/libraries/oauth/OAuthRequest.php at line 381</a>
+
+<h3 id="getParam()">getParam</h3>
+<code class="signature">public  string <strong>getParam</strong>(string name, boolean urldecode)</code>
+<div class="details">
+<p>Get a parameter, value is always urlencoded</p><dl>
+<dt>Parameters:</dt>
+<dd></dd>
+<dd>urldecode - set to true to decode the value upon return</dd>
+<dt>Returns:</dt>
+<dd>value false when not found</dd>
+</dl>
+</div></div>
+
+
+
+<div class='method'><a href="../source/application/libraries/oauth/oauthrequest.php.html#line726" class="location">application/libraries/oauth/OAuthRequest.php at line 726</a>
+
+<h3 id="getRequestBody()">getRequestBody</h3>
+<code class="signature">private  string <strong>getRequestBody</strong>()</code>
+<div class="details">
+<p>Get the body of a POST or PUT.</p><p>Used for fetching the post parameters and to calculate the body signature.</p><dl>
+<dt>Returns:</dt>
+<dd>null when no body present (or wrong content type for body)</dd>
+</dl>
+</div></div>
+
+
+
+<div class='method'><a href="../source/application/libraries/oauth/oauthrequest.php.html#line708" class="location">application/libraries/oauth/OAuthRequest.php at line 708</a>
+
+<h3 id="getRequestContentType()">getRequestContentType</h3>
+<code class="signature">private  string <strong>getRequestContentType</strong>()</code>
+<div class="details">
+<p>Fetch the content type of the current request</p></div></div>
+
+
+
+<div class='method'><a href="../source/application/libraries/oauth/oauthrequest.php.html#line354" class="location">application/libraries/oauth/OAuthRequest.php at line 354</a>
+
+<h3 id="getRequestUrl()">getRequestUrl</h3>
+<code class="signature">public  void <strong>getRequestUrl</strong>()</code>
+<div class="details">
+<p>Return the normalised url for signature checks</p></div></div>
+
+
+
+<div class='method'><a href="../source/application/libraries/oauth/oauthrequest.php.html#line261" class="location">application/libraries/oauth/OAuthRequest.php at line 261</a>
+
+<h3 id="getSignatureMethod()">getSignatureMethod</h3>
+<code class="signature">public  <a href="../giftflow/oauthsignaturemethod.html">OAuthSignatureMethod</a> <strong>getSignatureMethod</strong>(string method)</code>
+<div class="details">
+<p>Fetch the signature object used for calculating and checking the signature base string</p><dl>
+<dt>Returns:</dt>
+<dd>object</dd>
+</dl>
+</div></div>
+
+
+
+<div class='method'><a href="../source/application/libraries/oauth/oauthrequest.php.html#line659" class="location">application/libraries/oauth/OAuthRequest.php at line 659</a>
+
+<h3 id="parseHeaders()">parseHeaders</h3>
+<code class="signature">private  void <strong>parseHeaders</strong>()</code>
+<div class="details">
+<p>Parse the oauth parameters from the request headers
+Looks for something like:</p><p>Authorization: OAuth realm="http://photos.example.net/authorize",
+oauth_consumer_key="dpf43f3p2l4k3l03",
+oauth_token="nnch734d00sl2jdk",
+oauth_signature_method="HMAC-SHA1",
+oauth_signature="tR3%2BTy81lMeYAr%2FFid0kMTYa%2FWM%3D",
+oauth_timestamp="1191242096",
+oauth_nonce="kllo9940pd9333jh",
+oauth_version="1.0"</p></div></div>
+
+
+
+<div class='method'><a href="../source/application/libraries/oauth/oauthrequest.php.html#line493" class="location">application/libraries/oauth/OAuthRequest.php at line 493</a>
+
+<h3 id="parseUri()">parseUri</h3>
+<code class="signature">protected  void <strong>parseUri</strong>(string parameters)</code>
+<div class="details">
+<p>Parse the uri into its parts.  Fill in the missing parts.</p><dl>
+<dt>Todo:</dt>
+<dd>check for the use of https, right now we default to http</dd>
+<dd>support for multiple occurences of parameters</dd>
+<dt>Parameters:</dt>
+<dd>parameters - optional extra parameters (from eg the http post)</dd>
+</dl>
+</div></div>
+
+
+
+<div class='method'><a href="../source/application/libraries/oauth/oauthrequest.php.html#line758" class="location">application/libraries/oauth/OAuthRequest.php at line 758</a>
+
+<h3 id="redirect()">redirect</h3>
+<code class="signature">public  void <strong>redirect</strong>(string uri, array params)</code>
+<div class="details">
+<p>Simple function to perform a redirect (GET).
+Redirects the User-Agent, does not return.</p><dl>
+<dt>Parameters:</dt>
+<dd></dd>
+<dd>params - parameters, urlencoded</dd>
+<dt>Exception:</dt>
+<dd>OAuthException when redirect uri is illegal</dd>
+</dl>
+</div></div>
+
+
+
+<div class='method'><a href="../source/application/libraries/oauth/oauthrequest.php.html#line222" class="location">application/libraries/oauth/OAuthRequest.php at line 222</a>
+
+<h3 id="selectSignatureMethod()">selectSignatureMethod</h3>
+<code class="signature">public  string <strong>selectSignatureMethod</strong>(array methods)</code>
+<div class="details">
+<p>Select a signature method from the list of available methods.
+We try to check the most secure methods first.</p><dl>
+<dt>Todo:</dt>
+<dd>Let the signature method tell us how secure it is</dd>
+<dt>Exception:</dt>
+<dd>OAuthException when we don't support any method in the list</dd>
+</dl>
+</div></div>
+
+
+
+<div class='method'><a href="../source/application/libraries/oauth/oauthrequest.php.html#line480" class="location">application/libraries/oauth/OAuthRequest.php at line 480</a>
+
+<h3 id="setBody()">setBody</h3>
+<code class="signature">public  string <strong>setBody</strong>(mixed body)</code>
+<div class="details">
+<p>Return the body of the OAuth request.</p><dl>
+<dt>Returns:</dt>
+<dd>null when no body</dd>
+</dl>
+</div></div>
+
+
+
+<div class='method'><a href="../source/application/libraries/oauth/oauthrequest.php.html#line416" class="location">application/libraries/oauth/OAuthRequest.php at line 416</a>
+
+<h3 id="setParam()">setParam</h3>
+<code class="signature">public  void <strong>setParam</strong>(string name, string value, boolean encoded)</code>
+<div class="details">
+<p>Set a parameter</p><dl>
+<dt>Parameters:</dt>
+<dd></dd>
+<dd></dd>
+<dd>encoded - set to true when the values are already encoded</dd>
+</dl>
+</div></div>
+
+
+
+<div class='method'><a href="../source/application/libraries/oauth/oauthrequest.php.html#line139" class="location">application/libraries/oauth/OAuthRequest.php at line 139</a>
+
+<h3 id="signatureBaseString()">signatureBaseString</h3>
+<code class="signature">public  string <strong>signatureBaseString</strong>()</code>
+<div class="details">
+<p>Return the signature base string.
+Note that we can't use rawurlencode due to specified use of RFC3986.</p></div></div>
+
+
+
+<div class='method'><a href="../source/application/libraries/oauth/oauthrequest.php.html#line444" class="location">application/libraries/oauth/OAuthRequest.php at line 444</a>
+
+<h3 id="transcodeParams()">transcodeParams</h3>
+<code class="signature">protected  void <strong>transcodeParams</strong>()</code>
+<div class="details">
+<p>Re-encode all parameters so that they are encoded using RFC3986.
+Updates the $this->param attribute.</p></div></div>
+
+
+
+<div class='method'><a href="../source/application/libraries/oauth/oauthrequest.php.html#line613" class="location">application/libraries/oauth/OAuthRequest.php at line 613</a>
+
+<h3 id="urldecode()">urldecode</h3>
+<code class="signature">public  string <strong>urldecode</strong>(string s)</code>
+<div class="details">
+<p>Decode a string according to RFC3986.
+Also correctly decodes RFC1738 urls.</p></div></div>
+
+
+
+<div class='method'><a href="../source/application/libraries/oauth/oauthrequest.php.html#line594" class="location">application/libraries/oauth/OAuthRequest.php at line 594</a>
+
+<h3 id="urlencode()">urlencode</h3>
+<code class="signature">public  string <strong>urlencode</strong>(string s)</code>
+<div class="details">
+<p>Encode a string according to the RFC3986</p></div></div>
+
+
+
+<div class='method'><a href="../source/application/libraries/oauth/oauthrequest.php.html#line633" class="location">application/libraries/oauth/OAuthRequest.php at line 633</a>
+
+<h3 id="urltranscode()">urltranscode</h3>
+<code class="signature">public  string <strong>urltranscode</strong>(string s)</code>
+<div class="details">
+<p>urltranscode - make sure that a value is encoded using RFC3986.
+We use a basic urldecode() function so that any use of '+' as the
+encoding of the space character is correctly handled.</p></div></div>
+
+
+
+</div><div class="header">
+<h1>GiftFlow API</h1>
+<ul>
+<li><a href="../overview-summary.html">Overview</a></li>
+<li><a href="../giftflow/package-summary.html">Package</a></li>
+<li class="active">Class</li>
+<li><a href="../giftflow/package-tree.html">Tree</a></li>
+<li><a href="../overview-files.html">Files</a></li>
+<li><a href="../deprecated-list.html">Deprecated</a></li>
+<li><a href="../index-all.html">Index</a></li>
+</ul>
+</div>
+
+<div class="small_links">
+<a href="../index.html" target="_top">Frames</a>
+<a href="../giftflow/oauthrequest.html" target="_top">No frames</a>
+</div>
+<div class="small_links">
+Summary: <a href="#summary_field">Field</a> | <a href="#summary_method">Method</a> | <a href="#summary_constr">Constr</a>
+Detail: <a href="#detail_field">Field</a> | <a href="#detail_method">Method</a> | <a href="#summary_constr">Constr</a>
+</div>
+<hr>
+
+<p id="footer">This document was generated by <a href="http://peej.github.com/phpdoctor/">PHPDoctor: The PHP Documentation Creator</a></p>
+
+</body>
+
+</html>
