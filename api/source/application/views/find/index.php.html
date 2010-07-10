@@ -6,7 +6,7 @@
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 
 <meta name="generator" content="PHPDoctor 2RC4 (http://peej.github.com/phpdoctor/)">
-<meta name="when" content="Tue, 29 Jun 2010 21:10:10 +0000">
+<meta name="when" content="Sat, 10 Jul 2010 18:10:57 +0000">
 
 <link rel="stylesheet" type="text/css" href="../../../../stylesheet.css">
 <link rel="start" href="../../../../overview-summary.html">
@@ -139,7 +139,7 @@
 <a name="line102"></a>					"results": [ <?php if(!empty($results)) {
 <a name="line103"></a>									for($i=0; $i<count($results); $i++)
 <a name="line104"></a>									{
-<a name="line105"></a>										echo "{ 'latitude':'".$results[$i]->latitude."', 'longitude':'".$results[$i]->longitude."','title':'".$results[$i]->title."'}";
+<a name="line105"></a>										echo '{ "location": { "latitude":"'.$results[$i]->location->latitude.'", "longitude":"'.$results[$i]->location->longitude.'" }, "title":"'.$results[$i]->title.'"}';
 <a name="line106"></a>										if($i!=(count($results)-1)) echo ",\n";
 <a name="line107"></a>									}
 <a name="line108"></a>								}
@@ -187,128 +187,127 @@
 <a name="line150"></a>			$(".no_results").show();
 <a name="line151"></a>		}
 <a name="line152"></a>	}
-<a name="line153"></a>
-<a name="line154"></a>	function generateCenteredMap( data )
-<a name="line155"></a>	{
-<a name="line156"></a>		$("#find_map").show();
-<a name="line157"></a>		$(".no_results").hide();
-<a name="line158"></a>		
-<a name="line159"></a>		/*
-<a name="line160"></a>		*	 Sets the center of the map. There are 3 cases.
-<a name="line161"></a>		*	1. center is defined in the json's center property
-<a name="line162"></a>		*	2. location of first result is used as the center
-<a name="line163"></a>		*	3. location is set to be new haven
-<a name="line164"></a>		*/
-<a name="line165"></a>		if(data.center!=null)
-<a name="line166"></a>			var default_location = new google.maps.LatLng( data.center.latitude, data.center.longitude );
-<a name="line167"></a>		else if(data.results[0]!=null)
-<a name="line168"></a>			var default_location = new google.maps.LatLng( data.results[0].latitude, data.results[0].longitude );
-<a name="line169"></a>		else
-<a name="line170"></a>			var default_location = new google.maps.LatLng( 41, -71);
-<a name="line171"></a>		
-<a name="line172"></a>		// Options
-<a name="line173"></a>		var mapOptions = {
-<a name="line174"></a>			scrollwheel: false,
-<a name="line175"></a>     			zoom: 12,
-<a name="line176"></a>     			center: default_location,
-<a name="line177"></a>			mapTypeId: google.maps.MapTypeId.ROADMAP,
-<a name="line178"></a>			mapTypeControl: false,
-<a name="line179"></a>			navigationControlOptions:  {
-<a name="line180"></a>				style: google.maps.NavigationControlStyle.SMALL
-<a name="line181"></a> 			}
-<a name="line182"></a>   		 };
-<a name="line183"></a>   		
-<a name="line184"></a>   		// Create new map element
-<a name="line185"></a>		map = new google.maps.Map(document.getElementById("find_map"), mapOptions);
-<a name="line186"></a>		
-<a name="line187"></a>		/*
-<a name="line188"></a>		*	important: ensures that the event listener that is about to be created doesn't fire every time
-<a name="line189"></a>		*	the map is reloaded
-<a name="line190"></a>		*/
-<a name="line191"></a>		var init = 0;
-<a name="line192"></a>		
-<a name="line193"></a>		/*
-<a name="line194"></a>		*	When the tiles are finished loading, the markers are added. The getBounds function
-<a name="line195"></a>		*	will not work properly unless this is the case. The if condition makes sure that the 
-<a name="line196"></a>		*	event listener doesn't fire every time the map is moved or zoomed.
-<a name="line197"></a>		*/
-<a name="line198"></a>		google.maps.event.addListener(map, 'tilesloaded', function () 
-<a name="line199"></a>		{
-<a name="line200"></a>			if(init==0)
-<a name="line201"></a>			{
-<a name="line202"></a>				init =1
-<a name="line203"></a>				// Add center marker
-<a name="line204"></a>				if(data.center!=null)
-<a name="line205"></a>					add_marker( null, null, 'Your Location', null, default_location);
-<a name="line206"></a>		
-<a name="line207"></a>				// Add gift markers
-<a name="line208"></a>				$.each(data.results, function(key, val){
-<a name="line209"></a>					add_marker(val.latitude, val.longitude, val.title, giftIcon);
-<a name="line210"></a>				});		
-<a name="line211"></a>			}
-<a name="line212"></a>		});
-<a name="line213"></a>	}
-<a name="line214"></a>
-<a name="line215"></a>	function add_marker( latitude, longitude, title, icon, location_obj )
-<a name="line216"></a>	{
-<a name="line217"></a>		if(location_obj!=null)
-<a name="line218"></a>		{
-<a name="line219"></a>			location = location_obj;
-<a name="line220"></a>		}
-<a name="line221"></a>		else
-<a name="line222"></a>		{
-<a name="line223"></a>			// marker location
-<a name="line224"></a>			var location = new google.maps.LatLng( latitude, longitude);
-<a name="line225"></a>		}
-<a name="line226"></a>		
-<a name="line227"></a>		// zooms out until marker is visible
-<a name="line228"></a>		expander( location );
-<a name="line229"></a>		
-<a name="line230"></a>		// create marker
-<a name="line231"></a>		var marker = new google.maps.Marker({
-<a name="line232"></a>			position: location, 
-<a name="line233"></a>			map: map, 
-<a name="line234"></a>			icon: icon,
-<a name="line235"></a>			title: title
-<a name="line236"></a>		});
-<a name="line237"></a>	}
-<a name="line238"></a>	
-<a name="line239"></a>	/*
-<a name="line240"></a>	*	function recursively expands the bounds to include markers,
-<a name="line241"></a>	*	while ensuring that the map is still centered on the user's location.
-<a name="line242"></a>	*/
-<a name="line243"></a>	function expander( location )
-<a name="line244"></a>	{
-<a name="line245"></a>		var boundaries = map.getBounds();
-<a name="line246"></a>		var fits = boundaries.contains( location );
-<a name="line247"></a>		if(fits == false)
-<a name="line248"></a>		{
-<a name="line249"></a>			var zoom = map.getZoom();
-<a name="line250"></a>			map.setZoom(zoom-1);
-<a name="line251"></a>			expander(location);
-<a name="line252"></a>		}
-<a name="line253"></a>		else
-<a name="line254"></a>		{
-<a name="line255"></a>			return true;
-<a name="line256"></a>		}
-<a name="line257"></a>	}
-<a name="line258"></a>	
-<a name="line259"></a>	<?php if($display=="no_results"&&(!empty($location['latitude'])&&!empty($location['longitude']))) { ?>
-<a name="line260"></a>		var data = <?php $data['center'] = $location; $data['results'] = ''; echo json_encode($data); ?>;
-<a name="line261"></a>		generateCenteredMap(data);
-<a name="line262"></a>		$(".no_results").show();
-<a name="line263"></a>	<?php } ?>
-<a name="line264"></a>
-<a name="line265"></a>	paginate();
-<a name="line266"></a>	
-<a name="line267"></a>	function paginate()
-<a name="line268"></a>	{
-<a name="line269"></a>		$("ul.simplePagerNav").remove();
-<a name="line270"></a>		$("ul.results_list").quickPager( { pageSize: 5} );
-<a name="line271"></a>	}
-<a name="line272"></a>});
-<a name="line273"></a>
-<a name="line274"></a></script></pre>
+<a name="line153"></a>	function generateCenteredMap( data )
+<a name="line154"></a>	{
+<a name="line155"></a>		$("#find_map").show();
+<a name="line156"></a>		$(".no_results").hide();
+<a name="line157"></a>		
+<a name="line158"></a>		/*
+<a name="line159"></a>		*	 Sets the center of the map. There are 3 cases.
+<a name="line160"></a>		*	1. center is defined in the json's center property
+<a name="line161"></a>		*	2. location of first result is used as the center
+<a name="line162"></a>		*	3. location is set to be new haven
+<a name="line163"></a>		*/
+<a name="line164"></a>		if(data.center!=null)
+<a name="line165"></a>			var default_location = new google.maps.LatLng( data.center.latitude, data.center.longitude );
+<a name="line166"></a>		else if(data.results[0]!=null)
+<a name="line167"></a>			var default_location = new google.maps.LatLng( data.results[0].location.latitude, data.results[0].location.longitude );
+<a name="line168"></a>		else
+<a name="line169"></a>			var default_location = new google.maps.LatLng( 41, -71);
+<a name="line170"></a>		
+<a name="line171"></a>		// Options
+<a name="line172"></a>		var mapOptions = {
+<a name="line173"></a>			scrollwheel: false,
+<a name="line174"></a>     			zoom: 12,
+<a name="line175"></a>     			center: default_location,
+<a name="line176"></a>			mapTypeId: google.maps.MapTypeId.ROADMAP,
+<a name="line177"></a>			mapTypeControl: false,
+<a name="line178"></a>			navigationControlOptions:  {
+<a name="line179"></a>				style: google.maps.NavigationControlStyle.SMALL
+<a name="line180"></a> 			}
+<a name="line181"></a>   		 };
+<a name="line182"></a>   		
+<a name="line183"></a>   		// Create new map element
+<a name="line184"></a>		map = new google.maps.Map(document.getElementById("find_map"), mapOptions);
+<a name="line185"></a>		
+<a name="line186"></a>		/*
+<a name="line187"></a>		*	important: ensures that the event listener that is about to be created doesn't fire every time
+<a name="line188"></a>		*	the map is reloaded
+<a name="line189"></a>		*/
+<a name="line190"></a>		var init = 0;
+<a name="line191"></a>		
+<a name="line192"></a>		/*
+<a name="line193"></a>		*	When the tiles are finished loading, the markers are added. The getBounds function
+<a name="line194"></a>		*	will not work properly unless this is the case. The if condition makes sure that the 
+<a name="line195"></a>		*	event listener doesn't fire every time the map is moved or zoomed.
+<a name="line196"></a>		*/
+<a name="line197"></a>		google.maps.event.addListener(map, 'tilesloaded', function () 
+<a name="line198"></a>		{
+<a name="line199"></a>			if(init==0)
+<a name="line200"></a>			{
+<a name="line201"></a>				init =1
+<a name="line202"></a>				// Add center marker
+<a name="line203"></a>				if(data.center!=null)
+<a name="line204"></a>					add_marker( null, null, 'Your Location', null, default_location);
+<a name="line205"></a>
+<a name="line206"></a>				// Add gift markers
+<a name="line207"></a>				$.each(data.results, function(key, val){
+<a name="line208"></a>					add_marker(val.location.latitude, val.location.longitude, val.title, giftIcon);
+<a name="line209"></a>				});		
+<a name="line210"></a>			}
+<a name="line211"></a>		});
+<a name="line212"></a>	}
+<a name="line213"></a>
+<a name="line214"></a>	function add_marker( latitude, longitude, title, icon, location_obj )
+<a name="line215"></a>	{
+<a name="line216"></a>		if(location_obj!=null)
+<a name="line217"></a>		{
+<a name="line218"></a>			location = location_obj;
+<a name="line219"></a>		}
+<a name="line220"></a>		else
+<a name="line221"></a>		{
+<a name="line222"></a>			// marker location
+<a name="line223"></a>			var location = new google.maps.LatLng( latitude, longitude);
+<a name="line224"></a>		}
+<a name="line225"></a>		
+<a name="line226"></a>		// zooms out until marker is visible
+<a name="line227"></a>		expander( location );
+<a name="line228"></a>		
+<a name="line229"></a>		// create marker
+<a name="line230"></a>		var marker = new google.maps.Marker({
+<a name="line231"></a>			position: location, 
+<a name="line232"></a>			map: map, 
+<a name="line233"></a>			icon: icon,
+<a name="line234"></a>			title: title
+<a name="line235"></a>		});
+<a name="line236"></a>	}
+<a name="line237"></a>	
+<a name="line238"></a>	/*
+<a name="line239"></a>	*	function recursively expands the bounds to include markers,
+<a name="line240"></a>	*	while ensuring that the map is still centered on the user's location.
+<a name="line241"></a>	*/
+<a name="line242"></a>	function expander( location )
+<a name="line243"></a>	{
+<a name="line244"></a>		var boundaries = map.getBounds();
+<a name="line245"></a>		var fits = boundaries.contains( location );
+<a name="line246"></a>		if(fits == false)
+<a name="line247"></a>		{
+<a name="line248"></a>			var zoom = map.getZoom();
+<a name="line249"></a>			map.setZoom(zoom-1);
+<a name="line250"></a>			expander(location);
+<a name="line251"></a>		}
+<a name="line252"></a>		else
+<a name="line253"></a>		{
+<a name="line254"></a>			return true;
+<a name="line255"></a>		}
+<a name="line256"></a>	}
+<a name="line257"></a>	
+<a name="line258"></a>	<?php if($display=="no_results"&&(!empty($location['latitude'])&&!empty($location['longitude']))) { ?>
+<a name="line259"></a>		var data = <?php $data['center'] = $location; $data['results'] = ''; echo json_encode($data); ?>;
+<a name="line260"></a>		generateCenteredMap(data);
+<a name="line261"></a>		$(".no_results").show();
+<a name="line262"></a>	<?php } ?>
+<a name="line263"></a>
+<a name="line264"></a>	paginate();
+<a name="line265"></a>	
+<a name="line266"></a>	function paginate()
+<a name="line267"></a>	{
+<a name="line268"></a>		$("ul.simplePagerNav").remove();
+<a name="line269"></a>		$("ul.results_list").quickPager( { pageSize: 5} );
+<a name="line270"></a>	}
+<a name="line271"></a>});
+<a name="line272"></a>
+<a name="line273"></a></script></pre>
 <div class="header">
 <h1>GiftFlow API</h1>
 <ul>

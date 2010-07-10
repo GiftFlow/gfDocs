@@ -6,7 +6,7 @@
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 
 <meta name="generator" content="PHPDoctor 2RC4 (http://peej.github.com/phpdoctor/)">
-<meta name="when" content="Tue, 29 Jun 2010 21:10:08 +0000">
+<meta name="when" content="Sat, 10 Jul 2010 18:10:53 +0000">
 
 <link rel="stylesheet" type="text/css" href="../stylesheet.css">
 <link rel="start" href="../overview-summary.html">
@@ -43,6 +43,17 @@
 <tr><td class="name"><a href="../giftflow/admin.html">Admin</a></td><td class="description"></td></tr>
 <tr><td class="name"><a href="../giftflow/ajax.html">Ajax</a></td><td class="description"></td></tr>
 <tr><td class="name"><a href="../giftflow/api.html">Api</a></td><td class="description"></td></tr>
+<tr><td class="name"><a href="../giftflow/auth_openid_cryptutil.html">Auth_OpenID_CryptUtil</a></td><td class="description"></td></tr>
+<tr><td class="name"><a href="../giftflow/auth_openid_pape_request.html">Auth_OpenID_PAPE_Request</a></td><td class="description">A Provider Authentication Policy request, sent from a relying party
+to a providerpreferred_auth_policies: The authentication policies that
+the relying party prefersmax_auth_age: The maximum time, in seconds, that the relying party
+wants to allow to have elapsed before the user must re-authenticate</td></tr>
+<tr><td class="name"><a href="../giftflow/auth_openid_pape_response.html">Auth_OpenID_PAPE_Response</a></td><td class="description">A Provider Authentication Policy response, sent from a provider to
+a relying party</td></tr>
+<tr><td class="name"><a href="../giftflow/auth_openid_serviceendpoint.html">Auth_OpenID_ServiceEndpoint</a></td><td class="description">Object representing an OpenID service endpoint.</td></tr>
+<tr><td class="name"><a href="../giftflow/auth_openid_trustroot.html">Auth_OpenID_TrustRoot</a></td><td class="description">A wrapper for trust-root related functions</td></tr>
+<tr><td class="name"><a href="../giftflow/auth_yadis_httpresponse.html">Auth_Yadis_HTTPResponse</a></td><td class="description"></td></tr>
+<tr><td class="name"><a href="../giftflow/auth_yadis_proxyresolver.html">Auth_Yadis_ProxyResolver</a></td><td class="description">Code for using a proxy XRI resolver.</td></tr>
 <tr><td class="name"><a href="../giftflow/ci_benchmark.html">CI_Benchmark</a></td><td class="description">CodeIgniter Benchmark ClassThis class enables you to mark points and calculate the time difference
 between them. </td></tr>
 <tr><td class="name"><a href="../giftflow/ci_calendar.html">CI_Calendar</a></td><td class="description">CodeIgniter Calendar ClassThis class enables the creation of calendars</td></tr>
@@ -146,9 +157,7 @@ deletes objects. </td></tr>
 <tr><td class="name"><a href="../giftflow/give.html">Give</a></td><td class="description"></td></tr>
 <tr><td class="name"><a href="../giftflow/location.html">Location</a></td><td class="description">ABOUT THIS EXTENSIONThe purpose of this extension is to alter the order in which DataMapper
 deletes objects. </td></tr>
-<tr><td class="name"><a href="../giftflow/my_hooks.html">MY_Hooks</a></td><td class="description">CodeIgniter MY_Hooks Class
-
-Provides a mechanism to extend the base plugin system. </td></tr>
+<tr><td class="name"><a href="../giftflow/my_hooks.html">MY_Hooks</a></td><td class="description">CodeIgniter MY_Hooks ClassProvides a mechanism to extend the base plugin system. </td></tr>
 <tr><td class="name"><a href="../giftflow/mail.html">Mail</a></td><td class="description"></td></tr>
 <tr><td class="name"><a href="../giftflow/market.html">Market</a></td><td class="description"></td></tr>
 <tr><td class="name"><a href="../giftflow/member.html">Member</a></td><td class="description"></td></tr>
@@ -210,8 +219,46 @@ deletes objects. </td></tr>
 
 <table class="title">
 <tr><th colspan="2" class="title">Function Summary</th></tr>
+<tr><td class="name"><a href="package-functions.html#Auth_OpenID_SHA1">Auth_OpenID_SHA1</a></td><td class="description"></td></tr>
+<tr><td class="name"><a href="package-functions.html#Auth_OpenID_arrangeByType">Auth_OpenID_arrangeByType</a></td><td class="description"></td></tr>
+<tr><td class="name"><a href="package-functions.html#Auth_OpenID_bestMatchingService">Auth_OpenID_bestMatchingService</a></td><td class="description"></td></tr>
+<tr><td class="name"><a href="package-functions.html#Auth_OpenID_checkFieldName">Auth_OpenID_checkFieldName</a></td><td class="description">Check to see that the given value is a valid simple registration
+data field name. </td></tr>
+<tr><td class="name"><a href="package-functions.html#Auth_OpenID_discover">Auth_OpenID_discover</a></td><td class="description"></td></tr>
+<tr><td class="name"><a href="package-functions.html#Auth_OpenID_discoverURI">Auth_OpenID_discoverURI</a></td><td class="description"></td></tr>
+<tr><td class="name"><a href="package-functions.html#Auth_OpenID_discoverWithYadis">Auth_OpenID_discoverWithYadis</a></td><td class="description"></td></tr>
+<tr><td class="name"><a href="package-functions.html#Auth_OpenID_discoverWithoutYadis">Auth_OpenID_discoverWithoutYadis</a></td><td class="description"></td></tr>
+<tr><td class="name"><a href="package-functions.html#Auth_OpenID_discoverXRI">Auth_OpenID_discoverXRI</a></td><td class="description"></td></tr>
+<tr><td class="name"><a href="package-functions.html#Auth_OpenID_findOPLocalIdentifier">Auth_OpenID_findOPLocalIdentifier</a></td><td class="description"></td></tr>
+<tr><td class="name"><a href="package-functions.html#Auth_OpenID_getDefaultGen">Auth_OpenID_getDefaultGen</a></td><td class="description"></td></tr>
+<tr><td class="name"><a href="package-functions.html#Auth_OpenID_getOPOrUserServices">Auth_OpenID_getOPOrUserServices</a></td><td class="description"></td></tr>
+<tr><td class="name"><a href="package-functions.html#Auth_OpenID_getOpenIDConsumerTypeURIs">Auth_OpenID_getOpenIDConsumerTypeURIs</a></td><td class="description"></td></tr>
+<tr><td class="name"><a href="package-functions.html#Auth_OpenID_getOpenIDTypeName">Auth_OpenID_getOpenIDTypeName</a></td><td class="description"></td></tr>
+<tr><td class="name"><a href="package-functions.html#Auth_OpenID_getOpenIDTypeURIs">Auth_OpenID_getOpenIDTypeURIs</a></td><td class="description"></td></tr>
+<tr><td class="name"><a href="package-functions.html#Auth_OpenID_isError">Auth_OpenID_isError</a></td><td class="description"></td></tr>
+<tr><td class="name"><a href="package-functions.html#Auth_OpenID_isOpenID1">Auth_OpenID_isOpenID1</a></td><td class="description"></td></tr>
+<tr><td class="name"><a href="package-functions.html#Auth_OpenID_makeOpenIDEndpoints">Auth_OpenID_makeOpenIDEndpoints</a></td><td class="description"></td></tr>
+<tr><td class="name"><a href="package-functions.html#Auth_OpenID_splitNonce">Auth_OpenID_splitNonce</a></td><td class="description"></td></tr>
+<tr><td class="name"><a href="package-functions.html#Auth_Yadis_XRI">Auth_Yadis_XRI</a></td><td class="description"></td></tr>
+<tr><td class="name"><a href="package-functions.html#Auth_Yadis_XRIAppendArgs">Auth_Yadis_XRIAppendArgs</a></td><td class="description"></td></tr>
+<tr><td class="name"><a href="package-functions.html#Auth_Yadis_escapeForIRI">Auth_Yadis_escapeForIRI</a></td><td class="description"></td></tr>
+<tr><td class="name"><a href="package-functions.html#Auth_Yadis_getCanonicalID">Auth_Yadis_getCanonicalID</a></td><td class="description"></td></tr>
+<tr><td class="name"><a href="package-functions.html#Auth_Yadis_getEscapeRE">Auth_Yadis_getEscapeRE</a></td><td class="description"></td></tr>
+<tr><td class="name"><a href="package-functions.html#Auth_Yadis_getIPrivateChars">Auth_Yadis_getIPrivateChars</a></td><td class="description"></td></tr>
+<tr><td class="name"><a href="package-functions.html#Auth_Yadis_getNSMap">Auth_Yadis_getNSMap</a></td><td class="description"></td></tr>
+<tr><td class="name"><a href="package-functions.html#Auth_Yadis_getXRIAuthorities">Auth_Yadis_getXRIAuthorities</a></td><td class="description"></td></tr>
+<tr><td class="name"><a href="package-functions.html#Auth_Yadis_getXrefRE">Auth_Yadis_getXrefRE</a></td><td class="description"></td></tr>
+<tr><td class="name"><a href="package-functions.html#Auth_Yadis_identifierScheme">Auth_Yadis_identifierScheme</a></td><td class="description"></td></tr>
+<tr><td class="name"><a href="package-functions.html#Auth_Yadis_iriToURI">Auth_Yadis_iriToURI</a></td><td class="description"></td></tr>
+<tr><td class="name"><a href="package-functions.html#Auth_Yadis_pct_escape_unicode">Auth_Yadis_pct_escape_unicode</a></td><td class="description"></td></tr>
+<tr><td class="name"><a href="package-functions.html#Auth_Yadis_providerIsAuthoritative">Auth_Yadis_providerIsAuthoritative</a></td><td class="description"></td></tr>
+<tr><td class="name"><a href="package-functions.html#Auth_Yadis_rootAuthority">Auth_Yadis_rootAuthority</a></td><td class="description"></td></tr>
+<tr><td class="name"><a href="package-functions.html#Auth_Yadis_startswith">Auth_Yadis_startswith</a></td><td class="description"></td></tr>
+<tr><td class="name"><a href="package-functions.html#Auth_Yadis_toIRINormal">Auth_Yadis_toIRINormal</a></td><td class="description"></td></tr>
+<tr><td class="name"><a href="package-functions.html#Auth_Yadis_toURINormal">Auth_Yadis_toURINormal</a></td><td class="description"></td></tr>
 <tr><td class="name"><a href="package-functions.html#DB">DB</a></td><td class="description">Initialize the database</td></tr>
 <tr><td class="name"><a href="package-functions.html#_attributes_to_string">_attributes_to_string</a></td><td class="description">Attributes To StringHelper function used by some of the form helpers</td></tr>
+<tr><td class="name"><a href="package-functions.html#_escape_xref">_escape_xref</a></td><td class="description"></td></tr>
 <tr><td class="name"><a href="package-functions.html#_get_smiley_array">_get_smiley_array</a></td><td class="description">Get Smiley ArrayFetches the config/smiley.php file</td></tr>
 <tr><td class="name"><a href="package-functions.html#_get_validation_object">_get_validation_object</a></td><td class="description">Validation ObjectDetermines what the form validation class was instantiated as, fetches
 the object and returns it.</td></tr>
@@ -261,6 +308,8 @@ html4-strict, html4-trans, and html4-frame. </td></tr>
 <tr><td class="name"><a href="package-functions.html#file_put_contents">file_put_contents</a></td><td class="description">file_put_contents()Writes a string to a file
 http://us.php.net/manual/en/function.file_put_contents.php
 argument 4, $context, not supported</td></tr>
+<tr><td class="name"><a href="package-functions.html#filter_MatchesAnyOpenIDConsumerType">filter_MatchesAnyOpenIDConsumerType</a></td><td class="description"></td></tr>
+<tr><td class="name"><a href="package-functions.html#filter_MatchesAnyOpenIDType">filter_MatchesAnyOpenIDType</a></td><td class="description"></td></tr>
 <tr><td class="name"><a href="package-functions.html#force_download">force_download</a></td><td class="description">Force DownloadGenerates headers that force a download to happen</td></tr>
 <tr><td class="name"><a href="package-functions.html#form_button">form_button</a></td><td class="description">Form Button</td></tr>
 <tr><td class="name"><a href="package-functions.html#form_checkbox">form_checkbox</a></td><td class="description">Checkbox Field</td></tr>
@@ -419,6 +468,61 @@ word you've submitted.</td></tr>
 
 <table class="title">
 <tr><th colspan="2" class="title">Global Summary</th></tr>
+<tr><td class="name"><a href="package-globals.html#AUTH_OPENID_HTTP_ERROR">AUTH_OPENID_HTTP_ERROR</a></td><td class="description"></td></tr>
+<tr><td class="name"><a href="package-globals.html#AUTH_OPENID_HTTP_REDIRECT">AUTH_OPENID_HTTP_REDIRECT</a></td><td class="description"></td></tr>
+<tr><td class="name"><a href="package-globals.html#Auth_OpenID_AX_MINIMUM_SUPPORTED_ALIAS_LENGTH">Auth_OpenID_AX_MINIMUM_SUPPORTED_ALIAS_LENGTH</a></td><td class="description"></td></tr>
+<tr><td class="name"><a href="package-globals.html#Auth_OpenID_AX_UNLIMITED_VALUES">Auth_OpenID_AX_UNLIMITED_VALUES</a></td><td class="description"></td></tr>
+<tr><td class="name"><a href="package-globals.html#Auth_OpenID_CANCEL">Auth_OpenID_CANCEL</a></td><td class="description">Status to indicate cancellation of OpenID authentication.</td></tr>
+<tr><td class="name"><a href="package-globals.html#Auth_OpenID_DO_ABOUT">Auth_OpenID_DO_ABOUT</a></td><td class="description">Status code returned when there were no OpenID arguments
+passed. </td></tr>
+<tr><td class="name"><a href="package-globals.html#Auth_OpenID_DO_AUTH">Auth_OpenID_DO_AUTH</a></td><td class="description">Status code returned when the caller needs to authenticate the
+user. </td></tr>
+<tr><td class="name"><a href="package-globals.html#Auth_OpenID_ENCODE_HTML_FORM">Auth_OpenID_ENCODE_HTML_FORM</a></td><td class="description"></td></tr>
+<tr><td class="name"><a href="package-globals.html#Auth_OpenID_ENCODE_KVFORM">Auth_OpenID_ENCODE_KVFORM</a></td><td class="description"></td></tr>
+<tr><td class="name"><a href="package-globals.html#Auth_OpenID_ENCODE_URL">Auth_OpenID_ENCODE_URL</a></td><td class="description"></td></tr>
+<tr><td class="name"><a href="package-globals.html#Auth_OpenID_FAILURE">Auth_OpenID_FAILURE</a></td><td class="description">This is the status code completeAuth returns when the value it
+received indicated an invalid login.</td></tr>
+<tr><td class="name"><a href="package-globals.html#Auth_OpenID_LOCAL_ERROR">Auth_OpenID_LOCAL_ERROR</a></td><td class="description">Status code returned by the server when the only option is to show
+an error page, since we do not have enough information to redirect
+back to the consumer. </td></tr>
+<tr><td class="name"><a href="package-globals.html#Auth_OpenID_Nonce_REGEX">Auth_OpenID_Nonce_REGEX</a></td><td class="description"></td></tr>
+<tr><td class="name"><a href="package-globals.html#Auth_OpenID_Nonce_TIME_FMT">Auth_OpenID_Nonce_TIME_FMT</a></td><td class="description"></td></tr>
+<tr><td class="name"><a href="package-globals.html#Auth_OpenID_OPENID1_NS">Auth_OpenID_OPENID1_NS</a></td><td class="description"></td></tr>
+<tr><td class="name"><a href="package-globals.html#Auth_OpenID_PAPE_NS_URI">Auth_OpenID_PAPE_NS_URI</a></td><td class="description">An implementation of the OpenID Provider Authentication Policy
+Extension 1.0See:
+http://openid.net/developers/specs</td></tr>
+<tr><td class="name"><a href="package-globals.html#Auth_OpenID_PARSE_ERROR">Auth_OpenID_PARSE_ERROR</a></td><td class="description">This is the status code beginAuth returns when the page fetched
+from the entered OpenID URL doesn't contain the necessary link tags
+to function as an identity page.</td></tr>
+<tr><td class="name"><a href="package-globals.html#Auth_OpenID_REDIRECT">Auth_OpenID_REDIRECT</a></td><td class="description">Status code returned when there is a redirect back to the
+consumer. </td></tr>
+<tr><td class="name"><a href="package-globals.html#Auth_OpenID_REMOTE_ERROR">Auth_OpenID_REMOTE_ERROR</a></td><td class="description">Status code returned when there is an error to return in key-value
+form to the consumer. </td></tr>
+<tr><td class="name"><a href="package-globals.html#Auth_OpenID_REMOTE_OK">Auth_OpenID_REMOTE_OK</a></td><td class="description">Status code returned when there is a key-value form OK response to
+the consumer. </td></tr>
+<tr><td class="name"><a href="package-globals.html#Auth_OpenID_RP_RETURN_TO_URL_TYPE">Auth_OpenID_RP_RETURN_TO_URL_TYPE</a></td><td class="description"></td></tr>
+<tr><td class="name"><a href="package-globals.html#Auth_OpenID_SETUP_NEEDED">Auth_OpenID_SETUP_NEEDED</a></td><td class="description">This is the status code completeAuth returns when the
+{@link Auth_OpenID_Consumer} instance is in immediate mode, and the
+identity server sends back a URL to send the user to to complete his
+or her login.</td></tr>
+<tr><td class="name"><a href="package-globals.html#Auth_OpenID_SKEW">Auth_OpenID_SKEW</a></td><td class="description"></td></tr>
+<tr><td class="name"><a href="package-globals.html#Auth_OpenID_SREG_URI">Auth_OpenID_SREG_URI</a></td><td class="description"></td></tr>
+<tr><td class="name"><a href="package-globals.html#Auth_OpenID_THE_OTHER_OPENID1_NS">Auth_OpenID_THE_OTHER_OPENID1_NS</a></td><td class="description"></td></tr>
+<tr><td class="name"><a href="package-globals.html#Auth_OpenID_TYPE_1_0">Auth_OpenID_TYPE_1_0</a></td><td class="description"></td></tr>
+<tr><td class="name"><a href="package-globals.html#Auth_OpenID_TYPE_1_1">Auth_OpenID_TYPE_1_1</a></td><td class="description"></td></tr>
+<tr><td class="name"><a href="package-globals.html#Auth_OpenID_TYPE_1_2">Auth_OpenID_TYPE_1_2</a></td><td class="description"></td></tr>
+<tr><td class="name"><a href="package-globals.html#Auth_OpenID_TYPE_2_0">Auth_OpenID_TYPE_2_0</a></td><td class="description"></td></tr>
+<tr><td class="name"><a href="package-globals.html#Auth_OpenID_TYPE_2_0_IDP">Auth_OpenID_TYPE_2_0_IDP</a></td><td class="description"></td></tr>
+<tr><td class="name"><a href="package-globals.html#Auth_OpenID_USER_AGENT">Auth_OpenID_USER_AGENT</a></td><td class="description"></td></tr>
+<tr><td class="name"><a href="package-globals.html#Auth_OpenID_XMLNS_1_0">Auth_OpenID_XMLNS_1_0</a></td><td class="description">The OpenID and Yadis discovery implementation for OpenID 1.2.</td></tr>
+<tr><td class="name"><a href="package-globals.html#Auth_OpenID___HostSegmentRe">Auth_OpenID___HostSegmentRe</a></td><td class="description"></td></tr>
+<tr><td class="name"><a href="package-globals.html#Auth_OpenID_digits">Auth_OpenID_digits</a></td><td class="description"></td></tr>
+<tr><td class="name"><a href="package-globals.html#Auth_OpenID_letters">Auth_OpenID_letters</a></td><td class="description">Defines for regexes and format checking.</td></tr>
+<tr><td class="name"><a href="package-globals.html#Auth_OpenID_punct">Auth_OpenID_punct</a></td><td class="description"></td></tr>
+<tr><td class="name"><a href="package-globals.html#Auth_OpenID_sreg_data_fields">Auth_OpenID_sreg_data_fields</a></td><td class="description"></td></tr>
+<tr><td class="name"><a href="package-globals.html#Auth_Yadis_HEADER_NAME">Auth_Yadis_HEADER_NAME</a></td><td class="description">Yadis header</td></tr>
+<tr><td class="name"><a href="package-globals.html#Auth_Yadis_XMLNS_XRDS">Auth_Yadis_XMLNS_XRDS</a></td><td class="description">XRDS XML namespace</td></tr>
+<tr><td class="name"><a href="package-globals.html#Auth_Yadis_XMLNS_XRD_2_0">Auth_Yadis_XMLNS_XRD_2_0</a></td><td class="description">XRD XML namespace</td></tr>
 <tr><td class="name"><a href="package-globals.html#DEFAULT_THUMBLIB_IMPLEMENTATION">DEFAULT_THUMBLIB_IMPLEMENTATION</a></td><td class="description"></td></tr>
 <tr><td class="name"><a href="package-globals.html#DIR_READ_MODE">DIR_READ_MODE</a></td><td class="description"></td></tr>
 <tr><td class="name"><a href="package-globals.html#DIR_WRITE_MODE">DIR_WRITE_MODE</a></td><td class="description"></td></tr>
@@ -437,16 +541,25 @@ word you've submitted.</td></tr>
 <tr><td class="name"><a href="package-globals.html#GLOBALS">GLOBALS</a></td><td class="description"></td></tr>
 <tr><td class="name"><a href="package-globals.html#L">L</a></td><td class="description"></td></tr>
 <tr><td class="name"><a href="package-globals.html#N">N</a></td><td class="description"></td></tr>
+<tr><td class="name"><a href="package-globals.html#PAPE_AUTH_MULTI_FACTOR">PAPE_AUTH_MULTI_FACTOR</a></td><td class="description"></td></tr>
+<tr><td class="name"><a href="package-globals.html#PAPE_AUTH_MULTI_FACTOR_PHYSICAL">PAPE_AUTH_MULTI_FACTOR_PHYSICAL</a></td><td class="description"></td></tr>
+<tr><td class="name"><a href="package-globals.html#PAPE_AUTH_PHISHING_RESISTANT">PAPE_AUTH_PHISHING_RESISTANT</a></td><td class="description"></td></tr>
+<tr><td class="name"><a href="package-globals.html#PAPE_TIME_VALIDATOR">PAPE_TIME_VALIDATOR</a></td><td class="description"></td></tr>
 <tr><td class="name"><a href="package-globals.html#PASSWORD">PASSWORD</a></td><td class="description"></td></tr>
 <tr><td class="name"><a href="package-globals.html#PHP_EOL">PHP_EOL</a></td><td class="description">CodeIgniter Compatibility HelpersThis helper contains some functions based on the PEAR PHP_Compat library
 http://pear.php.net/package/PHP_CompatThe PEAR compat library is a little bloated and the code doesn't harmonize
 well with CodeIgniter, so those functions have been refactored.
 </td></tr>
 <tr><td class="name"><a href="package-globals.html#R">R</a></td><td class="description"></td></tr>
+<tr><td class="name"><a href="package-globals.html#SERVICES_YADIS_MATCH_ANY">SERVICES_YADIS_MATCH_ANY</a></td><td class="description">This match mode means a given service must match ANY filters (at
+least one) passed to the Auth_Yadis_XRDS::services() call.</td></tr>
+<tr><td class="name"><a href="package-globals.html#SERVICES_YADIS_MAX_PRIORITY">SERVICES_YADIS_MAX_PRIORITY</a></td><td class="description">The priority value used for service elements with no priority
+specified.</td></tr>
 <tr><td class="name"><a href="package-globals.html#THUMBLIB_PLUGIN_PATH">THUMBLIB_PLUGIN_PATH</a></td><td class="description"></td></tr>
 <tr><td class="name"><a href="package-globals.html#U">U</a></td><td class="description"></td></tr>
 <tr><td class="name"><a href="package-globals.html#USERNAME">USERNAME</a></td><td class="description">oauth-php: Example OAuth serverGlobal initialization file for the server, defines some helper
 functions, required includes, and starts the session.</td></tr>
+<tr><td class="name"><a href="package-globals.html#_Auth_OpenID_Request_Modes">_Auth_OpenID_Request_Modes</a></td><td class="description"></td></tr>
 <tr><td class="name"><a href="package-globals.html#_POST">_POST</a></td><td class="description">oauth-php: Example OAuth serverSimple logon for consumer registration at this server.</td></tr>
 <tr><td class="name"><a href="package-globals.html#_REQUEST">_REQUEST</a></td><td class="description"></td></tr>
 <tr><td class="name"><a href="package-globals.html#_SERVER">_SERVER</a></td><td class="description"></td></tr>
@@ -499,6 +612,7 @@ functions, required includes, and starts the session.</td></tr>
 <tr><td class="name"><a href="package-globals.html#goods">goods</a></td><td class="description"></td></tr>
 <tr><td class="name"><a href="package-globals.html#googlemaps">googlemaps</a></td><td class="description"></td></tr>
 <tr><td class="name"><a href="package-globals.html#heading">heading</a></td><td class="description"></td></tr>
+<tr><td class="name"><a href="package-globals.html#hook">hook</a></td><td class="description"></td></tr>
 <tr><td class="name"><a href="package-globals.html#i">i</a></td><td class="description"></td></tr>
 <tr><td class="name"><a href="package-globals.html#id">id</a></td><td class="description"></td></tr>
 <tr><td class="name"><a href="package-globals.html#identity">identity</a></td><td class="description"></td></tr>

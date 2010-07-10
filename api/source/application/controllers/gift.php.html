@@ -6,7 +6,7 @@
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 
 <meta name="generator" content="PHPDoctor 2RC4 (http://peej.github.com/phpdoctor/)">
-<meta name="when" content="Tue, 29 Jun 2010 21:10:10 +0000">
+<meta name="when" content="Sat, 10 Jul 2010 18:10:56 +0000">
 
 <link rel="stylesheet" type="text/css" href="../../../stylesheet.css">
 <link rel="start" href="../../../overview-summary.html">
@@ -39,537 +39,587 @@
 <a name="line2"></a>
 <a name="line3"></a>class Gift extends Controller {
 <a name="line4"></a>
-<a name="line5"></a>	// View data
-<a name="line6"></a>	var $data;
-<a name="line7"></a>	
-<a name="line8"></a>	// Good object
-<a name="line9"></a>	var $G;
+<a name="line5"></a>	/**
+<a name="line6"></a>	*	View data
+<a name="line7"></a>	*	@var array
+<a name="line8"></a>	*/
+<a name="line9"></a>	var $data;
 <a name="line10"></a>	
-<a name="line11"></a>	// Good ID / Second URL Segment
-<a name="line12"></a>	var $good_id;
-<a name="line13"></a>	
-<a name="line14"></a>	// Method name / Third URL Segment
-<a name="line15"></a>	var $method;
+<a name="line11"></a>	/**
+<a name="line12"></a>	*	Good object
+<a name="line13"></a>	*	@var Object
+<a name="line14"></a>	*/
+<a name="line15"></a>	var $G;
 <a name="line16"></a>	
-<a name="line17"></a>	// Extra parameter / Fourth URL Segment
-<a name="line18"></a>	var $param;
-<a name="line19"></a>	
-<a name="line20"></a>	// Stores the status of a recipient's request
-<a name="line21"></a>	var $recipient_status;
+<a name="line17"></a>	/**
+<a name="line18"></a>	*	User object
+<a name="line19"></a>	*	@var Object
+<a name="line20"></a>	*/
+<a name="line21"></a>	var $U;
 <a name="line22"></a>	
-<a name="line23"></a>	function __construct()
-<a name="line24"></a>	{
-<a name="line25"></a>		parent::Controller();
-<a name="line26"></a>		
-<a name="line27"></a>		// Load external classes
-<a name="line28"></a>		$this->load->helper('elements');
-<a name="line29"></a>		$this->load->library('market');
-<a name="line30"></a>		
-<a name="line31"></a>		// Set some class-wide variables
-<a name="line32"></a>		$this->good_id = $this->uri->segment(2);
-<a name="line33"></a>		$this->method = $this->uri->segment(3);
-<a name="line34"></a>		$this->param = $this->uri->segment(4);
-<a name="line35"></a>		
-<a name="line36"></a>		// Initialize Good
-<a name="line37"></a>		if(!empty($this->good_id))
-<a name="line38"></a>		{
-<a name="line39"></a>			$this->G = new Good ( $this->good_id );
-<a name="line40"></a>			$this->G->user->get();
-<a name="line41"></a>			$this->G->location->get();
-<a name="line42"></a>			$this->G->photo->get();
-<a name="line43"></a>			$this->G->default_photo->get();
-<a name="line44"></a>			$this->G->tag->get();
-<a name="line45"></a>		}
-<a name="line46"></a>		
-<a name="line47"></a>		// Parse global data
-<a name="line48"></a>		$this->util->config();
-<a name="line49"></a>		$this->data = $this->util->parse_globals();
-<a name="line50"></a>		
-<a name="line51"></a>		if(!empty($this->G))
-<a name="line52"></a>			$this->data['G'] = $this->G;
-<a name="line53"></a>		$this->data['content'] = array();
-<a name="line54"></a>
-<a name="line55"></a>
-<a name="line56"></a>	}
-<a name="line57"></a>
-<a name="line58"></a>	function index()
-<a name="line59"></a>	{
-<a name="line60"></a>		$this->session->set_flashdata( 'error', 'No gift was selected.' );
-<a name="line61"></a>		redirect('find');
-<a name="line62"></a>	}
-<a name="line63"></a>	function view()
-<a name="line64"></a>	{
-<a name="line65"></a>		// Begin Routing
-<a name="line66"></a>		$go = "_".$this->method;
-<a name="line67"></a>		
-<a name="line68"></a>		// If this auto-routed function exists, execute it
-<a name="line69"></a>		if( method_exists( __CLASS__, $go ) )
-<a name="line70"></a>		{
-<a name="line71"></a>			$this->$go();
-<a name="line72"></a>		}
-<a name="line73"></a>		
-<a name="line74"></a>		// If not, determine the proper index page to display
-<a name="line75"></a>		else
-<a name="line76"></a>		{
-<a name="line77"></a>			// route gift author to giver dashboard
-<a name="line78"></a>			if($this->_restrict(FALSE))
-<a name="line79"></a>			{
-<a name="line80"></a>				$this->_giver_dashboard();
-<a name="line81"></a>			}
-<a name="line82"></a>			// Route everyone else
-<a name="line83"></a>			else
-<a name="line84"></a>			{
-<a name="line85"></a>				// Logged in...
-<a name="line86"></a>				if(!empty($this->data['logged_in_user_id']) )
-<a name="line87"></a>				{
-<a name="line88"></a>					$this->recipient_status = $this->G->request_status( $this->data['logged_in_user_id'] );
-<a name="line89"></a>					if( $this->recipient_status['status'] == 'pending' || $this->recipient_status['status'] == "accepted" || $this->recipient_status['status'] == "exchanged" )
-<a name="line90"></a>						$this->_recipient_dashboard();
-<a name="line91"></a>					else
-<a name="line92"></a>						$this->_view();
-<a name="line93"></a>				}
-<a name="line94"></a>				// If not logged in...
-<a name="line95"></a>				else
-<a name="line96"></a>					$this->_view();
-<a name="line97"></a>			}
-<a name="line98"></a>		}
-<a name="line99"></a>	}
-<a name="line100"></a>	
-<a name="line101"></a>	/**
-<a name="line102"></a>	*	Main "View Gift" or "View Need" page
-<a name="line103"></a>	*/
-<a name="line104"></a>	
-<a name="line105"></a>	function _view()
-<a name="line106"></a>	{
-<a name="line107"></a>		// Prepare data
-<a name="line108"></a>		if($this->data['logged_in'])
-<a name="line109"></a>		{	
-<a name="line110"></a>			// Load the user's request
-<a name="line111"></a>			// returns array( 'status'=>{String}, 'request'=>{Transaction object} )
-<a name="line112"></a>			$your_request = $this->G->request_status( $this->data['logged_in_user_id'] );
-<a name="line113"></a>			if( $your_request['status'] == "pending" || $your_request['status'] == "accepted" || $your_request['status'] == "ignored" )
-<a name="line114"></a>			{
-<a name="line115"></a>				$this->data['requested'] = TRUE;
-<a name="line116"></a>				$this->data['content']['requests'] = array("title"=>"info","content"=>$this->load->view('gift/includes/requests', array('request'=>$your_request['request'], "type"=>"view"), true));
-<a name="line117"></a>			}
-<a name="line118"></a>			else
-<a name="line119"></a>			{
-<a name="line120"></a>				$this->data['requested'] = FALSE;
-<a name="line121"></a>			}
-<a name="line122"></a>		}
-<a name="line123"></a>		
-<a name="line124"></a>		// Prepare output
-<a name="line125"></a>		
-<a name="line126"></a>		// Load main gift module
-<a name="line127"></a>		$this->data['right'] = $this->load->view('gift/includes/view', $this->data, true);
-<a name="line128"></a>		
-<a name="line129"></a>		// Title
-<a name="line130"></a>		$this->data['title'] = $this->G->title." | A Gift from ".$this->G->user->screen_name;
-<a name="line131"></a>		
-<a name="line132"></a>		// Breadcrumbs
-<a name="line133"></a>		if($this->G->type=="gift")
-<a name="line134"></a>		{
-<a name="line135"></a>			$this->data['is_gift'] = TRUE;
-<a name="line136"></a>			$this->data['breadcrumbs'][] = array("title"=>"Gifts", "href"=>site_url("give"));
-<a name="line137"></a>			$this->data['breadcrumbs'][] = array ("title"=>$this->G->title);
-<a name="line138"></a>			$this->data['title'] = $this->G->title." | A Gift from ".$this->G->user->screen_name;
-<a name="line139"></a>		}
-<a name="line140"></a>		elseif($this->G->type=="need")
-<a name="line141"></a>		{
-<a name="line142"></a>			$this->data['is_gift'] = FALSE;
-<a name="line143"></a>			$this->data['breadcrumbs'][] = array("title"=>"Needs", "href"=>site_url("get"));
-<a name="line144"></a>			$this->data['breadcrumbs'][] = array ("title"=>$this->G->title);
-<a name="line145"></a>			$this->data['title'] = $this->G->title." | A Need from ".$this->G->user->screen_name;
-<a name="line146"></a>		}
-<a name="line147"></a>		
-<a name="line148"></a>		// Load views
-<a name="line149"></a>		$this->load->view('header', $this->data);
-<a name="line150"></a>		$this->load->view('gift/view', $this->data);
-<a name="line151"></a>		$this->load->view("footer", $this->data);
-<a name="line152"></a>	}
-<a name="line153"></a>	
-<a name="line154"></a>	/*
-<a name="line155"></a>	*	Dashboard displayed after a user has requested a gift
-<a name="line156"></a>	*/
-<a name="line157"></a>	function _recipient_dashboard()
-<a name="line158"></a>	{
-<a name="line159"></a>		$this->data['U'] = new User( $this->data['logged_in_user_id'] );
-<a name="line160"></a>		$this->data['U']->location->get();
-<a name="line161"></a>		
-<a name="line162"></a>		$this->data['request_status'] = $this->recipient_status['request'];
-<a name="line163"></a>		$this->data['request'] = $this->recipient_status['request'];
-<a name="line164"></a>		
-<a name="line165"></a>		$this->data['menu']['request_gift'] = 'active';
-<a name="line166"></a>		$this->data['menu']['arrange_meeting'] = 'disabled';
-<a name="line167"></a>		$this->data['menu']['leave_feedback'] = 'disabled';
-<a name="line168"></a>
-<a name="line169"></a>		// If request has been accepted, display arrange meeting screen
-<a name="line170"></a>		if( $this->recipient_status['status'] == "accepted" )
-<a name="line171"></a>		{
-<a name="line172"></a>			$this->data['menu']['request_gift'] = '';
-<a name="line173"></a>			$this->data['menu']['arrange_meeting'] = 'active';
-<a name="line174"></a>			$this->load->library('inbox');
-<a name="line175"></a>			$this->load->helper('date');
-<a name="line176"></a>			$this->data['messages'] = $this->inbox->transaction($this->recipient_status['request']->id);
+<a name="line23"></a>	/**
+<a name="line24"></a>	*	Transaction object
+<a name="line25"></a>	*	@var Object
+<a name="line26"></a>	*/
+<a name="line27"></a>	var $T;
+<a name="line28"></a>	
+<a name="line29"></a>	/**
+<a name="line30"></a>	*	Good ID / Second URL Segment
+<a name="line31"></a>	*	@var int
+<a name="line32"></a>	*/
+<a name="line33"></a>	var $good_id;
+<a name="line34"></a>	
+<a name="line35"></a>	/**
+<a name="line36"></a>	*	Method name / Third URL Segment
+<a name="line37"></a>	*	@var string
+<a name="line38"></a>	*/
+<a name="line39"></a>	var $method;
+<a name="line40"></a>	
+<a name="line41"></a>	/**
+<a name="line42"></a>	*	Extra parameter / Fourth URL Segment
+<a name="line43"></a>	*	@var string
+<a name="line44"></a>	*/
+<a name="line45"></a>	var $param;
+<a name="line46"></a>	
+<a name="line47"></a>	/**
+<a name="line48"></a>	*	Stores the status of a recipient's request
+<a name="line49"></a>	*/
+<a name="line50"></a>	var $recipient_status;
+<a name="line51"></a>	
+<a name="line52"></a>	function __construct()
+<a name="line53"></a>	{
+<a name="line54"></a>		parent::Controller();
+<a name="line55"></a>		
+<a name="line56"></a>		// Load external classes
+<a name="line57"></a>		$this->load->helper('elements');
+<a name="line58"></a>		$this->load->library('market');
+<a name="line59"></a>		$this->hooks =& load_class('Hooks');
+<a name="line60"></a>
+<a name="line61"></a>		
+<a name="line62"></a>		// Set some class-wide variables
+<a name="line63"></a>		$this->good_id = $this->uri->segment(2);
+<a name="line64"></a>		$this->method = $this->uri->segment(3);
+<a name="line65"></a>		$this->param = $this->uri->segment(4);
+<a name="line66"></a>		
+<a name="line67"></a>		// Initialize Good
+<a name="line68"></a>		if(!empty($this->good_id))
+<a name="line69"></a>		{
+<a name="line70"></a>			$this->G = new Good ( $this->good_id );
+<a name="line71"></a>			$this->G->user->get();
+<a name="line72"></a>			$this->G->location->get();
+<a name="line73"></a>			$this->G->photo->get();
+<a name="line74"></a>			$this->G->default_photo->get();
+<a name="line75"></a>			$this->G->tag->get();
+<a name="line76"></a>		}
+<a name="line77"></a>		
+<a name="line78"></a>		// Parse global data
+<a name="line79"></a>		$this->util->config();
+<a name="line80"></a>		$this->data = $this->util->parse_globals();
+<a name="line81"></a>		
+<a name="line82"></a>		if(!empty($this->G))
+<a name="line83"></a>			$this->data['G'] = $this->G;
+<a name="line84"></a>		$this->data['content'] = array();
+<a name="line85"></a>
+<a name="line86"></a>
+<a name="line87"></a>	}
+<a name="line88"></a>
+<a name="line89"></a>	function index()
+<a name="line90"></a>	{
+<a name="line91"></a>		$this->session->set_flashdata( 'error', 'No gift was selected.' );
+<a name="line92"></a>		redirect('find');
+<a name="line93"></a>	}
+<a name="line94"></a>	function view()
+<a name="line95"></a>	{
+<a name="line96"></a>		// Begin Routing
+<a name="line97"></a>		$go = "_".$this->method;
+<a name="line98"></a>		
+<a name="line99"></a>		// If this auto-routed function exists, execute it
+<a name="line100"></a>		if( method_exists( __CLASS__, $go ) )
+<a name="line101"></a>		{
+<a name="line102"></a>			$this->$go();
+<a name="line103"></a>		}
+<a name="line104"></a>		
+<a name="line105"></a>		// If not, determine the proper index page to display
+<a name="line106"></a>		else
+<a name="line107"></a>		{
+<a name="line108"></a>			// route gift author to giver dashboard
+<a name="line109"></a>			if($this->_restrict(FALSE))
+<a name="line110"></a>			{
+<a name="line111"></a>				$this->_giver_dashboard();
+<a name="line112"></a>			}
+<a name="line113"></a>			// Route everyone else
+<a name="line114"></a>			else
+<a name="line115"></a>			{
+<a name="line116"></a>				// Logged in...
+<a name="line117"></a>				if(!empty($this->data['logged_in_user_id']) )
+<a name="line118"></a>				{
+<a name="line119"></a>					$this->recipient_status = $this->G->request_status( $this->data['logged_in_user_id'] );
+<a name="line120"></a>					if( $this->recipient_status['status'] == 'pending' || $this->recipient_status['status'] == "accepted" || $this->recipient_status['status'] == "exchanged" )
+<a name="line121"></a>						$this->_recipient_dashboard();
+<a name="line122"></a>					else
+<a name="line123"></a>						$this->_view();
+<a name="line124"></a>				}
+<a name="line125"></a>				// If not logged in...
+<a name="line126"></a>				else
+<a name="line127"></a>					$this->_view();
+<a name="line128"></a>			}
+<a name="line129"></a>		}
+<a name="line130"></a>	}
+<a name="line131"></a>	
+<a name="line132"></a>	/**
+<a name="line133"></a>	*	Main "View Gift" or "View Need" page
+<a name="line134"></a>	*/
+<a name="line135"></a>	
+<a name="line136"></a>	function _view()
+<a name="line137"></a>	{
+<a name="line138"></a>		// Prepare data
+<a name="line139"></a>		if($this->data['logged_in'])
+<a name="line140"></a>		{	
+<a name="line141"></a>			// Load the user's request
+<a name="line142"></a>			// returns array( 'status'=>{String}, 'request'=>{Transaction object} )
+<a name="line143"></a>			$your_request = $this->G->request_status( $this->data['logged_in_user_id'] );
+<a name="line144"></a>			if( $your_request['status'] == "pending" || $your_request['status'] == "accepted" || $your_request['status'] == "ignored" )
+<a name="line145"></a>			{
+<a name="line146"></a>				$this->data['requested'] = TRUE;
+<a name="line147"></a>				$this->data['content']['requests'] = array("title"=>"info","content"=>$this->load->view('gift/includes/requests', array('request'=>$your_request['request'], "type"=>"view"), true));
+<a name="line148"></a>			}
+<a name="line149"></a>			else
+<a name="line150"></a>			{
+<a name="line151"></a>				$this->data['requested'] = FALSE;
+<a name="line152"></a>			}
+<a name="line153"></a>		}
+<a name="line154"></a>		
+<a name="line155"></a>		// Prepare output
+<a name="line156"></a>		
+<a name="line157"></a>		// Load main gift module
+<a name="line158"></a>		$this->data['right'] = $this->load->view('gift/includes/view', $this->data, true);
+<a name="line159"></a>		
+<a name="line160"></a>		// Title
+<a name="line161"></a>		$this->data['title'] = $this->G->title." | A Gift from ".$this->G->user->screen_name;
+<a name="line162"></a>		
+<a name="line163"></a>		// Breadcrumbs
+<a name="line164"></a>		if($this->G->type=="gift")
+<a name="line165"></a>		{
+<a name="line166"></a>			$this->data['is_gift'] = TRUE;
+<a name="line167"></a>			$this->data['breadcrumbs'][] = array("title"=>"Gifts", "href"=>site_url("give"));
+<a name="line168"></a>			$this->data['breadcrumbs'][] = array ("title"=>$this->G->title);
+<a name="line169"></a>			$this->data['title'] = $this->G->title." | A Gift from ".$this->G->user->screen_name;
+<a name="line170"></a>		}
+<a name="line171"></a>		elseif($this->G->type=="need")
+<a name="line172"></a>		{
+<a name="line173"></a>			$this->data['is_gift'] = FALSE;
+<a name="line174"></a>			$this->data['breadcrumbs'][] = array("title"=>"Needs", "href"=>site_url("get"));
+<a name="line175"></a>			$this->data['breadcrumbs'][] = array ("title"=>$this->G->title);
+<a name="line176"></a>			$this->data['title'] = $this->G->title." | A Need from ".$this->G->user->screen_name;
 <a name="line177"></a>		}
 <a name="line178"></a>		
-<a name="line179"></a>			
-<a name="line180"></a>		// Has the recipient marked this gift as exchanged? If so,
-<a name="line181"></a>		// load panel 3
-<a name="line182"></a>		if( $this->recipient_status['request']->recipient_confirmed == 1 )
-<a name="line183"></a>		{
-<a name="line184"></a>			$this->data['menu']['request_gift'] = '';
-<a name="line185"></a>			$this->data['menu']['arrange_meeting'] = '';
-<a name="line186"></a>			$this->data['menu']['leave_feedback'] = 'active';
-<a name="line187"></a>			
-<a name="line188"></a>			// Has the giver marked this gift as exchanged too?
-<a name="line189"></a>			if( $this->recipient_status['request']->giver_confirmed == 1 )
-<a name="line190"></a>			{
-<a name="line191"></a>
-<a name="line192"></a>			}
-<a name="line193"></a>			
-<a name="line194"></a>			// Gift exchange not yet confirmed by other party
-<a name="line195"></a>			else
-<a name="line196"></a>			{
-<a name="line197"></a>				
-<a name="line198"></a>			}
-<a name="line199"></a>			 
-<a name="line200"></a>		}
-<a name="line201"></a>
-<a name="line202"></a>		// Load main gift module
-<a name="line203"></a>		$this->data['right'] = $this->load->view('gift/includes/view', $this->data, true);
-<a name="line204"></a>		
-<a name="line205"></a>		// Breadcrumbs
-<a name="line206"></a>		if($this->G->type=="gift")
-<a name="line207"></a>		{
-<a name="line208"></a>			$this->data['breadcrumbs'][] = array("title"=>"Gifts", "href"=>site_url("give"));
-<a name="line209"></a>			$this->data['breadcrumbs'][] = array ("title"=>$this->G->title);
-<a name="line210"></a>			$this->data['title'] = $this->G->title." | Request a Gift";
-<a name="line211"></a>		}
-<a name="line212"></a>		elseif($this->G->type=="need")
-<a name="line213"></a>		{
-<a name="line214"></a>			$this->data['breadcrumbs'][] = array("title"=>"Needs", "href"=>site_url("get"));
-<a name="line215"></a>			$this->data['breadcrumbs'][] = array ("title"=>$this->G->title);
-<a name="line216"></a>			$this->data['title'] = $this->G->title;
-<a name="line217"></a>		}
-<a name="line218"></a>		
-<a name="line219"></a>		// Load Views
-<a name="line220"></a>		$this->load->view('header', $this->data);
-<a name="line221"></a>		$this->load->view('gift/recipient_dashboard', $this->data);
-<a name="line222"></a>		$this->load->view("footer", $this->data);
-<a name="line223"></a>	}
-<a name="line224"></a>	
-<a name="line225"></a>	function _request()
-<a name="line226"></a>	{
-<a name="line227"></a>		// Create Transaction
-<a name="line228"></a>		$T = new Transaction();
-<a name="line229"></a>		
-<a name="line230"></a>		// Create User
-<a name="line231"></a>		$U = new User( $this->data['logged_in_user_id'] );
-<a name="line232"></a>		
-<a name="line233"></a>		// Set request reason (if set)
-<a name="line234"></a>		if(!empty($_POST['reason'])) $T->reason = $_POST['reason'];
+<a name="line179"></a>		// Load views
+<a name="line180"></a>		$this->load->view('header', $this->data);
+<a name="line181"></a>		$this->load->view('gift/view', $this->data);
+<a name="line182"></a>		$this->load->view("footer", $this->data);
+<a name="line183"></a>	}
+<a name="line184"></a>	
+<a name="line185"></a>	/*
+<a name="line186"></a>	*	Dashboard displayed after a user has requested a gift
+<a name="line187"></a>	*/
+<a name="line188"></a>	function _recipient_dashboard()
+<a name="line189"></a>	{
+<a name="line190"></a>		$this->data['U'] = new User( $this->data['logged_in_user_id'] );
+<a name="line191"></a>		$this->data['U']->location->get();
+<a name="line192"></a>		
+<a name="line193"></a>		$this->data['request_status'] = $this->recipient_status['request'];
+<a name="line194"></a>		$this->data['request'] = $this->recipient_status['request'];
+<a name="line195"></a>		
+<a name="line196"></a>		$this->data['menu']['request_gift'] = 'active';
+<a name="line197"></a>		$this->data['menu']['arrange_meeting'] = 'disabled';
+<a name="line198"></a>		$this->data['menu']['leave_feedback'] = 'disabled';
+<a name="line199"></a>
+<a name="line200"></a>		// If request has been accepted, display arrange meeting screen
+<a name="line201"></a>		if( $this->recipient_status['status'] == "accepted" )
+<a name="line202"></a>		{
+<a name="line203"></a>			$this->data['menu']['request_gift'] = '';
+<a name="line204"></a>			$this->data['menu']['arrange_meeting'] = 'active';
+<a name="line205"></a>			$this->load->library('inbox');
+<a name="line206"></a>			$this->load->helper('date');
+<a name="line207"></a>			$this->data['messages'] = $this->inbox->transaction($this->recipient_status['request']->id);
+<a name="line208"></a>		}
+<a name="line209"></a>		
+<a name="line210"></a>			
+<a name="line211"></a>		// Has the recipient marked this gift as exchanged? If so,
+<a name="line212"></a>		// load panel 3
+<a name="line213"></a>		if( $this->recipient_status['request']->recipient_confirmed == 1 )
+<a name="line214"></a>		{
+<a name="line215"></a>			$this->data['menu']['request_gift'] = '';
+<a name="line216"></a>			$this->data['menu']['arrange_meeting'] = '';
+<a name="line217"></a>			$this->data['menu']['leave_feedback'] = 'active';
+<a name="line218"></a>			
+<a name="line219"></a>			// Has the giver marked this gift as exchanged too?
+<a name="line220"></a>			if( $this->recipient_status['request']->giver_confirmed == 1 )
+<a name="line221"></a>			{
+<a name="line222"></a>
+<a name="line223"></a>			}
+<a name="line224"></a>			
+<a name="line225"></a>			// Gift exchange not yet confirmed by other party
+<a name="line226"></a>			else
+<a name="line227"></a>			{
+<a name="line228"></a>				
+<a name="line229"></a>			}
+<a name="line230"></a>			 
+<a name="line231"></a>		}
+<a name="line232"></a>
+<a name="line233"></a>		// Load main gift module
+<a name="line234"></a>		$this->data['right'] = $this->load->view('gift/includes/view', $this->data, true);
 <a name="line235"></a>		
-<a name="line236"></a>		// Save transaction & relationships
-<a name="line237"></a>		$T->save();
-<a name="line238"></a>		$T->save_recipient($U);
-<a name="line239"></a>		$T->save_gift($this->G);
-<a name="line240"></a>				
-<a name="line241"></a>		// @TODO: Send notification
-<a name="line242"></a>				
-<a name="line243"></a>		// Set flashdata & redirect
-<a name="line244"></a>		$this->session->set_flashdata('success', 'Gift requested!');
-<a name="line245"></a>		redirect('gift/'. $this->good_id );
-<a name="line246"></a>	}
-<a name="line247"></a>	
-<a name="line248"></a>	function _unrequest()
-<a name="line249"></a>	{
-<a name="line250"></a>		// Create Transaction
-<a name="line251"></a>		$T = new Transaction();
-<a name="line252"></a>		
-<a name="line253"></a>		// Load Request
-<a name="line254"></a>		$T	->where_related_gift( 'id',  $this->good_id )
-<a name="line255"></a>			->where_related_recipient( 'id', $this->data['logged_in_user_id'] )
-<a name="line256"></a>			->get();
-<a name="line257"></a>			
-<a name="line258"></a>		// Delete Request
-<a name="line259"></a>		//$this->G->delete_request($T);
-<a name="line260"></a>		//$U = new User( $this->data['logged_in_user_id'] );
-<a name="line261"></a>		//$U->delete($T);
-<a name="line262"></a>		$T->delete();
+<a name="line236"></a>		// Breadcrumbs
+<a name="line237"></a>		if($this->G->type=="gift")
+<a name="line238"></a>		{
+<a name="line239"></a>			$this->data['breadcrumbs'][] = array("title"=>"Gifts", "href"=>site_url("give"));
+<a name="line240"></a>			$this->data['breadcrumbs'][] = array ("title"=>$this->G->title);
+<a name="line241"></a>			$this->data['title'] = $this->G->title." | Request a Gift";
+<a name="line242"></a>		}
+<a name="line243"></a>		elseif($this->G->type=="need")
+<a name="line244"></a>		{
+<a name="line245"></a>			$this->data['breadcrumbs'][] = array("title"=>"Needs", "href"=>site_url("get"));
+<a name="line246"></a>			$this->data['breadcrumbs'][] = array ("title"=>$this->G->title);
+<a name="line247"></a>			$this->data['title'] = $this->G->title;
+<a name="line248"></a>		}
+<a name="line249"></a>		
+<a name="line250"></a>		// Load Views
+<a name="line251"></a>		$this->load->view('header', $this->data);
+<a name="line252"></a>		$this->load->view('gift/recipient_dashboard', $this->data);
+<a name="line253"></a>		$this->load->view("footer", $this->data);
+<a name="line254"></a>	}
+<a name="line255"></a>	
+<a name="line256"></a>	function _request()
+<a name="line257"></a>	{
+<a name="line258"></a>		// Create Transaction
+<a name="line259"></a>		$this->T = new Transaction();
+<a name="line260"></a>		
+<a name="line261"></a>		// Create User: the person who is requesting the gift
+<a name="line262"></a>		$this->U = new User( $this->data['logged_in_user_id'] );
 <a name="line263"></a>		
-<a name="line264"></a>		// Set flashdata & redirect
-<a name="line265"></a>		$this->session->set_flashdata('success', 'Request canceled.');
-<a name="line266"></a>		redirect('gift/'. $this->good_id );
-<a name="line267"></a>	}
-<a name="line268"></a>		
-<a name="line269"></a>	function _giver_dashboard()
-<a name="line270"></a>	{
-<a name="line271"></a>		if(!empty($_POST))
-<a name="line272"></a>		{
-<a name="line273"></a>			$this->_giver_dashboard_save();
-<a name="line274"></a>		}
-<a name="line275"></a>		else
-<a name="line276"></a>		{
-<a name="line277"></a>			$this->data['U'] = new User( $this->data['logged_in_user_id'] );
-<a name="line278"></a>			$this->data['U']->location->get();
-<a name="line279"></a>			
-<a name="line280"></a>			$this->data['menu']['find_recipient'] = 'active';
-<a name="line281"></a>			$this->data['menu']['choose_recipient'] = 'disabled';
-<a name="line282"></a>			$this->data['menu']['arrange_meeting'] = 'disabled';
-<a name="line283"></a>			$this->data['menu']['leave_feedback'] = 'disabled';
-<a name="line284"></a>
-<a name="line285"></a>			// Search for pending requests
-<a name="line286"></a>			$this->G->request = $this->G->requests("pending");
-<a name="line287"></a>			if(count($this->G->request)>0)
-<a name="line288"></a>			{
-<a name="line289"></a>				$this->data['requests'] = $this->G->request;
-<a name="line290"></a>				$this->data['menu']['find_recipient'] = '';
-<a name="line291"></a>				$this->data['menu']['choose_recipient'] = 'active';
-<a name="line292"></a>			}
-<a name="line293"></a>			
-<a name="line294"></a>			// Search for the active transaction
-<a name="line295"></a>			$this->G->active_transaction = $this->G->active_transaction();
-<a name="line296"></a>			if(count($this->G->active_transaction)>0)
-<a name="line297"></a>			{
-<a name="line298"></a>				$this->data['active_transaction'] = $this->G->active_transaction;
-<a name="line299"></a>				$this->data['menu']['find_recipient'] = '';
-<a name="line300"></a>				$this->data['menu']['choose_recipient'] = '';
-<a name="line301"></a>				$this->data['menu']['arrange_meeting'] = 'active';
-<a name="line302"></a>				$this->load->library('inbox');
-<a name="line303"></a>				$this->load->helper('date');
-<a name="line304"></a>				$this->data['messages'] = $this->inbox->transaction($this->G->active_transaction->id);
-<a name="line305"></a>				
-<a name="line306"></a>				// Has the giver marked this gift as exchanged? If so,
-<a name="line307"></a>				// load panel 4
-<a name="line308"></a>				if( $this->G->active_transaction->giver_confirmed == 1 )
-<a name="line309"></a>				{
-<a name="line310"></a>					$this->data['menu']['find_recipient'] = '';
-<a name="line311"></a>					$this->data['menu']['choose_recipient'] = '';
-<a name="line312"></a>					$this->data['menu']['arrange_meeting'] = '';
-<a name="line313"></a>					$this->data['menu']['leave_feedback'] = 'active';
-<a name="line314"></a>					
-<a name="line315"></a>					// Has the recipient marked this gift as exchanged too?
-<a name="line316"></a>					if( $this->G->active_transaction->recipient_confirmed == 1 )
-<a name="line317"></a>					{
-<a name="line318"></a>
-<a name="line319"></a>					}
-<a name="line320"></a>					
-<a name="line321"></a>					// Gift exchange not yet confirmed by other party
-<a name="line322"></a>					else
-<a name="line323"></a>					{
-<a name="line324"></a>						
-<a name="line325"></a>					}
-<a name="line326"></a>					 
-<a name="line327"></a>				}
-<a name="line328"></a>			}
-<a name="line329"></a>			
-<a name="line330"></a>			// Load main gift module
-<a name="line331"></a>			$this->data['right'] = $this->load->view('gift/includes/view', $this->data, true);
-<a name="line332"></a>			
-<a name="line333"></a>			// Breadcrumbs
-<a name="line334"></a>			if($this->G->type=="gift")
-<a name="line335"></a>			{
-<a name="line336"></a>				$this->data['breadcrumbs'][] = array("title"=>"Your Gifts", "href"=>site_url("give"));
-<a name="line337"></a>				$this->data['breadcrumbs'][] = array ("title"=>$this->G->title);
-<a name="line338"></a>				$this->data['title'] = $this->G->title." | Manage Your Gift";
-<a name="line339"></a>			}
-<a name="line340"></a>			elseif($this->G->type=="need")
-<a name="line341"></a>			{
-<a name="line342"></a>				$this->data['breadcrumbs'][] = array("title"=>"Your Needs", "href"=>site_url("get"));
-<a name="line343"></a>				$this->data['breadcrumbs'][] = array ("title"=>$this->G->title);
-<a name="line344"></a>				$this->data['title'] = $this->G->title." | Manage Your Need";
-<a name="line345"></a>			}
-<a name="line346"></a>			
-<a name="line347"></a>			// Load Views
-<a name="line348"></a>			$this->load->view('header', $this->data);
-<a name="line349"></a>			$this->load->view('gift/giver_dashboard', $this->data);
-<a name="line350"></a>			$this->load->view("footer", $this->data);
-<a name="line351"></a>		}
-<a name="line352"></a>	}
-<a name="line353"></a>	function _giver_dashboard_save()
-<a name="line354"></a>	{
-<a name="line355"></a>		$U = new User($this->data['logged_in_user_id']);
-<a name="line356"></a>
-<a name="line357"></a>		$this->G->title = $_POST["title"];
-<a name="line358"></a>		$this->G->description = $_POST["description"];
-<a name="line359"></a>		$this->G->save();
-<a name="line360"></a>		
-<a name="line361"></a>		/*
-<a name="line362"></a>		* Save locaiton
-<a name="line363"></a>		*/
-<a name="line364"></a>		
-<a name="line365"></a>		//Create location object
-<a name="line366"></a>		$L = new Location();
-<a name="line367"></a>		$L->raw = $this->input->post('location');
-<a name="line368"></a>		$L->user_id = $this->data['logged_in_user_id'];
-<a name="line369"></a>		
-<a name="line370"></a>		//Validate it to make sure this location doesn't already exist
-<a name="line371"></a>		$L->validate();
-<a name="line372"></a>		
-<a name="line373"></a>		// If it does already exist, load existing location
-<a name="line374"></a>		if(!empty($L->duplicate_id))
-<a name="line375"></a>			$L = new Location($L->duplicate_id);
-<a name="line376"></a>		
-<a name="line377"></a>		// If it doesn't already exist, save new lcoation
-<a name="line378"></a>		else
-<a name="line379"></a>			$L->save();
-<a name="line380"></a>		
-<a name="line381"></a>		// Save location object to user and gift
-<a name="line382"></a>		$U->save($L);
-<a name="line383"></a>		$this->G->save($L);
-<a name="line384"></a>		
-<a name="line385"></a>		/*
-<a name="line386"></a>		* Save tags
-<a name="line387"></a>		*/
-<a name="line388"></a>		
-<a name="line389"></a>		// Tags are passed as a comma delimited list. Explode this list into an array.
-<a name="line390"></a>		$tags = explode(",", $_POST['tags']);
-<a name="line391"></a>		
-<a name="line392"></a>		// Load and delete existing tags
-<a name="line393"></a>		$T = $this->G->tag->get();
-<a name="line394"></a>		$this->G->delete($T->all);
-<a name="line395"></a>		
-<a name="line396"></a>		// Add new tags (and reload existing tags)
-<a name="line397"></a>		foreach ( $tags as $tag )
-<a name="line398"></a>			$this->G->add_tag( $tag );
+<a name="line264"></a>		// Set request reason (if set)
+<a name="line265"></a>		if(!empty($_POST['reason'])) $T->reason = $_POST['reason'];
+<a name="line266"></a>		
+<a name="line267"></a>		// Save transaction & relationships
+<a name="line268"></a>		$this->T->save();
+<a name="line269"></a>		$this->T->save_recipient($this->U);
+<a name="line270"></a>		$this->T->save_gift($this->G);
+<a name="line271"></a>				
+<a name="line272"></a>		// Hook: 'request_new'
+<a name="line273"></a>		$this->hooks->call('request_new', $this);
+<a name="line274"></a>		
+<a name="line275"></a>		// Set flashdata & redirect
+<a name="line276"></a>		$this->session->set_flashdata('success', 'Gift requested!');
+<a name="line277"></a>		redirect('gift/'. $this->good_id );
+<a name="line278"></a>	}
+<a name="line279"></a>	
+<a name="line280"></a>	function _unrequest()
+<a name="line281"></a>	{
+<a name="line282"></a>		// Create Transaction
+<a name="line283"></a>		$this->T = new Transaction();
+<a name="line284"></a>		
+<a name="line285"></a>		// Load Request
+<a name="line286"></a>		$this->T->where_related_gift( 'id',  $this->good_id )
+<a name="line287"></a>				->where_related_recipient( 'id', $this->data['logged_in_user_id'] )
+<a name="line288"></a>				->get();
+<a name="line289"></a>			
+<a name="line290"></a>		// Delete Request
+<a name="line291"></a>		$this->T->delete();
+<a name="line292"></a>		
+<a name="line293"></a>		// Hook: 'request_cancelled'
+<a name="line294"></a>		$this->hooks->call('request_cancelled', $this);
+<a name="line295"></a>		
+<a name="line296"></a>		// Set flashdata & redirect
+<a name="line297"></a>		$this->session->set_flashdata('success', 'Request canceled.');
+<a name="line298"></a>		redirect('gift/'. $this->good_id );
+<a name="line299"></a>	}
+<a name="line300"></a>		
+<a name="line301"></a>	function _giver_dashboard()
+<a name="line302"></a>	{
+<a name="line303"></a>		if(!empty($_POST))
+<a name="line304"></a>		{
+<a name="line305"></a>			$this->_giver_dashboard_save();
+<a name="line306"></a>		}
+<a name="line307"></a>		else
+<a name="line308"></a>		{
+<a name="line309"></a>			$this->data['U'] = new User( $this->data['logged_in_user_id'] );
+<a name="line310"></a>			$this->data['U']->location->get();
+<a name="line311"></a>			
+<a name="line312"></a>			$this->data['menu']['find_recipient'] = 'active';
+<a name="line313"></a>			$this->data['menu']['choose_recipient'] = 'disabled';
+<a name="line314"></a>			$this->data['menu']['arrange_meeting'] = 'disabled';
+<a name="line315"></a>			$this->data['menu']['leave_feedback'] = 'disabled';
+<a name="line316"></a>
+<a name="line317"></a>			// Search for pending requests
+<a name="line318"></a>			$this->G->request = $this->G->requests("pending");
+<a name="line319"></a>			if(count($this->G->request)>0)
+<a name="line320"></a>			{
+<a name="line321"></a>				$this->data['requests'] = $this->G->request;
+<a name="line322"></a>				$this->data['menu']['find_recipient'] = '';
+<a name="line323"></a>				$this->data['menu']['choose_recipient'] = 'active';
+<a name="line324"></a>			}
+<a name="line325"></a>			
+<a name="line326"></a>			// Search for the active transaction
+<a name="line327"></a>			$this->G->active_transaction = $this->G->active_transaction();
+<a name="line328"></a>			if(count($this->G->active_transaction)>0)
+<a name="line329"></a>			{
+<a name="line330"></a>				$this->data['active_transaction'] = $this->G->active_transaction;
+<a name="line331"></a>				$this->data['menu']['find_recipient'] = '';
+<a name="line332"></a>				$this->data['menu']['choose_recipient'] = '';
+<a name="line333"></a>				$this->data['menu']['arrange_meeting'] = 'active';
+<a name="line334"></a>				$this->load->library('inbox');
+<a name="line335"></a>				$this->load->helper('date');
+<a name="line336"></a>				$this->data['messages'] = $this->inbox->transaction($this->G->active_transaction->id);
+<a name="line337"></a>				
+<a name="line338"></a>				// Has the giver marked this gift as exchanged? If so,
+<a name="line339"></a>				// load panel 4
+<a name="line340"></a>				if( $this->G->active_transaction->giver_confirmed == 1 )
+<a name="line341"></a>				{
+<a name="line342"></a>					$this->data['menu']['find_recipient'] = '';
+<a name="line343"></a>					$this->data['menu']['choose_recipient'] = '';
+<a name="line344"></a>					$this->data['menu']['arrange_meeting'] = '';
+<a name="line345"></a>					$this->data['menu']['leave_feedback'] = 'active';
+<a name="line346"></a>					
+<a name="line347"></a>					// Has the recipient marked this gift as exchanged too?
+<a name="line348"></a>					if( $this->G->active_transaction->recipient_confirmed == 1 )
+<a name="line349"></a>					{
+<a name="line350"></a>
+<a name="line351"></a>					}
+<a name="line352"></a>					
+<a name="line353"></a>					// Gift exchange not yet confirmed by other party
+<a name="line354"></a>					else
+<a name="line355"></a>					{
+<a name="line356"></a>						
+<a name="line357"></a>					}
+<a name="line358"></a>					 
+<a name="line359"></a>				}
+<a name="line360"></a>			}
+<a name="line361"></a>			
+<a name="line362"></a>			// Load main gift module
+<a name="line363"></a>			$this->data['right'] = $this->load->view('gift/includes/view', $this->data, true);
+<a name="line364"></a>			
+<a name="line365"></a>			// Breadcrumbs
+<a name="line366"></a>			if($this->G->type=="gift")
+<a name="line367"></a>			{
+<a name="line368"></a>				$this->data['breadcrumbs'][] = array("title"=>"Your Gifts", "href"=>site_url("give"));
+<a name="line369"></a>				$this->data['breadcrumbs'][] = array ("title"=>$this->G->title);
+<a name="line370"></a>				$this->data['title'] = $this->G->title." | Manage Your Gift";
+<a name="line371"></a>			}
+<a name="line372"></a>			elseif($this->G->type=="need")
+<a name="line373"></a>			{
+<a name="line374"></a>				$this->data['breadcrumbs'][] = array("title"=>"Your Needs", "href"=>site_url("get"));
+<a name="line375"></a>				$this->data['breadcrumbs'][] = array ("title"=>$this->G->title);
+<a name="line376"></a>				$this->data['title'] = $this->G->title." | Manage Your Need";
+<a name="line377"></a>			}
+<a name="line378"></a>			
+<a name="line379"></a>			// Load Views
+<a name="line380"></a>			$this->load->view('header', $this->data);
+<a name="line381"></a>			$this->load->view('gift/giver_dashboard', $this->data);
+<a name="line382"></a>			$this->load->view("footer", $this->data);
+<a name="line383"></a>		}
+<a name="line384"></a>	}
+<a name="line385"></a>	function _giver_dashboard_save()
+<a name="line386"></a>	{
+<a name="line387"></a>		$U = new User($this->data['logged_in_user_id']);
+<a name="line388"></a>
+<a name="line389"></a>		$this->G->title = $_POST["title"];
+<a name="line390"></a>		$this->G->description = $_POST["description"];
+<a name="line391"></a>		$this->G->save();
+<a name="line392"></a>		
+<a name="line393"></a>		// Save locaiton
+<a name="line394"></a>		
+<a name="line395"></a>		//Create location object
+<a name="line396"></a>		$L = new Location();
+<a name="line397"></a>		$L->raw = $this->input->post('location');
+<a name="line398"></a>		$L->user_id = $this->data['logged_in_user_id'];
 <a name="line399"></a>		
-<a name="line400"></a>		$U->save_good($this->G);
-<a name="line401"></a>		$this->session->set_flashdata('success','Changes saved successfully.');
+<a name="line400"></a>		//Validate it to make sure this location doesn't already exist
+<a name="line401"></a>		$L->validate();
 <a name="line402"></a>		
-<a name="line403"></a>		redirect('gift/'.$this->G->id);
-<a name="line404"></a>
-<a name="line405"></a>	}
-<a name="line406"></a>	function _abort()
-<a name="line407"></a>	{
-<a name="line408"></a>		$T = new Transaction( $this->param );
-<a name="line409"></a>		$T->recipient->get();
-<a name="line410"></a>		$T->status = "pending";
-<a name="line411"></a>		$T->save();
-<a name="line412"></a>		
-<a name="line413"></a>		$this->session->set_flashdata("success", $T->recipient->screen_name." is no longer selected as the recipient.");
-<a name="line414"></a>		redirect('gift/'.$this->good_id);
-<a name="line415"></a>	}
-<a name="line416"></a>	function _accept()
-<a name="line417"></a>	{
-<a name="line418"></a>		$this->_restrict();
-<a name="line419"></a>		
-<a name="line420"></a>		// make sure that request id was passed in the uri
-<a name="line421"></a>		$request_id = $this->param;
-<a name="line422"></a>		if( !$request_id  && !$this->data['is_ajax'] ) redirect('gift/'.$this->good_id);
-<a name="line423"></a>		
-<a name="line424"></a>		// load transaction
-<a name="line425"></a>		$T = new Transaction();
-<a name="line426"></a>
-<a name="line427"></a>		$T->where('id', $request_id )->include_related("recipient", "*", NULL, TRUE)->get();
-<a name="line428"></a>		
-<a name="line429"></a>		// change status
-<a name="line430"></a>		$T->accepted();
+<a name="line403"></a>		// If it does already exist, load existing location
+<a name="line404"></a>		if(!empty($L->duplicate_id))
+<a name="line405"></a>			$L = new Location($L->duplicate_id);
+<a name="line406"></a>		
+<a name="line407"></a>		// If it doesn't already exist, save new lcoation
+<a name="line408"></a>		else
+<a name="line409"></a>			$L->save();
+<a name="line410"></a>		
+<a name="line411"></a>		// Save location object to user and gift
+<a name="line412"></a>		$U->save($L);
+<a name="line413"></a>		$this->G->save($L);
+<a name="line414"></a>		
+<a name="line415"></a>		/*
+<a name="line416"></a>		* Save tags
+<a name="line417"></a>		*/
+<a name="line418"></a>		
+<a name="line419"></a>		// Tags are passed as a comma delimited list. Explode this list into an array.
+<a name="line420"></a>		$tags = explode(",", $_POST['tags']);
+<a name="line421"></a>		
+<a name="line422"></a>		// Load and delete existing tags
+<a name="line423"></a>		$T = $this->G->tag->get();
+<a name="line424"></a>		$this->G->delete($T->all);
+<a name="line425"></a>		
+<a name="line426"></a>		// Add new tags (and reload existing tags)
+<a name="line427"></a>		foreach ( $tags as $tag )
+<a name="line428"></a>			$this->G->add_tag( $tag );
+<a name="line429"></a>		
+<a name="line430"></a>		$U->save_good($this->G);
 <a name="line431"></a>		
-<a name="line432"></a>		// @TODO: send notification
-<a name="line433"></a>
-<a name="line434"></a>		// set flashdata, redirect
-<a name="line435"></a>		$this->session->set_flashdata('success', $T->recipient->screen_name."'s request accepted.");
-<a name="line436"></a>		redirect('gift/'. $this->good_id );
-<a name="line437"></a>	}
-<a name="line438"></a>	
-<a name="line439"></a>	function _delete()
-<a name="line440"></a>	{
-<a name="line441"></a>		$this->session->set_flashdata('success', $this->G->title." was deleted successfully."); 
-<a name="line442"></a>		$this->G->delete();
-<a name="line443"></a>		redirect("give");
-<a name="line444"></a>	}
-<a name="line445"></a>	
-<a name="line446"></a>	function _exchanged()
-<a name="line447"></a>	{
-<a name="line448"></a>		// make sure that request id was passed in the uri
-<a name="line449"></a>		$request_id = $this->param;
-<a name="line450"></a>		if( !$request_id && !$this->data['is_ajax'] ) redirect('gift/'.$this->good_id);
-<a name="line451"></a>		
-<a name="line452"></a>		// load transaction
-<a name="line453"></a>		$T = new Transaction();
-<a name="line454"></a>		$T->where( 'id', $request_id )->include_related("recipient", "*", NULL, TRUE)->get();
-<a name="line455"></a>
-<a name="line456"></a>		if($this->_restrict(FALSE))
-<a name="line457"></a>			$T->exchanged("giver");
-<a name="line458"></a>		else
-<a name="line459"></a>			$T->exchanged("recipient");
+<a name="line432"></a>		// Hook: 'gift_edited'
+<a name="line433"></a>		$this->hooks->call('gift_edited', $this);
+<a name="line434"></a>
+<a name="line435"></a>		// Set flashdata
+<a name="line436"></a>		$this->session->set_flashdata('success','Changes saved successfully.');
+<a name="line437"></a>		redirect('gift/'.$this->G->id);
+<a name="line438"></a>
+<a name="line439"></a>	}
+<a name="line440"></a>	function _abort()
+<a name="line441"></a>	{
+<a name="line442"></a>		$T = new Transaction( $this->param );
+<a name="line443"></a>		$T->recipient->get();
+<a name="line444"></a>		$T->status = "pending";
+<a name="line445"></a>		$T->save();
+<a name="line446"></a>		
+<a name="line447"></a>		// Hook: 'request_aborted'
+<a name="line448"></a>		$this->hooks->call('request_aborted', $this);
+<a name="line449"></a>		
+<a name="line450"></a>		$this->session->set_flashdata("success", $T->recipient->screen_name." is no longer selected as the recipient.");
+<a name="line451"></a>		redirect('gift/'.$this->good_id);
+<a name="line452"></a>	}
+<a name="line453"></a>	function _accept()
+<a name="line454"></a>	{
+<a name="line455"></a>		$this->_restrict();
+<a name="line456"></a>		
+<a name="line457"></a>		// make sure that request id was passed in the uri
+<a name="line458"></a>		$request_id = $this->param;
+<a name="line459"></a>		if( !$request_id  && !$this->data['is_ajax'] ) redirect('gift/'.$this->good_id);
 <a name="line460"></a>		
-<a name="line461"></a>		// @TODO: send notification
-<a name="line462"></a>
-<a name="line463"></a>		// set flashdata, redirect
-<a name="line464"></a>		$this->session->set_flashdata('success', "Gift marked as exchanged.");
-<a name="line465"></a>		redirect('gift/'. $this->good_id );
-<a name="line466"></a>	}
-<a name="line467"></a>	
-<a name="line468"></a>	function _ignore()
-<a name="line469"></a>	{
-<a name="line470"></a>		// make sure that request id was passed in the uri as segment 4
-<a name="line471"></a>		if( !$this->param && !$this->data['is_ajax'] ) redirect('gift/'.$this->good_id);
-<a name="line472"></a>
-<a name="line473"></a>		// Load transaction
-<a name="line474"></a>		$T = new Transaction();
-<a name="line475"></a>		$T->where('id', $this->param)->include_related("recipient", "*", NULL, TRUE)->get();
-<a name="line476"></a>		
-<a name="line477"></a>		// Change status
-<a name="line478"></a>		$T->ignored();
-<a name="line479"></a>		
-<a name="line480"></a>		if( $this->data['is_ajax'] )
-<a name="line481"></a>		{
-<a name="line482"></a>			if( count( $this->G->requests( "pending" ) ) > 0 )
-<a name="line483"></a>			{
-<a name="line484"></a>				echo "Request ignored.";
-<a name="line485"></a>				exit;
-<a name="line486"></a>			}
-<a name="line487"></a>			else
-<a name="line488"></a>			{
-<a name="line489"></a>				echo "Request ignored. There are no more requests at this time.";
-<a name="line490"></a>				exit;
-<a name="line491"></a>			}
-<a name="line492"></a>		}
-<a name="line493"></a>		else
-<a name="line494"></a>		{
-<a name="line495"></a>			// set flashdata, redirect
-<a name="line496"></a>			$this->session->set_flashdata('success', $T->recipient->screen_name."'s request accepted.");
-<a name="line497"></a>			redirect('gift/'. $this->good_id );
-<a name="line498"></a>		}
-<a name="line499"></a>	}
-<a name="line500"></a>	function _message()
-<a name="line501"></a>	{
-<a name="line502"></a>		$M = new Message();
-<a name="line503"></a>		$M->body = $_POST['message'];
-<a name="line504"></a>		$M->author_id = $this->data['logged_in_user_id'];
-<a name="line505"></a>		$this->G->active_transaction = $this->G->active_transaction();
-<a name="line506"></a>		$M->transaction_id = $this->G->active_transaction->id;
-<a name="line507"></a>		$M->recipients = array($this->data['logged_in_user_id'],  $this->G->active_transaction->recipient->id);
-<a name="line508"></a>		$M->transaction_dialogue();
-<a name="line509"></a>		redirect( 'gift/' . $this->G->id );
-<a name="line510"></a>	}
-<a name="line511"></a>	
-<a name="line512"></a>	/*
-<a name="line513"></a>	*	Tests to see if the current logged in user is also the author of the current
-<a name="line514"></a>	*	good. If yes, then it returns TRUE. If not, then it can do one of two things. 
-<a name="line515"></a>	*
-<a name="line516"></a>	*	If $redirect is unspecified or set to TRUE, the user is redirect to the default
-<a name="line517"></a>	*	view gift page. If $redirect is set to FALSE, the function returns FALSE.
-<a name="line518"></a>	*	
-<a name="line519"></a>	*	@param bool redirect
-<a name="line520"></a>	*	@returns bool OR null + redirect (see above for details)
-<a name="line521"></a>	*/
-<a name="line522"></a>	function _restrict( $redirect = TRUE )
-<a name="line523"></a>	{
-<a name="line524"></a>		if(!empty($this->data['logged_in_user_id']) && $this->G->user->id==$this->data['logged_in_user_id'] )
-<a name="line525"></a>			return true;
-<a name="line526"></a>		else
+<a name="line461"></a>		// load transaction
+<a name="line462"></a>		$T = new Transaction();
+<a name="line463"></a>
+<a name="line464"></a>		$T->where('id', $request_id )->include_related("recipient", "*", NULL, TRUE)->get();
+<a name="line465"></a>		
+<a name="line466"></a>		// change status
+<a name="line467"></a>		$T->accepted();
+<a name="line468"></a>		
+<a name="line469"></a>		// Hook: 'request_accepted'
+<a name="line470"></a>		$this->hooks->call('request_accepted', $this);
+<a name="line471"></a>
+<a name="line472"></a>		// set flashdata, redirect
+<a name="line473"></a>		$this->session->set_flashdata('success', $T->recipient->screen_name."'s request accepted.");
+<a name="line474"></a>		redirect('gift/'. $this->good_id );
+<a name="line475"></a>	}
+<a name="line476"></a>	
+<a name="line477"></a>	function _delete()
+<a name="line478"></a>	{
+<a name="line479"></a>		$this->session->set_flashdata('success', $this->G->title." was deleted successfully."); 
+<a name="line480"></a>		$this->G->delete();
+<a name="line481"></a>		
+<a name="line482"></a>		// Hook: 'gift_deleted'
+<a name="line483"></a>		$this->hooks->call('gift_deleted', $this);
+<a name="line484"></a>		
+<a name="line485"></a>		redirect("give");
+<a name="line486"></a>	}
+<a name="line487"></a>	
+<a name="line488"></a>	function _exchanged()
+<a name="line489"></a>	{
+<a name="line490"></a>		// make sure that request id was passed in the uri
+<a name="line491"></a>		$request_id = $this->param;
+<a name="line492"></a>		if( !$request_id && !$this->data['is_ajax'] ) redirect('gift/'.$this->good_id);
+<a name="line493"></a>		
+<a name="line494"></a>		// load transaction
+<a name="line495"></a>		$T = new Transaction();
+<a name="line496"></a>		$T->where( 'id', $request_id )->include_related("recipient", "*", NULL, TRUE)->get();
+<a name="line497"></a>
+<a name="line498"></a>		if($this->_restrict(FALSE))
+<a name="line499"></a>			$T->exchanged("giver");
+<a name="line500"></a>		else
+<a name="line501"></a>			$T->exchanged("recipient");
+<a name="line502"></a>		
+<a name="line503"></a>		// Hook: 'transaction_confirmed'
+<a name="line504"></a>		$this->hooks->call('transaction_confirmed', $this);
+<a name="line505"></a>
+<a name="line506"></a>		// set flashdata, redirect
+<a name="line507"></a>		$this->session->set_flashdata('success', "Gift marked as exchanged.");
+<a name="line508"></a>		redirect('gift/'. $this->good_id );
+<a name="line509"></a>	}
+<a name="line510"></a>	
+<a name="line511"></a>	function _ignore()
+<a name="line512"></a>	{
+<a name="line513"></a>		// make sure that request id was passed in the uri as segment 4
+<a name="line514"></a>		if( !$this->param && !$this->data['is_ajax'] ) redirect('gift/'.$this->good_id);
+<a name="line515"></a>
+<a name="line516"></a>		// Load transaction
+<a name="line517"></a>		$T = new Transaction();
+<a name="line518"></a>		$T->where('id', $this->param)->include_related("recipient", "*", NULL, TRUE)->get();
+<a name="line519"></a>		
+<a name="line520"></a>		// Change status
+<a name="line521"></a>		$T->ignored();
+<a name="line522"></a>		
+<a name="line523"></a>		// Hook: 'request_ignored'
+<a name="line524"></a>		$this->hooks->call('request_ignored', $this);
+<a name="line525"></a>		
+<a name="line526"></a>		if( $this->data['is_ajax'] )
 <a name="line527"></a>		{
-<a name="line528"></a>			if($redirect)
-<a name="line529"></a>				redirect('gift/'.$this->good_id);
-<a name="line530"></a>			else
-<a name="line531"></a>				return false;
-<a name="line532"></a>		}
-<a name="line533"></a>	}
-<a name="line534"></a>}
-<a name="line535"></a></pre>
+<a name="line528"></a>			if( count( $this->G->requests( "pending" ) ) > 0 )
+<a name="line529"></a>			{
+<a name="line530"></a>				echo "Request ignored.";
+<a name="line531"></a>				exit;
+<a name="line532"></a>			}
+<a name="line533"></a>			else
+<a name="line534"></a>			{
+<a name="line535"></a>				echo "Request ignored. There are no more requests at this time.";
+<a name="line536"></a>				exit;
+<a name="line537"></a>			}
+<a name="line538"></a>		}
+<a name="line539"></a>		else
+<a name="line540"></a>		{
+<a name="line541"></a>			// set flashdata, redirect
+<a name="line542"></a>			$this->session->set_flashdata('success', $T->recipient->screen_name."'s request accepted.");
+<a name="line543"></a>			redirect('gift/'. $this->good_id );
+<a name="line544"></a>		}
+<a name="line545"></a>	}
+<a name="line546"></a>	function _message()
+<a name="line547"></a>	{
+<a name="line548"></a>		$M = new Message();
+<a name="line549"></a>		$M->body = $_POST['message'];
+<a name="line550"></a>		$M->author_id = $this->data['logged_in_user_id'];
+<a name="line551"></a>		$this->G->active_transaction = $this->G->active_transaction();
+<a name="line552"></a>		$M->transaction_id = $this->G->active_transaction->id;
+<a name="line553"></a>		$M->recipients = array($this->data['logged_in_user_id'],  $this->G->active_transaction->recipient->id);
+<a name="line554"></a>		$M->transaction_dialogue();
+<a name="line555"></a>
+<a name="line556"></a>		// Hook: 'transaction_message_sent'
+<a name="line557"></a>		$this->hooks->call('transaction_message_sent', $this);
+<a name="line558"></a>		
+<a name="line559"></a>		redirect( 'gift/' . $this->G->id );
+<a name="line560"></a>	}
+<a name="line561"></a>	
+<a name="line562"></a>	/*
+<a name="line563"></a>	*	Tests to see if the current logged in user is also the author of the current
+<a name="line564"></a>	*	good. If yes, then it returns TRUE. If not, then it can do one of two things. 
+<a name="line565"></a>	*
+<a name="line566"></a>	*	If $redirect is unspecified or set to TRUE, the user is redirect to the default
+<a name="line567"></a>	*	view gift page. If $redirect is set to FALSE, the function returns FALSE.
+<a name="line568"></a>	*	
+<a name="line569"></a>	*	@param bool redirect
+<a name="line570"></a>	*	@returns bool OR null + redirect (see above for details)
+<a name="line571"></a>	*/
+<a name="line572"></a>	function _restrict( $redirect = TRUE )
+<a name="line573"></a>	{
+<a name="line574"></a>		if(!empty($this->data['logged_in_user_id']) && $this->G->user->id==$this->data['logged_in_user_id'] )
+<a name="line575"></a>			return true;
+<a name="line576"></a>		else
+<a name="line577"></a>		{
+<a name="line578"></a>			if($redirect)
+<a name="line579"></a>				redirect('gift/'.$this->good_id);
+<a name="line580"></a>			else
+<a name="line581"></a>				return false;
+<a name="line582"></a>		}
+<a name="line583"></a>	}
+<a name="line584"></a>}
+<a name="line585"></a></pre>
 <div class="header">
 <h1>GiftFlow API</h1>
 <ul>

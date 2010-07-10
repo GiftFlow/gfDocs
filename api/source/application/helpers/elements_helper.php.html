@@ -6,7 +6,7 @@
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 
 <meta name="generator" content="PHPDoctor 2RC4 (http://peej.github.com/phpdoctor/)">
-<meta name="when" content="Tue, 29 Jun 2010 21:10:10 +0000">
+<meta name="when" content="Sat, 10 Jul 2010 18:10:56 +0000">
 
 <link rel="stylesheet" type="text/css" href="../../../stylesheet.css">
 <link rel="start" href="../../../overview-summary.html">
@@ -226,445 +226,422 @@
 <a name="line189"></a>		$r = "<ul class='results_list'>";
 <a name="line190"></a>		foreach($data as $key=>$val)
 <a name="line191"></a>		{
-<a name="line192"></a>			$r .= result_row($val->id, array('location', 'created'), $val);
-<a name="line193"></a>			/*
-<a name="line194"></a>			// Begin output
-<a name="line195"></a>			$r .= "<li>";
-<a name="line196"></a>			
-<a name="line197"></a>			// if image option isn't set or if it is set to true, show the thumbnail
-<a name="line198"></a>			if( !isset($options['image']) || $options['image'] )
-<a name="line199"></a>				$r .= "<img src='".good_thumb($val->id, FALSE)."' class='mini_thumb left' />";
-<a name="line200"></a>			
-<a name="line201"></a>			$r .= "<div class='left'>";
-<a name="line202"></a>			$r .= "<a class='title' href='".site_url($val->type.'/'.$val->id)."'>".$val->title."</a>";
-<a name="line203"></a>			$r .= "<span class='metadata'>".$val->location->city.", ".$val->location->state.". Posted on ".date('F jS Y', strtotime($val->created)).".</span>";
-<a name="line204"></a>			$r .= "</div>";
-<a name="line205"></a>			$r .= "<div style='clear: both;'></div>";
-<a name="line206"></a>			$r .= "</li>";
-<a name="line207"></a>			*/
+<a name="line192"></a>			$r .= result_row($val, array('location', 'created'), $val);
+<a name="line193"></a>		}
+<a name="line194"></a>		$r .= "</ul>";
+<a name="line195"></a>		
+<a name="line196"></a>		return $r;
+<a name="line197"></a>    }   
+<a name="line198"></a>}
+<a name="line199"></a>
+<a name="line200"></a>if ( ! function_exists('notify'))
+<a name="line201"></a>{
+<a name="line202"></a>    	function notify()
+<a name="line203"></a>	{
+<a name="line204"></a>		return "
+<a name="line205"></a>		if(alert_success)
+<a name="line206"></a>		{
+<a name="line207"></a>			setTimeout(notify_success, 50);
 <a name="line208"></a>		}
-<a name="line209"></a>		$r .= "</ul>";
-<a name="line210"></a>		
-<a name="line211"></a>		return $r;
-<a name="line212"></a>    }   
-<a name="line213"></a>}
-<a name="line214"></a>
-<a name="line215"></a>if ( ! function_exists('notify'))
-<a name="line216"></a>{
-<a name="line217"></a>    	function notify()
-<a name="line218"></a>	{
-<a name="line219"></a>		return "
-<a name="line220"></a>		if(alert_success)
-<a name="line221"></a>		{
-<a name="line222"></a>			setTimeout(notify_success, 50);
-<a name="line223"></a>		}
-<a name="line224"></a>		if(alert_error)
-<a name="line225"></a>		{
-<a name="line226"></a>			setTimeout(notify_error, 50);
-<a name="line227"></a>		}
-<a name="line228"></a>		function notify_success()
-<a name="line229"></a>		{
-<a name="line230"></a>			$.notifyBar({ html: alert_success, cls: 'success', animationSpeed: 'normal', delay: 4000});
-<a name="line231"></a>		}
-<a name="line232"></a>		function notify_error()
-<a name="line233"></a>		{
-<a name="line234"></a>			$.notifyBar({ html: alert_error, cls: 'error', animationSpeed: 'normal', delay: 4000});
-<a name="line235"></a>		}";
-<a name="line236"></a>	}
-<a name="line237"></a>}
-<a name="line238"></a>
-<a name="line239"></a>if ( ! function_exists('heading'))
-<a name="line240"></a>{
-<a name="line241"></a>	function heading( $name, $params = NULL )
-<a name="line242"></a>	{
-<a name="line243"></a>		$r = "<img src='".base_url()."assets/images/headings/".$name.".png' alt='".ucwords($name)."' ";
-<a name="line244"></a>		if(is_array($params))
-<a name="line245"></a>		{
-<a name="line246"></a>			foreach($params as $key=>$val)
-<a name="line247"></a>			{
-<a name="line248"></a>				$r .= $key."='".$val."' ";
-<a name="line249"></a>			}
-<a name="line250"></a>		}
-<a name="line251"></a>		$r .= "/>";
-<a name="line252"></a>		return $r;
-<a name="line253"></a>	}
-<a name="line254"></a>}
-<a name="line255"></a>
-<a name="line256"></a>if ( ! function_exists('form_errors'))
-<a name="line257"></a>{
-<a name="line258"></a>	function form_errors()
-<a name="line259"></a>	{
-<a name="line260"></a>		$CI =& get_instance();
-<a name="line261"></a>		$flashdata_error = $CI->session->flashdata('error');
-<a name="line262"></a>		if(empty($flashdata_error)) return false;
-<a name="line263"></a>		
-<a name="line264"></a>		if(is_array($flashdata_error))
-<a name="line265"></a>		{
-<a name="line266"></a>			$array = $flashdata_error;
-<a name="line267"></a>			$flashdata_error = '<ul class="alert_error">';
-<a name="line268"></a>			foreach($array as $val) $flashdata_error .= "<li>".$val."</li>";
-<a name="line269"></a>			$flashdata_error .= "</ul>";
-<a name="line270"></a>			return $flashdata_error;
-<a name="line271"></a>		}
-<a name="line272"></a>		$r = "<p class='alert_error'>".$flashdata_error."</p>";
-<a name="line273"></a>		return $r;
-<a name="line274"></a>		
-<a name="line275"></a>	}
-<a name="line276"></a>}
-<a name="line277"></a>
+<a name="line209"></a>		if(alert_error)
+<a name="line210"></a>		{
+<a name="line211"></a>			setTimeout(notify_error, 50);
+<a name="line212"></a>		}
+<a name="line213"></a>		function notify_success()
+<a name="line214"></a>		{
+<a name="line215"></a>			$.notifyBar({ html: alert_success, cls: 'success', animationSpeed: 'normal', delay: 4000});
+<a name="line216"></a>		}
+<a name="line217"></a>		function notify_error()
+<a name="line218"></a>		{
+<a name="line219"></a>			$.notifyBar({ html: alert_error, cls: 'error', animationSpeed: 'normal', delay: 4000});
+<a name="line220"></a>		}";
+<a name="line221"></a>	}
+<a name="line222"></a>}
+<a name="line223"></a>
+<a name="line224"></a>if ( ! function_exists('heading'))
+<a name="line225"></a>{
+<a name="line226"></a>	function heading( $name, $params = NULL )
+<a name="line227"></a>	{
+<a name="line228"></a>		$r = "<img src='".base_url()."assets/images/headings/".$name.".png' alt='".ucwords($name)."' ";
+<a name="line229"></a>		if(is_array($params))
+<a name="line230"></a>		{
+<a name="line231"></a>			foreach($params as $key=>$val)
+<a name="line232"></a>			{
+<a name="line233"></a>				$r .= $key."='".$val."' ";
+<a name="line234"></a>			}
+<a name="line235"></a>		}
+<a name="line236"></a>		$r .= "/>";
+<a name="line237"></a>		return $r;
+<a name="line238"></a>	}
+<a name="line239"></a>}
+<a name="line240"></a>
+<a name="line241"></a>if ( ! function_exists('form_errors'))
+<a name="line242"></a>{
+<a name="line243"></a>	function form_errors()
+<a name="line244"></a>	{
+<a name="line245"></a>		$CI =& get_instance();
+<a name="line246"></a>		$flashdata_error = $CI->session->flashdata('error');
+<a name="line247"></a>		if(empty($flashdata_error)) return false;
+<a name="line248"></a>		
+<a name="line249"></a>		if(is_array($flashdata_error))
+<a name="line250"></a>		{
+<a name="line251"></a>			$array = $flashdata_error;
+<a name="line252"></a>			$flashdata_error = '<ul class="alert_error">';
+<a name="line253"></a>			foreach($array as $val) $flashdata_error .= "<li>".$val."</li>";
+<a name="line254"></a>			$flashdata_error .= "</ul>";
+<a name="line255"></a>			return $flashdata_error;
+<a name="line256"></a>		}
+<a name="line257"></a>		$r = "<p class='alert_error'>".$flashdata_error."</p>";
+<a name="line258"></a>		return $r;
+<a name="line259"></a>		
+<a name="line260"></a>	}
+<a name="line261"></a>}
+<a name="line262"></a>
+<a name="line263"></a>
+<a name="line264"></a>if ( ! function_exists('about_menu'))
+<a name="line265"></a>{
+<a name="line266"></a>	function about_menu( $active = null )
+<a name="line267"></a>	{
+<a name="line268"></a>		$r  = 	"<ul id='about_menu'>";
+<a name="line269"></a>		$r .= 	"<li style='margin-bottom: 22px;'>".heading('about_menu')."</li>";
+<a name="line270"></a>		
+<a name="line271"></a>		$r .=	"<li><a ";
+<a name="line272"></a>		if($active=='index') $r .= "class='active' ";
+<a name="line273"></a>		$r .= 	"href='".site_url('about')."'>Intro</a></li>";
+<a name="line274"></a>
+<a name="line275"></a>		$r .=	"<li><a ";
+<a name="line276"></a>		if($active=='tour') $r .= "class='active' ";
+<a name="line277"></a>		$r .= 	"href='".site_url('about/tour')."'>The Tour</a></li>";
 <a name="line278"></a>
-<a name="line279"></a>if ( ! function_exists('about_menu'))
-<a name="line280"></a>{
-<a name="line281"></a>	function about_menu( $active = null )
-<a name="line282"></a>	{
-<a name="line283"></a>		$r  = 	"<ul id='about_menu'>";
-<a name="line284"></a>		$r .= 	"<li style='margin-bottom: 22px;'>".heading('about_menu')."</li>";
-<a name="line285"></a>		
-<a name="line286"></a>		$r .=	"<li><a ";
-<a name="line287"></a>		if($active=='index') $r .= "class='active' ";
-<a name="line288"></a>		$r .= 	"href='".site_url('about')."'>Intro</a></li>";
-<a name="line289"></a>
-<a name="line290"></a>		$r .=	"<li><a ";
-<a name="line291"></a>		if($active=='tour') $r .= "class='active' ";
-<a name="line292"></a>		$r .= 	"href='".site_url('about/tour')."'>The Tour</a></li>";
-<a name="line293"></a>
-<a name="line294"></a>		$r .=	"<li><a ";
-<a name="line295"></a>		if($active=='story') $r .= "class='active' ";
-<a name="line296"></a>		$r .= 	"href='".site_url('about/story')."'>Our Story</a></li>";
-<a name="line297"></a>		
-<a name="line298"></a>		$r .=	"<li><a ";
-<a name="line299"></a>		if($active=='press') $r .= "class='active' ";
-<a name="line300"></a>		$r .= 	"href='".site_url('about/press')."'>In the Press</a></li>";
-<a name="line301"></a>		
-<a name="line302"></a>		$r .= "</ul>";
-<a name="line303"></a>		return $r;
-<a name="line304"></a>	}
-<a name="line305"></a>}
-<a name="line306"></a>
-<a name="line307"></a>if ( ! function_exists('result_row'))
-<a name="line308"></a>{
-<a name="line309"></a>	function result_row( $id, $params, $G = NULL )
-<a name="line310"></a>	{
-<a name="line311"></a>		if($G==NULL)
+<a name="line279"></a>		$r .=	"<li><a ";
+<a name="line280"></a>		if($active=='story') $r .= "class='active' ";
+<a name="line281"></a>		$r .= 	"href='".site_url('about/story')."'>Our Story</a></li>";
+<a name="line282"></a>		
+<a name="line283"></a>		$r .=	"<li><a ";
+<a name="line284"></a>		if($active=='press') $r .= "class='active' ";
+<a name="line285"></a>		$r .= 	"href='".site_url('about/press')."'>In the Press</a></li>";
+<a name="line286"></a>		
+<a name="line287"></a>		$r .= "</ul>";
+<a name="line288"></a>		return $r;
+<a name="line289"></a>	}
+<a name="line290"></a>}
+<a name="line291"></a>
+<a name="line292"></a>if ( ! function_exists('result_row'))
+<a name="line293"></a>{
+<a name="line294"></a>	function result_row( $G, $params)
+<a name="line295"></a>	{
+<a name="line296"></a>		$r = "<li class='result_row'>";
+<a name="line297"></a>		$r .= "<a href='".site_url('gift/'.$G->id)."' class='result_image'>";
+<a name="line298"></a>		$r .=  "<img src='" . good_thumb( $G->id, FALSE ) . "' />";
+<a name="line299"></a>		$r .= "</a>";
+<a name="line300"></a>		$r .= "<div class='result_meta'>";
+<a name="line301"></a>		if($G->type=="gift")
+<a name="line302"></a>			$r .= "<a id='title' href='".site_url('gift/'.$G->id). "'>";
+<a name="line303"></a>		elseif($G->type == "need")
+<a name="line304"></a>			$r .= "<a id='title' href='".site_url('need/'.$G->id). "'>";
+<a name="line305"></a>		$r .= $G->title;
+<a name="line306"></a>		$r .= "</a>";
+<a name="line307"></a>		
+<a name="line308"></a>		// Begin specific parameter output
+<a name="line309"></a>		if( in_array("requests", $params) )
+<a name="line310"></a>			$r .= "<span id='requests' class='metadata'><em>requested</em> ". count($G->requests->all). " times</span>";
+<a name="line311"></a>		if( in_array("author", $params) )
 <a name="line312"></a>		{
-<a name="line313"></a>			$G = new Good( $id );
-<a name="line314"></a>			$G->user->get();
-<a name="line315"></a>			$G->default_photo->get();
-<a name="line316"></a>			$G->location->get();
-<a name="line317"></a>			$G->requests->get();
-<a name="line318"></a>		}
-<a name="line319"></a>		$r = "<li class='result_row'>";
-<a name="line320"></a>		$r .= "<a href='".site_url('gift/'.$G->id)."' class='result_image'>";
-<a name="line321"></a>		$r .=  "<img src='" . good_thumb( $G->id, FALSE ) . "' />";
-<a name="line322"></a>		$r .= "</a>";
-<a name="line323"></a>		$r .= "<div class='result_meta'>";
-<a name="line324"></a>		if($G->type=="gift")
-<a name="line325"></a>			$r .= "<a id='title' href='".site_url('gift/'.$G->id). "'>";
-<a name="line326"></a>		elseif($G->type == "need")
-<a name="line327"></a>			$r .= "<a id='title' href='".site_url('need/'.$G->id). "'>";
-<a name="line328"></a>		$r .= $G->title;
-<a name="line329"></a>		$r .= "</a>";
-<a name="line330"></a>		
-<a name="line331"></a>		// Begin specific parameter output
-<a name="line332"></a>		if( in_array("requests", $params) )
-<a name="line333"></a>			$r .= "<span id='requests' class='metadata'><em>requested</em> ". count($G->requests->all). " times</span>";
-<a name="line334"></a>		if( in_array("author", $params) )
-<a name="line335"></a>		{
-<a name="line336"></a>			$r .= "<span id='author' class='metadata'><em>from</em> ";
-<a name="line337"></a>			if($G->user->exists()) $r .= "<a href='".site_url('profile/'.$G->user->id)."'>".$G->user->screen_name."</a>";
-<a name="line338"></a>			else $r .= "<a href='".site_url('profile/'.$G->needy->id)."'>".$G->needy->screen_name."</a>";
-<a name="line339"></a>			$r .= "</span>";
-<a name="line340"></a>		}
-<a name="line341"></a>		if( in_array("location", $params) && !empty($G->location->city) && !empty($G->location->state) )
-<a name="line342"></a>			$r .= "<span id='location' class='metadata'><em>in</em> ".$G->location->city.", ".$G->location->state."</span>";
-<a name="line343"></a>		if( in_array("created", $params) )
-<a name="line344"></a>			$r .= "<span id='created' class='metadata'><em>posted</em> ". date("F jS Y", strtotime($G->created))."</span>";
-<a name="line345"></a>		$r .= "</div>";
-<a name="line346"></a>		$r .= "<div style='clear: both;'></div>";
-<a name="line347"></a>		$r .= "</li>";
-<a name="line348"></a>		return $r;
-<a name="line349"></a>	}
-<a name="line350"></a>}
-<a name="line351"></a>
-<a name="line352"></a>
-<a name="line353"></a>if ( ! function_exists('facebook_sdk'))
-<a name="line354"></a>{
-<a name="line355"></a>	function facebook_sdk()
-<a name="line356"></a>	{
-<a name="line357"></a>		$r = '<script src="http://connect.facebook.net/en_US/all.js"></script>';
-<a name="line358"></a>		$r .= '<div id="fb-root"></div>';
-<a name="line359"></a>		$r .= '<script>';
-<a name="line360"></a>		$r .= '  window.fbAsyncInit = function() {';
-<a name="line361"></a>		$r .= '    FB.init({appId: "111637438874755", status: true, cookie: true,';
-<a name="line362"></a>		$r .= '             xfbml: true});';
-<a name="line363"></a>		$r .= '  };';
-<a name="line364"></a>		$r .= '  (function() {';
-<a name="line365"></a>		$r .= '    var e = document.createElement("script"); e.async = true;';
-<a name="line366"></a>		$r .= '    e.src = document.location.protocol +';
-<a name="line367"></a>		$r .= '    document.getElementById("fb-root").appendChild(e);';
-<a name="line368"></a>		$r .= '  }());';
-<a name="line369"></a>		$r .= '</script>';
-<a name="line370"></a>		return $r;
-<a name="line371"></a>	}
-<a name="line372"></a>}
-<a name="line373"></a>if ( ! function_exists('facebook_open_graph'))
-<a name="line374"></a>{
-<a name="line375"></a>	function facebook_open_graph( $options = null )
-<a name="line376"></a>	{
-<a name="line377"></a>		$CI =& get_instance();
-<a name="line378"></a>		$seg1 = $CI->uri->segment('1');
-<a name="line379"></a>		$seg2 = $CI->uri->segment('2');
-<a name="line380"></a>		if($seg1=="gift"&&!empty($seg2))
-<a name="line381"></a>		{
-<a name="line382"></a>			$G = new Good( $seg2 );
-<a name="line383"></a>			$G->location->get();
-<a name="line384"></a>			$G->default_photo->get();
-<a name="line385"></a>			if(count($G->default_photo->all)==0)
-<a name="line386"></a>    				$tags['og:image'] = base_url()."assets/images/default_".$G->type.".png";
-<a name="line387"></a>    			else
-<a name="line388"></a>    				$tags['og:image'] = $G->default_photo->thumb_url;
-<a name="line389"></a>    			$tags['og:title'] = $G->title;
-<a name="line390"></a>    			$tags['og:type'] = "product";
-<a name="line391"></a>    			
-<a name="line392"></a>    			// Location
-<a name="line393"></a>    			if(!empty($G->location->latitude)) $tags["og:latitude"] = $G->location->latitude;
-<a name="line394"></a>    			if(!empty($G->location->longitude)) $tags["og:longitude"] = $G->location->longitude;
-<a name="line395"></a>    			if(!empty($G->location->street_address)) $tags["og:street-address"] = $G->location->street_address;
-<a name="line396"></a>    			if(!empty($G->location->city)) $tags["og:locality"] = $G->location->city;
-<a name="line397"></a>			if(!empty($G->location->state)) $tags["og:region"] = $G->location->state;
-<a name="line398"></a>			if(!empty($G->location->zip)) $tags['og:postal-code'] = $G->location->zip;
-<a name="line399"></a>			$tags['og:country-name'] = "USA";
-<a name="line400"></a>		}
-<a name="line401"></a>    		
-<a name="line402"></a>    		$tags['fb:app_id'] = '111637438874755';
-<a name="line403"></a>		$tags['og:url'] = current_url();
-<a name="line404"></a>		$tags['og:site_name'] = 'GiftFlow';
-<a name="line405"></a>		$r = '';
-<a name="line406"></a>		foreach($tags as $property=>$content)
-<a name="line407"></a>		{
-<a name="line408"></a>			$r .= "<meta property='{$property}' content='{$content}' />\n";
-<a name="line409"></a>		}
-<a name="line410"></a>		return $r;
-<a name="line411"></a>	}
-<a name="line412"></a>}
-<a name="line413"></a>
-<a name="line414"></a>if ( ! function_exists('sidebar'))
-<a name="line415"></a>{
-<a name="line416"></a>	function sidebar( $options )
-<a name="line417"></a>	{
-<a name="line418"></a>		/*
-<a name="line419"></a>		*	Options
-<a name="line420"></a>		*	======
-<a name="line421"></a>		*
-<a name="line422"></a>		*	class
-<a name="line423"></a>		*	content (*)
-<a name="line424"></a>		*	id 
-<a name="line425"></a>		*	title (*)
-<a name="line426"></a>		*/
-<a name="line427"></a>		$r = '<div class="sidebar ';
-<a name="line428"></a>		if(!empty($options['class'])) $r .= '" '.$options["class"];
-<a name="line429"></a>		if(!empty($options['id'])) $r .= '" id="'.$options["id"];
-<a name="line430"></a>		$r .= '">';
-<a name="line431"></a>		$r .= '	<div class="top">';
-<a name="line432"></a>		$r .= '		<h2>'.$options["title"].'</h2>';
-<a name="line433"></a>		$r .= '	</div>';
-<a name="line434"></a>		$r .= '	<div class="center">'.$options["content"].'</div>';
-<a name="line435"></a>		$r .= '	<div class="bottom"></div>';
-<a name="line436"></a>		$r .= '</div>';
-<a name="line437"></a>		return $r;
-<a name="line438"></a>	}
-<a name="line439"></a>}
-<a name="line440"></a>if ( ! function_exists('sharing_sidebar'))
-<a name="line441"></a>{
-<a name="line442"></a>	function sharing_sidebar( $options = null )
-<a name="line443"></a>	{
-<a name="line444"></a>		$content = '
-<a name="line445"></a>		<div class="addthis_toolbox">
-<a name="line446"></a>		    <a class="addthis_button_facebook_like"></a>
-<a name="line447"></a>
-<a name="line448"></a>		    	<div class="two_column">
-<a name="line449"></a>		    		
-<a name="line450"></a>		    		<div class="top"></div>
-<a name="line451"></a>		    		<div class="clear"></div>
-<a name="line452"></a>				<div class="column1">					
-<a name="line453"></a>					<a class="addthis_button_facebook">Facebook</a>
-<a name="line454"></a>					<a class="addthis_button_email">Email</a>
-<a name="line455"></a>					<a class="addthis_button_myspace">MySpace</a>
-<a name="line456"></a>			  	</div>
-<a name="line457"></a>			  	<div class="column2">
-<a name="line458"></a>			  		<a class="addthis_button_twitter">Twitter</a>
-<a name="line459"></a>					<a class="addthis_button_digg">Digg</a>
-<a name="line460"></a>					<a class="addthis_button_delicious">Delicous</a>
-<a name="line461"></a>			  	</div>
-<a name="line462"></a>			  	<div class="clear"></div>
-<a name="line463"></a>			  	<div class="more">
-<a name="line464"></a>					<a class="addthis_button_expanded">More Destinations...</a>
-<a name="line465"></a>				</div>
-<a name="line466"></a>			</div>
-<a name="line467"></a>		</div>';
-<a name="line468"></a>		$options = array ("title"=>"Share This", "content"=>$content);
-<a name="line469"></a>		return sidebar( $options );
-<a name="line470"></a>	}
-<a name="line471"></a>}
-<a name="line472"></a>if ( ! function_exists('time_ago'))
-<a name="line473"></a>{
-<a name="line474"></a>	/*
-<a name="line475"></a>	*	Calculates time ago string
-<a name="line476"></a>	*	For example, "This post was created 4 minutes ago" instead of displaying
-<a name="line477"></a>	*	a date
-<a name="line478"></a>	*
-<a name="line479"></a>	*	@param timestamp $datefrom
-<a name="line480"></a>	*	@param timestamp $dateto
-<a name="line481"></a>	*/
-<a name="line482"></a>	function time_ago( $datefrom, $dateto=-1 )
-<a name="line483"></a>	{
-<a name="line484"></a>		// Defaults and assume if 0 is passed in that
-<a name="line485"></a>		// its an error rather than the epoch
-<a name="line486"></a>		
-<a name="line487"></a>		if($datefrom<=0) 
-<a name="line488"></a>			return "A long time ago";
-<a name="line489"></a>		if($dateto==-1)
-<a name="line490"></a>			$dateto = time();
-<a name="line491"></a>		
-<a name="line492"></a>		// Calculate the difference in seconds betweeen
-<a name="line493"></a>		// the two timestamps
-<a name="line494"></a>		$difference = $dateto - $datefrom;
-<a name="line495"></a>		
-<a name="line496"></a>		// If difference is less than 60 seconds,
-<a name="line497"></a>		// seconds is a good interval of choice
-<a name="line498"></a>		
-<a name="line499"></a>		if($difference < 60)
-<a name="line500"></a>		{
-<a name="line501"></a>			$interval = "s";
-<a name="line502"></a>		}
-<a name="line503"></a>		
-<a name="line504"></a>		// If difference is between 60 seconds and
-<a name="line505"></a>		// 60 minutes, minutes is a good interval
-<a name="line506"></a>		elseif($difference >= 60 && $difference<60*60)
-<a name="line507"></a>		{
-<a name="line508"></a>			$interval = "n";
-<a name="line509"></a>		}
-<a name="line510"></a>		
-<a name="line511"></a>		// If difference is between 1 hour and 24 hours
-<a name="line512"></a>		// hours is a good interval
-<a name="line513"></a>		elseif($difference >= 60*60 && $difference<60*60*24)
-<a name="line514"></a>		{
-<a name="line515"></a>			$interval = "h";
-<a name="line516"></a>		}
-<a name="line517"></a>		
-<a name="line518"></a>		// If difference is between 1 day and 7 days
-<a name="line519"></a>		// days is a good interval
-<a name="line520"></a>		elseif($difference >= 60*60*24 && $difference<60*60*24*7)
-<a name="line521"></a>		{
-<a name="line522"></a>			$interval = "d";
-<a name="line523"></a>		}
-<a name="line524"></a>		
-<a name="line525"></a>		// If difference is between 1 week and 30 days
-<a name="line526"></a>		// weeks is a good interval
-<a name="line527"></a>		elseif($difference >= 60*60*24*7 && $difference <
-<a name="line528"></a>		60*60*24*30)
-<a name="line529"></a>		{
-<a name="line530"></a>			$interval = "ww";
-<a name="line531"></a>		}
-<a name="line532"></a>		
-<a name="line533"></a>		// If difference is between 30 days and 365 days
-<a name="line534"></a>		// months is a good interval, again, the same thing
-<a name="line535"></a>		// applies, if the 29th February happens to exist
-<a name="line536"></a>		// between your 2 dates, the function will return
-<a name="line537"></a>		// the 'incorrect' value for a day
-<a name="line538"></a>		elseif($difference >= 60*60*24*30 && $difference <
-<a name="line539"></a>		60*60*24*365)
-<a name="line540"></a>		{
-<a name="line541"></a>			$interval = "m";
-<a name="line542"></a>		}
-<a name="line543"></a>		
-<a name="line544"></a>		// If difference is greater than or equal to 365
-<a name="line545"></a>		// days, return year. This will be incorrect if
-<a name="line546"></a>		// for example, you call the function on the 28th April
-<a name="line547"></a>		// 2008 passing in 29th April 2007. It will return
-<a name="line548"></a>		// 1 year ago when in actual fact (yawn!) not quite
-<a name="line549"></a>		// a year has gone by
-<a name="line550"></a>		elseif($difference >= 60*60*24*365)
-<a name="line551"></a>		{
-<a name="line552"></a>			$interval = "y";
-<a name="line553"></a>		}
+<a name="line313"></a>			$r .= "<span id='author' class='metadata'><em>from</em> ";
+<a name="line314"></a>			if( !empty($G->user)) $r .= "<a href='".site_url('profile/'.$G->user->id)."'>".$G->user->screen_name."</a>";
+<a name="line315"></a>			else $r .= "<a href='".site_url('profile/'.$G->needy->id)."'>".$G->needy->screen_name."</a>";
+<a name="line316"></a>			$r .= "</span>";
+<a name="line317"></a>		}
+<a name="line318"></a>		if( in_array("location", $params) && !empty($G->location->city) && !empty($G->location->state) )
+<a name="line319"></a>			$r .= "<span id='location' class='metadata'><em>in</em> ".$G->location->city.", ".$G->location->state."</span>";
+<a name="line320"></a>		if( in_array("created", $params) )
+<a name="line321"></a>			$r .= "<span id='created' class='metadata'><em>posted</em> ". date("F jS Y", strtotime($G->created))."</span>";
+<a name="line322"></a>		$r .= "</div>";
+<a name="line323"></a>		$r .= "<div style='clear: both;'></div>";
+<a name="line324"></a>		$r .= "</li>";
+<a name="line325"></a>		return $r;
+<a name="line326"></a>	}
+<a name="line327"></a>}
+<a name="line328"></a>
+<a name="line329"></a>
+<a name="line330"></a>if ( ! function_exists('facebook_sdk'))
+<a name="line331"></a>{
+<a name="line332"></a>	function facebook_sdk()
+<a name="line333"></a>	{
+<a name="line334"></a>		$r = '<script src="http://connect.facebook.net/en_US/all.js"></script>';
+<a name="line335"></a>		$r .= '<div id="fb-root"></div>';
+<a name="line336"></a>		$r .= '<script>';
+<a name="line337"></a>		$r .= '  window.fbAsyncInit = function() {';
+<a name="line338"></a>		$r .= '    FB.init({appId: "111637438874755", status: true, cookie: true,';
+<a name="line339"></a>		$r .= '             xfbml: true});';
+<a name="line340"></a>		$r .= '  };';
+<a name="line341"></a>		$r .= '  (function() {';
+<a name="line342"></a>		$r .= '    var e = document.createElement("script"); e.async = true;';
+<a name="line343"></a>		$r .= '    e.src = document.location.protocol +';
+<a name="line344"></a>		$r .= '    document.getElementById("fb-root").appendChild(e);';
+<a name="line345"></a>		$r .= '  }());';
+<a name="line346"></a>		$r .= '</script>';
+<a name="line347"></a>		return $r;
+<a name="line348"></a>	}
+<a name="line349"></a>}
+<a name="line350"></a>if ( ! function_exists('facebook_open_graph'))
+<a name="line351"></a>{
+<a name="line352"></a>	function facebook_open_graph( $options = null )
+<a name="line353"></a>	{
+<a name="line354"></a>		$CI =& get_instance();
+<a name="line355"></a>		$seg1 = $CI->uri->segment('1');
+<a name="line356"></a>		$seg2 = $CI->uri->segment('2');
+<a name="line357"></a>		if($seg1=="gift"&&!empty($seg2))
+<a name="line358"></a>		{
+<a name="line359"></a>			$G = new Good( $seg2 );
+<a name="line360"></a>			$G->location->get();
+<a name="line361"></a>			$G->default_photo->get();
+<a name="line362"></a>			if(count($G->default_photo->all)==0)
+<a name="line363"></a>    				$tags['og:image'] = base_url()."assets/images/default_".$G->type.".png";
+<a name="line364"></a>    			else
+<a name="line365"></a>    				$tags['og:image'] = $G->default_photo->thumb_url;
+<a name="line366"></a>    			$tags['og:title'] = $G->title;
+<a name="line367"></a>    			$tags['og:type'] = "product";
+<a name="line368"></a>    			
+<a name="line369"></a>    			// Location
+<a name="line370"></a>    			if(!empty($G->location->latitude)) $tags["og:latitude"] = $G->location->latitude;
+<a name="line371"></a>    			if(!empty($G->location->longitude)) $tags["og:longitude"] = $G->location->longitude;
+<a name="line372"></a>    			if(!empty($G->location->street_address)) $tags["og:street-address"] = $G->location->street_address;
+<a name="line373"></a>    			if(!empty($G->location->city)) $tags["og:locality"] = $G->location->city;
+<a name="line374"></a>			if(!empty($G->location->state)) $tags["og:region"] = $G->location->state;
+<a name="line375"></a>			if(!empty($G->location->zip)) $tags['og:postal-code'] = $G->location->zip;
+<a name="line376"></a>			$tags['og:country-name'] = "USA";
+<a name="line377"></a>		}
+<a name="line378"></a>    		
+<a name="line379"></a>    		$tags['fb:app_id'] = '111637438874755';
+<a name="line380"></a>		$tags['og:url'] = current_url();
+<a name="line381"></a>		$tags['og:site_name'] = 'GiftFlow';
+<a name="line382"></a>		$r = '';
+<a name="line383"></a>		foreach($tags as $property=>$content)
+<a name="line384"></a>		{
+<a name="line385"></a>			$r .= "<meta property='{$property}' content='{$content}' />\n";
+<a name="line386"></a>		}
+<a name="line387"></a>		return $r;
+<a name="line388"></a>	}
+<a name="line389"></a>}
+<a name="line390"></a>
+<a name="line391"></a>if ( ! function_exists('sidebar'))
+<a name="line392"></a>{
+<a name="line393"></a>	function sidebar( $options )
+<a name="line394"></a>	{
+<a name="line395"></a>		/*
+<a name="line396"></a>		*	Options
+<a name="line397"></a>		*	======
+<a name="line398"></a>		*
+<a name="line399"></a>		*	class
+<a name="line400"></a>		*	content (*)
+<a name="line401"></a>		*	id 
+<a name="line402"></a>		*	title (*)
+<a name="line403"></a>		*/
+<a name="line404"></a>		$r = '<div class="sidebar ';
+<a name="line405"></a>		if(!empty($options['class'])) $r .= '" '.$options["class"];
+<a name="line406"></a>		if(!empty($options['id'])) $r .= '" id="'.$options["id"];
+<a name="line407"></a>		$r .= '">';
+<a name="line408"></a>		$r .= '	<div class="top">';
+<a name="line409"></a>		$r .= '		<h2>'.$options["title"].'</h2>';
+<a name="line410"></a>		$r .= '	</div>';
+<a name="line411"></a>		$r .= '	<div class="center">'.$options["content"].'</div>';
+<a name="line412"></a>		$r .= '	<div class="bottom"></div>';
+<a name="line413"></a>		$r .= '</div>';
+<a name="line414"></a>		return $r;
+<a name="line415"></a>	}
+<a name="line416"></a>}
+<a name="line417"></a>if ( ! function_exists('sharing_sidebar'))
+<a name="line418"></a>{
+<a name="line419"></a>	function sharing_sidebar( $options = null )
+<a name="line420"></a>	{
+<a name="line421"></a>		$content = '
+<a name="line422"></a>		<div class="addthis_toolbox">
+<a name="line423"></a>		    <a class="addthis_button_facebook_like"></a>
+<a name="line424"></a>
+<a name="line425"></a>		    	<div class="two_column">
+<a name="line426"></a>		    		
+<a name="line427"></a>		    		<div class="top"></div>
+<a name="line428"></a>		    		<div class="clear"></div>
+<a name="line429"></a>				<div class="column1">					
+<a name="line430"></a>					<a class="addthis_button_facebook">Facebook</a>
+<a name="line431"></a>					<a class="addthis_button_email">Email</a>
+<a name="line432"></a>					<a class="addthis_button_myspace">MySpace</a>
+<a name="line433"></a>			  	</div>
+<a name="line434"></a>			  	<div class="column2">
+<a name="line435"></a>			  		<a class="addthis_button_twitter">Twitter</a>
+<a name="line436"></a>					<a class="addthis_button_digg">Digg</a>
+<a name="line437"></a>					<a class="addthis_button_delicious">Delicous</a>
+<a name="line438"></a>			  	</div>
+<a name="line439"></a>			  	<div class="clear"></div>
+<a name="line440"></a>			  	<div class="more">
+<a name="line441"></a>					<a class="addthis_button_expanded">More Destinations...</a>
+<a name="line442"></a>				</div>
+<a name="line443"></a>			</div>
+<a name="line444"></a>		</div>';
+<a name="line445"></a>		$options = array ("title"=>"Share This", "content"=>$content);
+<a name="line446"></a>		return sidebar( $options );
+<a name="line447"></a>	}
+<a name="line448"></a>}
+<a name="line449"></a>if ( ! function_exists('time_ago'))
+<a name="line450"></a>{
+<a name="line451"></a>	/*
+<a name="line452"></a>	*	Calculates time ago string
+<a name="line453"></a>	*	For example, "This post was created 4 minutes ago" instead of displaying
+<a name="line454"></a>	*	a date
+<a name="line455"></a>	*
+<a name="line456"></a>	*	@param timestamp $datefrom
+<a name="line457"></a>	*	@param timestamp $dateto
+<a name="line458"></a>	*/
+<a name="line459"></a>	function time_ago( $datefrom, $dateto=-1 )
+<a name="line460"></a>	{
+<a name="line461"></a>		// Defaults and assume if 0 is passed in that
+<a name="line462"></a>		// its an error rather than the epoch
+<a name="line463"></a>		
+<a name="line464"></a>		if($datefrom<=0) 
+<a name="line465"></a>			return "A long time ago";
+<a name="line466"></a>		if($dateto==-1)
+<a name="line467"></a>			$dateto = time();
+<a name="line468"></a>		
+<a name="line469"></a>		// Calculate the difference in seconds betweeen
+<a name="line470"></a>		// the two timestamps
+<a name="line471"></a>		$difference = $dateto - $datefrom;
+<a name="line472"></a>		
+<a name="line473"></a>		// If difference is less than 60 seconds,
+<a name="line474"></a>		// seconds is a good interval of choice
+<a name="line475"></a>		
+<a name="line476"></a>		if($difference < 60)
+<a name="line477"></a>		{
+<a name="line478"></a>			$interval = "s";
+<a name="line479"></a>		}
+<a name="line480"></a>		
+<a name="line481"></a>		// If difference is between 60 seconds and
+<a name="line482"></a>		// 60 minutes, minutes is a good interval
+<a name="line483"></a>		elseif($difference >= 60 && $difference<60*60)
+<a name="line484"></a>		{
+<a name="line485"></a>			$interval = "n";
+<a name="line486"></a>		}
+<a name="line487"></a>		
+<a name="line488"></a>		// If difference is between 1 hour and 24 hours
+<a name="line489"></a>		// hours is a good interval
+<a name="line490"></a>		elseif($difference >= 60*60 && $difference<60*60*24)
+<a name="line491"></a>		{
+<a name="line492"></a>			$interval = "h";
+<a name="line493"></a>		}
+<a name="line494"></a>		
+<a name="line495"></a>		// If difference is between 1 day and 7 days
+<a name="line496"></a>		// days is a good interval
+<a name="line497"></a>		elseif($difference >= 60*60*24 && $difference<60*60*24*7)
+<a name="line498"></a>		{
+<a name="line499"></a>			$interval = "d";
+<a name="line500"></a>		}
+<a name="line501"></a>		
+<a name="line502"></a>		// If difference is between 1 week and 30 days
+<a name="line503"></a>		// weeks is a good interval
+<a name="line504"></a>		elseif($difference >= 60*60*24*7 && $difference <
+<a name="line505"></a>		60*60*24*30)
+<a name="line506"></a>		{
+<a name="line507"></a>			$interval = "ww";
+<a name="line508"></a>		}
+<a name="line509"></a>		
+<a name="line510"></a>		// If difference is between 30 days and 365 days
+<a name="line511"></a>		// months is a good interval, again, the same thing
+<a name="line512"></a>		// applies, if the 29th February happens to exist
+<a name="line513"></a>		// between your 2 dates, the function will return
+<a name="line514"></a>		// the 'incorrect' value for a day
+<a name="line515"></a>		elseif($difference >= 60*60*24*30 && $difference <
+<a name="line516"></a>		60*60*24*365)
+<a name="line517"></a>		{
+<a name="line518"></a>			$interval = "m";
+<a name="line519"></a>		}
+<a name="line520"></a>		
+<a name="line521"></a>		// If difference is greater than or equal to 365
+<a name="line522"></a>		// days, return year. This will be incorrect if
+<a name="line523"></a>		// for example, you call the function on the 28th April
+<a name="line524"></a>		// 2008 passing in 29th April 2007. It will return
+<a name="line525"></a>		// 1 year ago when in actual fact (yawn!) not quite
+<a name="line526"></a>		// a year has gone by
+<a name="line527"></a>		elseif($difference >= 60*60*24*365)
+<a name="line528"></a>		{
+<a name="line529"></a>			$interval = "y";
+<a name="line530"></a>		}
+<a name="line531"></a>		
+<a name="line532"></a>		// Based on the interval, determine the
+<a name="line533"></a>		// number of units between the two dates
+<a name="line534"></a>		// From this point on, you would be hard
+<a name="line535"></a>		// pushed telling the difference between
+<a name="line536"></a>		// this function and DateDiff. If the $datediff
+<a name="line537"></a>		// returned is 1, be sure to return the singular
+<a name="line538"></a>		// of the unit, e.g. 'day' rather 'days'
+<a name="line539"></a>		
+<a name="line540"></a>		switch($interval)
+<a name="line541"></a>		{
+<a name="line542"></a>			case "m":
+<a name="line543"></a>				$months_difference = floor($difference / 60 / 60 / 24 / 29);
+<a name="line544"></a>				while ( 	mktime(date("H", $datefrom), 
+<a name="line545"></a>						date("i", $datefrom),
+<a name="line546"></a>						date("s", $datefrom), 
+<a name="line547"></a>						date("n", $datefrom)+($months_difference),
+<a name="line548"></a>						date("j", $dateto), 
+<a name="line549"></a>						date("Y", $datefrom)) < $dateto)
+<a name="line550"></a>				{
+<a name="line551"></a>					$months_difference++;
+<a name="line552"></a>				}
+<a name="line553"></a>				$datediff = $months_difference;
 <a name="line554"></a>		
-<a name="line555"></a>		// Based on the interval, determine the
-<a name="line556"></a>		// number of units between the two dates
-<a name="line557"></a>		// From this point on, you would be hard
-<a name="line558"></a>		// pushed telling the difference between
-<a name="line559"></a>		// this function and DateDiff. If the $datediff
-<a name="line560"></a>		// returned is 1, be sure to return the singular
-<a name="line561"></a>		// of the unit, e.g. 'day' rather 'days'
-<a name="line562"></a>		
-<a name="line563"></a>		switch($interval)
-<a name="line564"></a>		{
-<a name="line565"></a>			case "m":
-<a name="line566"></a>				$months_difference = floor($difference / 60 / 60 / 24 / 29);
-<a name="line567"></a>				while ( 	mktime(date("H", $datefrom), 
-<a name="line568"></a>						date("i", $datefrom),
-<a name="line569"></a>						date("s", $datefrom), 
-<a name="line570"></a>						date("n", $datefrom)+($months_difference),
-<a name="line571"></a>						date("j", $dateto), 
-<a name="line572"></a>						date("Y", $datefrom)) < $dateto)
-<a name="line573"></a>				{
-<a name="line574"></a>					$months_difference++;
-<a name="line575"></a>				}
-<a name="line576"></a>				$datediff = $months_difference;
-<a name="line577"></a>		
-<a name="line578"></a>				// We need this in here because it is possible
-<a name="line579"></a>				// to have an 'm' interval and a months
-<a name="line580"></a>				// difference of 12 because we are using 29 days
-<a name="line581"></a>				// in a month
-<a name="line582"></a>				
-<a name="line583"></a>				if($datediff==12)
-<a name="line584"></a>					$datediff--;
-<a name="line585"></a>				
-<a name="line586"></a>				$res = ($datediff==1) ? "$datediff month ago" : "$datediff
-<a name="line587"></a>				months ago";
-<a name="line588"></a>				break;
-<a name="line589"></a>		
-<a name="line590"></a>			case "y":
-<a name="line591"></a>				$datediff = floor($difference / 60 / 60 / 24 / 365);
-<a name="line592"></a>				$res = ($datediff==1) ? "$datediff year ago" : "$datediff
-<a name="line593"></a>						years ago";
-<a name="line594"></a>				break;
-<a name="line595"></a>		
-<a name="line596"></a>		case "d":
-<a name="line597"></a>		$datediff = floor($difference / 60 / 60 / 24);
-<a name="line598"></a>		$res = ($datediff==1) ? "$datediff day ago" : "$datediff
-<a name="line599"></a>		days ago";
-<a name="line600"></a>		break;
-<a name="line601"></a>		
-<a name="line602"></a>		case "ww":
-<a name="line603"></a>		$datediff = floor($difference / 60 / 60 / 24 / 7);
-<a name="line604"></a>		$res = ($datediff==1) ? "$datediff week ago" : "$datediff
-<a name="line605"></a>		weeks ago";
-<a name="line606"></a>		break;
-<a name="line607"></a>		
-<a name="line608"></a>		case "h":
-<a name="line609"></a>		$datediff = floor($difference / 60 / 60);
-<a name="line610"></a>		$res = ($datediff==1) ? "$datediff hour ago" : "$datediff
-<a name="line611"></a>		hours ago";
-<a name="line612"></a>		break;
-<a name="line613"></a>		
-<a name="line614"></a>		case "n":
-<a name="line615"></a>		$datediff = floor($difference / 60);
-<a name="line616"></a>		$res = ($datediff==1) ? "$datediff minute ago" :
-<a name="line617"></a>		"$datediff minutes ago";
-<a name="line618"></a>		break;
-<a name="line619"></a>		
-<a name="line620"></a>		case "s":
-<a name="line621"></a>		$datediff = $difference;
-<a name="line622"></a>		$res = ($datediff==1) ? "$datediff second ago" :
-<a name="line623"></a>		"$datediff seconds ago";
-<a name="line624"></a>		break;
-<a name="line625"></a>		}
-<a name="line626"></a>		return $res;
-<a name="line627"></a>	}
-<a name="line628"></a>}
-<a name="line629"></a>?>
-<a name="line630"></a></pre>
+<a name="line555"></a>				// We need this in here because it is possible
+<a name="line556"></a>				// to have an 'm' interval and a months
+<a name="line557"></a>				// difference of 12 because we are using 29 days
+<a name="line558"></a>				// in a month
+<a name="line559"></a>				
+<a name="line560"></a>				if($datediff==12)
+<a name="line561"></a>					$datediff--;
+<a name="line562"></a>				
+<a name="line563"></a>				$res = ($datediff==1) ? "$datediff month ago" : "$datediff
+<a name="line564"></a>				months ago";
+<a name="line565"></a>				break;
+<a name="line566"></a>		
+<a name="line567"></a>			case "y":
+<a name="line568"></a>				$datediff = floor($difference / 60 / 60 / 24 / 365);
+<a name="line569"></a>				$res = ($datediff==1) ? "$datediff year ago" : "$datediff
+<a name="line570"></a>						years ago";
+<a name="line571"></a>				break;
+<a name="line572"></a>		
+<a name="line573"></a>		case "d":
+<a name="line574"></a>		$datediff = floor($difference / 60 / 60 / 24);
+<a name="line575"></a>		$res = ($datediff==1) ? "$datediff day ago" : "$datediff
+<a name="line576"></a>		days ago";
+<a name="line577"></a>		break;
+<a name="line578"></a>		
+<a name="line579"></a>		case "ww":
+<a name="line580"></a>		$datediff = floor($difference / 60 / 60 / 24 / 7);
+<a name="line581"></a>		$res = ($datediff==1) ? "$datediff week ago" : "$datediff
+<a name="line582"></a>		weeks ago";
+<a name="line583"></a>		break;
+<a name="line584"></a>		
+<a name="line585"></a>		case "h":
+<a name="line586"></a>		$datediff = floor($difference / 60 / 60);
+<a name="line587"></a>		$res = ($datediff==1) ? "$datediff hour ago" : "$datediff
+<a name="line588"></a>		hours ago";
+<a name="line589"></a>		break;
+<a name="line590"></a>		
+<a name="line591"></a>		case "n":
+<a name="line592"></a>		$datediff = floor($difference / 60);
+<a name="line593"></a>		$res = ($datediff==1) ? "$datediff minute ago" :
+<a name="line594"></a>		"$datediff minutes ago";
+<a name="line595"></a>		break;
+<a name="line596"></a>		
+<a name="line597"></a>		case "s":
+<a name="line598"></a>		$datediff = $difference;
+<a name="line599"></a>		$res = ($datediff==1) ? "$datediff second ago" :
+<a name="line600"></a>		"$datediff seconds ago";
+<a name="line601"></a>		break;
+<a name="line602"></a>		}
+<a name="line603"></a>		return $res;
+<a name="line604"></a>	}
+<a name="line605"></a>}
+<a name="line606"></a>?>
+<a name="line607"></a></pre>
 <div class="header">
 <h1>GiftFlow API</h1>
 <ul>

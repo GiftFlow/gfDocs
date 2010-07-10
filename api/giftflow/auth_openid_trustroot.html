@@ -1,0 +1,173 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+
+<html lang="en">
+<head>
+
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
+<meta name="generator" content="PHPDoctor 2RC4 (http://peej.github.com/phpdoctor/)">
+<meta name="when" content="Sat, 10 Jul 2010 18:10:54 +0000">
+
+<link rel="stylesheet" type="text/css" href="../stylesheet.css">
+<link rel="start" href="../overview-summary.html">
+
+<title>Auth_OpenID_TrustRoot (GiftFlow API)</title>
+
+</head>
+<body id="definition" onload="parent.document.title=document.title;">
+
+<div class="header">
+<h1>GiftFlow API</h1>
+<ul>
+<li><a href="../overview-summary.html">Overview</a></li>
+<li><a href="../giftflow/package-summary.html">Package</a></li>
+<li class="active">Class</li>
+<li><a href="../giftflow/package-tree.html">Tree</a></li>
+<li><a href="../overview-files.html">Files</a></li>
+<li><a href="../deprecated-list.html">Deprecated</a></li>
+<li><a href="../index-all.html">Index</a></li>
+</ul>
+</div>
+
+<div class="small_links">
+<a href="../index.html" target="_top">Frames</a>
+<a href="../giftflow/auth_openid_trustroot.html" target="_top">No frames</a>
+</div>
+<div class="small_links">
+Summary: <a href="#summary_field">Field</a> | <a href="#summary_method">Method</a> | <a href="#summary_constr">Constr</a>
+Detail: <a href="#detail_field">Field</a> | <a href="#detail_method">Method</a> | <a href="#summary_constr">Constr</a>
+</div>
+<hr>
+
+<div class="qualifiedName">GiftFlow\Auth_OpenID_TrustRoot</div>
+<a href="../source/application/libraries/auth/openid/trustroot.php.html#line30" class="location">application/libraries/Auth/OpenID/TrustRoot.php at line 30</a>
+
+<h1>Class Auth_OpenID_TrustRoot</h1>
+
+<pre class="tree"><strong>Auth_OpenID_TrustRoot</strong><br /></pre>
+
+<hr>
+
+<p class="signature">public  class <strong>Auth_OpenID_TrustRoot</strong></p>
+
+<div class="comment" id="overview_description"><p>A wrapper for trust-root related functions</p></div>
+
+<hr>
+
+<table id="summary_method">
+<tr><th colspan="2">Method Summary</th></tr>
+<tr>
+<td class="type">private static  mixed</td>
+<td class="description"><p class="name"><a href="#_parse()">_parse</a>(string trust_root)</p><p class="description">Parse a URL into its trust_root parts.</p></td>
+</tr>
+<tr>
+<td class="type">static  void</td>
+<td class="description"><p class="name"><a href="#buildDiscoveryURL()">buildDiscoveryURL</a>(mixed realm)</p></td>
+</tr>
+<tr>
+<td class="type">static  bool</td>
+<td class="description"><p class="name"><a href="#isSane()">isSane</a>(string trust_root)</p><p class="description">Is this trust root sane?A trust root is sane if it is syntactically valid and it has a
+reasonable domain name. </p></td>
+</tr>
+<tr>
+<td class="type">static  bool</td>
+<td class="description"><p class="name"><a href="#match()">match</a>(string trust_root, string url)</p><p class="description">Does this URL match the given trust root?Return whether the URL falls under the given trust root. </p></td>
+</tr>
+</table>
+
+<h2 id="detail_method">Method Detail</h2><div class="method_detail">
+<div class='method'><a href="../source/application/libraries/auth/openid/trustroot.php.html#line77" class="location">application/libraries/Auth/OpenID/TrustRoot.php at line 77</a>
+
+<h3 id="_parse()">_parse</h3>
+<code class="signature">private static  mixed <strong>_parse</strong>(string trust_root)</code>
+<div class="details">
+<p>Parse a URL into its trust_root parts.</p><dl>
+<dt>Parameters:</dt>
+<dd>trust_root - The url to parse</dd>
+<dt>Returns:</dt>
+<dd>$parsed Either an associative array of trust root parts or false if parsing failed.</dd>
+</dl>
+</div></div>
+
+
+
+<div class='method'><a href="../source/application/libraries/auth/openid/trustroot.php.html#line42" class="location">application/libraries/Auth/OpenID/TrustRoot.php at line 42</a>
+
+<h3 id="buildDiscoveryURL()">buildDiscoveryURL</h3>
+<code class="signature">public static  void <strong>buildDiscoveryURL</strong>(mixed realm)</code>
+<div class="details">
+</div></div>
+
+
+
+<div class='method'><a href="../source/application/libraries/auth/openid/trustroot.php.html#line183" class="location">application/libraries/Auth/OpenID/TrustRoot.php at line 183</a>
+
+<h3 id="isSane()">isSane</h3>
+<code class="signature">public static  bool <strong>isSane</strong>(string trust_root)</code>
+<div class="details">
+<p>Is this trust root sane?</p><p>A trust root is sane if it is syntactically valid and it has a
+reasonable domain name. Specifically, the domain name must be
+more than one level below a standard TLD or more than two
+levels below a two-letter tld.</p><p>For example, '*.com' is not a sane trust root, but '*.foo.com'
+is.  '*.co.uk' is not sane, but '*.bbc.co.uk' is.</p><p>This check is not always correct, but it attempts to err on the
+side of marking sane trust roots insane instead of marking
+insane trust roots sane. For example, 'kink.fm' is marked as
+insane even though it "should" (for some meaning of should) be
+marked sane.</p><p>This function should be used when creating OpenID servers to
+alert the users of the server when a consumer attempts to get
+the user to accept a suspicious trust root.</p><dl>
+<dt>Parameters:</dt>
+<dd>trust_root - The trust root to check</dd>
+<dt>Returns:</dt>
+<dd>$sanity Whether the trust root looks OK</dd>
+</dl>
+</div></div>
+
+
+
+<div class='method'><a href="../source/application/libraries/auth/openid/trustroot.php.html#line253" class="location">application/libraries/Auth/OpenID/TrustRoot.php at line 253</a>
+
+<h3 id="match()">match</h3>
+<code class="signature">public static  bool <strong>match</strong>(string trust_root, string url)</code>
+<div class="details">
+<p>Does this URL match the given trust root?</p><p>Return whether the URL falls under the given trust root. This
+does not check whether the trust root is sane. If the URL or
+trust root do not parse, this function will return false.</p><dl>
+<dt>Parameters:</dt>
+<dd>trust_root - The trust root to match against</dd>
+<dd>url - The URL to check</dd>
+<dt>Returns:</dt>
+<dd>$matches Whether the URL matches against the trust root</dd>
+</dl>
+</div></div>
+
+
+
+</div><div class="header">
+<h1>GiftFlow API</h1>
+<ul>
+<li><a href="../overview-summary.html">Overview</a></li>
+<li><a href="../giftflow/package-summary.html">Package</a></li>
+<li class="active">Class</li>
+<li><a href="../giftflow/package-tree.html">Tree</a></li>
+<li><a href="../overview-files.html">Files</a></li>
+<li><a href="../deprecated-list.html">Deprecated</a></li>
+<li><a href="../index-all.html">Index</a></li>
+</ul>
+</div>
+
+<div class="small_links">
+<a href="../index.html" target="_top">Frames</a>
+<a href="../giftflow/auth_openid_trustroot.html" target="_top">No frames</a>
+</div>
+<div class="small_links">
+Summary: <a href="#summary_field">Field</a> | <a href="#summary_method">Method</a> | <a href="#summary_constr">Constr</a>
+Detail: <a href="#detail_field">Field</a> | <a href="#detail_method">Method</a> | <a href="#summary_constr">Constr</a>
+</div>
+<hr>
+
+<p id="footer">This document was generated by <a href="http://peej.github.com/phpdoctor/">PHPDoctor: The PHP Documentation Creator</a></p>
+
+</body>
+
+</html>

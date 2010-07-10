@@ -6,7 +6,7 @@
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 
 <meta name="generator" content="PHPDoctor 2RC4 (http://peej.github.com/phpdoctor/)">
-<meta name="when" content="Tue, 29 Jun 2010 21:10:09 +0000">
+<meta name="when" content="Sat, 10 Jul 2010 18:10:55 +0000">
 
 <link rel="stylesheet" type="text/css" href="../stylesheet.css">
 <link rel="start" href="../overview-summary.html">
@@ -327,6 +327,11 @@ database entry</p></td>
 <td class="description"><p class="name"><a href="#needs()">needs</a>()</p><p class="description">Returns the user's current needs</p></td>
 </tr>
 <tr>
+<td class="type"> void</td>
+<td class="description"><p class="name"><a href="#register()">register</a>()</p><p class="description">This function should be used when a new user is being saved (as 
+opposed to being updated. </p></td>
+</tr>
+<tr>
 <td class="type"> array</td>
 <td class="description"><p class="name"><a href="#requests()">requests</a>()</p><p class="description">Returns the user's current pending requests</p></td>
 </tr>
@@ -513,7 +518,7 @@ your fields.</p></div>
 
 
 
-<div class='method'><a href="../source/application/models/user.php.html#line392" class="location">application/models/user.php at line 392</a>
+<div class='method'><a href="../source/application/models/user.php.html#line478" class="location">application/models/user.php at line 478</a>
 
 <h3 id="_encrypt()">_encrypt</h3>
 <code class="signature">private  void <strong>_encrypt</strong>(mixed field)</code>
@@ -523,7 +528,7 @@ salt.</p></div></div>
 
 
 
-<div class='method'><a href="../source/application/models/user.php.html#line125" class="location">application/models/user.php at line 125</a>
+<div class='method'><a href="../source/application/models/user.php.html#line163" class="location">application/models/user.php at line 163</a>
 
 <h3 id="activate()">activate</h3>
 <code class="signature">public  void <strong>activate</strong>()</code>
@@ -532,7 +537,7 @@ salt.</p></div></div>
 
 
 
-<div class='method'><a href="../source/application/models/user.php.html#line246" class="location">application/models/user.php at line 246</a>
+<div class='method'><a href="../source/application/models/user.php.html#line283" class="location">application/models/user.php at line 283</a>
 
 <h3 id="completed_gifts()">completed_gifts</h3>
 <code class="signature">public  array <strong>completed_gifts</strong>()</code>
@@ -541,7 +546,7 @@ salt.</p></div></div>
 
 
 
-<div class='method'><a href="../source/application/models/user.php.html#line261" class="location">application/models/user.php at line 261</a>
+<div class='method'><a href="../source/application/models/user.php.html#line298" class="location">application/models/user.php at line 298</a>
 
 <h3 id="completed_requests()">completed_requests</h3>
 <code class="signature">public  array <strong>completed_requests</strong>()</code>
@@ -550,7 +555,7 @@ salt.</p></div></div>
 
 
 
-<div class='method'><a href="../source/application/models/user.php.html#line107" class="location">application/models/user.php at line 107</a>
+<div class='method'><a href="../source/application/models/user.php.html#line145" class="location">application/models/user.php at line 145</a>
 
 <h3 id="deactivate()">deactivate</h3>
 <code class="signature">public  void <strong>deactivate</strong>()</code>
@@ -559,7 +564,7 @@ salt.</p></div></div>
 
 
 
-<div class='method'><a href="../source/application/models/user.php.html#line341" class="location">application/models/user.php at line 341</a>
+<div class='method'><a href="../source/application/models/user.php.html#line378" class="location">application/models/user.php at line 378</a>
 
 <h3 id="facebook_sync()">facebook_sync</h3>
 <code class="signature">public  void <strong>facebook_sync</strong>(JSON data)</code>
@@ -575,7 +580,7 @@ not, however, overwrite any database data with Facebook data.</p><dl>
 
 
 
-<div class='method'><a href="../source/application/models/user.php.html#line378" class="location">application/models/user.php at line 378</a>
+<div class='method'><a href="../source/application/models/user.php.html#line461" class="location">application/models/user.php at line 461</a>
 
 <h3 id="facebook_unlink()">facebook_unlink</h3>
 <code class="signature">public  void <strong>facebook_unlink</strong>()</code>
@@ -584,7 +589,7 @@ not, however, overwrite any database data with Facebook data.</p><dl>
 
 
 
-<div class='method'><a href="../source/application/models/user.php.html#line294" class="location">application/models/user.php at line 294</a>
+<div class='method'><a href="../source/application/models/user.php.html#line331" class="location">application/models/user.php at line 331</a>
 
 <h3 id="following()">following</h3>
 <code class="signature">public  array <strong>following</strong>()</code>
@@ -593,7 +598,7 @@ not, however, overwrite any database data with Facebook data.</p><dl>
 
 
 
-<div class='method'><a href="../source/application/models/user.php.html#line166" class="location">application/models/user.php at line 166</a>
+<div class='method'><a href="../source/application/models/user.php.html#line204" class="location">application/models/user.php at line 204</a>
 
 <h3 id="gifts()">gifts</h3>
 <code class="signature">public  array <strong>gifts</strong>()</code>
@@ -602,7 +607,7 @@ not, however, overwrite any database data with Facebook data.</p><dl>
 
 
 
-<div class='method'><a href="../source/application/models/user.php.html#line114" class="location">application/models/user.php at line 114</a>
+<div class='method'><a href="../source/application/models/user.php.html#line152" class="location">application/models/user.php at line 152</a>
 
 <h3 id="is_admin()">is_admin</h3>
 <code class="signature">public  void <strong>is_admin</strong>()</code>
@@ -611,7 +616,7 @@ not, however, overwrite any database data with Facebook data.</p><dl>
 
 
 
-<div class='method'><a href="../source/application/models/user.php.html#line321" class="location">application/models/user.php at line 321</a>
+<div class='method'><a href="../source/application/models/user.php.html#line358" class="location">application/models/user.php at line 358</a>
 
 <h3 id="is_followed_by()">is_followed_by</h3>
 <code class="signature">public  boolean <strong>is_followed_by</strong>(int id)</code>
@@ -624,7 +629,7 @@ not, however, overwrite any database data with Facebook data.</p><dl>
 
 
 
-<div class='method'><a href="../source/application/models/user.php.html#line305" class="location">application/models/user.php at line 305</a>
+<div class='method'><a href="../source/application/models/user.php.html#line342" class="location">application/models/user.php at line 342</a>
 
 <h3 id="is_following()">is_following</h3>
 <code class="signature">public  boolean <strong>is_following</strong>(int id)</code>
@@ -637,7 +642,7 @@ not, however, overwrite any database data with Facebook data.</p><dl>
 
 
 
-<div class='method'><a href="../source/application/models/user.php.html#line133" class="location">application/models/user.php at line 133</a>
+<div class='method'><a href="../source/application/models/user.php.html#line171" class="location">application/models/user.php at line 171</a>
 
 <h3 id="load_mail()">load_mail</h3>
 <code class="signature">public  void <strong>load_mail</strong>(int limit, int offset, str folder)</code>
@@ -656,7 +661,7 @@ database entry</p></div></div>
 
 
 
-<div class='method'><a href="../source/application/models/user.php.html#line198" class="location">application/models/user.php at line 198</a>
+<div class='method'><a href="../source/application/models/user.php.html#line235" class="location">application/models/user.php at line 235</a>
 
 <h3 id="needs()">needs</h3>
 <code class="signature">public  array <strong>needs</strong>()</code>
@@ -665,7 +670,17 @@ database entry</p></div></div>
 
 
 
-<div class='method'><a href="../source/application/models/user.php.html#line230" class="location">application/models/user.php at line 230</a>
+<div class='method'><a href="../source/application/models/user.php.html#line111" class="location">application/models/user.php at line 111</a>
+
+<h3 id="register()">register</h3>
+<code class="signature">public  void <strong>register</strong>()</code>
+<div class="details">
+<p>This function should be used when a new user is being saved (as 
+opposed to being updated. This is so we can call the user_new hook.</p></div></div>
+
+
+
+<div class='method'><a href="../source/application/models/user.php.html#line267" class="location">application/models/user.php at line 267</a>
 
 <h3 id="requests()">requests</h3>
 <code class="signature">public  array <strong>requests</strong>()</code>
@@ -674,7 +689,7 @@ database entry</p></div></div>
 
 
 
-<div class='method'><a href="../source/application/models/user.php.html#line276" class="location">application/models/user.php at line 276</a>
+<div class='method'><a href="../source/application/models/user.php.html#line313" class="location">application/models/user.php at line 313</a>
 
 <h3 id="stats()">stats</h3>
 <code class="signature">public  boolean <strong>stats</strong>()</code>

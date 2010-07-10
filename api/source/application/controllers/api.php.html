@@ -6,7 +6,7 @@
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 
 <meta name="generator" content="PHPDoctor 2RC4 (http://peej.github.com/phpdoctor/)">
-<meta name="when" content="Tue, 29 Jun 2010 21:10:10 +0000">
+<meta name="when" content="Sat, 10 Jul 2010 18:10:56 +0000">
 
 <link rel="stylesheet" type="text/css" href="../../../stylesheet.css">
 <link rel="start" href="../../../overview-summary.html">
@@ -97,7 +97,13 @@
 <a name="line60"></a>		header( "Location: ".$url);
 <a name="line61"></a>	
 <a name="line62"></a>	}
-<a name="line63"></a>}</pre>
+<a name="line63"></a>	function test()
+<a name="line64"></a>	{
+<a name="line65"></a>		$this->load->model('good');
+<a name="line66"></a>		print_r($this->good->find());
+<a name="line67"></a>	}
+<a name="line68"></a>
+<a name="line69"></a>}</pre>
 <div class="header">
 <h1>GiftFlow API</h1>
 <ul>

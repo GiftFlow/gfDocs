@@ -1,0 +1,514 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+
+<html lang="en">
+<head>
+
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
+<meta name="generator" content="PHPDoctor 2RC4 (http://peej.github.com/phpdoctor/)">
+<meta name="when" content="Sat, 10 Jul 2010 18:10:56 +0000">
+
+<link rel="stylesheet" type="text/css" href="../../../../../stylesheet.css">
+<link rel="start" href="../../../../../overview-summary.html">
+
+<title>application/libraries/Auth/OpenID/BigMath.php (GiftFlow API)</title>
+
+</head>
+<body id="file" onload="parent.document.title=document.title;">
+
+<div class="header">
+<h1>GiftFlow API</h1>
+<ul>
+<li><a href="../../../../../overview-summary.html">Overview</a></li>
+<li>Package</li><li>Class</li><li>Tree</li><li><a href="../../../../../overview-files.html">Files</a></li>
+<li><a href="../../../../../deprecated-list.html">Deprecated</a></li>
+<li><a href="../../../../../index-all.html">Index</a></li>
+</ul>
+</div>
+
+<div class="small_links">
+<a href="../../../../../index.html" target="_top">Frames</a>
+<a href="../../../../../source/application/libraries/auth/openid/bigmath.php.html" target="_top">No frames</a>
+</div>
+<hr>
+
+<h1>application/libraries/Auth/OpenID/BigMath.php</h1>
+<div class="comment" id="overview_description"><p>BigMath: A math library wrapper that abstracts out the underlying
+long integer library.</p><p>PHP versions 4 and 5</p><p>LICENSE: See the COPYING file included in this distribution.</p></div>
+
+<hr>
+
+<a name="line1"></a><pre><?php
+<a name="line2"></a>
+<a name="line3"></a>/**
+<a name="line4"></a> * BigMath: A math library wrapper that abstracts out the underlying
+<a name="line5"></a> * long integer library.
+<a name="line6"></a> *
+<a name="line7"></a> * PHP versions 4 and 5
+<a name="line8"></a> *
+<a name="line9"></a> * LICENSE: See the COPYING file included in this distribution.
+<a name="line10"></a> *
+<a name="line11"></a> * @access private
+<a name="line12"></a> * @package OpenID
+<a name="line13"></a> * @author JanRain, Inc. <openid@janrain.com>
+<a name="line14"></a> * @copyright 2005-2008 Janrain, Inc.
+<a name="line15"></a> * @license http://www.apache.org/licenses/LICENSE-2.0 Apache
+<a name="line16"></a> */
+<a name="line17"></a>
+<a name="line18"></a>/**
+<a name="line19"></a> * Needed for random number generation
+<a name="line20"></a> */
+<a name="line21"></a>require_once 'Auth/OpenID/CryptUtil.php';
+<a name="line22"></a>
+<a name="line23"></a>/**
+<a name="line24"></a> * Need Auth_OpenID::bytes().
+<a name="line25"></a> */
+<a name="line26"></a>require_once 'Auth/OpenID.php';
+<a name="line27"></a>
+<a name="line28"></a>/**
+<a name="line29"></a> * The superclass of all big-integer math implementations
+<a name="line30"></a> * @access private
+<a name="line31"></a> * @package OpenID
+<a name="line32"></a> */
+<a name="line33"></a>class Auth_OpenID_MathLibrary {
+<a name="line34"></a>    /**
+<a name="line35"></a>     * Given a long integer, returns the number converted to a binary
+<a name="line36"></a>     * string.  This function accepts long integer values of arbitrary
+<a name="line37"></a>     * magnitude and uses the local large-number math library when
+<a name="line38"></a>     * available.
+<a name="line39"></a>     *
+<a name="line40"></a>     * @param integer $long The long number (can be a normal PHP
+<a name="line41"></a>     * integer or a number created by one of the available long number
+<a name="line42"></a>     * libraries)
+<a name="line43"></a>     * @return string $binary The binary version of $long
+<a name="line44"></a>     */
+<a name="line45"></a>    function longToBinary($long)
+<a name="line46"></a>    {
+<a name="line47"></a>        $cmp = $this->cmp($long, 0);
+<a name="line48"></a>        if ($cmp < 0) {
+<a name="line49"></a>            $msg = __FUNCTION__ . " takes only positive integers.";
+<a name="line50"></a>            trigger_error($msg, E_USER_ERROR);
+<a name="line51"></a>            return null;
+<a name="line52"></a>        }
+<a name="line53"></a>
+<a name="line54"></a>        if ($cmp == 0) {
+<a name="line55"></a>            return "\x00";
+<a name="line56"></a>        }
+<a name="line57"></a>
+<a name="line58"></a>        $bytes = array();
+<a name="line59"></a>
+<a name="line60"></a>        while ($this->cmp($long, 0) > 0) {
+<a name="line61"></a>            array_unshift($bytes, $this->mod($long, 256));
+<a name="line62"></a>            $long = $this->div($long, pow(2, 8));
+<a name="line63"></a>        }
+<a name="line64"></a>
+<a name="line65"></a>        if ($bytes && ($bytes[0] > 127)) {
+<a name="line66"></a>            array_unshift($bytes, 0);
+<a name="line67"></a>        }
+<a name="line68"></a>
+<a name="line69"></a>        $string = '';
+<a name="line70"></a>        foreach ($bytes as $byte) {
+<a name="line71"></a>            $string .= pack('C', $byte);
+<a name="line72"></a>        }
+<a name="line73"></a>
+<a name="line74"></a>        return $string;
+<a name="line75"></a>    }
+<a name="line76"></a>
+<a name="line77"></a>    /**
+<a name="line78"></a>     * Given a binary string, returns the binary string converted to a
+<a name="line79"></a>     * long number.
+<a name="line80"></a>     *
+<a name="line81"></a>     * @param string $binary The binary version of a long number,
+<a name="line82"></a>     * probably as a result of calling longToBinary
+<a name="line83"></a>     * @return integer $long The long number equivalent of the binary
+<a name="line84"></a>     * string $str
+<a name="line85"></a>     */
+<a name="line86"></a>    function binaryToLong($str)
+<a name="line87"></a>    {
+<a name="line88"></a>        if ($str === null) {
+<a name="line89"></a>            return null;
+<a name="line90"></a>        }
+<a name="line91"></a>
+<a name="line92"></a>        // Use array_merge to return a zero-indexed array instead of a
+<a name="line93"></a>        // one-indexed array.
+<a name="line94"></a>        $bytes = array_merge(unpack('C*', $str));
+<a name="line95"></a>
+<a name="line96"></a>        $n = $this->init(0);
+<a name="line97"></a>
+<a name="line98"></a>        if ($bytes && ($bytes[0] > 127)) {
+<a name="line99"></a>            trigger_error("bytesToNum works only for positive integers.",
+<a name="line100"></a>                          E_USER_WARNING);
+<a name="line101"></a>            return null;
+<a name="line102"></a>        }
+<a name="line103"></a>
+<a name="line104"></a>        foreach ($bytes as $byte) {
+<a name="line105"></a>            $n = $this->mul($n, pow(2, 8));
+<a name="line106"></a>            $n = $this->add($n, $byte);
+<a name="line107"></a>        }
+<a name="line108"></a>
+<a name="line109"></a>        return $n;
+<a name="line110"></a>    }
+<a name="line111"></a>
+<a name="line112"></a>    function base64ToLong($str)
+<a name="line113"></a>    {
+<a name="line114"></a>        $b64 = base64_decode($str);
+<a name="line115"></a>
+<a name="line116"></a>        if ($b64 === false) {
+<a name="line117"></a>            return false;
+<a name="line118"></a>        }
+<a name="line119"></a>
+<a name="line120"></a>        return $this->binaryToLong($b64);
+<a name="line121"></a>    }
+<a name="line122"></a>
+<a name="line123"></a>    function longToBase64($str)
+<a name="line124"></a>    {
+<a name="line125"></a>        return base64_encode($this->longToBinary($str));
+<a name="line126"></a>    }
+<a name="line127"></a>
+<a name="line128"></a>    /**
+<a name="line129"></a>     * Returns a random number in the specified range.  This function
+<a name="line130"></a>     * accepts $start, $stop, and $step values of arbitrary magnitude
+<a name="line131"></a>     * and will utilize the local large-number math library when
+<a name="line132"></a>     * available.
+<a name="line133"></a>     *
+<a name="line134"></a>     * @param integer $start The start of the range, or the minimum
+<a name="line135"></a>     * random number to return
+<a name="line136"></a>     * @param integer $stop The end of the range, or the maximum
+<a name="line137"></a>     * random number to return
+<a name="line138"></a>     * @param integer $step The step size, such that $result - ($step
+<a name="line139"></a>     * * N) = $start for some N
+<a name="line140"></a>     * @return integer $result The resulting randomly-generated number
+<a name="line141"></a>     */
+<a name="line142"></a>    function rand($stop)
+<a name="line143"></a>    {
+<a name="line144"></a>        static $duplicate_cache = array();
+<a name="line145"></a>
+<a name="line146"></a>        // Used as the key for the duplicate cache
+<a name="line147"></a>        $rbytes = $this->longToBinary($stop);
+<a name="line148"></a>
+<a name="line149"></a>        if (array_key_exists($rbytes, $duplicate_cache)) {
+<a name="line150"></a>            list($duplicate, $nbytes) = $duplicate_cache[$rbytes];
+<a name="line151"></a>        } else {
+<a name="line152"></a>            if ($rbytes[0] == "\x00") {
+<a name="line153"></a>                $nbytes = Auth_OpenID::bytes($rbytes) - 1;
+<a name="line154"></a>            } else {
+<a name="line155"></a>                $nbytes = Auth_OpenID::bytes($rbytes);
+<a name="line156"></a>            }
+<a name="line157"></a>
+<a name="line158"></a>            $mxrand = $this->pow(256, $nbytes);
+<a name="line159"></a>
+<a name="line160"></a>            // If we get a number less than this, then it is in the
+<a name="line161"></a>            // duplicated range.
+<a name="line162"></a>            $duplicate = $this->mod($mxrand, $stop);
+<a name="line163"></a>
+<a name="line164"></a>            if (count($duplicate_cache) > 10) {
+<a name="line165"></a>                $duplicate_cache = array();
+<a name="line166"></a>            }
+<a name="line167"></a>
+<a name="line168"></a>            $duplicate_cache[$rbytes] = array($duplicate, $nbytes);
+<a name="line169"></a>        }
+<a name="line170"></a>
+<a name="line171"></a>        do {
+<a name="line172"></a>            $bytes = "\x00" . Auth_OpenID_CryptUtil::getBytes($nbytes);
+<a name="line173"></a>            $n = $this->binaryToLong($bytes);
+<a name="line174"></a>            // Keep looping if this value is in the low duplicated range
+<a name="line175"></a>        } while ($this->cmp($n, $duplicate) < 0);
+<a name="line176"></a>
+<a name="line177"></a>        return $this->mod($n, $stop);
+<a name="line178"></a>    }
+<a name="line179"></a>}
+<a name="line180"></a>
+<a name="line181"></a>/**
+<a name="line182"></a> * Exposes BCmath math library functionality.
+<a name="line183"></a> *
+<a name="line184"></a> * {@link Auth_OpenID_BcMathWrapper} wraps the functionality provided
+<a name="line185"></a> * by the BCMath extension.
+<a name="line186"></a> *
+<a name="line187"></a> * @access private
+<a name="line188"></a> * @package OpenID
+<a name="line189"></a> */
+<a name="line190"></a>class Auth_OpenID_BcMathWrapper extends Auth_OpenID_MathLibrary{
+<a name="line191"></a>    var $type = 'bcmath';
+<a name="line192"></a>
+<a name="line193"></a>    function add($x, $y)
+<a name="line194"></a>    {
+<a name="line195"></a>        return bcadd($x, $y);
+<a name="line196"></a>    }
+<a name="line197"></a>
+<a name="line198"></a>    function sub($x, $y)
+<a name="line199"></a>    {
+<a name="line200"></a>        return bcsub($x, $y);
+<a name="line201"></a>    }
+<a name="line202"></a>
+<a name="line203"></a>    function pow($base, $exponent)
+<a name="line204"></a>    {
+<a name="line205"></a>        return bcpow($base, $exponent);
+<a name="line206"></a>    }
+<a name="line207"></a>
+<a name="line208"></a>    function cmp($x, $y)
+<a name="line209"></a>    {
+<a name="line210"></a>        return bccomp($x, $y);
+<a name="line211"></a>    }
+<a name="line212"></a>
+<a name="line213"></a>    function init($number, $base = 10)
+<a name="line214"></a>    {
+<a name="line215"></a>        return $number;
+<a name="line216"></a>    }
+<a name="line217"></a>
+<a name="line218"></a>    function mod($base, $modulus)
+<a name="line219"></a>    {
+<a name="line220"></a>        return bcmod($base, $modulus);
+<a name="line221"></a>    }
+<a name="line222"></a>
+<a name="line223"></a>    function mul($x, $y)
+<a name="line224"></a>    {
+<a name="line225"></a>        return bcmul($x, $y);
+<a name="line226"></a>    }
+<a name="line227"></a>
+<a name="line228"></a>    function div($x, $y)
+<a name="line229"></a>    {
+<a name="line230"></a>        return bcdiv($x, $y);
+<a name="line231"></a>    }
+<a name="line232"></a>
+<a name="line233"></a>    /**
+<a name="line234"></a>     * Same as bcpowmod when bcpowmod is missing
+<a name="line235"></a>     *
+<a name="line236"></a>     * @access private
+<a name="line237"></a>     */
+<a name="line238"></a>    function _powmod($base, $exponent, $modulus)
+<a name="line239"></a>    {
+<a name="line240"></a>        $square = $this->mod($base, $modulus);
+<a name="line241"></a>        $result = 1;
+<a name="line242"></a>        while($this->cmp($exponent, 0) > 0) {
+<a name="line243"></a>            if ($this->mod($exponent, 2)) {
+<a name="line244"></a>                $result = $this->mod($this->mul($result, $square), $modulus);
+<a name="line245"></a>            }
+<a name="line246"></a>            $square = $this->mod($this->mul($square, $square), $modulus);
+<a name="line247"></a>            $exponent = $this->div($exponent, 2);
+<a name="line248"></a>        }
+<a name="line249"></a>        return $result;
+<a name="line250"></a>    }
+<a name="line251"></a>
+<a name="line252"></a>    function powmod($base, $exponent, $modulus)
+<a name="line253"></a>    {
+<a name="line254"></a>        if (function_exists('bcpowmod')) {
+<a name="line255"></a>            return bcpowmod($base, $exponent, $modulus);
+<a name="line256"></a>        } else {
+<a name="line257"></a>            return $this->_powmod($base, $exponent, $modulus);
+<a name="line258"></a>        }
+<a name="line259"></a>    }
+<a name="line260"></a>
+<a name="line261"></a>    function toString($num)
+<a name="line262"></a>    {
+<a name="line263"></a>        return $num;
+<a name="line264"></a>    }
+<a name="line265"></a>}
+<a name="line266"></a>
+<a name="line267"></a>/**
+<a name="line268"></a> * Exposes GMP math library functionality.
+<a name="line269"></a> *
+<a name="line270"></a> * {@link Auth_OpenID_GmpMathWrapper} wraps the functionality provided
+<a name="line271"></a> * by the GMP extension.
+<a name="line272"></a> *
+<a name="line273"></a> * @access private
+<a name="line274"></a> * @package OpenID
+<a name="line275"></a> */
+<a name="line276"></a>class Auth_OpenID_GmpMathWrapper extends Auth_OpenID_MathLibrary{
+<a name="line277"></a>    var $type = 'gmp';
+<a name="line278"></a>
+<a name="line279"></a>    function add($x, $y)
+<a name="line280"></a>    {
+<a name="line281"></a>        return gmp_add($x, $y);
+<a name="line282"></a>    }
+<a name="line283"></a>
+<a name="line284"></a>    function sub($x, $y)
+<a name="line285"></a>    {
+<a name="line286"></a>        return gmp_sub($x, $y);
+<a name="line287"></a>    }
+<a name="line288"></a>
+<a name="line289"></a>    function pow($base, $exponent)
+<a name="line290"></a>    {
+<a name="line291"></a>        return gmp_pow($base, $exponent);
+<a name="line292"></a>    }
+<a name="line293"></a>
+<a name="line294"></a>    function cmp($x, $y)
+<a name="line295"></a>    {
+<a name="line296"></a>        return gmp_cmp($x, $y);
+<a name="line297"></a>    }
+<a name="line298"></a>
+<a name="line299"></a>    function init($number, $base = 10)
+<a name="line300"></a>    {
+<a name="line301"></a>        return gmp_init($number, $base);
+<a name="line302"></a>    }
+<a name="line303"></a>
+<a name="line304"></a>    function mod($base, $modulus)
+<a name="line305"></a>    {
+<a name="line306"></a>        return gmp_mod($base, $modulus);
+<a name="line307"></a>    }
+<a name="line308"></a>
+<a name="line309"></a>    function mul($x, $y)
+<a name="line310"></a>    {
+<a name="line311"></a>        return gmp_mul($x, $y);
+<a name="line312"></a>    }
+<a name="line313"></a>
+<a name="line314"></a>    function div($x, $y)
+<a name="line315"></a>    {
+<a name="line316"></a>        return gmp_div_q($x, $y);
+<a name="line317"></a>    }
+<a name="line318"></a>
+<a name="line319"></a>    function powmod($base, $exponent, $modulus)
+<a name="line320"></a>    {
+<a name="line321"></a>        return gmp_powm($base, $exponent, $modulus);
+<a name="line322"></a>    }
+<a name="line323"></a>
+<a name="line324"></a>    function toString($num)
+<a name="line325"></a>    {
+<a name="line326"></a>        return gmp_strval($num);
+<a name="line327"></a>    }
+<a name="line328"></a>}
+<a name="line329"></a>
+<a name="line330"></a>/**
+<a name="line331"></a> * Define the supported extensions.  An extension array has keys
+<a name="line332"></a> * 'modules', 'extension', and 'class'.  'modules' is an array of PHP
+<a name="line333"></a> * module names which the loading code will attempt to load.  These
+<a name="line334"></a> * values will be suffixed with a library file extension (e.g. ".so").
+<a name="line335"></a> * 'extension' is the name of a PHP extension which will be tested
+<a name="line336"></a> * before 'modules' are loaded.  'class' is the string name of a
+<a name="line337"></a> * {@link Auth_OpenID_MathWrapper} subclass which should be
+<a name="line338"></a> * instantiated if a given extension is present.
+<a name="line339"></a> *
+<a name="line340"></a> * You can define new math library implementations and add them to
+<a name="line341"></a> * this array.
+<a name="line342"></a> */
+<a name="line343"></a>function Auth_OpenID_math_extensions()
+<a name="line344"></a>{
+<a name="line345"></a>    $result = array();
+<a name="line346"></a>
+<a name="line347"></a>    if (!defined('Auth_OpenID_BUGGY_GMP')) {
+<a name="line348"></a>        $result[] =
+<a name="line349"></a>            array('modules' => array('gmp', 'php_gmp'),
+<a name="line350"></a>                  'extension' => 'gmp',
+<a name="line351"></a>                  'class' => 'Auth_OpenID_GmpMathWrapper');
+<a name="line352"></a>    }
+<a name="line353"></a>
+<a name="line354"></a>    $result[] = array('modules' => array('bcmath', 'php_bcmath'),
+<a name="line355"></a>                      'extension' => 'bcmath',
+<a name="line356"></a>                      'class' => 'Auth_OpenID_BcMathWrapper');
+<a name="line357"></a>
+<a name="line358"></a>    return $result;
+<a name="line359"></a>}
+<a name="line360"></a>
+<a name="line361"></a>/**
+<a name="line362"></a> * Detect which (if any) math library is available
+<a name="line363"></a> */
+<a name="line364"></a>function Auth_OpenID_detectMathLibrary($exts)
+<a name="line365"></a>{
+<a name="line366"></a>    $loaded = false;
+<a name="line367"></a>
+<a name="line368"></a>	$hasDl = function_exists('dl');
+<a name="line369"></a>    foreach ($exts as $extension) {
+<a name="line370"></a>        if (extension_loaded($extension['extension'])) {
+<a name="line371"></a>            return $extension;
+<a name="line372"></a>        }
+<a name="line373"></a>    }
+<a name="line374"></a>
+<a name="line375"></a>    return false;
+<a name="line376"></a>}
+<a name="line377"></a>
+<a name="line378"></a>/**
+<a name="line379"></a> * {@link Auth_OpenID_getMathLib} checks for the presence of long
+<a name="line380"></a> * number extension modules and returns an instance of
+<a name="line381"></a> * {@link Auth_OpenID_MathWrapper} which exposes the module's
+<a name="line382"></a> * functionality.
+<a name="line383"></a> *
+<a name="line384"></a> * Checks for the existence of an extension module described by the
+<a name="line385"></a> * result of {@link Auth_OpenID_math_extensions()} and returns an
+<a name="line386"></a> * instance of a wrapper for that extension module.  If no extension
+<a name="line387"></a> * module is found, an instance of {@link Auth_OpenID_MathWrapper} is
+<a name="line388"></a> * returned, which wraps the native PHP integer implementation.  The
+<a name="line389"></a> * proper calling convention for this method is $lib =
+<a name="line390"></a> * Auth_OpenID_getMathLib().
+<a name="line391"></a> *
+<a name="line392"></a> * This function checks for the existence of specific long number
+<a name="line393"></a> * implementations in the following order: GMP followed by BCmath.
+<a name="line394"></a> *
+<a name="line395"></a> * @return Auth_OpenID_MathWrapper $instance An instance of
+<a name="line396"></a> * {@link Auth_OpenID_MathWrapper} or one of its subclasses
+<a name="line397"></a> *
+<a name="line398"></a> * @package OpenID
+<a name="line399"></a> */
+<a name="line400"></a>function Auth_OpenID_getMathLib()
+<a name="line401"></a>{
+<a name="line402"></a>    // The instance of Auth_OpenID_MathWrapper that we choose to
+<a name="line403"></a>    // supply will be stored here, so that subseqent calls to this
+<a name="line404"></a>    // method will return a reference to the same object.
+<a name="line405"></a>    static $lib = null;
+<a name="line406"></a>
+<a name="line407"></a>    if (isset($lib)) {
+<a name="line408"></a>        return $lib;
+<a name="line409"></a>    }
+<a name="line410"></a>
+<a name="line411"></a>    if (Auth_OpenID_noMathSupport()) {
+<a name="line412"></a>        $null = null;
+<a name="line413"></a>        return $null;
+<a name="line414"></a>    }
+<a name="line415"></a>
+<a name="line416"></a>    // If this method has not been called before, look at
+<a name="line417"></a>    // Auth_OpenID_math_extensions and try to find an extension that
+<a name="line418"></a>    // works.
+<a name="line419"></a>    $ext = Auth_OpenID_detectMathLibrary(Auth_OpenID_math_extensions());
+<a name="line420"></a>    if ($ext === false) {
+<a name="line421"></a>        $tried = array();
+<a name="line422"></a>        foreach (Auth_OpenID_math_extensions() as $extinfo) {
+<a name="line423"></a>            $tried[] = $extinfo['extension'];
+<a name="line424"></a>        }
+<a name="line425"></a>        $triedstr = implode(", ", $tried);
+<a name="line426"></a>
+<a name="line427"></a>        Auth_OpenID_setNoMathSupport();
+<a name="line428"></a>
+<a name="line429"></a>        $result = null;
+<a name="line430"></a>        return $result;
+<a name="line431"></a>    }
+<a name="line432"></a>
+<a name="line433"></a>    // Instantiate a new wrapper
+<a name="line434"></a>    $class = $ext['class'];
+<a name="line435"></a>    $lib = new $class();
+<a name="line436"></a>
+<a name="line437"></a>    return $lib;
+<a name="line438"></a>}
+<a name="line439"></a>
+<a name="line440"></a>function Auth_OpenID_setNoMathSupport()
+<a name="line441"></a>{
+<a name="line442"></a>    if (!defined('Auth_OpenID_NO_MATH_SUPPORT')) {
+<a name="line443"></a>        define('Auth_OpenID_NO_MATH_SUPPORT', true);
+<a name="line444"></a>    }
+<a name="line445"></a>}
+<a name="line446"></a>
+<a name="line447"></a>function Auth_OpenID_noMathSupport()
+<a name="line448"></a>{
+<a name="line449"></a>    return defined('Auth_OpenID_NO_MATH_SUPPORT');
+<a name="line450"></a>}
+<a name="line451"></a>
+<a name="line452"></a>
+<a name="line453"></a></pre>
+<div class="header">
+<h1>GiftFlow API</h1>
+<ul>
+<li><a href="../../../../../overview-summary.html">Overview</a></li>
+<li>Package</li><li>Class</li><li>Tree</li><li><a href="../../../../../overview-files.html">Files</a></li>
+<li><a href="../../../../../deprecated-list.html">Deprecated</a></li>
+<li><a href="../../../../../index-all.html">Index</a></li>
+</ul>
+</div>
+
+<div class="small_links">
+<a href="../../../../../index.html" target="_top">Frames</a>
+<a href="../../../../../source/application/libraries/auth/openid/bigmath.php.html" target="_top">No frames</a>
+</div>
+<hr>
+
+<p id="footer">This document was generated by <a href="http://peej.github.com/phpdoctor/">PHPDoctor: The PHP Documentation Creator</a></p>
+
+</body>
+
+</html>

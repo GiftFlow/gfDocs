@@ -1,0 +1,213 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+
+<html lang="en">
+<head>
+
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
+<meta name="generator" content="PHPDoctor 2RC4 (http://peej.github.com/phpdoctor/)">
+<meta name="when" content="Sat, 10 Jul 2010 18:10:55 +0000">
+
+<link rel="stylesheet" type="text/css" href="../stylesheet.css">
+<link rel="start" href="../overview-summary.html">
+
+<title>Auth_Yadis_Yadis (GiftFlow API)</title>
+
+</head>
+<body id="definition" onload="parent.document.title=document.title;">
+
+<div class="header">
+<h1>GiftFlow API</h1>
+<ul>
+<li><a href="../overview-summary.html">Overview</a></li>
+<li><a href="../openid/package-summary.html">Package</a></li>
+<li class="active">Class</li>
+<li><a href="../openid/package-tree.html">Tree</a></li>
+<li><a href="../overview-files.html">Files</a></li>
+<li><a href="../deprecated-list.html">Deprecated</a></li>
+<li><a href="../index-all.html">Index</a></li>
+</ul>
+</div>
+
+<div class="small_links">
+<a href="../index.html" target="_top">Frames</a>
+<a href="../openid/auth_yadis_yadis.html" target="_top">No frames</a>
+</div>
+<div class="small_links">
+Summary: <a href="#summary_field">Field</a> | <a href="#summary_method">Method</a> | <a href="#summary_constr">Constr</a>
+Detail: <a href="#detail_field">Field</a> | <a href="#detail_method">Method</a> | <a href="#summary_constr">Constr</a>
+</div>
+<hr>
+
+<div class="qualifiedName">OpenID\Auth_Yadis_Yadis</div>
+<a href="../source/application/libraries/auth/yadis/yadis.php.html#line241" class="location">application/libraries/Auth/Yadis/Yadis.php at line 241</a>
+
+<h1>Class Auth_Yadis_Yadis</h1>
+
+<pre class="tree"><strong>Auth_Yadis_Yadis</strong><br /></pre>
+
+<hr>
+
+<p class="signature">public  class <strong>Auth_Yadis_Yadis</strong></p>
+
+<div class="comment" id="overview_description"><p>This is the core of the PHP Yadis library.  This is the only class
+a user needs to use to perform Yadis discovery.  This class
+performs the discovery AND stores the result of the discovery.</p><p>First, require this library into your program source:</p><p><pre>  require_once "Auth/Yadis/Yadis.php";</pre></p><p>To perform Yadis discovery, first call the "discover" method
+statically with a URI parameter:</p><p><pre>  $http_response = array();
+$fetcher = Auth_Yadis_Yadis::getHTTPFetcher();
+$yadis_object = Auth_Yadis_Yadis::discover($uri,
+$http_response, $fetcher);</pre></p><p>If the discovery succeeds, $yadis_object will be an instance of
+<code><a href="../openid/auth_yadis_yadis.html">Auth_Yadis_Yadis</a></code>.  If not, it will be null.  The XRDS
+document found during discovery should have service descriptions,
+which can be accessed by calling</p><p><pre>  $service_list = $yadis_object->services();</pre></p><p>which returns an array of objects which describe each service.
+These objects are instances of Auth_Yadis_Service.  Each object
+describes exactly one whole Service element, complete with all of
+its Types and URIs (no expansion is performed).  The common use
+case for using the service objects returned by services() is to
+write one or more filter functions and pass those to services():</p><p><pre>  $service_list = $yadis_object->services(
+array("filterByURI",
+"filterByExtension"));</pre></p><p>The filter functions (whose names appear in the array passed to
+services()) take the following form:</p><p><pre>  function myFilter($service) {
+Query $service object here.  Return true if the service
+matches your query; false if not.
+}</pre></p><p>This is an example of a filter which uses a regular expression to
+match the content of URI tags (note that the Auth_Yadis_Service
+class provides a getURIs() method which you should use instead of
+this contrived example):</p><p><pre>
+function URIMatcher($service) {
+foreach ($service->getElements('xrd:URI') as $uri) {
+if (preg_match("/some_pattern/",
+$service->parser->content($uri))) {
+return true;
+}
+}
+return false;
+}</pre></p><p>The filter functions you pass will be called for each service
+object to determine which ones match the criteria your filters
+specify.  The default behavior is that if a given service object
+matches ANY of the filters specified in the services() call, it
+will be returned.  You can specify that a given service object will
+be returned ONLY if it matches ALL specified filters by changing
+the match mode of services():</p><p><pre>  $yadis_object->services(array("filter1", "filter2"),
+SERVICES_YADIS_MATCH_ALL);</pre></p><p>See <code><a href="../openid/package-globals.html#SERVICES_YADIS_MATCH_ALL">SERVICES_YADIS_MATCH_ALL</a></code> and .</p><p>Services described in an XRDS should have a library which you'll
+probably be using.  Those libraries are responsible for defining
+filters that can be used with the "services()" call.  If you need
+to write your own filter, see the documentation for .</p></div>
+
+<hr>
+
+<table id="summary_method">
+<tr><th colspan="2">Method Summary</th></tr>
+<tr>
+<td class="type">private static  void</td>
+<td class="description"><p class="name"><a href="#_getContentType()">_getContentType</a>(mixed content_type_header)</p><p class="description"></p></td>
+</tr>
+<tr>
+<td class="type">private static  void</td>
+<td class="description"><p class="name"><a href="#_getHeader()">_getHeader</a>(mixed header_list, mixed names)</p><p class="description"></p></td>
+</tr>
+<tr>
+<td class="type">static  void</td>
+<td class="description"><p class="name"><a href="#curlPresent()">curlPresent</a>()</p></td>
+</tr>
+<tr>
+<td class="type">static  mixed</td>
+<td class="description"><p class="name"><a href="#discover()">discover</a>(string uri, <a href="../openid/auth_yadis_httpfetcher.html">Auth_Yadis_HTTPFetcher</a> fetcher, array extra_ns_map, integer timeout, array http_response)</p><p class="description">This should be called statically and will build a Yadis
+instance if the discovery process succeeds. </p></td>
+</tr>
+<tr>
+<td class="type">static  void</td>
+<td class="description"><p class="name"><a href="#getHTTPFetcher()">getHTTPFetcher</a>(int timeout)</p><p class="description">Returns an HTTP fetcher object. </p></td>
+</tr>
+</table>
+
+<h2 id="detail_method">Method Detail</h2><div class="method_detail">
+<div class='method'><a href="../source/application/libraries/auth/yadis/yadis.php.html#line287" class="location">application/libraries/Auth/Yadis/Yadis.php at line 287</a>
+
+<h3 id="_getContentType()">_getContentType</h3>
+<code class="signature">private static  void <strong>_getContentType</strong>(mixed content_type_header)</code>
+<div class="details">
+<p></p></div></div>
+
+
+
+<div class='method'><a href="../source/application/libraries/auth/yadis/yadis.php.html#line271" class="location">application/libraries/Auth/Yadis/Yadis.php at line 271</a>
+
+<h3 id="_getHeader()">_getHeader</h3>
+<code class="signature">private static  void <strong>_getHeader</strong>(mixed header_list, mixed names)</code>
+<div class="details">
+<p></p></div></div>
+
+
+
+<div class='method'><a href="../source/application/libraries/auth/yadis/yadis.php.html#line263" class="location">application/libraries/Auth/Yadis/Yadis.php at line 263</a>
+
+<h3 id="curlPresent()">curlPresent</h3>
+<code class="signature">public static  void <strong>curlPresent</strong>()</code>
+<div class="details">
+</div></div>
+
+
+
+<div class='method'><a href="../source/application/libraries/auth/yadis/yadis.php.html#line319" class="location">application/libraries/Auth/Yadis/Yadis.php at line 319</a>
+
+<h3 id="discover()">discover</h3>
+<code class="signature">public static  mixed <strong>discover</strong>(string uri, <a href="../openid/auth_yadis_httpfetcher.html">Auth_Yadis_HTTPFetcher</a> fetcher, array extra_ns_map, integer timeout, array http_response)</code>
+<div class="details">
+<p>This should be called statically and will build a Yadis
+instance if the discovery process succeeds.  This implements
+Yadis discovery as specified in the Yadis specification.</p><dl>
+<dt>Parameters:</dt>
+<dd>uri - The URI on which to perform Yadis discovery.</dd>
+<dd>http_response - An array reference where the HTTP response object will be stored (see {@link Auth_Yadis_HTTPResponse}.</dd>
+<dd>fetcher - An instance of a Auth_Yadis_HTTPFetcher subclass.</dd>
+<dd>extra_ns_map - An array which maps namespace names to namespace URIs to be used when parsing the Yadis XRDS document.</dd>
+<dd>timeout - An optional fetcher timeout, in seconds.</dd>
+<dt>Returns:</dt>
+<dd>$obj Either null or an instance of Auth_Yadis_Yadis, depending on whether the discovery succeeded.</dd>
+</dl>
+</div></div>
+
+
+
+<div class='method'><a href="../source/application/libraries/auth/yadis/yadis.php.html#line252" class="location">application/libraries/Auth/Yadis/Yadis.php at line 252</a>
+
+<h3 id="getHTTPFetcher()">getHTTPFetcher</h3>
+<code class="signature">public static  void <strong>getHTTPFetcher</strong>(int timeout)</code>
+<div class="details">
+<p>Returns an HTTP fetcher object.  If the CURL extension is
+present, an instance of <code><a href="../openid/auth_yadis_paranoidhttpfetcher.html">Auth_Yadis_ParanoidHTTPFetcher</a></code>
+is returned.  If not, an instance of
+<code><a href="../openid/auth_yadis_plainhttpfetcher.html">Auth_Yadis_PlainHTTPFetcher</a></code> is returned.</p><p>If Auth_Yadis_CURL_OVERRIDE is defined, this method will always
+return a <code><a href="../openid/auth_yadis_plainhttpfetcher.html">Auth_Yadis_PlainHTTPFetcher</a></code>.</p></div></div>
+
+
+
+</div><div class="header">
+<h1>GiftFlow API</h1>
+<ul>
+<li><a href="../overview-summary.html">Overview</a></li>
+<li><a href="../openid/package-summary.html">Package</a></li>
+<li class="active">Class</li>
+<li><a href="../openid/package-tree.html">Tree</a></li>
+<li><a href="../overview-files.html">Files</a></li>
+<li><a href="../deprecated-list.html">Deprecated</a></li>
+<li><a href="../index-all.html">Index</a></li>
+</ul>
+</div>
+
+<div class="small_links">
+<a href="../index.html" target="_top">Frames</a>
+<a href="../openid/auth_yadis_yadis.html" target="_top">No frames</a>
+</div>
+<div class="small_links">
+Summary: <a href="#summary_field">Field</a> | <a href="#summary_method">Method</a> | <a href="#summary_constr">Constr</a>
+Detail: <a href="#detail_field">Field</a> | <a href="#detail_method">Method</a> | <a href="#summary_constr">Constr</a>
+</div>
+<hr>
+
+<p id="footer">This document was generated by <a href="http://peej.github.com/phpdoctor/">PHPDoctor: The PHP Documentation Creator</a></p>
+
+</body>
+
+</html>

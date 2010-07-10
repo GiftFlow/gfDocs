@@ -1,0 +1,373 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+
+<html lang="en">
+<head>
+
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
+<meta name="generator" content="PHPDoctor 2RC4 (http://peej.github.com/phpdoctor/)">
+<meta name="when" content="Sat, 10 Jul 2010 18:10:54 +0000">
+
+<link rel="stylesheet" type="text/css" href="../stylesheet.css">
+<link rel="start" href="../overview-summary.html">
+
+<title>Openid (GiftFlow API)</title>
+
+</head>
+<body id="definition" onload="parent.document.title=document.title;">
+
+<div class="header">
+<h1>GiftFlow API</h1>
+<ul>
+<li><a href="../overview-summary.html">Overview</a></li>
+<li><a href="../codeigniter/package-summary.html">Package</a></li>
+<li class="active">Class</li>
+<li><a href="../codeigniter/package-tree.html">Tree</a></li>
+<li><a href="../overview-files.html">Files</a></li>
+<li><a href="../deprecated-list.html">Deprecated</a></li>
+<li><a href="../index-all.html">Index</a></li>
+</ul>
+</div>
+
+<div class="small_links">
+<a href="../index.html" target="_top">Frames</a>
+<a href="../codeigniter/openid.html" target="_top">No frames</a>
+</div>
+<div class="small_links">
+Summary: <a href="#summary_field">Field</a> | <a href="#summary_method">Method</a> | <a href="#summary_constr">Constr</a>
+Detail: <a href="#detail_field">Field</a> | <a href="#detail_method">Method</a> | <a href="#summary_constr">Constr</a>
+</div>
+<hr>
+
+<div class="qualifiedName">CodeIgniter\Openid</div>
+<a href="../source/application/libraries/openid.php.html#line11" class="location">application/libraries/Openid.php at line 11</a>
+
+<h1>Class Openid</h1>
+
+<pre class="tree"><strong>Openid</strong><br /></pre>
+
+<hr>
+
+<p class="signature">public  class <strong>Openid</strong></p>
+
+<div class="comment" id="overview_description"><p>OpenID Library</p></div>
+
+<dl>
+<dt>Author:</dt>
+<dd>bardelot</dd>
+<dt>See Also:</dt>
+<dd><a href="http://cakebaker.42dh.com/2007/01/11/cakephp-and-openid/">& http://openidenabled.com/php-openid/</a></dd>
+</dl>
+<hr>
+
+<table id="summary_field">
+<tr><th colspan="2">Field Summary</th></tr>
+<tr>
+<td class="type"> mixed</td>
+<td class="description"><p class="name"><a href="#ext_args">$ext_args</a></p></td>
+</tr>
+<tr>
+<td class="type"> mixed</td>
+<td class="description"><p class="name"><a href="#pape_enable">$pape_enable</a></p></td>
+</tr>
+<tr>
+<td class="type"> mixed</td>
+<td class="description"><p class="name"><a href="#pape_policy_uris">$pape_policy_uris</a></p></td>
+</tr>
+<tr>
+<td class="type"> mixed</td>
+<td class="description"><p class="name"><a href="#request_to">$request_to</a></p></td>
+</tr>
+<tr>
+<td class="type"> mixed</td>
+<td class="description"><p class="name"><a href="#sreg_enable">$sreg_enable</a></p></td>
+</tr>
+<tr>
+<td class="type"> mixed</td>
+<td class="description"><p class="name"><a href="#sreg_optional">$sreg_optional</a></p></td>
+</tr>
+<tr>
+<td class="type"> mixed</td>
+<td class="description"><p class="name"><a href="#sreg_policy">$sreg_policy</a></p></td>
+</tr>
+<tr>
+<td class="type"> mixed</td>
+<td class="description"><p class="name"><a href="#sreg_required">$sreg_required</a></p></td>
+</tr>
+<tr>
+<td class="type"> mixed</td>
+<td class="description"><p class="name"><a href="#storePath">$storePath</a></p></td>
+</tr>
+<tr>
+<td class="type"> mixed</td>
+<td class="description"><p class="name"><a href="#trust_root">$trust_root</a></p></td>
+</tr>
+</table>
+
+<table id="summary_method">
+<tr><th colspan="2">Method Summary</th></tr>
+<tr>
+<td class="type"> void</td>
+<td class="description"><p class="name"><a href="#__construct()">__construct</a>()</p></td>
+</tr>
+<tr>
+<td class="type">private  void</td>
+<td class="description"><p class="name"><a href="#_doIncludes()">_doIncludes</a>()</p></td>
+</tr>
+<tr>
+<td class="type">private  void</td>
+<td class="description"><p class="name"><a href="#_getConsumer()">_getConsumer</a>()</p></td>
+</tr>
+<tr>
+<td class="type">private  void</td>
+<td class="description"><p class="name"><a href="#_set_message()">_set_message</a>(mixed error, mixed msg, str val, str sub)</p></td>
+</tr>
+<tr>
+<td class="type"> void</td>
+<td class="description"><p class="name"><a href="#authenticate()">authenticate</a>(mixed openId)</p></td>
+</tr>
+<tr>
+<td class="type"> void</td>
+<td class="description"><p class="name"><a href="#getResponse()">getResponse</a>()</p></td>
+</tr>
+<tr>
+<td class="type"> void</td>
+<td class="description"><p class="name"><a href="#set_args()">set_args</a>(mixed args)</p></td>
+</tr>
+<tr>
+<td class="type"> void</td>
+<td class="description"><p class="name"><a href="#set_pape()">set_pape</a>(mixed enable, mixed policy_uris)</p></td>
+</tr>
+<tr>
+<td class="type"> void</td>
+<td class="description"><p class="name"><a href="#set_request_to()">set_request_to</a>(mixed uri)</p></td>
+</tr>
+<tr>
+<td class="type"> void</td>
+<td class="description"><p class="name"><a href="#set_sreg()">set_sreg</a>(mixed enable, mixed required, mixed optional, mixed policy)</p></td>
+</tr>
+<tr>
+<td class="type"> void</td>
+<td class="description"><p class="name"><a href="#set_trust_root()">set_trust_root</a>(mixed trust_root)</p></td>
+</tr>
+</table>
+
+<h2 id="detail_field">Field Detail</h2>
+<a href="../source/application/libraries/openid.php.html#line25" class="location">application/libraries/Openid.php at line 25</a>
+
+<h3 id="ext_args">ext_args</h3>
+<code class="signature">public  mixed <strong>$ext_args</strong></code>
+<div class="details">
+</div>
+
+<hr>
+
+<a href="../source/application/libraries/openid.php.html#line20" class="location">application/libraries/Openid.php at line 20</a>
+
+<h3 id="pape_enable">pape_enable</h3>
+<code class="signature">public  mixed <strong>$pape_enable</strong> = false</code>
+<div class="details">
+</div>
+
+<hr>
+
+<a href="../source/application/libraries/openid.php.html#line21" class="location">application/libraries/Openid.php at line 21</a>
+
+<h3 id="pape_policy_uris">pape_policy_uris</h3>
+<code class="signature">public  mixed <strong>$pape_policy_uris</strong> = null</code>
+<div class="details">
+</div>
+
+<hr>
+
+<a href="../source/application/libraries/openid.php.html#line23" class="location">application/libraries/Openid.php at line 23</a>
+
+<h3 id="request_to">request_to</h3>
+<code class="signature">public  mixed <strong>$request_to</strong></code>
+<div class="details">
+</div>
+
+<hr>
+
+<a href="../source/application/libraries/openid.php.html#line15" class="location">application/libraries/Openid.php at line 15</a>
+
+<h3 id="sreg_enable">sreg_enable</h3>
+<code class="signature">public  mixed <strong>$sreg_enable</strong> = false</code>
+<div class="details">
+</div>
+
+<hr>
+
+<a href="../source/application/libraries/openid.php.html#line17" class="location">application/libraries/Openid.php at line 17</a>
+
+<h3 id="sreg_optional">sreg_optional</h3>
+<code class="signature">public  mixed <strong>$sreg_optional</strong> = null</code>
+<div class="details">
+</div>
+
+<hr>
+
+<a href="../source/application/libraries/openid.php.html#line18" class="location">application/libraries/Openid.php at line 18</a>
+
+<h3 id="sreg_policy">sreg_policy</h3>
+<code class="signature">public  mixed <strong>$sreg_policy</strong> = null</code>
+<div class="details">
+</div>
+
+<hr>
+
+<a href="../source/application/libraries/openid.php.html#line16" class="location">application/libraries/Openid.php at line 16</a>
+
+<h3 id="sreg_required">sreg_required</h3>
+<code class="signature">public  mixed <strong>$sreg_required</strong> = null</code>
+<div class="details">
+</div>
+
+<hr>
+
+<a href="../source/application/libraries/openid.php.html#line13" class="location">application/libraries/Openid.php at line 13</a>
+
+<h3 id="storePath">storePath</h3>
+<code class="signature">public  mixed <strong>$storePath</strong> = 'tmp'</code>
+<div class="details">
+</div>
+
+<hr>
+
+<a href="../source/application/libraries/openid.php.html#line24" class="location">application/libraries/Openid.php at line 24</a>
+
+<h3 id="trust_root">trust_root</h3>
+<code class="signature">public  mixed <strong>$trust_root</strong></code>
+<div class="details">
+</div>
+
+<hr>
+
+<h2 id="detail_method">Method Detail</h2><div class="method_detail">
+<div class='method'><a href="../source/application/libraries/openid.php.html#line27" class="location">application/libraries/Openid.php at line 27</a>
+
+<h3 id="__construct()">__construct</h3>
+<code class="signature">public  void <strong>__construct</strong>()</code>
+<div class="details">
+</div></div>
+
+
+
+<div class='method'><a href="../source/application/libraries/openid.php.html#line39" class="location">application/libraries/Openid.php at line 39</a>
+
+<h3 id="_doIncludes()">_doIncludes</h3>
+<code class="signature">private  void <strong>_doIncludes</strong>()</code>
+<div class="details">
+</div></div>
+
+
+
+<div class='method'><a href="../source/application/libraries/openid.php.html#line198" class="location">application/libraries/Openid.php at line 198</a>
+
+<h3 id="_getConsumer()">_getConsumer</h3>
+<code class="signature">private  void <strong>_getConsumer</strong>()</code>
+<div class="details">
+</div></div>
+
+
+
+<div class='method'><a href="../source/application/libraries/openid.php.html#line78" class="location">application/libraries/Openid.php at line 78</a>
+
+<h3 id="_set_message()">_set_message</h3>
+<code class="signature">private  void <strong>_set_message</strong>(mixed error, mixed msg, str val, str sub)</code>
+<div class="details">
+</div></div>
+
+
+
+<div class='method'><a href="../source/application/libraries/openid.php.html#line90" class="location">application/libraries/Openid.php at line 90</a>
+
+<h3 id="authenticate()">authenticate</h3>
+<code class="signature">public  void <strong>authenticate</strong>(mixed openId)</code>
+<div class="details">
+</div></div>
+
+
+
+<div class='method'><a href="../source/application/libraries/openid.php.html#line190" class="location">application/libraries/Openid.php at line 190</a>
+
+<h3 id="getResponse()">getResponse</h3>
+<code class="signature">public  void <strong>getResponse</strong>()</code>
+<div class="details">
+</div></div>
+
+
+
+<div class='method'><a href="../source/application/libraries/openid.php.html#line73" class="location">application/libraries/Openid.php at line 73</a>
+
+<h3 id="set_args()">set_args</h3>
+<code class="signature">public  void <strong>set_args</strong>(mixed args)</code>
+<div class="details">
+</div></div>
+
+
+
+<div class='method'><a href="../source/application/libraries/openid.php.html#line57" class="location">application/libraries/Openid.php at line 57</a>
+
+<h3 id="set_pape()">set_pape</h3>
+<code class="signature">public  void <strong>set_pape</strong>(mixed enable, mixed policy_uris)</code>
+<div class="details">
+</div></div>
+
+
+
+<div class='method'><a href="../source/application/libraries/openid.php.html#line63" class="location">application/libraries/Openid.php at line 63</a>
+
+<h3 id="set_request_to()">set_request_to</h3>
+<code class="signature">public  void <strong>set_request_to</strong>(mixed uri)</code>
+<div class="details">
+</div></div>
+
+
+
+<div class='method'><a href="../source/application/libraries/openid.php.html#line49" class="location">application/libraries/Openid.php at line 49</a>
+
+<h3 id="set_sreg()">set_sreg</h3>
+<code class="signature">public  void <strong>set_sreg</strong>(mixed enable, mixed required, mixed optional, mixed policy)</code>
+<div class="details">
+</div></div>
+
+
+
+<div class='method'><a href="../source/application/libraries/openid.php.html#line68" class="location">application/libraries/Openid.php at line 68</a>
+
+<h3 id="set_trust_root()">set_trust_root</h3>
+<code class="signature">public  void <strong>set_trust_root</strong>(mixed trust_root)</code>
+<div class="details">
+</div></div>
+
+
+
+</div><div class="header">
+<h1>GiftFlow API</h1>
+<ul>
+<li><a href="../overview-summary.html">Overview</a></li>
+<li><a href="../codeigniter/package-summary.html">Package</a></li>
+<li class="active">Class</li>
+<li><a href="../codeigniter/package-tree.html">Tree</a></li>
+<li><a href="../overview-files.html">Files</a></li>
+<li><a href="../deprecated-list.html">Deprecated</a></li>
+<li><a href="../index-all.html">Index</a></li>
+</ul>
+</div>
+
+<div class="small_links">
+<a href="../index.html" target="_top">Frames</a>
+<a href="../codeigniter/openid.html" target="_top">No frames</a>
+</div>
+<div class="small_links">
+Summary: <a href="#summary_field">Field</a> | <a href="#summary_method">Method</a> | <a href="#summary_constr">Constr</a>
+Detail: <a href="#detail_field">Field</a> | <a href="#detail_method">Method</a> | <a href="#summary_constr">Constr</a>
+</div>
+<hr>
+
+<p id="footer">This document was generated by <a href="http://peej.github.com/phpdoctor/">PHPDoctor: The PHP Documentation Creator</a></p>
+
+</body>
+
+</html>

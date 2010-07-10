@@ -1,0 +1,363 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+
+<html lang="en">
+<head>
+
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
+<meta name="generator" content="PHPDoctor 2RC4 (http://peej.github.com/phpdoctor/)">
+<meta name="when" content="Sat, 10 Jul 2010 18:10:56 +0000">
+
+<link rel="stylesheet" type="text/css" href="../../../../../stylesheet.css">
+<link rel="start" href="../../../../../overview-summary.html">
+
+<title>application/libraries/Auth/OpenID/PAPE.php (GiftFlow API)</title>
+
+</head>
+<body id="file" onload="parent.document.title=document.title;">
+
+<div class="header">
+<h1>GiftFlow API</h1>
+<ul>
+<li><a href="../../../../../overview-summary.html">Overview</a></li>
+<li>Package</li><li>Class</li><li>Tree</li><li><a href="../../../../../overview-files.html">Files</a></li>
+<li><a href="../../../../../deprecated-list.html">Deprecated</a></li>
+<li><a href="../../../../../index-all.html">Index</a></li>
+</ul>
+</div>
+
+<div class="small_links">
+<a href="../../../../../index.html" target="_top">Frames</a>
+<a href="../../../../../source/application/libraries/auth/openid/pape.php.html" target="_top">No frames</a>
+</div>
+<hr>
+
+<h1>application/libraries/Auth/OpenID/PAPE.php</h1>
+<div class="comment" id="overview_description"><p>An implementation of the OpenID Provider Authentication Policy
+Extension 1.0</p><p>See:
+http://openid.net/developers/specs</p></div>
+
+<hr>
+
+<a name="line1"></a><pre><?php
+<a name="line2"></a>
+<a name="line3"></a>/**
+<a name="line4"></a> * An implementation of the OpenID Provider Authentication Policy
+<a name="line5"></a> *  Extension 1.0
+<a name="line6"></a> *
+<a name="line7"></a> * See:
+<a name="line8"></a> * http://openid.net/developers/specs/
+<a name="line9"></a> */
+<a name="line10"></a>
+<a name="line11"></a>require_once "Auth/OpenID/Extension.php";
+<a name="line12"></a>
+<a name="line13"></a>define('Auth_OpenID_PAPE_NS_URI',
+<a name="line14"></a>       "http://specs.openid.net/extensions/pape/1.0");
+<a name="line15"></a>
+<a name="line16"></a>define('PAPE_AUTH_MULTI_FACTOR_PHYSICAL',
+<a name="line17"></a>       'http://schemas.openid.net/pape/policies/2007/06/multi-factor-physical');
+<a name="line18"></a>define('PAPE_AUTH_MULTI_FACTOR',
+<a name="line19"></a>       'http://schemas.openid.net/pape/policies/2007/06/multi-factor');
+<a name="line20"></a>define('PAPE_AUTH_PHISHING_RESISTANT',
+<a name="line21"></a>       'http://schemas.openid.net/pape/policies/2007/06/phishing-resistant');
+<a name="line22"></a>
+<a name="line23"></a>define('PAPE_TIME_VALIDATOR',
+<a name="line24"></a>      '/^[0-9]{4,4}-[0-9][0-9]-[0-9][0-9]T[0-9][0-9]:[0-9][0-9]:[0-9][0-9]Z$/');
+<a name="line25"></a>/**
+<a name="line26"></a> * A Provider Authentication Policy request, sent from a relying party
+<a name="line27"></a> * to a provider
+<a name="line28"></a> *
+<a name="line29"></a> * preferred_auth_policies: The authentication policies that
+<a name="line30"></a> * the relying party prefers
+<a name="line31"></a> *
+<a name="line32"></a> * max_auth_age: The maximum time, in seconds, that the relying party
+<a name="line33"></a> * wants to allow to have elapsed before the user must re-authenticate
+<a name="line34"></a> */
+<a name="line35"></a>class Auth_OpenID_PAPE_Request extends Auth_OpenID_Extension {
+<a name="line36"></a>
+<a name="line37"></a>    var $ns_alias = 'pape';
+<a name="line38"></a>    var $ns_uri = Auth_OpenID_PAPE_NS_URI;
+<a name="line39"></a>
+<a name="line40"></a>    function Auth_OpenID_PAPE_Request($preferred_auth_policies=null,
+<a name="line41"></a>                                      $max_auth_age=null)
+<a name="line42"></a>    {
+<a name="line43"></a>        if ($preferred_auth_policies === null) {
+<a name="line44"></a>            $preferred_auth_policies = array();
+<a name="line45"></a>        }
+<a name="line46"></a>
+<a name="line47"></a>        $this->preferred_auth_policies = $preferred_auth_policies;
+<a name="line48"></a>        $this->max_auth_age = $max_auth_age;
+<a name="line49"></a>    }
+<a name="line50"></a>
+<a name="line51"></a>    /**
+<a name="line52"></a>     * Add an acceptable authentication policy URI to this request
+<a name="line53"></a>     *
+<a name="line54"></a>     * This method is intended to be used by the relying party to add
+<a name="line55"></a>     * acceptable authentication types to the request.
+<a name="line56"></a>     *
+<a name="line57"></a>     * policy_uri: The identifier for the preferred type of
+<a name="line58"></a>     * authentication.
+<a name="line59"></a>     */
+<a name="line60"></a>    function addPolicyURI($policy_uri)
+<a name="line61"></a>    {
+<a name="line62"></a>        if (!in_array($policy_uri, $this->preferred_auth_policies)) {
+<a name="line63"></a>            $this->preferred_auth_policies[] = $policy_uri;
+<a name="line64"></a>        }
+<a name="line65"></a>    }
+<a name="line66"></a>
+<a name="line67"></a>    function getExtensionArgs()
+<a name="line68"></a>    {
+<a name="line69"></a>        $ns_args = array(
+<a name="line70"></a>                         'preferred_auth_policies' =>
+<a name="line71"></a>                           implode(' ', $this->preferred_auth_policies)
+<a name="line72"></a>                         );
+<a name="line73"></a>
+<a name="line74"></a>        if ($this->max_auth_age !== null) {
+<a name="line75"></a>            $ns_args['max_auth_age'] = strval($this->max_auth_age);
+<a name="line76"></a>        }
+<a name="line77"></a>
+<a name="line78"></a>        return $ns_args;
+<a name="line79"></a>    }
+<a name="line80"></a>
+<a name="line81"></a>    /**
+<a name="line82"></a>     * Instantiate a Request object from the arguments in a checkid_*
+<a name="line83"></a>     * OpenID message
+<a name="line84"></a>     */
+<a name="line85"></a>    static function fromOpenIDRequest($request)
+<a name="line86"></a>    {
+<a name="line87"></a>        $obj = new Auth_OpenID_PAPE_Request();
+<a name="line88"></a>        $args = $request->message->getArgs(Auth_OpenID_PAPE_NS_URI);
+<a name="line89"></a>
+<a name="line90"></a>        if ($args === null || $args === array()) {
+<a name="line91"></a>            return null;
+<a name="line92"></a>        }
+<a name="line93"></a>
+<a name="line94"></a>        $obj->parseExtensionArgs($args);
+<a name="line95"></a>        return $obj;
+<a name="line96"></a>    }
+<a name="line97"></a>
+<a name="line98"></a>    /**
+<a name="line99"></a>     * Set the state of this request to be that expressed in these
+<a name="line100"></a>     * PAPE arguments
+<a name="line101"></a>     *
+<a name="line102"></a>     * @param args: The PAPE arguments without a namespace
+<a name="line103"></a>     */
+<a name="line104"></a>    function parseExtensionArgs($args)
+<a name="line105"></a>    {
+<a name="line106"></a>        // preferred_auth_policies is a space-separated list of policy
+<a name="line107"></a>        // URIs
+<a name="line108"></a>        $this->preferred_auth_policies = array();
+<a name="line109"></a>
+<a name="line110"></a>        $policies_str = Auth_OpenID::arrayGet($args, 'preferred_auth_policies');
+<a name="line111"></a>        if ($policies_str) {
+<a name="line112"></a>            foreach (explode(' ', $policies_str) as $uri) {
+<a name="line113"></a>                if (!in_array($uri, $this->preferred_auth_policies)) {
+<a name="line114"></a>                    $this->preferred_auth_policies[] = $uri;
+<a name="line115"></a>                }
+<a name="line116"></a>            }
+<a name="line117"></a>        }
+<a name="line118"></a>
+<a name="line119"></a>        // max_auth_age is base-10 integer number of seconds
+<a name="line120"></a>        $max_auth_age_str = Auth_OpenID::arrayGet($args, 'max_auth_age');
+<a name="line121"></a>        if ($max_auth_age_str) {
+<a name="line122"></a>            $this->max_auth_age = Auth_OpenID::intval($max_auth_age_str);
+<a name="line123"></a>        } else {
+<a name="line124"></a>            $this->max_auth_age = null;
+<a name="line125"></a>        }
+<a name="line126"></a>    }
+<a name="line127"></a>
+<a name="line128"></a>    /**
+<a name="line129"></a>     * Given a list of authentication policy URIs that a provider
+<a name="line130"></a>     * supports, this method returns the subsequence of those types
+<a name="line131"></a>     * that are preferred by the relying party.
+<a name="line132"></a>     *
+<a name="line133"></a>     * @param supported_types: A sequence of authentication policy
+<a name="line134"></a>     * type URIs that are supported by a provider
+<a name="line135"></a>     *
+<a name="line136"></a>     * @return array The sub-sequence of the supported types that are
+<a name="line137"></a>     * preferred by the relying party. This list will be ordered in
+<a name="line138"></a>     * the order that the types appear in the supported_types
+<a name="line139"></a>     * sequence, and may be empty if the provider does not prefer any
+<a name="line140"></a>     * of the supported authentication types.
+<a name="line141"></a>     */
+<a name="line142"></a>    function preferredTypes($supported_types)
+<a name="line143"></a>    {
+<a name="line144"></a>        $result = array();
+<a name="line145"></a>
+<a name="line146"></a>        foreach ($supported_types as $st) {
+<a name="line147"></a>            if (in_array($st, $this->preferred_auth_policies)) {
+<a name="line148"></a>                $result[] = $st;
+<a name="line149"></a>            }
+<a name="line150"></a>        }
+<a name="line151"></a>        return $result;
+<a name="line152"></a>    }
+<a name="line153"></a>}
+<a name="line154"></a>
+<a name="line155"></a>/**
+<a name="line156"></a> * A Provider Authentication Policy response, sent from a provider to
+<a name="line157"></a> * a relying party
+<a name="line158"></a> */
+<a name="line159"></a>class Auth_OpenID_PAPE_Response extends Auth_OpenID_Extension {
+<a name="line160"></a>
+<a name="line161"></a>    var $ns_alias = 'pape';
+<a name="line162"></a>    var $ns_uri = Auth_OpenID_PAPE_NS_URI;
+<a name="line163"></a>
+<a name="line164"></a>    function Auth_OpenID_PAPE_Response($auth_policies=null, $auth_time=null,
+<a name="line165"></a>                                       $nist_auth_level=null)
+<a name="line166"></a>    {
+<a name="line167"></a>        if ($auth_policies) {
+<a name="line168"></a>            $this->auth_policies = $auth_policies;
+<a name="line169"></a>        } else {
+<a name="line170"></a>            $this->auth_policies = array();
+<a name="line171"></a>        }
+<a name="line172"></a>
+<a name="line173"></a>        $this->auth_time = $auth_time;
+<a name="line174"></a>        $this->nist_auth_level = $nist_auth_level;
+<a name="line175"></a>    }
+<a name="line176"></a>
+<a name="line177"></a>    /**
+<a name="line178"></a>     * Add a authentication policy to this response
+<a name="line179"></a>     *
+<a name="line180"></a>     * This method is intended to be used by the provider to add a
+<a name="line181"></a>     * policy that the provider conformed to when authenticating the
+<a name="line182"></a>     * user.
+<a name="line183"></a>     *
+<a name="line184"></a>     * @param policy_uri: The identifier for the preferred type of
+<a name="line185"></a>     * authentication.
+<a name="line186"></a>     */
+<a name="line187"></a>    function addPolicyURI($policy_uri)
+<a name="line188"></a>    {
+<a name="line189"></a>        if (!in_array($policy_uri, $this->auth_policies)) {
+<a name="line190"></a>            $this->auth_policies[] = $policy_uri;
+<a name="line191"></a>        }
+<a name="line192"></a>    }
+<a name="line193"></a>
+<a name="line194"></a>    /**
+<a name="line195"></a>     * Create an Auth_OpenID_PAPE_Response object from a successful
+<a name="line196"></a>     * OpenID library response.
+<a name="line197"></a>     *
+<a name="line198"></a>     * @param success_response $success_response A SuccessResponse
+<a name="line199"></a>     * from Auth_OpenID_Consumer::complete()
+<a name="line200"></a>     *
+<a name="line201"></a>     * @returns: A provider authentication policy response from the
+<a name="line202"></a>     * data that was supplied with the id_res response.
+<a name="line203"></a>     */
+<a name="line204"></a>    static function fromSuccessResponse($success_response)
+<a name="line205"></a>    {
+<a name="line206"></a>        $obj = new Auth_OpenID_PAPE_Response();
+<a name="line207"></a>
+<a name="line208"></a>        // PAPE requires that the args be signed.
+<a name="line209"></a>        $args = $success_response->getSignedNS(Auth_OpenID_PAPE_NS_URI);
+<a name="line210"></a>
+<a name="line211"></a>        if ($args === null || $args === array()) {
+<a name="line212"></a>            return null;
+<a name="line213"></a>        }
+<a name="line214"></a>
+<a name="line215"></a>        $result = $obj->parseExtensionArgs($args);
+<a name="line216"></a>
+<a name="line217"></a>        if ($result === false) {
+<a name="line218"></a>            return null;
+<a name="line219"></a>        } else {
+<a name="line220"></a>            return $obj;
+<a name="line221"></a>        }
+<a name="line222"></a>    }
+<a name="line223"></a>
+<a name="line224"></a>    /**
+<a name="line225"></a>     * Parse the provider authentication policy arguments into the
+<a name="line226"></a>     *  internal state of this object
+<a name="line227"></a>     *
+<a name="line228"></a>     * @param args: unqualified provider authentication policy
+<a name="line229"></a>     * arguments
+<a name="line230"></a>     *
+<a name="line231"></a>     * @param strict: Whether to return false when bad data is
+<a name="line232"></a>     * encountered
+<a name="line233"></a>     *
+<a name="line234"></a>     * @return null The data is parsed into the internal fields of
+<a name="line235"></a>     * this object.
+<a name="line236"></a>    */
+<a name="line237"></a>    function parseExtensionArgs($args, $strict=false)
+<a name="line238"></a>    {
+<a name="line239"></a>        $policies_str = Auth_OpenID::arrayGet($args, 'auth_policies');
+<a name="line240"></a>        if ($policies_str && $policies_str != "none") {
+<a name="line241"></a>            $this->auth_policies = explode(" ", $policies_str);
+<a name="line242"></a>        }
+<a name="line243"></a>
+<a name="line244"></a>        $nist_level_str = Auth_OpenID::arrayGet($args, 'nist_auth_level');
+<a name="line245"></a>        if ($nist_level_str !== null) {
+<a name="line246"></a>            $nist_level = Auth_OpenID::intval($nist_level_str);
+<a name="line247"></a>
+<a name="line248"></a>            if ($nist_level === false) {
+<a name="line249"></a>                if ($strict) {
+<a name="line250"></a>                    return false;
+<a name="line251"></a>                } else {
+<a name="line252"></a>                    $nist_level = null;
+<a name="line253"></a>                }
+<a name="line254"></a>            }
+<a name="line255"></a>
+<a name="line256"></a>            if (0 <= $nist_level && $nist_level < 5) {
+<a name="line257"></a>                $this->nist_auth_level = $nist_level;
+<a name="line258"></a>            } else if ($strict) {
+<a name="line259"></a>                return false;
+<a name="line260"></a>            }
+<a name="line261"></a>        }
+<a name="line262"></a>
+<a name="line263"></a>        $auth_time = Auth_OpenID::arrayGet($args, 'auth_time');
+<a name="line264"></a>        if ($auth_time !== null) {
+<a name="line265"></a>            if (preg_match(PAPE_TIME_VALIDATOR, $auth_time)) {
+<a name="line266"></a>                $this->auth_time = $auth_time;
+<a name="line267"></a>            } else if ($strict) {
+<a name="line268"></a>                return false;
+<a name="line269"></a>            }
+<a name="line270"></a>        }
+<a name="line271"></a>    }
+<a name="line272"></a>
+<a name="line273"></a>    function getExtensionArgs()
+<a name="line274"></a>    {
+<a name="line275"></a>        $ns_args = array();
+<a name="line276"></a>        if (count($this->auth_policies) > 0) {
+<a name="line277"></a>            $ns_args['auth_policies'] = implode(' ', $this->auth_policies);
+<a name="line278"></a>        } else {
+<a name="line279"></a>            $ns_args['auth_policies'] = 'none';
+<a name="line280"></a>        }
+<a name="line281"></a>
+<a name="line282"></a>        if ($this->nist_auth_level !== null) {
+<a name="line283"></a>            if (!in_array($this->nist_auth_level, range(0, 4), true)) {
+<a name="line284"></a>                return false;
+<a name="line285"></a>            }
+<a name="line286"></a>            $ns_args['nist_auth_level'] = strval($this->nist_auth_level);
+<a name="line287"></a>        }
+<a name="line288"></a>
+<a name="line289"></a>        if ($this->auth_time !== null) {
+<a name="line290"></a>            if (!preg_match(PAPE_TIME_VALIDATOR, $this->auth_time)) {
+<a name="line291"></a>                return false;
+<a name="line292"></a>            }
+<a name="line293"></a>
+<a name="line294"></a>            $ns_args['auth_time'] = $this->auth_time;
+<a name="line295"></a>        }
+<a name="line296"></a>
+<a name="line297"></a>        return $ns_args;
+<a name="line298"></a>    }
+<a name="line299"></a>}
+<a name="line300"></a>
+<a name="line301"></a></pre>
+<div class="header">
+<h1>GiftFlow API</h1>
+<ul>
+<li><a href="../../../../../overview-summary.html">Overview</a></li>
+<li>Package</li><li>Class</li><li>Tree</li><li><a href="../../../../../overview-files.html">Files</a></li>
+<li><a href="../../../../../deprecated-list.html">Deprecated</a></li>
+<li><a href="../../../../../index-all.html">Index</a></li>
+</ul>
+</div>
+
+<div class="small_links">
+<a href="../../../../../index.html" target="_top">Frames</a>
+<a href="../../../../../source/application/libraries/auth/openid/pape.php.html" target="_top">No frames</a>
+</div>
+<hr>
+
+<p id="footer">This document was generated by <a href="http://peej.github.com/phpdoctor/">PHPDoctor: The PHP Documentation Creator</a></p>
+
+</body>
+
+</html>

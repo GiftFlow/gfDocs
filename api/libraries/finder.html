@@ -6,7 +6,7 @@
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 
 <meta name="generator" content="PHPDoctor 2RC4 (http://peej.github.com/phpdoctor/)">
-<meta name="when" content="Tue, 29 Jun 2010 21:10:09 +0000">
+<meta name="when" content="Sat, 10 Jul 2010 18:10:55 +0000">
 
 <link rel="stylesheet" type="text/css" href="../stylesheet.css">
 <link rel="start" href="../overview-summary.html">
@@ -61,12 +61,28 @@ Detail: <a href="#detail_field">Field</a> | <a href="#detail_method">Method</a> 
 <table id="summary_field">
 <tr><th colspan="2">Field Summary</th></tr>
 <tr>
-<td class="type"> mixed</td>
-<td class="description"><p class="name"><a href="#address">$address</a></p></td>
+<td class="type"> string</td>
+<td class="description"><p class="name"><a href="#address">$address</a></p><p class="description"></p></td>
 </tr>
 <tr>
-<td class="type"> mixed</td>
-<td class="description"><p class="name"><a href="#bounds">$bounds</a></p></td>
+<td class="type"> array</td>
+<td class="description"><p class="name"><a href="#bounds">$bounds</a></p><p class="description">LatLng bounds defined using search radius</p></td>
+</tr>
+<tr>
+<td class="type"> int</td>
+<td class="description"><p class="name"><a href="#default_limit_offset">$default_limit_offset</a></p><p class="description">Default LIMIT offset</p></td>
+</tr>
+<tr>
+<td class="type"> int</td>
+<td class="description"><p class="name"><a href="#default_limit_size">$default_limit_size</a></p><p class="description">Default LIMIT size</p></td>
+</tr>
+<tr>
+<td class="type"> string</td>
+<td class="description"><p class="name"><a href="#default_order_by_direction">$default_order_by_direction</a></p><p class="description">Default ORDER BY direction</p></td>
+</tr>
+<tr>
+<td class="type"> string</td>
+<td class="description"><p class="name"><a href="#default_order_by_field">$default_order_by_field</a></p><p class="description">Default ORDER BY field</p></td>
 </tr>
 <tr>
 <td class="type"> mixed</td>
@@ -77,40 +93,64 @@ Detail: <a href="#detail_field">Field</a> | <a href="#detail_method">Method</a> 
 <td class="description"><p class="name"><a href="#friends">$friends</a></p></td>
 </tr>
 <tr>
-<td class="type"> mixed</td>
-<td class="description"><p class="name"><a href="#keyword">$keyword</a></p></td>
+<td class="type"> string</td>
+<td class="description"><p class="name"><a href="#keyword">$keyword</a></p><p class="description"></p></td>
+</tr>
+<tr>
+<td class="type"> float</td>
+<td class="description"><p class="name"><a href="#latitude">$latitude</a></p><p class="description"></p></td>
+</tr>
+<tr>
+<td class="type"> int</td>
+<td class="description"><p class="name"><a href="#limit_offset">$limit_offset</a></p><p class="description">User-specified LIMIT offset</p></td>
+</tr>
+<tr>
+<td class="type"> int</td>
+<td class="description"><p class="name"><a href="#limit_size">$limit_size</a></p><p class="description">User-specified LIMIT size</p></td>
+</tr>
+<tr>
+<td class="type"> string</td>
+<td class="description"><p class="name"><a href="#location">$location</a></p><p class="description"></p></td>
+</tr>
+<tr>
+<td class="type"> float</td>
+<td class="description"><p class="name"><a href="#longitude">$longitude</a></p><p class="description"></p></td>
 </tr>
 <tr>
 <td class="type"> mixed</td>
-<td class="description"><p class="name"><a href="#latitude">$latitude</a></p></td>
+<td class="description"><p class="name"><a href="#object">$object</a></p></td>
 </tr>
 <tr>
-<td class="type"> mixed</td>
-<td class="description"><p class="name"><a href="#location">$location</a></p></td>
+<td class="type"> string</td>
+<td class="description"><p class="name"><a href="#order_by_direction">$order_by_direction</a></p><p class="description">User-specified ORDER BY direction</p></td>
 </tr>
 <tr>
-<td class="type"> mixed</td>
-<td class="description"><p class="name"><a href="#longitude">$longitude</a></p></td>
+<td class="type"> string</td>
+<td class="description"><p class="name"><a href="#order_by_field">$order_by_field</a></p><p class="description">User-specified ORDER BY field</p></td>
 </tr>
 <tr>
-<td class="type"> mixed</td>
-<td class="description"><p class="name"><a href="#radius">$radius</a></p></td>
+<td class="type"> int</td>
+<td class="description"><p class="name"><a href="#radius">$radius</a></p><p class="description">Search radius in miles</p></td>
 </tr>
 <tr>
 <td class="type"> mixed</td>
 <td class="description"><p class="name"><a href="#result">$result</a></p></td>
 </tr>
 <tr>
-<td class="type"> mixed</td>
-<td class="description"><p class="name"><a href="#subquery">$subquery</a></p></td>
+<td class="type"> array</td>
+<td class="description"><p class="name"><a href="#subquery">$subquery</a></p><p class="description">Stores subquery strings which will be merged in a union</p></td>
 </tr>
 <tr>
-<td class="type"> mixed</td>
-<td class="description"><p class="name"><a href="#tag_id">$tag_id</a></p></td>
+<td class="type"> int</td>
+<td class="description"><p class="name"><a href="#tag_id">$tag_id</a></p><p class="description">Tag ID</p></td>
 </tr>
 <tr>
-<td class="type"> mixed</td>
-<td class="description"><p class="name"><a href="#type">$type</a></p></td>
+<td class="type"> string</td>
+<td class="description"><p class="name"><a href="#type">$type</a></p><p class="description">Type of search</p></td>
+</tr>
+<tr>
+<td class="type"> array</td>
+<td class="description"><p class="name"><a href="#users">$users</a></p><p class="description">List of users to search</p></td>
 </tr>
 </table>
 
@@ -121,71 +161,148 @@ Detail: <a href="#detail_field">Field</a> | <a href="#detail_method">Method</a> 
 <td class="description"><p class="name"><a href="#__construct()">__construct</a>()</p></td>
 </tr>
 <tr>
-<td class="type">private  void</td>
-<td class="description"><p class="name"><a href="#_basic_query()">_basic_query</a>()</p></td>
-</tr>
-<tr>
-<td class="type">private  void</td>
-<td class="description"><p class="name"><a href="#_format_result()">_format_result</a>()</p></td>
+<td class="type">protected  void</td>
+<td class="description"><p class="name"><a href="#_basic_query()">_basic_query</a>()</p><p class="description">Basic query that is run every time for both subqueries and normal queries.
+</p></td>
 </tr>
 <tr>
 <td class="type">protected  void</td>
-<td class="description"><p class="name"><a href="#_set_bounds()">_set_bounds</a>()</p></td>
+<td class="description"><p class="name"><a href="#_count_transactions()">_count_transactions</a>()</p><p class="description">Counts the requests for each good, grouped by request status</p></td>
 </tr>
 <tr>
-<td class="type">private  void</td>
+<td class="type">protected  void</td>
+<td class="description"><p class="name"><a href="#_format_result()">_format_result</a>()</p><p class="description">Formats results into HTML for display on find page</p></td>
+</tr>
+<tr>
+<td class="type">protected  void</td>
+<td class="description"><p class="name"><a href="#_geocode()">_geocode</a>()</p><p class="description">Geocodes this->address into a usable location object</p></td>
+</tr>
+<tr>
+<td class="type">protected  void</td>
+<td class="description"><p class="name"><a href="#_object_factory()">_object_factory</a>()</p><p class="description">Turns a DB result object into datamapper object clone</p></td>
+</tr>
+<tr>
+<td class="type">protected  void</td>
+<td class="description"><p class="name"><a href="#_set_geographic_bounds()">_set_geographic_bounds</a>()</p><p class="description">Adds where clauses that limit results to a specific geographic area</p></td>
+</tr>
+<tr>
+<td class="type">protected  void</td>
 <td class="description"><p class="name"><a href="#_set_tag()">_set_tag</a>(string tag)</p><p class="description">Takes the keyword input and tries to find a matching tag</p></td>
 </tr>
 <tr>
-<td class="type">private  void</td>
-<td class="description"><p class="name"><a href="#_tag_query()">_tag_query</a>()</p></td>
+<td class="type">protected  void</td>
+<td class="description"><p class="name"><a href="#_sort_and_paginate()">_sort_and_paginate</a>()</p><p class="description">Sorts and paginates search results
+First, it checks to see if the user has input any order_by or limit information
+using the Finder::order_by() or Finder::limit() methods.
+</p></td>
 </tr>
 <tr>
-<td class="type">private  void</td>
-<td class="description"><p class="name"><a href="#_title_query()">_title_query</a>()</p></td>
+<td class="type">protected  void</td>
+<td class="description"><p class="name"><a href="#_subquery_union()">_subquery_union</a>()</p><p class="description">Performs a union query if there are multiple subqueries.</p></td>
 </tr>
 <tr>
-<td class="type"> void</td>
-<td class="description"><p class="name"><a href="#locate_ip()">locate_ip</a>(mixed ip)</p></td>
+<td class="type">protected  string</td>
+<td class="description"><p class="name"><a href="#_tag_query()">_tag_query</a>()</p><p class="description">Searches by tag</p></td>
 </tr>
 <tr>
-<td class="type"> void</td>
-<td class="description"><p class="name"><a href="#popular_tags()">popular_tags</a>()</p></td>
-</tr>
-<tr>
-<td class="type"> void</td>
-<td class="description"><p class="name"><a href="#query()">query</a>()</p></td>
-</tr>
-<tr>
-<td class="type"> void</td>
-<td class="description"><p class="name"><a href="#search()">search</a>()</p></td>
+<td class="type">protected  string</td>
+<td class="description"><p class="name"><a href="#_title_query()">_title_query</a>()</p><p class="description">Searches by title</p></td>
 </tr>
 <tr>
 <td class="type"> void</td>
-<td class="description"><p class="name"><a href="#tag_search()">tag_search</a>(mixed tag)</p></td>
+<td class="description"><p class="name"><a href="#follower_search()">follower_search</a>()</p><p class="description">Follower search</p></td>
+</tr>
+<tr>
+<td class="type"> JSON</td>
+<td class="description"><p class="name"><a href="#geosearch()">geosearch</a>()</p><p class="description">Generates results for the find page.
+</p></td>
+</tr>
+<tr>
+<td class="type"> void</td>
+<td class="description"><p class="name"><a href="#keyword_search()">keyword_search</a>()</p><p class="description">Searches based on tag and title similarity$this->keyword is required</p></td>
+</tr>
+<tr>
+<td class="type"> void</td>
+<td class="description"><p class="name"><a href="#limit()">limit</a>(int size, int offset)</p><p class="description">Saves LIMIT clause</p></td>
+</tr>
+<tr>
+<td class="type"> array</td>
+<td class="description"><p class="name"><a href="#locate_ip()">locate_ip</a>(string ip)</p><p class="description">Geocodes an IP address</p></td>
+</tr>
+<tr>
+<td class="type"> void</td>
+<td class="description"><p class="name"><a href="#order_by()">order_by</a>(string field, string direction)</p><p class="description">Saves ORDER BY clause</p></td>
+</tr>
+<tr>
+<td class="type"> object</td>
+<td class="description"><p class="name"><a href="#popular_tags()">popular_tags</a>()</p><p class="description">Gets the most popular tags for the site</p></td>
+</tr>
+<tr>
+<td class="type"> object</td>
+<td class="description"><p class="name"><a href="#tag_search()">tag_search</a>(string tag)</p><p class="description">Searches gifts based on their tags</p></td>
+</tr>
+<tr>
+<td class="type"> void</td>
+<td class="description"><p class="name"><a href="#user_search()">user_search</a>()</p><p class="description">Performs generic user search based on user_id(s) provided.</p></td>
 </tr>
 </table>
 
 <h2 id="detail_field">Field Detail</h2>
-<a href="../source/application/libraries/finder.php.html#line18" class="location">application/libraries/finder.php at line 18</a>
+<a href="../source/application/libraries/finder.php.html#line30" class="location">application/libraries/finder.php at line 30</a>
 
 <h3 id="address">address</h3>
-<code class="signature">public  mixed <strong>$address</strong></code>
+<code class="signature">public  string <strong>$address</strong></code>
 <div class="details">
-</div>
+<p></p></div>
 
 <hr>
 
-<a href="../source/application/libraries/finder.php.html#line26" class="location">application/libraries/finder.php at line 26</a>
+<a href="../source/application/libraries/finder.php.html#line54" class="location">application/libraries/finder.php at line 54</a>
 
 <h3 id="bounds">bounds</h3>
-<code class="signature">public  mixed <strong>$bounds</strong></code>
+<code class="signature">public  array <strong>$bounds</strong></code>
 <div class="details">
-</div>
+<p>LatLng bounds defined using search radius</p></div>
 
 <hr>
 
-<a href="../source/application/libraries/finder.php.html#line41" class="location">application/libraries/finder.php at line 41</a>
+<a href="../source/application/libraries/finder.php.html#line104" class="location">application/libraries/finder.php at line 104</a>
+
+<h3 id="default_limit_offset">default_limit_offset</h3>
+<code class="signature">public  int <strong>$default_limit_offset</strong></code>
+<div class="details">
+<p>Default LIMIT offset</p></div>
+
+<hr>
+
+<a href="../source/application/libraries/finder.php.html#line98" class="location">application/libraries/finder.php at line 98</a>
+
+<h3 id="default_limit_size">default_limit_size</h3>
+<code class="signature">public  int <strong>$default_limit_size</strong> = 10</code>
+<div class="details">
+<p>Default LIMIT size</p></div>
+
+<hr>
+
+<a href="../source/application/libraries/finder.php.html#line92" class="location">application/libraries/finder.php at line 92</a>
+
+<h3 id="default_order_by_direction">default_order_by_direction</h3>
+<code class="signature">public  string <strong>$default_order_by_direction</strong> = 'ASC'</code>
+<div class="details">
+<p>Default ORDER BY direction</p></div>
+
+<hr>
+
+<a href="../source/application/libraries/finder.php.html#line86" class="location">application/libraries/finder.php at line 86</a>
+
+<h3 id="default_order_by_field">default_order_by_field</h3>
+<code class="signature">public  string <strong>$default_order_by_field</strong> = 'good_created'</code>
+<div class="details">
+<p>Default ORDER BY field</p></div>
+
+<hr>
+
+<a href="../source/application/libraries/finder.php.html#line136" class="location">application/libraries/finder.php at line 136</a>
 
 <h3 id="format">format</h3>
 <code class="signature">public  mixed <strong>$format</strong></code>
@@ -203,52 +320,97 @@ Detail: <a href="#detail_field">Field</a> | <a href="#detail_method">Method</a> 
 
 <hr>
 
-<a href="../source/application/libraries/finder.php.html#line14" class="location">application/libraries/finder.php at line 14</a>
+<a href="../source/application/libraries/finder.php.html#line18" class="location">application/libraries/finder.php at line 18</a>
 
 <h3 id="keyword">keyword</h3>
-<code class="signature">public  mixed <strong>$keyword</strong></code>
+<code class="signature">public  string <strong>$keyword</strong></code>
 <div class="details">
-</div>
+<p></p></div>
 
 <hr>
 
-<a href="../source/application/libraries/finder.php.html#line19" class="location">application/libraries/finder.php at line 19</a>
+<a href="../source/application/libraries/finder.php.html#line35" class="location">application/libraries/finder.php at line 35</a>
 
 <h3 id="latitude">latitude</h3>
-<code class="signature">public  mixed <strong>$latitude</strong></code>
+<code class="signature">public  float <strong>$latitude</strong></code>
 <div class="details">
-</div>
+<p></p></div>
 
 <hr>
 
-<a href="../source/application/libraries/finder.php.html#line15" class="location">application/libraries/finder.php at line 15</a>
+<a href="../source/application/libraries/finder.php.html#line128" class="location">application/libraries/finder.php at line 128</a>
 
-<h3 id="location">location</h3>
-<code class="signature">public  mixed <strong>$location</strong></code>
+<h3 id="limit_offset">limit_offset</h3>
+<code class="signature">public  int <strong>$limit_offset</strong></code>
 <div class="details">
-</div>
+<p>User-specified LIMIT offset</p></div>
 
 <hr>
 
-<a href="../source/application/libraries/finder.php.html#line20" class="location">application/libraries/finder.php at line 20</a>
+<a href="../source/application/libraries/finder.php.html#line122" class="location">application/libraries/finder.php at line 122</a>
 
-<h3 id="longitude">longitude</h3>
-<code class="signature">public  mixed <strong>$longitude</strong></code>
+<h3 id="limit_size">limit_size</h3>
+<code class="signature">public  int <strong>$limit_size</strong></code>
 <div class="details">
-</div>
+<p>User-specified LIMIT size</p></div>
 
 <hr>
 
 <a href="../source/application/libraries/finder.php.html#line23" class="location">application/libraries/finder.php at line 23</a>
 
-<h3 id="radius">radius</h3>
-<code class="signature">public  mixed <strong>$radius</strong> = 10000</code>
+<h3 id="location">location</h3>
+<code class="signature">public  string <strong>$location</strong></code>
+<div class="details">
+<p></p></div>
+
+<hr>
+
+<a href="../source/application/libraries/finder.php.html#line40" class="location">application/libraries/finder.php at line 40</a>
+
+<h3 id="longitude">longitude</h3>
+<code class="signature">public  float <strong>$longitude</strong></code>
+<div class="details">
+<p></p></div>
+
+<hr>
+
+<a href="../source/application/libraries/finder.php.html#line133" class="location">application/libraries/finder.php at line 133</a>
+
+<h3 id="object">object</h3>
+<code class="signature">public  mixed <strong>$object</strong></code>
 <div class="details">
 </div>
 
 <hr>
 
-<a href="../source/application/libraries/finder.php.html#line38" class="location">application/libraries/finder.php at line 38</a>
+<a href="../source/application/libraries/finder.php.html#line116" class="location">application/libraries/finder.php at line 116</a>
+
+<h3 id="order_by_direction">order_by_direction</h3>
+<code class="signature">public  string <strong>$order_by_direction</strong></code>
+<div class="details">
+<p>User-specified ORDER BY direction</p></div>
+
+<hr>
+
+<a href="../source/application/libraries/finder.php.html#line110" class="location">application/libraries/finder.php at line 110</a>
+
+<h3 id="order_by_field">order_by_field</h3>
+<code class="signature">public  string <strong>$order_by_field</strong></code>
+<div class="details">
+<p>User-specified ORDER BY field</p></div>
+
+<hr>
+
+<a href="../source/application/libraries/finder.php.html#line48" class="location">application/libraries/finder.php at line 48</a>
+
+<h3 id="radius">radius</h3>
+<code class="signature">public  int <strong>$radius</strong> = 10000</code>
+<div class="details">
+<p>Search radius in miles</p></div>
+
+<hr>
+
+<a href="../source/application/libraries/finder.php.html#line132" class="location">application/libraries/finder.php at line 132</a>
 
 <h3 id="result">result</h3>
 <code class="signature">public  mixed <strong>$result</strong></code>
@@ -257,35 +419,44 @@ Detail: <a href="#detail_field">Field</a> | <a href="#detail_method">Method</a> 
 
 <hr>
 
-<a href="../source/application/libraries/finder.php.html#line35" class="location">application/libraries/finder.php at line 35</a>
+<a href="../source/application/libraries/finder.php.html#line78" class="location">application/libraries/finder.php at line 78</a>
 
 <h3 id="subquery">subquery</h3>
-<code class="signature">public  mixed <strong>$subquery</strong></code>
+<code class="signature">public  array <strong>$subquery</strong></code>
 <div class="details">
-</div>
+<p>Stores subquery strings which will be merged in a union</p></div>
 
 <hr>
 
-<a href="../source/application/libraries/finder.php.html#line32" class="location">application/libraries/finder.php at line 32</a>
+<a href="../source/application/libraries/finder.php.html#line72" class="location">application/libraries/finder.php at line 72</a>
 
 <h3 id="tag_id">tag_id</h3>
-<code class="signature">public  mixed <strong>$tag_id</strong></code>
+<code class="signature">public  int <strong>$tag_id</strong></code>
 <div class="details">
-</div>
+<p>Tag ID</p></div>
 
 <hr>
 
-<a href="../source/application/libraries/finder.php.html#line29" class="location">application/libraries/finder.php at line 29</a>
+<a href="../source/application/libraries/finder.php.html#line66" class="location">application/libraries/finder.php at line 66</a>
 
 <h3 id="type">type</h3>
-<code class="signature">public  mixed <strong>$type</strong> = 'gift'</code>
+<code class="signature">public  string <strong>$type</strong> = 'gift'</code>
 <div class="details">
-</div>
+<p>Type of search</p></div>
+
+<hr>
+
+<a href="../source/application/libraries/finder.php.html#line60" class="location">application/libraries/finder.php at line 60</a>
+
+<h3 id="users">users</h3>
+<code class="signature">public  array <strong>$users</strong></code>
+<div class="details">
+<p>List of users to search</p></div>
 
 <hr>
 
 <h2 id="detail_method">Method Detail</h2><div class="method_detail">
-<div class='method'><a href="../source/application/libraries/finder.php.html#line43" class="location">application/libraries/finder.php at line 43</a>
+<div class='method'><a href="../source/application/libraries/finder.php.html#line138" class="location">application/libraries/finder.php at line 138</a>
 
 <h3 id="__construct()">__construct</h3>
 <code class="signature">public  void <strong>__construct</strong>()</code>
@@ -294,37 +465,66 @@ Detail: <a href="#detail_field">Field</a> | <a href="#detail_method">Method</a> 
 
 
 
-<div class='method'><a href="../source/application/libraries/finder.php.html#line176" class="location">application/libraries/finder.php at line 176</a>
+<div class='method'><a href="../source/application/libraries/finder.php.html#line319" class="location">application/libraries/finder.php at line 319</a>
 
 <h3 id="_basic_query()">_basic_query</h3>
-<code class="signature">private  void <strong>_basic_query</strong>()</code>
+<code class="signature">protected  void <strong>_basic_query</strong>()</code>
 <div class="details">
-</div></div>
+<p>Basic query that is run every time for both subqueries and normal queries.
+There are several subroutines which are run that add to the active record
+object's methods.</p></div></div>
 
 
 
-<div class='method'><a href="../source/application/libraries/finder.php.html#line220" class="location">application/libraries/finder.php at line 220</a>
+<div class='method'><a href="../source/application/libraries/finder.php.html#line380" class="location">application/libraries/finder.php at line 380</a>
+
+<h3 id="_count_transactions()">_count_transactions</h3>
+<code class="signature">protected  void <strong>_count_transactions</strong>()</code>
+<div class="details">
+<p>Counts the requests for each good, grouped by request status</p></div></div>
+
+
+
+<div class='method'><a href="../source/application/libraries/finder.php.html#line568" class="location">application/libraries/finder.php at line 568</a>
 
 <h3 id="_format_result()">_format_result</h3>
-<code class="signature">private  void <strong>_format_result</strong>()</code>
+<code class="signature">protected  void <strong>_format_result</strong>()</code>
 <div class="details">
-</div></div>
+<p>Formats results into HTML for display on find page</p></div></div>
 
 
 
-<div class='method'><a href="../source/application/libraries/finder.php.html#line64" class="location">application/libraries/finder.php at line 64</a>
+<div class='method'><a href="../source/application/libraries/finder.php.html#line556" class="location">application/libraries/finder.php at line 556</a>
 
-<h3 id="_set_bounds()">_set_bounds</h3>
-<code class="signature">protected  void <strong>_set_bounds</strong>()</code>
+<h3 id="_geocode()">_geocode</h3>
+<code class="signature">protected  void <strong>_geocode</strong>()</code>
 <div class="details">
-</div></div>
+<p>Geocodes this->address into a usable location object</p></div></div>
 
 
 
-<div class='method'><a href="../source/application/libraries/finder.php.html#line232" class="location">application/libraries/finder.php at line 232</a>
+<div class='method'><a href="../source/application/libraries/finder.php.html#line530" class="location">application/libraries/finder.php at line 530</a>
+
+<h3 id="_object_factory()">_object_factory</h3>
+<code class="signature">protected  void <strong>_object_factory</strong>()</code>
+<div class="details">
+<p>Turns a DB result object into datamapper object clone</p></div></div>
+
+
+
+<div class='method'><a href="../source/application/libraries/finder.php.html#line397" class="location">application/libraries/finder.php at line 397</a>
+
+<h3 id="_set_geographic_bounds()">_set_geographic_bounds</h3>
+<code class="signature">protected  void <strong>_set_geographic_bounds</strong>()</code>
+<div class="details">
+<p>Adds where clauses that limit results to a specific geographic area</p></div></div>
+
+
+
+<div class='method'><a href="../source/application/libraries/finder.php.html#line581" class="location">application/libraries/finder.php at line 581</a>
 
 <h3 id="_set_tag()">_set_tag</h3>
-<code class="signature">private  void <strong>_set_tag</strong>(string tag)</code>
+<code class="signature">protected  void <strong>_set_tag</strong>(string tag)</code>
 <div class="details">
 <p>Takes the keyword input and tries to find a matching tag</p><dl>
 <dt>Parameters:</dt>
@@ -334,66 +534,129 @@ Detail: <a href="#detail_field">Field</a> | <a href="#detail_method">Method</a> 
 
 
 
-<div class='method'><a href="../source/application/libraries/finder.php.html#line196" class="location">application/libraries/finder.php at line 196</a>
+<div class='method'><a href="../source/application/libraries/finder.php.html#line441" class="location">application/libraries/finder.php at line 441</a>
+
+<h3 id="_sort_and_paginate()">_sort_and_paginate</h3>
+<code class="signature">protected  void <strong>_sort_and_paginate</strong>()</code>
+<div class="details">
+<p>Sorts and paginates search results
+First, it checks to see if the user has input any order_by or limit information
+using the Finder::order_by() or Finder::limit() methods.
+If not, then reverts to default values specified in the model's properties</p></div></div>
+
+
+
+<div class='method'><a href="../source/application/libraries/finder.php.html#line499" class="location">application/libraries/finder.php at line 499</a>
+
+<h3 id="_subquery_union()">_subquery_union</h3>
+<code class="signature">protected  void <strong>_subquery_union</strong>()</code>
+<div class="details">
+<p>Performs a union query if there are multiple subqueries.</p></div></div>
+
+
+
+<div class='method'><a href="../source/application/libraries/finder.php.html#line464" class="location">application/libraries/finder.php at line 464</a>
 
 <h3 id="_tag_query()">_tag_query</h3>
-<code class="signature">private  void <strong>_tag_query</strong>()</code>
+<code class="signature">protected  string <strong>_tag_query</strong>()</code>
 <div class="details">
-</div></div>
+<p>Searches by tag</p></div></div>
 
 
 
-<div class='method'><a href="../source/application/libraries/finder.php.html#line209" class="location">application/libraries/finder.php at line 209</a>
+<div class='method'><a href="../source/application/libraries/finder.php.html#line486" class="location">application/libraries/finder.php at line 486</a>
 
 <h3 id="_title_query()">_title_query</h3>
-<code class="signature">private  void <strong>_title_query</strong>()</code>
+<code class="signature">protected  string <strong>_title_query</strong>()</code>
 <div class="details">
-</div></div>
+<p>Searches by title</p></div></div>
 
 
 
-<div class='method'><a href="../source/application/libraries/finder.php.html#line48" class="location">application/libraries/finder.php at line 48</a>
+<div class='method'><a href="../source/application/libraries/finder.php.html#line237" class="location">application/libraries/finder.php at line 237</a>
+
+<h3 id="follower_search()">follower_search</h3>
+<code class="signature">public  void <strong>follower_search</strong>()</code>
+<div class="details">
+<p>Follower search</p></div></div>
+
+
+
+<div class='method'><a href="../source/application/libraries/finder.php.html#line212" class="location">application/libraries/finder.php at line 212</a>
+
+<h3 id="geosearch()">geosearch</h3>
+<code class="signature">public  JSON <strong>geosearch</strong>()</code>
+<div class="details">
+<p>Generates results for the find page.
+It uses the search keyword ($this->keyword) to search for gifts based
+on location, tags and titles.</p></div></div>
+
+
+
+<div class='method'><a href="../source/application/libraries/finder.php.html#line277" class="location">application/libraries/finder.php at line 277</a>
+
+<h3 id="keyword_search()">keyword_search</h3>
+<code class="signature">public  void <strong>keyword_search</strong>()</code>
+<div class="details">
+<p>Searches based on tag and title similarity</p><p>$this->keyword is required</p></div></div>
+
+
+
+<div class='method'><a href="../source/application/libraries/finder.php.html#line308" class="location">application/libraries/finder.php at line 308</a>
+
+<h3 id="limit()">limit</h3>
+<code class="signature">public  void <strong>limit</strong>(int size, int offset)</code>
+<div class="details">
+<p>Saves LIMIT clause</p></div></div>
+
+
+
+<div class='method'><a href="../source/application/libraries/finder.php.html#line148" class="location">application/libraries/finder.php at line 148</a>
 
 <h3 id="locate_ip()">locate_ip</h3>
-<code class="signature">public  void <strong>locate_ip</strong>(mixed ip)</code>
+<code class="signature">public  array <strong>locate_ip</strong>(string ip)</code>
 <div class="details">
-</div></div>
+<p>Geocodes an IP address</p></div></div>
 
 
 
-<div class='method'><a href="../source/application/libraries/finder.php.html#line84" class="location">application/libraries/finder.php at line 84</a>
+<div class='method'><a href="../source/application/libraries/finder.php.html#line297" class="location">application/libraries/finder.php at line 297</a>
+
+<h3 id="order_by()">order_by</h3>
+<code class="signature">public  void <strong>order_by</strong>(string field, string direction)</code>
+<div class="details">
+<p>Saves ORDER BY clause</p></div></div>
+
+
+
+<div class='method'><a href="../source/application/libraries/finder.php.html#line168" class="location">application/libraries/finder.php at line 168</a>
 
 <h3 id="popular_tags()">popular_tags</h3>
-<code class="signature">public  void <strong>popular_tags</strong>()</code>
+<code class="signature">public  object <strong>popular_tags</strong>()</code>
 <div class="details">
-</div></div>
+<p>Gets the most popular tags for the site</p></div></div>
 
 
 
-<div class='method'><a href="../source/application/libraries/finder.php.html#line140" class="location">application/libraries/finder.php at line 140</a>
-
-<h3 id="query()">query</h3>
-<code class="signature">public  void <strong>query</strong>()</code>
-<div class="details">
-</div></div>
-
-
-
-<div class='method'><a href="../source/application/libraries/finder.php.html#line120" class="location">application/libraries/finder.php at line 120</a>
-
-<h3 id="search()">search</h3>
-<code class="signature">public  void <strong>search</strong>()</code>
-<div class="details">
-</div></div>
-
-
-
-<div class='method'><a href="../source/application/libraries/finder.php.html#line104" class="location">application/libraries/finder.php at line 104</a>
+<div class='method'><a href="../source/application/libraries/finder.php.html#line191" class="location">application/libraries/finder.php at line 191</a>
 
 <h3 id="tag_search()">tag_search</h3>
-<code class="signature">public  void <strong>tag_search</strong>(mixed tag)</code>
+<code class="signature">public  object <strong>tag_search</strong>(string tag)</code>
 <div class="details">
+<p>Searches gifts based on their tags</p><dl>
+<dt>Parameters:</dt>
+<dd>tag - Tag name to search by</dd>
+</dl>
 </div></div>
+
+
+
+<div class='method'><a href="../source/application/libraries/finder.php.html#line256" class="location">application/libraries/finder.php at line 256</a>
+
+<h3 id="user_search()">user_search</h3>
+<code class="signature">public  void <strong>user_search</strong>()</code>
+<div class="details">
+<p>Performs generic user search based on user_id(s) provided.</p></div></div>
 
 
 

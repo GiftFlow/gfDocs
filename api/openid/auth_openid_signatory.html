@@ -1,0 +1,218 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+
+<html lang="en">
+<head>
+
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
+<meta name="generator" content="PHPDoctor 2RC4 (http://peej.github.com/phpdoctor/)">
+<meta name="when" content="Sat, 10 Jul 2010 18:10:55 +0000">
+
+<link rel="stylesheet" type="text/css" href="../stylesheet.css">
+<link rel="start" href="../overview-summary.html">
+
+<title>Auth_OpenID_Signatory (GiftFlow API)</title>
+
+</head>
+<body id="definition" onload="parent.document.title=document.title;">
+
+<div class="header">
+<h1>GiftFlow API</h1>
+<ul>
+<li><a href="../overview-summary.html">Overview</a></li>
+<li><a href="../openid/package-summary.html">Package</a></li>
+<li class="active">Class</li>
+<li><a href="../openid/package-tree.html">Tree</a></li>
+<li><a href="../overview-files.html">Files</a></li>
+<li><a href="../deprecated-list.html">Deprecated</a></li>
+<li><a href="../index-all.html">Index</a></li>
+</ul>
+</div>
+
+<div class="small_links">
+<a href="../index.html" target="_top">Frames</a>
+<a href="../openid/auth_openid_signatory.html" target="_top">No frames</a>
+</div>
+<div class="small_links">
+Summary: <a href="#summary_field">Field</a> | <a href="#summary_method">Method</a> | <a href="#summary_constr">Constr</a>
+Detail: <a href="#detail_field">Field</a> | <a href="#detail_method">Method</a> | <a href="#summary_constr">Constr</a>
+</div>
+<hr>
+
+<div class="qualifiedName">OpenID\Auth_OpenID_Signatory</div>
+<a href="../source/application/libraries/auth/openid/server.php.html#line1287" class="location">application/libraries/Auth/OpenID/Server.php at line 1287</a>
+
+<h1>Class Auth_OpenID_Signatory</h1>
+
+<pre class="tree"><strong>Auth_OpenID_Signatory</strong><br /></pre>
+
+<hr>
+
+<p class="signature">public  class <strong>Auth_OpenID_Signatory</strong></p>
+
+<div class="comment" id="overview_description"><p>Responsible for the signature of query data and the verification of
+OpenID signature values.</p></div>
+
+<hr>
+
+<table id="summary_field">
+<tr><th colspan="2">Field Summary</th></tr>
+<tr>
+<td class="type"> mixed</td>
+<td class="description"><p class="name"><a href="#SECRET_LIFETIME">$SECRET_LIFETIME</a></p></td>
+</tr>
+<tr>
+<td class="type"> mixed</td>
+<td class="description"><p class="name"><a href="#dumb_key">$dumb_key</a></p></td>
+</tr>
+<tr>
+<td class="type"> mixed</td>
+<td class="description"><p class="name"><a href="#normal_key">$normal_key</a></p></td>
+</tr>
+</table>
+
+<table id="summary_method">
+<tr><th colspan="2">Method Summary</th></tr>
+<tr>
+<td class="type"> void</td>
+<td class="description"><p class="name"><a href="#__construct()">__construct</a>(mixed store)</p><p class="description">Create a new signatory using a given store.</p></td>
+</tr>
+<tr>
+<td class="type"> void</td>
+<td class="description"><p class="name"><a href="#createAssociation()">createAssociation</a>(bool dumb, str assoc_type)</p><p class="description">Make a new association.</p></td>
+</tr>
+<tr>
+<td class="type"> void</td>
+<td class="description"><p class="name"><a href="#getAssociation()">getAssociation</a>(mixed assoc_handle, mixed dumb, bool check_expiration)</p><p class="description">Given an association handle, get the association from the
+store, or return a ServerError or null if something goes wrong.</p></td>
+</tr>
+<tr>
+<td class="type"> void</td>
+<td class="description"><p class="name"><a href="#invalidate()">invalidate</a>(mixed assoc_handle, mixed dumb)</p><p class="description">Invalidate a given association handle.</p></td>
+</tr>
+<tr>
+<td class="type"> void</td>
+<td class="description"><p class="name"><a href="#sign()">sign</a>(mixed response)</p><p class="description">Given a response, sign the fields in the response's 'signed'
+list, and insert the signature into the response.</p></td>
+</tr>
+<tr>
+<td class="type"> void</td>
+<td class="description"><p class="name"><a href="#verify()">verify</a>(mixed assoc_handle, mixed message)</p><p class="description">Verify, using a given association handle, a signature with
+signed key-value pairs from an HTTP request.</p></td>
+</tr>
+</table>
+
+<h2 id="detail_field">Field Detail</h2>
+<a href="../source/application/libraries/auth/openid/server.php.html#line1290" class="location">application/libraries/Auth/OpenID/Server.php at line 1290</a>
+
+<h3 id="SECRET_LIFETIME">SECRET_LIFETIME</h3>
+<code class="signature">public  mixed <strong>$SECRET_LIFETIME</strong> = 1209600</code>
+<div class="details">
+</div>
+
+<hr>
+
+<a href="../source/application/libraries/auth/openid/server.php.html#line1297" class="location">application/libraries/Auth/OpenID/Server.php at line 1297</a>
+
+<h3 id="dumb_key">dumb_key</h3>
+<code class="signature">public  mixed <strong>$dumb_key</strong> = 'http://localhost/|dumb'</code>
+<div class="details">
+</div>
+
+<hr>
+
+<a href="../source/application/libraries/auth/openid/server.php.html#line1296" class="location">application/libraries/Auth/OpenID/Server.php at line 1296</a>
+
+<h3 id="normal_key">normal_key</h3>
+<code class="signature">public  mixed <strong>$normal_key</strong> = 'http://localhost/|normal'</code>
+<div class="details">
+</div>
+
+<hr>
+
+<h2 id="detail_method">Method Detail</h2><div class="method_detail">
+<div class='method'><a href="../source/application/libraries/auth/openid/server.php.html#line1302" class="location">application/libraries/Auth/OpenID/Server.php at line 1302</a>
+
+<h3 id="__construct()">__construct</h3>
+<code class="signature">public  void <strong>__construct</strong>(mixed store)</code>
+<div class="details">
+<p>Create a new signatory using a given store.</p></div></div>
+
+
+
+<div class='method'><a href="../source/application/libraries/auth/openid/server.php.html#line1361" class="location">application/libraries/Auth/OpenID/Server.php at line 1361</a>
+
+<h3 id="createAssociation()">createAssociation</h3>
+<code class="signature">public  void <strong>createAssociation</strong>(bool dumb, str assoc_type)</code>
+<div class="details">
+<p>Make a new association.</p></div></div>
+
+
+
+<div class='method'><a href="../source/application/libraries/auth/openid/server.php.html#line1386" class="location">application/libraries/Auth/OpenID/Server.php at line 1386</a>
+
+<h3 id="getAssociation()">getAssociation</h3>
+<code class="signature">public  void <strong>getAssociation</strong>(mixed assoc_handle, mixed dumb, bool check_expiration)</code>
+<div class="details">
+<p>Given an association handle, get the association from the
+store, or return a ServerError or null if something goes wrong.</p></div></div>
+
+
+
+<div class='method'><a href="../source/application/libraries/auth/openid/server.php.html#line1414" class="location">application/libraries/Auth/OpenID/Server.php at line 1414</a>
+
+<h3 id="invalidate()">invalidate</h3>
+<code class="signature">public  void <strong>invalidate</strong>(mixed assoc_handle, mixed dumb)</code>
+<div class="details">
+<p>Invalidate a given association handle.</p></div></div>
+
+
+
+<div class='method'><a href="../source/application/libraries/auth/openid/server.php.html#line1328" class="location">application/libraries/Auth/OpenID/Server.php at line 1328</a>
+
+<h3 id="sign()">sign</h3>
+<code class="signature">public  void <strong>sign</strong>(mixed response)</code>
+<div class="details">
+<p>Given a response, sign the fields in the response's 'signed'
+list, and insert the signature into the response.</p></div></div>
+
+
+
+<div class='method'><a href="../source/application/libraries/auth/openid/server.php.html#line1312" class="location">application/libraries/Auth/OpenID/Server.php at line 1312</a>
+
+<h3 id="verify()">verify</h3>
+<code class="signature">public  void <strong>verify</strong>(mixed assoc_handle, mixed message)</code>
+<div class="details">
+<p>Verify, using a given association handle, a signature with
+signed key-value pairs from an HTTP request.</p></div></div>
+
+
+
+</div><div class="header">
+<h1>GiftFlow API</h1>
+<ul>
+<li><a href="../overview-summary.html">Overview</a></li>
+<li><a href="../openid/package-summary.html">Package</a></li>
+<li class="active">Class</li>
+<li><a href="../openid/package-tree.html">Tree</a></li>
+<li><a href="../overview-files.html">Files</a></li>
+<li><a href="../deprecated-list.html">Deprecated</a></li>
+<li><a href="../index-all.html">Index</a></li>
+</ul>
+</div>
+
+<div class="small_links">
+<a href="../index.html" target="_top">Frames</a>
+<a href="../openid/auth_openid_signatory.html" target="_top">No frames</a>
+</div>
+<div class="small_links">
+Summary: <a href="#summary_field">Field</a> | <a href="#summary_method">Method</a> | <a href="#summary_constr">Constr</a>
+Detail: <a href="#detail_field">Field</a> | <a href="#detail_method">Method</a> | <a href="#summary_constr">Constr</a>
+</div>
+<hr>
+
+<p id="footer">This document was generated by <a href="http://peej.github.com/phpdoctor/">PHPDoctor: The PHP Documentation Creator</a></p>
+
+</body>
+
+</html>

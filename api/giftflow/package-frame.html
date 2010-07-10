@@ -6,7 +6,7 @@
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 
 <meta name="generator" content="PHPDoctor 2RC4 (http://peej.github.com/phpdoctor/)">
-<meta name="when" content="Tue, 29 Jun 2010 21:10:08 +0000">
+<meta name="when" content="Sat, 10 Jul 2010 18:10:54 +0000">
 
 <link rel="stylesheet" type="text/css" href="../stylesheet.css">
 <link rel="start" href="../overview-summary.html">
@@ -25,6 +25,13 @@
 <li><a href="../giftflow/admin.html" target="main">Admin</a></li>
 <li><a href="../giftflow/ajax.html" target="main">Ajax</a></li>
 <li><a href="../giftflow/api.html" target="main">Api</a></li>
+<li><a href="../giftflow/auth_openid_cryptutil.html" target="main">Auth_OpenID_CryptUtil</a></li>
+<li><a href="../giftflow/auth_openid_pape_request.html" target="main">Auth_OpenID_PAPE_Request</a></li>
+<li><a href="../giftflow/auth_openid_pape_response.html" target="main">Auth_OpenID_PAPE_Response</a></li>
+<li><a href="../giftflow/auth_openid_serviceendpoint.html" target="main">Auth_OpenID_ServiceEndpoint</a></li>
+<li><a href="../giftflow/auth_openid_trustroot.html" target="main">Auth_OpenID_TrustRoot</a></li>
+<li><a href="../giftflow/auth_yadis_httpresponse.html" target="main">Auth_Yadis_HTTPResponse</a></li>
+<li><a href="../giftflow/auth_yadis_proxyresolver.html" target="main">Auth_Yadis_ProxyResolver</a></li>
 <li><a href="../giftflow/ci_benchmark.html" target="main">CI_Benchmark</a></li>
 <li><a href="../giftflow/ci_calendar.html" target="main">CI_Calendar</a></li>
 <li><a href="../giftflow/ci_cart.html" target="main">CI_Cart</a></li>
@@ -154,8 +161,45 @@
 
 <h2>Functions</h2>
 <ul>
+<li><a href="../giftflow/package-functions.html#Auth_OpenID_SHA1()" target="main">Auth_OpenID_SHA1</a></li>
+<li><a href="../giftflow/package-functions.html#Auth_OpenID_arrangeByType()" target="main">Auth_OpenID_arrangeByType</a></li>
+<li><a href="../giftflow/package-functions.html#Auth_OpenID_bestMatchingService()" target="main">Auth_OpenID_bestMatchingService</a></li>
+<li><a href="../giftflow/package-functions.html#Auth_OpenID_checkFieldName()" target="main">Auth_OpenID_checkFieldName</a></li>
+<li><a href="../giftflow/package-functions.html#Auth_OpenID_discover()" target="main">Auth_OpenID_discover</a></li>
+<li><a href="../giftflow/package-functions.html#Auth_OpenID_discoverURI()" target="main">Auth_OpenID_discoverURI</a></li>
+<li><a href="../giftflow/package-functions.html#Auth_OpenID_discoverWithYadis()" target="main">Auth_OpenID_discoverWithYadis</a></li>
+<li><a href="../giftflow/package-functions.html#Auth_OpenID_discoverWithoutYadis()" target="main">Auth_OpenID_discoverWithoutYadis</a></li>
+<li><a href="../giftflow/package-functions.html#Auth_OpenID_discoverXRI()" target="main">Auth_OpenID_discoverXRI</a></li>
+<li><a href="../giftflow/package-functions.html#Auth_OpenID_findOPLocalIdentifier()" target="main">Auth_OpenID_findOPLocalIdentifier</a></li>
+<li><a href="../giftflow/package-functions.html#Auth_OpenID_getDefaultGen()" target="main">Auth_OpenID_getDefaultGen</a></li>
+<li><a href="../giftflow/package-functions.html#Auth_OpenID_getOPOrUserServices()" target="main">Auth_OpenID_getOPOrUserServices</a></li>
+<li><a href="../giftflow/package-functions.html#Auth_OpenID_getOpenIDConsumerTypeURIs()" target="main">Auth_OpenID_getOpenIDConsumerTypeURIs</a></li>
+<li><a href="../giftflow/package-functions.html#Auth_OpenID_getOpenIDTypeName()" target="main">Auth_OpenID_getOpenIDTypeName</a></li>
+<li><a href="../giftflow/package-functions.html#Auth_OpenID_getOpenIDTypeURIs()" target="main">Auth_OpenID_getOpenIDTypeURIs</a></li>
+<li><a href="../giftflow/package-functions.html#Auth_OpenID_isError()" target="main">Auth_OpenID_isError</a></li>
+<li><a href="../giftflow/package-functions.html#Auth_OpenID_isOpenID1()" target="main">Auth_OpenID_isOpenID1</a></li>
+<li><a href="../giftflow/package-functions.html#Auth_OpenID_makeOpenIDEndpoints()" target="main">Auth_OpenID_makeOpenIDEndpoints</a></li>
+<li><a href="../giftflow/package-functions.html#Auth_OpenID_splitNonce()" target="main">Auth_OpenID_splitNonce</a></li>
+<li><a href="../giftflow/package-functions.html#Auth_Yadis_XRI()" target="main">Auth_Yadis_XRI</a></li>
+<li><a href="../giftflow/package-functions.html#Auth_Yadis_XRIAppendArgs()" target="main">Auth_Yadis_XRIAppendArgs</a></li>
+<li><a href="../giftflow/package-functions.html#Auth_Yadis_escapeForIRI()" target="main">Auth_Yadis_escapeForIRI</a></li>
+<li><a href="../giftflow/package-functions.html#Auth_Yadis_getCanonicalID()" target="main">Auth_Yadis_getCanonicalID</a></li>
+<li><a href="../giftflow/package-functions.html#Auth_Yadis_getEscapeRE()" target="main">Auth_Yadis_getEscapeRE</a></li>
+<li><a href="../giftflow/package-functions.html#Auth_Yadis_getIPrivateChars()" target="main">Auth_Yadis_getIPrivateChars</a></li>
+<li><a href="../giftflow/package-functions.html#Auth_Yadis_getNSMap()" target="main">Auth_Yadis_getNSMap</a></li>
+<li><a href="../giftflow/package-functions.html#Auth_Yadis_getXRIAuthorities()" target="main">Auth_Yadis_getXRIAuthorities</a></li>
+<li><a href="../giftflow/package-functions.html#Auth_Yadis_getXrefRE()" target="main">Auth_Yadis_getXrefRE</a></li>
+<li><a href="../giftflow/package-functions.html#Auth_Yadis_identifierScheme()" target="main">Auth_Yadis_identifierScheme</a></li>
+<li><a href="../giftflow/package-functions.html#Auth_Yadis_iriToURI()" target="main">Auth_Yadis_iriToURI</a></li>
+<li><a href="../giftflow/package-functions.html#Auth_Yadis_pct_escape_unicode()" target="main">Auth_Yadis_pct_escape_unicode</a></li>
+<li><a href="../giftflow/package-functions.html#Auth_Yadis_providerIsAuthoritative()" target="main">Auth_Yadis_providerIsAuthoritative</a></li>
+<li><a href="../giftflow/package-functions.html#Auth_Yadis_rootAuthority()" target="main">Auth_Yadis_rootAuthority</a></li>
+<li><a href="../giftflow/package-functions.html#Auth_Yadis_startswith()" target="main">Auth_Yadis_startswith</a></li>
+<li><a href="../giftflow/package-functions.html#Auth_Yadis_toIRINormal()" target="main">Auth_Yadis_toIRINormal</a></li>
+<li><a href="../giftflow/package-functions.html#Auth_Yadis_toURINormal()" target="main">Auth_Yadis_toURINormal</a></li>
 <li><a href="../giftflow/package-functions.html#DB()" target="main">DB</a></li>
 <li><a href="../giftflow/package-functions.html#_attributes_to_string()" target="main">_attributes_to_string</a></li>
+<li><a href="../giftflow/package-functions.html#_escape_xref()" target="main">_escape_xref</a></li>
 <li><a href="../giftflow/package-functions.html#_get_smiley_array()" target="main">_get_smiley_array</a></li>
 <li><a href="../giftflow/package-functions.html#_get_validation_object()" target="main">_get_validation_object</a></li>
 <li><a href="../giftflow/package-functions.html#_http_build_query_helper()" target="main">_http_build_query_helper</a></li>
@@ -192,6 +236,8 @@
 <li><a href="../giftflow/package-functions.html#facebook_open_graph()" target="main">facebook_open_graph</a></li>
 <li><a href="../giftflow/package-functions.html#facebook_sdk()" target="main">facebook_sdk</a></li>
 <li><a href="../giftflow/package-functions.html#file_put_contents()" target="main">file_put_contents</a></li>
+<li><a href="../giftflow/package-functions.html#filter_MatchesAnyOpenIDConsumerType()" target="main">filter_MatchesAnyOpenIDConsumerType</a></li>
+<li><a href="../giftflow/package-functions.html#filter_MatchesAnyOpenIDType()" target="main">filter_MatchesAnyOpenIDType</a></li>
 <li><a href="../giftflow/package-functions.html#force_download()" target="main">force_download</a></li>
 <li><a href="../giftflow/package-functions.html#form_button()" target="main">form_button</a></li>
 <li><a href="../giftflow/package-functions.html#form_checkbox()" target="main">form_checkbox</a></li>
@@ -317,6 +363,46 @@
 
 <h2>Globals</h2>
 <ul>
+<li><a href="../giftflow/package-globals.html#AUTH_OPENID_HTTP_ERROR" target="main">AUTH_OPENID_HTTP_ERROR</a></li>
+<li><a href="../giftflow/package-globals.html#AUTH_OPENID_HTTP_REDIRECT" target="main">AUTH_OPENID_HTTP_REDIRECT</a></li>
+<li><a href="../giftflow/package-globals.html#Auth_OpenID_AX_MINIMUM_SUPPORTED_ALIAS_LENGTH" target="main">Auth_OpenID_AX_MINIMUM_SUPPORTED_ALIAS_LENGTH</a></li>
+<li><a href="../giftflow/package-globals.html#Auth_OpenID_AX_UNLIMITED_VALUES" target="main">Auth_OpenID_AX_UNLIMITED_VALUES</a></li>
+<li><a href="../giftflow/package-globals.html#Auth_OpenID_CANCEL" target="main">Auth_OpenID_CANCEL</a></li>
+<li><a href="../giftflow/package-globals.html#Auth_OpenID_DO_ABOUT" target="main">Auth_OpenID_DO_ABOUT</a></li>
+<li><a href="../giftflow/package-globals.html#Auth_OpenID_DO_AUTH" target="main">Auth_OpenID_DO_AUTH</a></li>
+<li><a href="../giftflow/package-globals.html#Auth_OpenID_ENCODE_HTML_FORM" target="main">Auth_OpenID_ENCODE_HTML_FORM</a></li>
+<li><a href="../giftflow/package-globals.html#Auth_OpenID_ENCODE_KVFORM" target="main">Auth_OpenID_ENCODE_KVFORM</a></li>
+<li><a href="../giftflow/package-globals.html#Auth_OpenID_ENCODE_URL" target="main">Auth_OpenID_ENCODE_URL</a></li>
+<li><a href="../giftflow/package-globals.html#Auth_OpenID_FAILURE" target="main">Auth_OpenID_FAILURE</a></li>
+<li><a href="../giftflow/package-globals.html#Auth_OpenID_LOCAL_ERROR" target="main">Auth_OpenID_LOCAL_ERROR</a></li>
+<li><a href="../giftflow/package-globals.html#Auth_OpenID_Nonce_REGEX" target="main">Auth_OpenID_Nonce_REGEX</a></li>
+<li><a href="../giftflow/package-globals.html#Auth_OpenID_Nonce_TIME_FMT" target="main">Auth_OpenID_Nonce_TIME_FMT</a></li>
+<li><a href="../giftflow/package-globals.html#Auth_OpenID_OPENID1_NS" target="main">Auth_OpenID_OPENID1_NS</a></li>
+<li><a href="../giftflow/package-globals.html#Auth_OpenID_PAPE_NS_URI" target="main">Auth_OpenID_PAPE_NS_URI</a></li>
+<li><a href="../giftflow/package-globals.html#Auth_OpenID_PARSE_ERROR" target="main">Auth_OpenID_PARSE_ERROR</a></li>
+<li><a href="../giftflow/package-globals.html#Auth_OpenID_REDIRECT" target="main">Auth_OpenID_REDIRECT</a></li>
+<li><a href="../giftflow/package-globals.html#Auth_OpenID_REMOTE_ERROR" target="main">Auth_OpenID_REMOTE_ERROR</a></li>
+<li><a href="../giftflow/package-globals.html#Auth_OpenID_REMOTE_OK" target="main">Auth_OpenID_REMOTE_OK</a></li>
+<li><a href="../giftflow/package-globals.html#Auth_OpenID_RP_RETURN_TO_URL_TYPE" target="main">Auth_OpenID_RP_RETURN_TO_URL_TYPE</a></li>
+<li><a href="../giftflow/package-globals.html#Auth_OpenID_SETUP_NEEDED" target="main">Auth_OpenID_SETUP_NEEDED</a></li>
+<li><a href="../giftflow/package-globals.html#Auth_OpenID_SKEW" target="main">Auth_OpenID_SKEW</a></li>
+<li><a href="../giftflow/package-globals.html#Auth_OpenID_SREG_URI" target="main">Auth_OpenID_SREG_URI</a></li>
+<li><a href="../giftflow/package-globals.html#Auth_OpenID_THE_OTHER_OPENID1_NS" target="main">Auth_OpenID_THE_OTHER_OPENID1_NS</a></li>
+<li><a href="../giftflow/package-globals.html#Auth_OpenID_TYPE_1_0" target="main">Auth_OpenID_TYPE_1_0</a></li>
+<li><a href="../giftflow/package-globals.html#Auth_OpenID_TYPE_1_1" target="main">Auth_OpenID_TYPE_1_1</a></li>
+<li><a href="../giftflow/package-globals.html#Auth_OpenID_TYPE_1_2" target="main">Auth_OpenID_TYPE_1_2</a></li>
+<li><a href="../giftflow/package-globals.html#Auth_OpenID_TYPE_2_0" target="main">Auth_OpenID_TYPE_2_0</a></li>
+<li><a href="../giftflow/package-globals.html#Auth_OpenID_TYPE_2_0_IDP" target="main">Auth_OpenID_TYPE_2_0_IDP</a></li>
+<li><a href="../giftflow/package-globals.html#Auth_OpenID_USER_AGENT" target="main">Auth_OpenID_USER_AGENT</a></li>
+<li><a href="../giftflow/package-globals.html#Auth_OpenID_XMLNS_1_0" target="main">Auth_OpenID_XMLNS_1_0</a></li>
+<li><a href="../giftflow/package-globals.html#Auth_OpenID___HostSegmentRe" target="main">Auth_OpenID___HostSegmentRe</a></li>
+<li><a href="../giftflow/package-globals.html#Auth_OpenID_digits" target="main">Auth_OpenID_digits</a></li>
+<li><a href="../giftflow/package-globals.html#Auth_OpenID_letters" target="main">Auth_OpenID_letters</a></li>
+<li><a href="../giftflow/package-globals.html#Auth_OpenID_punct" target="main">Auth_OpenID_punct</a></li>
+<li><a href="../giftflow/package-globals.html#Auth_OpenID_sreg_data_fields" target="main">Auth_OpenID_sreg_data_fields</a></li>
+<li><a href="../giftflow/package-globals.html#Auth_Yadis_HEADER_NAME" target="main">Auth_Yadis_HEADER_NAME</a></li>
+<li><a href="../giftflow/package-globals.html#Auth_Yadis_XMLNS_XRDS" target="main">Auth_Yadis_XMLNS_XRDS</a></li>
+<li><a href="../giftflow/package-globals.html#Auth_Yadis_XMLNS_XRD_2_0" target="main">Auth_Yadis_XMLNS_XRD_2_0</a></li>
 <li><a href="../giftflow/package-globals.html#DEFAULT_THUMBLIB_IMPLEMENTATION" target="main">DEFAULT_THUMBLIB_IMPLEMENTATION</a></li>
 <li><a href="../giftflow/package-globals.html#DIR_READ_MODE" target="main">DIR_READ_MODE</a></li>
 <li><a href="../giftflow/package-globals.html#DIR_WRITE_MODE" target="main">DIR_WRITE_MODE</a></li>
@@ -335,12 +421,19 @@
 <li><a href="../giftflow/package-globals.html#GLOBALS" target="main">GLOBALS</a></li>
 <li><a href="../giftflow/package-globals.html#L" target="main">L</a></li>
 <li><a href="../giftflow/package-globals.html#N" target="main">N</a></li>
+<li><a href="../giftflow/package-globals.html#PAPE_AUTH_MULTI_FACTOR" target="main">PAPE_AUTH_MULTI_FACTOR</a></li>
+<li><a href="../giftflow/package-globals.html#PAPE_AUTH_MULTI_FACTOR_PHYSICAL" target="main">PAPE_AUTH_MULTI_FACTOR_PHYSICAL</a></li>
+<li><a href="../giftflow/package-globals.html#PAPE_AUTH_PHISHING_RESISTANT" target="main">PAPE_AUTH_PHISHING_RESISTANT</a></li>
+<li><a href="../giftflow/package-globals.html#PAPE_TIME_VALIDATOR" target="main">PAPE_TIME_VALIDATOR</a></li>
 <li><a href="../giftflow/package-globals.html#PASSWORD" target="main">PASSWORD</a></li>
 <li><a href="../giftflow/package-globals.html#PHP_EOL" target="main">PHP_EOL</a></li>
 <li><a href="../giftflow/package-globals.html#R" target="main">R</a></li>
+<li><a href="../giftflow/package-globals.html#SERVICES_YADIS_MATCH_ANY" target="main">SERVICES_YADIS_MATCH_ANY</a></li>
+<li><a href="../giftflow/package-globals.html#SERVICES_YADIS_MAX_PRIORITY" target="main">SERVICES_YADIS_MAX_PRIORITY</a></li>
 <li><a href="../giftflow/package-globals.html#THUMBLIB_PLUGIN_PATH" target="main">THUMBLIB_PLUGIN_PATH</a></li>
 <li><a href="../giftflow/package-globals.html#U" target="main">U</a></li>
 <li><a href="../giftflow/package-globals.html#USERNAME" target="main">USERNAME</a></li>
+<li><a href="../giftflow/package-globals.html#_Auth_OpenID_Request_Modes" target="main">_Auth_OpenID_Request_Modes</a></li>
 <li><a href="../giftflow/package-globals.html#_POST" target="main">_POST</a></li>
 <li><a href="../giftflow/package-globals.html#_REQUEST" target="main">_REQUEST</a></li>
 <li><a href="../giftflow/package-globals.html#_SERVER" target="main">_SERVER</a></li>
@@ -393,6 +486,7 @@
 <li><a href="../giftflow/package-globals.html#goods" target="main">goods</a></li>
 <li><a href="../giftflow/package-globals.html#googlemaps" target="main">googlemaps</a></li>
 <li><a href="../giftflow/package-globals.html#heading" target="main">heading</a></li>
+<li><a href="../giftflow/package-globals.html#hook" target="main">hook</a></li>
 <li><a href="../giftflow/package-globals.html#i" target="main">i</a></li>
 <li><a href="../giftflow/package-globals.html#id" target="main">id</a></li>
 <li><a href="../giftflow/package-globals.html#identity" target="main">identity</a></li>

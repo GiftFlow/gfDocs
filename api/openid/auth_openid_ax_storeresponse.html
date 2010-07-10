@@ -1,0 +1,196 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+
+<html lang="en">
+<head>
+
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
+<meta name="generator" content="PHPDoctor 2RC4 (http://peej.github.com/phpdoctor/)">
+<meta name="when" content="Sat, 10 Jul 2010 18:10:55 +0000">
+
+<link rel="stylesheet" type="text/css" href="../stylesheet.css">
+<link rel="start" href="../overview-summary.html">
+
+<title>Auth_OpenID_AX_StoreResponse (GiftFlow API)</title>
+
+</head>
+<body id="definition" onload="parent.document.title=document.title;">
+
+<div class="header">
+<h1>GiftFlow API</h1>
+<ul>
+<li><a href="../overview-summary.html">Overview</a></li>
+<li><a href="../openid/package-summary.html">Package</a></li>
+<li class="active">Class</li>
+<li><a href="../openid/package-tree.html">Tree</a></li>
+<li><a href="../overview-files.html">Files</a></li>
+<li><a href="../deprecated-list.html">Deprecated</a></li>
+<li><a href="../index-all.html">Index</a></li>
+</ul>
+</div>
+
+<div class="small_links">
+<a href="../index.html" target="_top">Frames</a>
+<a href="../openid/auth_openid_ax_storeresponse.html" target="_top">No frames</a>
+</div>
+<div class="small_links">
+Summary: <a href="#summary_field">Field</a> | <a href="#summary_method">Method</a> | <a href="#summary_constr">Constr</a>
+Detail: <a href="#detail_field">Field</a> | <a href="#detail_method">Method</a> | <a href="#summary_constr">Constr</a>
+</div>
+<hr>
+
+<div class="qualifiedName">OpenID\Auth_OpenID_AX_StoreResponse</div>
+<a href="../source/application/libraries/auth/openid/ax.php.html#line972" class="location">application/libraries/Auth/OpenID/AX.php at line 972</a>
+
+<h1>Class Auth_OpenID_AX_StoreResponse</h1>
+
+<pre class="tree"><a href="../openid/auth_openid_extension.html">Auth_OpenID_Extension</a><br>    └─<a href="../openid/auth_openid_ax_message.html">Auth_OpenID_AX_Message</a><br>       └─<strong>Auth_OpenID_AX_StoreResponse</strong><br /></pre>
+
+<hr>
+
+<p class="signature">public  class <strong>Auth_OpenID_AX_StoreResponse</strong><br>extends <a href="../openid/auth_openid_ax_message.html">Auth_OpenID_AX_Message</a>
+
+</p>
+
+<div class="comment" id="overview_description"><p>An indication that the store request was processed along with this
+OpenID transaction.  Use make(), NOT the constructor, to create
+response objects.</p></div>
+
+<hr>
+
+<table id="summary_field">
+<tr><th colspan="2">Field Summary</th></tr>
+<tr>
+<td class="type"> mixed</td>
+<td class="description"><p class="name"><a href="#FAILURE_MODE">$FAILURE_MODE</a></p></td>
+</tr>
+<tr>
+<td class="type"> mixed</td>
+<td class="description"><p class="name"><a href="#SUCCESS_MODE">$SUCCESS_MODE</a></p></td>
+</tr>
+</table>
+
+<table class="inherit">
+<tr><th colspan="2">Fields inherited from OpenID\Auth_OpenID_AX_Message</th></tr>
+<tr><td><a href="../openid/auth_openid_ax_message.html#mode">mode</a>, <a href="../openid/auth_openid_ax_message.html#ns_alias">ns_alias</a>, <a href="../openid/auth_openid_ax_message.html#ns_uri">ns_uri</a></td></tr></table>
+
+<table class="inherit">
+<tr><th colspan="2">Fields inherited from OpenID\Auth_OpenID_Extension</th></tr>
+<tr><td><a href="../openid/auth_openid_extension.html#ns_alias">ns_alias</a>, <a href="../openid/auth_openid_extension.html#ns_uri">ns_uri</a></td></tr></table>
+
+<table id="summary_method">
+<tr><th colspan="2">Method Summary</th></tr>
+<tr>
+<td class="type"> void</td>
+<td class="description"><p class="name"><a href="#__construct()">__construct</a>(bool succeeded, mixed error_message)</p></td>
+</tr>
+<tr>
+<td class="type"> void</td>
+<td class="description"><p class="name"><a href="#getExtensionArgs()">getExtensionArgs</a>()</p><p class="description">Get the string arguments that should be added to an OpenID
+message for this extension.</p></td>
+</tr>
+<tr>
+<td class="type"> void</td>
+<td class="description"><p class="name"><a href="#make()">make</a>(bool succeeded, mixed error_message)</p><p class="description">Returns Auth_OpenID_AX_Error on error or an
+Auth_OpenID_AX_StoreResponse object on success.</p></td>
+</tr>
+<tr>
+<td class="type"> void</td>
+<td class="description"><p class="name"><a href="#succeeded()">succeeded</a>()</p><p class="description">Was this response a success response?</p></td>
+</tr>
+</table>
+
+<table class="inherit">
+<tr><th colspan="2">Methods inherited from OpenID\Auth_OpenID_AX_Message</th></tr>
+<tr><td><a href="../openid/auth_openid_ax_message.html#_checkMode()">_checkMode</a>, <a href="../openid/auth_openid_ax_message.html#_newArgs()">_newArgs</a></td></tr></table>
+
+<table class="inherit">
+<tr><th colspan="2">Methods inherited from OpenID\Auth_OpenID_Extension</th></tr>
+<tr><td><a href="../openid/auth_openid_extension.html#getExtensionArgs()">getExtensionArgs</a>, <a href="../openid/auth_openid_extension.html#toMessage()">toMessage</a></td></tr></table>
+
+<h2 id="detail_field">Field Detail</h2>
+<a href="../source/application/libraries/auth/openid/ax.php.html#line974" class="location">application/libraries/Auth/OpenID/AX.php at line 974</a>
+
+<h3 id="FAILURE_MODE">FAILURE_MODE</h3>
+<code class="signature">public  mixed <strong>$FAILURE_MODE</strong> = 'store_response_failure'</code>
+<div class="details">
+</div>
+
+<hr>
+
+<a href="../source/application/libraries/auth/openid/ax.php.html#line973" class="location">application/libraries/Auth/OpenID/AX.php at line 973</a>
+
+<h3 id="SUCCESS_MODE">SUCCESS_MODE</h3>
+<code class="signature">public  mixed <strong>$SUCCESS_MODE</strong> = 'store_response_success'</code>
+<div class="details">
+</div>
+
+<hr>
+
+<h2 id="detail_method">Method Detail</h2><div class="method_detail">
+<div class='method'><a href="../source/application/libraries/auth/openid/ax.php.html#line990" class="location">application/libraries/Auth/OpenID/AX.php at line 990</a>
+
+<h3 id="__construct()">__construct</h3>
+<code class="signature">public  void <strong>__construct</strong>(bool succeeded, mixed error_message)</code>
+<div class="details">
+</div></div>
+
+
+
+<div class='method'><a href="../source/application/libraries/auth/openid/ax.php.html#line1009" class="location">application/libraries/Auth/OpenID/AX.php at line 1009</a>
+
+<h3 id="getExtensionArgs()">getExtensionArgs</h3>
+<code class="signature">public  void <strong>getExtensionArgs</strong>()</code>
+<div class="details">
+<p>Get the string arguments that should be added to an OpenID
+message for this extension.</p></div></div>
+
+
+
+<div class='method'><a href="../source/application/libraries/auth/openid/ax.php.html#line980" class="location">application/libraries/Auth/OpenID/AX.php at line 980</a>
+
+<h3 id="make()">make</h3>
+<code class="signature">public  void <strong>make</strong>(bool succeeded, mixed error_message)</code>
+<div class="details">
+<p>Returns Auth_OpenID_AX_Error on error or an
+Auth_OpenID_AX_StoreResponse object on success.</p></div></div>
+
+
+
+<div class='method'><a href="../source/application/libraries/auth/openid/ax.php.html#line1004" class="location">application/libraries/Auth/OpenID/AX.php at line 1004</a>
+
+<h3 id="succeeded()">succeeded</h3>
+<code class="signature">public  void <strong>succeeded</strong>()</code>
+<div class="details">
+<p>Was this response a success response?</p></div></div>
+
+
+
+</div><div class="header">
+<h1>GiftFlow API</h1>
+<ul>
+<li><a href="../overview-summary.html">Overview</a></li>
+<li><a href="../openid/package-summary.html">Package</a></li>
+<li class="active">Class</li>
+<li><a href="../openid/package-tree.html">Tree</a></li>
+<li><a href="../overview-files.html">Files</a></li>
+<li><a href="../deprecated-list.html">Deprecated</a></li>
+<li><a href="../index-all.html">Index</a></li>
+</ul>
+</div>
+
+<div class="small_links">
+<a href="../index.html" target="_top">Frames</a>
+<a href="../openid/auth_openid_ax_storeresponse.html" target="_top">No frames</a>
+</div>
+<div class="small_links">
+Summary: <a href="#summary_field">Field</a> | <a href="#summary_method">Method</a> | <a href="#summary_constr">Constr</a>
+Detail: <a href="#detail_field">Field</a> | <a href="#detail_method">Method</a> | <a href="#summary_constr">Constr</a>
+</div>
+<hr>
+
+<p id="footer">This document was generated by <a href="http://peej.github.com/phpdoctor/">PHPDoctor: The PHP Documentation Creator</a></p>
+
+</body>
+
+</html>

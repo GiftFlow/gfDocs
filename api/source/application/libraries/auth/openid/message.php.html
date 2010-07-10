@@ -1,0 +1,981 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+
+<html lang="en">
+<head>
+
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
+<meta name="generator" content="PHPDoctor 2RC4 (http://peej.github.com/phpdoctor/)">
+<meta name="when" content="Sat, 10 Jul 2010 18:10:56 +0000">
+
+<link rel="stylesheet" type="text/css" href="../../../../../stylesheet.css">
+<link rel="start" href="../../../../../overview-summary.html">
+
+<title>application/libraries/Auth/OpenID/Message.php (GiftFlow API)</title>
+
+</head>
+<body id="file" onload="parent.document.title=document.title;">
+
+<div class="header">
+<h1>GiftFlow API</h1>
+<ul>
+<li><a href="../../../../../overview-summary.html">Overview</a></li>
+<li>Package</li><li>Class</li><li>Tree</li><li><a href="../../../../../overview-files.html">Files</a></li>
+<li><a href="../../../../../deprecated-list.html">Deprecated</a></li>
+<li><a href="../../../../../index-all.html">Index</a></li>
+</ul>
+</div>
+
+<div class="small_links">
+<a href="../../../../../index.html" target="_top">Frames</a>
+<a href="../../../../../source/application/libraries/auth/openid/message.php.html" target="_top">No frames</a>
+</div>
+<hr>
+
+<h1>application/libraries/Auth/OpenID/Message.php</h1>
+<div class="comment" id="overview_description"><p>Extension argument processing code</p></div>
+
+<hr>
+
+<a name="line1"></a><pre><?php
+<a name="line2"></a>
+<a name="line3"></a>/**
+<a name="line4"></a> * Extension argument processing code
+<a name="line5"></a> *
+<a name="line6"></a> * @package OpenID
+<a name="line7"></a> */
+<a name="line8"></a>
+<a name="line9"></a>/**
+<a name="line10"></a> * Import tools needed to deal with messages.
+<a name="line11"></a> */
+<a name="line12"></a>require_once 'Auth/OpenID.php';
+<a name="line13"></a>require_once 'Auth/OpenID/KVForm.php';
+<a name="line14"></a>require_once 'Auth/Yadis/XML.php';
+<a name="line15"></a>require_once 'Auth/OpenID/Consumer.php'; // For Auth_OpenID_FailureResponse
+<a name="line16"></a>
+<a name="line17"></a>// This doesn't REALLY belong here, but where is better?
+<a name="line18"></a>define('Auth_OpenID_IDENTIFIER_SELECT',
+<a name="line19"></a>       "http://specs.openid.net/auth/2.0/identifier_select");
+<a name="line20"></a>
+<a name="line21"></a>// URI for Simple Registration extension, the only commonly deployed
+<a name="line22"></a>// OpenID 1.x extension, and so a special case
+<a name="line23"></a>define('Auth_OpenID_SREG_URI', 'http://openid.net/sreg/1.0');
+<a name="line24"></a>
+<a name="line25"></a>// The OpenID 1.X namespace URI
+<a name="line26"></a>define('Auth_OpenID_OPENID1_NS', 'http://openid.net/signon/1.0');
+<a name="line27"></a>define('Auth_OpenID_THE_OTHER_OPENID1_NS', 'http://openid.net/signon/1.1');
+<a name="line28"></a>
+<a name="line29"></a>function Auth_OpenID_isOpenID1($ns)
+<a name="line30"></a>{
+<a name="line31"></a>    return ($ns == Auth_OpenID_THE_OTHER_OPENID1_NS) ||
+<a name="line32"></a>        ($ns == Auth_OpenID_OPENID1_NS);
+<a name="line33"></a>}
+<a name="line34"></a>
+<a name="line35"></a>// The OpenID 2.0 namespace URI
+<a name="line36"></a>define('Auth_OpenID_OPENID2_NS', 'http://specs.openid.net/auth/2.0');
+<a name="line37"></a>
+<a name="line38"></a>// The namespace consisting of pairs with keys that are prefixed with
+<a name="line39"></a>// "openid."  but not in another namespace.
+<a name="line40"></a>define('Auth_OpenID_NULL_NAMESPACE', 'Null namespace');
+<a name="line41"></a>
+<a name="line42"></a>// The null namespace, when it is an allowed OpenID namespace
+<a name="line43"></a>define('Auth_OpenID_OPENID_NS', 'OpenID namespace');
+<a name="line44"></a>
+<a name="line45"></a>// The top-level namespace, excluding all pairs with keys that start
+<a name="line46"></a>// with "openid."
+<a name="line47"></a>define('Auth_OpenID_BARE_NS', 'Bare namespace');
+<a name="line48"></a>
+<a name="line49"></a>// Sentinel for Message implementation to indicate that getArg should
+<a name="line50"></a>// return null instead of returning a default.
+<a name="line51"></a>define('Auth_OpenID_NO_DEFAULT', 'NO DEFAULT ALLOWED');
+<a name="line52"></a>
+<a name="line53"></a>// Limit, in bytes, of identity provider and return_to URLs, including
+<a name="line54"></a>// response payload.  See OpenID 1.1 specification, Appendix D.
+<a name="line55"></a>define('Auth_OpenID_OPENID1_URL_LIMIT', 2047);
+<a name="line56"></a>
+<a name="line57"></a>// All OpenID protocol fields.  Used to check namespace aliases.
+<a name="line58"></a>global $Auth_OpenID_OPENID_PROTOCOL_FIELDS;
+<a name="line59"></a>$Auth_OpenID_OPENID_PROTOCOL_FIELDS = array(
+<a name="line60"></a>    'ns', 'mode', 'error', 'return_to', 'contact', 'reference',
+<a name="line61"></a>    'signed', 'assoc_type', 'session_type', 'dh_modulus', 'dh_gen',
+<a name="line62"></a>    'dh_consumer_public', 'claimed_id', 'identity', 'realm',
+<a name="line63"></a>    'invalidate_handle', 'op_endpoint', 'response_nonce', 'sig',
+<a name="line64"></a>    'assoc_handle', 'trust_root', 'openid');
+<a name="line65"></a>
+<a name="line66"></a>// Global namespace / alias registration map.  See
+<a name="line67"></a>// Auth_OpenID_registerNamespaceAlias.
+<a name="line68"></a>global $Auth_OpenID_registered_aliases;
+<a name="line69"></a>$Auth_OpenID_registered_aliases = array();
+<a name="line70"></a>
+<a name="line71"></a>/**
+<a name="line72"></a> * Registers a (namespace URI, alias) mapping in a global namespace
+<a name="line73"></a> * alias map.  Raises NamespaceAliasRegistrationError if either the
+<a name="line74"></a> * namespace URI or alias has already been registered with a different
+<a name="line75"></a> * value.  This function is required if you want to use a namespace
+<a name="line76"></a> * with an OpenID 1 message.
+<a name="line77"></a> */
+<a name="line78"></a>function Auth_OpenID_registerNamespaceAlias($namespace_uri, $alias)
+<a name="line79"></a>{
+<a name="line80"></a>    global $Auth_OpenID_registered_aliases;
+<a name="line81"></a>
+<a name="line82"></a>    if (Auth_OpenID::arrayGet($Auth_OpenID_registered_aliases,
+<a name="line83"></a>                              $alias) == $namespace_uri) {
+<a name="line84"></a>        return true;
+<a name="line85"></a>    }
+<a name="line86"></a>
+<a name="line87"></a>    if (in_array($namespace_uri,
+<a name="line88"></a>                 array_values($Auth_OpenID_registered_aliases))) {
+<a name="line89"></a>        return false;
+<a name="line90"></a>    }
+<a name="line91"></a>
+<a name="line92"></a>    if (in_array($alias, array_keys($Auth_OpenID_registered_aliases))) {
+<a name="line93"></a>        return false;
+<a name="line94"></a>    }
+<a name="line95"></a>
+<a name="line96"></a>    $Auth_OpenID_registered_aliases[$alias] = $namespace_uri;
+<a name="line97"></a>    return true;
+<a name="line98"></a>}
+<a name="line99"></a>
+<a name="line100"></a>/**
+<a name="line101"></a> * Removes a (namespace_uri, alias) registration from the global
+<a name="line102"></a> * namespace alias map.  Returns true if the removal succeeded; false
+<a name="line103"></a> * if not (if the mapping did not exist).
+<a name="line104"></a> */
+<a name="line105"></a>function Auth_OpenID_removeNamespaceAlias($namespace_uri, $alias)
+<a name="line106"></a>{
+<a name="line107"></a>    global $Auth_OpenID_registered_aliases;
+<a name="line108"></a>
+<a name="line109"></a>    if (Auth_OpenID::arrayGet($Auth_OpenID_registered_aliases,
+<a name="line110"></a>                              $alias) === $namespace_uri) {
+<a name="line111"></a>        unset($Auth_OpenID_registered_aliases[$alias]);
+<a name="line112"></a>        return true;
+<a name="line113"></a>    }
+<a name="line114"></a>
+<a name="line115"></a>    return false;
+<a name="line116"></a>}
+<a name="line117"></a>
+<a name="line118"></a>/**
+<a name="line119"></a> * An Auth_OpenID_Mapping maintains a mapping from arbitrary keys to
+<a name="line120"></a> * arbitrary values.  (This is unlike an ordinary PHP array, whose
+<a name="line121"></a> * keys may be only simple scalars.)
+<a name="line122"></a> *
+<a name="line123"></a> * @package OpenID
+<a name="line124"></a> */
+<a name="line125"></a>class Auth_OpenID_Mapping {
+<a name="line126"></a>    /**
+<a name="line127"></a>     * Initialize a mapping.  If $classic_array is specified, its keys
+<a name="line128"></a>     * and values are used to populate the mapping.
+<a name="line129"></a>     */
+<a name="line130"></a>    function Auth_OpenID_Mapping($classic_array = null)
+<a name="line131"></a>    {
+<a name="line132"></a>        $this->keys = array();
+<a name="line133"></a>        $this->values = array();
+<a name="line134"></a>
+<a name="line135"></a>        if (is_array($classic_array)) {
+<a name="line136"></a>            foreach ($classic_array as $key => $value) {
+<a name="line137"></a>                $this->set($key, $value);
+<a name="line138"></a>            }
+<a name="line139"></a>        }
+<a name="line140"></a>    }
+<a name="line141"></a>
+<a name="line142"></a>    /**
+<a name="line143"></a>     * Returns true if $thing is an Auth_OpenID_Mapping object; false
+<a name="line144"></a>     * if not.
+<a name="line145"></a>     */
+<a name="line146"></a>    static function isA($thing)
+<a name="line147"></a>    {
+<a name="line148"></a>        return (is_object($thing) &&
+<a name="line149"></a>                strtolower(get_class($thing)) == 'auth_openid_mapping');
+<a name="line150"></a>    }
+<a name="line151"></a>
+<a name="line152"></a>    /**
+<a name="line153"></a>     * Returns an array of the keys in the mapping.
+<a name="line154"></a>     */
+<a name="line155"></a>    function keys()
+<a name="line156"></a>    {
+<a name="line157"></a>        return $this->keys;
+<a name="line158"></a>    }
+<a name="line159"></a>
+<a name="line160"></a>    /**
+<a name="line161"></a>     * Returns an array of values in the mapping.
+<a name="line162"></a>     */
+<a name="line163"></a>    function values()
+<a name="line164"></a>    {
+<a name="line165"></a>        return $this->values;
+<a name="line166"></a>    }
+<a name="line167"></a>
+<a name="line168"></a>    /**
+<a name="line169"></a>     * Returns an array of (key, value) pairs in the mapping.
+<a name="line170"></a>     */
+<a name="line171"></a>    function items()
+<a name="line172"></a>    {
+<a name="line173"></a>        $temp = array();
+<a name="line174"></a>
+<a name="line175"></a>        for ($i = 0; $i < count($this->keys); $i++) {
+<a name="line176"></a>            $temp[] = array($this->keys[$i],
+<a name="line177"></a>                            $this->values[$i]);
+<a name="line178"></a>        }
+<a name="line179"></a>        return $temp;
+<a name="line180"></a>    }
+<a name="line181"></a>
+<a name="line182"></a>    /**
+<a name="line183"></a>     * Returns the "length" of the mapping, or the number of keys.
+<a name="line184"></a>     */
+<a name="line185"></a>    function len()
+<a name="line186"></a>    {
+<a name="line187"></a>        return count($this->keys);
+<a name="line188"></a>    }
+<a name="line189"></a>
+<a name="line190"></a>    /**
+<a name="line191"></a>     * Sets a key-value pair in the mapping.  If the key already
+<a name="line192"></a>     * exists, its value is replaced with the new value.
+<a name="line193"></a>     */
+<a name="line194"></a>    function set($key, $value)
+<a name="line195"></a>    {
+<a name="line196"></a>        $index = array_search($key, $this->keys);
+<a name="line197"></a>
+<a name="line198"></a>        if ($index !== false) {
+<a name="line199"></a>            $this->values[$index] = $value;
+<a name="line200"></a>        } else {
+<a name="line201"></a>            $this->keys[] = $key;
+<a name="line202"></a>            $this->values[] = $value;
+<a name="line203"></a>        }
+<a name="line204"></a>    }
+<a name="line205"></a>
+<a name="line206"></a>    /**
+<a name="line207"></a>     * Gets a specified value from the mapping, associated with the
+<a name="line208"></a>     * specified key.  If the key does not exist in the mapping,
+<a name="line209"></a>     * $default is returned instead.
+<a name="line210"></a>     */
+<a name="line211"></a>    function get($key, $default = null)
+<a name="line212"></a>    {
+<a name="line213"></a>        $index = array_search($key, $this->keys);
+<a name="line214"></a>
+<a name="line215"></a>        if ($index !== false) {
+<a name="line216"></a>            return $this->values[$index];
+<a name="line217"></a>        } else {
+<a name="line218"></a>            return $default;
+<a name="line219"></a>        }
+<a name="line220"></a>    }
+<a name="line221"></a>
+<a name="line222"></a>    /**
+<a name="line223"></a>     * @access private
+<a name="line224"></a>     */
+<a name="line225"></a>    function _reflow()
+<a name="line226"></a>    {
+<a name="line227"></a>        // PHP is broken yet again.  Sort the arrays to remove the
+<a name="line228"></a>        // hole in the numeric indexes that make up the array.
+<a name="line229"></a>        $old_keys = $this->keys;
+<a name="line230"></a>        $old_values = $this->values;
+<a name="line231"></a>
+<a name="line232"></a>        $this->keys = array();
+<a name="line233"></a>        $this->values = array();
+<a name="line234"></a>
+<a name="line235"></a>        foreach ($old_keys as $k) {
+<a name="line236"></a>            $this->keys[] = $k;
+<a name="line237"></a>        }
+<a name="line238"></a>
+<a name="line239"></a>        foreach ($old_values as $v) {
+<a name="line240"></a>            $this->values[] = $v;
+<a name="line241"></a>        }
+<a name="line242"></a>    }
+<a name="line243"></a>
+<a name="line244"></a>    /**
+<a name="line245"></a>     * Deletes a key-value pair from the mapping with the specified
+<a name="line246"></a>     * key.
+<a name="line247"></a>     */
+<a name="line248"></a>    function del($key)
+<a name="line249"></a>    {
+<a name="line250"></a>        $index = array_search($key, $this->keys);
+<a name="line251"></a>
+<a name="line252"></a>        if ($index !== false) {
+<a name="line253"></a>            unset($this->keys[$index]);
+<a name="line254"></a>            unset($this->values[$index]);
+<a name="line255"></a>            $this->_reflow();
+<a name="line256"></a>            return true;
+<a name="line257"></a>        }
+<a name="line258"></a>        return false;
+<a name="line259"></a>    }
+<a name="line260"></a>
+<a name="line261"></a>    /**
+<a name="line262"></a>     * Returns true if the specified value has a key in the mapping;
+<a name="line263"></a>     * false if not.
+<a name="line264"></a>     */
+<a name="line265"></a>    function contains($value)
+<a name="line266"></a>    {
+<a name="line267"></a>        return (array_search($value, $this->keys) !== false);
+<a name="line268"></a>    }
+<a name="line269"></a>}
+<a name="line270"></a>
+<a name="line271"></a>/**
+<a name="line272"></a> * Maintains a bijective map between namespace uris and aliases.
+<a name="line273"></a> *
+<a name="line274"></a> * @package OpenID
+<a name="line275"></a> */
+<a name="line276"></a>class Auth_OpenID_NamespaceMap {
+<a name="line277"></a>    function Auth_OpenID_NamespaceMap()
+<a name="line278"></a>    {
+<a name="line279"></a>        $this->alias_to_namespace = new Auth_OpenID_Mapping();
+<a name="line280"></a>        $this->namespace_to_alias = new Auth_OpenID_Mapping();
+<a name="line281"></a>        $this->implicit_namespaces = array();
+<a name="line282"></a>    }
+<a name="line283"></a>
+<a name="line284"></a>    function getAlias($namespace_uri)
+<a name="line285"></a>    {
+<a name="line286"></a>        return $this->namespace_to_alias->get($namespace_uri);
+<a name="line287"></a>    }
+<a name="line288"></a>
+<a name="line289"></a>    function getNamespaceURI($alias)
+<a name="line290"></a>    {
+<a name="line291"></a>        return $this->alias_to_namespace->get($alias);
+<a name="line292"></a>    }
+<a name="line293"></a>
+<a name="line294"></a>    function iterNamespaceURIs()
+<a name="line295"></a>    {
+<a name="line296"></a>        // Return an iterator over the namespace URIs
+<a name="line297"></a>        return $this->namespace_to_alias->keys();
+<a name="line298"></a>    }
+<a name="line299"></a>
+<a name="line300"></a>    function iterAliases()
+<a name="line301"></a>    {
+<a name="line302"></a>        // Return an iterator over the aliases"""
+<a name="line303"></a>        return $this->alias_to_namespace->keys();
+<a name="line304"></a>    }
+<a name="line305"></a>
+<a name="line306"></a>    function iteritems()
+<a name="line307"></a>    {
+<a name="line308"></a>        return $this->namespace_to_alias->items();
+<a name="line309"></a>    }
+<a name="line310"></a>
+<a name="line311"></a>    function isImplicit($namespace_uri)
+<a name="line312"></a>    {
+<a name="line313"></a>        return in_array($namespace_uri, $this->implicit_namespaces);
+<a name="line314"></a>    }
+<a name="line315"></a>
+<a name="line316"></a>    function addAlias($namespace_uri, $desired_alias, $implicit=false)
+<a name="line317"></a>    {
+<a name="line318"></a>        // Add an alias from this namespace URI to the desired alias
+<a name="line319"></a>        global $Auth_OpenID_OPENID_PROTOCOL_FIELDS;
+<a name="line320"></a>
+<a name="line321"></a>        // Check that desired_alias is not an openid protocol field as
+<a name="line322"></a>        // per the spec.
+<a name="line323"></a>        if (in_array($desired_alias, $Auth_OpenID_OPENID_PROTOCOL_FIELDS)) {
+<a name="line324"></a>            Auth_OpenID::log("\"%s\" is not an allowed namespace alias",
+<a name="line325"></a>                            $desired_alias);
+<a name="line326"></a>            return null;
+<a name="line327"></a>        }
+<a name="line328"></a>
+<a name="line329"></a>        // Check that desired_alias does not contain a period as per
+<a name="line330"></a>        // the spec.
+<a name="line331"></a>        if (strpos($desired_alias, '.') !== false) {
+<a name="line332"></a>            Auth_OpenID::log('"%s" must not contain a dot', $desired_alias);
+<a name="line333"></a>            return null;
+<a name="line334"></a>        }
+<a name="line335"></a>
+<a name="line336"></a>        // Check that there is not a namespace already defined for the
+<a name="line337"></a>        // desired alias
+<a name="line338"></a>        $current_namespace_uri =
+<a name="line339"></a>            $this->alias_to_namespace->get($desired_alias);
+<a name="line340"></a>
+<a name="line341"></a>        if (($current_namespace_uri !== null) &&
+<a name="line342"></a>            ($current_namespace_uri != $namespace_uri)) {
+<a name="line343"></a>            Auth_OpenID::log('Cannot map "%s" because previous mapping exists',
+<a name="line344"></a>                            $namespace_uri);
+<a name="line345"></a>            return null;
+<a name="line346"></a>        }
+<a name="line347"></a>
+<a name="line348"></a>        // Check that there is not already a (different) alias for
+<a name="line349"></a>        // this namespace URI
+<a name="line350"></a>        $alias = $this->namespace_to_alias->get($namespace_uri);
+<a name="line351"></a>
+<a name="line352"></a>        if (($alias !== null) && ($alias != $desired_alias)) {
+<a name="line353"></a>            Auth_OpenID::log('Cannot map %s to alias %s. ' .
+<a name="line354"></a>                            'It is already mapped to alias %s',
+<a name="line355"></a>                            $namespace_uri, $desired_alias, $alias);
+<a name="line356"></a>            return null;
+<a name="line357"></a>        }
+<a name="line358"></a>
+<a name="line359"></a>        assert((Auth_OpenID_NULL_NAMESPACE === $desired_alias) ||
+<a name="line360"></a>               is_string($desired_alias));
+<a name="line361"></a>
+<a name="line362"></a>        $this->alias_to_namespace->set($desired_alias, $namespace_uri);
+<a name="line363"></a>        $this->namespace_to_alias->set($namespace_uri, $desired_alias);
+<a name="line364"></a>        if ($implicit) {
+<a name="line365"></a>            array_push($this->implicit_namespaces, $namespace_uri);
+<a name="line366"></a>        }
+<a name="line367"></a>
+<a name="line368"></a>        return $desired_alias;
+<a name="line369"></a>    }
+<a name="line370"></a>
+<a name="line371"></a>    function add($namespace_uri)
+<a name="line372"></a>    {
+<a name="line373"></a>        // Add this namespace URI to the mapping, without caring what
+<a name="line374"></a>        // alias it ends up with
+<a name="line375"></a>
+<a name="line376"></a>        // See if this namespace is already mapped to an alias
+<a name="line377"></a>        $alias = $this->namespace_to_alias->get($namespace_uri);
+<a name="line378"></a>
+<a name="line379"></a>        if ($alias !== null) {
+<a name="line380"></a>            return $alias;
+<a name="line381"></a>        }
+<a name="line382"></a>
+<a name="line383"></a>        // Fall back to generating a numerical alias
+<a name="line384"></a>        $i = 0;
+<a name="line385"></a>        while (1) {
+<a name="line386"></a>            $alias = 'ext' . strval($i);
+<a name="line387"></a>            if ($this->addAlias($namespace_uri, $alias) === null) {
+<a name="line388"></a>                $i += 1;
+<a name="line389"></a>            } else {
+<a name="line390"></a>                return $alias;
+<a name="line391"></a>            }
+<a name="line392"></a>        }
+<a name="line393"></a>
+<a name="line394"></a>        // Should NEVER be reached!
+<a name="line395"></a>        return null;
+<a name="line396"></a>    }
+<a name="line397"></a>
+<a name="line398"></a>    function contains($namespace_uri)
+<a name="line399"></a>    {
+<a name="line400"></a>        return $this->isDefined($namespace_uri);
+<a name="line401"></a>    }
+<a name="line402"></a>
+<a name="line403"></a>    function isDefined($namespace_uri)
+<a name="line404"></a>    {
+<a name="line405"></a>        return $this->namespace_to_alias->contains($namespace_uri);
+<a name="line406"></a>    }
+<a name="line407"></a>}
+<a name="line408"></a>
+<a name="line409"></a>/**
+<a name="line410"></a> * In the implementation of this object, null represents the global
+<a name="line411"></a> * namespace as well as a namespace with no key.
+<a name="line412"></a> *
+<a name="line413"></a> * @package OpenID
+<a name="line414"></a> */
+<a name="line415"></a>class Auth_OpenID_Message {
+<a name="line416"></a>
+<a name="line417"></a>    function Auth_OpenID_Message($openid_namespace = null)
+<a name="line418"></a>    {
+<a name="line419"></a>        // Create an empty Message
+<a name="line420"></a>        $this->allowed_openid_namespaces = array(
+<a name="line421"></a>                               Auth_OpenID_OPENID1_NS,
+<a name="line422"></a>                               Auth_OpenID_THE_OTHER_OPENID1_NS,
+<a name="line423"></a>                               Auth_OpenID_OPENID2_NS);
+<a name="line424"></a>
+<a name="line425"></a>        $this->args = new Auth_OpenID_Mapping();
+<a name="line426"></a>        $this->namespaces = new Auth_OpenID_NamespaceMap();
+<a name="line427"></a>        if ($openid_namespace === null) {
+<a name="line428"></a>            $this->_openid_ns_uri = null;
+<a name="line429"></a>        } else {
+<a name="line430"></a>            $implicit = Auth_OpenID_isOpenID1($openid_namespace);
+<a name="line431"></a>            $this->setOpenIDNamespace($openid_namespace, $implicit);
+<a name="line432"></a>        }
+<a name="line433"></a>    }
+<a name="line434"></a>
+<a name="line435"></a>    function isOpenID1()
+<a name="line436"></a>    {
+<a name="line437"></a>        return Auth_OpenID_isOpenID1($this->getOpenIDNamespace());
+<a name="line438"></a>    }
+<a name="line439"></a>
+<a name="line440"></a>    function isOpenID2()
+<a name="line441"></a>    {
+<a name="line442"></a>        return $this->getOpenIDNamespace() == Auth_OpenID_OPENID2_NS;
+<a name="line443"></a>    }
+<a name="line444"></a>
+<a name="line445"></a>    static function fromPostArgs($args)
+<a name="line446"></a>    {
+<a name="line447"></a>        // Construct a Message containing a set of POST arguments
+<a name="line448"></a>        $obj = new Auth_OpenID_Message();
+<a name="line449"></a>
+<a name="line450"></a>        // Partition into "openid." args and bare args
+<a name="line451"></a>        $openid_args = array();
+<a name="line452"></a>        foreach ($args as $key => $value) {
+<a name="line453"></a>
+<a name="line454"></a>            if (is_array($value)) {
+<a name="line455"></a>                return null;
+<a name="line456"></a>            }
+<a name="line457"></a>
+<a name="line458"></a>            $parts = explode('.', $key, 2);
+<a name="line459"></a>
+<a name="line460"></a>            if (count($parts) == 2) {
+<a name="line461"></a>                list($prefix, $rest) = $parts;
+<a name="line462"></a>            } else {
+<a name="line463"></a>                $prefix = null;
+<a name="line464"></a>            }
+<a name="line465"></a>
+<a name="line466"></a>            if ($prefix != 'openid') {
+<a name="line467"></a>                $obj->args->set(array(Auth_OpenID_BARE_NS, $key), $value);
+<a name="line468"></a>            } else {
+<a name="line469"></a>                $openid_args[$rest] = $value;
+<a name="line470"></a>            }
+<a name="line471"></a>        }
+<a name="line472"></a>
+<a name="line473"></a>        if ($obj->_fromOpenIDArgs($openid_args)) {
+<a name="line474"></a>            return $obj;
+<a name="line475"></a>        } else {
+<a name="line476"></a>            return null;
+<a name="line477"></a>        }
+<a name="line478"></a>    }
+<a name="line479"></a>
+<a name="line480"></a>    static function fromOpenIDArgs($openid_args)
+<a name="line481"></a>    {
+<a name="line482"></a>        // Takes an array.
+<a name="line483"></a>
+<a name="line484"></a>        // Construct a Message from a parsed KVForm message
+<a name="line485"></a>        $obj = new Auth_OpenID_Message();
+<a name="line486"></a>        if ($obj->_fromOpenIDArgs($openid_args)) {
+<a name="line487"></a>            return $obj;
+<a name="line488"></a>        } else {
+<a name="line489"></a>            return null;
+<a name="line490"></a>        }
+<a name="line491"></a>    }
+<a name="line492"></a>
+<a name="line493"></a>    /**
+<a name="line494"></a>     * @access private
+<a name="line495"></a>     */
+<a name="line496"></a>    function _fromOpenIDArgs($openid_args)
+<a name="line497"></a>    {
+<a name="line498"></a>        global $Auth_OpenID_registered_aliases;
+<a name="line499"></a>
+<a name="line500"></a>        // Takes an Auth_OpenID_Mapping instance OR an array.
+<a name="line501"></a>
+<a name="line502"></a>        if (!Auth_OpenID_Mapping::isA($openid_args)) {
+<a name="line503"></a>            $openid_args = new Auth_OpenID_Mapping($openid_args);
+<a name="line504"></a>        }
+<a name="line505"></a>
+<a name="line506"></a>        $ns_args = array();
+<a name="line507"></a>
+<a name="line508"></a>        // Resolve namespaces
+<a name="line509"></a>        foreach ($openid_args->items() as $pair) {
+<a name="line510"></a>            list($rest, $value) = $pair;
+<a name="line511"></a>
+<a name="line512"></a>            $parts = explode('.', $rest, 2);
+<a name="line513"></a>
+<a name="line514"></a>            if (count($parts) == 2) {
+<a name="line515"></a>                list($ns_alias, $ns_key) = $parts;
+<a name="line516"></a>            } else {
+<a name="line517"></a>                $ns_alias = Auth_OpenID_NULL_NAMESPACE;
+<a name="line518"></a>                $ns_key = $rest;
+<a name="line519"></a>            }
+<a name="line520"></a>
+<a name="line521"></a>            if ($ns_alias == 'ns') {
+<a name="line522"></a>                if ($this->namespaces->addAlias($value, $ns_key) === null) {
+<a name="line523"></a>                    return false;
+<a name="line524"></a>                }
+<a name="line525"></a>            } else if (($ns_alias == Auth_OpenID_NULL_NAMESPACE) &&
+<a name="line526"></a>                       ($ns_key == 'ns')) {
+<a name="line527"></a>                // null namespace
+<a name="line528"></a>                if ($this->setOpenIDNamespace($value, false) === false) {
+<a name="line529"></a>                    return false;
+<a name="line530"></a>                }
+<a name="line531"></a>            } else {
+<a name="line532"></a>                $ns_args[] = array($ns_alias, $ns_key, $value);
+<a name="line533"></a>            }
+<a name="line534"></a>        }
+<a name="line535"></a>
+<a name="line536"></a>        if (!$this->getOpenIDNamespace()) {
+<a name="line537"></a>            if ($this->setOpenIDNamespace(Auth_OpenID_OPENID1_NS, true) ===
+<a name="line538"></a>                false) {
+<a name="line539"></a>                return false;
+<a name="line540"></a>            }
+<a name="line541"></a>        }
+<a name="line542"></a>
+<a name="line543"></a>        // Actually put the pairs into the appropriate namespaces
+<a name="line544"></a>        foreach ($ns_args as $triple) {
+<a name="line545"></a>            list($ns_alias, $ns_key, $value) = $triple;
+<a name="line546"></a>            $ns_uri = $this->namespaces->getNamespaceURI($ns_alias);
+<a name="line547"></a>            if ($ns_uri === null) {
+<a name="line548"></a>                $ns_uri = $this->_getDefaultNamespace($ns_alias);
+<a name="line549"></a>                if ($ns_uri === null) {
+<a name="line550"></a>
+<a name="line551"></a>                    $ns_uri = Auth_OpenID_OPENID_NS;
+<a name="line552"></a>                    $ns_key = sprintf('%s.%s', $ns_alias, $ns_key);
+<a name="line553"></a>                } else {
+<a name="line554"></a>                    $this->namespaces->addAlias($ns_uri, $ns_alias, true);
+<a name="line555"></a>                }
+<a name="line556"></a>            }
+<a name="line557"></a>
+<a name="line558"></a>            $this->setArg($ns_uri, $ns_key, $value);
+<a name="line559"></a>        }
+<a name="line560"></a>
+<a name="line561"></a>        return true;
+<a name="line562"></a>    }
+<a name="line563"></a>
+<a name="line564"></a>    function _getDefaultNamespace($mystery_alias)
+<a name="line565"></a>    {
+<a name="line566"></a>        global $Auth_OpenID_registered_aliases;
+<a name="line567"></a>        if ($this->isOpenID1()) {
+<a name="line568"></a>            return @$Auth_OpenID_registered_aliases[$mystery_alias];
+<a name="line569"></a>        }
+<a name="line570"></a>        return null;
+<a name="line571"></a>    }
+<a name="line572"></a>
+<a name="line573"></a>    function setOpenIDNamespace($openid_ns_uri, $implicit)
+<a name="line574"></a>    {
+<a name="line575"></a>        if (!in_array($openid_ns_uri, $this->allowed_openid_namespaces)) {
+<a name="line576"></a>            Auth_OpenID::log('Invalid null namespace: "%s"', $openid_ns_uri);
+<a name="line577"></a>            return false;
+<a name="line578"></a>        }
+<a name="line579"></a>
+<a name="line580"></a>        $succeeded = $this->namespaces->addAlias($openid_ns_uri,
+<a name="line581"></a>                                                 Auth_OpenID_NULL_NAMESPACE,
+<a name="line582"></a>                                                 $implicit);
+<a name="line583"></a>        if ($succeeded === false) {
+<a name="line584"></a>            return false;
+<a name="line585"></a>        }
+<a name="line586"></a>
+<a name="line587"></a>        $this->_openid_ns_uri = $openid_ns_uri;
+<a name="line588"></a>
+<a name="line589"></a>        return true;
+<a name="line590"></a>    }
+<a name="line591"></a>
+<a name="line592"></a>    function getOpenIDNamespace()
+<a name="line593"></a>    {
+<a name="line594"></a>        return $this->_openid_ns_uri;
+<a name="line595"></a>    }
+<a name="line596"></a>
+<a name="line597"></a>    static function fromKVForm($kvform_string)
+<a name="line598"></a>    {
+<a name="line599"></a>        // Create a Message from a KVForm string
+<a name="line600"></a>        return Auth_OpenID_Message::fromOpenIDArgs(
+<a name="line601"></a>                     Auth_OpenID_KVForm::toArray($kvform_string));
+<a name="line602"></a>    }
+<a name="line603"></a>
+<a name="line604"></a>    function copy()
+<a name="line605"></a>    {
+<a name="line606"></a>        return $this;
+<a name="line607"></a>    }
+<a name="line608"></a>
+<a name="line609"></a>    function toPostArgs()
+<a name="line610"></a>    {
+<a name="line611"></a>        // Return all arguments with openid. in front of namespaced
+<a name="line612"></a>        // arguments.
+<a name="line613"></a>
+<a name="line614"></a>        $args = array();
+<a name="line615"></a>
+<a name="line616"></a>        // Add namespace definitions to the output
+<a name="line617"></a>        foreach ($this->namespaces->iteritems() as $pair) {
+<a name="line618"></a>            list($ns_uri, $alias) = $pair;
+<a name="line619"></a>            if ($this->namespaces->isImplicit($ns_uri)) {
+<a name="line620"></a>                continue;
+<a name="line621"></a>            }
+<a name="line622"></a>            if ($alias == Auth_OpenID_NULL_NAMESPACE) {
+<a name="line623"></a>                $ns_key = 'openid.ns';
+<a name="line624"></a>            } else {
+<a name="line625"></a>                $ns_key = 'openid.ns.' . $alias;
+<a name="line626"></a>            }
+<a name="line627"></a>            $args[$ns_key] = $ns_uri;
+<a name="line628"></a>        }
+<a name="line629"></a>
+<a name="line630"></a>        foreach ($this->args->items() as $pair) {
+<a name="line631"></a>            list($ns_parts, $value) = $pair;
+<a name="line632"></a>            list($ns_uri, $ns_key) = $ns_parts;
+<a name="line633"></a>            $key = $this->getKey($ns_uri, $ns_key);
+<a name="line634"></a>            $args[$key] = $value;
+<a name="line635"></a>        }
+<a name="line636"></a>
+<a name="line637"></a>        return $args;
+<a name="line638"></a>    }
+<a name="line639"></a>
+<a name="line640"></a>    function toArgs()
+<a name="line641"></a>    {
+<a name="line642"></a>        // Return all namespaced arguments, failing if any
+<a name="line643"></a>        // non-namespaced arguments exist.
+<a name="line644"></a>        $post_args = $this->toPostArgs();
+<a name="line645"></a>        $kvargs = array();
+<a name="line646"></a>        foreach ($post_args as $k => $v) {
+<a name="line647"></a>            if (strpos($k, 'openid.') !== 0) {
+<a name="line648"></a>                // raise ValueError(
+<a name="line649"></a>                //   'This message can only be encoded as a POST, because it '
+<a name="line650"></a>                //   'contains arguments that are not prefixed with "openid."')
+<a name="line651"></a>                return null;
+<a name="line652"></a>            } else {
+<a name="line653"></a>                $kvargs[substr($k, 7)] = $v;
+<a name="line654"></a>            }
+<a name="line655"></a>        }
+<a name="line656"></a>
+<a name="line657"></a>        return $kvargs;
+<a name="line658"></a>    }
+<a name="line659"></a>
+<a name="line660"></a>    function toFormMarkup($action_url, $form_tag_attrs = null,
+<a name="line661"></a>                          $submit_text = "Continue")
+<a name="line662"></a>    {
+<a name="line663"></a>        $form = "<form accept-charset=\"UTF-8\" ".
+<a name="line664"></a>            "enctype=\"application/x-www-form-urlencoded\"";
+<a name="line665"></a>
+<a name="line666"></a>        if (!$form_tag_attrs) {
+<a name="line667"></a>            $form_tag_attrs = array();
+<a name="line668"></a>        }
+<a name="line669"></a>
+<a name="line670"></a>        $form_tag_attrs['action'] = $action_url;
+<a name="line671"></a>        $form_tag_attrs['method'] = 'post';
+<a name="line672"></a>
+<a name="line673"></a>        unset($form_tag_attrs['enctype']);
+<a name="line674"></a>        unset($form_tag_attrs['accept-charset']);
+<a name="line675"></a>
+<a name="line676"></a>        if ($form_tag_attrs) {
+<a name="line677"></a>            foreach ($form_tag_attrs as $name => $attr) {
+<a name="line678"></a>                $form .= sprintf(" %s=\"%s\"", $name, $attr);
+<a name="line679"></a>            }
+<a name="line680"></a>        }
+<a name="line681"></a>
+<a name="line682"></a>        $form .= ">\n";
+<a name="line683"></a>
+<a name="line684"></a>        foreach ($this->toPostArgs() as $name => $value) {
+<a name="line685"></a>            $form .= sprintf(
+<a name="line686"></a>                        "<input type=\"hidden\" name=\"%s\" value=\"%s\" />\n",
+<a name="line687"></a>                        $name, $value);
+<a name="line688"></a>        }
+<a name="line689"></a>
+<a name="line690"></a>        $form .= sprintf("<input type=\"submit\" value=\"%s\" />\n",
+<a name="line691"></a>                         $submit_text);
+<a name="line692"></a>
+<a name="line693"></a>        $form .= "</form>\n";
+<a name="line694"></a>
+<a name="line695"></a>        return $form;
+<a name="line696"></a>    }
+<a name="line697"></a>
+<a name="line698"></a>    function toURL($base_url)
+<a name="line699"></a>    {
+<a name="line700"></a>        // Generate a GET URL with the parameters in this message
+<a name="line701"></a>        // attached as query parameters.
+<a name="line702"></a>        return Auth_OpenID::appendArgs($base_url, $this->toPostArgs());
+<a name="line703"></a>    }
+<a name="line704"></a>
+<a name="line705"></a>    function toKVForm()
+<a name="line706"></a>    {
+<a name="line707"></a>        // Generate a KVForm string that contains the parameters in
+<a name="line708"></a>        // this message. This will fail if the message contains
+<a name="line709"></a>        // arguments outside of the 'openid.' prefix.
+<a name="line710"></a>        return Auth_OpenID_KVForm::fromArray($this->toArgs());
+<a name="line711"></a>    }
+<a name="line712"></a>
+<a name="line713"></a>    function toURLEncoded()
+<a name="line714"></a>    {
+<a name="line715"></a>        // Generate an x-www-urlencoded string
+<a name="line716"></a>        $args = array();
+<a name="line717"></a>
+<a name="line718"></a>        foreach ($this->toPostArgs() as $k => $v) {
+<a name="line719"></a>            $args[] = array($k, $v);
+<a name="line720"></a>        }
+<a name="line721"></a>
+<a name="line722"></a>        sort($args);
+<a name="line723"></a>        return Auth_OpenID::httpBuildQuery($args);
+<a name="line724"></a>    }
+<a name="line725"></a>
+<a name="line726"></a>    /**
+<a name="line727"></a>     * @access private
+<a name="line728"></a>     */
+<a name="line729"></a>    function _fixNS($namespace)
+<a name="line730"></a>    {
+<a name="line731"></a>        // Convert an input value into the internally used values of
+<a name="line732"></a>        // this object
+<a name="line733"></a>
+<a name="line734"></a>        if ($namespace == Auth_OpenID_OPENID_NS) {
+<a name="line735"></a>            if ($this->_openid_ns_uri === null) {
+<a name="line736"></a>                return new Auth_OpenID_FailureResponse(null,
+<a name="line737"></a>                    'OpenID namespace not set');
+<a name="line738"></a>            } else {
+<a name="line739"></a>                $namespace = $this->_openid_ns_uri;
+<a name="line740"></a>            }
+<a name="line741"></a>        }
+<a name="line742"></a>
+<a name="line743"></a>        if (($namespace != Auth_OpenID_BARE_NS) &&
+<a name="line744"></a>              (!is_string($namespace))) {
+<a name="line745"></a>            //TypeError
+<a name="line746"></a>            $err_msg = sprintf("Namespace must be Auth_OpenID_BARE_NS, ".
+<a name="line747"></a>                              "Auth_OpenID_OPENID_NS or a string. got %s",
+<a name="line748"></a>                              print_r($namespace, true));
+<a name="line749"></a>            return new Auth_OpenID_FailureResponse(null, $err_msg);
+<a name="line750"></a>        }
+<a name="line751"></a>
+<a name="line752"></a>        if (($namespace != Auth_OpenID_BARE_NS) &&
+<a name="line753"></a>            (strpos($namespace, ':') === false)) {
+<a name="line754"></a>            // fmt = 'OpenID 2.0 namespace identifiers SHOULD be URIs. Got %r'
+<a name="line755"></a>            // warnings.warn(fmt % (namespace,), DeprecationWarning)
+<a name="line756"></a>
+<a name="line757"></a>            if ($namespace == 'sreg') {
+<a name="line758"></a>                // fmt = 'Using %r instead of "sreg" as namespace'
+<a name="line759"></a>                // warnings.warn(fmt % (SREG_URI,), DeprecationWarning,)
+<a name="line760"></a>                return Auth_OpenID_SREG_URI;
+<a name="line761"></a>            }
+<a name="line762"></a>        }
+<a name="line763"></a>
+<a name="line764"></a>        return $namespace;
+<a name="line765"></a>    }
+<a name="line766"></a>
+<a name="line767"></a>    function hasKey($namespace, $ns_key)
+<a name="line768"></a>    {
+<a name="line769"></a>        $namespace = $this->_fixNS($namespace);
+<a name="line770"></a>        if (Auth_OpenID::isFailure($namespace)) {
+<a name="line771"></a>            // XXX log me
+<a name="line772"></a>            return false;
+<a name="line773"></a>        } else {
+<a name="line774"></a>            return $this->args->contains(array($namespace, $ns_key));
+<a name="line775"></a>        }
+<a name="line776"></a>    }
+<a name="line777"></a>
+<a name="line778"></a>    function getKey($namespace, $ns_key)
+<a name="line779"></a>    {
+<a name="line780"></a>        // Get the key for a particular namespaced argument
+<a name="line781"></a>        $namespace = $this->_fixNS($namespace);
+<a name="line782"></a>        if (Auth_OpenID::isFailure($namespace)) {
+<a name="line783"></a>            return $namespace;
+<a name="line784"></a>        }
+<a name="line785"></a>        if ($namespace == Auth_OpenID_BARE_NS) {
+<a name="line786"></a>            return $ns_key;
+<a name="line787"></a>        }
+<a name="line788"></a>
+<a name="line789"></a>        $ns_alias = $this->namespaces->getAlias($namespace);
+<a name="line790"></a>
+<a name="line791"></a>        // No alias is defined, so no key can exist
+<a name="line792"></a>        if ($ns_alias === null) {
+<a name="line793"></a>            return null;
+<a name="line794"></a>        }
+<a name="line795"></a>
+<a name="line796"></a>        if ($ns_alias == Auth_OpenID_NULL_NAMESPACE) {
+<a name="line797"></a>            $tail = $ns_key;
+<a name="line798"></a>        } else {
+<a name="line799"></a>            $tail = sprintf('%s.%s', $ns_alias, $ns_key);
+<a name="line800"></a>        }
+<a name="line801"></a>
+<a name="line802"></a>        return 'openid.' . $tail;
+<a name="line803"></a>    }
+<a name="line804"></a>
+<a name="line805"></a>    function getArg($namespace, $key, $default = null)
+<a name="line806"></a>    {
+<a name="line807"></a>        // Get a value for a namespaced key.
+<a name="line808"></a>        $namespace = $this->_fixNS($namespace);
+<a name="line809"></a>
+<a name="line810"></a>        if (Auth_OpenID::isFailure($namespace)) {
+<a name="line811"></a>            return $namespace;
+<a name="line812"></a>        } else {
+<a name="line813"></a>            if ((!$this->args->contains(array($namespace, $key))) &&
+<a name="line814"></a>              ($default == Auth_OpenID_NO_DEFAULT)) {
+<a name="line815"></a>                $err_msg = sprintf("Namespace %s missing required field %s",
+<a name="line816"></a>                                   $namespace, $key);
+<a name="line817"></a>                return new Auth_OpenID_FailureResponse(null, $err_msg);
+<a name="line818"></a>            } else {
+<a name="line819"></a>                return $this->args->get(array($namespace, $key), $default);
+<a name="line820"></a>            }
+<a name="line821"></a>        }
+<a name="line822"></a>    }
+<a name="line823"></a>
+<a name="line824"></a>    function getArgs($namespace)
+<a name="line825"></a>    {
+<a name="line826"></a>        // Get the arguments that are defined for this namespace URI
+<a name="line827"></a>
+<a name="line828"></a>        $namespace = $this->_fixNS($namespace);
+<a name="line829"></a>        if (Auth_OpenID::isFailure($namespace)) {
+<a name="line830"></a>            return $namespace;
+<a name="line831"></a>        } else {
+<a name="line832"></a>            $stuff = array();
+<a name="line833"></a>            foreach ($this->args->items() as $pair) {
+<a name="line834"></a>                list($key, $value) = $pair;
+<a name="line835"></a>                list($pair_ns, $ns_key) = $key;
+<a name="line836"></a>                if ($pair_ns == $namespace) {
+<a name="line837"></a>                    $stuff[$ns_key] = $value;
+<a name="line838"></a>                }
+<a name="line839"></a>            }
+<a name="line840"></a>
+<a name="line841"></a>            return $stuff;
+<a name="line842"></a>        }
+<a name="line843"></a>    }
+<a name="line844"></a>
+<a name="line845"></a>    function updateArgs($namespace, $updates)
+<a name="line846"></a>    {
+<a name="line847"></a>        // Set multiple key/value pairs in one call
+<a name="line848"></a>
+<a name="line849"></a>        $namespace = $this->_fixNS($namespace);
+<a name="line850"></a>
+<a name="line851"></a>        if (Auth_OpenID::isFailure($namespace)) {
+<a name="line852"></a>            return $namespace;
+<a name="line853"></a>        } else {
+<a name="line854"></a>            foreach ($updates as $k => $v) {
+<a name="line855"></a>                $this->setArg($namespace, $k, $v);
+<a name="line856"></a>            }
+<a name="line857"></a>            return true;
+<a name="line858"></a>        }
+<a name="line859"></a>    }
+<a name="line860"></a>
+<a name="line861"></a>    function setArg($namespace, $key, $value)
+<a name="line862"></a>    {
+<a name="line863"></a>        // Set a single argument in this namespace
+<a name="line864"></a>        $namespace = $this->_fixNS($namespace);
+<a name="line865"></a>
+<a name="line866"></a>        if (Auth_OpenID::isFailure($namespace)) {
+<a name="line867"></a>            return $namespace;
+<a name="line868"></a>        } else {
+<a name="line869"></a>            $this->args->set(array($namespace, $key), $value);
+<a name="line870"></a>            if ($namespace !== Auth_OpenID_BARE_NS) {
+<a name="line871"></a>                $this->namespaces->add($namespace);
+<a name="line872"></a>            }
+<a name="line873"></a>            return true;
+<a name="line874"></a>        }
+<a name="line875"></a>    }
+<a name="line876"></a>
+<a name="line877"></a>    function delArg($namespace, $key)
+<a name="line878"></a>    {
+<a name="line879"></a>        $namespace = $this->_fixNS($namespace);
+<a name="line880"></a>
+<a name="line881"></a>        if (Auth_OpenID::isFailure($namespace)) {
+<a name="line882"></a>            return $namespace;
+<a name="line883"></a>        } else {
+<a name="line884"></a>            return $this->args->del(array($namespace, $key));
+<a name="line885"></a>        }
+<a name="line886"></a>    }
+<a name="line887"></a>
+<a name="line888"></a>    function getAliasedArg($aliased_key, $default = null)
+<a name="line889"></a>    {
+<a name="line890"></a>        if ($aliased_key == 'ns') {
+<a name="line891"></a>            // Return the namespace URI for the OpenID namespace
+<a name="line892"></a>            return $this->getOpenIDNamespace();
+<a name="line893"></a>        }
+<a name="line894"></a>
+<a name="line895"></a>        $parts = explode('.', $aliased_key, 2);
+<a name="line896"></a>
+<a name="line897"></a>        if (count($parts) != 2) {
+<a name="line898"></a>            $ns = null;
+<a name="line899"></a>        } else {
+<a name="line900"></a>            list($alias, $key) = $parts;
+<a name="line901"></a>
+<a name="line902"></a>            if ($alias == 'ns') {
+<a name="line903"></a>              // Return the namespace URI for a namespace alias
+<a name="line904"></a>              // parameter.
+<a name="line905"></a>              return $this->namespaces->getNamespaceURI($key);
+<a name="line906"></a>            } else {
+<a name="line907"></a>              $ns = $this->namespaces->getNamespaceURI($alias);
+<a name="line908"></a>            }
+<a name="line909"></a>        }
+<a name="line910"></a>
+<a name="line911"></a>        if ($ns === null) {
+<a name="line912"></a>            $key = $aliased_key;
+<a name="line913"></a>            $ns = $this->getOpenIDNamespace();
+<a name="line914"></a>        }
+<a name="line915"></a>
+<a name="line916"></a>        return $this->getArg($ns, $key, $default);
+<a name="line917"></a>    }
+<a name="line918"></a>}
+<a name="line919"></a>
+<a name="line920"></a>
+<a name="line921"></a></pre>
+<div class="header">
+<h1>GiftFlow API</h1>
+<ul>
+<li><a href="../../../../../overview-summary.html">Overview</a></li>
+<li>Package</li><li>Class</li><li>Tree</li><li><a href="../../../../../overview-files.html">Files</a></li>
+<li><a href="../../../../../deprecated-list.html">Deprecated</a></li>
+<li><a href="../../../../../index-all.html">Index</a></li>
+</ul>
+</div>
+
+<div class="small_links">
+<a href="../../../../../index.html" target="_top">Frames</a>
+<a href="../../../../../source/application/libraries/auth/openid/message.php.html" target="_top">No frames</a>
+</div>
+<hr>
+
+<p id="footer">This document was generated by <a href="http://peej.github.com/phpdoctor/">PHPDoctor: The PHP Documentation Creator</a></p>
+
+</body>
+
+</html>

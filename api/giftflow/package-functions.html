@@ -6,7 +6,7 @@
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 
 <meta name="generator" content="PHPDoctor 2RC4 (http://peej.github.com/phpdoctor/)">
-<meta name="when" content="Tue, 29 Jun 2010 21:10:09 +0000">
+<meta name="when" content="Sat, 10 Jul 2010 18:10:55 +0000">
 
 <link rel="stylesheet" type="text/css" href="../stylesheet.css">
 <link rel="start" href="../overview-summary.html">
@@ -47,11 +47,160 @@ Detail: <a href="#detail_function">Function</a>
 <tr><th colspan="2" class="title">Function Summary</th></tr>
 <tr>
 <td class="type"> void</td>
+<td class="description"><p class="name"><a href="#Auth_OpenID_SHA1()">Auth_OpenID_SHA1</a>(mixed text)</p></td>
+</tr>
+<tr>
+<td class="type"> void</td>
+<td class="description"><p class="name"><a href="#Auth_OpenID_arrangeByType()">Auth_OpenID_arrangeByType</a>(mixed service_list, mixed preferred_types)</p></td>
+</tr>
+<tr>
+<td class="type"> void</td>
+<td class="description"><p class="name"><a href="#Auth_OpenID_bestMatchingService()">Auth_OpenID_bestMatchingService</a>(mixed service, mixed preferred_types)</p></td>
+</tr>
+<tr>
+<td class="type"> void</td>
+<td class="description"><p class="name"><a href="#Auth_OpenID_checkFieldName()">Auth_OpenID_checkFieldName</a>(mixed field_name)</p><p class="description">Check to see that the given value is a valid simple registration
+data field name. </p></td>
+</tr>
+<tr>
+<td class="type"> void</td>
+<td class="description"><p class="name"><a href="#Auth_OpenID_discover()">Auth_OpenID_discover</a>(mixed uri, mixed fetcher)</p></td>
+</tr>
+<tr>
+<td class="type"> void</td>
+<td class="description"><p class="name"><a href="#Auth_OpenID_discoverURI()">Auth_OpenID_discoverURI</a>(mixed uri, mixed fetcher)</p></td>
+</tr>
+<tr>
+<td class="type"> void</td>
+<td class="description"><p class="name"><a href="#Auth_OpenID_discoverWithYadis()">Auth_OpenID_discoverWithYadis</a>(mixed uri, mixed fetcher, str endpoint_filter, mixed discover_function)</p></td>
+</tr>
+<tr>
+<td class="type"> void</td>
+<td class="description"><p class="name"><a href="#Auth_OpenID_discoverWithoutYadis()">Auth_OpenID_discoverWithoutYadis</a>(mixed uri, mixed fetcher)</p></td>
+</tr>
+<tr>
+<td class="type"> void</td>
+<td class="description"><p class="name"><a href="#Auth_OpenID_discoverXRI()">Auth_OpenID_discoverXRI</a>(mixed iname, mixed fetcher)</p></td>
+</tr>
+<tr>
+<td class="type"> void</td>
+<td class="description"><p class="name"><a href="#Auth_OpenID_findOPLocalIdentifier()">Auth_OpenID_findOPLocalIdentifier</a>(mixed service, mixed type_uris)</p></td>
+</tr>
+<tr>
+<td class="type"> void</td>
+<td class="description"><p class="name"><a href="#Auth_OpenID_getDefaultGen()">Auth_OpenID_getDefaultGen</a>()</p></td>
+</tr>
+<tr>
+<td class="type"> void</td>
+<td class="description"><p class="name"><a href="#Auth_OpenID_getOPOrUserServices()">Auth_OpenID_getOPOrUserServices</a>(mixed openid_services)</p></td>
+</tr>
+<tr>
+<td class="type"> void</td>
+<td class="description"><p class="name"><a href="#Auth_OpenID_getOpenIDConsumerTypeURIs()">Auth_OpenID_getOpenIDConsumerTypeURIs</a>()</p></td>
+</tr>
+<tr>
+<td class="type"> void</td>
+<td class="description"><p class="name"><a href="#Auth_OpenID_getOpenIDTypeName()">Auth_OpenID_getOpenIDTypeName</a>(mixed type_uri)</p></td>
+</tr>
+<tr>
+<td class="type"> void</td>
+<td class="description"><p class="name"><a href="#Auth_OpenID_getOpenIDTypeURIs()">Auth_OpenID_getOpenIDTypeURIs</a>()</p></td>
+</tr>
+<tr>
+<td class="type">private  void</td>
+<td class="description"><p class="name"><a href="#Auth_OpenID_isError()">Auth_OpenID_isError</a>(mixed obj, str cls)</p><p class="description"></p></td>
+</tr>
+<tr>
+<td class="type"> void</td>
+<td class="description"><p class="name"><a href="#Auth_OpenID_isOpenID1()">Auth_OpenID_isOpenID1</a>(mixed ns)</p></td>
+</tr>
+<tr>
+<td class="type"> void</td>
+<td class="description"><p class="name"><a href="#Auth_OpenID_makeOpenIDEndpoints()">Auth_OpenID_makeOpenIDEndpoints</a>(mixed uri, mixed yadis_services)</p></td>
+</tr>
+<tr>
+<td class="type"> void</td>
+<td class="description"><p class="name"><a href="#Auth_OpenID_splitNonce()">Auth_OpenID_splitNonce</a>(mixed nonce_string)</p></td>
+</tr>
+<tr>
+<td class="type"> void</td>
+<td class="description"><p class="name"><a href="#Auth_Yadis_XRI()">Auth_Yadis_XRI</a>(mixed xri)</p></td>
+</tr>
+<tr>
+<td class="type"> void</td>
+<td class="description"><p class="name"><a href="#Auth_Yadis_XRIAppendArgs()">Auth_Yadis_XRIAppendArgs</a>(mixed url, mixed args)</p></td>
+</tr>
+<tr>
+<td class="type"> void</td>
+<td class="description"><p class="name"><a href="#Auth_Yadis_escapeForIRI()">Auth_Yadis_escapeForIRI</a>(mixed xri)</p></td>
+</tr>
+<tr>
+<td class="type"> void</td>
+<td class="description"><p class="name"><a href="#Auth_Yadis_getCanonicalID()">Auth_Yadis_getCanonicalID</a>(mixed iname, mixed xrds)</p></td>
+</tr>
+<tr>
+<td class="type"> void</td>
+<td class="description"><p class="name"><a href="#Auth_Yadis_getEscapeRE()">Auth_Yadis_getEscapeRE</a>()</p></td>
+</tr>
+<tr>
+<td class="type"> void</td>
+<td class="description"><p class="name"><a href="#Auth_Yadis_getIPrivateChars()">Auth_Yadis_getIPrivateChars</a>()</p></td>
+</tr>
+<tr>
+<td class="type"> void</td>
+<td class="description"><p class="name"><a href="#Auth_Yadis_getNSMap()">Auth_Yadis_getNSMap</a>()</p></td>
+</tr>
+<tr>
+<td class="type"> void</td>
+<td class="description"><p class="name"><a href="#Auth_Yadis_getXRIAuthorities()">Auth_Yadis_getXRIAuthorities</a>()</p></td>
+</tr>
+<tr>
+<td class="type"> void</td>
+<td class="description"><p class="name"><a href="#Auth_Yadis_getXrefRE()">Auth_Yadis_getXrefRE</a>()</p></td>
+</tr>
+<tr>
+<td class="type"> void</td>
+<td class="description"><p class="name"><a href="#Auth_Yadis_identifierScheme()">Auth_Yadis_identifierScheme</a>(mixed identifier)</p></td>
+</tr>
+<tr>
+<td class="type"> void</td>
+<td class="description"><p class="name"><a href="#Auth_Yadis_iriToURI()">Auth_Yadis_iriToURI</a>(mixed iri)</p></td>
+</tr>
+<tr>
+<td class="type"> void</td>
+<td class="description"><p class="name"><a href="#Auth_Yadis_pct_escape_unicode()">Auth_Yadis_pct_escape_unicode</a>(mixed char_match)</p></td>
+</tr>
+<tr>
+<td class="type"> void</td>
+<td class="description"><p class="name"><a href="#Auth_Yadis_providerIsAuthoritative()">Auth_Yadis_providerIsAuthoritative</a>(mixed providerID, mixed canonicalID)</p></td>
+</tr>
+<tr>
+<td class="type"> void</td>
+<td class="description"><p class="name"><a href="#Auth_Yadis_rootAuthority()">Auth_Yadis_rootAuthority</a>(mixed xri)</p></td>
+</tr>
+<tr>
+<td class="type"> void</td>
+<td class="description"><p class="name"><a href="#Auth_Yadis_startswith()">Auth_Yadis_startswith</a>(mixed s, mixed stuff)</p></td>
+</tr>
+<tr>
+<td class="type"> void</td>
+<td class="description"><p class="name"><a href="#Auth_Yadis_toIRINormal()">Auth_Yadis_toIRINormal</a>(mixed xri)</p></td>
+</tr>
+<tr>
+<td class="type"> void</td>
+<td class="description"><p class="name"><a href="#Auth_Yadis_toURINormal()">Auth_Yadis_toURINormal</a>(mixed xri)</p></td>
+</tr>
+<tr>
+<td class="type"> void</td>
 <td class="description"><p class="name"><a href="#DB()">DB</a>(str params, bool active_record_override)</p><p class="description">Initialize the database</p></td>
 </tr>
 <tr>
 <td class="type"> void</td>
 <td class="description"><p class="name"><a href="#_attributes_to_string()">_attributes_to_string</a>(mixed attributes, bool formtag)</p><p class="description">Attributes To StringHelper function used by some of the form helpers</p></td>
+</tr>
+<tr>
+<td class="type"> void</td>
+<td class="description"><p class="name"><a href="#_escape_xref()">_escape_xref</a>(mixed xref_match)</p></td>
 </tr>
 <tr>
 <td class="type"> void</td>
@@ -209,6 +358,14 @@ html4-strict, html4-trans, and html4-frame. </p></td>
 <td class="description"><p class="name"><a href="#file_put_contents()">file_put_contents</a>(mixed filename, mixed data, mixed flags)</p><p class="description">file_put_contents()Writes a string to a file
 http://us.php.net/manual/en/function.file_put_contents.php
 argument 4, $context, not supported</p></td>
+</tr>
+<tr>
+<td class="type"> void</td>
+<td class="description"><p class="name"><a href="#filter_MatchesAnyOpenIDConsumerType()">filter_MatchesAnyOpenIDConsumerType</a>(mixed service)</p></td>
+</tr>
+<tr>
+<td class="type"> void</td>
+<td class="description"><p class="name"><a href="#filter_MatchesAnyOpenIDType()">filter_MatchesAnyOpenIDType</a>(mixed service)</p></td>
 </tr>
 <tr>
 <td class="type"> void</td>
@@ -529,7 +686,7 @@ except those found in http://http://www.some-site.com//index.phpbecomes:http://w
 </tr>
 <tr>
 <td class="type"> void</td>
-<td class="description"><p class="name"><a href="#result_row()">result_row</a>(mixed id, mixed params, mixed G)</p></td>
+<td class="description"><p class="name"><a href="#result_row()">result_row</a>(mixed G, mixed params)</p></td>
 </tr>
 <tr>
 <td class="type"> void</td>
@@ -730,6 +887,333 @@ word you've submitted.</p></td>
 </table>
 
 <h2 id="detail_function">Function Detail</h2>
+<a href="../source/application/libraries/auth/openid/hmac.php.html#line25" class="location">application/libraries/Auth/OpenID/HMAC.php at line 25</a>
+
+<h3 id="Auth_OpenID_SHA1()">Auth_OpenID_SHA1</h3>
+<code class="signature">public  void <strong>Auth_OpenID_SHA1</strong>(mixed text)</code>
+<div class="details">
+</div>
+
+<hr>
+
+<a href="../source/application/libraries/auth/openid/discover.php.html#line397" class="location">application/libraries/Auth/OpenID/Discover.php at line 397</a>
+
+<h3 id="Auth_OpenID_arrangeByType()">Auth_OpenID_arrangeByType</h3>
+<code class="signature">public  void <strong>Auth_OpenID_arrangeByType</strong>(mixed service_list, mixed preferred_types)</code>
+<div class="details">
+</div>
+
+<hr>
+
+<a href="../source/application/libraries/auth/openid/discover.php.html#line378" class="location">application/libraries/Auth/OpenID/Discover.php at line 378</a>
+
+<h3 id="Auth_OpenID_bestMatchingService()">Auth_OpenID_bestMatchingService</h3>
+<code class="signature">public  void <strong>Auth_OpenID_bestMatchingService</strong>(mixed service, mixed preferred_types)</code>
+<div class="details">
+</div>
+
+<hr>
+
+<a href="../source/application/libraries/auth/openid/sreg.php.html#line65" class="location">application/libraries/Auth/OpenID/SReg.php at line 65</a>
+
+<h3 id="Auth_OpenID_checkFieldName()">Auth_OpenID_checkFieldName</h3>
+<code class="signature">public  void <strong>Auth_OpenID_checkFieldName</strong>(mixed field_name)</code>
+<div class="details">
+<p>Check to see that the given value is a valid simple registration
+data field name.  Return true if so, false if not.</p>
+</div>
+
+<hr>
+
+<a href="../source/application/libraries/auth/openid/discover.php.html#line571" class="location">application/libraries/Auth/OpenID/Discover.php at line 571</a>
+
+<h3 id="Auth_OpenID_discover()">Auth_OpenID_discover</h3>
+<code class="signature">public  void <strong>Auth_OpenID_discover</strong>(mixed uri, mixed fetcher)</code>
+<div class="details">
+</div>
+
+<hr>
+
+<a href="../source/application/libraries/auth/openid/discover.php.html#line523" class="location">application/libraries/Auth/OpenID/Discover.php at line 523</a>
+
+<h3 id="Auth_OpenID_discoverURI()">Auth_OpenID_discoverURI</h3>
+<code class="signature">public  void <strong>Auth_OpenID_discoverURI</strong>(mixed uri, mixed fetcher)</code>
+<div class="details">
+</div>
+
+<hr>
+
+<a href="../source/application/libraries/auth/openid/discover.php.html#line475" class="location">application/libraries/Auth/OpenID/Discover.php at line 475</a>
+
+<h3 id="Auth_OpenID_discoverWithYadis()">Auth_OpenID_discoverWithYadis</h3>
+<code class="signature">public  void <strong>Auth_OpenID_discoverWithYadis</strong>(mixed uri, mixed fetcher, str endpoint_filter, mixed discover_function)</code>
+<div class="details">
+</div>
+
+<hr>
+
+<a href="../source/application/libraries/auth/openid/discover.php.html#line529" class="location">application/libraries/Auth/OpenID/Discover.php at line 529</a>
+
+<h3 id="Auth_OpenID_discoverWithoutYadis()">Auth_OpenID_discoverWithoutYadis</h3>
+<code class="signature">public  void <strong>Auth_OpenID_discoverWithoutYadis</strong>(mixed uri, mixed fetcher)</code>
+<div class="details">
+</div>
+
+<hr>
+
+<a href="../source/application/libraries/auth/openid/discover.php.html#line548" class="location">application/libraries/Auth/OpenID/Discover.php at line 548</a>
+
+<h3 id="Auth_OpenID_discoverXRI()">Auth_OpenID_discoverXRI</h3>
+<code class="signature">public  void <strong>Auth_OpenID_discoverXRI</strong>(mixed iname, mixed fetcher)</code>
+<div class="details">
+</div>
+
+<hr>
+
+<a href="../source/application/libraries/auth/openid/discover.php.html#line307" class="location">application/libraries/Auth/OpenID/Discover.php at line 307</a>
+
+<h3 id="Auth_OpenID_findOPLocalIdentifier()">Auth_OpenID_findOPLocalIdentifier</h3>
+<code class="signature">public  void <strong>Auth_OpenID_findOPLocalIdentifier</strong>(mixed service, mixed type_uris)</code>
+<div class="details">
+</div>
+
+<hr>
+
+<a href="../source/application/libraries/auth/openid/diffiehellman.php.html#line31" class="location">application/libraries/Auth/OpenID/DiffieHellman.php at line 31</a>
+
+<h3 id="Auth_OpenID_getDefaultGen()">Auth_OpenID_getDefaultGen</h3>
+<code class="signature">public  void <strong>Auth_OpenID_getDefaultGen</strong>()</code>
+<div class="details">
+</div>
+
+<hr>
+
+<a href="../source/application/libraries/auth/openid/discover.php.html#line429" class="location">application/libraries/Auth/OpenID/Discover.php at line 429</a>
+
+<h3 id="Auth_OpenID_getOPOrUserServices()">Auth_OpenID_getOPOrUserServices</h3>
+<code class="signature">public  void <strong>Auth_OpenID_getOPOrUserServices</strong>(mixed openid_services)</code>
+<div class="details">
+</div>
+
+<hr>
+
+<a href="../source/application/libraries/auth/openid/discover.php.html#line33" class="location">application/libraries/Auth/OpenID/Discover.php at line 33</a>
+
+<h3 id="Auth_OpenID_getOpenIDConsumerTypeURIs()">Auth_OpenID_getOpenIDConsumerTypeURIs</h3>
+<code class="signature">public  void <strong>Auth_OpenID_getOpenIDConsumerTypeURIs</strong>()</code>
+<div class="details">
+</div>
+
+<hr>
+
+<a href="../source/application/libraries/auth/openid/discover.php.html#line43" class="location">application/libraries/Auth/OpenID/Discover.php at line 43</a>
+
+<h3 id="Auth_OpenID_getOpenIDTypeName()">Auth_OpenID_getOpenIDTypeName</h3>
+<code class="signature">public  void <strong>Auth_OpenID_getOpenIDTypeName</strong>(mixed type_uri)</code>
+<div class="details">
+</div>
+
+<hr>
+
+<a href="../source/application/libraries/auth/openid/discover.php.html#line24" class="location">application/libraries/Auth/OpenID/Discover.php at line 24</a>
+
+<h3 id="Auth_OpenID_getOpenIDTypeURIs()">Auth_OpenID_getOpenIDTypeURIs</h3>
+<code class="signature">public  void <strong>Auth_OpenID_getOpenIDTypeURIs</strong>()</code>
+<div class="details">
+</div>
+
+<hr>
+
+<a href="../source/application/libraries/auth/openid/server.php.html#line135" class="location">application/libraries/Auth/OpenID/Server.php at line 135</a>
+
+<h3 id="Auth_OpenID_isError()">Auth_OpenID_isError</h3>
+<code class="signature">private  void <strong>Auth_OpenID_isError</strong>(mixed obj, str cls)</code>
+<div class="details">
+<p></p>
+</div>
+
+<hr>
+
+<a href="../source/application/libraries/auth/openid/message.php.html#line28" class="location">application/libraries/Auth/OpenID/Message.php at line 28</a>
+
+<h3 id="Auth_OpenID_isOpenID1()">Auth_OpenID_isOpenID1</h3>
+<code class="signature">public  void <strong>Auth_OpenID_isOpenID1</strong>(mixed ns)</code>
+<div class="details">
+</div>
+
+<hr>
+
+<a href="../source/application/libraries/auth/openid/discover.php.html#line444" class="location">application/libraries/Auth/OpenID/Discover.php at line 444</a>
+
+<h3 id="Auth_OpenID_makeOpenIDEndpoints()">Auth_OpenID_makeOpenIDEndpoints</h3>
+<code class="signature">public  void <strong>Auth_OpenID_makeOpenIDEndpoints</strong>(mixed uri, mixed yadis_services)</code>
+<div class="details">
+</div>
+
+<hr>
+
+<a href="../source/application/libraries/auth/openid/nonce.php.html#line29" class="location">application/libraries/Auth/OpenID/Nonce.php at line 29</a>
+
+<h3 id="Auth_OpenID_splitNonce()">Auth_OpenID_splitNonce</h3>
+<code class="signature">public  void <strong>Auth_OpenID_splitNonce</strong>(mixed nonce_string)</code>
+<div class="details">
+</div>
+
+<hr>
+
+<a href="../source/application/libraries/auth/yadis/xri.php.html#line179" class="location">application/libraries/Auth/Yadis/XRI.php at line 179</a>
+
+<h3 id="Auth_Yadis_XRI()">Auth_Yadis_XRI</h3>
+<code class="signature">public  void <strong>Auth_Yadis_XRI</strong>(mixed xri)</code>
+<div class="details">
+</div>
+
+<hr>
+
+<a href="../source/application/libraries/auth/yadis/xri.php.html#line97" class="location">application/libraries/Auth/Yadis/XRI.php at line 97</a>
+
+<h3 id="Auth_Yadis_XRIAppendArgs()">Auth_Yadis_XRIAppendArgs</h3>
+<code class="signature">public  void <strong>Auth_Yadis_XRIAppendArgs</strong>(mixed url, mixed args)</code>
+<div class="details">
+</div>
+
+<hr>
+
+<a href="../source/application/libraries/auth/yadis/xri.php.html#line72" class="location">application/libraries/Auth/Yadis/XRI.php at line 72</a>
+
+<h3 id="Auth_Yadis_escapeForIRI()">Auth_Yadis_escapeForIRI</h3>
+<code class="signature">public  void <strong>Auth_Yadis_escapeForIRI</strong>(mixed xri)</code>
+<div class="details">
+</div>
+
+<hr>
+
+<a href="../source/application/libraries/auth/yadis/xri.php.html#line187" class="location">application/libraries/Auth/Yadis/XRI.php at line 187</a>
+
+<h3 id="Auth_Yadis_getCanonicalID()">Auth_Yadis_getCanonicalID</h3>
+<code class="signature">public  void <strong>Auth_Yadis_getCanonicalID</strong>(mixed iname, mixed xrds)</code>
+<div class="details">
+</div>
+
+<hr>
+
+<a href="../source/application/libraries/auth/yadis/xri.php.html#line26" class="location">application/libraries/Auth/Yadis/XRI.php at line 26</a>
+
+<h3 id="Auth_Yadis_getEscapeRE()">Auth_Yadis_getEscapeRE</h3>
+<code class="signature">public  void <strong>Auth_Yadis_getEscapeRE</strong>()</code>
+<div class="details">
+</div>
+
+<hr>
+
+<a href="../source/application/libraries/auth/yadis/misc.php.html#line35" class="location">application/libraries/Auth/Yadis/Misc.php at line 35</a>
+
+<h3 id="Auth_Yadis_getIPrivateChars()">Auth_Yadis_getIPrivateChars</h3>
+<code class="signature">public  void <strong>Auth_Yadis_getIPrivateChars</strong>()</code>
+<div class="details">
+</div>
+
+<hr>
+
+<a href="../source/application/libraries/auth/yadis/xrds.php.html#line49" class="location">application/libraries/Auth/Yadis/XRDS.php at line 49</a>
+
+<h3 id="Auth_Yadis_getNSMap()">Auth_Yadis_getNSMap</h3>
+<code class="signature">public  void <strong>Auth_Yadis_getNSMap</strong>()</code>
+<div class="details">
+</div>
+
+<hr>
+
+<a href="../source/application/libraries/auth/yadis/xri.php.html#line21" class="location">application/libraries/Auth/Yadis/XRI.php at line 21</a>
+
+<h3 id="Auth_Yadis_getXRIAuthorities()">Auth_Yadis_getXRIAuthorities</h3>
+<code class="signature">public  void <strong>Auth_Yadis_getXRIAuthorities</strong>()</code>
+<div class="details">
+</div>
+
+<hr>
+
+<a href="../source/application/libraries/auth/yadis/xri.php.html#line38" class="location">application/libraries/Auth/Yadis/XRI.php at line 38</a>
+
+<h3 id="Auth_Yadis_getXrefRE()">Auth_Yadis_getXrefRE</h3>
+<code class="signature">public  void <strong>Auth_Yadis_getXrefRE</strong>()</code>
+<div class="details">
+</div>
+
+<hr>
+
+<a href="../source/application/libraries/auth/yadis/xri.php.html#line43" class="location">application/libraries/Auth/Yadis/XRI.php at line 43</a>
+
+<h3 id="Auth_Yadis_identifierScheme()">Auth_Yadis_identifierScheme</h3>
+<code class="signature">public  void <strong>Auth_Yadis_identifierScheme</strong>(mixed identifier)</code>
+<div class="details">
+</div>
+
+<hr>
+
+<a href="../source/application/libraries/auth/yadis/xri.php.html#line85" class="location">application/libraries/Auth/Yadis/XRI.php at line 85</a>
+
+<h3 id="Auth_Yadis_iriToURI()">Auth_Yadis_iriToURI</h3>
+<code class="signature">public  void <strong>Auth_Yadis_iriToURI</strong>(mixed iri)</code>
+<div class="details">
+</div>
+
+<hr>
+
+<a href="../source/application/libraries/auth/yadis/misc.php.html#line44" class="location">application/libraries/Auth/Yadis/Misc.php at line 44</a>
+
+<h3 id="Auth_Yadis_pct_escape_unicode()">Auth_Yadis_pct_escape_unicode</h3>
+<code class="signature">public  void <strong>Auth_Yadis_pct_escape_unicode</strong>(mixed char_match)</code>
+<div class="details">
+</div>
+
+<hr>
+
+<a href="../source/application/libraries/auth/yadis/xri.php.html#line137" class="location">application/libraries/Auth/Yadis/XRI.php at line 137</a>
+
+<h3 id="Auth_Yadis_providerIsAuthoritative()">Auth_Yadis_providerIsAuthoritative</h3>
+<code class="signature">public  void <strong>Auth_Yadis_providerIsAuthoritative</strong>(mixed providerID, mixed canonicalID)</code>
+<div class="details">
+</div>
+
+<hr>
+
+<a href="../source/application/libraries/auth/yadis/xri.php.html#line144" class="location">application/libraries/Auth/Yadis/XRI.php at line 144</a>
+
+<h3 id="Auth_Yadis_rootAuthority()">Auth_Yadis_rootAuthority</h3>
+<code class="signature">public  void <strong>Auth_Yadis_rootAuthority</strong>(mixed xri)</code>
+<div class="details">
+</div>
+
+<hr>
+
+<a href="../source/application/libraries/auth/yadis/misc.php.html#line54" class="location">application/libraries/Auth/Yadis/Misc.php at line 54</a>
+
+<h3 id="Auth_Yadis_startswith()">Auth_Yadis_startswith</h3>
+<code class="signature">public  void <strong>Auth_Yadis_startswith</strong>(mixed s, mixed stuff)</code>
+<div class="details">
+</div>
+
+<hr>
+
+<a href="../source/application/libraries/auth/yadis/xri.php.html#line54" class="location">application/libraries/Auth/Yadis/XRI.php at line 54</a>
+
+<h3 id="Auth_Yadis_toIRINormal()">Auth_Yadis_toIRINormal</h3>
+<code class="signature">public  void <strong>Auth_Yadis_toIRINormal</strong>(mixed xri)</code>
+<div class="details">
+</div>
+
+<hr>
+
+<a href="../source/application/libraries/auth/yadis/xri.php.html#line80" class="location">application/libraries/Auth/Yadis/XRI.php at line 80</a>
+
+<h3 id="Auth_Yadis_toURINormal()">Auth_Yadis_toURINormal</h3>
+<code class="signature">public  void <strong>Auth_Yadis_toURINormal</strong>(mixed xri)</code>
+<div class="details">
+</div>
+
+<hr>
+
 <a href="../source/database/db.php.html#line25" class="location">database/DB.php at line 25</a>
 
 <h3 id="DB()">DB</h3>
@@ -758,6 +1242,15 @@ word you've submitted.</p></td>
 <dt>Param	bool.</dt>
 <dt>Return	string.</dt>
 </dl>
+</div>
+
+<hr>
+
+<a href="../source/application/libraries/auth/yadis/xri.php.html#line63" class="location">application/libraries/Auth/Yadis/XRI.php at line 63</a>
+
+<h3 id="_escape_xref()">_escape_xref</h3>
+<code class="signature">public  void <strong>_escape_xref</strong>(mixed xref_match)</code>
+<div class="details">
 </div>
 
 <hr>
@@ -846,7 +1339,7 @@ the object and returns it.</p>
 
 <hr>
 
-<a href="../source/application/helpers/elements_helper.php.html#line281" class="location">application/helpers/elements_helper.php at line 281</a>
+<a href="../source/application/helpers/elements_helper.php.html#line266" class="location">application/helpers/elements_helper.php at line 266</a>
 
 <h3 id="about_menu()">about_menu</h3>
 <code class="signature">public  void <strong>about_menu</strong>(mixed active)</code>
@@ -1268,7 +1761,7 @@ If the element is empty it returns FALSE (or whatever you specify as the default
 
 <hr>
 
-<a href="../source/application/helpers/elements_helper.php.html#line375" class="location">application/helpers/elements_helper.php at line 375</a>
+<a href="../source/application/helpers/elements_helper.php.html#line352" class="location">application/helpers/elements_helper.php at line 352</a>
 
 <h3 id="facebook_open_graph()">facebook_open_graph</h3>
 <code class="signature">public  void <strong>facebook_open_graph</strong>(mixed options)</code>
@@ -1277,7 +1770,7 @@ If the element is empty it returns FALSE (or whatever you specify as the default
 
 <hr>
 
-<a href="../source/application/helpers/elements_helper.php.html#line355" class="location">application/helpers/elements_helper.php at line 355</a>
+<a href="../source/application/helpers/elements_helper.php.html#line332" class="location">application/helpers/elements_helper.php at line 332</a>
 
 <h3 id="facebook_sdk()">facebook_sdk</h3>
 <code class="signature">public  void <strong>facebook_sdk</strong>()</code>
@@ -1304,6 +1797,24 @@ argument 4, $context, not supported</p>
 <dt>Return	int			length:</dt>
 <dd>of written string</dd>
 </dl>
+</div>
+
+<hr>
+
+<a href="../source/application/libraries/auth/openid/discover.php.html#line365" class="location">application/libraries/Auth/OpenID/Discover.php at line 365</a>
+
+<h3 id="filter_MatchesAnyOpenIDConsumerType()">filter_MatchesAnyOpenIDConsumerType</h3>
+<code class="signature">public  void <strong>filter_MatchesAnyOpenIDConsumerType</strong>(mixed service)</code>
+<div class="details">
+</div>
+
+<hr>
+
+<a href="../source/application/libraries/auth/openid/discover.php.html#line352" class="location">application/libraries/Auth/OpenID/Discover.php at line 352</a>
+
+<h3 id="filter_MatchesAnyOpenIDType()">filter_MatchesAnyOpenIDType</h3>
+<code class="signature">public  void <strong>filter_MatchesAnyOpenIDType</strong>(mixed service)</code>
+<div class="details">
 </div>
 
 <hr>
@@ -1401,7 +1912,7 @@ form validation class.</p>
 
 <hr>
 
-<a href="../source/application/helpers/elements_helper.php.html#line258" class="location">application/helpers/elements_helper.php at line 258</a>
+<a href="../source/application/helpers/elements_helper.php.html#line243" class="location">application/helpers/elements_helper.php at line 243</a>
 
 <h3 id="form_errors()">form_errors</h3>
 <code class="signature">public  void <strong>form_errors</strong>()</code>
@@ -2239,7 +2750,7 @@ match the date codes.</p>
 
 <hr>
 
-<a href="../source/application/helpers/elements_helper.php.html#line217" class="location">application/helpers/elements_helper.php at line 217</a>
+<a href="../source/application/helpers/elements_helper.php.html#line202" class="location">application/helpers/elements_helper.php at line 202</a>
 
 <h3 id="notify()">notify</h3>
 <code class="signature">public  void <strong>notify</strong>()</code>
@@ -2497,10 +3008,10 @@ except those found in http://</p><p>http://www.some-site.com//index.php</p><p>be
 
 <hr>
 
-<a href="../source/application/helpers/elements_helper.php.html#line309" class="location">application/helpers/elements_helper.php at line 309</a>
+<a href="../source/application/helpers/elements_helper.php.html#line294" class="location">application/helpers/elements_helper.php at line 294</a>
 
 <h3 id="result_row()">result_row</h3>
-<code class="signature">public  void <strong>result_row</strong>(mixed id, mixed params, mixed G)</code>
+<code class="signature">public  void <strong>result_row</strong>(mixed G, mixed params)</code>
 <div class="details">
 </div>
 
@@ -2652,7 +3163,7 @@ is active it retrieves the info from the validation class</p>
 
 <hr>
 
-<a href="../source/application/helpers/elements_helper.php.html#line442" class="location">application/helpers/elements_helper.php at line 442</a>
+<a href="../source/application/helpers/elements_helper.php.html#line419" class="location">application/helpers/elements_helper.php at line 419</a>
 
 <h3 id="sharing_sidebar()">sharing_sidebar</h3>
 <code class="signature">public  void <strong>sharing_sidebar</strong>(mixed options)</code>
@@ -2661,7 +3172,7 @@ is active it retrieves the info from the validation class</p>
 
 <hr>
 
-<a href="../source/application/helpers/elements_helper.php.html#line416" class="location">application/helpers/elements_helper.php at line 416</a>
+<a href="../source/application/helpers/elements_helper.php.html#line393" class="location">application/helpers/elements_helper.php at line 393</a>
 
 <h3 id="sidebar()">sidebar</h3>
 <code class="signature">public  void <strong>sidebar</strong>(mixed options)</code>
@@ -2841,7 +3352,7 @@ standard symbolic notation representing that value</p>
 
 <hr>
 
-<a href="../source/application/helpers/elements_helper.php.html#line482" class="location">application/helpers/elements_helper.php at line 482</a>
+<a href="../source/application/helpers/elements_helper.php.html#line459" class="location">application/helpers/elements_helper.php at line 459</a>
 
 <h3 id="time_ago()">time_ago</h3>
 <code class="signature">public  void <strong>time_ago</strong>(mixed datefrom, int dateto)</code>

@@ -1,0 +1,203 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+
+<html lang="en">
+<head>
+
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
+<meta name="generator" content="PHPDoctor 2RC4 (http://peej.github.com/phpdoctor/)">
+<meta name="when" content="Sat, 10 Jul 2010 18:10:55 +0000">
+
+<link rel="stylesheet" type="text/css" href="../stylesheet.css">
+<link rel="start" href="../overview-summary.html">
+
+<title>Auth_Yadis_Service (GiftFlow API)</title>
+
+</head>
+<body id="definition" onload="parent.document.title=document.title;">
+
+<div class="header">
+<h1>GiftFlow API</h1>
+<ul>
+<li><a href="../overview-summary.html">Overview</a></li>
+<li><a href="../openid/package-summary.html">Package</a></li>
+<li class="active">Class</li>
+<li><a href="../openid/package-tree.html">Tree</a></li>
+<li><a href="../overview-files.html">Files</a></li>
+<li><a href="../deprecated-list.html">Deprecated</a></li>
+<li><a href="../index-all.html">Index</a></li>
+</ul>
+</div>
+
+<div class="small_links">
+<a href="../index.html" target="_top">Frames</a>
+<a href="../openid/auth_yadis_service.html" target="_top">No frames</a>
+</div>
+<div class="small_links">
+Summary: <a href="#summary_field">Field</a> | <a href="#summary_method">Method</a> | <a href="#summary_constr">Constr</a>
+Detail: <a href="#detail_field">Field</a> | <a href="#detail_method">Method</a> | <a href="#summary_constr">Constr</a>
+</div>
+<hr>
+
+<div class="qualifiedName">OpenID\Auth_Yadis_Service</div>
+<a href="../source/application/libraries/auth/yadis/xrds.php.html#line83" class="location">application/libraries/Auth/Yadis/XRDS.php at line 83</a>
+
+<h1>Class Auth_Yadis_Service</h1>
+
+<pre class="tree"><strong>Auth_Yadis_Service</strong><br /></pre>
+
+<hr>
+
+<p class="signature">public  class <strong>Auth_Yadis_Service</strong></p>
+
+<div class="comment" id="overview_description"><p>This class represents a <Service> element in an XRDS document.
+Objects of this type are returned by
+Auth_Yadis_XRDS::services() and
+Auth_Yadis_Yadis::services().  Each object corresponds directly
+to a <Service> element in the XRDS and supplies a
+getElements($name) method which you should use to inspect the
+element's contents.  See <code><a href="../openid/auth_yadis_yadis.html">Auth_Yadis_Yadis</a></code> for more
+information on the role this class plays in Yadis discovery.</p></div>
+
+<hr>
+
+<table id="summary_method">
+<tr><th colspan="2">Method Summary</th></tr>
+<tr>
+<td class="type"> void</td>
+<td class="description"><p class="name"><a href="#__construct()">__construct</a>()</p><p class="description">Creates an empty service object.</p></td>
+</tr>
+<tr>
+<td class="type"> array</td>
+<td class="description"><p class="name"><a href="#getElements()">getElements</a>(string name)</p><p class="description">Used to get XML elements from this object's  element.
+</p></td>
+</tr>
+<tr>
+<td class="type"> mixed</td>
+<td class="description"><p class="name"><a href="#getPriority()">getPriority</a>()</p><p class="description">Returns the "priority" attribute value of this 
+element, if the attribute is present. </p></td>
+</tr>
+<tr>
+<td class="type"> array</td>
+<td class="description"><p class="name"><a href="#getTypes()">getTypes</a>()</p><p class="description">Return the URIs in the "Type" elements, if any, of this Service
+element.</p></td>
+</tr>
+<tr>
+<td class="type"> array</td>
+<td class="description"><p class="name"><a href="#getURIs()">getURIs</a>()</p><p class="description">Return the URIs in the "URI" elements, if any, of this Service
+element. </p></td>
+</tr>
+<tr>
+<td class="type"> void</td>
+<td class="description"><p class="name"><a href="#matchTypes()">matchTypes</a>(mixed type_uris)</p></td>
+</tr>
+</table>
+
+<h2 id="detail_method">Method Detail</h2><div class="method_detail">
+<div class='method'><a href="../source/application/libraries/auth/yadis/xrds.php.html#line88" class="location">application/libraries/Auth/Yadis/XRDS.php at line 88</a>
+
+<h3 id="__construct()">__construct</h3>
+<code class="signature">public  void <strong>__construct</strong>()</code>
+<div class="details">
+<p>Creates an empty service object.</p></div></div>
+
+
+
+<div class='method'><a href="../source/application/libraries/auth/yadis/xrds.php.html#line201" class="location">application/libraries/Auth/Yadis/XRDS.php at line 201</a>
+
+<h3 id="getElements()">getElements</h3>
+<code class="signature">public  array <strong>getElements</strong>(string name)</code>
+<div class="details">
+<p>Used to get XML elements from this object's <Service> element.</p><p>This is what you should use to get all custom information out
+of this element. This is used by service filter functions to
+determine whether a service element contains specific tags,
+etc.  NOTE: this only considers elements which are direct
+children of the <Service> element for this object.</p><dl>
+<dt>Parameters:</dt>
+<dd>name - The name of the element to look for</dd>
+<dt>Returns:</dt>
+<dd>$list An array of elements with the specified name which are direct children of the <Service> element. The nodes returned by this function can be passed to $this->parser methods (see {@link Auth_Yadis_XMLParser}).</dd>
+</dl>
+</div></div>
+
+
+
+<div class='method'><a href="../source/application/libraries/auth/yadis/xrds.php.html#line175" class="location">application/libraries/Auth/Yadis/XRDS.php at line 175</a>
+
+<h3 id="getPriority()">getPriority</h3>
+<code class="signature">public  mixed <strong>getPriority</strong>()</code>
+<div class="details">
+<p>Returns the "priority" attribute value of this <Service>
+element, if the attribute is present.  Returns null if not.</p><dl>
+<dt>Returns:</dt>
+<dd>$result Null or integer, depending on whether this Service element has a 'priority' attribute.</dd>
+</dl>
+</div></div>
+
+
+
+<div class='method'><a href="../source/application/libraries/auth/yadis/xrds.php.html#line100" class="location">application/libraries/Auth/Yadis/XRDS.php at line 100</a>
+
+<h3 id="getTypes()">getTypes</h3>
+<code class="signature">public  array <strong>getTypes</strong>()</code>
+<div class="details">
+<p>Return the URIs in the "Type" elements, if any, of this Service
+element.</p><dl>
+<dt>Returns:</dt>
+<dd>$type_uris An array of Type URI strings.</dd>
+</dl>
+</div></div>
+
+
+
+<div class='method'><a href="../source/application/libraries/auth/yadis/xrds.php.html#line131" class="location">application/libraries/Auth/Yadis/XRDS.php at line 131</a>
+
+<h3 id="getURIs()">getURIs</h3>
+<code class="signature">public  array <strong>getURIs</strong>()</code>
+<div class="details">
+<p>Return the URIs in the "URI" elements, if any, of this Service
+element.  The URIs are returned sorted in priority order.</p><dl>
+<dt>Returns:</dt>
+<dd>$uris An array of URI strings.</dd>
+</dl>
+</div></div>
+
+
+
+<div class='method'><a href="../source/application/libraries/auth/yadis/xrds.php.html#line112" class="location">application/libraries/Auth/Yadis/XRDS.php at line 112</a>
+
+<h3 id="matchTypes()">matchTypes</h3>
+<code class="signature">public  void <strong>matchTypes</strong>(mixed type_uris)</code>
+<div class="details">
+</div></div>
+
+
+
+</div><div class="header">
+<h1>GiftFlow API</h1>
+<ul>
+<li><a href="../overview-summary.html">Overview</a></li>
+<li><a href="../openid/package-summary.html">Package</a></li>
+<li class="active">Class</li>
+<li><a href="../openid/package-tree.html">Tree</a></li>
+<li><a href="../overview-files.html">Files</a></li>
+<li><a href="../deprecated-list.html">Deprecated</a></li>
+<li><a href="../index-all.html">Index</a></li>
+</ul>
+</div>
+
+<div class="small_links">
+<a href="../index.html" target="_top">Frames</a>
+<a href="../openid/auth_yadis_service.html" target="_top">No frames</a>
+</div>
+<div class="small_links">
+Summary: <a href="#summary_field">Field</a> | <a href="#summary_method">Method</a> | <a href="#summary_constr">Constr</a>
+Detail: <a href="#detail_field">Field</a> | <a href="#detail_method">Method</a> | <a href="#summary_constr">Constr</a>
+</div>
+<hr>
+
+<p id="footer">This document was generated by <a href="http://peej.github.com/phpdoctor/">PHPDoctor: The PHP Documentation Creator</a></p>
+
+</body>
+
+</html>

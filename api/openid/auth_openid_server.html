@@ -1,0 +1,196 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+
+<html lang="en">
+<head>
+
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
+<meta name="generator" content="PHPDoctor 2RC4 (http://peej.github.com/phpdoctor/)">
+<meta name="when" content="Sat, 10 Jul 2010 18:10:55 +0000">
+
+<link rel="stylesheet" type="text/css" href="../stylesheet.css">
+<link rel="start" href="../overview-summary.html">
+
+<title>Auth_OpenID_Server (GiftFlow API)</title>
+
+</head>
+<body id="definition" onload="parent.document.title=document.title;">
+
+<div class="header">
+<h1>GiftFlow API</h1>
+<ul>
+<li><a href="../overview-summary.html">Overview</a></li>
+<li><a href="../openid/package-summary.html">Package</a></li>
+<li class="active">Class</li>
+<li><a href="../openid/package-tree.html">Tree</a></li>
+<li><a href="../overview-files.html">Files</a></li>
+<li><a href="../deprecated-list.html">Deprecated</a></li>
+<li><a href="../index-all.html">Index</a></li>
+</ul>
+</div>
+
+<div class="small_links">
+<a href="../index.html" target="_top">Frames</a>
+<a href="../openid/auth_openid_server.html" target="_top">No frames</a>
+</div>
+<div class="small_links">
+Summary: <a href="#summary_field">Field</a> | <a href="#summary_method">Method</a> | <a href="#summary_constr">Constr</a>
+Detail: <a href="#detail_field">Field</a> | <a href="#detail_method">Method</a> | <a href="#summary_constr">Constr</a>
+</div>
+<hr>
+
+<div class="qualifiedName">OpenID\Auth_OpenID_Server</div>
+<a href="../source/application/libraries/auth/openid/server.php.html#line1668" class="location">application/libraries/Auth/OpenID/Server.php at line 1668</a>
+
+<h1>Class Auth_OpenID_Server</h1>
+
+<pre class="tree"><strong>Auth_OpenID_Server</strong><br /></pre>
+
+<hr>
+
+<p class="signature">public  class <strong>Auth_OpenID_Server</strong></p>
+
+<div class="comment" id="overview_description"><p>I handle requests for an OpenID server.</p><p>Some types of requests (those which are not checkid requests) may
+be handed to my <code><a href="../openid/auth_openid_server.html#handleRequest()">handleRequest</a></code> method, and I will take care
+of it and return a response.</p><p>For your convenience, I also provide an interface to  and  through my methods  and <code><a href="../openid/auth_openid_server.html#encodeResponse()">encodeResponse</a></code>.</p><p>All my state is encapsulated in an <code><a href="../openid/auth_openid_openidstore.html">Auth_OpenID_OpenIDStore</a></code>.</p><p>Example:</p><p><pre> $oserver = new Auth_OpenID_Server(Auth_OpenID_FileStore($data_path),
+"http://example.com/op");
+$request = $oserver->decodeRequest();
+if (in_array($request->mode, array('checkid_immediate',
+'checkid_setup'))) {
+if ($app->isAuthorized($request->identity, $request->trust_root)) {
+$response = $request->answer(true);
+} else if ($request->immediate) {
+$response = $request->answer(false);
+} else {
+$app->showDecidePage($request);
+return;
+}
+} else {
+$response = $oserver->handleRequest($request);
+}</p><p>$webresponse = $oserver->encode($response);</pre></p></div>
+
+<hr>
+
+<table id="summary_method">
+<tr><th colspan="2">Method Summary</th></tr>
+<tr>
+<td class="type"> void</td>
+<td class="description"><p class="name"><a href="#__construct()">__construct</a>(mixed store, mixed op_endpoint)</p></td>
+</tr>
+<tr>
+<td class="type"> void</td>
+<td class="description"><p class="name"><a href="#decodeRequest()">decodeRequest</a>(mixed query)</p><p class="description">Decodes a query args array into the appropriate
+{@link Auth_OpenID_Request} object.</p></td>
+</tr>
+<tr>
+<td class="type"> void</td>
+<td class="description"><p class="name"><a href="#encodeResponse()">encodeResponse</a>(mixed response)</p><p class="description">Encodes as response in the appropriate format suitable for
+sending to the user agent.</p></td>
+</tr>
+<tr>
+<td class="type"> <a href="../openid/auth_openid_serverresponse.html">Auth_OpenID_ServerResponse</a></td>
+<td class="description"><p class="name"><a href="#handleRequest()">handleRequest</a>(<a href="../openid/auth_openid_request.html">Auth_OpenID_Request</a> request)</p><p class="description">Handle a request. </p></td>
+</tr>
+<tr>
+<td class="type"> void</td>
+<td class="description"><p class="name"><a href="#openid_associate()">openid_associate</a>(mixed request)</p><p class="description">The callback for 'associate' messages.</p></td>
+</tr>
+<tr>
+<td class="type"> void</td>
+<td class="description"><p class="name"><a href="#openid_check_authentication()">openid_check_authentication</a>(mixed request)</p><p class="description">The callback for 'check_authentication' messages.</p></td>
+</tr>
+</table>
+
+<h2 id="detail_method">Method Detail</h2><div class="method_detail">
+<div class='method'><a href="../source/application/libraries/auth/openid/server.php.html#line1669" class="location">application/libraries/Auth/OpenID/Server.php at line 1669</a>
+
+<h3 id="__construct()">__construct</h3>
+<code class="signature">public  void <strong>__construct</strong>(mixed store, mixed op_endpoint)</code>
+<div class="details">
+</div></div>
+
+
+
+<div class='method'><a href="../source/application/libraries/auth/openid/server.php.html#line1742" class="location">application/libraries/Auth/OpenID/Server.php at line 1742</a>
+
+<h3 id="decodeRequest()">decodeRequest</h3>
+<code class="signature">public  void <strong>decodeRequest</strong>(mixed query)</code>
+<div class="details">
+<p>Decodes a query args array into the appropriate
+<code><a href="../openid/auth_openid_request.html">Auth_OpenID_Request</a></code> object.</p></div></div>
+
+
+
+<div class='method'><a href="../source/application/libraries/auth/openid/server.php.html#line1733" class="location">application/libraries/Auth/OpenID/Server.php at line 1733</a>
+
+<h3 id="encodeResponse()">encodeResponse</h3>
+<code class="signature">public  void <strong>encodeResponse</strong>(mixed response)</code>
+<div class="details">
+<p>Encodes as response in the appropriate format suitable for
+sending to the user agent.</p></div></div>
+
+
+
+<div class='method'><a href="../source/application/libraries/auth/openid/server.php.html#line1690" class="location">application/libraries/Auth/OpenID/Server.php at line 1690</a>
+
+<h3 id="handleRequest()">handleRequest</h3>
+<code class="signature">public  <a href="../openid/auth_openid_serverresponse.html">Auth_OpenID_ServerResponse</a> <strong>handleRequest</strong>(<a href="../openid/auth_openid_request.html">Auth_OpenID_Request</a> request)</code>
+<div class="details">
+<p>Handle a request.  Given an <code><a href="../openid/auth_openid_request.html">Auth_OpenID_Request</a></code> object,
+call the appropriate <code><a href="../openid/auth_openid_server.html">Auth_OpenID_Server</a></code> method to
+process the request and generate a response.</p><dl>
+<dt>Parameters:</dt>
+<dd>request - An {@link Auth_OpenID_Request} returned by {@link Auth_OpenID_Server::decodeRequest()}.</dd>
+<dt>Returns:</dt>
+<dd>$response A response object capable of generating a user-agent reply.</dd>
+</dl>
+</div></div>
+
+
+
+<div class='method'><a href="../source/application/libraries/auth/openid/server.php.html#line1710" class="location">application/libraries/Auth/OpenID/Server.php at line 1710</a>
+
+<h3 id="openid_associate()">openid_associate</h3>
+<code class="signature">public  void <strong>openid_associate</strong>(mixed request)</code>
+<div class="details">
+<p>The callback for 'associate' messages.</p></div></div>
+
+
+
+<div class='method'><a href="../source/application/libraries/auth/openid/server.php.html#line1702" class="location">application/libraries/Auth/OpenID/Server.php at line 1702</a>
+
+<h3 id="openid_check_authentication()">openid_check_authentication</h3>
+<code class="signature">public  void <strong>openid_check_authentication</strong>(mixed request)</code>
+<div class="details">
+<p>The callback for 'check_authentication' messages.</p></div></div>
+
+
+
+</div><div class="header">
+<h1>GiftFlow API</h1>
+<ul>
+<li><a href="../overview-summary.html">Overview</a></li>
+<li><a href="../openid/package-summary.html">Package</a></li>
+<li class="active">Class</li>
+<li><a href="../openid/package-tree.html">Tree</a></li>
+<li><a href="../overview-files.html">Files</a></li>
+<li><a href="../deprecated-list.html">Deprecated</a></li>
+<li><a href="../index-all.html">Index</a></li>
+</ul>
+</div>
+
+<div class="small_links">
+<a href="../index.html" target="_top">Frames</a>
+<a href="../openid/auth_openid_server.html" target="_top">No frames</a>
+</div>
+<div class="small_links">
+Summary: <a href="#summary_field">Field</a> | <a href="#summary_method">Method</a> | <a href="#summary_constr">Constr</a>
+Detail: <a href="#detail_field">Field</a> | <a href="#detail_method">Method</a> | <a href="#summary_constr">Constr</a>
+</div>
+<hr>
+
+<p id="footer">This document was generated by <a href="http://peej.github.com/phpdoctor/">PHPDoctor: The PHP Documentation Creator</a></p>
+
+</body>
+
+</html>

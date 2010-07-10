@@ -6,7 +6,7 @@
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 
 <meta name="generator" content="PHPDoctor 2RC4 (http://peej.github.com/phpdoctor/)">
-<meta name="when" content="Tue, 29 Jun 2010 21:10:10 +0000">
+<meta name="when" content="Sat, 10 Jul 2010 18:10:56 +0000">
 
 <link rel="stylesheet" type="text/css" href="../../../stylesheet.css">
 <link rel="start" href="../../../overview-summary.html">
@@ -61,13 +61,22 @@
 <a name="line24"></a>
 <a name="line25"></a>	);
 <a name="line26"></a>
-<a name="line27"></a>    	function __construct( $id = NULL )
+<a name="line27"></a>    function __construct( $id = NULL )
 <a name="line28"></a>	{
 <a name="line29"></a>		parent::__construct( $id );
-<a name="line30"></a>    	}
-<a name="line31"></a>}
-<a name="line32"></a>?>
-<a name="line33"></a></pre>
+<a name="line30"></a>    }
+<a name="line31"></a>
+<a name="line32"></a>	function get_email_template($name, $language = 'english')
+<a name="line33"></a>	{
+<a name="line34"></a>		$T = new Term();
+<a name="line35"></a>		$T->where('type', 'alert_template');
+<a name="line36"></a>		$T->where('language', $language);
+<a name="line37"></a>		$T->where('name', $name);
+<a name="line38"></a>		return $T;
+<a name="line39"></a>	}
+<a name="line40"></a>}
+<a name="line41"></a>?>
+<a name="line42"></a></pre>
 <div class="header">
 <h1>GiftFlow API</h1>
 <ul>

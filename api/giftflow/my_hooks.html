@@ -6,7 +6,7 @@
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 
 <meta name="generator" content="PHPDoctor 2RC4 (http://peej.github.com/phpdoctor/)">
-<meta name="when" content="Tue, 29 Jun 2010 21:10:08 +0000">
+<meta name="when" content="Sat, 10 Jul 2010 18:10:54 +0000">
 
 <link rel="stylesheet" type="text/css" href="../stylesheet.css">
 <link rel="start" href="../overview-summary.html">
@@ -52,9 +52,7 @@ Detail: <a href="#detail_field">Field</a> | <a href="#detail_method">Method</a> 
 
 </p>
 
-<div class="comment" id="overview_description"><p>CodeIgniter MY_Hooks Class
-
-Provides a mechanism to extend the base plugin system.  This class
+<div class="comment" id="overview_description"><p>CodeIgniter MY_Hooks Class</p><p>Provides a mechanism to extend the base plugin system.  This class
 allows other plugin hooks to be created and called without messing
 with the core system hooks.</p></div>
 
@@ -75,6 +73,10 @@ with the core system hooks.</p></div>
 <tr><th colspan="2">Field Summary</th></tr>
 <tr>
 <td class="type"> mixed</td>
+<td class="description"><p class="name"><a href="#data">$data</a></p></td>
+</tr>
+<tr>
+<td class="type"> mixed</td>
 <td class="description"><p class="name"><a href="#objects">$objects</a></p></td>
 </tr>
 </table>
@@ -87,29 +89,21 @@ with the core system hooks.</p></div>
 <tr><th colspan="2">Method Summary</th></tr>
 <tr>
 <td class="type">private  void</td>
-<td class="description"><p class="name"><a href="#_run_hook()">_run_hook</a>(mixed hook, mixed data)</p><p class="description">Run Hook
-
-Runs a particular hook</p></td>
+<td class="description"><p class="name"><a href="#_run_hook()">_run_hook</a>(mixed hook, mixed data)</p><p class="description">Run HookRuns a particular hook</p></td>
 </tr>
 <tr>
 <td class="type"> void</td>
-<td class="description"><p class="name"><a href="#call()">call</a>(str which, mixed data)</p><p class="description">Call Hook
-
-Calls a particular hook that return output
+<td class="description"><p class="name"><a href="#call()">call</a>(str which, mixed data)</p><p class="description">Call HookCalls a particular hook that return output
 call() is prettier than _call_hook()</p></td>
 </tr>
 <tr>
 <td class="type"> void</td>
-<td class="description"><p class="name"><a href="#filter()">filter</a>(str which, mixed data)</p><p class="description">Filter Hook
-
-Similar to call() but alows data to be filtered
+<td class="description"><p class="name"><a href="#filter()">filter</a>(str which, mixed data)</p><p class="description">Filter HookSimilar to call() but alows data to be filtered
 by multible hooks and the result is returned.</p></td>
 </tr>
 <tr>
 <td class="type"> void</td>
-<td class="description"><p class="name"><a href="#remove()">remove</a>(str hook_name, str function)</p><p class="description">Remove Hook
-
-remove a particular function from the given hook</p></td>
+<td class="description"><p class="name"><a href="#remove()">remove</a>(str hook_name, str function)</p><p class="description">Remove Hookremove a particular function from the given hook</p></td>
 </tr>
 </table>
 
@@ -118,6 +112,15 @@ remove a particular function from the given hook</p></td>
 <tr><td><a href="../giftflow/ci_hooks.html#__construct()">__construct</a>, <a href="../giftflow/ci_hooks.html#_call_hook()">_call_hook</a>, <a href="../giftflow/ci_hooks.html#_initialize()">_initialize</a>, <a href="../giftflow/ci_hooks.html#_run_hook()">_run_hook</a></td></tr></table>
 
 <h2 id="detail_field">Field Detail</h2>
+<a href="../source/application/libraries/my_hooks.php.html#line36" class="location">application/libraries/MY_Hooks.php at line 36</a>
+
+<h3 id="data">data</h3>
+<code class="signature">public  mixed <strong>$data</strong></code>
+<div class="details">
+</div>
+
+<hr>
+
 <a href="../source/application/libraries/my_hooks.php.html#line34" class="location">application/libraries/MY_Hooks.php at line 34</a>
 
 <h3 id="objects">objects</h3>
@@ -128,14 +131,12 @@ remove a particular function from the given hook</p></td>
 <hr>
 
 <h2 id="detail_method">Method Detail</h2><div class="method_detail">
-<div class='method'><a href="../source/application/libraries/my_hooks.php.html#line100" class="location">application/libraries/MY_Hooks.php at line 100</a>
+<div class='method'><a href="../source/application/libraries/my_hooks.php.html#line102" class="location">application/libraries/MY_Hooks.php at line 102</a>
 
 <h3 id="_run_hook()">_run_hook</h3>
 <code class="signature">private  void <strong>_run_hook</strong>(mixed hook, mixed data)</code>
 <div class="details">
-<p>Run Hook
-
-Runs a particular hook</p><dl>
+<p>Run Hook</p><p>Runs a particular hook</p><dl>
 <dt>Access	private.</dt>
 <dt>Param	array	the:</dt>
 <dd>hook details</dd>
@@ -145,14 +146,12 @@ Runs a particular hook</p><dl>
 
 
 
-<div class='method'><a href="../source/application/libraries/my_hooks.php.html#line47" class="location">application/libraries/MY_Hooks.php at line 47</a>
+<div class='method'><a href="../source/application/libraries/my_hooks.php.html#line48" class="location">application/libraries/MY_Hooks.php at line 48</a>
 
 <h3 id="call()">call</h3>
 <code class="signature">public  void <strong>call</strong>(str which, mixed data)</code>
 <div class="details">
-<p>Call Hook
-
-Calls a particular hook that return output
+<p>Call Hook</p><p>Calls a particular hook that return output
 call() is prettier than _call_hook()</p><dl>
 <dt>Access	public.</dt>
 <dt>Param	string	the:</dt>
@@ -163,14 +162,12 @@ call() is prettier than _call_hook()</p><dl>
 
 
 
-<div class='method'><a href="../source/application/libraries/my_hooks.php.html#line63" class="location">application/libraries/MY_Hooks.php at line 63</a>
+<div class='method'><a href="../source/application/libraries/my_hooks.php.html#line65" class="location">application/libraries/MY_Hooks.php at line 65</a>
 
 <h3 id="filter()">filter</h3>
 <code class="signature">public  void <strong>filter</strong>(str which, mixed data)</code>
 <div class="details">
-<p>Filter Hook
-
-Similar to call() but alows data to be filtered
+<p>Filter Hook</p><p>Similar to call() but alows data to be filtered
 by multible hooks and the result is returned.</p><dl>
 <dt>Access	public.</dt>
 <dt>Param	string	the:</dt>
@@ -183,14 +180,12 @@ by multible hooks and the result is returned.</p><dl>
 
 
 
-<div class='method'><a href="../source/application/libraries/my_hooks.php.html#line207" class="location">application/libraries/MY_Hooks.php at line 207</a>
+<div class='method'><a href="../source/application/libraries/my_hooks.php.html#line211" class="location">application/libraries/MY_Hooks.php at line 211</a>
 
 <h3 id="remove()">remove</h3>
 <code class="signature">public  void <strong>remove</strong>(str hook_name, str function)</code>
 <div class="details">
-<p>Remove Hook
-
-remove a particular function from the given hook</p><dl>
+<p>Remove Hook</p><p>remove a particular function from the given hook</p><dl>
 <dt>Access	private.</dt>
 <dt>Param	string	the:</dt>
 <dd>hook name</dd>

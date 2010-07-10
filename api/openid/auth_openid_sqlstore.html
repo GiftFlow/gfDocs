@@ -1,0 +1,504 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+
+<html lang="en">
+<head>
+
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
+<meta name="generator" content="PHPDoctor 2RC4 (http://peej.github.com/phpdoctor/)">
+<meta name="when" content="Sat, 10 Jul 2010 18:10:55 +0000">
+
+<link rel="stylesheet" type="text/css" href="../stylesheet.css">
+<link rel="start" href="../overview-summary.html">
+
+<title>Auth_OpenID_SQLStore (GiftFlow API)</title>
+
+</head>
+<body id="definition" onload="parent.document.title=document.title;">
+
+<div class="header">
+<h1>GiftFlow API</h1>
+<ul>
+<li><a href="../overview-summary.html">Overview</a></li>
+<li><a href="../openid/package-summary.html">Package</a></li>
+<li class="active">Class</li>
+<li><a href="../openid/package-tree.html">Tree</a></li>
+<li><a href="../overview-files.html">Files</a></li>
+<li><a href="../deprecated-list.html">Deprecated</a></li>
+<li><a href="../index-all.html">Index</a></li>
+</ul>
+</div>
+
+<div class="small_links">
+<a href="../index.html" target="_top">Frames</a>
+<a href="../openid/auth_openid_sqlstore.html" target="_top">No frames</a>
+</div>
+<div class="small_links">
+Summary: <a href="#summary_field">Field</a> | <a href="#summary_method">Method</a> | <a href="#summary_constr">Constr</a>
+Detail: <a href="#detail_field">Field</a> | <a href="#detail_method">Method</a> | <a href="#summary_constr">Constr</a>
+</div>
+<hr>
+
+<div class="qualifiedName">OpenID\Auth_OpenID_SQLStore</div>
+<a href="../source/application/libraries/auth/openid/sqlstore.php.html#line57" class="location">application/libraries/Auth/OpenID/SQLStore.php at line 57</a>
+
+<h1>Class Auth_OpenID_SQLStore</h1>
+
+<pre class="tree"><a href="../openid/auth_openid_openidstore.html">Auth_OpenID_OpenIDStore</a><br>    └─<strong>Auth_OpenID_SQLStore</strong><br /></pre>
+
+<hr>
+
+<p class="signature">private  class <strong>Auth_OpenID_SQLStore</strong><br>extends <a href="../openid/auth_openid_openidstore.html">Auth_OpenID_OpenIDStore</a>
+
+</p>
+
+<div class="comment" id="overview_description"><p>This is the parent class for the SQL stores, which contains the
+logic common to all of the SQL stores.</p><p>The table names used are determined by the class variables
+associations_table_name and nonces_table_name.  To change the name
+of the tables used, pass new table names into the constructor.</p><p>To create the tables with the proper schema, see the createTables
+method.</p><p>This class shouldn't be used directly.  Use one of its subclasses
+instead, as those contain the code necessary to use a specific
+database.  If you're an OpenID integrator and you'd like to create
+an SQL-driven store that wraps an application's database
+abstraction, be sure to create a subclass of
+<code><a href="../openid/auth_openid_databaseconnection.html">Auth_OpenID_DatabaseConnection</a></code> that calls the application's
+database abstraction calls.  Then, pass an instance of your new
+database connection class to your SQLStore subclass constructor.</p><p>All methods other than the constructor and createTables should be
+considered implementation details.</p></div>
+
+<dl>
+<dt>Author:</dt>
+<dd>JanRain, Inc. <openid@janrain.com></dd>
+</dl>
+<hr>
+
+<table id="summary_method">
+<tr><th colspan="2">Method Summary</th></tr>
+<tr>
+<td class="type"> void</td>
+<td class="description"><p class="name"><a href="#__construct()">__construct</a>(connection connection, mixed associations_table, mixed nonces_table, nonces_table: This)</p><p class="description">This creates a new SQLStore instance. </p></td>
+</tr>
+<tr>
+<td class="type">private  void</td>
+<td class="description"><p class="name"><a href="#_add_nonce()">_add_nonce</a>(mixed server_url, mixed timestamp, mixed salt)</p><p class="description"></p></td>
+</tr>
+<tr>
+<td class="type">private  void</td>
+<td class="description"><p class="name"><a href="#_fixSQL()">_fixSQL</a>()</p><p class="description"></p></td>
+</tr>
+<tr>
+<td class="type">private  void</td>
+<td class="description"><p class="name"><a href="#_get_assoc()">_get_assoc</a>(mixed server_url, mixed handle)</p><p class="description"></p></td>
+</tr>
+<tr>
+<td class="type">private  void</td>
+<td class="description"><p class="name"><a href="#_get_assocs()">_get_assocs</a>(mixed server_url)</p><p class="description"></p></td>
+</tr>
+<tr>
+<td class="type">private  void</td>
+<td class="description"><p class="name"><a href="#_octify()">_octify</a>(mixed str)</p><p class="description">"Octifies" a binary string by returning a string with escaped
+octal bytes. </p></td>
+</tr>
+<tr>
+<td class="type">private  void</td>
+<td class="description"><p class="name"><a href="#_set_assoc()">_set_assoc</a>(mixed server_url, mixed handle, mixed secret, mixed issued, mixed lifetime, mixed assoc_type)</p><p class="description"></p></td>
+</tr>
+<tr>
+<td class="type">private  void</td>
+<td class="description"><p class="name"><a href="#_unoctify()">_unoctify</a>(mixed str)</p><p class="description">"Unoctifies" octal-escaped data from PostgreSQL and returns the
+resulting ASCII (possibly binary) string.</p></td>
+</tr>
+<tr>
+<td class="type">private  void</td>
+<td class="description"><p class="name"><a href="#_verifySQL()">_verifySQL</a>()</p><p class="description"></p></td>
+</tr>
+<tr>
+<td class="type"> void</td>
+<td class="description"><p class="name"><a href="#blobDecode()">blobDecode</a>(mixed blob)</p></td>
+</tr>
+<tr>
+<td class="type"> void</td>
+<td class="description"><p class="name"><a href="#blobEncode()">blobEncode</a>(mixed str)</p></td>
+</tr>
+<tr>
+<td class="type"> void</td>
+<td class="description"><p class="name"><a href="#cleanupAssociations()">cleanupAssociations</a>()</p></td>
+</tr>
+<tr>
+<td class="type"> void</td>
+<td class="description"><p class="name"><a href="#cleanupNonces()">cleanupNonces</a>()</p></td>
+</tr>
+<tr>
+<td class="type"> void</td>
+<td class="description"><p class="name"><a href="#createTables()">createTables</a>()</p></td>
+</tr>
+<tr>
+<td class="type"> void</td>
+<td class="description"><p class="name"><a href="#create_assoc_table()">create_assoc_table</a>()</p></td>
+</tr>
+<tr>
+<td class="type"> void</td>
+<td class="description"><p class="name"><a href="#create_nonce_table()">create_nonce_table</a>()</p></td>
+</tr>
+<tr>
+<td class="type"> Association</td>
+<td class="description"><p class="name"><a href="#getAssociation()">getAssociation</a>(string server_url, mixed handle)</p><p class="description">This method returns an Association object from storage that
+matches the server URL and, if specified, handle. </p></td>
+</tr>
+<tr>
+<td class="type"> void</td>
+<td class="description"><p class="name"><a href="#isError()">isError</a>(mixed value)</p><p class="description">Returns true if $value constitutes a database error; returns
+false otherwise.</p></td>
+</tr>
+<tr>
+<td class="type"> mixed</td>
+<td class="description"><p class="name"><a href="#removeAssociation()">removeAssociation</a>(string server_url, string handle)</p><p class="description">This method removes the matching association if it's found, and
+returns whether the association was removed or not.</p></td>
+</tr>
+<tr>
+<td class="type"> void</td>
+<td class="description"><p class="name"><a href="#reset()">reset</a>()</p><p class="description">Resets the store by removing all records from the store's
+tables.</p></td>
+</tr>
+<tr>
+<td class="type"> void</td>
+<td class="description"><p class="name"><a href="#resultToBool()">resultToBool</a>(mixed obj)</p><p class="description">Converts a query result to a boolean. </p></td>
+</tr>
+<tr>
+<td class="type"> void</td>
+<td class="description"><p class="name"><a href="#setSQL()">setSQL</a>()</p><p class="description">This method should be overridden by subclasses. </p></td>
+</tr>
+<tr>
+<td class="type"> void</td>
+<td class="description"><p class="name"><a href="#storeAssociation()">storeAssociation</a>(string server_url, Association association)</p><p class="description">This method puts an Association object into storage,
+retrievable by server URL and handle.</p></td>
+</tr>
+<tr>
+<td class="type"> void</td>
+<td class="description"><p class="name"><a href="#tableExists()">tableExists</a>(mixed table_name)</p></td>
+</tr>
+<tr>
+<td class="type"> bool</td>
+<td class="description"><p class="name"><a href="#useNonce()">useNonce</a>(mixed server_url, mixed timestamp, mixed salt, string nonce)</p><p class="description">Called when using a nonce.
+</p></td>
+</tr>
+</table>
+
+<table class="inherit">
+<tr><th colspan="2">Methods inherited from OpenID\Auth_OpenID_OpenIDStore</th></tr>
+<tr><td><a href="../openid/auth_openid_openidstore.html#cleanup()">cleanup</a>, <a href="../openid/auth_openid_openidstore.html#cleanupAssociations()">cleanupAssociations</a>, <a href="../openid/auth_openid_openidstore.html#cleanupNonces()">cleanupNonces</a>, <a href="../openid/auth_openid_openidstore.html#getAssociation()">getAssociation</a>, <a href="../openid/auth_openid_openidstore.html#removeAssociation()">removeAssociation</a>, <a href="../openid/auth_openid_openidstore.html#reset()">reset</a>, <a href="../openid/auth_openid_openidstore.html#storeAssociation()">storeAssociation</a>, <a href="../openid/auth_openid_openidstore.html#supportsCleanup()">supportsCleanup</a>, <a href="../openid/auth_openid_openidstore.html#useNonce()">useNonce</a></td></tr></table>
+
+<h2 id="detail_method">Method Detail</h2><div class="method_detail">
+<div class='method'><a href="../source/application/libraries/auth/openid/sqlstore.php.html#line78" class="location">application/libraries/Auth/OpenID/SQLStore.php at line 78</a>
+
+<h3 id="__construct()">__construct</h3>
+<code class="signature">public  void <strong>__construct</strong>(connection connection, mixed associations_table, mixed nonces_table, nonces_table: This)</code>
+<div class="details">
+<p>This creates a new SQLStore instance.  It requires an
+established database connection be given to it, and it allows
+overriding the default table names.</p><dl>
+<dt>Parameters:</dt>
+<dd>connection - This must be an established connection to a database of the correct type for the SQLStore subclass you're using. This must either be an PEAR DB connection handle or an instance of a subclass of Auth_OpenID_DatabaseConnection.</dd>
+<dd>This - is an optional parameter to specify the name of the table used for storing associations. The default value is 'oid_associations'.</dd>
+<dd>This - is an optional parameter to specify the name of the table used for storing nonces. The default value is 'oid_nonces'.</dd>
+</dl>
+</div></div>
+
+
+
+<div class='method'><a href="../source/application/libraries/auth/openid/sqlstore.php.html#line451" class="location">application/libraries/Auth/OpenID/SQLStore.php at line 451</a>
+
+<h3 id="_add_nonce()">_add_nonce</h3>
+<code class="signature">private  void <strong>_add_nonce</strong>(mixed server_url, mixed timestamp, mixed salt)</code>
+<div class="details">
+<p></p></div></div>
+
+
+
+<div class='method'><a href="../source/application/libraries/auth/openid/sqlstore.php.html#line237" class="location">application/libraries/Auth/OpenID/SQLStore.php at line 237</a>
+
+<h3 id="_fixSQL()">_fixSQL</h3>
+<code class="signature">private  void <strong>_fixSQL</strong>()</code>
+<div class="details">
+<p></p></div></div>
+
+
+
+<div class='method'><a href="../source/application/libraries/auth/openid/sqlstore.php.html#line351" class="location">application/libraries/Auth/OpenID/SQLStore.php at line 351</a>
+
+<h3 id="_get_assoc()">_get_assoc</h3>
+<code class="signature">private  void <strong>_get_assoc</strong>(mixed server_url, mixed handle)</code>
+<div class="details">
+<p></p></div></div>
+
+
+
+<div class='method'><a href="../source/application/libraries/auth/openid/sqlstore.php.html#line365" class="location">application/libraries/Auth/OpenID/SQLStore.php at line 365</a>
+
+<h3 id="_get_assocs()">_get_assocs</h3>
+<code class="signature">private  void <strong>_get_assocs</strong>(mixed server_url)</code>
+<div class="details">
+<p></p></div></div>
+
+
+
+<div class='method'><a href="../source/application/libraries/auth/openid/sqlstore.php.html#line483" class="location">application/libraries/Auth/OpenID/SQLStore.php at line 483</a>
+
+<h3 id="_octify()">_octify</h3>
+<code class="signature">private  void <strong>_octify</strong>(mixed str)</code>
+<div class="details">
+<p>"Octifies" a binary string by returning a string with escaped
+octal bytes.  This is used for preparing binary data for
+PostgreSQL BYTEA fields.</p></div></div>
+
+
+
+<div class='method'><a href="../source/application/libraries/auth/openid/sqlstore.php.html#line319" class="location">application/libraries/Auth/OpenID/SQLStore.php at line 319</a>
+
+<h3 id="_set_assoc()">_set_assoc</h3>
+<code class="signature">private  void <strong>_set_assoc</strong>(mixed server_url, mixed handle, mixed secret, mixed issued, mixed lifetime, mixed assoc_type)</code>
+<div class="details">
+<p></p></div></div>
+
+
+
+<div class='method'><a href="../source/application/libraries/auth/openid/sqlstore.php.html#line505" class="location">application/libraries/Auth/OpenID/SQLStore.php at line 505</a>
+
+<h3 id="_unoctify()">_unoctify</h3>
+<code class="signature">private  void <strong>_unoctify</strong>(mixed str)</code>
+<div class="details">
+<p>"Unoctifies" octal-escaped data from PostgreSQL and returns the
+resulting ASCII (possibly binary) string.</p></div></div>
+
+
+
+<div class='method'><a href="../source/application/libraries/auth/openid/sqlstore.php.html#line209" class="location">application/libraries/Auth/OpenID/SQLStore.php at line 209</a>
+
+<h3 id="_verifySQL()">_verifySQL</h3>
+<code class="signature">private  void <strong>_verifySQL</strong>()</code>
+<div class="details">
+<p></p></div></div>
+
+
+
+<div class='method'><a href="../source/application/libraries/auth/openid/sqlstore.php.html#line274" class="location">application/libraries/Auth/OpenID/SQLStore.php at line 274</a>
+
+<h3 id="blobDecode()">blobDecode</h3>
+<code class="signature">public  void <strong>blobDecode</strong>(mixed blob)</code>
+<div class="details">
+</div></div>
+
+
+
+<div class='method'><a href="../source/application/libraries/auth/openid/sqlstore.php.html#line279" class="location">application/libraries/Auth/OpenID/SQLStore.php at line 279</a>
+
+<h3 id="blobEncode()">blobEncode</h3>
+<code class="signature">public  void <strong>blobEncode</strong>(mixed str)</code>
+<div class="details">
+</div></div>
+
+
+
+<div class='method'><a href="../source/application/libraries/auth/openid/sqlstore.php.html#line544" class="location">application/libraries/Auth/OpenID/SQLStore.php at line 544</a>
+
+<h3 id="cleanupAssociations()">cleanupAssociations</h3>
+<code class="signature">public  void <strong>cleanupAssociations</strong>()</code>
+<div class="details">
+</div></div>
+
+
+
+<div class='method'><a href="../source/application/libraries/auth/openid/sqlstore.php.html#line533" class="location">application/libraries/Auth/OpenID/SQLStore.php at line 533</a>
+
+<h3 id="cleanupNonces()">cleanupNonces</h3>
+<code class="signature">public  void <strong>cleanupNonces</strong>()</code>
+<div class="details">
+</div></div>
+
+
+
+<div class='method'><a href="../source/application/libraries/auth/openid/sqlstore.php.html#line284" class="location">application/libraries/Auth/OpenID/SQLStore.php at line 284</a>
+
+<h3 id="createTables()">createTables</h3>
+<code class="signature">public  void <strong>createTables</strong>()</code>
+<div class="details">
+</div></div>
+
+
+
+<div class='method'><a href="../source/application/libraries/auth/openid/sqlstore.php.html#line307" class="location">application/libraries/Auth/OpenID/SQLStore.php at line 307</a>
+
+<h3 id="create_assoc_table()">create_assoc_table</h3>
+<code class="signature">public  void <strong>create_assoc_table</strong>()</code>
+<div class="details">
+</div></div>
+
+
+
+<div class='method'><a href="../source/application/libraries/auth/openid/sqlstore.php.html#line298" class="location">application/libraries/Auth/OpenID/SQLStore.php at line 298</a>
+
+<h3 id="create_nonce_table()">create_nonce_table</h3>
+<code class="signature">public  void <strong>create_nonce_table</strong>()</code>
+<div class="details">
+</div></div>
+
+
+
+<div class='method'><a href="../source/application/libraries/auth/openid/sqlstore.php.html#line394" class="location">application/libraries/Auth/OpenID/SQLStore.php at line 394</a>
+
+<h3 id="getAssociation()">getAssociation</h3>
+<code class="signature">public  Association <strong>getAssociation</strong>(string server_url, mixed handle)</code>
+<div class="details">
+<p>This method returns an Association object from storage that
+matches the server URL and, if specified, handle. It returns
+null if no such association is found or if the matching
+association is expired.</p><p>If no handle is specified, the store may return any association
+which matches the server URL. If multiple associations are
+valid, the recommended return value for this method is the one
+most recently issued.</p><p>This method is allowed (and encouraged) to garbage collect
+expired associations when found. This method must not return
+expired associations.</p><dl>
+<dt>Parameters:</dt>
+<dd>server_url - The URL of the identity server to get the association for. Because of the way the server portion of the library uses this interface, don't assume there are any limitations on the character set of the input string. In particular, expect to see unescaped non-url-safe characters in the server_url field.</dd>
+<dd>handle - This optional parameter is the handle of the specific association to get. If no specific handle is provided, any valid association matching the server URL is returned.</dd>
+<dt>Returns:</dt>
+<dd>The Association for the given identity server.</dd>
+</dl>
+</div></div>
+
+
+
+<div class='method'><a href="../source/application/libraries/auth/openid/sqlstore.php.html#line165" class="location">application/libraries/Auth/OpenID/SQLStore.php at line 165</a>
+
+<h3 id="isError()">isError</h3>
+<code class="signature">public  void <strong>isError</strong>(mixed value)</code>
+<div class="details">
+<p>Returns true if $value constitutes a database error; returns
+false otherwise.</p></div></div>
+
+
+
+<div class='method'><a href="../source/application/libraries/auth/openid/sqlstore.php.html#line377" class="location">application/libraries/Auth/OpenID/SQLStore.php at line 377</a>
+
+<h3 id="removeAssociation()">removeAssociation</h3>
+<code class="signature">public  mixed <strong>removeAssociation</strong>(string server_url, string handle)</code>
+<div class="details">
+<p>This method removes the matching association if it's found, and
+returns whether the association was removed or not.</p><dl>
+<dt>Parameters:</dt>
+<dd>server_url - The URL of the identity server the association to remove belongs to. Because of the way the server portion of the library uses this interface, don't assume there are any limitations on the character set of the input string. In particular, expect to see unescaped non-url-safe characters in the server_url field.</dd>
+<dd>handle - This is the handle of the association to remove. If there isn't an association found that matches both the given URL and handle, then there was no matching handle found.</dd>
+<dt>Returns:</dt>
+<dd>Returns whether or not the given association existed.</dd>
+</dl>
+</div></div>
+
+
+
+<div class='method'><a href="../source/application/libraries/auth/openid/sqlstore.php.html#line197" class="location">application/libraries/Auth/OpenID/SQLStore.php at line 197</a>
+
+<h3 id="reset()">reset</h3>
+<code class="signature">public  void <strong>reset</strong>()</code>
+<div class="details">
+<p>Resets the store by removing all records from the store's
+tables.</p></div></div>
+
+
+
+<div class='method'><a href="../source/application/libraries/auth/openid/sqlstore.php.html#line175" class="location">application/libraries/Auth/OpenID/SQLStore.php at line 175</a>
+
+<h3 id="resultToBool()">resultToBool</h3>
+<code class="signature">public  void <strong>resultToBool</strong>(mixed obj)</code>
+<div class="details">
+<p>Converts a query result to a boolean.  If the result is a
+database error according to $this->isError(), this returns
+false; otherwise, this returns true.</p></div></div>
+
+
+
+<div class='method'><a href="../source/application/libraries/auth/openid/sqlstore.php.html#line189" class="location">application/libraries/Auth/OpenID/SQLStore.php at line 189</a>
+
+<h3 id="setSQL()">setSQL</h3>
+<code class="signature">public  void <strong>setSQL</strong>()</code>
+<div class="details">
+<p>This method should be overridden by subclasses.  This method is
+called by the constructor to set values in $this->sql, which is
+an array keyed on sql name.</p></div></div>
+
+
+
+<div class='method'><a href="../source/application/libraries/auth/openid/sqlstore.php.html#line331" class="location">application/libraries/Auth/OpenID/SQLStore.php at line 331</a>
+
+<h3 id="storeAssociation()">storeAssociation</h3>
+<code class="signature">public  void <strong>storeAssociation</strong>(string server_url, Association association)</code>
+<div class="details">
+<p>This method puts an Association object into storage,
+retrievable by server URL and handle.</p><dl>
+<dt>Parameters:</dt>
+<dd>server_url - The URL of the identity server that this association is with. Because of the way the server portion of the library uses this interface, don't assume there are any limitations on the character set of the input string. In particular, expect to see unescaped non-url-safe characters in the server_url field.</dd>
+<dd>association - The Association to store.</dd>
+</dl>
+</div></div>
+
+
+
+<div class='method'><a href="../source/application/libraries/auth/openid/sqlstore.php.html#line153" class="location">application/libraries/Auth/OpenID/SQLStore.php at line 153</a>
+
+<h3 id="tableExists()">tableExists</h3>
+<code class="signature">public  void <strong>tableExists</strong>(mixed table_name)</code>
+<div class="details">
+</div></div>
+
+
+
+<div class='method'><a href="../source/application/libraries/auth/openid/sqlstore.php.html#line465" class="location">application/libraries/Auth/OpenID/SQLStore.php at line 465</a>
+
+<h3 id="useNonce()">useNonce</h3>
+<code class="signature">public  bool <strong>useNonce</strong>(mixed server_url, mixed timestamp, mixed salt, string nonce)</code>
+<div class="details">
+<p>Called when using a nonce.</p><p>This method should return C{True} if the nonce has not been
+used before, and store it for a while to make sure nobody
+tries to use the same value again.  If the nonce has already
+been used, return C{False}.</p><p>Change: In earlier versions, round-trip nonces were used and a
+nonce was only valid if it had been previously stored with
+storeNonce.  Version 2.0 uses one-way nonces, requiring a
+different implementation here that does not depend on a
+storeNonce call.  (storeNonce is no longer part of the
+interface.</p><dl>
+<dt>Parameters:</dt>
+<dd>nonce - The nonce to use.</dd>
+<dt>Returns:</dt>
+<dd>Whether or not the nonce was valid.</dd>
+</dl>
+</div></div>
+
+
+
+</div><div class="header">
+<h1>GiftFlow API</h1>
+<ul>
+<li><a href="../overview-summary.html">Overview</a></li>
+<li><a href="../openid/package-summary.html">Package</a></li>
+<li class="active">Class</li>
+<li><a href="../openid/package-tree.html">Tree</a></li>
+<li><a href="../overview-files.html">Files</a></li>
+<li><a href="../deprecated-list.html">Deprecated</a></li>
+<li><a href="../index-all.html">Index</a></li>
+</ul>
+</div>
+
+<div class="small_links">
+<a href="../index.html" target="_top">Frames</a>
+<a href="../openid/auth_openid_sqlstore.html" target="_top">No frames</a>
+</div>
+<div class="small_links">
+Summary: <a href="#summary_field">Field</a> | <a href="#summary_method">Method</a> | <a href="#summary_constr">Constr</a>
+Detail: <a href="#detail_field">Field</a> | <a href="#detail_method">Method</a> | <a href="#summary_constr">Constr</a>
+</div>
+<hr>
+
+<p id="footer">This document was generated by <a href="http://peej.github.com/phpdoctor/">PHPDoctor: The PHP Documentation Creator</a></p>
+
+</body>
+
+</html>

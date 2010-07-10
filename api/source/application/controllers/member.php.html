@@ -6,7 +6,7 @@
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 
 <meta name="generator" content="PHPDoctor 2RC4 (http://peej.github.com/phpdoctor/)">
-<meta name="when" content="Tue, 29 Jun 2010 21:10:10 +0000">
+<meta name="when" content="Sat, 10 Jul 2010 18:10:56 +0000">
 
 <link rel="stylesheet" type="text/css" href="../../../stylesheet.css">
 <link rel="start" href="../../../overview-summary.html">
@@ -391,57 +391,66 @@
 <a name="line354"></a>		$F = new User( $id );
 <a name="line355"></a>		$U->save_following($F);
 <a name="line356"></a>
-<a name="line357"></a>		if( $this->data['is_ajax'] )
-<a name="line358"></a>		{
-<a name="line359"></a>			echo "Now following ".$F->screen_name;
-<a name="line360"></a>		}
-<a name="line361"></a>		else
-<a name="line362"></a>		{
-<a name="line363"></a>			$this->session->set_flashdata('success', 'Now following '.$F->screen_name.'.');
-<a name="line364"></a>			redirect('profile/'.$id);
-<a name="line365"></a>		}
-<a name="line366"></a>	}
-<a name="line367"></a>	
-<a name="line368"></a>	function unfollow( $id )
-<a name="line369"></a>	{
-<a name="line370"></a>		$U = new User($this->data['logged_in_user_id']);
-<a name="line371"></a>		$F = new User( $id );
-<a name="line372"></a>		$U->delete_following($F);
-<a name="line373"></a>		$this->session->set_flashdata('success', 'No longer following '.$F->screen_name.'.');
-<a name="line374"></a>		redirect('profile/'.$id);
-<a name="line375"></a>	}
-<a name="line376"></a>
-<a name="line377"></a>	function facebook( $key1 = null, $val1 = null, $key2 = null, $val2 = null )
-<a name="line378"></a>	{
-<a name="line379"></a>		// Handles the initial facebook connect request. Redirects user to Facebook's OAuth page. The data will be returned to /assets/facebook.php.
-<a name="line380"></a>		if(empty($key1))
-<a name="line381"></a>		{
-<a name="line382"></a>			$config = array (	"client_id"=>111637438874755,
-<a name="line383"></a>								"scope" => "offline_access,user_location,user_photos,email,publish_stream",
-<a name="line384"></a>								"redirect_uri"=>"http://www.giftflow.org/assets/facebook.php" );
-<a name="line385"></a>			
-<a name="line386"></a>			redirect("https://graph.facebook.com/oauth/authorize?".http_build_query($config));
-<a name="line387"></a>		}
-<a name="line388"></a>		// Once the user has been authorized, this code parses the authorization code and sends the necessary data to the Auth class.
-<a name="line389"></a>		else
+<a name="line357"></a>		// Hook: 'follower_new'
+<a name="line358"></a>		$this->hooks->call('follower_new', $this);
+<a name="line359"></a>
+<a name="line360"></a>		if( $this->data['is_ajax'] )
+<a name="line361"></a>		{
+<a name="line362"></a>			echo "Now following ".$F->screen_name;
+<a name="line363"></a>		}
+<a name="line364"></a>		else
+<a name="line365"></a>		{
+<a name="line366"></a>			$this->session->set_flashdata('success', 'Now following '.$F->screen_name.'.');
+<a name="line367"></a>			redirect('profile/'.$id);
+<a name="line368"></a>		}
+<a name="line369"></a>	}
+<a name="line370"></a>	
+<a name="line371"></a>	function unfollow( $id )
+<a name="line372"></a>	{
+<a name="line373"></a>		$U = new User($this->data['logged_in_user_id']);
+<a name="line374"></a>		$F = new User( $id );
+<a name="line375"></a>		$U->delete_following($F);
+<a name="line376"></a>		
+<a name="line377"></a>		// Hook: 'follower_deleted'
+<a name="line378"></a>		$this->hooks->call('follower_deleted', $this);
+<a name="line379"></a>
+<a name="line380"></a>		
+<a name="line381"></a>		$this->session->set_flashdata('success', 'No longer following '.$F->screen_name.'.');
+<a name="line382"></a>		
+<a name="line383"></a>		redirect('profile/'.$id);
+<a name="line384"></a>	}
+<a name="line385"></a>
+<a name="line386"></a>	function facebook( $key1 = null, $val1 = null, $key2 = null, $val2 = null )
+<a name="line387"></a>	{
+<a name="line388"></a>		// Handles the initial facebook connect request. Redirects user to Facebook's OAuth page. The data will be returned to /assets/facebook.php.
+<a name="line389"></a>		if(empty($key1))
 <a name="line390"></a>		{
-<a name="line391"></a>			$access = $key1.'='.$val1;
-<a name="line392"></a>			if(!empty($key2)&&!empty($val2)) $access .= $key2.'='.$val2;
-<a name="line393"></a>			$facebook_data = json_decode(file_get_contents("https://graph.facebook.com/me?".$access));
-<a name="line394"></a>			if($key1=="access_token") $facebook_data->token = $val1;
-<a name="line395"></a>			$this->auth->facebook( $facebook_data );
-<a name="line396"></a>		}	
-<a name="line397"></a>	}
-<a name="line398"></a>	
-<a name="line399"></a>	function facebook_welcome()
-<a name="line400"></a>	{
-<a name="line401"></a>	
-<a name="line402"></a>	}
-<a name="line403"></a>}
-<a name="line404"></a>
-<a name="line405"></a>/* End of file member.php */
-<a name="line406"></a>/* Location: ./system/application/controllers/member.php */
-<a name="line407"></a></pre>
+<a name="line391"></a>			$config = array (	"client_id"=>111637438874755,
+<a name="line392"></a>								"scope" => "offline_access,user_location,user_photos,email,publish_stream",
+<a name="line393"></a>								"redirect_uri"=>"http://www.giftflow.org/assets/facebook.php" );
+<a name="line394"></a>			
+<a name="line395"></a>			redirect("https://graph.facebook.com/oauth/authorize?".http_build_query($config));
+<a name="line396"></a>		}
+<a name="line397"></a>		// Once the user has been authorized, this code parses the authorization code and sends the necessary data to the Auth class.
+<a name="line398"></a>		else
+<a name="line399"></a>		{
+<a name="line400"></a>			$access = $key1.'='.$val1;
+<a name="line401"></a>			if(!empty($key2)&&!empty($val2)) $access .= $key2.'='.$val2;
+<a name="line402"></a>			$facebook_data = json_decode(file_get_contents("https://graph.facebook.com/me?".$access));
+<a name="line403"></a>			if($key1=="access_token") $facebook_data->token = $val1;
+<a name="line404"></a>			$this->auth->facebook( $facebook_data );
+<a name="line405"></a>		}	
+<a name="line406"></a>	}
+<a name="line407"></a>	
+<a name="line408"></a>	function facebook_welcome()
+<a name="line409"></a>	{
+<a name="line410"></a>	
+<a name="line411"></a>	}
+<a name="line412"></a>}
+<a name="line413"></a>
+<a name="line414"></a>/* End of file member.php */
+<a name="line415"></a>/* Location: ./system/application/controllers/member.php */
+<a name="line416"></a></pre>
 <div class="header">
 <h1>GiftFlow API</h1>
 <ul>

@@ -1,0 +1,522 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+
+<html lang="en">
+<head>
+
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
+<meta name="generator" content="PHPDoctor 2RC4 (http://peej.github.com/phpdoctor/)">
+<meta name="when" content="Sat, 10 Jul 2010 18:10:56 +0000">
+
+<link rel="stylesheet" type="text/css" href="../../../../../stylesheet.css">
+<link rel="start" href="../../../../../overview-summary.html">
+
+<title>application/libraries/Auth/OpenID/TrustRoot.php (GiftFlow API)</title>
+
+</head>
+<body id="file" onload="parent.document.title=document.title;">
+
+<div class="header">
+<h1>GiftFlow API</h1>
+<ul>
+<li><a href="../../../../../overview-summary.html">Overview</a></li>
+<li>Package</li><li>Class</li><li>Tree</li><li><a href="../../../../../overview-files.html">Files</a></li>
+<li><a href="../../../../../deprecated-list.html">Deprecated</a></li>
+<li><a href="../../../../../index-all.html">Index</a></li>
+</ul>
+</div>
+
+<div class="small_links">
+<a href="../../../../../index.html" target="_top">Frames</a>
+<a href="../../../../../source/application/libraries/auth/openid/trustroot.php.html" target="_top">No frames</a>
+</div>
+<hr>
+
+<h1>application/libraries/Auth/OpenID/TrustRoot.php</h1>
+<div class="comment" id="overview_description"><p>Functions for dealing with OpenID trust roots</p><p>PHP versions 4 and 5</p><p>LICENSE: See the COPYING file included in this distribution.</p></div>
+
+<hr>
+
+<a name="line1"></a><pre><?php
+<a name="line2"></a>/**
+<a name="line3"></a> * Functions for dealing with OpenID trust roots
+<a name="line4"></a> *
+<a name="line5"></a> * PHP versions 4 and 5
+<a name="line6"></a> *
+<a name="line7"></a> * LICENSE: See the COPYING file included in this distribution.
+<a name="line8"></a> *
+<a name="line9"></a> * @package OpenID
+<a name="line10"></a> * @author JanRain, Inc. <openid@janrain.com>
+<a name="line11"></a> * @copyright 2005-2008 Janrain, Inc.
+<a name="line12"></a> * @license http://www.apache.org/licenses/LICENSE-2.0 Apache
+<a name="line13"></a> */
+<a name="line14"></a>
+<a name="line15"></a>require_once 'Auth/OpenID/Discover.php';
+<a name="line16"></a>
+<a name="line17"></a>/**
+<a name="line18"></a> * A regular expression that matches a domain ending in a top-level domains.
+<a name="line19"></a> * Used in checking trust roots for sanity.
+<a name="line20"></a> *
+<a name="line21"></a> * @access private
+<a name="line22"></a> */
+<a name="line23"></a>define('Auth_OpenID___TLDs',
+<a name="line24"></a>       '/\.(ac|ad|ae|aero|af|ag|ai|al|am|an|ao|aq|ar|arpa|as|asia' .
+<a name="line25"></a>       '|at|au|aw|ax|az|ba|bb|bd|be|bf|bg|bh|bi|biz|bj|bm|bn|bo|br' .
+<a name="line26"></a>       '|bs|bt|bv|bw|by|bz|ca|cat|cc|cd|cf|cg|ch|ci|ck|cl|cm|cn|co' .
+<a name="line27"></a>       '|com|coop|cr|cu|cv|cx|cy|cz|de|dj|dk|dm|do|dz|ec|edu|ee|eg' .
+<a name="line28"></a>       '|er|es|et|eu|fi|fj|fk|fm|fo|fr|ga|gb|gd|ge|gf|gg|gh|gi|gl' .
+<a name="line29"></a>       '|gm|gn|gov|gp|gq|gr|gs|gt|gu|gw|gy|hk|hm|hn|hr|ht|hu|id|ie' .
+<a name="line30"></a>       '|il|im|in|info|int|io|iq|ir|is|it|je|jm|jo|jobs|jp|ke|kg|kh' .
+<a name="line31"></a>       '|ki|km|kn|kp|kr|kw|ky|kz|la|lb|lc|li|lk|lr|ls|lt|lu|lv|ly' .
+<a name="line32"></a>       '|ma|mc|md|me|mg|mh|mil|mk|ml|mm|mn|mo|mobi|mp|mq|mr|ms|mt' .
+<a name="line33"></a>       '|mu|museum|mv|mw|mx|my|mz|na|name|nc|ne|net|nf|ng|ni|nl|no' .
+<a name="line34"></a>       '|np|nr|nu|nz|om|org|pa|pe|pf|pg|ph|pk|pl|pm|pn|pr|pro|ps|pt' .
+<a name="line35"></a>       '|pw|py|qa|re|ro|rs|ru|rw|sa|sb|sc|sd|se|sg|sh|si|sj|sk|sl' .
+<a name="line36"></a>       '|sm|sn|so|sr|st|su|sv|sy|sz|tc|td|tel|tf|tg|th|tj|tk|tl|tm' .
+<a name="line37"></a>       '|tn|to|tp|tr|travel|tt|tv|tw|tz|ua|ug|uk|us|uy|uz|va|vc|ve' .
+<a name="line38"></a>       '|vg|vi|vn|vu|wf|ws|xn--0zwm56d|xn--11b5bs3a9aj6g' .
+<a name="line39"></a>       '|xn--80akhbyknj4f|xn--9t4b11yi5a|xn--deba0ad|xn--g6w251d' .
+<a name="line40"></a>       '|xn--hgbk6aj7f53bba|xn--hlcj6aya9esc7a|xn--jxalpdlp' .
+<a name="line41"></a>       '|xn--kgbechtv|xn--zckzah|ye|yt|yu|za|zm|zw)\.?$/');
+<a name="line42"></a>
+<a name="line43"></a>define('Auth_OpenID___HostSegmentRe',
+<a name="line44"></a>       "/^(?:[-a-zA-Z0-9!$&'\\(\\)\\*+,;=._~]|%[a-zA-Z0-9]{2})*$/");
+<a name="line45"></a>
+<a name="line46"></a>/**
+<a name="line47"></a> * A wrapper for trust-root related functions
+<a name="line48"></a> */
+<a name="line49"></a>class Auth_OpenID_TrustRoot {
+<a name="line50"></a>    /*
+<a name="line51"></a>     * Return a discovery URL for this realm.
+<a name="line52"></a>     *
+<a name="line53"></a>     * Return null if the realm could not be parsed or was not valid.
+<a name="line54"></a>     *
+<a name="line55"></a>     * @param return_to The relying party return URL of the OpenID
+<a name="line56"></a>     * authentication request
+<a name="line57"></a>     *
+<a name="line58"></a>     * @return The URL upon which relying party discovery should be
+<a name="line59"></a>     * run in order to verify the return_to URL
+<a name="line60"></a>     */
+<a name="line61"></a>    static function buildDiscoveryURL($realm)
+<a name="line62"></a>    {
+<a name="line63"></a>        $parsed = Auth_OpenID_TrustRoot::_parse($realm);
+<a name="line64"></a>
+<a name="line65"></a>        if ($parsed === false) {
+<a name="line66"></a>            return false;
+<a name="line67"></a>        }
+<a name="line68"></a>
+<a name="line69"></a>        if ($parsed['wildcard']) {
+<a name="line70"></a>            // Use "www." in place of the star
+<a name="line71"></a>            if ($parsed['host'][0] != '.') {
+<a name="line72"></a>                return false;
+<a name="line73"></a>            }
+<a name="line74"></a>
+<a name="line75"></a>            $www_domain = 'www' . $parsed['host'];
+<a name="line76"></a>
+<a name="line77"></a>            return sprintf('%s://%s%s', $parsed['scheme'],
+<a name="line78"></a>                           $www_domain, $parsed['path']);
+<a name="line79"></a>        } else {
+<a name="line80"></a>            return $parsed['unparsed'];
+<a name="line81"></a>        }
+<a name="line82"></a>    }
+<a name="line83"></a>
+<a name="line84"></a>    /**
+<a name="line85"></a>     * Parse a URL into its trust_root parts.
+<a name="line86"></a>     *
+<a name="line87"></a>     * @static
+<a name="line88"></a>     *
+<a name="line89"></a>     * @access private
+<a name="line90"></a>     *
+<a name="line91"></a>     * @param string $trust_root The url to parse
+<a name="line92"></a>     *
+<a name="line93"></a>     * @return mixed $parsed Either an associative array of trust root
+<a name="line94"></a>     * parts or false if parsing failed.
+<a name="line95"></a>     */
+<a name="line96"></a>    static function _parse($trust_root)
+<a name="line97"></a>    {
+<a name="line98"></a>        $trust_root = Auth_OpenID_urinorm($trust_root);
+<a name="line99"></a>        if ($trust_root === null) {
+<a name="line100"></a>            return false;
+<a name="line101"></a>        }
+<a name="line102"></a>
+<a name="line103"></a>        if (preg_match("/:\/\/[^:]+(:\d+){2,}(\/|$)/", $trust_root)) {
+<a name="line104"></a>            return false;
+<a name="line105"></a>        }
+<a name="line106"></a>
+<a name="line107"></a>        $parts = @parse_url($trust_root);
+<a name="line108"></a>        if ($parts === false) {
+<a name="line109"></a>            return false;
+<a name="line110"></a>        }
+<a name="line111"></a>
+<a name="line112"></a>        $required_parts = array('scheme', 'host');
+<a name="line113"></a>        $forbidden_parts = array('user', 'pass', 'fragment');
+<a name="line114"></a>        $keys = array_keys($parts);
+<a name="line115"></a>        if (array_intersect($keys, $required_parts) != $required_parts) {
+<a name="line116"></a>            return false;
+<a name="line117"></a>        }
+<a name="line118"></a>
+<a name="line119"></a>        if (array_intersect($keys, $forbidden_parts) != array()) {
+<a name="line120"></a>            return false;
+<a name="line121"></a>        }
+<a name="line122"></a>
+<a name="line123"></a>        if (!preg_match(Auth_OpenID___HostSegmentRe, $parts['host'])) {
+<a name="line124"></a>            return false;
+<a name="line125"></a>        }
+<a name="line126"></a>
+<a name="line127"></a>        $scheme = strtolower($parts['scheme']);
+<a name="line128"></a>        $allowed_schemes = array('http', 'https');
+<a name="line129"></a>        if (!in_array($scheme, $allowed_schemes)) {
+<a name="line130"></a>            return false;
+<a name="line131"></a>        }
+<a name="line132"></a>        $parts['scheme'] = $scheme;
+<a name="line133"></a>
+<a name="line134"></a>        $host = strtolower($parts['host']);
+<a name="line135"></a>        $hostparts = explode('*', $host);
+<a name="line136"></a>        switch (count($hostparts)) {
+<a name="line137"></a>        case 1:
+<a name="line138"></a>            $parts['wildcard'] = false;
+<a name="line139"></a>            break;
+<a name="line140"></a>        case 2:
+<a name="line141"></a>            if ($hostparts[0] ||
+<a name="line142"></a>                ($hostparts[1] && substr($hostparts[1], 0, 1) != '.')) {
+<a name="line143"></a>                return false;
+<a name="line144"></a>            }
+<a name="line145"></a>            $host = $hostparts[1];
+<a name="line146"></a>            $parts['wildcard'] = true;
+<a name="line147"></a>            break;
+<a name="line148"></a>        default:
+<a name="line149"></a>            return false;
+<a name="line150"></a>        }
+<a name="line151"></a>        if (strpos($host, ':') !== false) {
+<a name="line152"></a>            return false;
+<a name="line153"></a>        }
+<a name="line154"></a>
+<a name="line155"></a>        $parts['host'] = $host;
+<a name="line156"></a>
+<a name="line157"></a>        if (isset($parts['path'])) {
+<a name="line158"></a>            $path = strtolower($parts['path']);
+<a name="line159"></a>            if (substr($path, 0, 1) != '/') {
+<a name="line160"></a>                return false;
+<a name="line161"></a>            }
+<a name="line162"></a>        } else {
+<a name="line163"></a>            $path = '/';
+<a name="line164"></a>        }
+<a name="line165"></a>
+<a name="line166"></a>        $parts['path'] = $path;
+<a name="line167"></a>        if (!isset($parts['port'])) {
+<a name="line168"></a>            $parts['port'] = false;
+<a name="line169"></a>        }
+<a name="line170"></a>
+<a name="line171"></a>
+<a name="line172"></a>        $parts['unparsed'] = $trust_root;
+<a name="line173"></a>
+<a name="line174"></a>        return $parts;
+<a name="line175"></a>    }
+<a name="line176"></a>
+<a name="line177"></a>    /**
+<a name="line178"></a>     * Is this trust root sane?
+<a name="line179"></a>     *
+<a name="line180"></a>     * A trust root is sane if it is syntactically valid and it has a
+<a name="line181"></a>     * reasonable domain name. Specifically, the domain name must be
+<a name="line182"></a>     * more than one level below a standard TLD or more than two
+<a name="line183"></a>     * levels below a two-letter tld.
+<a name="line184"></a>     *
+<a name="line185"></a>     * For example, '*.com' is not a sane trust root, but '*.foo.com'
+<a name="line186"></a>     * is.  '*.co.uk' is not sane, but '*.bbc.co.uk' is.
+<a name="line187"></a>     *
+<a name="line188"></a>     * This check is not always correct, but it attempts to err on the
+<a name="line189"></a>     * side of marking sane trust roots insane instead of marking
+<a name="line190"></a>     * insane trust roots sane. For example, 'kink.fm' is marked as
+<a name="line191"></a>     * insane even though it "should" (for some meaning of should) be
+<a name="line192"></a>     * marked sane.
+<a name="line193"></a>     *
+<a name="line194"></a>     * This function should be used when creating OpenID servers to
+<a name="line195"></a>     * alert the users of the server when a consumer attempts to get
+<a name="line196"></a>     * the user to accept a suspicious trust root.
+<a name="line197"></a>     *
+<a name="line198"></a>     * @static
+<a name="line199"></a>     * @param string $trust_root The trust root to check
+<a name="line200"></a>     * @return bool $sanity Whether the trust root looks OK
+<a name="line201"></a>     */
+<a name="line202"></a>    static function isSane($trust_root)
+<a name="line203"></a>    {
+<a name="line204"></a>        $parts = Auth_OpenID_TrustRoot::_parse($trust_root);
+<a name="line205"></a>        if ($parts === false) {
+<a name="line206"></a>            return false;
+<a name="line207"></a>        }
+<a name="line208"></a>
+<a name="line209"></a>        // Localhost is a special case
+<a name="line210"></a>        if ($parts['host'] == 'localhost') {
+<a name="line211"></a>            return true;
+<a name="line212"></a>        }
+<a name="line213"></a>        
+<a name="line214"></a>        $host_parts = explode('.', $parts['host']);
+<a name="line215"></a>        if ($parts['wildcard']) {
+<a name="line216"></a>            // Remove the empty string from the beginning of the array
+<a name="line217"></a>            array_shift($host_parts);
+<a name="line218"></a>        }
+<a name="line219"></a>
+<a name="line220"></a>        if ($host_parts && !$host_parts[count($host_parts) - 1]) {
+<a name="line221"></a>            array_pop($host_parts);
+<a name="line222"></a>        }
+<a name="line223"></a>
+<a name="line224"></a>        if (!$host_parts) {
+<a name="line225"></a>            return false;
+<a name="line226"></a>        }
+<a name="line227"></a>
+<a name="line228"></a>        // Don't allow adjacent dots
+<a name="line229"></a>        if (in_array('', $host_parts, true)) {
+<a name="line230"></a>            return false;
+<a name="line231"></a>        }
+<a name="line232"></a>
+<a name="line233"></a>        // Get the top-level domain of the host. If it is not a valid TLD,
+<a name="line234"></a>        // it's not sane.
+<a name="line235"></a>        preg_match(Auth_OpenID___TLDs, $parts['host'], $matches);
+<a name="line236"></a>        if (!$matches) {
+<a name="line237"></a>            return false;
+<a name="line238"></a>        }
+<a name="line239"></a>        $tld = $matches[1];
+<a name="line240"></a>
+<a name="line241"></a>        if (count($host_parts) == 1) {
+<a name="line242"></a>            return false;
+<a name="line243"></a>        }
+<a name="line244"></a>
+<a name="line245"></a>        if ($parts['wildcard']) {
+<a name="line246"></a>            // It's a 2-letter tld with a short second to last segment
+<a name="line247"></a>            // so there needs to be more than two segments specified
+<a name="line248"></a>            // (e.g. *.co.uk is insane)
+<a name="line249"></a>            $second_level = $host_parts[count($host_parts) - 2];
+<a name="line250"></a>            if (strlen($tld) == 2 && strlen($second_level) <= 3) {
+<a name="line251"></a>                return count($host_parts) > 2;
+<a name="line252"></a>            }
+<a name="line253"></a>        }
+<a name="line254"></a>
+<a name="line255"></a>        return true;
+<a name="line256"></a>    }
+<a name="line257"></a>
+<a name="line258"></a>    /**
+<a name="line259"></a>     * Does this URL match the given trust root?
+<a name="line260"></a>     *
+<a name="line261"></a>     * Return whether the URL falls under the given trust root. This
+<a name="line262"></a>     * does not check whether the trust root is sane. If the URL or
+<a name="line263"></a>     * trust root do not parse, this function will return false.
+<a name="line264"></a>     *
+<a name="line265"></a>     * @param string $trust_root The trust root to match against
+<a name="line266"></a>     *
+<a name="line267"></a>     * @param string $url The URL to check
+<a name="line268"></a>     *
+<a name="line269"></a>     * @return bool $matches Whether the URL matches against the
+<a name="line270"></a>     * trust root
+<a name="line271"></a>     */
+<a name="line272"></a>    static function match($trust_root, $url)
+<a name="line273"></a>    {
+<a name="line274"></a>        $trust_root_parsed = Auth_OpenID_TrustRoot::_parse($trust_root);
+<a name="line275"></a>        $url_parsed = Auth_OpenID_TrustRoot::_parse($url);
+<a name="line276"></a>        if (!$trust_root_parsed || !$url_parsed) {
+<a name="line277"></a>            return false;
+<a name="line278"></a>        }
+<a name="line279"></a>
+<a name="line280"></a>        // Check hosts matching
+<a name="line281"></a>        if ($url_parsed['wildcard']) {
+<a name="line282"></a>            return false;
+<a name="line283"></a>        }
+<a name="line284"></a>        if ($trust_root_parsed['wildcard']) {
+<a name="line285"></a>            $host_tail = $trust_root_parsed['host'];
+<a name="line286"></a>            $host = $url_parsed['host'];
+<a name="line287"></a>            if ($host_tail &&
+<a name="line288"></a>                substr($host, -(strlen($host_tail))) != $host_tail &&
+<a name="line289"></a>                substr($host_tail, 1) != $host) {
+<a name="line290"></a>                return false;
+<a name="line291"></a>            }
+<a name="line292"></a>        } else {
+<a name="line293"></a>            if ($trust_root_parsed['host'] != $url_parsed['host']) {
+<a name="line294"></a>                return false;
+<a name="line295"></a>            }
+<a name="line296"></a>        }
+<a name="line297"></a>
+<a name="line298"></a>        // Check path and query matching
+<a name="line299"></a>        $base_path = $trust_root_parsed['path'];
+<a name="line300"></a>        $path = $url_parsed['path'];
+<a name="line301"></a>        if (!isset($trust_root_parsed['query'])) {
+<a name="line302"></a>            if ($base_path != $path) {
+<a name="line303"></a>                if (substr($path, 0, strlen($base_path)) != $base_path) {
+<a name="line304"></a>                    return false;
+<a name="line305"></a>                }
+<a name="line306"></a>                if (substr($base_path, strlen($base_path) - 1, 1) != '/' &&
+<a name="line307"></a>                    substr($path, strlen($base_path), 1) != '/') {
+<a name="line308"></a>                    return false;
+<a name="line309"></a>                }
+<a name="line310"></a>            }
+<a name="line311"></a>        } else {
+<a name="line312"></a>            $base_query = $trust_root_parsed['query'];
+<a name="line313"></a>            $query = @$url_parsed['query'];
+<a name="line314"></a>            $qplus = substr($query, 0, strlen($base_query) + 1);
+<a name="line315"></a>            $bqplus = $base_query . '&';
+<a name="line316"></a>            if ($base_path != $path ||
+<a name="line317"></a>                ($base_query != $query && $qplus != $bqplus)) {
+<a name="line318"></a>                return false;
+<a name="line319"></a>            }
+<a name="line320"></a>        }
+<a name="line321"></a>
+<a name="line322"></a>        // The port and scheme need to match exactly
+<a name="line323"></a>        return ($trust_root_parsed['scheme'] == $url_parsed['scheme'] &&
+<a name="line324"></a>                $url_parsed['port'] === $trust_root_parsed['port']);
+<a name="line325"></a>    }
+<a name="line326"></a>}
+<a name="line327"></a>
+<a name="line328"></a>/*
+<a name="line329"></a> * If the endpoint is a relying party OpenID return_to endpoint,
+<a name="line330"></a> * return the endpoint URL. Otherwise, return None.
+<a name="line331"></a> *
+<a name="line332"></a> * This function is intended to be used as a filter for the Yadis
+<a name="line333"></a> * filtering interface.
+<a name="line334"></a> *
+<a name="line335"></a> * @see: C{L{openid.yadis.services}}
+<a name="line336"></a> * @see: C{L{openid.yadis.filters}}
+<a name="line337"></a> *
+<a name="line338"></a> * @param endpoint: An XRDS BasicServiceEndpoint, as returned by
+<a name="line339"></a> * performing Yadis dicovery.
+<a name="line340"></a> *
+<a name="line341"></a> * @returns: The endpoint URL or None if the endpoint is not a
+<a name="line342"></a> * relying party endpoint.
+<a name="line343"></a> */
+<a name="line344"></a>function filter_extractReturnURL($endpoint)
+<a name="line345"></a>{
+<a name="line346"></a>    if ($endpoint->matchTypes(array(Auth_OpenID_RP_RETURN_TO_URL_TYPE))) {
+<a name="line347"></a>        return $endpoint;
+<a name="line348"></a>    } else {
+<a name="line349"></a>        return null;
+<a name="line350"></a>    }
+<a name="line351"></a>}
+<a name="line352"></a>
+<a name="line353"></a>function &Auth_OpenID_extractReturnURL(&$endpoint_list)
+<a name="line354"></a>{
+<a name="line355"></a>    $result = array();
+<a name="line356"></a>
+<a name="line357"></a>    foreach ($endpoint_list as $endpoint) {
+<a name="line358"></a>        if (filter_extractReturnURL($endpoint)) {
+<a name="line359"></a>            $result[] = $endpoint;
+<a name="line360"></a>        }
+<a name="line361"></a>    }
+<a name="line362"></a>
+<a name="line363"></a>    return $result;
+<a name="line364"></a>}
+<a name="line365"></a>
+<a name="line366"></a>/*
+<a name="line367"></a> * Is the return_to URL under one of the supplied allowed return_to
+<a name="line368"></a> * URLs?
+<a name="line369"></a> */
+<a name="line370"></a>function Auth_OpenID_returnToMatches($allowed_return_to_urls, $return_to)
+<a name="line371"></a>{
+<a name="line372"></a>    foreach ($allowed_return_to_urls as $allowed_return_to) {
+<a name="line373"></a>        // A return_to pattern works the same as a realm, except that
+<a name="line374"></a>        // it's not allowed to use a wildcard. We'll model this by
+<a name="line375"></a>        // parsing it as a realm, and not trying to match it if it has
+<a name="line376"></a>        // a wildcard.
+<a name="line377"></a>
+<a name="line378"></a>        $return_realm = Auth_OpenID_TrustRoot::_parse($allowed_return_to);
+<a name="line379"></a>        if (// Parses as a trust root
+<a name="line380"></a>            ($return_realm !== false) &&
+<a name="line381"></a>            // Does not have a wildcard
+<a name="line382"></a>            (!$return_realm['wildcard']) &&
+<a name="line383"></a>            // Matches the return_to that we passed in with it
+<a name="line384"></a>            (Auth_OpenID_TrustRoot::match($allowed_return_to, $return_to))) {
+<a name="line385"></a>            return true;
+<a name="line386"></a>        }
+<a name="line387"></a>    }
+<a name="line388"></a>
+<a name="line389"></a>    // No URL in the list matched
+<a name="line390"></a>    return false;
+<a name="line391"></a>}
+<a name="line392"></a>
+<a name="line393"></a>/*
+<a name="line394"></a> * Given a relying party discovery URL return a list of return_to
+<a name="line395"></a> * URLs.
+<a name="line396"></a> */
+<a name="line397"></a>function Auth_OpenID_getAllowedReturnURLs($relying_party_url, $fetcher,
+<a name="line398"></a>              $discover_function=null)
+<a name="line399"></a>{
+<a name="line400"></a>    if ($discover_function === null) {
+<a name="line401"></a>        $discover_function = array('Auth_Yadis_Yadis', 'discover');
+<a name="line402"></a>    }
+<a name="line403"></a>
+<a name="line404"></a>    $xrds_parse_cb = array('Auth_OpenID_ServiceEndpoint', 'consumerFromXRDS');
+<a name="line405"></a>
+<a name="line406"></a>    list($rp_url_after_redirects, $endpoints) =
+<a name="line407"></a>        Auth_Yadis_getServiceEndpoints($relying_party_url, $xrds_parse_cb,
+<a name="line408"></a>                                       $discover_function, $fetcher);
+<a name="line409"></a>
+<a name="line410"></a>    if ($rp_url_after_redirects != $relying_party_url) {
+<a name="line411"></a>        // Verification caused a redirect
+<a name="line412"></a>        return false;
+<a name="line413"></a>    }
+<a name="line414"></a>
+<a name="line415"></a>    call_user_func_array($discover_function,
+<a name="line416"></a>                         array($relying_party_url, &$fetcher));
+<a name="line417"></a>
+<a name="line418"></a>    $return_to_urls = array();
+<a name="line419"></a>    $matching_endpoints = Auth_OpenID_extractReturnURL($endpoints);
+<a name="line420"></a>
+<a name="line421"></a>    foreach ($matching_endpoints as $e) {
+<a name="line422"></a>        $return_to_urls[] = $e->server_url;
+<a name="line423"></a>    }
+<a name="line424"></a>
+<a name="line425"></a>    return $return_to_urls;
+<a name="line426"></a>}
+<a name="line427"></a>
+<a name="line428"></a>/*
+<a name="line429"></a> * Verify that a return_to URL is valid for the given realm.
+<a name="line430"></a> *
+<a name="line431"></a> * This function builds a discovery URL, performs Yadis discovery on
+<a name="line432"></a> * it, makes sure that the URL does not redirect, parses out the
+<a name="line433"></a> * return_to URLs, and finally checks to see if the current return_to
+<a name="line434"></a> * URL matches the return_to.
+<a name="line435"></a> *
+<a name="line436"></a> * @return true if the return_to URL is valid for the realm
+<a name="line437"></a> */
+<a name="line438"></a>function Auth_OpenID_verifyReturnTo($realm_str, $return_to, $fetcher,
+<a name="line439"></a>              $_vrfy='Auth_OpenID_getAllowedReturnURLs')
+<a name="line440"></a>{
+<a name="line441"></a>    $disco_url = Auth_OpenID_TrustRoot::buildDiscoveryURL($realm_str);
+<a name="line442"></a>
+<a name="line443"></a>    if ($disco_url === false) {
+<a name="line444"></a>        return false;
+<a name="line445"></a>    }
+<a name="line446"></a>
+<a name="line447"></a>    $allowable_urls = call_user_func_array($_vrfy,
+<a name="line448"></a>                           array($disco_url, $fetcher));
+<a name="line449"></a>
+<a name="line450"></a>    // The realm_str could not be parsed.
+<a name="line451"></a>    if ($allowable_urls === false) {
+<a name="line452"></a>        return false;
+<a name="line453"></a>    }
+<a name="line454"></a>
+<a name="line455"></a>    if (Auth_OpenID_returnToMatches($allowable_urls, $return_to)) {
+<a name="line456"></a>        return true;
+<a name="line457"></a>    } else {
+<a name="line458"></a>        return false;
+<a name="line459"></a>    }
+<a name="line460"></a>}
+<a name="line461"></a>
+<a name="line462"></a></pre>
+<div class="header">
+<h1>GiftFlow API</h1>
+<ul>
+<li><a href="../../../../../overview-summary.html">Overview</a></li>
+<li>Package</li><li>Class</li><li>Tree</li><li><a href="../../../../../overview-files.html">Files</a></li>
+<li><a href="../../../../../deprecated-list.html">Deprecated</a></li>
+<li><a href="../../../../../index-all.html">Index</a></li>
+</ul>
+</div>
+
+<div class="small_links">
+<a href="../../../../../index.html" target="_top">Frames</a>
+<a href="../../../../../source/application/libraries/auth/openid/trustroot.php.html" target="_top">No frames</a>
+</div>
+<hr>
+
+<p id="footer">This document was generated by <a href="http://peej.github.com/phpdoctor/">PHPDoctor: The PHP Documentation Creator</a></p>
+
+</body>
+
+</html>

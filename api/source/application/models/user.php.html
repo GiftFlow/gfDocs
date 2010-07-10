@@ -6,7 +6,7 @@
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 
 <meta name="generator" content="PHPDoctor 2RC4 (http://peej.github.com/phpdoctor/)">
-<meta name="when" content="Tue, 29 Jun 2010 21:10:10 +0000">
+<meta name="when" content="Sat, 10 Jul 2010 18:10:56 +0000">
 
 <link rel="stylesheet" type="text/css" href="../../../stylesheet.css">
 <link rel="start" href="../../../overview-summary.html">
@@ -246,306 +246,392 @@
 <a name="line209"></a>        	}
 <a name="line210"></a>    	}
 <a name="line211"></a>    	
-<a name="line212"></a>    	function deactivate()
-<a name="line213"></a>    	{
-<a name="line214"></a>    		$activation_code = sha1(md5(microtime()));
-<a name="line215"></a>		$this->activation_code = $activation_code;
-<a name="line216"></a>		$this->save();
-<a name="line217"></a>	}
-<a name="line218"></a>	
-<a name="line219"></a>	function is_admin() {
-<a name="line220"></a>		// TODO: sync this function with auth->validate()
-<a name="line221"></a>		$U = new User();
-<a name="line222"></a>		$U->where('id', $this->id)->include_related("role")->get();
-<a name="line223"></a>
-<a name="line224"></a>		if ($U->role_level == 100 && $U->role_name = "Super-Admin")
-<a name="line225"></a>			return true;
-<a name="line226"></a>
-<a name="line227"></a>		return false;
-<a name="line228"></a>	}
-<a name="line229"></a>
-<a name="line230"></a>	function activate()
-<a name="line231"></a>	{
-<a name="line232"></a>		// remove the activation code, to indicate it is been activated
-<a name="line233"></a>		$this->activation_code = "0";
-<a name="line234"></a>		$this->status = "active";
-<a name="line235"></a>		$this->save();
-<a name="line236"></a>	}
-<a name="line237"></a>	
-<a name="line238"></a>	function load_mail( $limit = 10, $offset = 0, $folder = "inbox")
-<a name="line239"></a>	{
-<a name="line240"></a>		$this->CI =& get_instance();
-<a name="line241"></a>		$query = $this->CI->db->join('messages AS m ', 'm.id = d.message_id')
-<a name="line242"></a>							->from('message_deliveries AS d ')
-<a name="line243"></a>							->where('recipient_id',$this->id)
-<a name="line244"></a>							->order_by('d.thread', 'desc')
-<a name="line245"></a>							->get();
-<a name="line246"></a>		
-<a name="line247"></a>		foreach($query->result() as $val)
-<a name="line248"></a>		{
-<a name="line249"></a>			if ( $folder=="sent" && $val->author_id == $this->id )
-<a name="line250"></a>				$mail[$val->thread][] = $val->id;
-<a name="line251"></a>			elseif ( $folder == "inbox" )
-<a name="line252"></a>				$mail[$val->thread][] = $val->id; // new Message($val->message_id);//$val->id;
-<a name="line253"></a>		}
-<a name="line254"></a>		$mail = array_slice($mail, $offset, $limit, TRUE);
-<a name="line255"></a>		//$this->load->library('thread');
-<a name="line256"></a>		foreach($mail as $key=>$val)
-<a name="line257"></a>		{
-<a name="line258"></a>			//$t = new Thread(); //   (object) array (	'thread_id' => $key, 'messages' => $val );
-<a name="line259"></a>			$t->id = $key;
-<a name="line260"></a>			$t->messages = $val;
-<a name="line261"></a>			$mail_two[] = $t;
-<a name="line262"></a>		}
-<a name="line263"></a>		
-<a name="line264"></a>		return $mail_two;
-<a name="line265"></a>	}
-<a name="line266"></a>	
-<a name="line267"></a>	/**
-<a name="line268"></a>	* 	Returns the user's current gifts
-<a name="line269"></a>	*	@return array
-<a name="line270"></a>	*/
-<a name="line271"></a>	function gifts()
-<a name="line272"></a>	{
-<a name="line273"></a>		$G = new Good();
-<a name="line274"></a>		// Get gift objects
-<a name="line275"></a>		$G	->where_related_user('id', $this->id)
-<a name="line276"></a>			->where('type', 'gift')
-<a name="line277"></a>			->include_related('location', "*", NULL, TRUE)
-<a name="line278"></a>			->order_by('created', 'desc')
-<a name="line279"></a>			->get();
-<a name="line280"></a>		$r = array();
-<a name="line281"></a>		
-<a name="line282"></a>		// Build related has-many fields
-<a name="line283"></a>		foreach($G->all as $key=>$val)
-<a name="line284"></a>		{
-<a name="line285"></a>			$T = new Transaction();
-<a name="line286"></a>			$T	->where_related_gift('id', $val->id)
-<a name="line287"></a>				->where('status', 'pending')
-<a name="line288"></a>				->get();
-<a name="line289"></a>			$val->requests = $T;
-<a name="line290"></a>			$P = new Photo();
-<a name="line291"></a>			$P->where_related_good('id', $val->id)->get();
-<a name="line292"></a>			$val->photo = $P;
-<a name="line293"></a>			$r[] = $val;
-<a name="line294"></a>		}
-<a name="line295"></a>		
-<a name="line296"></a>		return $r;
-<a name="line297"></a>	}
-<a name="line298"></a>	
-<a name="line299"></a>	/**
-<a name="line300"></a>	* 	Returns the user's current needs
-<a name="line301"></a>	*	@return array
-<a name="line302"></a>	*/
-<a name="line303"></a>	function needs()
-<a name="line304"></a>	{
-<a name="line305"></a>		$G = new Good();
-<a name="line306"></a>		// Get gift objects
-<a name="line307"></a>		$G	->where_related_user('id', $this->id)
-<a name="line308"></a>			->where('type', 'need')
-<a name="line309"></a>			->include_related('location', "*", NULL, TRUE)
-<a name="line310"></a>			->order_by('created', 'desc')
-<a name="line311"></a>			->get();
-<a name="line312"></a>		$r = array();
-<a name="line313"></a>
-<a name="line314"></a>		// Build related has-many fields
-<a name="line315"></a>		foreach($G->all as $key=>$val)
-<a name="line316"></a>		{
-<a name="line317"></a>			$T = new Transaction();
-<a name="line318"></a>			$T	->where_related_gift('id', $val->id)
-<a name="line319"></a>				->where('status', 'pending')
-<a name="line320"></a>				->get();
-<a name="line321"></a>			$val->requests = $T;
-<a name="line322"></a>			$P = new Photo();
-<a name="line323"></a>			$P->where_related_good('id', $val->id)->get();
-<a name="line324"></a>			$val->photo = $P;
-<a name="line325"></a>			$r[] = $val;
-<a name="line326"></a>		}
-<a name="line327"></a>
-<a name="line328"></a>		return $r;
-<a name="line329"></a>	}
-<a name="line330"></a>
-<a name="line331"></a>	/**
-<a name="line332"></a>	* 	Returns the user's current pending requests
-<a name="line333"></a>	*	@return array
-<a name="line334"></a>	*/
-<a name="line335"></a>	function requests()
-<a name="line336"></a>	{
-<a name="line337"></a>		$T = new Transaction();
-<a name="line338"></a>		$T	->where_related_recipient('id', $this->id)
-<a name="line339"></a>			->where('status','pending')
-<a name="line340"></a>			->order_by('created', 'desc')
-<a name="line341"></a>			->include_related('recipient', "*", NULL, TRUE)
-<a name="line342"></a>			->include_related('gift', '*', NULL, TRUE)
-<a name="line343"></a>			->get();
-<a name="line344"></a>		return $T->all;
-<a name="line345"></a>	}
-<a name="line346"></a>	
-<a name="line347"></a>	/**
-<a name="line348"></a>	* 	Returns the user's completed gifts
-<a name="line349"></a>	*	@return array
-<a name="line350"></a>	*/
-<a name="line351"></a>	function completed_gifts()
-<a name="line352"></a>	{
-<a name="line353"></a>		$G = new Good();
-<a name="line354"></a>		$G	->where_related_user('id', $this->id)
-<a name="line355"></a>			->where('winning_transaction_id !=', '0' )
-<a name="line356"></a>			->include_related('user', '*', NULL, TRUE)
-<a name="line357"></a>			->include_related('winning_transaction','*', NULL, TRUE)
-<a name="line358"></a>			->get();
-<a name="line359"></a>		return $G->all;
-<a name="line360"></a>	}
-<a name="line361"></a>
-<a name="line362"></a>	/**
-<a name="line363"></a>	* 	Returns the user's completed requests (ie gifts that the user has received)
-<a name="line364"></a>	*	@return array
-<a name="line365"></a>	*/
-<a name="line366"></a>	function completed_requests()
-<a name="line367"></a>	{
-<a name="line368"></a>		$T = new Transaction();
-<a name="line369"></a>		$T	->where('status','completed')
-<a name="line370"></a>			->order_by('created', 'desc')
-<a name="line371"></a>			->include_related('recipient', "*", NULL, TRUE)
-<a name="line372"></a>			->include_related('gift', '*', NULL, TRUE)
-<a name="line373"></a>			->get();
-<a name="line374"></a>		return $T->all;
-<a name="line375"></a>	}	
-<a name="line376"></a>	
-<a name="line377"></a>	/**
-<a name="line378"></a>	* 	Compiles stats about the user
-<a name="line379"></a>	*	@return boolean
-<a name="line380"></a>	*/
-<a name="line381"></a>	function stats()
-<a name="line382"></a>	{
-<a name="line383"></a>		if(empty($this->id)) return false;
-<a name="line384"></a>		$this->total_completed_gifts = count($this->completed_gifts());
-<a name="line385"></a>		$this->total_completed_requests = count($this->completed_requests());
-<a name="line386"></a>		$this->total_interactions = $this->total_completed_requests + $this->total_completed_gifts;
-<a name="line387"></a>		
-<a name="line388"></a>		$F = new User();
-<a name="line389"></a>		$this->total_followers = $F->where_related_following('id', $this->id)->count();
-<a name="line390"></a>		$this->total_following =$this->following->count();
-<a name="line391"></a>		
-<a name="line392"></a>		return true;
-<a name="line393"></a>	}
-<a name="line394"></a>
-<a name="line395"></a>	/**
-<a name="line396"></a>	* 	Gets data about all of the people this user is following
-<a name="line397"></a>	*	@return array
-<a name="line398"></a>	*/
-<a name="line399"></a>	function following()
-<a name="line400"></a>	{
-<a name="line401"></a>		$this->following->include_related('default_photo', '*', null, 'true')->get();
-<a name="line402"></a>		return $this->following->all;
-<a name="line403"></a>	}
-<a name="line404"></a>	
-<a name="line405"></a>	/**
-<a name="line406"></a>	*	Boolean test that tells whether this user is following a certain $id
-<a name="line407"></a>	*	@param int $id	user_id of the user who this user may be following
-<a name="line408"></a>	*	@return boolean
-<a name="line409"></a>	*/
-<a name="line410"></a>	function is_following ( $id )
-<a name="line411"></a>	{
-<a name="line412"></a>		$count = $this->db	->from('users AS U ')
-<a name="line413"></a>								->join('followings_users AS FU ', 'U.id = FU.user_id')
-<a name="line414"></a>								->where('FU.following_id', $id)
-<a name="line415"></a>								->where('U.id', $this->id)
-<a name="line416"></a>								->count_all_results();
-<a name="line417"></a>		if($count==0) return false;
-<a name="line418"></a>		else return true;
-<a name="line419"></a>	}
-<a name="line420"></a>	
-<a name="line421"></a>	/**
-<a name="line422"></a>	*	Boolean test that tells whether this user is being followed by a user with the id $id
-<a name="line423"></a>	*	@param int $id	user_id of the user who may be following the current user
-<a name="line424"></a>	*	@return boolean
-<a name="line425"></a>	*/
-<a name="line426"></a>	function is_followed_by ( $id )
-<a name="line427"></a>	{
-<a name="line428"></a>		$count = $this->db	->from('users AS U ')
-<a name="line429"></a>								->join('followings_users AS FU ', 'U.id = FU.user_id')
-<a name="line430"></a>								->where('FU.following_id', $this->id)
-<a name="line431"></a>								->where('U.id', $id)
-<a name="line432"></a>								->count_all_results();
-<a name="line433"></a>		if($count==0) return false;
-<a name="line434"></a>		else return true;
-<a name="line435"></a>	}
-<a name="line436"></a>	
-<a name="line437"></a>	/**
-<a name="line438"></a>	* 	Facebook sync function
-<a name="line439"></a>	* 	This is used each time a user logs in via Facebook. It checks to see if there are any empty 
-<a name="line440"></a>	*  	fields in the database which could be populated by Facebook data. If so, it fills them. It does
-<a name="line441"></a>	*    not, however, overwrite any database data with Facebook data.
-<a name="line442"></a>	*
-<a name="line443"></a>	*	@param JSON $data	 JSON object returned by Facebook
-<a name="line444"></a>	*/
-<a name="line445"></a>	
-<a name="line446"></a>	function facebook_sync( $data )
-<a name="line447"></a>	{
-<a name="line448"></a>		if(!empty($data->id)&&empty($this->facebook_id))
-<a name="line449"></a>			$this->facebook_id = $data->id;
-<a name="line450"></a>		if(!empty($data->token)&&empty($this->facebook_token))
-<a name="line451"></a>			$this->facebook_token = $data->token;
-<a name="line452"></a>		if(!empty($data->email)&&empty($this->email))
-<a name="line453"></a>			$this->email = $data->email;
-<a name="line454"></a>		if(!empty($data->name)&&empty($this->screen_name))
-<a name="line455"></a>			$this->screen_name = $data->name;
-<a name="line456"></a>		if(!empty($data->first_name)&&empty($this->first_name))
-<a name="line457"></a>			$this->first_name = $data->first_name;
-<a name="line458"></a>		if(!empty($data->last_name)&&empty($this->last_name))
-<a name="line459"></a>			$this->last_name = $data->last_name;	
-<a name="line460"></a>		if(!empty($data->link)&&empty($this->facebook_link))
-<a name="line461"></a>			$this->facebook_link = $data->link;					
-<a name="line462"></a>		if(empty($this->facebook_data))
-<a name="line463"></a>			$this->facebook_data = json_encode($data);
-<a name="line464"></a>		if(empty($this->password))
-<a name="line465"></a>			$this->password = uniqid();
-<a name="line466"></a>		if(empty($this->role_id))
-<a name="line467"></a>			$this->role_id = 2;
-<a name="line468"></a>		if(empty($this->ip_address))
-<a name="line469"></a>			$this->ip_address = $this->CI->input->ip_address();
-<a name="line470"></a>		if(empty($this->salt))
-<a name="line471"></a>			$this->salt = sha1('~'.$this->email.'~'.microtime(TRUE));
-<a name="line472"></a>		if(empty($this->registration_type))
-<a name="line473"></a>			$this->registration_type = 'facebook';
-<a name="line474"></a>		if(!isset($this->facebook_photo))
-<a name="line475"></a>			$this->facebook_photo = 1;
-<a name="line476"></a>		$this->validate();
-<a name="line477"></a>		if($this->save())
-<a name="line478"></a>			return true;
-<a name="line479"></a>		else
-<a name="line480"></a>			return false;
-<a name="line481"></a>	}
+<a name="line212"></a>    	/**
+<a name="line213"></a>    	*	This function should be used when a new user is being saved (as 
+<a name="line214"></a>    	*	opposed to being updated. This is so we can call the user_new hook.
+<a name="line215"></a>    	*/
+<a name="line216"></a>    	function register()
+<a name="line217"></a>    	{
+<a name="line218"></a>    		// This stores the existing ID of this User object. If it is empty, that means
+<a name="line219"></a>    		// that this is a new user. If not, then it is an update.
+<a name="line220"></a>    		$id = $this->id;
+<a name="line221"></a>    		
+<a name="line222"></a>    		// Save the user
+<a name="line223"></a>		if($this->save())
+<a name="line224"></a>		{
+<a name="line225"></a>			// If truly a new registration...
+<a name="line226"></a>			if(empty($id))
+<a name="line227"></a>			{
+<a name="line228"></a>				// Create new user settings object
+<a name="line229"></a>				$S = new User_setting();
+<a name="line230"></a>				
+<a name="line231"></a>				// Save settings object
+<a name="line232"></a>				$this->save($S);
+<a name="line233"></a>	
+<a name="line234"></a>				// Hook: 'user_new'
+<a name="line235"></a>				//$this->hooks->call('user_new', $this);
+<a name="line236"></a>			}
+<a name="line237"></a>			
+<a name="line238"></a>			// Return true if saved/updated successfully
+<a name="line239"></a>			return true;
+<a name="line240"></a>		}
+<a name="line241"></a>		
+<a name="line242"></a>		// Return false if failed
+<a name="line243"></a>		else
+<a name="line244"></a>		{
+<a name="line245"></a>			return false;
+<a name="line246"></a>		}
+<a name="line247"></a>    	}
+<a name="line248"></a>
+<a name="line249"></a>
+<a name="line250"></a>    	function deactivate()
+<a name="line251"></a>    	{
+<a name="line252"></a>    		$activation_code = sha1(md5(microtime()));
+<a name="line253"></a>		$this->activation_code = $activation_code;
+<a name="line254"></a>		$this->save();
+<a name="line255"></a>	}
+<a name="line256"></a>	
+<a name="line257"></a>	function is_admin() {
+<a name="line258"></a>		// TODO: sync this function with auth->validate()
+<a name="line259"></a>		$U = new User();
+<a name="line260"></a>		$U->where('id', $this->id)->include_related("role")->get();
+<a name="line261"></a>
+<a name="line262"></a>		if ($U->role_level == 100 && $U->role_name = "Super-Admin")
+<a name="line263"></a>			return true;
+<a name="line264"></a>
+<a name="line265"></a>		return false;
+<a name="line266"></a>	}
+<a name="line267"></a>
+<a name="line268"></a>	function activate()
+<a name="line269"></a>	{
+<a name="line270"></a>		// remove the activation code, to indicate it is been activated
+<a name="line271"></a>		$this->activation_code = "0";
+<a name="line272"></a>		$this->status = "active";
+<a name="line273"></a>		$this->save();
+<a name="line274"></a>	}
+<a name="line275"></a>	
+<a name="line276"></a>	function load_mail( $limit = 10, $offset = 0, $folder = "inbox")
+<a name="line277"></a>	{
+<a name="line278"></a>		$this->CI =& get_instance();
+<a name="line279"></a>		$query = $this->CI->db->join('messages AS m ', 'm.id = d.message_id')
+<a name="line280"></a>							->from('message_deliveries AS d ')
+<a name="line281"></a>							->where('recipient_id',$this->id)
+<a name="line282"></a>							->order_by('d.thread', 'desc')
+<a name="line283"></a>							->get();
+<a name="line284"></a>		
+<a name="line285"></a>		foreach($query->result() as $val)
+<a name="line286"></a>		{
+<a name="line287"></a>			if ( $folder=="sent" && $val->author_id == $this->id )
+<a name="line288"></a>				$mail[$val->thread][] = $val->id;
+<a name="line289"></a>			elseif ( $folder == "inbox" )
+<a name="line290"></a>				$mail[$val->thread][] = $val->id; // new Message($val->message_id);//$val->id;
+<a name="line291"></a>		}
+<a name="line292"></a>		$mail = array_slice($mail, $offset, $limit, TRUE);
+<a name="line293"></a>		//$this->load->library('thread');
+<a name="line294"></a>		foreach($mail as $key=>$val)
+<a name="line295"></a>		{
+<a name="line296"></a>			//$t = new Thread(); //   (object) array (	'thread_id' => $key, 'messages' => $val );
+<a name="line297"></a>			$t->id = $key;
+<a name="line298"></a>			$t->messages = $val;
+<a name="line299"></a>			$mail_two[] = $t;
+<a name="line300"></a>		}
+<a name="line301"></a>		
+<a name="line302"></a>		return $mail_two;
+<a name="line303"></a>	}
+<a name="line304"></a>	
+<a name="line305"></a>	/**
+<a name="line306"></a>	* 	Returns the user's current gifts
+<a name="line307"></a>	*	@return array
+<a name="line308"></a>	*/
+<a name="line309"></a>	function gifts()
+<a name="line310"></a>	{
+<a name="line311"></a>		$G = new Good();
+<a name="line312"></a>		// Get gift objects
+<a name="line313"></a>		$G	->where_related_user('id', $this->id)
+<a name="line314"></a>			->where('type', 'gift')
+<a name="line315"></a>			->include_related('location', "*", NULL, TRUE)
+<a name="line316"></a>			->order_by('created', 'desc')
+<a name="line317"></a>			->get();
+<a name="line318"></a>		$r = array();
+<a name="line319"></a>		
+<a name="line320"></a>		// Build related has-many fields
+<a name="line321"></a>		foreach($G->all as $key=>$val)
+<a name="line322"></a>		{
+<a name="line323"></a>			$T = new Transaction();
+<a name="line324"></a>			$T	->where_related_gift('id', $val->id)
+<a name="line325"></a>				->where('status', 'pending')
+<a name="line326"></a>				->get();
+<a name="line327"></a>			$val->requests = $T;
+<a name="line328"></a>			$P = new Photo();
+<a name="line329"></a>			$P->where_related_good('id', $val->id)->get();
+<a name="line330"></a>			$val->photo = $P;
+<a name="line331"></a>			$r[] = $val;
+<a name="line332"></a>		}
+<a name="line333"></a>		
+<a name="line334"></a>		return $r;
+<a name="line335"></a>	}	
+<a name="line336"></a>	/**
+<a name="line337"></a>	* 	Returns the user's current needs
+<a name="line338"></a>	*	@return array
+<a name="line339"></a>	*/
+<a name="line340"></a>	function needs()
+<a name="line341"></a>	{
+<a name="line342"></a>		$G = new Good();
+<a name="line343"></a>		// Get gift objects
+<a name="line344"></a>		$G	->where_related_user('id', $this->id)
+<a name="line345"></a>			->where('type', 'need')
+<a name="line346"></a>			->include_related('location', "*", NULL, TRUE)
+<a name="line347"></a>			->order_by('created', 'desc')
+<a name="line348"></a>			->get();
+<a name="line349"></a>		$r = array();
+<a name="line350"></a>
+<a name="line351"></a>		// Build related has-many fields
+<a name="line352"></a>		foreach($G->all as $key=>$val)
+<a name="line353"></a>		{
+<a name="line354"></a>			$T = new Transaction();
+<a name="line355"></a>			$T	->where_related_gift('id', $val->id)
+<a name="line356"></a>				->where('status', 'pending')
+<a name="line357"></a>				->get();
+<a name="line358"></a>			$val->requests = $T;
+<a name="line359"></a>			$P = new Photo();
+<a name="line360"></a>			$P->where_related_good('id', $val->id)->get();
+<a name="line361"></a>			$val->photo = $P;
+<a name="line362"></a>			$r[] = $val;
+<a name="line363"></a>		}
+<a name="line364"></a>
+<a name="line365"></a>		return $r;
+<a name="line366"></a>	}
+<a name="line367"></a>
+<a name="line368"></a>	/**
+<a name="line369"></a>	* 	Returns the user's current pending requests
+<a name="line370"></a>	*	@return array
+<a name="line371"></a>	*/
+<a name="line372"></a>	function requests()
+<a name="line373"></a>	{
+<a name="line374"></a>		$T = new Transaction();
+<a name="line375"></a>		$T	->where_related_recipient('id', $this->id)
+<a name="line376"></a>			->where('status','pending')
+<a name="line377"></a>			->order_by('created', 'desc')
+<a name="line378"></a>			->include_related('recipient', "*", NULL, TRUE)
+<a name="line379"></a>			->include_related('gift', '*', NULL, TRUE)
+<a name="line380"></a>			->get();
+<a name="line381"></a>		return $T->all;
+<a name="line382"></a>	}
+<a name="line383"></a>	
+<a name="line384"></a>	/**
+<a name="line385"></a>	* 	Returns the user's completed gifts
+<a name="line386"></a>	*	@return array
+<a name="line387"></a>	*/
+<a name="line388"></a>	function completed_gifts()
+<a name="line389"></a>	{
+<a name="line390"></a>		$G = new Good();
+<a name="line391"></a>		$G	->where_related_user('id', $this->id)
+<a name="line392"></a>			->where('winning_transaction_id !=', '0' )
+<a name="line393"></a>			->include_related('user', '*', NULL, TRUE)
+<a name="line394"></a>			->include_related('winning_transaction','*', NULL, TRUE)
+<a name="line395"></a>			->get();
+<a name="line396"></a>		return $G->all;
+<a name="line397"></a>	}
+<a name="line398"></a>
+<a name="line399"></a>	/**
+<a name="line400"></a>	* 	Returns the user's completed requests (ie gifts that the user has received)
+<a name="line401"></a>	*	@return array
+<a name="line402"></a>	*/
+<a name="line403"></a>	function completed_requests()
+<a name="line404"></a>	{
+<a name="line405"></a>		$T = new Transaction();
+<a name="line406"></a>		$T	->where('status','completed')
+<a name="line407"></a>			->order_by('created', 'desc')
+<a name="line408"></a>			->include_related('recipient', "*", NULL, TRUE)
+<a name="line409"></a>			->include_related('gift', '*', NULL, TRUE)
+<a name="line410"></a>			->get();
+<a name="line411"></a>		return $T->all;
+<a name="line412"></a>	}	
+<a name="line413"></a>	
+<a name="line414"></a>	/**
+<a name="line415"></a>	* 	Compiles stats about the user
+<a name="line416"></a>	*	@return boolean
+<a name="line417"></a>	*/
+<a name="line418"></a>	function stats()
+<a name="line419"></a>	{
+<a name="line420"></a>		if(empty($this->id)) return false;
+<a name="line421"></a>		$this->total_completed_gifts = count($this->completed_gifts());
+<a name="line422"></a>		$this->total_completed_requests = count($this->completed_requests());
+<a name="line423"></a>		$this->total_interactions = $this->total_completed_requests + $this->total_completed_gifts;
+<a name="line424"></a>		
+<a name="line425"></a>		$F = new User();
+<a name="line426"></a>		$this->total_followers = $F->where_related_following('id', $this->id)->count();
+<a name="line427"></a>		$this->total_following =$this->following->count();
+<a name="line428"></a>		
+<a name="line429"></a>		return true;
+<a name="line430"></a>	}
+<a name="line431"></a>
+<a name="line432"></a>	/**
+<a name="line433"></a>	* 	Gets data about all of the people this user is following
+<a name="line434"></a>	*	@return array
+<a name="line435"></a>	*/
+<a name="line436"></a>	function following()
+<a name="line437"></a>	{
+<a name="line438"></a>		$this->following->include_related('default_photo', '*', null, 'true')->get();
+<a name="line439"></a>		return $this->following->all;
+<a name="line440"></a>	}
+<a name="line441"></a>	
+<a name="line442"></a>	/**
+<a name="line443"></a>	*	Boolean test that tells whether this user is following a certain $id
+<a name="line444"></a>	*	@param int $id	user_id of the user who this user may be following
+<a name="line445"></a>	*	@return boolean
+<a name="line446"></a>	*/
+<a name="line447"></a>	function is_following ( $id )
+<a name="line448"></a>	{
+<a name="line449"></a>		$count = $this->db	->from('users AS U ')
+<a name="line450"></a>								->join('followings_users AS FU ', 'U.id = FU.user_id')
+<a name="line451"></a>								->where('FU.following_id', $id)
+<a name="line452"></a>								->where('U.id', $this->id)
+<a name="line453"></a>								->count_all_results();
+<a name="line454"></a>		if($count==0) return false;
+<a name="line455"></a>		else return true;
+<a name="line456"></a>	}
+<a name="line457"></a>	
+<a name="line458"></a>	/**
+<a name="line459"></a>	*	Boolean test that tells whether this user is being followed by a user with the id $id
+<a name="line460"></a>	*	@param int $id	user_id of the user who may be following the current user
+<a name="line461"></a>	*	@return boolean
+<a name="line462"></a>	*/
+<a name="line463"></a>	function is_followed_by ( $id )
+<a name="line464"></a>	{
+<a name="line465"></a>		$count = $this->db	->from('users AS U ')
+<a name="line466"></a>								->join('followings_users AS FU ', 'U.id = FU.user_id')
+<a name="line467"></a>								->where('FU.following_id', $this->id)
+<a name="line468"></a>								->where('U.id', $id)
+<a name="line469"></a>								->count_all_results();
+<a name="line470"></a>		if($count==0) return false;
+<a name="line471"></a>		else return true;
+<a name="line472"></a>	}
+<a name="line473"></a>	
+<a name="line474"></a>	/**
+<a name="line475"></a>	* 	Facebook sync function
+<a name="line476"></a>	* 	This is used each time a user logs in via Facebook. It checks to see if there are any empty 
+<a name="line477"></a>	*  	fields in the database which could be populated by Facebook data. If so, it fills them. It does
+<a name="line478"></a>	*    not, however, overwrite any database data with Facebook data.
+<a name="line479"></a>	*
+<a name="line480"></a>	*	@param JSON $data	 JSON object returned by Facebook
+<a name="line481"></a>	*/
 <a name="line482"></a>	
-<a name="line483"></a>	function facebook_unlink()
+<a name="line483"></a>	function facebook_sync( $data )
 <a name="line484"></a>	{
-<a name="line485"></a>		$this->facebook_id = '';
-<a name="line486"></a>		$this->facebook_token = '';
-<a name="line487"></a>		$this->facebook_data = '';
-<a name="line488"></a>		$this->facebook_link = '';
-<a name="line489"></a>		$this->facebook_photo = 0;
-<a name="line490"></a>		$this->save();
-<a name="line491"></a>	}
-<a name="line492"></a>	
-<a name="line493"></a>	/**
-<a name="line494"></a>	*	Custom validation rule that encrypts passwords using the 
-<a name="line495"></a>	*	salt.
-<a name="line496"></a>	*/
-<a name="line497"></a>    	function _encrypt($field)
-<a name="line498"></a>    	{
-<a name="line499"></a>       		if (!empty($this->{$field}))
-<a name="line500"></a>        		{
-<a name="line501"></a>            		if (empty($this->salt))
-<a name="line502"></a>            		{
-<a name="line503"></a>                			$this->salt = md5(uniqid(rand(), true));
-<a name="line504"></a>            		}
-<a name="line505"></a>
-<a name="line506"></a>            		$this->{$field} = sha1($this->salt . $this->{$field});
-<a name="line507"></a>        	}
-<a name="line508"></a>    	}
-<a name="line509"></a>
-<a name="line510"></a>}
-<a name="line511"></a></pre>
+<a name="line485"></a>		// Check to see if Facebook ID is already stored.
+<a name="line486"></a>		// If not, then mark as "newly linked". This will be used later when the user is saved
+<a name="line487"></a>		// so we can call the facebook_linked hook instead of the facebook_synced callback.
+<a name="line488"></a>		if(!empty($data->id)&&empty($this->facebook_id))
+<a name="line489"></a>		{
+<a name="line490"></a>			$newly_linked = TRUE;
+<a name="line491"></a>			$this->facebook_id = $data->id;
+<a name="line492"></a>		}
+<a name="line493"></a>		else
+<a name="line494"></a>			$newly_linked = FALSE;
+<a name="line495"></a>			
+<a name="line496"></a>		// Sync various properties
+<a name="line497"></a>		if(!empty($data->token)&&empty($this->facebook_token))
+<a name="line498"></a>			$this->facebook_token = $data->token;
+<a name="line499"></a>		if(!empty($data->email)&&empty($this->email))
+<a name="line500"></a>			$this->email = $data->email;
+<a name="line501"></a>		if(!empty($data->name)&&empty($this->screen_name))
+<a name="line502"></a>			$this->screen_name = $data->name;
+<a name="line503"></a>		if(!empty($data->first_name)&&empty($this->first_name))
+<a name="line504"></a>			$this->first_name = $data->first_name;
+<a name="line505"></a>		if(!empty($data->last_name)&&empty($this->last_name))
+<a name="line506"></a>			$this->last_name = $data->last_name;	
+<a name="line507"></a>		if(!empty($data->link)&&empty($this->facebook_link))
+<a name="line508"></a>			$this->facebook_link = $data->link;					
+<a name="line509"></a>		if(empty($this->facebook_data))
+<a name="line510"></a>			$this->facebook_data = json_encode($data);
+<a name="line511"></a>		if(empty($this->password))
+<a name="line512"></a>			$this->password = uniqid();
+<a name="line513"></a>		if(empty($this->role_id))
+<a name="line514"></a>			$this->role_id = 2;
+<a name="line515"></a>		if(empty($this->ip_address))
+<a name="line516"></a>			$this->ip_address = $this->CI->input->ip_address();
+<a name="line517"></a>		if(empty($this->salt))
+<a name="line518"></a>			$this->salt = sha1('~'.$this->email.'~'.microtime(TRUE));
+<a name="line519"></a>		if(empty($this->registration_type))
+<a name="line520"></a>			$this->registration_type = 'facebook';
+<a name="line521"></a>		if(!isset($this->facebook_photo))
+<a name="line522"></a>			$this->facebook_photo = 1;
+<a name="line523"></a>		$this->validate();
+<a name="line524"></a>		
+<a name="line525"></a>		// New registration
+<a name="line526"></a>		if(empty($this->id))
+<a name="line527"></a>		{
+<a name="line528"></a>			if( $this->register() )
+<a name="line529"></a>			{
+<a name="line530"></a>				// Hook: 'user_registration_facebook'
+<a name="line531"></a>				$this->hooks->call('user_registration_facebook', $this);
+<a name="line532"></a>				
+<a name="line533"></a>				// Hook: 'facebook_linked'
+<a name="line534"></a>				$this->hooks->call('facebook_linked', $this);
+<a name="line535"></a>
+<a name="line536"></a>				return true;
+<a name="line537"></a>			}
+<a name="line538"></a>			else
+<a name="line539"></a>			{
+<a name="line540"></a>				return false;
+<a name="line541"></a>			}
+<a name="line542"></a>		}
+<a name="line543"></a>		
+<a name="line544"></a>		// Update existing data
+<a name="line545"></a>		else
+<a name="line546"></a>		{
+<a name="line547"></a>			if($this->save())
+<a name="line548"></a>			{
+<a name="line549"></a>				if($newly_linked)
+<a name="line550"></a>				{
+<a name="line551"></a>					// Hook: 'facebook_linked'
+<a name="line552"></a>					$this->hooks->call('facebook_linked', $this);
+<a name="line553"></a>				}
+<a name="line554"></a>				else
+<a name="line555"></a>				{
+<a name="line556"></a>					// Hook: 'facebook_synced'
+<a name="line557"></a>					$this->hooks->call('facebook_synced', $this);
+<a name="line558"></a>				}
+<a name="line559"></a>				return true;
+<a name="line560"></a>			}
+<a name="line561"></a>			else
+<a name="line562"></a>				return false;
+<a name="line563"></a>		}
+<a name="line564"></a>	}
+<a name="line565"></a>	
+<a name="line566"></a>	function facebook_unlink()
+<a name="line567"></a>	{
+<a name="line568"></a>		$this->facebook_id = '';
+<a name="line569"></a>		$this->facebook_token = '';
+<a name="line570"></a>		$this->facebook_data = '';
+<a name="line571"></a>		$this->facebook_link = '';
+<a name="line572"></a>		$this->facebook_photo = 0;
+<a name="line573"></a>		$this->save();
+<a name="line574"></a>		
+<a name="line575"></a>		// Hook: 'facebook_unlinked'
+<a name="line576"></a>		$this->hooks->call('facebook_unlinked', $this);
+<a name="line577"></a>	}
+<a name="line578"></a>	
+<a name="line579"></a>	/**
+<a name="line580"></a>	*	Custom validation rule that encrypts passwords using the 
+<a name="line581"></a>	*	salt.
+<a name="line582"></a>	*/
+<a name="line583"></a>    	function _encrypt($field)
+<a name="line584"></a>    	{
+<a name="line585"></a>       		if (!empty($this->{$field}))
+<a name="line586"></a>        		{
+<a name="line587"></a>            		if (empty($this->salt))
+<a name="line588"></a>            		{
+<a name="line589"></a>                			$this->salt = md5(uniqid(rand(), true));
+<a name="line590"></a>            		}
+<a name="line591"></a>
+<a name="line592"></a>            		$this->{$field} = sha1($this->salt . $this->{$field});
+<a name="line593"></a>        	}
+<a name="line594"></a>    	}
+<a name="line595"></a>
+<a name="line596"></a>}
+<a name="line597"></a></pre>
 <div class="header">
 <h1>GiftFlow API</h1>
 <ul>

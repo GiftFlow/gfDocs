@@ -6,7 +6,7 @@
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 
 <meta name="generator" content="PHPDoctor 2RC4 (http://peej.github.com/phpdoctor/)">
-<meta name="when" content="Tue, 29 Jun 2010 21:10:10 +0000">
+<meta name="when" content="Sat, 10 Jul 2010 18:10:56 +0000">
 
 <link rel="stylesheet" type="text/css" href="../../../stylesheet.css">
 <link rel="start" href="../../../overview-summary.html">
@@ -33,9 +33,7 @@
 <hr>
 
 <h1>application/libraries/MY_Hooks.php</h1>
-<div class="comment" id="overview_description"><p>CodeIgniter
-
-An open source application development framework for PHP 4.3.2 or newer</p></div>
+<div class="comment" id="overview_description"><p>CodeIgniter</p><p>An open source application development framework for PHP 4.3.2 or newer</p></div>
 
 <hr>
 
@@ -74,192 +72,196 @@ An open source application development framework for PHP 4.3.2 or newer</p></div
 <a name="line33"></a>	//Added - an array of objects that can be re-used
 <a name="line34"></a>	var $objects		= array();
 <a name="line35"></a>
-<a name="line36"></a>
-<a name="line37"></a>	/**
-<a name="line38"></a>	 * Call Hook
-<a name="line39"></a>	 *
-<a name="line40"></a>	 * Calls a particular hook that return output
-<a name="line41"></a>	 * call() is prettier than _call_hook()
-<a name="line42"></a>	 *
-<a name="line43"></a>	 * @access	public
-<a name="line44"></a>	 * @param	string	the hook name
-<a name="line45"></a>	 * @return	void
-<a name="line46"></a>	 */
-<a name="line47"></a>	function call($which = '', $data=null) {
-<a name="line48"></a>		parent::_call_hook($which);
-<a name="line49"></a>	}
-<a name="line50"></a>	
-<a name="line51"></a>	
-<a name="line52"></a>	/**
-<a name="line53"></a>	 * Filter Hook
-<a name="line54"></a>	 *
-<a name="line55"></a>	 * Similar to call() but alows data to be filtered
-<a name="line56"></a>	 * by multible hooks and the result is returned.
-<a name="line57"></a>	 *
-<a name="line58"></a>	 * @access	public
-<a name="line59"></a>	 * @param	string	the hook name
-<a name="line60"></a>	 * @param	mixed	the data to filter
-<a name="line61"></a>	 * @return	mixed
-<a name="line62"></a>	 */
-<a name="line63"></a>	function filter($which = '', $data=null)
-<a name="line64"></a>	{
-<a name="line65"></a>		if (!$this->enabled OR !isset($this->hooks[$which])) {
-<a name="line66"></a>			return FALSE;
-<a name="line67"></a>		}
-<a name="line68"></a>	
-<a name="line69"></a>		if (isset($this->hooks[$which][0]) AND is_array($this->hooks[$which][0])) {
-<a name="line70"></a>			
-<a name="line71"></a>			//For each registered hook...
-<a name="line72"></a>			foreach ($this->hooks[$which] as $val) {
-<a name="line73"></a>				//Ask that hook to filter the data
-<a name="line74"></a>				$data = $this->_run_hook($val, $data);
-<a name="line75"></a>			}
-<a name="line76"></a>			
-<a name="line77"></a>			//return the result
-<a name="line78"></a>			return $data;
-<a name="line79"></a>		
-<a name="line80"></a>		} else {
-<a name="line81"></a>			//return the result since there is only one hook
-<a name="line82"></a>			return $this->_run_hook($this->hooks[$which], $data);
-<a name="line83"></a>		}
-<a name="line84"></a>		
-<a name="line85"></a>	}
-<a name="line86"></a>
-<a name="line87"></a>	
-<a name="line88"></a>	
-<a name="line89"></a>	// --------------------------------------------------------------------
-<a name="line90"></a>
-<a name="line91"></a>	/**
-<a name="line92"></a>	 * Run Hook
-<a name="line93"></a>	 *
-<a name="line94"></a>	 * Runs a particular hook
+<a name="line36"></a>	var $data;
+<a name="line37"></a>
+<a name="line38"></a>	/**
+<a name="line39"></a>	 * Call Hook
+<a name="line40"></a>	 *
+<a name="line41"></a>	 * Calls a particular hook that return output
+<a name="line42"></a>	 * call() is prettier than _call_hook()
+<a name="line43"></a>	 *
+<a name="line44"></a>	 * @access	public
+<a name="line45"></a>	 * @param	string	the hook name
+<a name="line46"></a>	 * @return	void
+<a name="line47"></a>	 */
+<a name="line48"></a>	function call($which = '', $data=null) {
+<a name="line49"></a>		if(!empty($data)) $this->data = $data;
+<a name="line50"></a>		parent::_call_hook($which);
+<a name="line51"></a>	}
+<a name="line52"></a>	
+<a name="line53"></a>	
+<a name="line54"></a>	/**
+<a name="line55"></a>	 * Filter Hook
+<a name="line56"></a>	 *
+<a name="line57"></a>	 * Similar to call() but alows data to be filtered
+<a name="line58"></a>	 * by multible hooks and the result is returned.
+<a name="line59"></a>	 *
+<a name="line60"></a>	 * @access	public
+<a name="line61"></a>	 * @param	string	the hook name
+<a name="line62"></a>	 * @param	mixed	the data to filter
+<a name="line63"></a>	 * @return	mixed
+<a name="line64"></a>	 */
+<a name="line65"></a>	function filter($which = '', $data=null)
+<a name="line66"></a>	{
+<a name="line67"></a>		if (!$this->enabled OR !isset($this->hooks[$which])) {
+<a name="line68"></a>			return FALSE;
+<a name="line69"></a>		}
+<a name="line70"></a>	
+<a name="line71"></a>		if (isset($this->hooks[$which][0]) AND is_array($this->hooks[$which][0])) {
+<a name="line72"></a>			
+<a name="line73"></a>			//For each registered hook...
+<a name="line74"></a>			foreach ($this->hooks[$which] as $val) {
+<a name="line75"></a>				//Ask that hook to filter the data
+<a name="line76"></a>				$data = $this->_run_hook($val, $data);
+<a name="line77"></a>			}
+<a name="line78"></a>			
+<a name="line79"></a>			//return the result
+<a name="line80"></a>			return $data;
+<a name="line81"></a>		
+<a name="line82"></a>		} else {
+<a name="line83"></a>			//return the result since there is only one hook
+<a name="line84"></a>			return $this->_run_hook($this->hooks[$which], $data);
+<a name="line85"></a>		}
+<a name="line86"></a>		
+<a name="line87"></a>	}
+<a name="line88"></a>
+<a name="line89"></a>	
+<a name="line90"></a>	
+<a name="line91"></a>	// --------------------------------------------------------------------
+<a name="line92"></a>
+<a name="line93"></a>	/**
+<a name="line94"></a>	 * Run Hook
 <a name="line95"></a>	 *
-<a name="line96"></a>	 * @access	private
-<a name="line97"></a>	 * @param	array	the hook details
-<a name="line98"></a>	 * @return	bool
-<a name="line99"></a>	 */
-<a name="line100"></a>	function _run_hook($hook, $data=null)
-<a name="line101"></a>	{
-<a name="line102"></a>		
-<a name="line103"></a>		if (!is_array($hook)) {
-<a name="line104"></a>			return FALSE;
-<a name="line105"></a>		}
-<a name="line106"></a>		
-<a name="line107"></a>		// -----------------------------------
-<a name="line108"></a>		// Safety - Prevents run-away loops
-<a name="line109"></a>		// -----------------------------------
-<a name="line110"></a>	
-<a name="line111"></a>		// If the script being called happens to have the same
-<a name="line112"></a>		// hook call within it a loop can happen
-<a name="line113"></a>		
-<a name="line114"></a>		if ($this->in_progress == TRUE) { 
-<a name="line115"></a>			return; 
-<a name="line116"></a>		}
-<a name="line117"></a>
-<a name="line118"></a>		// -----------------------------------
-<a name="line119"></a>		// Set file path
-<a name="line120"></a>		// -----------------------------------
-<a name="line121"></a>		
-<a name="line122"></a>		if (!isset($hook['filename'])) {
-<a name="line123"></a>			return FALSE;
-<a name="line124"></a>		}
-<a name="line125"></a>	
-<a name="line126"></a>		//If the hook file path is NOT set - default to "hooks"
-<a name="line127"></a>		if(!isset($hook['filepath'])) {
-<a name="line128"></a>			$hook['filepath'] = 'hooks';
-<a name="line129"></a>		}
-<a name="line130"></a>		
-<a name="line131"></a>		$filepath = APPPATH.$hook['filepath'].'/'.$hook['filename'];
-<a name="line132"></a>	
-<a name="line133"></a>		if (!file_exists($filepath)){
-<a name="line134"></a>			return FALSE;
-<a name="line135"></a>		}
-<a name="line136"></a>		
-<a name="line137"></a>		// -----------------------------------
-<a name="line138"></a>		// Set class/function name
-<a name="line139"></a>		// -----------------------------------
+<a name="line96"></a>	 * Runs a particular hook
+<a name="line97"></a>	 *
+<a name="line98"></a>	 * @access	private
+<a name="line99"></a>	 * @param	array	the hook details
+<a name="line100"></a>	 * @return	bool
+<a name="line101"></a>	 */
+<a name="line102"></a>	function _run_hook($hook, $data=null)
+<a name="line103"></a>	{
+<a name="line104"></a>		if(!empty($this->data)&&empty($data))
+<a name="line105"></a>			$data = $this->data;
+<a name="line106"></a>			
+<a name="line107"></a>		if (!is_array($hook)) {
+<a name="line108"></a>			return FALSE;
+<a name="line109"></a>		}
+<a name="line110"></a>		
+<a name="line111"></a>		// -----------------------------------
+<a name="line112"></a>		// Safety - Prevents run-away loops
+<a name="line113"></a>		// -----------------------------------
+<a name="line114"></a>	
+<a name="line115"></a>		// If the script being called happens to have the same
+<a name="line116"></a>		// hook call within it a loop can happen
+<a name="line117"></a>		
+<a name="line118"></a>		if ($this->in_progress == TRUE) { 
+<a name="line119"></a>			return; 
+<a name="line120"></a>		}
+<a name="line121"></a>
+<a name="line122"></a>		// -----------------------------------
+<a name="line123"></a>		// Set file path
+<a name="line124"></a>		// -----------------------------------
+<a name="line125"></a>		
+<a name="line126"></a>		if (!isset($hook['filename'])) {
+<a name="line127"></a>			return FALSE;
+<a name="line128"></a>		}
+<a name="line129"></a>	
+<a name="line130"></a>		//If the hook file path is NOT set - default to "hooks"
+<a name="line131"></a>		if(!isset($hook['filepath'])) {
+<a name="line132"></a>			$hook['filepath'] = 'hooks';
+<a name="line133"></a>		}
+<a name="line134"></a>		
+<a name="line135"></a>		$filepath = APPPATH.$hook['filepath'].'/'.$hook['filename'];
+<a name="line136"></a>	
+<a name="line137"></a>		if (!file_exists($filepath)){
+<a name="line138"></a>			return FALSE;
+<a name="line139"></a>		}
 <a name="line140"></a>		
-<a name="line141"></a>		$class		= FALSE;
-<a name="line142"></a>		$function	= FALSE;
-<a name="line143"></a>		$params		= '';
+<a name="line141"></a>		// -----------------------------------
+<a name="line142"></a>		// Set class/function name
+<a name="line143"></a>		// -----------------------------------
 <a name="line144"></a>		
-<a name="line145"></a>		if (isset($hook['class']) AND $hook['class'] != '') {
-<a name="line146"></a>			$class = $hook['class'];
-<a name="line147"></a>		}
-<a name="line148"></a>
-<a name="line149"></a>		if (isset($hook['function'])) {
-<a name="line150"></a>			$function = $hook['function'];
+<a name="line145"></a>		$class		= FALSE;
+<a name="line146"></a>		$function	= FALSE;
+<a name="line147"></a>		$params		= '';
+<a name="line148"></a>		
+<a name="line149"></a>		if (isset($hook['class']) AND $hook['class'] != '') {
+<a name="line150"></a>			$class = $hook['class'];
 <a name="line151"></a>		}
 <a name="line152"></a>
-<a name="line153"></a>		if (isset($hook['params'])) {
-<a name="line154"></a>			$params = $hook['params'];
+<a name="line153"></a>		if (isset($hook['function'])) {
+<a name="line154"></a>			$function = $hook['function'];
 <a name="line155"></a>		}
-<a name="line156"></a>		
-<a name="line157"></a>		if ($class === FALSE AND $function === FALSE) {
-<a name="line158"></a>			return FALSE;
+<a name="line156"></a>
+<a name="line157"></a>		if (isset($hook['params'])) {
+<a name="line158"></a>			$params = $hook['params'];
 <a name="line159"></a>		}
 <a name="line160"></a>		
-<a name="line161"></a>		// -----------------------------------
-<a name="line162"></a>		// Set the in_progress flag
-<a name="line163"></a>		// -----------------------------------
-<a name="line164"></a>
-<a name="line165"></a>		$this->in_progress = TRUE;
-<a name="line166"></a>		
+<a name="line161"></a>		if ($class === FALSE AND $function === FALSE) {
+<a name="line162"></a>			return FALSE;
+<a name="line163"></a>		}
+<a name="line164"></a>		
+<a name="line165"></a>		// -----------------------------------
+<a name="line166"></a>		// Set the in_progress flag
 <a name="line167"></a>		// -----------------------------------
-<a name="line168"></a>		// Call the requested class and/or function
-<a name="line169"></a>		// -----------------------------------
+<a name="line168"></a>
+<a name="line169"></a>		$this->in_progress = TRUE;
 <a name="line170"></a>		
-<a name="line171"></a>		//Changed to support multible hooks
-<a name="line172"></a>		
-<a name="line173"></a>		if ($class !== FALSE) {
-<a name="line174"></a>			
-<a name="line175"></a>			if (!class_exists($class)) {
-<a name="line176"></a>				require($filepath);
-<a name="line177"></a>				$this->objects[$class] = new $class;
-<a name="line178"></a>			}
-<a name="line179"></a>			
-<a name="line180"></a>			$output = $this->objects[$class]->$function($params, $data);
-<a name="line181"></a>		
-<a name="line182"></a>			//$HOOK = new $class;
-<a name="line183"></a>			//$HOOK->$function($params);
-<a name="line184"></a>		} else {
-<a name="line185"></a>			if (!function_exists($function)) {
-<a name="line186"></a>				require($filepath);
-<a name="line187"></a>			}
-<a name="line188"></a>			
-<a name="line189"></a>			$output = $function($params, $data);
-<a name="line190"></a>		}
-<a name="line191"></a>	
-<a name="line192"></a>		$this->in_progress = FALSE;
-<a name="line193"></a>		return ($output ? $output : TRUE);
-<a name="line194"></a>	}
+<a name="line171"></a>		// -----------------------------------
+<a name="line172"></a>		// Call the requested class and/or function
+<a name="line173"></a>		// -----------------------------------
+<a name="line174"></a>		
+<a name="line175"></a>		//Changed to support multible hooks
+<a name="line176"></a>		
+<a name="line177"></a>		if ($class !== FALSE) {
+<a name="line178"></a>			
+<a name="line179"></a>			if (!class_exists($class)) {
+<a name="line180"></a>				require($filepath);
+<a name="line181"></a>				$this->objects[$class] = new $class;
+<a name="line182"></a>			}
+<a name="line183"></a>			
+<a name="line184"></a>			$output = $this->objects[$class]->$function($params, $data);
+<a name="line185"></a>		
+<a name="line186"></a>			//$HOOK = new $class;
+<a name="line187"></a>			//$HOOK->$function($params);
+<a name="line188"></a>		} else {
+<a name="line189"></a>			if (!function_exists($function)) {
+<a name="line190"></a>				require($filepath);
+<a name="line191"></a>			}
+<a name="line192"></a>			
+<a name="line193"></a>			$output = $function($params, $data);
+<a name="line194"></a>		}
 <a name="line195"></a>	
-<a name="line196"></a>
-<a name="line197"></a>	/**
-<a name="line198"></a>	 * Remove Hook
-<a name="line199"></a>	 *
-<a name="line200"></a>	 * remove a particular function from the given hook
-<a name="line201"></a>	 *
-<a name="line202"></a>	 * @access	private
-<a name="line203"></a>	 * @param	string	the hook name
-<a name="line204"></a>	 * @param	string	the function name
-<a name="line205"></a>	 * @return	void
-<a name="line206"></a>	 */
-<a name="line207"></a>	function remove($hook_name = '', $function='') {
-<a name="line208"></a>		foreach($this->hooks[$hook_name] as $key => $hook) {
-<a name="line209"></a>			if($hook['function'] == $function) {
-<a name="line210"></a>				unset($this->hooks[$hook_name][$key]);
-<a name="line211"></a>				return;
-<a name="line212"></a>			}
-<a name="line213"></a>		}
-<a name="line214"></a>	}
-<a name="line215"></a>	
-<a name="line216"></a>}
-<a name="line217"></a>
-<a name="line218"></a>// END MY_Hooks class
-<a name="line219"></a>
-<a name="line220"></a>/* End of file Hooks.php */
-<a name="line221"></a>/* Location: application/libraries/MY_Hooks.php */</pre>
+<a name="line196"></a>		$this->in_progress = FALSE;
+<a name="line197"></a>		return ($output ? $output : TRUE);
+<a name="line198"></a>	}
+<a name="line199"></a>	
+<a name="line200"></a>
+<a name="line201"></a>	/**
+<a name="line202"></a>	 * Remove Hook
+<a name="line203"></a>	 *
+<a name="line204"></a>	 * remove a particular function from the given hook
+<a name="line205"></a>	 *
+<a name="line206"></a>	 * @access	private
+<a name="line207"></a>	 * @param	string	the hook name
+<a name="line208"></a>	 * @param	string	the function name
+<a name="line209"></a>	 * @return	void
+<a name="line210"></a>	 */
+<a name="line211"></a>	function remove($hook_name = '', $function='') {
+<a name="line212"></a>		foreach($this->hooks[$hook_name] as $key => $hook) {
+<a name="line213"></a>			if($hook['function'] == $function) {
+<a name="line214"></a>				unset($this->hooks[$hook_name][$key]);
+<a name="line215"></a>				return;
+<a name="line216"></a>			}
+<a name="line217"></a>		}
+<a name="line218"></a>	}
+<a name="line219"></a>	
+<a name="line220"></a>}
+<a name="line221"></a>
+<a name="line222"></a>// END MY_Hooks class
+<a name="line223"></a>
+<a name="line224"></a>/* End of file Hooks.php */
+<a name="line225"></a>/* Location: application/libraries/MY_Hooks.php */</pre>
 <div class="header">
 <h1>GiftFlow API</h1>
 <ul>

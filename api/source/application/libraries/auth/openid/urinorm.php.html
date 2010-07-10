@@ -1,0 +1,310 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+
+<html lang="en">
+<head>
+
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
+<meta name="generator" content="PHPDoctor 2RC4 (http://peej.github.com/phpdoctor/)">
+<meta name="when" content="Sat, 10 Jul 2010 18:10:56 +0000">
+
+<link rel="stylesheet" type="text/css" href="../../../../../stylesheet.css">
+<link rel="start" href="../../../../../overview-summary.html">
+
+<title>application/libraries/Auth/OpenID/URINorm.php (GiftFlow API)</title>
+
+</head>
+<body id="file" onload="parent.document.title=document.title;">
+
+<div class="header">
+<h1>GiftFlow API</h1>
+<ul>
+<li><a href="../../../../../overview-summary.html">Overview</a></li>
+<li>Package</li><li>Class</li><li>Tree</li><li><a href="../../../../../overview-files.html">Files</a></li>
+<li><a href="../../../../../deprecated-list.html">Deprecated</a></li>
+<li><a href="../../../../../index-all.html">Index</a></li>
+</ul>
+</div>
+
+<div class="small_links">
+<a href="../../../../../index.html" target="_top">Frames</a>
+<a href="../../../../../source/application/libraries/auth/openid/urinorm.php.html" target="_top">No frames</a>
+</div>
+<hr>
+
+<h1>application/libraries/Auth/OpenID/URINorm.php</h1>
+<div class="comment" id="overview_description"><p>URI normalization routines.</p></div>
+
+<hr>
+
+<a name="line1"></a><pre><?php
+<a name="line2"></a>
+<a name="line3"></a>/**
+<a name="line4"></a> * URI normalization routines.
+<a name="line5"></a> *
+<a name="line6"></a> * @package OpenID
+<a name="line7"></a> * @author JanRain, Inc. <openid@janrain.com>
+<a name="line8"></a> * @copyright 2005-2008 Janrain, Inc.
+<a name="line9"></a> * @license http://www.apache.org/licenses/LICENSE-2.0 Apache
+<a name="line10"></a> */
+<a name="line11"></a>
+<a name="line12"></a>require_once 'Auth/Yadis/Misc.php';
+<a name="line13"></a>
+<a name="line14"></a>// from appendix B of rfc 3986 (http://www.ietf.org/rfc/rfc3986.txt)
+<a name="line15"></a>function Auth_OpenID_getURIPattern()
+<a name="line16"></a>{
+<a name="line17"></a>    return '&^(([^:/?#]+):)?(//([^/?#]*))?([^?#]*)(\?([^#]*))?(#(.*))?&';
+<a name="line18"></a>}
+<a name="line19"></a>
+<a name="line20"></a>function Auth_OpenID_getAuthorityPattern()
+<a name="line21"></a>{
+<a name="line22"></a>    return '/^([^@]*@)?([^:]*)(:.*)?/';
+<a name="line23"></a>}
+<a name="line24"></a>
+<a name="line25"></a>function Auth_OpenID_getEncodedPattern()
+<a name="line26"></a>{
+<a name="line27"></a>    return '/%([0-9A-Fa-f]{2})/';
+<a name="line28"></a>}
+<a name="line29"></a>
+<a name="line30"></a># gen-delims  = ":" / "/" / "?" / "#" / "[" / "]" / "@"
+<a name="line31"></a>#
+<a name="line32"></a># sub-delims  = "!" / "$" / "&" / "'" / "(" / ")"
+<a name="line33"></a>#                  / "*" / "+" / "," / ";" / "="
+<a name="line34"></a>#
+<a name="line35"></a># unreserved  = ALPHA / DIGIT / "-" / "." / "_" / "~"
+<a name="line36"></a>function Auth_OpenID_getURLIllegalCharRE()
+<a name="line37"></a>{
+<a name="line38"></a>    return "/([^-A-Za-z0-9:\/\?#\[\]@\!\$&'\(\)\*\+,;=\._~\%])/";
+<a name="line39"></a>}
+<a name="line40"></a>
+<a name="line41"></a>function Auth_OpenID_getUnreserved()
+<a name="line42"></a>{
+<a name="line43"></a>    $_unreserved = array();
+<a name="line44"></a>    for ($i = 0; $i < 256; $i++) {
+<a name="line45"></a>        $_unreserved[$i] = false;
+<a name="line46"></a>    }
+<a name="line47"></a>
+<a name="line48"></a>    for ($i = ord('A'); $i <= ord('Z'); $i++) {
+<a name="line49"></a>        $_unreserved[$i] = true;
+<a name="line50"></a>    }
+<a name="line51"></a>
+<a name="line52"></a>    for ($i = ord('0'); $i <= ord('9'); $i++) {
+<a name="line53"></a>        $_unreserved[$i] = true;
+<a name="line54"></a>    }
+<a name="line55"></a>
+<a name="line56"></a>    for ($i = ord('a'); $i <= ord('z'); $i++) {
+<a name="line57"></a>        $_unreserved[$i] = true;
+<a name="line58"></a>    }
+<a name="line59"></a>
+<a name="line60"></a>    $_unreserved[ord('-')] = true;
+<a name="line61"></a>    $_unreserved[ord('.')] = true;
+<a name="line62"></a>    $_unreserved[ord('_')] = true;
+<a name="line63"></a>    $_unreserved[ord('~')] = true;
+<a name="line64"></a>
+<a name="line65"></a>    return $_unreserved;
+<a name="line66"></a>}
+<a name="line67"></a>
+<a name="line68"></a>function Auth_OpenID_getEscapeRE()
+<a name="line69"></a>{
+<a name="line70"></a>    $parts = array();
+<a name="line71"></a>    foreach (array_merge(Auth_Yadis_getUCSChars(),
+<a name="line72"></a>                         Auth_Yadis_getIPrivateChars()) as $pair) {
+<a name="line73"></a>        list($m, $n) = $pair;
+<a name="line74"></a>        $parts[] = sprintf("%s-%s", chr($m), chr($n));
+<a name="line75"></a>    }
+<a name="line76"></a>
+<a name="line77"></a>    return sprintf('[%s]', implode('', $parts));
+<a name="line78"></a>}
+<a name="line79"></a>
+<a name="line80"></a>function Auth_OpenID_pct_encoded_replace_unreserved($mo)
+<a name="line81"></a>{
+<a name="line82"></a>    $_unreserved = Auth_OpenID_getUnreserved();
+<a name="line83"></a>
+<a name="line84"></a>    $i = intval($mo[1], 16);
+<a name="line85"></a>    if ($_unreserved[$i]) {
+<a name="line86"></a>        return chr($i);
+<a name="line87"></a>    } else {
+<a name="line88"></a>        return strtoupper($mo[0]);
+<a name="line89"></a>    }
+<a name="line90"></a>
+<a name="line91"></a>    return $mo[0];
+<a name="line92"></a>}
+<a name="line93"></a>
+<a name="line94"></a>function Auth_OpenID_pct_encoded_replace($mo)
+<a name="line95"></a>{
+<a name="line96"></a>    return chr(intval($mo[1], 16));
+<a name="line97"></a>}
+<a name="line98"></a>
+<a name="line99"></a>function Auth_OpenID_remove_dot_segments($path)
+<a name="line100"></a>{
+<a name="line101"></a>    $result_segments = array();
+<a name="line102"></a>
+<a name="line103"></a>    while ($path) {
+<a name="line104"></a>        if (Auth_Yadis_startswith($path, '../')) {
+<a name="line105"></a>            $path = substr($path, 3);
+<a name="line106"></a>        } else if (Auth_Yadis_startswith($path, './')) {
+<a name="line107"></a>            $path = substr($path, 2);
+<a name="line108"></a>        } else if (Auth_Yadis_startswith($path, '/./')) {
+<a name="line109"></a>            $path = substr($path, 2);
+<a name="line110"></a>        } else if ($path == '/.') {
+<a name="line111"></a>            $path = '/';
+<a name="line112"></a>        } else if (Auth_Yadis_startswith($path, '/../')) {
+<a name="line113"></a>            $path = substr($path, 3);
+<a name="line114"></a>            if ($result_segments) {
+<a name="line115"></a>                array_pop($result_segments);
+<a name="line116"></a>            }
+<a name="line117"></a>        } else if ($path == '/..') {
+<a name="line118"></a>            $path = '/';
+<a name="line119"></a>            if ($result_segments) {
+<a name="line120"></a>                array_pop($result_segments);
+<a name="line121"></a>            }
+<a name="line122"></a>        } else if (($path == '..') ||
+<a name="line123"></a>                   ($path == '.')) {
+<a name="line124"></a>            $path = '';
+<a name="line125"></a>        } else {
+<a name="line126"></a>            $i = 0;
+<a name="line127"></a>            if ($path[0] == '/') {
+<a name="line128"></a>                $i = 1;
+<a name="line129"></a>            }
+<a name="line130"></a>            $i = strpos($path, '/', $i);
+<a name="line131"></a>            if ($i === false) {
+<a name="line132"></a>                $i = strlen($path);
+<a name="line133"></a>            }
+<a name="line134"></a>            $result_segments[] = substr($path, 0, $i);
+<a name="line135"></a>            $path = substr($path, $i);
+<a name="line136"></a>        }
+<a name="line137"></a>    }
+<a name="line138"></a>
+<a name="line139"></a>    return implode('', $result_segments);
+<a name="line140"></a>}
+<a name="line141"></a>
+<a name="line142"></a>function Auth_OpenID_urinorm($uri)
+<a name="line143"></a>{
+<a name="line144"></a>    $uri_matches = array();
+<a name="line145"></a>    preg_match(Auth_OpenID_getURIPattern(), $uri, $uri_matches);
+<a name="line146"></a>
+<a name="line147"></a>    if (count($uri_matches) < 9) {
+<a name="line148"></a>        for ($i = count($uri_matches); $i <= 9; $i++) {
+<a name="line149"></a>            $uri_matches[] = '';
+<a name="line150"></a>        }
+<a name="line151"></a>    }
+<a name="line152"></a>
+<a name="line153"></a>    $illegal_matches = array();
+<a name="line154"></a>    preg_match(Auth_OpenID_getURLIllegalCharRE(),
+<a name="line155"></a>               $uri, $illegal_matches);
+<a name="line156"></a>    if ($illegal_matches) {
+<a name="line157"></a>        return null;
+<a name="line158"></a>    }
+<a name="line159"></a>
+<a name="line160"></a>    $scheme = $uri_matches[2];
+<a name="line161"></a>    if ($scheme) {
+<a name="line162"></a>        $scheme = strtolower($scheme);
+<a name="line163"></a>    }
+<a name="line164"></a>
+<a name="line165"></a>    $scheme = $uri_matches[2];
+<a name="line166"></a>    if ($scheme === '') {
+<a name="line167"></a>        // No scheme specified
+<a name="line168"></a>        return null;
+<a name="line169"></a>    }
+<a name="line170"></a>
+<a name="line171"></a>    $scheme = strtolower($scheme);
+<a name="line172"></a>    if (!in_array($scheme, array('http', 'https'))) {
+<a name="line173"></a>        // Not an absolute HTTP or HTTPS URI
+<a name="line174"></a>        return null;
+<a name="line175"></a>    }
+<a name="line176"></a>
+<a name="line177"></a>    $authority = $uri_matches[4];
+<a name="line178"></a>    if ($authority === '') {
+<a name="line179"></a>        // Not an absolute URI
+<a name="line180"></a>        return null;
+<a name="line181"></a>    }
+<a name="line182"></a>
+<a name="line183"></a>    $authority_matches = array();
+<a name="line184"></a>    preg_match(Auth_OpenID_getAuthorityPattern(),
+<a name="line185"></a>               $authority, $authority_matches);
+<a name="line186"></a>    if (count($authority_matches) === 0) {
+<a name="line187"></a>        // URI does not have a valid authority
+<a name="line188"></a>        return null;
+<a name="line189"></a>    }
+<a name="line190"></a>
+<a name="line191"></a>    if (count($authority_matches) < 4) {
+<a name="line192"></a>        for ($i = count($authority_matches); $i <= 4; $i++) {
+<a name="line193"></a>            $authority_matches[] = '';
+<a name="line194"></a>        }
+<a name="line195"></a>    }
+<a name="line196"></a>
+<a name="line197"></a>    list($_whole, $userinfo, $host, $port) = $authority_matches;
+<a name="line198"></a>
+<a name="line199"></a>    if ($userinfo === null) {
+<a name="line200"></a>        $userinfo = '';
+<a name="line201"></a>    }
+<a name="line202"></a>
+<a name="line203"></a>    if (strpos($host, '%') !== -1) {
+<a name="line204"></a>        $host = strtolower($host);
+<a name="line205"></a>        $host = preg_replace_callback(
+<a name="line206"></a>                  Auth_OpenID_getEncodedPattern(),
+<a name="line207"></a>                  'Auth_OpenID_pct_encoded_replace', $host);
+<a name="line208"></a>        // NO IDNA.
+<a name="line209"></a>        // $host = unicode($host, 'utf-8').encode('idna');
+<a name="line210"></a>    } else {
+<a name="line211"></a>        $host = strtolower($host);
+<a name="line212"></a>    }
+<a name="line213"></a>
+<a name="line214"></a>    if ($port) {
+<a name="line215"></a>        if (($port == ':') ||
+<a name="line216"></a>            ($scheme == 'http' && $port == ':80') ||
+<a name="line217"></a>            ($scheme == 'https' && $port == ':443')) {
+<a name="line218"></a>            $port = '';
+<a name="line219"></a>        }
+<a name="line220"></a>    } else {
+<a name="line221"></a>        $port = '';
+<a name="line222"></a>    }
+<a name="line223"></a>
+<a name="line224"></a>    $authority = $userinfo . $host . $port;
+<a name="line225"></a>
+<a name="line226"></a>    $path = $uri_matches[5];
+<a name="line227"></a>    $path = preg_replace_callback(
+<a name="line228"></a>               Auth_OpenID_getEncodedPattern(),
+<a name="line229"></a>               'Auth_OpenID_pct_encoded_replace_unreserved', $path);
+<a name="line230"></a>
+<a name="line231"></a>    $path = Auth_OpenID_remove_dot_segments($path);
+<a name="line232"></a>    if (!$path) {
+<a name="line233"></a>        $path = '/';
+<a name="line234"></a>    }
+<a name="line235"></a>
+<a name="line236"></a>    $query = $uri_matches[6];
+<a name="line237"></a>    if ($query === null) {
+<a name="line238"></a>        $query = '';
+<a name="line239"></a>    }
+<a name="line240"></a>
+<a name="line241"></a>    $fragment = $uri_matches[8];
+<a name="line242"></a>    if ($fragment === null) {
+<a name="line243"></a>        $fragment = '';
+<a name="line244"></a>    }
+<a name="line245"></a>
+<a name="line246"></a>    return $scheme . '://' . $authority . $path . $query . $fragment;
+<a name="line247"></a>}
+<a name="line248"></a>
+<a name="line249"></a>
+<a name="line250"></a></pre>
+<div class="header">
+<h1>GiftFlow API</h1>
+<ul>
+<li><a href="../../../../../overview-summary.html">Overview</a></li>
+<li>Package</li><li>Class</li><li>Tree</li><li><a href="../../../../../overview-files.html">Files</a></li>
+<li><a href="../../../../../deprecated-list.html">Deprecated</a></li>
+<li><a href="../../../../../index-all.html">Index</a></li>
+</ul>
+</div>
+
+<div class="small_links">
+<a href="../../../../../index.html" target="_top">Frames</a>
+<a href="../../../../../source/application/libraries/auth/openid/urinorm.php.html" target="_top">No frames</a>
+</div>
+<hr>
+
+<p id="footer">This document was generated by <a href="http://peej.github.com/phpdoctor/">PHPDoctor: The PHP Documentation Creator</a></p>
+
+</body>
+
+</html>

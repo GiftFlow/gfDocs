@@ -1,0 +1,169 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+
+<html lang="en">
+<head>
+
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
+<meta name="generator" content="PHPDoctor 2RC4 (http://peej.github.com/phpdoctor/)">
+<meta name="when" content="Sat, 10 Jul 2010 18:10:56 +0000">
+
+<link rel="stylesheet" type="text/css" href="../../../../../stylesheet.css">
+<link rel="start" href="../../../../../overview-summary.html">
+
+<title>application/libraries/Auth/OpenID/Nonce.php (GiftFlow API)</title>
+
+</head>
+<body id="file" onload="parent.document.title=document.title;">
+
+<div class="header">
+<h1>GiftFlow API</h1>
+<ul>
+<li><a href="../../../../../overview-summary.html">Overview</a></li>
+<li>Package</li><li>Class</li><li>Tree</li><li><a href="../../../../../overview-files.html">Files</a></li>
+<li><a href="../../../../../deprecated-list.html">Deprecated</a></li>
+<li><a href="../../../../../index-all.html">Index</a></li>
+</ul>
+</div>
+
+<div class="small_links">
+<a href="../../../../../index.html" target="_top">Frames</a>
+<a href="../../../../../source/application/libraries/auth/openid/nonce.php.html" target="_top">No frames</a>
+</div>
+<hr>
+
+<h1>application/libraries/Auth/OpenID/Nonce.php</h1>
+<div class="comment" id="overview_description"><p>Nonce-related functionality.</p></div>
+
+<hr>
+
+<a name="line1"></a><pre><?php
+<a name="line2"></a>
+<a name="line3"></a>/**
+<a name="line4"></a> * Nonce-related functionality.
+<a name="line5"></a> *
+<a name="line6"></a> * @package OpenID
+<a name="line7"></a> */
+<a name="line8"></a>
+<a name="line9"></a>/**
+<a name="line10"></a> * Need CryptUtil to generate random strings.
+<a name="line11"></a> */
+<a name="line12"></a>require_once 'Auth/OpenID/CryptUtil.php';
+<a name="line13"></a>
+<a name="line14"></a>/**
+<a name="line15"></a> * This is the characters that the nonces are made from.
+<a name="line16"></a> */
+<a name="line17"></a>define('Auth_OpenID_Nonce_CHRS',"abcdefghijklmnopqrstuvwxyz" .
+<a name="line18"></a>       "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789");
+<a name="line19"></a>
+<a name="line20"></a>// Keep nonces for five hours (allow five hours for the combination of
+<a name="line21"></a>// request time and clock skew). This is probably way more than is
+<a name="line22"></a>// necessary, but there is not much overhead in storing nonces.
+<a name="line23"></a>global $Auth_OpenID_SKEW;
+<a name="line24"></a>$Auth_OpenID_SKEW = 60 * 60 * 5;
+<a name="line25"></a>
+<a name="line26"></a>define('Auth_OpenID_Nonce_REGEX',
+<a name="line27"></a>       '/(\d{4})-(\d\d)-(\d\d)T(\d\d):(\d\d):(\d\d)Z(.*)/');
+<a name="line28"></a>
+<a name="line29"></a>define('Auth_OpenID_Nonce_TIME_FMT',
+<a name="line30"></a>       '%Y-%m-%dT%H:%M:%SZ');
+<a name="line31"></a>
+<a name="line32"></a>function Auth_OpenID_splitNonce($nonce_string)
+<a name="line33"></a>{
+<a name="line34"></a>    // Extract a timestamp from the given nonce string
+<a name="line35"></a>    $result = preg_match(Auth_OpenID_Nonce_REGEX, $nonce_string, $matches);
+<a name="line36"></a>    if ($result != 1 || count($matches) != 8) {
+<a name="line37"></a>        return null;
+<a name="line38"></a>    }
+<a name="line39"></a>
+<a name="line40"></a>    list($unused,
+<a name="line41"></a>         $tm_year,
+<a name="line42"></a>         $tm_mon,
+<a name="line43"></a>         $tm_mday,
+<a name="line44"></a>         $tm_hour,
+<a name="line45"></a>         $tm_min,
+<a name="line46"></a>         $tm_sec,
+<a name="line47"></a>         $uniquifier) = $matches;
+<a name="line48"></a>
+<a name="line49"></a>    $timestamp =
+<a name="line50"></a>        @gmmktime($tm_hour, $tm_min, $tm_sec, $tm_mon, $tm_mday, $tm_year);
+<a name="line51"></a>
+<a name="line52"></a>    if ($timestamp === false || $timestamp < 0) {
+<a name="line53"></a>        return null;
+<a name="line54"></a>    }
+<a name="line55"></a>
+<a name="line56"></a>    return array($timestamp, $uniquifier);
+<a name="line57"></a>}
+<a name="line58"></a>
+<a name="line59"></a>function Auth_OpenID_checkTimestamp($nonce_string,
+<a name="line60"></a>                                    $allowed_skew = null,
+<a name="line61"></a>                                    $now = null)
+<a name="line62"></a>{
+<a name="line63"></a>    // Is the timestamp that is part of the specified nonce string
+<a name="line64"></a>    // within the allowed clock-skew of the current time?
+<a name="line65"></a>    global $Auth_OpenID_SKEW;
+<a name="line66"></a>
+<a name="line67"></a>    if ($allowed_skew === null) {
+<a name="line68"></a>        $allowed_skew = $Auth_OpenID_SKEW;
+<a name="line69"></a>    }
+<a name="line70"></a>
+<a name="line71"></a>    $parts = Auth_OpenID_splitNonce($nonce_string);
+<a name="line72"></a>    if ($parts == null) {
+<a name="line73"></a>        return false;
+<a name="line74"></a>    }
+<a name="line75"></a>
+<a name="line76"></a>    if ($now === null) {
+<a name="line77"></a>        $now = time();
+<a name="line78"></a>    }
+<a name="line79"></a>
+<a name="line80"></a>    $stamp = $parts[0];
+<a name="line81"></a>
+<a name="line82"></a>    // Time after which we should not use the nonce
+<a name="line83"></a>    $past = $now - $allowed_skew;
+<a name="line84"></a>
+<a name="line85"></a>    // Time that is too far in the future for us to allow
+<a name="line86"></a>    $future = $now + $allowed_skew;
+<a name="line87"></a>
+<a name="line88"></a>    // the stamp is not too far in the future and is not too far
+<a name="line89"></a>    // in the past
+<a name="line90"></a>    return (($past <= $stamp) && ($stamp <= $future));
+<a name="line91"></a>}
+<a name="line92"></a>
+<a name="line93"></a>function Auth_OpenID_mkNonce($when = null)
+<a name="line94"></a>{
+<a name="line95"></a>    // Generate a nonce with the current timestamp
+<a name="line96"></a>    $salt = Auth_OpenID_CryptUtil::randomString(
+<a name="line97"></a>        6, Auth_OpenID_Nonce_CHRS);
+<a name="line98"></a>    if ($when === null) {
+<a name="line99"></a>        // It's safe to call time() with no arguments; it returns a
+<a name="line100"></a>        // GMT unix timestamp on PHP 4 and PHP 5.  gmmktime() with no
+<a name="line101"></a>        // args returns a local unix timestamp on PHP 4, so don't use
+<a name="line102"></a>        // that.
+<a name="line103"></a>        $when = time();
+<a name="line104"></a>    }
+<a name="line105"></a>    $time_str = gmstrftime(Auth_OpenID_Nonce_TIME_FMT, $when);
+<a name="line106"></a>    return $time_str . $salt;
+<a name="line107"></a>}
+<a name="line108"></a>
+<a name="line109"></a></pre>
+<div class="header">
+<h1>GiftFlow API</h1>
+<ul>
+<li><a href="../../../../../overview-summary.html">Overview</a></li>
+<li>Package</li><li>Class</li><li>Tree</li><li><a href="../../../../../overview-files.html">Files</a></li>
+<li><a href="../../../../../deprecated-list.html">Deprecated</a></li>
+<li><a href="../../../../../index-all.html">Index</a></li>
+</ul>
+</div>
+
+<div class="small_links">
+<a href="../../../../../index.html" target="_top">Frames</a>
+<a href="../../../../../source/application/libraries/auth/openid/nonce.php.html" target="_top">No frames</a>
+</div>
+<hr>
+
+<p id="footer">This document was generated by <a href="http://peej.github.com/phpdoctor/">PHPDoctor: The PHP Documentation Creator</a></p>
+
+</body>
+
+</html>

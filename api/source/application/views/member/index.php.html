@@ -6,7 +6,7 @@
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 
 <meta name="generator" content="PHPDoctor 2RC4 (http://peej.github.com/phpdoctor/)">
-<meta name="when" content="Tue, 29 Jun 2010 21:10:10 +0000">
+<meta name="when" content="Sat, 10 Jul 2010 18:10:57 +0000">
 
 <link rel="stylesheet" type="text/css" href="../../../../stylesheet.css">
 <link rel="start" href="../../../../overview-summary.html">
@@ -64,13 +64,13 @@
 <a name="line27"></a>		<div id='tab_1' style='padding: 1em 0em;'>
 <a name="line28"></a>			<a href='<?php echo site_url('give'); ?>' class='button' style='width: 100%'>Add a Gift</a>
 <a name="line29"></a>			<ul class='results_list mini' id='your_gifts'>
-<a name="line30"></a>			<?php foreach($your_gifts as $key=>$val) {  echo result_row($val->id, array('created', 'requests')); } ?>
+<a name="line30"></a>			<?php foreach($your_gifts as $key=>$val) {  echo result_row($val, array('created', 'requests')); } ?>
 <a name="line31"></a>			</ul>
 <a name="line32"></a>		</div>
 <a name="line33"></a>		<div id='tab_2' style='padding: 1em 0em;'>
 <a name="line34"></a>			<ul class='results_list mini' id='your_needs'>
 <a name="line35"></a>			<a href='<?php echo site_url('get'); ?>' class='button' style='width: 100%'>Add a Need</a>
-<a name="line36"></a>			<?php foreach($your_needs as $key=>$val){ echo result_row($val->id, array('created', 'requests')); } ?>
+<a name="line36"></a>			<?php foreach($your_needs as $key=>$val){ echo result_row($val, array('created', 'requests')); } ?>
 <a name="line37"></a>			</ul>
 <a name="line38"></a>		</div>
 <a name="line39"></a>		<div id='tab_3' style='padding: 1em 0em;'>
@@ -124,7 +124,7 @@
 <a name="line87"></a><ul class='results_list'>
 <a name="line88"></a><?php 
 <a name="line89"></a>	foreach($follow_feed as $key=>$val) { ?>
-<a name="line90"></a>	<?php echo result_row($val->id, array('author', 'location', 'created')); ?>
+<a name="line90"></a>	<?php echo result_row($val, array('author', 'location', 'created')); ?>
 <a name="line91"></a><?php } ?>
 <a name="line92"></a></ul>
 <a name="line93"></a><?php } else{ ?>

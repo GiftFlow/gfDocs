@@ -1,0 +1,270 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+
+<html lang="en">
+<head>
+
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
+<meta name="generator" content="PHPDoctor 2RC4 (http://peej.github.com/phpdoctor/)">
+<meta name="when" content="Sat, 10 Jul 2010 18:10:56 +0000">
+
+<link rel="stylesheet" type="text/css" href="../../../stylesheet.css">
+<link rel="start" href="../../../overview-summary.html">
+
+<title>application/libraries/Openid.php (GiftFlow API)</title>
+
+</head>
+<body id="file" onload="parent.document.title=document.title;">
+
+<div class="header">
+<h1>GiftFlow API</h1>
+<ul>
+<li><a href="../../../overview-summary.html">Overview</a></li>
+<li>Package</li><li>Class</li><li>Tree</li><li><a href="../../../overview-files.html">Files</a></li>
+<li><a href="../../../deprecated-list.html">Deprecated</a></li>
+<li><a href="../../../index-all.html">Index</a></li>
+</ul>
+</div>
+
+<div class="small_links">
+<a href="../../../index.html" target="_top">Frames</a>
+<a href="../../../source/application/libraries/openid.php.html" target="_top">No frames</a>
+</div>
+<hr>
+
+<h1>application/libraries/Openid.php</h1>
+<hr>
+
+<a name="line1"></a><pre><?php if (!defined('BASEPATH')) exit('No direct script access allowed');
+<a name="line2"></a>/**
+<a name="line3"></a>* OpenID Library
+<a name="line4"></a>*
+<a name="line5"></a>* @package    CodeIgniter
+<a name="line6"></a>* @author     bardelot
+<a name="line7"></a>* @see        http://cakebaker.42dh.com/2007/01/11/cakephp-and-openid/
+<a name="line8"></a>*             & http://openidenabled.com/php-openid/
+<a name="line9"></a>*/
+<a name="line10"></a>
+<a name="line11"></a>class Openid{
+<a name="line12"></a>
+<a name="line13"></a>  var $storePath = 'tmp';
+<a name="line14"></a>  
+<a name="line15"></a>  var $sreg_enable = false;
+<a name="line16"></a>  var $sreg_required = null;
+<a name="line17"></a>  var $sreg_optional = null;
+<a name="line18"></a>  var $sreg_policy = null;
+<a name="line19"></a>  
+<a name="line20"></a>  var $pape_enable = false;
+<a name="line21"></a>  var $pape_policy_uris = null;
+<a name="line22"></a>  
+<a name="line23"></a>  var $request_to;
+<a name="line24"></a>  var $trust_root;
+<a name="line25"></a>  var $ext_args;
+<a name="line26"></a>    
+<a name="line27"></a>    function Openid()
+<a name="line28"></a>    {        
+<a name="line29"></a>    $CI =& get_instance();    
+<a name="line30"></a>        $CI->config->load('openid');
+<a name="line31"></a>        $this->storePath = $CI->config->item('openid_storepath');
+<a name="line32"></a>            
+<a name="line33"></a>        session_start();    
+<a name="line34"></a>        $this->_doIncludes();
+<a name="line35"></a>            
+<a name="line36"></a>    log_message('debug', "OpenID Class Initialized");
+<a name="line37"></a>    }
+<a name="line38"></a>    
+<a name="line39"></a>    function _doIncludes()
+<a name="line40"></a>    {
+<a name="line41"></a>    set_include_path(dirname(__FILE__) . PATH_SEPARATOR . get_include_path());
+<a name="line42"></a>
+<a name="line43"></a>    require_once "Auth/OpenID/Consumer.php";
+<a name="line44"></a>    require_once "Auth/OpenID/FileStore.php";
+<a name="line45"></a>    require_once "Auth/OpenID/SReg.php";
+<a name="line46"></a>    require_once "Auth/OpenID/PAPE.php";
+<a name="line47"></a>  }
+<a name="line48"></a>    
+<a name="line49"></a>    function set_sreg($enable, $required = null, $optional = null, $policy = null)
+<a name="line50"></a>    {
+<a name="line51"></a>    $this->sreg_enable = $enable;
+<a name="line52"></a>    $this->sreg_required = $required;
+<a name="line53"></a>    $this->sreg_optional = $optional;
+<a name="line54"></a>    $this->sreg_policy = $policy;
+<a name="line55"></a>    }
+<a name="line56"></a>    
+<a name="line57"></a>    function set_pape($enable, $policy_uris = null)
+<a name="line58"></a>    {
+<a name="line59"></a>    $this->pape_enable = $enable;
+<a name="line60"></a>    $this->pape_policy_uris = $policy_uris;
+<a name="line61"></a>    }
+<a name="line62"></a>    
+<a name="line63"></a>    function set_request_to($uri)
+<a name="line64"></a>    {
+<a name="line65"></a>    $this->request_to = $uri;
+<a name="line66"></a>    }
+<a name="line67"></a>    
+<a name="line68"></a>    function set_trust_root($trust_root)
+<a name="line69"></a>    {
+<a name="line70"></a>    $this->trust_root = $trust_root;
+<a name="line71"></a>    }
+<a name="line72"></a>    
+<a name="line73"></a>    function set_args($args)
+<a name="line74"></a>    {
+<a name="line75"></a>    $this->ext_args = $args;
+<a name="line76"></a>    }
+<a name="line77"></a>    
+<a name="line78"></a>    function _set_message($error, $msg, $val = '', $sub = '%s')
+<a name="line79"></a>    {
+<a name="line80"></a>      $CI =& get_instance();
+<a name="line81"></a>        $CI->lang->load('openid', 'english');
+<a name="line82"></a>        echo str_replace($sub, $val, $CI->lang->line($msg));
+<a name="line83"></a>        
+<a name="line84"></a>        if ($error)
+<a name="line85"></a>        {
+<a name="line86"></a>      exit;
+<a name="line87"></a>    }
+<a name="line88"></a>    }
+<a name="line89"></a>    
+<a name="line90"></a>    function authenticate($openId)
+<a name="line91"></a>    {
+<a name="line92"></a>    $consumer = $this->_getConsumer();
+<a name="line93"></a>        $authRequest = $consumer->begin($openId);
+<a name="line94"></a>            
+<a name="line95"></a>        // No auth request means we can't begin OpenID.
+<a name="line96"></a>    if (!$authRequest)
+<a name="line97"></a>    {
+<a name="line98"></a>        $this->_set_message(true,'openid_auth_error');
+<a name="line99"></a>    }
+<a name="line100"></a>      
+<a name="line101"></a>    if ($this->sreg_enable)
+<a name="line102"></a>    {
+<a name="line103"></a>        $sreg_request = Auth_OpenID_SRegRequest::build($this->sreg_required, $this->sreg_optional, $this->sreg_policy);
+<a name="line104"></a>
+<a name="line105"></a>        if ($sreg_request)
+<a name="line106"></a>        {
+<a name="line107"></a>            $authRequest->addExtension($sreg_request);
+<a name="line108"></a>        }
+<a name="line109"></a>        else
+<a name="line110"></a>        {
+<a name="line111"></a>            $this->_set_message(true,'openid_sreg_failed');
+<a name="line112"></a>        }
+<a name="line113"></a>    }
+<a name="line114"></a>      
+<a name="line115"></a>    if ($this->pape_enable)
+<a name="line116"></a>    {
+<a name="line117"></a>        $pape_request = new Auth_OpenID_PAPE_Request($this->pape_policy_uris);
+<a name="line118"></a>        
+<a name="line119"></a>        if ($pape_request)
+<a name="line120"></a>        {
+<a name="line121"></a>            $authRequest->addExtension($pape_request);
+<a name="line122"></a>        }
+<a name="line123"></a>        else
+<a name="line124"></a>        {
+<a name="line125"></a>            $this->_set_message(true,'openid_pape_failed');
+<a name="line126"></a>        }
+<a name="line127"></a>    }
+<a name="line128"></a>            
+<a name="line129"></a>        if ($this->ext_args != null)
+<a name="line130"></a>        {
+<a name="line131"></a>                foreach ($this->ext_args as $extensionArgument)
+<a name="line132"></a>                {
+<a name="line133"></a>            if (count($extensionArgument) == 3)
+<a name="line134"></a>            {
+<a name="line135"></a>                 $authRequest->addExtensionArg($extensionArgument[0], $extensionArgument[1], $extensionArgument[2]);
+<a name="line136"></a>            }
+<a name="line137"></a>                }
+<a name="line138"></a>    }
+<a name="line139"></a>            
+<a name="line140"></a>        // Redirect the user to the OpenID server for authentication.
+<a name="line141"></a>    // Store the token for this authentication so we can verify the
+<a name="line142"></a>    // response.
+<a name="line143"></a>
+<a name="line144"></a>    // For OpenID 1, send a redirect.  For OpenID 2, use a Javascript
+<a name="line145"></a>    // form to send a POST request to the server.
+<a name="line146"></a>    if ($authRequest->shouldSendRedirect())
+<a name="line147"></a>    {
+<a name="line148"></a>        $redirect_url = $authRequest->redirectURL($this->trust_root, $this->request_to);
+<a name="line149"></a>
+<a name="line150"></a>        // If the redirect URL can't be built, display an error
+<a name="line151"></a>        // message.
+<a name="line152"></a>        if (Auth_OpenID::isFailure($redirect_url))
+<a name="line153"></a>        {
+<a name="line154"></a>            $this->_set_message(true,'openid_redirect_failed', $redirect_url->message);
+<a name="line155"></a>        }
+<a name="line156"></a>        else
+<a name="line157"></a>        {
+<a name="line158"></a>            // Send redirect.
+<a name="line159"></a>            header("Location: ".$redirect_url);
+<a name="line160"></a>        }
+<a name="line161"></a>    }
+<a name="line162"></a>    else
+<a name="line163"></a>    {
+<a name="line164"></a>        // Generate form markup and render it.
+<a name="line165"></a>        $form_id = 'openid_message';
+<a name="line166"></a>        $form_html = $authRequest->formMarkup($this->trust_root, $this->request_to, false, array('id' => $form_id));
+<a name="line167"></a>
+<a name="line168"></a>        // Display an error if the form markup couldn't be generated;
+<a name="line169"></a>        // otherwise, render the HTML.
+<a name="line170"></a>        if (Auth_OpenID::isFailure($form_html))
+<a name="line171"></a>        {
+<a name="line172"></a>            $this->_set_message(true,'openid_redirect_failed', $form_html->message);
+<a name="line173"></a>        }
+<a name="line174"></a>        else
+<a name="line175"></a>        {
+<a name="line176"></a>            $page_contents = array(
+<a name="line177"></a>               "<html><head><title>",
+<a name="line178"></a>               "OpenID transaction in progress",
+<a name="line179"></a>               "</title></head>",
+<a name="line180"></a>               "<body onload='document.getElementById(\"".$form_id."\").submit()'>",
+<a name="line181"></a>               $form_html,
+<a name="line182"></a>               "</body></html>");
+<a name="line183"></a>
+<a name="line184"></a>            print implode("\n", $page_contents);
+<a name="line185"></a>        }
+<a name="line186"></a>    }
+<a name="line187"></a>
+<a name="line188"></a>        }
+<a name="line189"></a>        
+<a name="line190"></a>        function getResponse()
+<a name="line191"></a>        {
+<a name="line192"></a>      $consumer = $this->_getConsumer();
+<a name="line193"></a>      $response = $consumer->complete($this->request_to);
+<a name="line194"></a>            
+<a name="line195"></a>      return $response;
+<a name="line196"></a>        }
+<a name="line197"></a>        
+<a name="line198"></a>        function _getConsumer()
+<a name="line199"></a>        {
+<a name="line200"></a>            if (!file_exists($this->storePath) && !mkdir($this->storePath))
+<a name="line201"></a>            {
+<a name="line202"></a>          $this->_set_message(true,'openid_storepath_failed', $this->storePath);
+<a name="line203"></a>            }
+<a name="line204"></a>
+<a name="line205"></a>            $store = new Auth_OpenID_FileStore($this->storePath);
+<a name="line206"></a>            $consumer = new Auth_OpenID_Consumer($store);
+<a name="line207"></a>            
+<a name="line208"></a>            return $consumer;
+<a name="line209"></a>        }
+<a name="line210"></a>}
+<a name="line211"></a>?>
+<a name="line212"></a></pre>
+<div class="header">
+<h1>GiftFlow API</h1>
+<ul>
+<li><a href="../../../overview-summary.html">Overview</a></li>
+<li>Package</li><li>Class</li><li>Tree</li><li><a href="../../../overview-files.html">Files</a></li>
+<li><a href="../../../deprecated-list.html">Deprecated</a></li>
+<li><a href="../../../index-all.html">Index</a></li>
+</ul>
+</div>
+
+<div class="small_links">
+<a href="../../../index.html" target="_top">Frames</a>
+<a href="../../../source/application/libraries/openid.php.html" target="_top">No frames</a>
+</div>
+<hr>
+
+<p id="footer">This document was generated by <a href="http://peej.github.com/phpdoctor/">PHPDoctor: The PHP Documentation Creator</a></p>
+
+</body>
+
+</html>

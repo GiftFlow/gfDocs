@@ -1,0 +1,672 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+
+<html lang="en">
+<head>
+
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
+<meta name="generator" content="PHPDoctor 2RC4 (http://peej.github.com/phpdoctor/)">
+<meta name="when" content="Sat, 10 Jul 2010 18:10:56 +0000">
+
+<link rel="stylesheet" type="text/css" href="../../../../../stylesheet.css">
+<link rel="start" href="../../../../../overview-summary.html">
+
+<title>application/libraries/Auth/OpenID/Association.php (GiftFlow API)</title>
+
+</head>
+<body id="file" onload="parent.document.title=document.title;">
+
+<div class="header">
+<h1>GiftFlow API</h1>
+<ul>
+<li><a href="../../../../../overview-summary.html">Overview</a></li>
+<li>Package</li><li>Class</li><li>Tree</li><li><a href="../../../../../overview-files.html">Files</a></li>
+<li><a href="../../../../../deprecated-list.html">Deprecated</a></li>
+<li><a href="../../../../../index-all.html">Index</a></li>
+</ul>
+</div>
+
+<div class="small_links">
+<a href="../../../../../index.html" target="_top">Frames</a>
+<a href="../../../../../source/application/libraries/auth/openid/association.php.html" target="_top">No frames</a>
+</div>
+<hr>
+
+<h1>application/libraries/Auth/OpenID/Association.php</h1>
+<div class="comment" id="overview_description"><p>This module contains code for dealing with associations between
+consumers and servers.</p><p>PHP versions 4 and 5</p><p>LICENSE: See the COPYING file included in this distribution.</p></div>
+
+<hr>
+
+<a name="line1"></a><pre><?php
+<a name="line2"></a>
+<a name="line3"></a>/**
+<a name="line4"></a> * This module contains code for dealing with associations between
+<a name="line5"></a> * consumers and servers.
+<a name="line6"></a> *
+<a name="line7"></a> * PHP versions 4 and 5
+<a name="line8"></a> *
+<a name="line9"></a> * LICENSE: See the COPYING file included in this distribution.
+<a name="line10"></a> *
+<a name="line11"></a> * @package OpenID
+<a name="line12"></a> * @author JanRain, Inc. <openid@janrain.com>
+<a name="line13"></a> * @copyright 2005-2008 Janrain, Inc.
+<a name="line14"></a> * @license http://www.apache.org/licenses/LICENSE-2.0 Apache
+<a name="line15"></a> */
+<a name="line16"></a>
+<a name="line17"></a>/**
+<a name="line18"></a> * @access private
+<a name="line19"></a> */
+<a name="line20"></a>require_once 'Auth/OpenID/CryptUtil.php';
+<a name="line21"></a>
+<a name="line22"></a>/**
+<a name="line23"></a> * @access private
+<a name="line24"></a> */
+<a name="line25"></a>require_once 'Auth/OpenID/KVForm.php';
+<a name="line26"></a>
+<a name="line27"></a>/**
+<a name="line28"></a> * @access private
+<a name="line29"></a> */
+<a name="line30"></a>require_once 'Auth/OpenID/HMAC.php';
+<a name="line31"></a>
+<a name="line32"></a>/**
+<a name="line33"></a> * This class represents an association between a server and a
+<a name="line34"></a> * consumer.  In general, users of this library will never see
+<a name="line35"></a> * instances of this object.  The only exception is if you implement a
+<a name="line36"></a> * custom {@link Auth_OpenID_OpenIDStore}.
+<a name="line37"></a> *
+<a name="line38"></a> * If you do implement such a store, it will need to store the values
+<a name="line39"></a> * of the handle, secret, issued, lifetime, and assoc_type instance
+<a name="line40"></a> * variables.
+<a name="line41"></a> *
+<a name="line42"></a> * @package OpenID
+<a name="line43"></a> */
+<a name="line44"></a>class Auth_OpenID_Association {
+<a name="line45"></a>
+<a name="line46"></a>    /**
+<a name="line47"></a>     * This is a HMAC-SHA1 specific value.
+<a name="line48"></a>     *
+<a name="line49"></a>     * @access private
+<a name="line50"></a>     */
+<a name="line51"></a>    var $SIG_LENGTH = 20;
+<a name="line52"></a>
+<a name="line53"></a>    /**
+<a name="line54"></a>     * The ordering and name of keys as stored by serialize.
+<a name="line55"></a>     *
+<a name="line56"></a>     * @access private
+<a name="line57"></a>     */
+<a name="line58"></a>    var $assoc_keys = array(
+<a name="line59"></a>                            'version',
+<a name="line60"></a>                            'handle',
+<a name="line61"></a>                            'secret',
+<a name="line62"></a>                            'issued',
+<a name="line63"></a>                            'lifetime',
+<a name="line64"></a>                            'assoc_type'
+<a name="line65"></a>                            );
+<a name="line66"></a>
+<a name="line67"></a>    var $_macs = array(
+<a name="line68"></a>                       'HMAC-SHA1' => 'Auth_OpenID_HMACSHA1',
+<a name="line69"></a>                       'HMAC-SHA256' => 'Auth_OpenID_HMACSHA256'
+<a name="line70"></a>                       );
+<a name="line71"></a>
+<a name="line72"></a>    /**
+<a name="line73"></a>     * This is an alternate constructor (factory method) used by the
+<a name="line74"></a>     * OpenID consumer library to create associations.  OpenID store
+<a name="line75"></a>     * implementations shouldn't use this constructor.
+<a name="line76"></a>     *
+<a name="line77"></a>     * @access private
+<a name="line78"></a>     *
+<a name="line79"></a>     * @param integer $expires_in This is the amount of time this
+<a name="line80"></a>     * association is good for, measured in seconds since the
+<a name="line81"></a>     * association was issued.
+<a name="line82"></a>     *
+<a name="line83"></a>     * @param string $handle This is the handle the server gave this
+<a name="line84"></a>     * association.
+<a name="line85"></a>     *
+<a name="line86"></a>     * @param string secret This is the shared secret the server
+<a name="line87"></a>     * generated for this association.
+<a name="line88"></a>     *
+<a name="line89"></a>     * @param assoc_type This is the type of association this
+<a name="line90"></a>     * instance represents.  The only valid values of this field at
+<a name="line91"></a>     * this time is 'HMAC-SHA1' and 'HMAC-SHA256', but new types may
+<a name="line92"></a>     * be defined in the future.
+<a name="line93"></a>     *
+<a name="line94"></a>     * @return association An {@link Auth_OpenID_Association}
+<a name="line95"></a>     * instance.
+<a name="line96"></a>     */
+<a name="line97"></a>    static function fromExpiresIn($expires_in, $handle, $secret, $assoc_type)
+<a name="line98"></a>    {
+<a name="line99"></a>        $issued = time();
+<a name="line100"></a>        $lifetime = $expires_in;
+<a name="line101"></a>        return new Auth_OpenID_Association($handle, $secret,
+<a name="line102"></a>                                           $issued, $lifetime, $assoc_type);
+<a name="line103"></a>    }
+<a name="line104"></a>
+<a name="line105"></a>    /**
+<a name="line106"></a>     * This is the standard constructor for creating an association.
+<a name="line107"></a>     * The library should create all of the necessary associations, so
+<a name="line108"></a>     * this constructor is not part of the external API.
+<a name="line109"></a>     *
+<a name="line110"></a>     * @access private
+<a name="line111"></a>     *
+<a name="line112"></a>     * @param string $handle This is the handle the server gave this
+<a name="line113"></a>     * association.
+<a name="line114"></a>     *
+<a name="line115"></a>     * @param string $secret This is the shared secret the server
+<a name="line116"></a>     * generated for this association.
+<a name="line117"></a>     *
+<a name="line118"></a>     * @param integer $issued This is the time this association was
+<a name="line119"></a>     * issued, in seconds since 00:00 GMT, January 1, 1970.  (ie, a
+<a name="line120"></a>     * unix timestamp)
+<a name="line121"></a>     *
+<a name="line122"></a>     * @param integer $lifetime This is the amount of time this
+<a name="line123"></a>     * association is good for, measured in seconds since the
+<a name="line124"></a>     * association was issued.
+<a name="line125"></a>     *
+<a name="line126"></a>     * @param string $assoc_type This is the type of association this
+<a name="line127"></a>     * instance represents.  The only valid values of this field at
+<a name="line128"></a>     * this time is 'HMAC-SHA1' and 'HMAC-SHA256', but new types may
+<a name="line129"></a>     * be defined in the future.
+<a name="line130"></a>     */
+<a name="line131"></a>    function Auth_OpenID_Association(
+<a name="line132"></a>        $handle, $secret, $issued, $lifetime, $assoc_type)
+<a name="line133"></a>    {
+<a name="line134"></a>        if (!in_array($assoc_type,
+<a name="line135"></a>                      Auth_OpenID_getSupportedAssociationTypes(), true)) {
+<a name="line136"></a>            $fmt = 'Unsupported association type (%s)';
+<a name="line137"></a>            trigger_error(sprintf($fmt, $assoc_type), E_USER_ERROR);
+<a name="line138"></a>        }
+<a name="line139"></a>
+<a name="line140"></a>        $this->handle = $handle;
+<a name="line141"></a>        $this->secret = $secret;
+<a name="line142"></a>        $this->issued = $issued;
+<a name="line143"></a>        $this->lifetime = $lifetime;
+<a name="line144"></a>        $this->assoc_type = $assoc_type;
+<a name="line145"></a>    }
+<a name="line146"></a>
+<a name="line147"></a>    /**
+<a name="line148"></a>     * This returns the number of seconds this association is still
+<a name="line149"></a>     * valid for, or 0 if the association is no longer valid.
+<a name="line150"></a>     *
+<a name="line151"></a>     * @return integer $seconds The number of seconds this association
+<a name="line152"></a>     * is still valid for, or 0 if the association is no longer valid.
+<a name="line153"></a>     */
+<a name="line154"></a>    function getExpiresIn($now = null)
+<a name="line155"></a>    {
+<a name="line156"></a>        if ($now == null) {
+<a name="line157"></a>            $now = time();
+<a name="line158"></a>        }
+<a name="line159"></a>
+<a name="line160"></a>        return max(0, $this->issued + $this->lifetime - $now);
+<a name="line161"></a>    }
+<a name="line162"></a>
+<a name="line163"></a>    /**
+<a name="line164"></a>     * This checks to see if two {@link Auth_OpenID_Association}
+<a name="line165"></a>     * instances represent the same association.
+<a name="line166"></a>     *
+<a name="line167"></a>     * @return bool $result true if the two instances represent the
+<a name="line168"></a>     * same association, false otherwise.
+<a name="line169"></a>     */
+<a name="line170"></a>    function equal($other)
+<a name="line171"></a>    {
+<a name="line172"></a>        return ((gettype($this) == gettype($other))
+<a name="line173"></a>                && ($this->handle == $other->handle)
+<a name="line174"></a>                && ($this->secret == $other->secret)
+<a name="line175"></a>                && ($this->issued == $other->issued)
+<a name="line176"></a>                && ($this->lifetime == $other->lifetime)
+<a name="line177"></a>                && ($this->assoc_type == $other->assoc_type));
+<a name="line178"></a>    }
+<a name="line179"></a>
+<a name="line180"></a>    /**
+<a name="line181"></a>     * Convert an association to KV form.
+<a name="line182"></a>     *
+<a name="line183"></a>     * @return string $result String in KV form suitable for
+<a name="line184"></a>     * deserialization by deserialize.
+<a name="line185"></a>     */
+<a name="line186"></a>    function serialize()
+<a name="line187"></a>    {
+<a name="line188"></a>        $data = array(
+<a name="line189"></a>                     'version' => '2',
+<a name="line190"></a>                     'handle' => $this->handle,
+<a name="line191"></a>                     'secret' => base64_encode($this->secret),
+<a name="line192"></a>                     'issued' => strval(intval($this->issued)),
+<a name="line193"></a>                     'lifetime' => strval(intval($this->lifetime)),
+<a name="line194"></a>                     'assoc_type' => $this->assoc_type
+<a name="line195"></a>                     );
+<a name="line196"></a>
+<a name="line197"></a>        assert(array_keys($data) == $this->assoc_keys);
+<a name="line198"></a>
+<a name="line199"></a>        return Auth_OpenID_KVForm::fromArray($data, $strict = true);
+<a name="line200"></a>    }
+<a name="line201"></a>
+<a name="line202"></a>    /**
+<a name="line203"></a>     * Parse an association as stored by serialize().  This is the
+<a name="line204"></a>     * inverse of serialize.
+<a name="line205"></a>     *
+<a name="line206"></a>     * @param string $assoc_s Association as serialized by serialize()
+<a name="line207"></a>     * @return Auth_OpenID_Association $result instance of this class
+<a name="line208"></a>     */
+<a name="line209"></a>    static function deserialize($class_name, $assoc_s)
+<a name="line210"></a>    {
+<a name="line211"></a>        $pairs = Auth_OpenID_KVForm::toArray($assoc_s, $strict = true);
+<a name="line212"></a>        $keys = array();
+<a name="line213"></a>        $values = array();
+<a name="line214"></a>        foreach ($pairs as $key => $value) {
+<a name="line215"></a>            if (is_array($value)) {
+<a name="line216"></a>                list($key, $value) = $value;
+<a name="line217"></a>            }
+<a name="line218"></a>            $keys[] = $key;
+<a name="line219"></a>            $values[] = $value;
+<a name="line220"></a>        }
+<a name="line221"></a>
+<a name="line222"></a>        $class_vars = get_class_vars($class_name);
+<a name="line223"></a>        $class_assoc_keys = $class_vars['assoc_keys'];
+<a name="line224"></a>
+<a name="line225"></a>        sort($keys);
+<a name="line226"></a>        sort($class_assoc_keys);
+<a name="line227"></a>
+<a name="line228"></a>        if ($keys != $class_assoc_keys) {
+<a name="line229"></a>            trigger_error('Unexpected key values: ' . var_export($keys, true),
+<a name="line230"></a>                          E_USER_WARNING);
+<a name="line231"></a>            return null;
+<a name="line232"></a>        }
+<a name="line233"></a>
+<a name="line234"></a>        $version = $pairs['version'];
+<a name="line235"></a>        $handle = $pairs['handle'];
+<a name="line236"></a>        $secret = $pairs['secret'];
+<a name="line237"></a>        $issued = $pairs['issued'];
+<a name="line238"></a>        $lifetime = $pairs['lifetime'];
+<a name="line239"></a>        $assoc_type = $pairs['assoc_type'];
+<a name="line240"></a>
+<a name="line241"></a>        if ($version != '2') {
+<a name="line242"></a>            trigger_error('Unknown version: ' . $version, E_USER_WARNING);
+<a name="line243"></a>            return null;
+<a name="line244"></a>        }
+<a name="line245"></a>
+<a name="line246"></a>        $issued = intval($issued);
+<a name="line247"></a>        $lifetime = intval($lifetime);
+<a name="line248"></a>        $secret = base64_decode($secret);
+<a name="line249"></a>
+<a name="line250"></a>        return new $class_name(
+<a name="line251"></a>            $handle, $secret, $issued, $lifetime, $assoc_type);
+<a name="line252"></a>    }
+<a name="line253"></a>
+<a name="line254"></a>    /**
+<a name="line255"></a>     * Generate a signature for a sequence of (key, value) pairs
+<a name="line256"></a>     *
+<a name="line257"></a>     * @access private
+<a name="line258"></a>     * @param array $pairs The pairs to sign, in order.  This is an
+<a name="line259"></a>     * array of two-tuples.
+<a name="line260"></a>     * @return string $signature The binary signature of this sequence
+<a name="line261"></a>     * of pairs
+<a name="line262"></a>     */
+<a name="line263"></a>    function sign($pairs)
+<a name="line264"></a>    {
+<a name="line265"></a>        $kv = Auth_OpenID_KVForm::fromArray($pairs);
+<a name="line266"></a>
+<a name="line267"></a>        /* Invalid association types should be caught at constructor */
+<a name="line268"></a>        $callback = $this->_macs[$this->assoc_type];
+<a name="line269"></a>
+<a name="line270"></a>        return call_user_func_array($callback, array($this->secret, $kv));
+<a name="line271"></a>    }
+<a name="line272"></a>
+<a name="line273"></a>    /**
+<a name="line274"></a>     * Generate a signature for some fields in a dictionary
+<a name="line275"></a>     *
+<a name="line276"></a>     * @access private
+<a name="line277"></a>     * @param array $fields The fields to sign, in order; this is an
+<a name="line278"></a>     * array of strings.
+<a name="line279"></a>     * @param array $data Dictionary of values to sign (an array of
+<a name="line280"></a>     * string => string pairs).
+<a name="line281"></a>     * @return string $signature The signature, base64 encoded
+<a name="line282"></a>     */
+<a name="line283"></a>    function signMessage($message)
+<a name="line284"></a>    {
+<a name="line285"></a>        if ($message->hasKey(Auth_OpenID_OPENID_NS, 'sig') ||
+<a name="line286"></a>            $message->hasKey(Auth_OpenID_OPENID_NS, 'signed')) {
+<a name="line287"></a>            // Already has a sig
+<a name="line288"></a>            return null;
+<a name="line289"></a>        }
+<a name="line290"></a>
+<a name="line291"></a>        $extant_handle = $message->getArg(Auth_OpenID_OPENID_NS,
+<a name="line292"></a>                                          'assoc_handle');
+<a name="line293"></a>
+<a name="line294"></a>        if ($extant_handle && ($extant_handle != $this->handle)) {
+<a name="line295"></a>            // raise ValueError("Message has a different association handle")
+<a name="line296"></a>            return null;
+<a name="line297"></a>        }
+<a name="line298"></a>
+<a name="line299"></a>        $signed_message = $message;
+<a name="line300"></a>        $signed_message->setArg(Auth_OpenID_OPENID_NS, 'assoc_handle',
+<a name="line301"></a>                                $this->handle);
+<a name="line302"></a>
+<a name="line303"></a>        $message_keys = array_keys($signed_message->toPostArgs());
+<a name="line304"></a>        $signed_list = array();
+<a name="line305"></a>        $signed_prefix = 'openid.';
+<a name="line306"></a>
+<a name="line307"></a>        foreach ($message_keys as $k) {
+<a name="line308"></a>            if (strpos($k, $signed_prefix) === 0) {
+<a name="line309"></a>                $signed_list[] = substr($k, strlen($signed_prefix));
+<a name="line310"></a>            }
+<a name="line311"></a>        }
+<a name="line312"></a>
+<a name="line313"></a>        $signed_list[] = 'signed';
+<a name="line314"></a>        sort($signed_list);
+<a name="line315"></a>
+<a name="line316"></a>        $signed_message->setArg(Auth_OpenID_OPENID_NS, 'signed',
+<a name="line317"></a>                                implode(',', $signed_list));
+<a name="line318"></a>        $sig = $this->getMessageSignature($signed_message);
+<a name="line319"></a>        $signed_message->setArg(Auth_OpenID_OPENID_NS, 'sig', $sig);
+<a name="line320"></a>        return $signed_message;
+<a name="line321"></a>    }
+<a name="line322"></a>
+<a name="line323"></a>    /**
+<a name="line324"></a>     * Given a {@link Auth_OpenID_Message}, return the key/value pairs
+<a name="line325"></a>     * to be signed according to the signed list in the message.  If
+<a name="line326"></a>     * the message lacks a signed list, return null.
+<a name="line327"></a>     *
+<a name="line328"></a>     * @access private
+<a name="line329"></a>     */
+<a name="line330"></a>    function _makePairs($message)
+<a name="line331"></a>    {
+<a name="line332"></a>        $signed = $message->getArg(Auth_OpenID_OPENID_NS, 'signed');
+<a name="line333"></a>        if (!$signed || Auth_OpenID::isFailure($signed)) {
+<a name="line334"></a>            // raise ValueError('Message has no signed list: %s' % (message,))
+<a name="line335"></a>            return null;
+<a name="line336"></a>        }
+<a name="line337"></a>
+<a name="line338"></a>        $signed_list = explode(',', $signed);
+<a name="line339"></a>        $pairs = array();
+<a name="line340"></a>        $data = $message->toPostArgs();
+<a name="line341"></a>        foreach ($signed_list as $field) {
+<a name="line342"></a>            $pairs[] = array($field, Auth_OpenID::arrayGet($data,
+<a name="line343"></a>                                                           'openid.' .
+<a name="line344"></a>                                                           $field, ''));
+<a name="line345"></a>        }
+<a name="line346"></a>        return $pairs;
+<a name="line347"></a>    }
+<a name="line348"></a>
+<a name="line349"></a>    /**
+<a name="line350"></a>     * Given an {@link Auth_OpenID_Message}, return the signature for
+<a name="line351"></a>     * the signed list in the message.
+<a name="line352"></a>     *
+<a name="line353"></a>     * @access private
+<a name="line354"></a>     */
+<a name="line355"></a>    function getMessageSignature($message)
+<a name="line356"></a>    {
+<a name="line357"></a>        $pairs = $this->_makePairs($message);
+<a name="line358"></a>        return base64_encode($this->sign($pairs));
+<a name="line359"></a>    }
+<a name="line360"></a>
+<a name="line361"></a>    /**
+<a name="line362"></a>     * Confirm that the signature of these fields matches the
+<a name="line363"></a>     * signature contained in the data.
+<a name="line364"></a>     *
+<a name="line365"></a>     * @access private
+<a name="line366"></a>     */
+<a name="line367"></a>    function checkMessageSignature($message)
+<a name="line368"></a>    {
+<a name="line369"></a>        $sig = $message->getArg(Auth_OpenID_OPENID_NS,
+<a name="line370"></a>                                'sig');
+<a name="line371"></a>
+<a name="line372"></a>        if (!$sig || Auth_OpenID::isFailure($sig)) {
+<a name="line373"></a>            return false;
+<a name="line374"></a>        }
+<a name="line375"></a>
+<a name="line376"></a>        $calculated_sig = $this->getMessageSignature($message);
+<a name="line377"></a>        return $calculated_sig == $sig;
+<a name="line378"></a>    }
+<a name="line379"></a>}
+<a name="line380"></a>
+<a name="line381"></a>function Auth_OpenID_getSecretSize($assoc_type)
+<a name="line382"></a>{
+<a name="line383"></a>    if ($assoc_type == 'HMAC-SHA1') {
+<a name="line384"></a>        return 20;
+<a name="line385"></a>    } else if ($assoc_type == 'HMAC-SHA256') {
+<a name="line386"></a>        return 32;
+<a name="line387"></a>    } else {
+<a name="line388"></a>        return null;
+<a name="line389"></a>    }
+<a name="line390"></a>}
+<a name="line391"></a>
+<a name="line392"></a>function Auth_OpenID_getAllAssociationTypes()
+<a name="line393"></a>{
+<a name="line394"></a>    return array('HMAC-SHA1', 'HMAC-SHA256');
+<a name="line395"></a>}
+<a name="line396"></a>
+<a name="line397"></a>function Auth_OpenID_getSupportedAssociationTypes()
+<a name="line398"></a>{
+<a name="line399"></a>    $a = array('HMAC-SHA1');
+<a name="line400"></a>
+<a name="line401"></a>    if (Auth_OpenID_HMACSHA256_SUPPORTED) {
+<a name="line402"></a>        $a[] = 'HMAC-SHA256';
+<a name="line403"></a>    }
+<a name="line404"></a>
+<a name="line405"></a>    return $a;
+<a name="line406"></a>}
+<a name="line407"></a>
+<a name="line408"></a>function Auth_OpenID_getSessionTypes($assoc_type)
+<a name="line409"></a>{
+<a name="line410"></a>    $assoc_to_session = array(
+<a name="line411"></a>       'HMAC-SHA1' => array('DH-SHA1', 'no-encryption'));
+<a name="line412"></a>
+<a name="line413"></a>    if (Auth_OpenID_HMACSHA256_SUPPORTED) {
+<a name="line414"></a>        $assoc_to_session['HMAC-SHA256'] =
+<a name="line415"></a>            array('DH-SHA256', 'no-encryption');
+<a name="line416"></a>    }
+<a name="line417"></a>
+<a name="line418"></a>    return Auth_OpenID::arrayGet($assoc_to_session, $assoc_type, array());
+<a name="line419"></a>}
+<a name="line420"></a>
+<a name="line421"></a>function Auth_OpenID_checkSessionType($assoc_type, $session_type)
+<a name="line422"></a>{
+<a name="line423"></a>    if (!in_array($session_type,
+<a name="line424"></a>                  Auth_OpenID_getSessionTypes($assoc_type))) {
+<a name="line425"></a>        return false;
+<a name="line426"></a>    }
+<a name="line427"></a>
+<a name="line428"></a>    return true;
+<a name="line429"></a>}
+<a name="line430"></a>
+<a name="line431"></a>function Auth_OpenID_getDefaultAssociationOrder()
+<a name="line432"></a>{
+<a name="line433"></a>    $order = array();
+<a name="line434"></a>
+<a name="line435"></a>    if (!Auth_OpenID_noMathSupport()) {
+<a name="line436"></a>        $order[] = array('HMAC-SHA1', 'DH-SHA1');
+<a name="line437"></a>
+<a name="line438"></a>        if (Auth_OpenID_HMACSHA256_SUPPORTED) {
+<a name="line439"></a>            $order[] = array('HMAC-SHA256', 'DH-SHA256');
+<a name="line440"></a>        }
+<a name="line441"></a>    }
+<a name="line442"></a>
+<a name="line443"></a>    $order[] = array('HMAC-SHA1', 'no-encryption');
+<a name="line444"></a>
+<a name="line445"></a>    if (Auth_OpenID_HMACSHA256_SUPPORTED) {
+<a name="line446"></a>        $order[] = array('HMAC-SHA256', 'no-encryption');
+<a name="line447"></a>    }
+<a name="line448"></a>
+<a name="line449"></a>    return $order;
+<a name="line450"></a>}
+<a name="line451"></a>
+<a name="line452"></a>function Auth_OpenID_getOnlyEncryptedOrder()
+<a name="line453"></a>{
+<a name="line454"></a>    $result = array();
+<a name="line455"></a>
+<a name="line456"></a>    foreach (Auth_OpenID_getDefaultAssociationOrder() as $pair) {
+<a name="line457"></a>        list($assoc, $session) = $pair;
+<a name="line458"></a>
+<a name="line459"></a>        if ($session != 'no-encryption') {
+<a name="line460"></a>            if (Auth_OpenID_HMACSHA256_SUPPORTED &&
+<a name="line461"></a>                ($assoc == 'HMAC-SHA256')) {
+<a name="line462"></a>                $result[] = $pair;
+<a name="line463"></a>            } else if ($assoc != 'HMAC-SHA256') {
+<a name="line464"></a>                $result[] = $pair;
+<a name="line465"></a>            }
+<a name="line466"></a>        }
+<a name="line467"></a>    }
+<a name="line468"></a>
+<a name="line469"></a>    return $result;
+<a name="line470"></a>}
+<a name="line471"></a>
+<a name="line472"></a>function Auth_OpenID_getDefaultNegotiator()
+<a name="line473"></a>{
+<a name="line474"></a>    return new Auth_OpenID_SessionNegotiator(
+<a name="line475"></a>                 Auth_OpenID_getDefaultAssociationOrder());
+<a name="line476"></a>}
+<a name="line477"></a>
+<a name="line478"></a>function Auth_OpenID_getEncryptedNegotiator()
+<a name="line479"></a>{
+<a name="line480"></a>    return new Auth_OpenID_SessionNegotiator(
+<a name="line481"></a>                 Auth_OpenID_getOnlyEncryptedOrder());
+<a name="line482"></a>}
+<a name="line483"></a>
+<a name="line484"></a>/**
+<a name="line485"></a> * A session negotiator controls the allowed and preferred association
+<a name="line486"></a> * types and association session types. Both the {@link
+<a name="line487"></a> * Auth_OpenID_Consumer} and {@link Auth_OpenID_Server} use
+<a name="line488"></a> * negotiators when creating associations.
+<a name="line489"></a> *
+<a name="line490"></a> * You can create and use negotiators if you:
+<a name="line491"></a>
+<a name="line492"></a> * - Do not want to do Diffie-Hellman key exchange because you use
+<a name="line493"></a> * transport-layer encryption (e.g. SSL)
+<a name="line494"></a> *
+<a name="line495"></a> * - Want to use only SHA-256 associations
+<a name="line496"></a> *
+<a name="line497"></a> * - Do not want to support plain-text associations over a non-secure
+<a name="line498"></a> * channel
+<a name="line499"></a> *
+<a name="line500"></a> * It is up to you to set a policy for what kinds of associations to
+<a name="line501"></a> * accept. By default, the library will make any kind of association
+<a name="line502"></a> * that is allowed in the OpenID 2.0 specification.
+<a name="line503"></a> *
+<a name="line504"></a> * Use of negotiators in the library
+<a name="line505"></a> * =================================
+<a name="line506"></a> *
+<a name="line507"></a> * When a consumer makes an association request, it calls {@link
+<a name="line508"></a> * getAllowedType} to get the preferred association type and
+<a name="line509"></a> * association session type.
+<a name="line510"></a> *
+<a name="line511"></a> * The server gets a request for a particular association/session type
+<a name="line512"></a> * and calls {@link isAllowed} to determine if it should create an
+<a name="line513"></a> * association. If it is supported, negotiation is complete. If it is
+<a name="line514"></a> * not, the server calls {@link getAllowedType} to get an allowed
+<a name="line515"></a> * association type to return to the consumer.
+<a name="line516"></a> *
+<a name="line517"></a> * If the consumer gets an error response indicating that the
+<a name="line518"></a> * requested association/session type is not supported by the server
+<a name="line519"></a> * that contains an assocation/session type to try, it calls {@link
+<a name="line520"></a> * isAllowed} to determine if it should try again with the given
+<a name="line521"></a> * combination of association/session type.
+<a name="line522"></a> *
+<a name="line523"></a> * @package OpenID
+<a name="line524"></a> */
+<a name="line525"></a>class Auth_OpenID_SessionNegotiator {
+<a name="line526"></a>    function Auth_OpenID_SessionNegotiator($allowed_types)
+<a name="line527"></a>    {
+<a name="line528"></a>        $this->allowed_types = array();
+<a name="line529"></a>        $this->setAllowedTypes($allowed_types);
+<a name="line530"></a>    }
+<a name="line531"></a>
+<a name="line532"></a>    /**
+<a name="line533"></a>     * Set the allowed association types, checking to make sure each
+<a name="line534"></a>     * combination is valid.
+<a name="line535"></a>     *
+<a name="line536"></a>     * @access private
+<a name="line537"></a>     */
+<a name="line538"></a>    function setAllowedTypes($allowed_types)
+<a name="line539"></a>    {
+<a name="line540"></a>        foreach ($allowed_types as $pair) {
+<a name="line541"></a>            list($assoc_type, $session_type) = $pair;
+<a name="line542"></a>            if (!Auth_OpenID_checkSessionType($assoc_type, $session_type)) {
+<a name="line543"></a>                return false;
+<a name="line544"></a>            }
+<a name="line545"></a>        }
+<a name="line546"></a>
+<a name="line547"></a>        $this->allowed_types = $allowed_types;
+<a name="line548"></a>        return true;
+<a name="line549"></a>    }
+<a name="line550"></a>
+<a name="line551"></a>    /**
+<a name="line552"></a>     * Add an association type and session type to the allowed types
+<a name="line553"></a>     * list. The assocation/session pairs are tried in the order that
+<a name="line554"></a>     * they are added.
+<a name="line555"></a>     *
+<a name="line556"></a>     * @access private
+<a name="line557"></a>     */
+<a name="line558"></a>    function addAllowedType($assoc_type, $session_type = null)
+<a name="line559"></a>    {
+<a name="line560"></a>        if ($this->allowed_types === null) {
+<a name="line561"></a>            $this->allowed_types = array();
+<a name="line562"></a>        }
+<a name="line563"></a>
+<a name="line564"></a>        if ($session_type === null) {
+<a name="line565"></a>            $available = Auth_OpenID_getSessionTypes($assoc_type);
+<a name="line566"></a>
+<a name="line567"></a>            if (!$available) {
+<a name="line568"></a>                return false;
+<a name="line569"></a>            }
+<a name="line570"></a>
+<a name="line571"></a>            foreach ($available as $session_type) {
+<a name="line572"></a>                $this->addAllowedType($assoc_type, $session_type);
+<a name="line573"></a>            }
+<a name="line574"></a>        } else {
+<a name="line575"></a>            if (Auth_OpenID_checkSessionType($assoc_type, $session_type)) {
+<a name="line576"></a>                $this->allowed_types[] = array($assoc_type, $session_type);
+<a name="line577"></a>            } else {
+<a name="line578"></a>                return false;
+<a name="line579"></a>            }
+<a name="line580"></a>        }
+<a name="line581"></a>
+<a name="line582"></a>        return true;
+<a name="line583"></a>    }
+<a name="line584"></a>
+<a name="line585"></a>    // Is this combination of association type and session type allowed?
+<a name="line586"></a>    function isAllowed($assoc_type, $session_type)
+<a name="line587"></a>    {
+<a name="line588"></a>        $assoc_good = in_array(array($assoc_type, $session_type),
+<a name="line589"></a>                               $this->allowed_types);
+<a name="line590"></a>
+<a name="line591"></a>        $matches = in_array($session_type,
+<a name="line592"></a>                            Auth_OpenID_getSessionTypes($assoc_type));
+<a name="line593"></a>
+<a name="line594"></a>        return ($assoc_good && $matches);
+<a name="line595"></a>    }
+<a name="line596"></a>
+<a name="line597"></a>    /**
+<a name="line598"></a>     * Get a pair of assocation type and session type that are
+<a name="line599"></a>     * supported.
+<a name="line600"></a>     */
+<a name="line601"></a>    function getAllowedType()
+<a name="line602"></a>    {
+<a name="line603"></a>        if (!$this->allowed_types) {
+<a name="line604"></a>            return array(null, null);
+<a name="line605"></a>        }
+<a name="line606"></a>
+<a name="line607"></a>        return $this->allowed_types[0];
+<a name="line608"></a>    }
+<a name="line609"></a>}
+<a name="line610"></a>
+<a name="line611"></a></pre>
+<div class="header">
+<h1>GiftFlow API</h1>
+<ul>
+<li><a href="../../../../../overview-summary.html">Overview</a></li>
+<li>Package</li><li>Class</li><li>Tree</li><li><a href="../../../../../overview-files.html">Files</a></li>
+<li><a href="../../../../../deprecated-list.html">Deprecated</a></li>
+<li><a href="../../../../../index-all.html">Index</a></li>
+</ul>
+</div>
+
+<div class="small_links">
+<a href="../../../../../index.html" target="_top">Frames</a>
+<a href="../../../../../source/application/libraries/auth/openid/association.php.html" target="_top">No frames</a>
+</div>
+<hr>
+
+<p id="footer">This document was generated by <a href="http://peej.github.com/phpdoctor/">PHPDoctor: The PHP Documentation Creator</a></p>
+
+</body>
+
+</html>

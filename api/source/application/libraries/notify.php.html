@@ -6,7 +6,7 @@
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 
 <meta name="generator" content="PHPDoctor 2RC4 (http://peej.github.com/phpdoctor/)">
-<meta name="when" content="Tue, 29 Jun 2010 21:10:10 +0000">
+<meta name="when" content="Sat, 10 Jul 2010 18:10:56 +0000">
 
 <link rel="stylesheet" type="text/css" href="../../../stylesheet.css">
 <link rel="start" href="../../../overview-summary.html">
@@ -47,78 +47,160 @@
 <a name="line10"></a>
 <a name="line11"></a>class Notify
 <a name="line12"></a>{
-<a name="line13"></a>      public $from_email;
-<a name="line14"></a>      public $from_name;
-<a name="line15"></a>      public $to;
-<a name="line16"></a>      public $reply_to_email;
-<a name="line17"></a>      public $reply_to_name;
-<a name="line18"></a>      public $cc;
-<a name="line19"></a>      public $bcc;
-<a name="line20"></a>      public $subject;
-<a name="line21"></a>      public $parseables;
-<a name="line22"></a>      public $template;
-<a name="line23"></a>      public $l_delimiter;
-<a name="line24"></a>      public $r_delimiter;
-<a name="line25"></a>      
-<a name="line26"></a>      protected $CI;
+<a name="line13"></a>      public $alert_message;
+<a name="line14"></a>      public $alert_subject;
+<a name="line15"></a>      public $alert_subject_prefix = "[GiftFlow] ";
+<a name="line16"></a>      public $left_delimiter = "{{";
+<a name="line17"></a>      public $right_delimiter = "}}";
+<a name="line18"></a>      
+<a name="line19"></a>      protected $CI;
+<a name="line20"></a>      
+<a name="line21"></a>      public function __construct($config = array())
+<a name="line22"></a>      {
+<a name="line23"></a>            $this->CI =& get_instance();
+<a name="line24"></a>            $this->CI->load->library('util');
+<a name="line25"></a>            $this->CI->load->library('email');
+<a name="line26"></a>      }
 <a name="line27"></a>      
-<a name="line28"></a>      public function __construct($config = array())
-<a name="line29"></a>      {
-<a name="line30"></a>            $this->from_email = $config["from_email"];
-<a name="line31"></a>            $this->from_name  = $config["from_name"];
-<a name="line32"></a>            $this->to  = $config["to"];
-<a name="line33"></a>            $this->reply_to_email = $config["reply_to_email"];
-<a name="line34"></a>            $this->reply_to_name  = $config["reply_to_name"];
-<a name="line35"></a>            $this->cc  = $config["cc"];
-<a name="line36"></a>            $this->bcc  = $config["bcc"];
-<a name="line37"></a>            $this->subject = $config["subject"];
-<a name="line38"></a>            $this->parseables = $config["parseables"];
-<a name="line39"></a>            $this->template   = $config["template"];
-<a name="line40"></a>            $this->l_delimiter  = ($config["l_del"] == "") ? "{{" : $config["l_del"];
-<a name="line41"></a>            $this->r_delimiter   = ($config["r_del"] == "") ? "}}" : $config["r_del"];
-<a name="line42"></a>            
-<a name="line43"></a>            $this->CI =& get_instance();
-<a name="line44"></a>            $this->CI->load->library('util');
-<a name="line45"></a>            $this->CI->load->library('email');
-<a name="line46"></a>      }
-<a name="line47"></a>      
-<a name="line48"></a>      function send_email()
-<a name="line49"></a>      {
-<a name="line50"></a>            $this->CI->email->from($this->from_email, $this->from_name);
-<a name="line51"></a>            $this->CI->email->to($this->to);
+<a name="line28"></a>      /**
+<a name="line29"></a>      *	Send Email
+<a name="line30"></a>      */
+<a name="line31"></a>      function email( $config = array() )
+<a name="line32"></a>      {            
+<a name="line33"></a>            // SMTP Information
+<a name="line34"></a>            $config['protocol']  = 'smtp';
+<a name="line35"></a>		$config['newline'] = '\r\n';
+<a name="line36"></a>		$config['crlf'] = '\r\n';
+<a name="line37"></a>		$config['smtp_host'] = 'mail.giftflow.org';
+<a name="line38"></a>		$config['smtp_user'] = 'no-reply@giftflow.org';
+<a name="line39"></a>		$config['smtp_pass'] = 'mon3yis3vil';
+<a name="line40"></a>		$config['smtp_port'] = '26';
+<a name="line41"></a>		$config['mailtype']  = 'text';
+<a name="line42"></a>		$config['charset']   = 'utf-8';
+<a name="line43"></a>		
+<a name="line44"></a>		$this->CI->email->initialize($config);
+<a name="line45"></a>		
+<a name="line46"></a>            $this->CI->email->from( $config['from_email'], $config['from_name'] );
+<a name="line47"></a>            $this->CI->email->to( $config['to'] );
+<a name="line48"></a>            
+<a name="line49"></a>            
+<a name="line50"></a>            if ($config['reply_to_email'] != "")
+<a name="line51"></a>                  $this->CI->email->reply_to($config['reply_to_email'], $config['reply_to_name']);
 <a name="line52"></a>            
-<a name="line53"></a>            if ($this->reply_to_email != "")
-<a name="line54"></a>                  $this->CI->email->reply_to($this->reply_to_email, $this->reply_to_name);
+<a name="line53"></a>            if ( !empty($config['cc'])
+<a name="line54"></a>                  $this->CI->email->cc( $config['cc'] );
 <a name="line55"></a>            
-<a name="line56"></a>            if ($this->cc != "")
-<a name="line57"></a>                  $this->CI->email->cc($this->cc);
+<a name="line56"></a>            if ($config['bcc'] != "")
+<a name="line57"></a>                  $this->CI->email->bcc( $config['bcc'] );
 <a name="line58"></a>            
-<a name="line59"></a>            if ($this->bcc != "")
-<a name="line60"></a>                  $this->CI->email->bcc($this->bcc);
+<a name="line59"></a>            $this->CI->email->subject( $this->alert_subject_prefix . $config['subject']);
+<a name="line60"></a>            $this->CI->email->message( $config['message'] );
 <a name="line61"></a>            
-<a name="line62"></a>            $this->CI->email->subject($this->subject);
-<a name="line63"></a>            $this->CI->email->message($this->template_parser());
-<a name="line64"></a>            
-<a name="line65"></a>            if (!$this->CI->email->send())
-<a name="line66"></a>            {
-<a name="line67"></a>                  return TRUE;
-<a name="line68"></a>            }
-<a name="line69"></a>            
-<a name="line70"></a>            return FALSE;
-<a name="line71"></a>      }
-<a name="line72"></a>      
-<a name="line73"></a>      function template_parser()
-<a name="line74"></a>      {
-<a name="line75"></a>            foreach ($this->parseables as $key => $val)
-<a name="line76"></a>            {
-<a name="line77"></a>                  $find_arr[]    = $this->l_delimiter . $key . $this->r_delimiter;
-<a name="line78"></a>                  $replace_arr[] = htmlentities($val);
-<a name="line79"></a>            }
-<a name="line80"></a>            
-<a name="line81"></a>            return str_replace($find_arr, $replace_arr, $this->template);
-<a name="line82"></a>      }
-<a name="line83"></a>}
-<a name="line84"></a></pre>
+<a name="line62"></a>            if (!$this->CI->email->send())
+<a name="line63"></a>            {
+<a name="line64"></a>                  return TRUE;
+<a name="line65"></a>            }
+<a name="line66"></a>            return FALSE;
+<a name="line67"></a>      }
+<a name="line68"></a>      
+<a name="line69"></a>      function send_alert()
+<a name="line70"></a>      {
+<a name="line71"></a>		$config["subject"] = $this->alert_subject;
+<a name="line72"></a>		$config['message'] = $this->alert_message;
+<a name="line73"></a>		$config["from_email"] = 'no-reply@giftflow.org';
+<a name="line74"></a>		$config["from_name"] = 'GiftFlow';
+<a name="line75"></a>		$config["to"] = $data->U->email;
+<a name="line76"></a>		$config["reply_to_email"] = '';
+<a name="line77"></a>		$config["reply_to_name"] = '';
+<a name="line78"></a>		$config["cc"] = '';
+<a name="line79"></a>		$config["bcc"] = '';
+<a name="line80"></a>		$this->email( $config );
+<a name="line81"></a>      }
+<a name="line82"></a>      
+<a name="line83"></a>      /** 
+<a name="line84"></a>      *	Parse templates
+<a name="line85"></a>      *	@param string $template_name
+<a name="line86"></a>      *	@param array $parseables
+<a name="line87"></a>      */
+<a name="line88"></a>      function template_parser( $template_name, $parseables = NULL )
+<a name="line89"></a>      {
+<a name="line90"></a>      	// Load template
+<a name="line91"></a>      	$T = new Term();
+<a name="line92"></a>		$T->get_email_template( $template_name );
+<a name="line93"></a>		
+<a name="line94"></a>		// Parse template
+<a name="line95"></a>		if( !empty($parseables) && is_array( $parseables ) )
+<a name="line96"></a>		{
+<a name="line97"></a>			foreach ($parseables as $key => $val)
+<a name="line98"></a>			{
+<a name="line99"></a>				$find_arr[]    = $this->left_delimiter . $key . $this->right_delimiter;
+<a name="line100"></a>				$replace_arr[] = htmlentities($val);
+<a name="line101"></a>			}
+<a name="line102"></a>            }
+<a name="line103"></a>            
+<a name="line104"></a>            // Save subject and message
+<a name="line105"></a>            $this->alert_message = str_replace($find_arr, $replace_arr, $T->body);
+<a name="line106"></a>            $this->alert_subject = $T->subject;
+<a name="line107"></a>            return $this;
+<a name="line108"></a>      }
+<a name="line109"></a>	
+<a name="line110"></a>	/**
+<a name="line111"></a>	*	Sends alert when new users register
+<a name="line112"></a>	*	@param array $params
+<a name="line113"></a>	*	@param array $data
+<a name="line114"></a>	*/
+<a name="line115"></a>	function alert_user_registration_manual( $params, $data )
+<a name="line116"></a>	{
+<a name="line117"></a>		// Normally, here we would check to see if user has signed up to receive notifications
+<a name="line118"></a>      	// of this type. if they have, continue. If not, return false.
+<a name="line119"></a>      	
+<a name="line120"></a>      	// In this case, though, notification emails are mandatory.
+<a name="line121"></a>
+<a name="line122"></a>      	// parse hook data into email template
+<a name="line123"></a>		$parseables = array(	
+<a name="line124"></a>			'user_email' => $data->U->email, 
+<a name="line125"></a>			'activation_link' => site_url('member/activate/'.$data->U->activation_code)
+<a name="line126"></a>		);
+<a name="line127"></a>		$template_name = 'Email Confirmation';
+<a name="line128"></a>      
+<a name="line129"></a>      	// send email
+<a name="line130"></a>		$this->send_alert( $template_name, $parseables );
+<a name="line131"></a>	}
+<a name="line132"></a>	
+<a name="line133"></a>	 /**
+<a name="line134"></a>      *	More efficient way of routing alert callbacks. Currently will not work since
+<a name="line135"></a>      *	the hook doesn't easily pass parameters.
+<a name="line136"></a>      
+<a name="line137"></a>      function alert( $hook, $data )
+<a name="line138"></a>      {
+<a name="line139"></a>      
+<a name="line140"></a>      	// TODO: Check to see if user has signed up to receive notifications
+<a name="line141"></a>      	// of this type. if they have, continue. If not, return false.
+<a name="line142"></a>      
+<a name="line143"></a>		// Begin Routing
+<a name="line144"></a>		$method = "_alert_".$hook;
+<a name="line145"></a>		
+<a name="line146"></a>		// If this auto-routed function exists, execute it
+<a name="line147"></a>		if( method_exists( __CLASS__, $method ) )
+<a name="line148"></a>		{
+<a name="line149"></a>			$this->$method( $data );
+<a name="line150"></a>		}
+<a name="line151"></a>		
+<a name="line152"></a>		// If not, return false
+<a name="line153"></a>		else
+<a name="line154"></a>		{
+<a name="line155"></a>			return false;
+<a name="line156"></a>		}
+<a name="line157"></a>      }
+<a name="line158"></a>      
+<a name="line159"></a>      function _alert_user_registration_manual( $data )
+<a name="line160"></a>      {
+<a name="line161"></a>      	// parse alert here
+<a name="line162"></a>      }
+<a name="line163"></a>	*/
+<a name="line164"></a>	
+<a name="line165"></a>}
+<a name="line166"></a></pre>
 <div class="header">
 <h1>GiftFlow API</h1>
 <ul>

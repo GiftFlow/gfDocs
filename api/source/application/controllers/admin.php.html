@@ -6,7 +6,7 @@
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 
 <meta name="generator" content="PHPDoctor 2RC4 (http://peej.github.com/phpdoctor/)">
-<meta name="when" content="Tue, 29 Jun 2010 21:10:10 +0000">
+<meta name="when" content="Sat, 10 Jul 2010 18:10:56 +0000">
 
 <link rel="stylesheet" type="text/css" href="../../../stylesheet.css">
 <link rel="start" href="../../../overview-summary.html">
@@ -163,90 +163,94 @@
 <a name="line126"></a>		// Parse $_POST array
 <a name="line127"></a>		$template_id = $_POST['template_id'];
 <a name="line128"></a>		$template_name = $_POST['template_name'];
-<a name="line129"></a>		$template_body = $_POST['template_body'];
-<a name="line130"></a>		
-<a name="line131"></a>		// New alert template object
-<a name="line132"></a>		$template = new Term($template_id);
-<a name="line133"></a>		$template->where('id', $template_id)->update('name', $template_name);
-<a name="line134"></a>		$template->where('id', $template_id)->update('body', $template_body);
-<a name="line135"></a>	}
-<a name="line136"></a>
-<a name="line137"></a>	function add_alert_template()
-<a name="line138"></a>	{
-<a name="line139"></a>		// Parse $_POST array
-<a name="line140"></a>		$template_name = $_POST['template_name'];
-<a name="line141"></a>		$template_body = $_POST['template_body'];
-<a name="line142"></a>
-<a name="line143"></a>		// New alert template object
-<a name="line144"></a>		$template = new Term();
-<a name="line145"></a>		$template->name = $template_name;
-<a name="line146"></a>		$template->body = $template_body;
-<a name="line147"></a>		$template->save();
-<a name="line148"></a>	}
-<a name="line149"></a>
-<a name="line150"></a>	function toggleUserDisable($userId) {
-<a name="line151"></a>		$U = new User();
-<a name="line152"></a>		$U->where('id', $userId)->get();
+<a name="line129"></a>		$template_subject = $_POST['template_subject'];
+<a name="line130"></a>		$template_body = $_POST['template_body'];
+<a name="line131"></a>		
+<a name="line132"></a>		// New alert template object
+<a name="line133"></a>		$template = new Term($template_id);
+<a name="line134"></a>		$template->where('id', $template_id)->update('name', $template_name);
+<a name="line135"></a>		$template->where('id', $template_id)->update('subject', $template_subject);
+<a name="line136"></a>		$template->where('id', $template_id)->update('body', $template_body);
+<a name="line137"></a>	}
+<a name="line138"></a>
+<a name="line139"></a>	function add_alert_template()
+<a name="line140"></a>	{
+<a name="line141"></a>		// Parse $_POST array
+<a name="line142"></a>		$template_name = $_POST['template_name'];
+<a name="line143"></a>		$template_body = $_POST['template_body'];
+<a name="line144"></a>		$template_subject = $_POST['template_subject'];
+<a name="line145"></a>
+<a name="line146"></a>		// New alert template object
+<a name="line147"></a>		$template = new Term();
+<a name="line148"></a>		$template->name = $template_name;
+<a name="line149"></a>		$template->body = $template_body;
+<a name="line150"></a>		$template->subject = $template_subject;
+<a name="line151"></a>		$template->save();
+<a name="line152"></a>	}
 <a name="line153"></a>
-<a name="line154"></a>		if ($U->status == "disabled")
-<a name="line155"></a>			$U->where('id', $userId)->update('status', 'active');
-<a name="line156"></a>		else
-<a name="line157"></a>			$U->where('id', $userId)->update('status', 'disabled');
-<a name="line158"></a>	}
-<a name="line159"></a>
-<a name="line160"></a>	function deleteTag($tagId) {
-<a name="line161"></a>		$T = new Tag($tagId);
-<a name="line162"></a>		$T->delete();
-<a name="line163"></a>		// TODO: check to see if the delete worked and then return a true/false confirmation
-<a name="line164"></a>	}
-<a name="line165"></a>
-<a name="line166"></a>	function renameTag($tagId, $renameTo) {
-<a name="line167"></a>		$T = new Tag();
-<a name="line168"></a>		$T->where('id', $tagId)->update('name', $renameTo);
-<a name="line169"></a>	}
-<a name="line170"></a>
-<a name="line171"></a>	function mergeTag($tagId, $mergeToName) {
-<a name="line172"></a>		$Ta = new Tag($tagId);
-<a name="line173"></a>		$Tb = new Tag();
-<a name="line174"></a>		$Tb->where('name', $mergeToName)->get();
-<a name="line175"></a>		if (count($Tb->all) == 0)
-<a name="line176"></a>			return;
-<a name="line177"></a>
-<a name="line178"></a>		// find all goods that use the tag
-<a name="line179"></a>		$G = new Good();
-<a name="line180"></a>		$G->where_related_tag($Ta)->get();
-<a name="line181"></a>		echo count($G->all);
-<a name="line182"></a>
-<a name="line183"></a>		foreach ($G as $good) {
-<a name="line184"></a>			$good->save($Tb);	// add the new tag to the good
-<a name="line185"></a>			$good->delete($Ta);	// remove the old tag from the good
-<a name="line186"></a>		}
-<a name="line187"></a>
-<a name="line188"></a>		// if the old tag is no longer being used, remove the tag from the database
-<a name="line189"></a>		$G = new Good();
-<a name="line190"></a>		$G->where_related_tag($Ta)->get();
+<a name="line154"></a>	function toggleUserDisable($userId) {
+<a name="line155"></a>		$U = new User();
+<a name="line156"></a>		$U->where('id', $userId)->get();
+<a name="line157"></a>
+<a name="line158"></a>		if ($U->status == "disabled")
+<a name="line159"></a>			$U->where('id', $userId)->update('status', 'active');
+<a name="line160"></a>		else
+<a name="line161"></a>			$U->where('id', $userId)->update('status', 'disabled');
+<a name="line162"></a>	}
+<a name="line163"></a>
+<a name="line164"></a>	function deleteTag($tagId) {
+<a name="line165"></a>		$T = new Tag($tagId);
+<a name="line166"></a>		$T->delete();
+<a name="line167"></a>		// TODO: check to see if the delete worked and then return a true/false confirmation
+<a name="line168"></a>	}
+<a name="line169"></a>
+<a name="line170"></a>	function renameTag($tagId, $renameTo) {
+<a name="line171"></a>		$T = new Tag();
+<a name="line172"></a>		$T->where('id', $tagId)->update('name', $renameTo);
+<a name="line173"></a>	}
+<a name="line174"></a>
+<a name="line175"></a>	function mergeTag($tagId, $mergeToName) {
+<a name="line176"></a>		$Ta = new Tag($tagId);
+<a name="line177"></a>		$Tb = new Tag();
+<a name="line178"></a>		$Tb->where('name', $mergeToName)->get();
+<a name="line179"></a>		if (count($Tb->all) == 0)
+<a name="line180"></a>			return;
+<a name="line181"></a>
+<a name="line182"></a>		// find all goods that use the tag
+<a name="line183"></a>		$G = new Good();
+<a name="line184"></a>		$G->where_related_tag($Ta)->get();
+<a name="line185"></a>		echo count($G->all);
+<a name="line186"></a>
+<a name="line187"></a>		foreach ($G as $good) {
+<a name="line188"></a>			$good->save($Tb);	// add the new tag to the good
+<a name="line189"></a>			$good->delete($Ta);	// remove the old tag from the good
+<a name="line190"></a>		}
 <a name="line191"></a>
-<a name="line192"></a>		// TODO: handle this with foreign keys and cascading deletes
-<a name="line193"></a>		if (count($G->all) == 0)
-<a name="line194"></a>			$Ta->delete();
-<a name="line195"></a>	}
-<a name="line196"></a>
-<a name="line197"></a>	function tagSelectList(){
-<a name="line198"></a>		$T = new Tag();
-<a name="line199"></a>
-<a name="line200"></a>		$T->order_by('name', 'asc')->get();
-<a name="line201"></a>		$tags = $T->all;
-<a name="line202"></a>		$output = "";
-<a name="line203"></a>		foreach($tags as $key=>$val) {
-<a name="line204"></a>			$output .= "<option id=$val->id>$val->name</option>\n";
-<a name="line205"></a>		}
-<a name="line206"></a>		echo $output;
-<a name="line207"></a>	}
-<a name="line208"></a>}
-<a name="line209"></a>
-<a name="line210"></a>/* End of file member.php */
-<a name="line211"></a>/* Location: ./system/application/controllers/member.php */
-<a name="line212"></a></pre>
+<a name="line192"></a>		// if the old tag is no longer being used, remove the tag from the database
+<a name="line193"></a>		$G = new Good();
+<a name="line194"></a>		$G->where_related_tag($Ta)->get();
+<a name="line195"></a>
+<a name="line196"></a>		// TODO: handle this with foreign keys and cascading deletes
+<a name="line197"></a>		if (count($G->all) == 0)
+<a name="line198"></a>			$Ta->delete();
+<a name="line199"></a>	}
+<a name="line200"></a>
+<a name="line201"></a>	function tagSelectList(){
+<a name="line202"></a>		$T = new Tag();
+<a name="line203"></a>
+<a name="line204"></a>		$T->order_by('name', 'asc')->get();
+<a name="line205"></a>		$tags = $T->all;
+<a name="line206"></a>		$output = "";
+<a name="line207"></a>		foreach($tags as $key=>$val) {
+<a name="line208"></a>			$output .= "<option id=$val->id>$val->name</option>\n";
+<a name="line209"></a>		}
+<a name="line210"></a>		echo $output;
+<a name="line211"></a>	}
+<a name="line212"></a>}
+<a name="line213"></a>
+<a name="line214"></a>/* End of file member.php */
+<a name="line215"></a>/* Location: ./system/application/controllers/member.php */
+<a name="line216"></a></pre>
 <div class="header">
 <h1>GiftFlow API</h1>
 <ul>
