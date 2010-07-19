@@ -6,7 +6,7 @@
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 
 <meta name="generator" content="PHPDoctor 2RC4 (http://peej.github.com/phpdoctor/)">
-<meta name="when" content="Sat, 10 Jul 2010 18:10:56 +0000">
+<meta name="when" content="Mon, 19 Jul 2010 17:13:58 +0000">
 
 <link rel="stylesheet" type="text/css" href="../../../stylesheet.css">
 <link rel="start" href="../../../overview-summary.html">
@@ -72,11 +72,12 @@
 <a name="line35"></a>		$T->where('type', 'alert_template');
 <a name="line36"></a>		$T->where('language', $language);
 <a name="line37"></a>		$T->where('name', $name);
-<a name="line38"></a>		return $T;
-<a name="line39"></a>	}
-<a name="line40"></a>}
-<a name="line41"></a>?>
-<a name="line42"></a></pre>
+<a name="line38"></a>		$T->get();
+<a name="line39"></a>		return $T;
+<a name="line40"></a>	}
+<a name="line41"></a>}
+<a name="line42"></a>?>
+<a name="line43"></a></pre>
 <div class="header">
 <h1>GiftFlow API</h1>
 <ul>

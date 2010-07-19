@@ -6,7 +6,7 @@
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 
 <meta name="generator" content="PHPDoctor 2RC4 (http://peej.github.com/phpdoctor/)">
-<meta name="when" content="Sat, 10 Jul 2010 18:10:56 +0000">
+<meta name="when" content="Mon, 19 Jul 2010 17:13:57 +0000">
 
 <link rel="stylesheet" type="text/css" href="../../../stylesheet.css">
 <link rel="start" href="../../../overview-summary.html">
@@ -69,11 +69,11 @@
 <a name="line32"></a>	{
 <a name="line33"></a>		$this->data['title'] = "Your Dashboard";
 <a name="line34"></a>		$this->load->library('finder');
-<a name="line35"></a>		$this->load->library('giftflow');
+<a name="line35"></a>		$this->data['googlemaps'] = TRUE;
 <a name="line36"></a>		
 <a name="line37"></a>		$U = new User($this->data['logged_in_user_id']);
-<a name="line38"></a>		
-<a name="line39"></a>		$this->data['follow_feed'] = $this->finder->follower_search();
+<a name="line38"></a>		$this->finder->format = 'object';
+<a name="line39"></a>		$this->data['giftflow'] = $this->finder->giftflow();
 <a name="line40"></a>		
 <a name="line41"></a>		//$this->load->library('facebook');
 <a name="line42"></a>		//if(!empty($U->facebook_id)) $this->data['friends'] = $this->facebook->friends( $U->id );

@@ -6,7 +6,7 @@
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 
 <meta name="generator" content="PHPDoctor 2RC4 (http://peej.github.com/phpdoctor/)">
-<meta name="when" content="Sat, 10 Jul 2010 18:10:56 +0000">
+<meta name="when" content="Mon, 19 Jul 2010 17:13:57 +0000">
 
 <link rel="stylesheet" type="text/css" href="../../../stylesheet.css">
 <link rel="start" href="../../../overview-summary.html">
@@ -47,410 +47,412 @@
 <a name="line10"></a>		parent::Controller();
 <a name="line11"></a>		$this->util->config();
 <a name="line12"></a>		$this->data = $this->util->parse_globals();
-<a name="line13"></a>	}
+<a name="line13"></a>		$this->hooks =& load_class('Hooks');
 <a name="line14"></a>
-<a name="line15"></a>	function index()
-<a name="line16"></a>	{
-<a name="line17"></a>		// redirect to profile
-<a name="line18"></a>		redirect('profile');
-<a name="line19"></a>	}
-<a name="line20"></a>	
-<a name="line21"></a>	/**
-<a name="line22"></a>	*	Login page
-<a name="line23"></a>	*	@param string $redirect
-<a name="line24"></a>	*/
-<a name="line25"></a>	function login( $redirect = FALSE )
-<a name="line26"></a>	{
-<a name="line27"></a>		// If form data POST is here, process login
-<a name="line28"></a>		if(!empty($_POST))
-<a name="line29"></a>		{
-<a name="line30"></a>			$this->U = $this->auth->login();
-<a name="line31"></a>			
-<a name="line32"></a>			// Check for errors
+<a name="line15"></a>	}
+<a name="line16"></a>
+<a name="line17"></a>	function index()
+<a name="line18"></a>	{
+<a name="line19"></a>		// redirect to profile
+<a name="line20"></a>		redirect('profile');
+<a name="line21"></a>	}
+<a name="line22"></a>	
+<a name="line23"></a>	/**
+<a name="line24"></a>	*	Login page
+<a name="line25"></a>	*	@param string $redirect
+<a name="line26"></a>	*/
+<a name="line27"></a>	function login( $redirect = FALSE )
+<a name="line28"></a>	{
+<a name="line29"></a>		// If form data POST is here, process login
+<a name="line30"></a>		if(!empty($_POST))
+<a name="line31"></a>		{
+<a name="line32"></a>			$this->U = $this->auth->login();
 <a name="line33"></a>			
-<a name="line34"></a>			// If any errors, display error message
-<a name="line35"></a>			if(count($this->U->error->all) > 0)
-<a name="line36"></a>			{
-<a name="line37"></a>				$this->session->set_flashdata('error', $this->U->error->string);//$this->data['alert_error'] = $this->U->error->all;
-<a name="line38"></a>				redirect('login'); //$this->_login_form();
-<a name="line39"></a>			}
-<a name="line40"></a>			// No errors. Proceed.
-<a name="line41"></a>			else
-<a name="line42"></a>			{
-<a name="line43"></a>				// If there is a redirect adress set, send the authorized user there
-<a name="line44"></a>				if($this->input->post('redirect'))
-<a name="line45"></a>				{
-<a name="line46"></a>					$q = $this->db->where('id', $this->input->post('redirect'))->get('redirects',1);
-<a name="line47"></a>					$r = $q->row();
-<a name="line48"></a>					redirect($r->url);
-<a name="line49"></a>				}
-<a name="line50"></a>				// If not ,redirect to index page
-<a name="line51"></a>				else
-<a name="line52"></a>				{
-<a name="line53"></a>					redirect('');
-<a name="line54"></a>				}
-<a name="line55"></a>			}
-<a name="line56"></a>		}
-<a name="line57"></a>		
-<a name="line58"></a>		// If no form data, render login form
-<a name="line59"></a>		else
-<a name="line60"></a>		{
-<a name="line61"></a>			$this->data['redirect'] = $redirect;
-<a name="line62"></a>			$this->_login_form();
-<a name="line63"></a>		}
-<a name="line64"></a>	}
-<a name="line65"></a>	
-<a name="line66"></a>	/**
-<a name="line67"></a>	*	Logs user out
-<a name="line68"></a>	*/
-<a name="line69"></a>	function logout()
-<a name="line70"></a>	{
-<a name="line71"></a>		$this->auth->logout();
-<a name="line72"></a>		redirect('');
-<a name="line73"></a>	}
-<a name="line74"></a>	
-<a name="line75"></a>	/**
-<a name="line76"></a>	*	Registration form display and processing
-<a name="line77"></a>	*/
-<a name="line78"></a>	function register()
-<a name="line79"></a>	{
-<a name="line80"></a>		$this->load->library('recaptcha');
-<a name="line81"></a>
-<a name="line82"></a>		// If form data is present, save new user
-<a name="line83"></a>		if(!empty($_POST))
-<a name="line84"></a>		{
-<a name="line85"></a>			// Validate recaptcha answer
-<a name="line86"></a>			if (!$this->recaptcha->check_answer($this->input->ip_address(),$this->input->post('recaptcha_challenge_field'),$this->input->post('recaptcha_response_field')))
-<a name="line87"></a>			{
-<a name="line88"></a>				$this->session->set_flashdata('error', "You did not correctly input the words in the image. Please try again.");
-<a name="line89"></a>				redirect('register');
-<a name="line90"></a>			}
-<a name="line91"></a>			
-<a name="line92"></a>			// Perform registration routine
-<a name="line93"></a>			$this->U = $this->auth->register();
-<a name="line94"></a>			
-<a name="line95"></a>			// Check for errors
+<a name="line34"></a>			// Check for errors
+<a name="line35"></a>			
+<a name="line36"></a>			// If any errors, display error message
+<a name="line37"></a>			if(count($this->U->error->all) > 0)
+<a name="line38"></a>			{
+<a name="line39"></a>				$this->session->set_flashdata('error', $this->U->error->string);//$this->data['alert_error'] = $this->U->error->all;
+<a name="line40"></a>				redirect('login'); //$this->_login_form();
+<a name="line41"></a>			}
+<a name="line42"></a>			// No errors. Proceed.
+<a name="line43"></a>			else
+<a name="line44"></a>			{
+<a name="line45"></a>				// If there is a redirect adress set, send the authorized user there
+<a name="line46"></a>				if($this->input->post('redirect'))
+<a name="line47"></a>				{
+<a name="line48"></a>					$q = $this->db->where('id', $this->input->post('redirect'))->get('redirects',1);
+<a name="line49"></a>					$r = $q->row();
+<a name="line50"></a>					redirect($r->url);
+<a name="line51"></a>				}
+<a name="line52"></a>				// If not ,redirect to index page
+<a name="line53"></a>				else
+<a name="line54"></a>				{
+<a name="line55"></a>					redirect('');
+<a name="line56"></a>				}
+<a name="line57"></a>			}
+<a name="line58"></a>		}
+<a name="line59"></a>		
+<a name="line60"></a>		// If no form data, render login form
+<a name="line61"></a>		else
+<a name="line62"></a>		{
+<a name="line63"></a>			$this->data['redirect'] = $redirect;
+<a name="line64"></a>			$this->_login_form();
+<a name="line65"></a>		}
+<a name="line66"></a>	}
+<a name="line67"></a>	
+<a name="line68"></a>	/**
+<a name="line69"></a>	*	Logs user out
+<a name="line70"></a>	*/
+<a name="line71"></a>	function logout()
+<a name="line72"></a>	{
+<a name="line73"></a>		$this->auth->logout();
+<a name="line74"></a>		redirect('');
+<a name="line75"></a>	}
+<a name="line76"></a>	
+<a name="line77"></a>	/**
+<a name="line78"></a>	*	Registration form display and processing
+<a name="line79"></a>	*/
+<a name="line80"></a>	function register()
+<a name="line81"></a>	{
+<a name="line82"></a>		$this->load->library('recaptcha');
+<a name="line83"></a>
+<a name="line84"></a>		// If form data is present, save new user
+<a name="line85"></a>		if(!empty($_POST))
+<a name="line86"></a>		{
+<a name="line87"></a>			// Validate recaptcha answer
+<a name="line88"></a>			if (!$this->recaptcha->check_answer($this->input->ip_address(),$this->input->post('recaptcha_challenge_field'),$this->input->post('recaptcha_response_field')))
+<a name="line89"></a>			{
+<a name="line90"></a>				$this->session->set_flashdata('error', "You did not correctly input the words in the image. Please try again.");
+<a name="line91"></a>				redirect('register');
+<a name="line92"></a>			}
+<a name="line93"></a>			
+<a name="line94"></a>			// Perform registration routine
+<a name="line95"></a>			$this->U = $this->auth->register();
 <a name="line96"></a>			
-<a name="line97"></a>			// If any errors, redirect back to form
-<a name="line98"></a>			if(count($this->U->error->all) > 0)
-<a name="line99"></a>			{
-<a name="line100"></a>				$this->session->set_flashdata('error', $this->U->error->all);
-<a name="line101"></a>				redirect('register');
-<a name="line102"></a>			}
-<a name="line103"></a>			
-<a name="line104"></a>			// If no errors, send to success form
-<a name="line105"></a>			else
-<a name="line106"></a>			{
-<a name="line107"></a>				$this->_register_success();
-<a name="line108"></a>			}
-<a name="line109"></a>		}
-<a name="line110"></a>		
-<a name="line111"></a>		// If no form data, display registration form
-<a name="line112"></a>		else
-<a name="line113"></a>		{
-<a name="line114"></a>			$this->_register_form();
-<a name="line115"></a>		}
-<a name="line116"></a>	}
-<a name="line117"></a>	
-<a name="line118"></a>	/**
-<a name="line119"></a>	*	Displays user profile
-<a name="line120"></a>	*/
-<a name="line121"></a>	function profile()
-<a name="line122"></a>	{
-<a name="line123"></a>		// Default behavior:
-<a name="line124"></a>		// Segment one == "profile" and  segment two == user id
-<a name="line125"></a>		
-<a name="line126"></a>		// Handle special cases
+<a name="line97"></a>			// Check for errors
+<a name="line98"></a>			
+<a name="line99"></a>			// If any errors, redirect back to form
+<a name="line100"></a>			if(count($this->U->error->all) > 0)
+<a name="line101"></a>			{
+<a name="line102"></a>				$this->session->set_flashdata('error', $this->U->error->all);
+<a name="line103"></a>				redirect('register');
+<a name="line104"></a>			}
+<a name="line105"></a>			
+<a name="line106"></a>			// If no errors, send to success form
+<a name="line107"></a>			else
+<a name="line108"></a>			{
+<a name="line109"></a>				$this->_register_success();
+<a name="line110"></a>			}
+<a name="line111"></a>		}
+<a name="line112"></a>		
+<a name="line113"></a>		// If no form data, display registration form
+<a name="line114"></a>		else
+<a name="line115"></a>		{
+<a name="line116"></a>			$this->_register_form();
+<a name="line117"></a>		}
+<a name="line118"></a>	}
+<a name="line119"></a>	
+<a name="line120"></a>	/**
+<a name="line121"></a>	*	Displays user profile
+<a name="line122"></a>	*/
+<a name="line123"></a>	function profile()
+<a name="line124"></a>	{
+<a name="line125"></a>		// Default behavior:
+<a name="line126"></a>		// Segment one == "profile" and  segment two == user id
 <a name="line127"></a>		
-<a name="line128"></a>		// If segment 2 is empty
-<a name="line129"></a>		if ( !$user_id = $this->uri->segment(2) )
-<a name="line130"></a>		{
-<a name="line131"></a>			// if the user isn't logged in, redirect to error page
-<a name="line132"></a>			if(empty($this->data['userdata']['user_id']))
-<a name="line133"></a>			{
-<a name="line134"></a>				redirect('lost');
-<a name="line135"></a>			}
-<a name="line136"></a>			
-<a name="line137"></a>			// if user is logged in, display his profile
-<a name="line138"></a>			else
-<a name="line139"></a>			{
-<a name="line140"></a>				$user_id = $this->session->userdata('user_id');
-<a name="line141"></a>			}
-<a name="line142"></a>		}
-<a name="line143"></a>		
-<a name="line144"></a>		
-<a name="line145"></a>		// If URI segment one is member and two is profile,
-<a name="line146"></a>		// redirect to get rid of the word member so that the
-<a name="line147"></a>		// uri segment variables used to load the proper user work
-<a name="line148"></a>		
-<a name="line149"></a>		elseif( $this->data['segment'][2] == "profile" )
-<a name="line150"></a>		{
-<a name="line151"></a>			redirect('profile/'.$this->data['segment'][3]);
-<a name="line152"></a>		}
-<a name="line153"></a>		
-<a name="line154"></a>		// End routing
+<a name="line128"></a>		// Handle special cases
+<a name="line129"></a>		
+<a name="line130"></a>		// If segment 2 is empty
+<a name="line131"></a>		if ( !$user_id = $this->uri->segment(2) )
+<a name="line132"></a>		{
+<a name="line133"></a>			// if the user isn't logged in, redirect to error page
+<a name="line134"></a>			if(empty($this->data['userdata']['user_id']))
+<a name="line135"></a>			{
+<a name="line136"></a>				redirect('lost');
+<a name="line137"></a>			}
+<a name="line138"></a>			
+<a name="line139"></a>			// if user is logged in, display his profile
+<a name="line140"></a>			else
+<a name="line141"></a>			{
+<a name="line142"></a>				$user_id = $this->session->userdata('user_id');
+<a name="line143"></a>			}
+<a name="line144"></a>		}
+<a name="line145"></a>		
+<a name="line146"></a>		
+<a name="line147"></a>		// If URI segment one is member and two is profile,
+<a name="line148"></a>		// redirect to get rid of the word member so that the
+<a name="line149"></a>		// uri segment variables used to load the proper user work
+<a name="line150"></a>		
+<a name="line151"></a>		elseif( $this->data['segment'][2] == "profile" )
+<a name="line152"></a>		{
+<a name="line153"></a>			redirect('profile/'.$this->data['segment'][3]);
+<a name="line154"></a>		}
 <a name="line155"></a>		
-<a name="line156"></a>		// Begin loading user information
+<a name="line156"></a>		// End routing
 <a name="line157"></a>		
-<a name="line158"></a>		// Construct user object
-<a name="line159"></a>		$U = new User();
-<a name="line160"></a>		
-<a name="line161"></a>		// Fetch proper user
-<a name="line162"></a>		$U	->where('id',$user_id)
-<a name="line163"></a>			->include_related('default_location', '*', NULL, TRUE)
-<a name="line164"></a>			->include_related('default_photo', '*', NULL, TRUE)
-<a name="line165"></a>			->get();
-<a name="line166"></a>		
-<a name="line167"></a>		// Load user's gift
-<a name="line168"></a>		$U->gift = $U->gifts();
-<a name="line169"></a>		
-<a name="line170"></a>		// Load user's needs
-<a name="line171"></a>		$U->need = $U->needs();
-<a name="line172"></a>		
-<a name="line173"></a>		// Generate stats about the user
-<a name="line174"></a>		$U->stats();
-<a name="line175"></a>		
-<a name="line176"></a>		// Get list of people this user is following
-<a name="line177"></a>		$this->data['following'] = $U->following();
-<a name="line178"></a>		
-<a name="line179"></a>		// If logged in, check to see if visitor is following this user
-<a name="line180"></a>		if(!empty($this->data['logged_in_user_id']))
-<a name="line181"></a>			$this->data['is_following'] = $U->is_followed_by($this->data['logged_in_user_id']);
-<a name="line182"></a>		
-<a name="line183"></a>		// Send User object to the view
-<a name="line184"></a>		$this->data['u'] = $U;
-<a name="line185"></a>		$this->data['completed_gifts'] = $U->completed_gifts();
-<a name="line186"></a>		$this->data['completed_requests'] = $U->completed_requests();
-<a name="line187"></a>		$this->data['title'] = $U->screen_name." | Profile";
-<a name="line188"></a>		
-<a name="line189"></a>		// Load views
-<a name="line190"></a>		$this->load->view('header', $this->data);
-<a name="line191"></a>		$this->load->view('member/profile', $this->data);
-<a name="line192"></a>		$this->load->view('footer', $this->data);
-<a name="line193"></a>	}
-<a name="line194"></a>
-<a name="line195"></a>	
-<a name="line196"></a>	
+<a name="line158"></a>		// Begin loading user information
+<a name="line159"></a>		
+<a name="line160"></a>		// Construct user object
+<a name="line161"></a>		$U = new User();
+<a name="line162"></a>		
+<a name="line163"></a>		// Fetch proper user
+<a name="line164"></a>		$U	->where('id',$user_id)
+<a name="line165"></a>			->include_related('default_location', '*', NULL, TRUE)
+<a name="line166"></a>			->include_related('default_photo', '*', NULL, TRUE)
+<a name="line167"></a>			->get();
+<a name="line168"></a>		
+<a name="line169"></a>		// Load user's gift
+<a name="line170"></a>		$U->gift = $U->gifts();
+<a name="line171"></a>		
+<a name="line172"></a>		// Load user's needs
+<a name="line173"></a>		$U->need = $U->needs();
+<a name="line174"></a>		
+<a name="line175"></a>		// Generate stats about the user
+<a name="line176"></a>		$U->stats();
+<a name="line177"></a>		
+<a name="line178"></a>		// Get list of people this user is following
+<a name="line179"></a>		$this->data['following'] = $U->following();
+<a name="line180"></a>		
+<a name="line181"></a>		// If logged in, check to see if visitor is following this user
+<a name="line182"></a>		if(!empty($this->data['logged_in_user_id']))
+<a name="line183"></a>			$this->data['is_following'] = $U->is_followed_by($this->data['logged_in_user_id']);
+<a name="line184"></a>		
+<a name="line185"></a>		// Send User object to the view
+<a name="line186"></a>		$this->data['u'] = $U;
+<a name="line187"></a>		$this->data['completed_gifts'] = $U->completed_gifts();
+<a name="line188"></a>		$this->data['completed_requests'] = $U->completed_requests();
+<a name="line189"></a>		$this->data['title'] = $U->screen_name." | Profile";
+<a name="line190"></a>		
+<a name="line191"></a>		// Load views
+<a name="line192"></a>		$this->load->view('header', $this->data);
+<a name="line193"></a>		$this->load->view('member/profile', $this->data);
+<a name="line194"></a>		$this->load->view('footer', $this->data);
+<a name="line195"></a>	}
+<a name="line196"></a>
 <a name="line197"></a>	
 <a name="line198"></a>	
-<a name="line199"></a>	function activate( $code )
-<a name="line200"></a>	{
-<a name="line201"></a>		if(empty($code))
-<a name="line202"></a>		{
-<a name="line203"></a>			
-<a name="line204"></a>		}
-<a name="line205"></a>		else
-<a name="line206"></a>		{
-<a name="line207"></a>			$U = new User();
-<a name="line208"></a>			$U->where('activation_code', $code)->get();
-<a name="line209"></a>			if(count($U->all)==1)
-<a name="line210"></a>			{
-<a name="line211"></a>				$U->activate();
-<a name="line212"></a>				$this->session->flashdata('success','Account activated!');
-<a name="line213"></a>				redirect('account/profile');
-<a name="line214"></a>			}
-<a name="line215"></a>			else
-<a name="line216"></a>			{
-<a name="line217"></a>				// Invalid code
-<a name="line218"></a>			}
-<a name="line219"></a>		}
-<a name="line220"></a>	}
-<a name="line221"></a>	
-<a name="line222"></a>	
-<a name="line223"></a>	function change_password()
-<a name="line224"></a>	{	    
-<a name="line225"></a>	    $this->form_validation->set_rules('old', 'Old password', 'required');
-<a name="line226"></a>	    $this->form_validation->set_rules('new', 'New Password', 'required|matches[new_repeat]');
-<a name="line227"></a>	    $this->form_validation->set_rules('new_repeat', 'Repeat New Password', 'required');
-<a name="line228"></a>	    $this->form_validation->set_error_delimiters('<p class="error">', '</p>');
-<a name="line229"></a>	    
-<a name="line230"></a>	    if ($this->form_validation->run() == false)
-<a name="line231"></a>	    {
-<a name="line232"></a>	        $data['content'] = $this->load->view('redux_auth/change_password', null, true);
-<a name="line233"></a>	        $this->load->view('redux_auth/template', $data);
-<a name="line234"></a>	    }
-<a name="line235"></a>	    else
-<a name="line236"></a>	    {
-<a name="line237"></a>	        $old = $this->input->post('old');
-<a name="line238"></a>	        $new = $this->input->post('new');
-<a name="line239"></a>	        
-<a name="line240"></a>	        $identity = $this->session->userdata($this->config->item('identity'));
+<a name="line199"></a>	
+<a name="line200"></a>	
+<a name="line201"></a>	function activate( $code )
+<a name="line202"></a>	{
+<a name="line203"></a>		if(empty($code))
+<a name="line204"></a>		{
+<a name="line205"></a>			
+<a name="line206"></a>		}
+<a name="line207"></a>		else
+<a name="line208"></a>		{
+<a name="line209"></a>			$U = new User();
+<a name="line210"></a>			$U->where('activation_code', $code)->get();
+<a name="line211"></a>			if(count($U->all)==1)
+<a name="line212"></a>			{
+<a name="line213"></a>				$U->activate();
+<a name="line214"></a>				$this->session->flashdata('success','Account activated!');
+<a name="line215"></a>				redirect('account/profile');
+<a name="line216"></a>			}
+<a name="line217"></a>			else
+<a name="line218"></a>			{
+<a name="line219"></a>				// Invalid code
+<a name="line220"></a>			}
+<a name="line221"></a>		}
+<a name="line222"></a>	}
+<a name="line223"></a>	
+<a name="line224"></a>	
+<a name="line225"></a>	function change_password()
+<a name="line226"></a>	{	    
+<a name="line227"></a>	    $this->form_validation->set_rules('old', 'Old password', 'required');
+<a name="line228"></a>	    $this->form_validation->set_rules('new', 'New Password', 'required|matches[new_repeat]');
+<a name="line229"></a>	    $this->form_validation->set_rules('new_repeat', 'Repeat New Password', 'required');
+<a name="line230"></a>	    $this->form_validation->set_error_delimiters('<p class="error">', '</p>');
+<a name="line231"></a>	    
+<a name="line232"></a>	    if ($this->form_validation->run() == false)
+<a name="line233"></a>	    {
+<a name="line234"></a>	        $data['content'] = $this->load->view('redux_auth/change_password', null, true);
+<a name="line235"></a>	        $this->load->view('redux_auth/template', $data);
+<a name="line236"></a>	    }
+<a name="line237"></a>	    else
+<a name="line238"></a>	    {
+<a name="line239"></a>	        $old = $this->input->post('old');
+<a name="line240"></a>	        $new = $this->input->post('new');
 <a name="line241"></a>	        
-<a name="line242"></a>	        $change = $this->redux_auth->change_password($identity, $old, $new);
-<a name="line243"></a>		
-<a name="line244"></a>    		if ($change)
-<a name="line245"></a>    		{
-<a name="line246"></a>    			$this->logout();
-<a name="line247"></a>    		}
-<a name="line248"></a>    		else
-<a name="line249"></a>    		{
-<a name="line250"></a>    			echo "Password Change Failed";
-<a name="line251"></a>    		}
-<a name="line252"></a>	    }
-<a name="line253"></a>	}
-<a name="line254"></a>	
-<a name="line255"></a>	/**
-<a name="line256"></a>	 * forgotten password
-<a name="line257"></a>	 *
-<a name="line258"></a>	 * @return void
-<a name="line259"></a>	 * @author Mathew
-<a name="line260"></a>	 **/
-<a name="line261"></a>	function forgotten_password()
-<a name="line262"></a>	{
-<a name="line263"></a>	    $this->form_validation->set_rules('email', 'Email Address', 'required');
-<a name="line264"></a>	    $this->form_validation->set_error_delimiters('<p class="error">', '</p>');
-<a name="line265"></a>	    
-<a name="line266"></a>	    if ($this->form_validation->run() == false)
-<a name="line267"></a>	    {
-<a name="line268"></a>	        $data['content'] = $this->load->view('redux_auth/forgotten_password', null, true);
-<a name="line269"></a>	        $this->load->view('redux_auth/template', $data);
-<a name="line270"></a>	    }
-<a name="line271"></a>	    else
-<a name="line272"></a>	    {
-<a name="line273"></a>	        $email = $this->input->post('email');
-<a name="line274"></a>			$forgotten = $this->redux_auth->forgotten_password($email);
-<a name="line275"></a>		    
-<a name="line276"></a>			if ($forgotten)
-<a name="line277"></a>			{
-<a name="line278"></a>				$this->session->set_flashdata('message', '<p class="success">An email has been sent, please check your inbox.</p>');
-<a name="line279"></a>	            redirect('member/forgotten_password');
-<a name="line280"></a>			}
-<a name="line281"></a>			else
-<a name="line282"></a>			{
-<a name="line283"></a>				$this->session->set_flashdata('message', '<p class="error">The email failed to send, try again.</p>');
-<a name="line284"></a>	            redirect('member/forgotten_password');
-<a name="line285"></a>			}
-<a name="line286"></a>	    }
-<a name="line287"></a>	}
-<a name="line288"></a>	
-<a name="line289"></a>	/**
-<a name="line290"></a>	 * forgotten_password_complete
-<a name="line291"></a>	 *
-<a name="line292"></a>	 * @return void
-<a name="line293"></a>	 * @author Mathew
-<a name="line294"></a>	 **/
-<a name="line295"></a>	public function forgotten_password_complete()
-<a name="line296"></a>	{
-<a name="line297"></a>	    $this->form_validation->set_rules('code', 'Verification Code', 'required');
-<a name="line298"></a>	    $this->form_validation->set_error_delimiters('<p class="error">', '</p>');
-<a name="line299"></a>	    
-<a name="line300"></a>	    if ($this->form_validation->run() == false)
-<a name="line301"></a>	    {
-<a name="line302"></a>	        redirect('member/forgotten_password');
-<a name="line303"></a>	    }
-<a name="line304"></a>	    else
-<a name="line305"></a>	    {
-<a name="line306"></a>	        $code = $this->input->post('code');
-<a name="line307"></a>			$forgotten = $this->redux_auth->forgotten_password_complete($code);
-<a name="line308"></a>		    
-<a name="line309"></a>			if ($forgotten)
-<a name="line310"></a>			{
-<a name="line311"></a>				$this->session->set_flashdata('message', '<p class="success">An email has been sent, please check your inbox.</p>');
-<a name="line312"></a>	            redirect('member/forgotten_password');
-<a name="line313"></a>			}
-<a name="line314"></a>			else
-<a name="line315"></a>			{
-<a name="line316"></a>				$this->session->set_flashdata('message', '<p class="error">The email failed to send, try again.</p>');
-<a name="line317"></a>	            redirect('member/forgotten_password');
-<a name="line318"></a>			}
-<a name="line319"></a>	    }
-<a name="line320"></a>	}
-<a name="line321"></a>	
-<a name="line322"></a>	protected function _login_form()
-<a name="line323"></a>	{
-<a name="line324"></a>
-<a name="line325"></a>		$this->data['title'] = "Login";
-<a name="line326"></a>		$this->load->view('header', $this->data);
-<a name="line327"></a>		$this->load->view('member/login', $this->data);
-<a name="line328"></a>		$this->load->view('footer', $this->data);
-<a name="line329"></a>	}
-<a name="line330"></a>
-<a name="line331"></a>	protected function _register_form()
-<a name="line332"></a>	{
-<a name="line333"></a>		if(empty($this->U)) $this->U = new User();
-<a name="line334"></a>		$this->data['js'][] = 'jquery-validate.php';
-<a name="line335"></a>		$this->data['recaptcha'] = $this->recaptcha->get_html();
-<a name="line336"></a>		$this->data['u'] = $this->U;
-<a name="line337"></a>		$this->data['title'] = "Register";
-<a name="line338"></a>		$this->load->view('header', $this->data);
-<a name="line339"></a>		$this->load->view('member/register', $this->data);
-<a name="line340"></a>		$this->load->view('footer', $this->data);
-<a name="line341"></a>	}
-<a name="line342"></a>	
-<a name="line343"></a>	protected function _register_success()
-<a name="line344"></a>	{
-<a name="line345"></a>		$this->data['title'] = "Registration Successful";
-<a name="line346"></a>		$this->load->view('header',$this->data);
-<a name="line347"></a>		$this->load->view('member/registration_success', $this->data);
-<a name="line348"></a>		$this->load->view('footer', $this->data);
-<a name="line349"></a>	}
-<a name="line350"></a>	
-<a name="line351"></a>	function follow( $id )
-<a name="line352"></a>	{
-<a name="line353"></a>		$U = new User($this->data['logged_in_user_id']);
-<a name="line354"></a>		$F = new User( $id );
-<a name="line355"></a>		$U->save_following($F);
-<a name="line356"></a>
-<a name="line357"></a>		// Hook: 'follower_new'
-<a name="line358"></a>		$this->hooks->call('follower_new', $this);
-<a name="line359"></a>
-<a name="line360"></a>		if( $this->data['is_ajax'] )
-<a name="line361"></a>		{
-<a name="line362"></a>			echo "Now following ".$F->screen_name;
-<a name="line363"></a>		}
-<a name="line364"></a>		else
-<a name="line365"></a>		{
-<a name="line366"></a>			$this->session->set_flashdata('success', 'Now following '.$F->screen_name.'.');
-<a name="line367"></a>			redirect('profile/'.$id);
-<a name="line368"></a>		}
-<a name="line369"></a>	}
-<a name="line370"></a>	
-<a name="line371"></a>	function unfollow( $id )
-<a name="line372"></a>	{
-<a name="line373"></a>		$U = new User($this->data['logged_in_user_id']);
-<a name="line374"></a>		$F = new User( $id );
-<a name="line375"></a>		$U->delete_following($F);
-<a name="line376"></a>		
-<a name="line377"></a>		// Hook: 'follower_deleted'
-<a name="line378"></a>		$this->hooks->call('follower_deleted', $this);
-<a name="line379"></a>
-<a name="line380"></a>		
-<a name="line381"></a>		$this->session->set_flashdata('success', 'No longer following '.$F->screen_name.'.');
+<a name="line242"></a>	        $identity = $this->session->userdata($this->config->item('identity'));
+<a name="line243"></a>	        
+<a name="line244"></a>	        $change = $this->redux_auth->change_password($identity, $old, $new);
+<a name="line245"></a>		
+<a name="line246"></a>    		if ($change)
+<a name="line247"></a>    		{
+<a name="line248"></a>    			$this->logout();
+<a name="line249"></a>    		}
+<a name="line250"></a>    		else
+<a name="line251"></a>    		{
+<a name="line252"></a>    			echo "Password Change Failed";
+<a name="line253"></a>    		}
+<a name="line254"></a>	    }
+<a name="line255"></a>	}
+<a name="line256"></a>	
+<a name="line257"></a>	/**
+<a name="line258"></a>	 * forgotten password
+<a name="line259"></a>	 *
+<a name="line260"></a>	 * @return void
+<a name="line261"></a>	 * @author Mathew
+<a name="line262"></a>	 **/
+<a name="line263"></a>	function forgotten_password()
+<a name="line264"></a>	{
+<a name="line265"></a>	    $this->form_validation->set_rules('email', 'Email Address', 'required');
+<a name="line266"></a>	    $this->form_validation->set_error_delimiters('<p class="error">', '</p>');
+<a name="line267"></a>	    
+<a name="line268"></a>	    if ($this->form_validation->run() == false)
+<a name="line269"></a>	    {
+<a name="line270"></a>	        $data['content'] = $this->load->view('redux_auth/forgotten_password', null, true);
+<a name="line271"></a>	        $this->load->view('redux_auth/template', $data);
+<a name="line272"></a>	    }
+<a name="line273"></a>	    else
+<a name="line274"></a>	    {
+<a name="line275"></a>	        $email = $this->input->post('email');
+<a name="line276"></a>			$forgotten = $this->redux_auth->forgotten_password($email);
+<a name="line277"></a>		    
+<a name="line278"></a>			if ($forgotten)
+<a name="line279"></a>			{
+<a name="line280"></a>				$this->session->set_flashdata('message', '<p class="success">An email has been sent, please check your inbox.</p>');
+<a name="line281"></a>	            redirect('member/forgotten_password');
+<a name="line282"></a>			}
+<a name="line283"></a>			else
+<a name="line284"></a>			{
+<a name="line285"></a>				$this->session->set_flashdata('message', '<p class="error">The email failed to send, try again.</p>');
+<a name="line286"></a>	            redirect('member/forgotten_password');
+<a name="line287"></a>			}
+<a name="line288"></a>	    }
+<a name="line289"></a>	}
+<a name="line290"></a>	
+<a name="line291"></a>	/**
+<a name="line292"></a>	 * forgotten_password_complete
+<a name="line293"></a>	 *
+<a name="line294"></a>	 * @return void
+<a name="line295"></a>	 * @author Mathew
+<a name="line296"></a>	 **/
+<a name="line297"></a>	public function forgotten_password_complete()
+<a name="line298"></a>	{
+<a name="line299"></a>	    $this->form_validation->set_rules('code', 'Verification Code', 'required');
+<a name="line300"></a>	    $this->form_validation->set_error_delimiters('<p class="error">', '</p>');
+<a name="line301"></a>	    
+<a name="line302"></a>	    if ($this->form_validation->run() == false)
+<a name="line303"></a>	    {
+<a name="line304"></a>	        redirect('member/forgotten_password');
+<a name="line305"></a>	    }
+<a name="line306"></a>	    else
+<a name="line307"></a>	    {
+<a name="line308"></a>	        $code = $this->input->post('code');
+<a name="line309"></a>			$forgotten = $this->redux_auth->forgotten_password_complete($code);
+<a name="line310"></a>		    
+<a name="line311"></a>			if ($forgotten)
+<a name="line312"></a>			{
+<a name="line313"></a>				$this->session->set_flashdata('message', '<p class="success">An email has been sent, please check your inbox.</p>');
+<a name="line314"></a>	            redirect('member/forgotten_password');
+<a name="line315"></a>			}
+<a name="line316"></a>			else
+<a name="line317"></a>			{
+<a name="line318"></a>				$this->session->set_flashdata('message', '<p class="error">The email failed to send, try again.</p>');
+<a name="line319"></a>	            redirect('member/forgotten_password');
+<a name="line320"></a>			}
+<a name="line321"></a>	    }
+<a name="line322"></a>	}
+<a name="line323"></a>	
+<a name="line324"></a>	protected function _login_form()
+<a name="line325"></a>	{
+<a name="line326"></a>
+<a name="line327"></a>		$this->data['title'] = "Login";
+<a name="line328"></a>		$this->load->view('header', $this->data);
+<a name="line329"></a>		$this->load->view('member/login', $this->data);
+<a name="line330"></a>		$this->load->view('footer', $this->data);
+<a name="line331"></a>	}
+<a name="line332"></a>
+<a name="line333"></a>	protected function _register_form()
+<a name="line334"></a>	{
+<a name="line335"></a>		if(empty($this->U)) $this->U = new User();
+<a name="line336"></a>		$this->data['js'][] = 'jquery-validate.php';
+<a name="line337"></a>		$this->data['recaptcha'] = $this->recaptcha->get_html();
+<a name="line338"></a>		$this->data['u'] = $this->U;
+<a name="line339"></a>		$this->data['title'] = "Register";
+<a name="line340"></a>		$this->load->view('header', $this->data);
+<a name="line341"></a>		$this->load->view('member/register', $this->data);
+<a name="line342"></a>		$this->load->view('footer', $this->data);
+<a name="line343"></a>	}
+<a name="line344"></a>	
+<a name="line345"></a>	protected function _register_success()
+<a name="line346"></a>	{
+<a name="line347"></a>		$this->data['title'] = "Registration Successful";
+<a name="line348"></a>		$this->load->view('header',$this->data);
+<a name="line349"></a>		$this->load->view('member/registration_success', $this->data);
+<a name="line350"></a>		$this->load->view('footer', $this->data);
+<a name="line351"></a>	}
+<a name="line352"></a>	
+<a name="line353"></a>	function follow( $id )
+<a name="line354"></a>	{
+<a name="line355"></a>		$U = new User($this->data['logged_in_user_id']);
+<a name="line356"></a>		$F = new User( $id );
+<a name="line357"></a>		$U->save_following($F);
+<a name="line358"></a>
+<a name="line359"></a>		// Hook: 'follower_new'
+<a name="line360"></a>		$this->hooks->call('follower_new', $this);
+<a name="line361"></a>
+<a name="line362"></a>		if( $this->data['is_ajax'] )
+<a name="line363"></a>		{
+<a name="line364"></a>			echo "Now following ".$F->screen_name;
+<a name="line365"></a>		}
+<a name="line366"></a>		else
+<a name="line367"></a>		{
+<a name="line368"></a>			$this->session->set_flashdata('success', 'Now following '.$F->screen_name.'.');
+<a name="line369"></a>			redirect('profile/'.$id);
+<a name="line370"></a>		}
+<a name="line371"></a>	}
+<a name="line372"></a>	
+<a name="line373"></a>	function unfollow( $id )
+<a name="line374"></a>	{
+<a name="line375"></a>		$U = new User($this->data['logged_in_user_id']);
+<a name="line376"></a>		$F = new User( $id );
+<a name="line377"></a>		$U->delete_following($F);
+<a name="line378"></a>		
+<a name="line379"></a>		// Hook: 'follower_deleted'
+<a name="line380"></a>		$this->hooks->call('follower_deleted', $this);
+<a name="line381"></a>
 <a name="line382"></a>		
-<a name="line383"></a>		redirect('profile/'.$id);
-<a name="line384"></a>	}
-<a name="line385"></a>
-<a name="line386"></a>	function facebook( $key1 = null, $val1 = null, $key2 = null, $val2 = null )
-<a name="line387"></a>	{
-<a name="line388"></a>		// Handles the initial facebook connect request. Redirects user to Facebook's OAuth page. The data will be returned to /assets/facebook.php.
-<a name="line389"></a>		if(empty($key1))
-<a name="line390"></a>		{
-<a name="line391"></a>			$config = array (	"client_id"=>111637438874755,
-<a name="line392"></a>								"scope" => "offline_access,user_location,user_photos,email,publish_stream",
-<a name="line393"></a>								"redirect_uri"=>"http://www.giftflow.org/assets/facebook.php" );
-<a name="line394"></a>			
-<a name="line395"></a>			redirect("https://graph.facebook.com/oauth/authorize?".http_build_query($config));
-<a name="line396"></a>		}
-<a name="line397"></a>		// Once the user has been authorized, this code parses the authorization code and sends the necessary data to the Auth class.
-<a name="line398"></a>		else
-<a name="line399"></a>		{
-<a name="line400"></a>			$access = $key1.'='.$val1;
-<a name="line401"></a>			if(!empty($key2)&&!empty($val2)) $access .= $key2.'='.$val2;
-<a name="line402"></a>			$facebook_data = json_decode(file_get_contents("https://graph.facebook.com/me?".$access));
-<a name="line403"></a>			if($key1=="access_token") $facebook_data->token = $val1;
-<a name="line404"></a>			$this->auth->facebook( $facebook_data );
-<a name="line405"></a>		}	
-<a name="line406"></a>	}
-<a name="line407"></a>	
-<a name="line408"></a>	function facebook_welcome()
-<a name="line409"></a>	{
-<a name="line410"></a>	
-<a name="line411"></a>	}
-<a name="line412"></a>}
-<a name="line413"></a>
-<a name="line414"></a>/* End of file member.php */
-<a name="line415"></a>/* Location: ./system/application/controllers/member.php */
-<a name="line416"></a></pre>
+<a name="line383"></a>		$this->session->set_flashdata('success', 'No longer following '.$F->screen_name.'.');
+<a name="line384"></a>		
+<a name="line385"></a>		redirect('profile/'.$id);
+<a name="line386"></a>	}
+<a name="line387"></a>
+<a name="line388"></a>	function facebook( $key1 = null, $val1 = null, $key2 = null, $val2 = null )
+<a name="line389"></a>	{
+<a name="line390"></a>		// Handles the initial facebook connect request. Redirects user to Facebook's OAuth page. The data will be returned to /assets/facebook.php.
+<a name="line391"></a>		if(empty($key1))
+<a name="line392"></a>		{
+<a name="line393"></a>			$config = array (	"client_id"=>111637438874755,
+<a name="line394"></a>								"scope" => "offline_access,user_location,user_photos,email,publish_stream",
+<a name="line395"></a>								"redirect_uri"=>"http://www.giftflow.org/assets/facebook.php" );
+<a name="line396"></a>			
+<a name="line397"></a>			redirect("https://graph.facebook.com/oauth/authorize?".http_build_query($config));
+<a name="line398"></a>		}
+<a name="line399"></a>		// Once the user has been authorized, this code parses the authorization code and sends the necessary data to the Auth class.
+<a name="line400"></a>		else
+<a name="line401"></a>		{
+<a name="line402"></a>			$access = $key1.'='.$val1;
+<a name="line403"></a>			if(!empty($key2)&&!empty($val2)) $access .= $key2.'='.$val2;
+<a name="line404"></a>			$facebook_data = json_decode(file_get_contents("https://graph.facebook.com/me?".$access));
+<a name="line405"></a>			if($key1=="access_token") $facebook_data->token = $val1;
+<a name="line406"></a>			$this->auth->facebook( $facebook_data );
+<a name="line407"></a>		}	
+<a name="line408"></a>	}
+<a name="line409"></a>	
+<a name="line410"></a>	function facebook_welcome()
+<a name="line411"></a>	{
+<a name="line412"></a>	
+<a name="line413"></a>	}
+<a name="line414"></a>}
+<a name="line415"></a>
+<a name="line416"></a>/* End of file member.php */
+<a name="line417"></a>/* Location: ./system/application/controllers/member.php */
+<a name="line418"></a></pre>
 <div class="header">
 <h1>GiftFlow API</h1>
 <ul>

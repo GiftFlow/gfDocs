@@ -6,7 +6,7 @@
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 
 <meta name="generator" content="PHPDoctor 2RC4 (http://peej.github.com/phpdoctor/)">
-<meta name="when" content="Sat, 10 Jul 2010 18:10:55 +0000">
+<meta name="when" content="Mon, 19 Jul 2010 17:13:56 +0000">
 
 <link rel="stylesheet" type="text/css" href="../stylesheet.css">
 <link rel="start" href="../overview-summary.html">
@@ -213,6 +213,10 @@ Detail: <a href="#detail_field">Field</a> | <a href="#detail_method">Method</a> 
 </tr>
 <tr>
 <td class="type"> mixed</td>
+<td class="description"><p class="name"><a href="#hooks">$hooks</a></p></td>
+</tr>
+<tr>
+<td class="type"> mixed</td>
 <td class="description"><p class="name"><a href="#ignored">$ignored</a></p></td>
 </tr>
 <tr>
@@ -386,7 +390,7 @@ opposed to being updated. </p></td>
 
 <hr>
 
-<a href="../source/application/models/user.php.html#line42" class="location">application/models/user.php at line 42</a>
+<a href="../source/application/models/user.php.html#line44" class="location">application/models/user.php at line 44</a>
 
 <h3 id="has_many">has_many</h3>
 <code class="signature">public  array <strong>$has_many</strong> = array(...)</code>
@@ -395,12 +399,21 @@ opposed to being updated. </p></td>
 
 <hr>
 
-<a href="../source/application/models/user.php.html#line35" class="location">application/models/user.php at line 35</a>
+<a href="../source/application/models/user.php.html#line37" class="location">application/models/user.php at line 37</a>
 
 <h3 id="has_one">has_one</h3>
 <code class="signature">public  array <strong>$has_one</strong> = array(...)</code>
 <div class="details">
 <p>Has one relationships.</p></div>
+
+<hr>
+
+<a href="../source/application/models/user.php.html#line29" class="location">application/models/user.php at line 29</a>
+
+<h3 id="hooks">hooks</h3>
+<code class="signature">public  mixed <strong>$hooks</strong></code>
+<div class="details">
+</div>
 
 <hr>
 
@@ -494,7 +507,7 @@ opposed to being updated. </p></td>
 
 <hr>
 
-<a href="../source/application/models/user.php.html#line49" class="location">application/models/user.php at line 49</a>
+<a href="../source/application/models/user.php.html#line51" class="location">application/models/user.php at line 51</a>
 
 <h3 id="validation">validation</h3>
 <code class="signature">public  array <strong>$validation</strong> = array(...)</code>
@@ -505,7 +518,7 @@ your fields.</p></div>
 <hr>
 
 <h2 id="detail_method">Method Detail</h2><div class="method_detail">
-<div class='method'><a href="../source/application/models/user.php.html#line51" class="location">application/models/user.php at line 51</a>
+<div class='method'><a href="../source/application/models/user.php.html#line53" class="location">application/models/user.php at line 53</a>
 
 <h3 id="__construct()">__construct</h3>
 <code class="signature">public  void <strong>__construct</strong>(mixed id)</code>
@@ -518,7 +531,7 @@ your fields.</p></div>
 
 
 
-<div class='method'><a href="../source/application/models/user.php.html#line478" class="location">application/models/user.php at line 478</a>
+<div class='method'><a href="../source/application/models/user.php.html#line481" class="location">application/models/user.php at line 481</a>
 
 <h3 id="_encrypt()">_encrypt</h3>
 <code class="signature">private  void <strong>_encrypt</strong>(mixed field)</code>
@@ -528,7 +541,7 @@ salt.</p></div></div>
 
 
 
-<div class='method'><a href="../source/application/models/user.php.html#line163" class="location">application/models/user.php at line 163</a>
+<div class='method'><a href="../source/application/models/user.php.html#line167" class="location">application/models/user.php at line 167</a>
 
 <h3 id="activate()">activate</h3>
 <code class="signature">public  void <strong>activate</strong>()</code>
@@ -537,7 +550,7 @@ salt.</p></div></div>
 
 
 
-<div class='method'><a href="../source/application/models/user.php.html#line283" class="location">application/models/user.php at line 283</a>
+<div class='method'><a href="../source/application/models/user.php.html#line286" class="location">application/models/user.php at line 286</a>
 
 <h3 id="completed_gifts()">completed_gifts</h3>
 <code class="signature">public  array <strong>completed_gifts</strong>()</code>
@@ -546,7 +559,7 @@ salt.</p></div></div>
 
 
 
-<div class='method'><a href="../source/application/models/user.php.html#line298" class="location">application/models/user.php at line 298</a>
+<div class='method'><a href="../source/application/models/user.php.html#line301" class="location">application/models/user.php at line 301</a>
 
 <h3 id="completed_requests()">completed_requests</h3>
 <code class="signature">public  array <strong>completed_requests</strong>()</code>
@@ -555,7 +568,7 @@ salt.</p></div></div>
 
 
 
-<div class='method'><a href="../source/application/models/user.php.html#line145" class="location">application/models/user.php at line 145</a>
+<div class='method'><a href="../source/application/models/user.php.html#line149" class="location">application/models/user.php at line 149</a>
 
 <h3 id="deactivate()">deactivate</h3>
 <code class="signature">public  void <strong>deactivate</strong>()</code>
@@ -564,7 +577,7 @@ salt.</p></div></div>
 
 
 
-<div class='method'><a href="../source/application/models/user.php.html#line378" class="location">application/models/user.php at line 378</a>
+<div class='method'><a href="../source/application/models/user.php.html#line381" class="location">application/models/user.php at line 381</a>
 
 <h3 id="facebook_sync()">facebook_sync</h3>
 <code class="signature">public  void <strong>facebook_sync</strong>(JSON data)</code>
@@ -580,7 +593,7 @@ not, however, overwrite any database data with Facebook data.</p><dl>
 
 
 
-<div class='method'><a href="../source/application/models/user.php.html#line461" class="location">application/models/user.php at line 461</a>
+<div class='method'><a href="../source/application/models/user.php.html#line464" class="location">application/models/user.php at line 464</a>
 
 <h3 id="facebook_unlink()">facebook_unlink</h3>
 <code class="signature">public  void <strong>facebook_unlink</strong>()</code>
@@ -589,7 +602,7 @@ not, however, overwrite any database data with Facebook data.</p><dl>
 
 
 
-<div class='method'><a href="../source/application/models/user.php.html#line331" class="location">application/models/user.php at line 331</a>
+<div class='method'><a href="../source/application/models/user.php.html#line334" class="location">application/models/user.php at line 334</a>
 
 <h3 id="following()">following</h3>
 <code class="signature">public  array <strong>following</strong>()</code>
@@ -598,7 +611,7 @@ not, however, overwrite any database data with Facebook data.</p><dl>
 
 
 
-<div class='method'><a href="../source/application/models/user.php.html#line204" class="location">application/models/user.php at line 204</a>
+<div class='method'><a href="../source/application/models/user.php.html#line207" class="location">application/models/user.php at line 207</a>
 
 <h3 id="gifts()">gifts</h3>
 <code class="signature">public  array <strong>gifts</strong>()</code>
@@ -607,7 +620,7 @@ not, however, overwrite any database data with Facebook data.</p><dl>
 
 
 
-<div class='method'><a href="../source/application/models/user.php.html#line152" class="location">application/models/user.php at line 152</a>
+<div class='method'><a href="../source/application/models/user.php.html#line156" class="location">application/models/user.php at line 156</a>
 
 <h3 id="is_admin()">is_admin</h3>
 <code class="signature">public  void <strong>is_admin</strong>()</code>
@@ -616,7 +629,7 @@ not, however, overwrite any database data with Facebook data.</p><dl>
 
 
 
-<div class='method'><a href="../source/application/models/user.php.html#line358" class="location">application/models/user.php at line 358</a>
+<div class='method'><a href="../source/application/models/user.php.html#line361" class="location">application/models/user.php at line 361</a>
 
 <h3 id="is_followed_by()">is_followed_by</h3>
 <code class="signature">public  boolean <strong>is_followed_by</strong>(int id)</code>
@@ -629,7 +642,7 @@ not, however, overwrite any database data with Facebook data.</p><dl>
 
 
 
-<div class='method'><a href="../source/application/models/user.php.html#line342" class="location">application/models/user.php at line 342</a>
+<div class='method'><a href="../source/application/models/user.php.html#line345" class="location">application/models/user.php at line 345</a>
 
 <h3 id="is_following()">is_following</h3>
 <code class="signature">public  boolean <strong>is_following</strong>(int id)</code>
@@ -642,7 +655,7 @@ not, however, overwrite any database data with Facebook data.</p><dl>
 
 
 
-<div class='method'><a href="../source/application/models/user.php.html#line171" class="location">application/models/user.php at line 171</a>
+<div class='method'><a href="../source/application/models/user.php.html#line175" class="location">application/models/user.php at line 175</a>
 
 <h3 id="load_mail()">load_mail</h3>
 <code class="signature">public  void <strong>load_mail</strong>(int limit, int offset, str folder)</code>
@@ -651,7 +664,7 @@ not, however, overwrite any database data with Facebook data.</p><dl>
 
 
 
-<div class='method'><a href="../source/application/models/user.php.html#line62" class="location">application/models/user.php at line 62</a>
+<div class='method'><a href="../source/application/models/user.php.html#line66" class="location">application/models/user.php at line 66</a>
 
 <h3 id="login()">login</h3>
 <code class="signature">public  boolean <strong>login</strong>()</code>
@@ -661,7 +674,7 @@ database entry</p></div></div>
 
 
 
-<div class='method'><a href="../source/application/models/user.php.html#line235" class="location">application/models/user.php at line 235</a>
+<div class='method'><a href="../source/application/models/user.php.html#line238" class="location">application/models/user.php at line 238</a>
 
 <h3 id="needs()">needs</h3>
 <code class="signature">public  array <strong>needs</strong>()</code>
@@ -670,7 +683,7 @@ database entry</p></div></div>
 
 
 
-<div class='method'><a href="../source/application/models/user.php.html#line111" class="location">application/models/user.php at line 111</a>
+<div class='method'><a href="../source/application/models/user.php.html#line115" class="location">application/models/user.php at line 115</a>
 
 <h3 id="register()">register</h3>
 <code class="signature">public  void <strong>register</strong>()</code>
@@ -680,7 +693,7 @@ opposed to being updated. This is so we can call the user_new hook.</p></div></d
 
 
 
-<div class='method'><a href="../source/application/models/user.php.html#line267" class="location">application/models/user.php at line 267</a>
+<div class='method'><a href="../source/application/models/user.php.html#line270" class="location">application/models/user.php at line 270</a>
 
 <h3 id="requests()">requests</h3>
 <code class="signature">public  array <strong>requests</strong>()</code>
@@ -689,7 +702,7 @@ opposed to being updated. This is so we can call the user_new hook.</p></div></d
 
 
 
-<div class='method'><a href="../source/application/models/user.php.html#line313" class="location">application/models/user.php at line 313</a>
+<div class='method'><a href="../source/application/models/user.php.html#line316" class="location">application/models/user.php at line 316</a>
 
 <h3 id="stats()">stats</h3>
 <code class="signature">public  boolean <strong>stats</strong>()</code>

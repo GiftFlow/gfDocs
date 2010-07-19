@@ -6,7 +6,7 @@
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 
 <meta name="generator" content="PHPDoctor 2RC4 (http://peej.github.com/phpdoctor/)">
-<meta name="when" content="Sat, 10 Jul 2010 18:10:56 +0000">
+<meta name="when" content="Mon, 19 Jul 2010 17:13:57 +0000">
 
 <link rel="stylesheet" type="text/css" href="../../../stylesheet.css">
 <link rel="start" href="../../../overview-summary.html">
@@ -131,18 +131,24 @@
 <a name="line94"></a>		if(empty($query)) $query = $this->uri->segment(2);
 <a name="line95"></a>		$this->data['keyword'] = urldecode($query);
 <a name="line96"></a>
-<a name="line97"></a>		$this->finder->keyword = $this->data['keyword'];
-<a name="line98"></a>		
-<a name="line99"></a>		$this->data['results'] = $this->finder->geosearch();
-<a name="line100"></a>		$this->index();
-<a name="line101"></a>	}
-<a name="line102"></a>
-<a name="line103"></a>}
-<a name="line104"></a>	
-<a name="line105"></a>
-<a name="line106"></a>/* End of file mail.php */
-<a name="line107"></a>/* Location: ./system/application/controllers/mail.php */
-<a name="line108"></a></pre>
+<a name="line97"></a>		if(!empty($this->data['location']))
+<a name="line98"></a>		{
+<a name="line99"></a>			$this->finder->latitude = $this->data['location']['latitude'];
+<a name="line100"></a>			$this->finder->longitude = $this->data['location']['longitude'];
+<a name="line101"></a>			$this->finder->address = $this->data['location']['address'];
+<a name="line102"></a>		}
+<a name="line103"></a>
+<a name="line104"></a>		$this->finder->search_keyword = $this->data['keyword'];
+<a name="line105"></a>		$this->finder->format = "object";
+<a name="line106"></a>		$this->data['results'] = $this->finder->limit(50)->geosearch();
+<a name="line107"></a>		$this->index();
+<a name="line108"></a>	}
+<a name="line109"></a>}
+<a name="line110"></a>	
+<a name="line111"></a>
+<a name="line112"></a>/* End of file mail.php */
+<a name="line113"></a>/* Location: ./system/application/controllers/mail.php */
+<a name="line114"></a></pre>
 <div class="header">
 <h1>GiftFlow API</h1>
 <ul>

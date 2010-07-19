@@ -6,7 +6,7 @@
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 
 <meta name="generator" content="PHPDoctor 2RC4 (http://peej.github.com/phpdoctor/)">
-<meta name="when" content="Sat, 10 Jul 2010 18:10:56 +0000">
+<meta name="when" content="Mon, 19 Jul 2010 17:13:58 +0000">
 
 <link rel="stylesheet" type="text/css" href="../../../stylesheet.css">
 <link rel="start" href="../../../overview-summary.html">
@@ -61,160 +61,165 @@
 <a name="line24"></a>	}
 <a name="line25"></a>}
 <a name="line26"></a>?>
-<a name="line27"></a><script type="text/javascript" src="<?php echo base_url(); ?>assets/javascript/jquery.php"></script>
-<a name="line28"></a><script type="text/javascript" src="<?php echo base_url(); ?>assets/javascript/ui.php"></script>
-<a name="line29"></a><script type="text/javascript">
-<a name="line30"></a>var addthis_config = {
-<a name="line31"></a>						username: 'giftflow',
-<a name="line32"></a>						ui_email_note: 'you custom message here',
-<a name="line33"></a>						ui_email_to: 'you@yahoo.com',
-<a name="line34"></a>						ui_email_from: 'me@yahoo.com'
-<a name="line35"></a>					};
-<a name="line36"></a></script>
-<a name="line37"></a><script type="text/javascript" src="http://s7.addthis.com/js/250/addthis_widget.js"></script>
-<a name="line38"></a>
-<a name="line39"></a><?php
-<a name="line40"></a>if(!empty($googlemaps)&&$googlemaps==TRUE)
-<a name="line41"></a>{
-<a name="line42"></a>	echo "<script type='text/javascript' src='http://maps.google.com/maps/api/js?sensor=false'></script>";
-<a name="line43"></a>}
-<a name="line44"></a>if(isset($js))
+<a name="line27"></a><?php if($localhost) { ?>
+<a name="line28"></a><script type="text/javascript" src="<?php echo base_url(); ?>assets/javascript/jquery.php"></script>
+<a name="line29"></a><?php } else { ?>
+<a name="line30"></a><script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.4.2/jquery.min.js"></script>
+<a name="line31"></a><?php } ?>
+<a name="line32"></a><script type="text/javascript" src="<?php echo base_url(); ?>assets/javascript/ui.php"></script>
+<a name="line33"></a><script type="text/javascript">
+<a name="line34"></a>var addthis_config = {
+<a name="line35"></a>						username: 'giftflow',
+<a name="line36"></a>						ui_email_note: 'you custom message here',
+<a name="line37"></a>						ui_email_to: 'you@yahoo.com',
+<a name="line38"></a>						ui_email_from: 'me@yahoo.com'
+<a name="line39"></a>					};
+<a name="line40"></a></script>
+<a name="line41"></a><script type="text/javascript" src="http://s7.addthis.com/js/250/addthis_widget.js"></script>
+<a name="line42"></a>
+<a name="line43"></a><?php
+<a name="line44"></a>if(!empty($googlemaps)&&$googlemaps==TRUE)
 <a name="line45"></a>{
-<a name="line46"></a>	foreach($js as $val)
-<a name="line47"></a>	{
-<a name="line48"></a>		echo '<script type="text/javascript" src="'.base_url().'assets/javascript/'.$val.'"></script>';
-<a name="line49"></a>	}
-<a name="line50"></a>}
-<a name="line51"></a>?>
-<a name="line52"></a>
-<a name="line53"></a></head>
-<a name="line54"></a><body>
-<a name="line55"></a>
-<a name="line56"></a><div id='header'>
-<a name="line57"></a>	<div class='header_centered'>
-<a name="line58"></a>		<a href="<?php echo site_url(); ?>" id='logo'><img src="<?php echo base_url(); ?>assets/images/menubar_logo.png" /></a>
-<a name="line59"></a>		<div id='session'>
-<a name="line60"></a>			<?php 
-<a name="line61"></a>			if(!empty($logged_in)&&$logged_in)
-<a name="line62"></a>			{
-<a name="line63"></a>			?>
-<a name="line64"></a>				<ul id='you_menu'>
-<a name="line65"></a>					<li>
-<a name="line66"></a>						<a href='<?php echo site_url(''); ?>' id='you'>
-<a name="line67"></a>							<?php if(!empty($userdata['photo_thumb_url'])){ echo "<img src='".$userdata['photo_thumb_url']."' id='you_img'  />"; }  ?>
-<a name="line68"></a>							<span style='float: left;'>You</span>
-<a name="line69"></a>							<span class='ui-icon ui-icon-triangle-1-s left' style="background-image: url('<?php echo base_url(); ?>assets/css/green/images/ui-icons_ffffff_256x240.png'); margin-left: 10px;"></span>
-<a name="line70"></a>							<div style='clear: both;'></div>
-<a name="line71"></a>						</a>
-<a name="line72"></a>						<ul id='you_dropdown'>
-<a name="line73"></a>							<li><a href='<?php echo site_url(''); ?>'>Dashboard</a></li>
-<a name="line74"></a>
-<a name="line75"></a>								<?php if ($this->auth->validate(100)) { ?>
-<a name="line76"></a>									<li><a href='<?php echo site_url('admin'); ?>'>Admin Area</a></li>
-<a name="line77"></a>								<?php } ?>
-<a name="line78"></a>								
-<a name="line79"></a>							<li><a href='<?php echo site_url('give'); ?>'>Your Gifts</a></li>
-<a name="line80"></a>							<li><a  href='<?php echo site_url('get'); ?>'>Your Needs</a></li>
-<a name="line81"></a>							<li><a  href='<?php echo site_url('account'); ?>'>Settings</a></li>
-<a name="line82"></a>							<li><a href='<?php echo site_url('logout'); ?>'>Log Out</a></li>
-<a name="line83"></a>						</ul>
-<a name="line84"></a>					</li>
-<a name="line85"></a>				</ul>
-<a name="line86"></a>			<?php 
-<a name="line87"></a>			}
-<a name="line88"></a>			else
-<a name="line89"></a>			{
-<a name="line90"></a>			?>
-<a name="line91"></a>				<ul id='you_menu'>
-<a name="line92"></a>					<li><a href='<?php echo site_url('login'); ?>' id='login'>Login</a></li>
-<a name="line93"></a>					<li><a href='<?php echo site_url('register'); ?>' id='signup'>Sign Up</a></li>
-<a name="line94"></a>				</ul>
-<a name="line95"></a>			<?php
-<a name="line96"></a>			}
-<a name="line97"></a>			?>
-<a name="line98"></a>		</div>
-<a name="line99"></a>		<?php $segment = $this->uri->segment(1); ?>
-<a name="line100"></a>		<ul id='nav'>
-<a name="line101"></a>			<li><a href="<?php echo site_url(); if($segment==false) echo '" class="active'; ?>">Home</a></li>
-<a name="line102"></a>			<li><a href="<?php echo site_url('find'); if($segment=="find") echo '" class="active'; ?>">Find</a></li>
-<a name="line103"></a>			<li><a href="<?php echo site_url('give'); if($segment=="give") echo '" class="active'; ?>">Give</a></li>
-<a name="line104"></a>			<li><a href="<?php echo site_url('get'); if($segment=="get") echo '" class="active'; ?>">Get</a></li>
-<a name="line105"></a>			<li><a href="<?php echo site_url('about'); if($segment=="about") echo '" class="active'; ?>">About</a></li>
-<a name="line106"></a>		</ul>
-<a name="line107"></a>		<div style='clear:both;display: block;'></div>
-<a name="line108"></a>	</div>		
-<a name="line109"></a></div>
-<a name="line110"></a><div id='subheader'>
-<a name="line111"></a>	<div class='header_centered'>
-<a name="line112"></a>	</div>
-<a name="line113"></a></div>
-<a name="line114"></a><div class='wrapper'>
-<a name="line115"></a>
-<a name="line116"></a><?php
-<a name="line117"></a>// Output flashdata as javascript variable so that it can be displayed in jQuery
-<a name="line118"></a>$flashdata_success = $this->session->flashdata('success');
-<a name="line119"></a>$flashdata_error = $this->session->flashdata('error');
+<a name="line46"></a>	echo "<script type='text/javascript' src='http://maps.google.com/maps/api/js?sensor=false'></script>";
+<a name="line47"></a>	echo "<script type='text/javascript' src='".base_url()."assets/javascript/fluster.js'></script>";
+<a name="line48"></a>}
+<a name="line49"></a>if(isset($js))
+<a name="line50"></a>{
+<a name="line51"></a>	foreach($js as $val)
+<a name="line52"></a>	{
+<a name="line53"></a>		echo '<script type="text/javascript" src="'.base_url().'assets/javascript/'.$val.'"></script>';
+<a name="line54"></a>	}
+<a name="line55"></a>}
+<a name="line56"></a>?>
+<a name="line57"></a>
+<a name="line58"></a></head>
+<a name="line59"></a><body>
+<a name="line60"></a>
+<a name="line61"></a><div id='header'>
+<a name="line62"></a>	<div class='header_centered'>
+<a name="line63"></a>		<a href="<?php echo site_url(); ?>" id='logo'><img src="<?php echo base_url(); ?>assets/images/menubar_logo.png" /></a>
+<a name="line64"></a>		<div id='session'>
+<a name="line65"></a>			<?php 
+<a name="line66"></a>			if(!empty($logged_in)&&$logged_in)
+<a name="line67"></a>			{
+<a name="line68"></a>			?>
+<a name="line69"></a>				<ul id='you_menu'>
+<a name="line70"></a>					<li>
+<a name="line71"></a>						<a href='<?php echo site_url(''); ?>' id='you'>
+<a name="line72"></a>							<?php if(!empty($userdata['photo_thumb_url'])){ echo "<img src='".$userdata['photo_thumb_url']."' id='you_img'  />"; }  ?>
+<a name="line73"></a>							<span style='float: left;'>You</span>
+<a name="line74"></a>							<span class='ui-icon ui-icon-triangle-1-s left' style="background-image: url('<?php echo base_url(); ?>assets/css/green/images/ui-icons_ffffff_256x240.png'); margin-left: 10px;"></span>
+<a name="line75"></a>							<div style='clear: both;'></div>
+<a name="line76"></a>						</a>
+<a name="line77"></a>						<ul id='you_dropdown'>
+<a name="line78"></a>							<li><a href='<?php echo site_url(''); ?>'>Dashboard</a></li>
+<a name="line79"></a>
+<a name="line80"></a>								<?php if ($this->auth->validate(100)) { ?>
+<a name="line81"></a>									<li><a href='<?php echo site_url('admin'); ?>'>Admin Area</a></li>
+<a name="line82"></a>								<?php } ?>
+<a name="line83"></a>								
+<a name="line84"></a>							<li><a href='<?php echo site_url('give'); ?>'>Your Gifts</a></li>
+<a name="line85"></a>							<li><a  href='<?php echo site_url('get'); ?>'>Your Needs</a></li>
+<a name="line86"></a>							<li><a  href='<?php echo site_url('account'); ?>'>Settings</a></li>
+<a name="line87"></a>							<li><a href='<?php echo site_url('logout'); ?>'>Log Out</a></li>
+<a name="line88"></a>						</ul>
+<a name="line89"></a>					</li>
+<a name="line90"></a>				</ul>
+<a name="line91"></a>			<?php 
+<a name="line92"></a>			}
+<a name="line93"></a>			else
+<a name="line94"></a>			{
+<a name="line95"></a>			?>
+<a name="line96"></a>				<ul id='you_menu'>
+<a name="line97"></a>					<li><a href='<?php echo site_url('login'); ?>' id='login'>Login</a></li>
+<a name="line98"></a>					<li><a href='<?php echo site_url('register'); ?>' id='signup'>Sign Up</a></li>
+<a name="line99"></a>				</ul>
+<a name="line100"></a>			<?php
+<a name="line101"></a>			}
+<a name="line102"></a>			?>
+<a name="line103"></a>		</div>
+<a name="line104"></a>		<?php $segment = $this->uri->segment(1); ?>
+<a name="line105"></a>		<ul id='nav'>
+<a name="line106"></a>			<li><a href="<?php echo site_url(); if($segment==false) echo '" class="active'; ?>">Home</a></li>
+<a name="line107"></a>			<li><a href="<?php echo site_url('find'); if($segment=="find") echo '" class="active'; ?>">Find</a></li>
+<a name="line108"></a>			<li><a href="<?php echo site_url('give'); if($segment=="give") echo '" class="active'; ?>">Give</a></li>
+<a name="line109"></a>			<li><a href="<?php echo site_url('get'); if($segment=="get") echo '" class="active'; ?>">Get</a></li>
+<a name="line110"></a>			<li><a href="<?php echo site_url('about'); if($segment=="about") echo '" class="active'; ?>">About</a></li>
+<a name="line111"></a>		</ul>
+<a name="line112"></a>		<div style='clear:both;display: block;'></div>
+<a name="line113"></a>	</div>		
+<a name="line114"></a></div>
+<a name="line115"></a><div id='subheader'>
+<a name="line116"></a>	<div class='header_centered'>
+<a name="line117"></a>	</div>
+<a name="line118"></a></div>
+<a name="line119"></a><div class='wrapper'>
 <a name="line120"></a>
-<a name="line121"></a>if (!empty($flashdata_success)) 
-<a name="line122"></a>{
-<a name="line123"></a>	if(is_array($flashdata_success))
-<a name="line124"></a>	{
-<a name="line125"></a>		$array = $flashdata_success;
-<a name="line126"></a>		$flashdata_success = '';
-<a name="line127"></a>		foreach($array as $val) $flashdata_success .= $val." ";
-<a name="line128"></a>	}
-<a name="line129"></a>	echo "<noscript><p class='alert_success'>";
-<a name="line130"></a>	echo $flashdata_success;
-<a name="line131"></a>	echo "</p></noscript>";
-<a name="line132"></a>	echo '<script> var alert_success = "';
-<a name="line133"></a>	echo $flashdata_success;
-<a name="line134"></a>	echo '";</script>';
-<a name="line135"></a>}
-<a name="line136"></a>else
-<a name="line137"></a>{
-<a name="line138"></a>	echo "<script>var alert_success=false;</script>";
-<a name="line139"></a>}
-<a name="line140"></a>if (!empty($flashdata_error)) 
-<a name="line141"></a>{
-<a name="line142"></a>	if(is_array($flashdata_error))
-<a name="line143"></a>	{
-<a name="line144"></a>		$array = $flashdata_error;
-<a name="line145"></a>		$flashdata_error = '';
-<a name="line146"></a>		foreach($array as $val) $flashdata_error .= $val." ";
-<a name="line147"></a>	}
-<a name="line148"></a>	echo "<noscript><p class='alert_error'>";
-<a name="line149"></a>	echo $flashdata_error;
-<a name="line150"></a>	echo "</p></noscript>";
-<a name="line151"></a>	echo '<script> var alert_error = "';
-<a name="line152"></a>	echo $flashdata_error;
-<a name="line153"></a>	echo '";</script>';
-<a name="line154"></a>}
-<a name="line155"></a>else
-<a name="line156"></a>{
-<a name="line157"></a>	echo "<script>var alert_error=false;</script>";
-<a name="line158"></a>}
-<a name="line159"></a>?>
-<a name="line160"></a>
-<a name="line161"></a>
-<a name="line162"></a><?php
-<a name="line163"></a>// Display breadcrumbs
-<a name="line164"></a>if(!empty($breadcrumbs)) { ?>
-<a name="line165"></a>	<ul class="breadcrumbs">
-<a name="line166"></a>		<?php foreach($breadcrumbs as $crumb) { ?>
-<a name="line167"></a>		<li>
-<a name="line168"></a>			<?php if(!empty($crumb['href'])) { ?>
-<a name="line169"></a>				<a href='<?php echo $crumb['href']; ?>'><?php echo $crumb['title']; ?></a><span class='ui-icon ui-icon-triangle-1-e' id='breadcrumb_delimiter'></span>
-<a name="line170"></a>			<?php } else { ?>
-<a name="line171"></a>				<span class='current'><?php echo $crumb['title']; ?></span>
-<a name="line172"></a>			<?php } ?>
-<a name="line173"></a>		</li>
-<a name="line174"></a>		<?php } ?>
-<a name="line175"></a>	</ul>
-<a name="line176"></a><div style="clear: both;"></div>
-<a name="line177"></a>
-<a name="line178"></a><?php } ?>
-<a name="line179"></a>
-<a name="line180"></a></pre>
+<a name="line121"></a><?php
+<a name="line122"></a>// Output flashdata as javascript variable so that it can be displayed in jQuery
+<a name="line123"></a>$flashdata_success = $this->session->flashdata('success');
+<a name="line124"></a>$flashdata_error = $this->session->flashdata('error');
+<a name="line125"></a>
+<a name="line126"></a>if (!empty($flashdata_success)) 
+<a name="line127"></a>{
+<a name="line128"></a>	if(is_array($flashdata_success))
+<a name="line129"></a>	{
+<a name="line130"></a>		$array = $flashdata_success;
+<a name="line131"></a>		$flashdata_success = '';
+<a name="line132"></a>		foreach($array as $val) $flashdata_success .= $val." ";
+<a name="line133"></a>	}
+<a name="line134"></a>	echo "<noscript><p class='alert_success'>";
+<a name="line135"></a>	echo $flashdata_success;
+<a name="line136"></a>	echo "</p></noscript>";
+<a name="line137"></a>	echo '<script> var alert_success = "';
+<a name="line138"></a>	echo $flashdata_success;
+<a name="line139"></a>	echo '";</script>';
+<a name="line140"></a>}
+<a name="line141"></a>else
+<a name="line142"></a>{
+<a name="line143"></a>	echo "<script>var alert_success=false;</script>";
+<a name="line144"></a>}
+<a name="line145"></a>if (!empty($flashdata_error)) 
+<a name="line146"></a>{
+<a name="line147"></a>	if(is_array($flashdata_error))
+<a name="line148"></a>	{
+<a name="line149"></a>		$array = $flashdata_error;
+<a name="line150"></a>		$flashdata_error = '';
+<a name="line151"></a>		foreach($array as $val) $flashdata_error .= $val." ";
+<a name="line152"></a>	}
+<a name="line153"></a>	echo "<noscript><p class='alert_error'>";
+<a name="line154"></a>	echo $flashdata_error;
+<a name="line155"></a>	echo "</p></noscript>";
+<a name="line156"></a>	echo '<script> var alert_error = "';
+<a name="line157"></a>	echo $flashdata_error;
+<a name="line158"></a>	echo '";</script>';
+<a name="line159"></a>}
+<a name="line160"></a>else
+<a name="line161"></a>{
+<a name="line162"></a>	echo "<script>var alert_error=false;</script>";
+<a name="line163"></a>}
+<a name="line164"></a>?>
+<a name="line165"></a>
+<a name="line166"></a>
+<a name="line167"></a><?php
+<a name="line168"></a>// Display breadcrumbs
+<a name="line169"></a>if(!empty($breadcrumbs)) { ?>
+<a name="line170"></a>	<ul class="breadcrumbs">
+<a name="line171"></a>		<?php foreach($breadcrumbs as $crumb) { ?>
+<a name="line172"></a>		<li>
+<a name="line173"></a>			<?php if(!empty($crumb['href'])) { ?>
+<a name="line174"></a>				<a href='<?php echo $crumb['href']; ?>'><?php echo $crumb['title']; ?></a><span class='ui-icon ui-icon-triangle-1-e' id='breadcrumb_delimiter'></span>
+<a name="line175"></a>			<?php } else { ?>
+<a name="line176"></a>				<span class='current'><?php echo $crumb['title']; ?></span>
+<a name="line177"></a>			<?php } ?>
+<a name="line178"></a>		</li>
+<a name="line179"></a>		<?php } ?>
+<a name="line180"></a>	</ul>
+<a name="line181"></a><div style="clear: both;"></div>
+<a name="line182"></a>
+<a name="line183"></a><?php } ?>
+<a name="line184"></a>
+<a name="line185"></a></pre>
 <div class="header">
 <h1>GiftFlow API</h1>
 <ul>
