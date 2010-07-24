@@ -6,7 +6,7 @@
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 
 <meta name="generator" content="PHPDoctor 2RC4 (http://peej.github.com/phpdoctor/)">
-<meta name="when" content="Mon, 19 Jul 2010 17:13:58 +0000">
+<meta name="when" content="Sat, 24 Jul 2010 20:46:31 +0000">
 
 <link rel="stylesheet" type="text/css" href="../../stylesheet.css">
 <link rel="start" href="../../overview-summary.html">
@@ -45,7 +45,7 @@
 <a name="line6"></a> *
 <a name="line7"></a> * @package		CodeIgniter
 <a name="line8"></a> * @author		ExpressionEngine Dev Team
-<a name="line9"></a> * @copyright	Copyright (c) 2008 - 2009, EllisLab, Inc.
+<a name="line9"></a> * @copyright	Copyright (c) 2008 - 2010, EllisLab, Inc.
 <a name="line10"></a> * @license		http://codeigniter.com/user_guide/license.html
 <a name="line11"></a> * @link		http://codeigniter.com
 <a name="line12"></a> * @since		Version 1.0
@@ -61,7 +61,7 @@
 <a name="line22"></a> * @author		ExpressionEngine Dev Team
 <a name="line23"></a> * @link		http://codeigniter.com/user_guide/database/
 <a name="line24"></a> */
-<a name="line25"></a>function &DB($params = '', $active_record_override = FALSE)
+<a name="line25"></a>function &DB($params = '', $active_record_override = NULL)
 <a name="line26"></a>{
 <a name="line27"></a>	// Load the DB config file if a DSN string wasn't passed
 <a name="line28"></a>	if (is_string($params) AND strpos($params, '://') === FALSE)
@@ -141,9 +141,9 @@
 <a name="line102"></a>	// based on whether we're using the active record class or not.
 <a name="line103"></a>	// Kudos to Paul for discovering this clever use of eval()
 <a name="line104"></a>	
-<a name="line105"></a>	if ($active_record_override == TRUE)
+<a name="line105"></a>	if ($active_record_override !== NULL)
 <a name="line106"></a>	{
-<a name="line107"></a>		$active_record = TRUE;
+<a name="line107"></a>		$active_record = $active_record_override;
 <a name="line108"></a>	}
 <a name="line109"></a>	
 <a name="line110"></a>	require_once(BASEPATH.'database/DB_driver'.EXT);
@@ -176,13 +176,18 @@
 <a name="line137"></a>		$DB->initialize();
 <a name="line138"></a>	}
 <a name="line139"></a>	
-<a name="line140"></a>	return $DB;
-<a name="line141"></a>}	
-<a name="line142"></a>
-<a name="line143"></a>
-<a name="line144"></a>
-<a name="line145"></a>/* End of file DB.php */
-<a name="line146"></a>/* Location: ./system/database/DB.php */</pre>
+<a name="line140"></a>	if (isset($params['stricton']) && $params['stricton'] == TRUE)
+<a name="line141"></a>	{
+<a name="line142"></a>		$DB->query('SET SESSION sql_mode="STRICT_ALL_TABLES"');		
+<a name="line143"></a>	}
+<a name="line144"></a>	
+<a name="line145"></a>	return $DB;
+<a name="line146"></a>}	
+<a name="line147"></a>
+<a name="line148"></a>
+<a name="line149"></a>
+<a name="line150"></a>/* End of file DB.php */
+<a name="line151"></a>/* Location: ./system/database/DB.php */</pre>
 <div class="header">
 <h1>GiftFlow API</h1>
 <ul>

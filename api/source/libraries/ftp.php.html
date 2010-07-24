@@ -6,7 +6,7 @@
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 
 <meta name="generator" content="PHPDoctor 2RC4 (http://peej.github.com/phpdoctor/)">
-<meta name="when" content="Mon, 19 Jul 2010 17:13:58 +0000">
+<meta name="when" content="Sat, 24 Jul 2010 20:46:32 +0000">
 
 <link rel="stylesheet" type="text/css" href="../../stylesheet.css">
 <link rel="start" href="../../overview-summary.html">
@@ -45,7 +45,7 @@
 <a name="line6"></a> *
 <a name="line7"></a> * @package		CodeIgniter
 <a name="line8"></a> * @author		ExpressionEngine Dev Team
-<a name="line9"></a> * @copyright	Copyright (c) 2008 - 2009, EllisLab, Inc.
+<a name="line9"></a> * @copyright	Copyright (c) 2008 - 2010, EllisLab, Inc.
 <a name="line10"></a> * @license		http://codeigniter.com/user_guide/license.html
 <a name="line11"></a> * @link		http://codeigniter.com
 <a name="line12"></a> * @since		Version 1.0
@@ -320,341 +320,383 @@
 <a name="line281"></a>	// --------------------------------------------------------------------
 <a name="line282"></a>
 <a name="line283"></a>	/**
-<a name="line284"></a>	 * Rename (or move) a file
+<a name="line284"></a>	 * Download a file from a remote server to the local server
 <a name="line285"></a>	 *
 <a name="line286"></a>	 * @access	public
 <a name="line287"></a>	 * @param	string
 <a name="line288"></a>	 * @param	string
-<a name="line289"></a>	 * @param	bool
+<a name="line289"></a>	 * @param	string
 <a name="line290"></a>	 * @return	bool
 <a name="line291"></a>	 */
-<a name="line292"></a>	function rename($old_file, $new_file, $move = FALSE)
+<a name="line292"></a>	function download($rempath, $locpath, $mode = 'auto')
 <a name="line293"></a>	{
 <a name="line294"></a>		if ( ! $this->_is_conn())
 <a name="line295"></a>		{
 <a name="line296"></a>			return FALSE;
 <a name="line297"></a>		}
-<a name="line298"></a>
-<a name="line299"></a>		$result = @ftp_rename($this->conn_id, $old_file, $new_file);
-<a name="line300"></a>
-<a name="line301"></a>		if ($result === FALSE)
-<a name="line302"></a>		{
-<a name="line303"></a>			if ($this->debug == TRUE)
-<a name="line304"></a>			{
-<a name="line305"></a>				$msg = ($move == FALSE) ? 'ftp_unable_to_rename' : 'ftp_unable_to_move';
-<a name="line306"></a>
-<a name="line307"></a>				$this->_error($msg);
-<a name="line308"></a>			}
-<a name="line309"></a>			return FALSE;
-<a name="line310"></a>		}
-<a name="line311"></a>
-<a name="line312"></a>		return TRUE;
-<a name="line313"></a>	}
-<a name="line314"></a>
-<a name="line315"></a>	// --------------------------------------------------------------------
-<a name="line316"></a>
-<a name="line317"></a>	/**
-<a name="line318"></a>	 * Move a file
-<a name="line319"></a>	 *
-<a name="line320"></a>	 * @access	public
-<a name="line321"></a>	 * @param	string
-<a name="line322"></a>	 * @param	string
-<a name="line323"></a>	 * @return	bool
-<a name="line324"></a>	 */
-<a name="line325"></a>	function move($old_file, $new_file)
-<a name="line326"></a>	{
-<a name="line327"></a>		return $this->rename($old_file, $new_file, TRUE);
-<a name="line328"></a>	}
-<a name="line329"></a>
-<a name="line330"></a>	// --------------------------------------------------------------------
-<a name="line331"></a>
-<a name="line332"></a>	/**
-<a name="line333"></a>	 * Rename (or move) a file
-<a name="line334"></a>	 *
-<a name="line335"></a>	 * @access	public
-<a name="line336"></a>	 * @param	string
-<a name="line337"></a>	 * @return	bool
-<a name="line338"></a>	 */
-<a name="line339"></a>	function delete_file($filepath)
-<a name="line340"></a>	{
-<a name="line341"></a>		if ( ! $this->_is_conn())
-<a name="line342"></a>		{
-<a name="line343"></a>			return FALSE;
-<a name="line344"></a>		}
-<a name="line345"></a>
-<a name="line346"></a>		$result = @ftp_delete($this->conn_id, $filepath);
-<a name="line347"></a>
-<a name="line348"></a>		if ($result === FALSE)
-<a name="line349"></a>		{
-<a name="line350"></a>			if ($this->debug == TRUE)
-<a name="line351"></a>			{
-<a name="line352"></a>				$this->_error('ftp_unable_to_delete');
-<a name="line353"></a>			}
-<a name="line354"></a>			return FALSE;
-<a name="line355"></a>		}
+<a name="line298"></a>       
+<a name="line299"></a>		// Set the mode if not specified
+<a name="line300"></a>		if ($mode == 'auto')
+<a name="line301"></a>		{
+<a name="line302"></a>			// Get the file extension so we can set the upload type
+<a name="line303"></a>			$ext = $this->_getext($rempath);
+<a name="line304"></a>			$mode = $this->_settype($ext);
+<a name="line305"></a>		}
+<a name="line306"></a>               
+<a name="line307"></a>		$mode = ($mode == 'ascii') ? FTP_ASCII : FTP_BINARY;
+<a name="line308"></a>               
+<a name="line309"></a>		$result = @ftp_get($this->conn_id, $locpath, $rempath, $mode);
+<a name="line310"></a>
+<a name="line311"></a>		if ($result === FALSE)
+<a name="line312"></a>		{
+<a name="line313"></a>			if ($this->debug == TRUE)
+<a name="line314"></a>			{
+<a name="line315"></a>				$this->_error('ftp_unable_to_download');
+<a name="line316"></a>			}
+<a name="line317"></a>			return FALSE;          
+<a name="line318"></a>		}
+<a name="line319"></a>               
+<a name="line320"></a>		return TRUE;
+<a name="line321"></a>    }
+<a name="line322"></a>
+<a name="line323"></a>	// --------------------------------------------------------------------
+<a name="line324"></a>
+<a name="line325"></a>	/**
+<a name="line326"></a>	 * Rename (or move) a file
+<a name="line327"></a>	 *
+<a name="line328"></a>	 * @access	public
+<a name="line329"></a>	 * @param	string
+<a name="line330"></a>	 * @param	string
+<a name="line331"></a>	 * @param	bool
+<a name="line332"></a>	 * @return	bool
+<a name="line333"></a>	 */
+<a name="line334"></a>	function rename($old_file, $new_file, $move = FALSE)
+<a name="line335"></a>	{
+<a name="line336"></a>		if ( ! $this->_is_conn())
+<a name="line337"></a>		{
+<a name="line338"></a>			return FALSE;
+<a name="line339"></a>		}
+<a name="line340"></a>
+<a name="line341"></a>		$result = @ftp_rename($this->conn_id, $old_file, $new_file);
+<a name="line342"></a>
+<a name="line343"></a>		if ($result === FALSE)
+<a name="line344"></a>		{
+<a name="line345"></a>			if ($this->debug == TRUE)
+<a name="line346"></a>			{
+<a name="line347"></a>				$msg = ($move == FALSE) ? 'ftp_unable_to_rename' : 'ftp_unable_to_move';
+<a name="line348"></a>
+<a name="line349"></a>				$this->_error($msg);
+<a name="line350"></a>			}
+<a name="line351"></a>			return FALSE;
+<a name="line352"></a>		}
+<a name="line353"></a>
+<a name="line354"></a>		return TRUE;
+<a name="line355"></a>	}
 <a name="line356"></a>
-<a name="line357"></a>		return TRUE;
-<a name="line358"></a>	}
-<a name="line359"></a>
-<a name="line360"></a>	// --------------------------------------------------------------------
-<a name="line361"></a>
-<a name="line362"></a>	/**
-<a name="line363"></a>	 * Delete a folder and recursively delete everything (including sub-folders)
-<a name="line364"></a>	 * containted within it.
-<a name="line365"></a>	 *
-<a name="line366"></a>	 * @access	public
-<a name="line367"></a>	 * @param	string
-<a name="line368"></a>	 * @return	bool
-<a name="line369"></a>	 */
-<a name="line370"></a>	function delete_dir($filepath)
-<a name="line371"></a>	{
-<a name="line372"></a>		if ( ! $this->_is_conn())
-<a name="line373"></a>		{
-<a name="line374"></a>			return FALSE;
-<a name="line375"></a>		}
-<a name="line376"></a>
-<a name="line377"></a>		// Add a trailing slash to the file path if needed
-<a name="line378"></a>		$filepath = preg_replace("/(.+?)\/*$/", "\\1/",  $filepath);
-<a name="line379"></a>
-<a name="line380"></a>		$list = $this->list_files($filepath);
-<a name="line381"></a>
-<a name="line382"></a>		if ($list !== FALSE AND count($list) > 0)
-<a name="line383"></a>		{
-<a name="line384"></a>			foreach ($list as $item)
-<a name="line385"></a>			{
-<a name="line386"></a>				// If we can't delete the item it's probaly a folder so
-<a name="line387"></a>				// we'll recursively call delete_dir()
-<a name="line388"></a>				if ( ! @ftp_delete($this->conn_id, $item))
-<a name="line389"></a>				{
-<a name="line390"></a>					$this->delete_dir($item);
-<a name="line391"></a>				}
-<a name="line392"></a>			}
-<a name="line393"></a>		}
-<a name="line394"></a>
-<a name="line395"></a>		$result = @ftp_rmdir($this->conn_id, $filepath);
-<a name="line396"></a>
-<a name="line397"></a>		if ($result === FALSE)
-<a name="line398"></a>		{
-<a name="line399"></a>			if ($this->debug == TRUE)
-<a name="line400"></a>			{
-<a name="line401"></a>				$this->_error('ftp_unable_to_delete');
-<a name="line402"></a>			}
-<a name="line403"></a>			return FALSE;
-<a name="line404"></a>		}
-<a name="line405"></a>
-<a name="line406"></a>		return TRUE;
-<a name="line407"></a>	}
-<a name="line408"></a>
-<a name="line409"></a>	// --------------------------------------------------------------------
-<a name="line410"></a>
-<a name="line411"></a>	/**
-<a name="line412"></a>	 * Set file permissions
-<a name="line413"></a>	 *
-<a name="line414"></a>	 * @access	public
-<a name="line415"></a>	 * @param	string 	the file path
-<a name="line416"></a>	 * @param	string	the permissions
-<a name="line417"></a>	 * @return	bool
-<a name="line418"></a>	 */
-<a name="line419"></a>	function chmod($path, $perm)
-<a name="line420"></a>	{
-<a name="line421"></a>		if ( ! $this->_is_conn())
-<a name="line422"></a>		{
-<a name="line423"></a>			return FALSE;
-<a name="line424"></a>		}
-<a name="line425"></a>
-<a name="line426"></a>		// Permissions can only be set when running PHP 5
-<a name="line427"></a>		if ( ! function_exists('ftp_chmod'))
-<a name="line428"></a>		{
-<a name="line429"></a>			if ($this->debug == TRUE)
-<a name="line430"></a>			{
-<a name="line431"></a>				$this->_error('ftp_unable_to_chmod');
-<a name="line432"></a>			}
-<a name="line433"></a>			return FALSE;
-<a name="line434"></a>		}
-<a name="line435"></a>
-<a name="line436"></a>		$result = @ftp_chmod($this->conn_id, $perm, $path);
-<a name="line437"></a>
-<a name="line438"></a>		if ($result === FALSE)
-<a name="line439"></a>		{
-<a name="line440"></a>			if ($this->debug == TRUE)
-<a name="line441"></a>			{
-<a name="line442"></a>				$this->_error('ftp_unable_to_chmod');
-<a name="line443"></a>			}
-<a name="line444"></a>			return FALSE;
-<a name="line445"></a>		}
-<a name="line446"></a>
-<a name="line447"></a>		return TRUE;
-<a name="line448"></a>	}
-<a name="line449"></a>
-<a name="line450"></a>	// --------------------------------------------------------------------
-<a name="line451"></a>
-<a name="line452"></a>	/**
-<a name="line453"></a>	 * FTP List files in the specified directory
-<a name="line454"></a>	 *
-<a name="line455"></a>	 * @access	public
-<a name="line456"></a>	 * @return	array
-<a name="line457"></a>	 */
-<a name="line458"></a>	function list_files($path = '.')
-<a name="line459"></a>	{
-<a name="line460"></a>		if ( ! $this->_is_conn())
-<a name="line461"></a>		{
-<a name="line462"></a>			return FALSE;
-<a name="line463"></a>		}
-<a name="line464"></a>
-<a name="line465"></a>		return ftp_nlist($this->conn_id, $path);
-<a name="line466"></a>	}
+<a name="line357"></a>	// --------------------------------------------------------------------
+<a name="line358"></a>
+<a name="line359"></a>	/**
+<a name="line360"></a>	 * Move a file
+<a name="line361"></a>	 *
+<a name="line362"></a>	 * @access	public
+<a name="line363"></a>	 * @param	string
+<a name="line364"></a>	 * @param	string
+<a name="line365"></a>	 * @return	bool
+<a name="line366"></a>	 */
+<a name="line367"></a>	function move($old_file, $new_file)
+<a name="line368"></a>	{
+<a name="line369"></a>		return $this->rename($old_file, $new_file, TRUE);
+<a name="line370"></a>	}
+<a name="line371"></a>
+<a name="line372"></a>	// --------------------------------------------------------------------
+<a name="line373"></a>
+<a name="line374"></a>	/**
+<a name="line375"></a>	 * Rename (or move) a file
+<a name="line376"></a>	 *
+<a name="line377"></a>	 * @access	public
+<a name="line378"></a>	 * @param	string
+<a name="line379"></a>	 * @return	bool
+<a name="line380"></a>	 */
+<a name="line381"></a>	function delete_file($filepath)
+<a name="line382"></a>	{
+<a name="line383"></a>		if ( ! $this->_is_conn())
+<a name="line384"></a>		{
+<a name="line385"></a>			return FALSE;
+<a name="line386"></a>		}
+<a name="line387"></a>
+<a name="line388"></a>		$result = @ftp_delete($this->conn_id, $filepath);
+<a name="line389"></a>
+<a name="line390"></a>		if ($result === FALSE)
+<a name="line391"></a>		{
+<a name="line392"></a>			if ($this->debug == TRUE)
+<a name="line393"></a>			{
+<a name="line394"></a>				$this->_error('ftp_unable_to_delete');
+<a name="line395"></a>			}
+<a name="line396"></a>			return FALSE;
+<a name="line397"></a>		}
+<a name="line398"></a>
+<a name="line399"></a>		return TRUE;
+<a name="line400"></a>	}
+<a name="line401"></a>
+<a name="line402"></a>	// --------------------------------------------------------------------
+<a name="line403"></a>
+<a name="line404"></a>	/**
+<a name="line405"></a>	 * Delete a folder and recursively delete everything (including sub-folders)
+<a name="line406"></a>	 * containted within it.
+<a name="line407"></a>	 *
+<a name="line408"></a>	 * @access	public
+<a name="line409"></a>	 * @param	string
+<a name="line410"></a>	 * @return	bool
+<a name="line411"></a>	 */
+<a name="line412"></a>	function delete_dir($filepath)
+<a name="line413"></a>	{
+<a name="line414"></a>		if ( ! $this->_is_conn())
+<a name="line415"></a>		{
+<a name="line416"></a>			return FALSE;
+<a name="line417"></a>		}
+<a name="line418"></a>
+<a name="line419"></a>		// Add a trailing slash to the file path if needed
+<a name="line420"></a>		$filepath = preg_replace("/(.+?)\/*$/", "\\1/",  $filepath);
+<a name="line421"></a>
+<a name="line422"></a>		$list = $this->list_files($filepath);
+<a name="line423"></a>
+<a name="line424"></a>		if ($list !== FALSE AND count($list) > 0)
+<a name="line425"></a>		{
+<a name="line426"></a>			foreach ($list as $item)
+<a name="line427"></a>			{
+<a name="line428"></a>				// If we can't delete the item it's probaly a folder so
+<a name="line429"></a>				// we'll recursively call delete_dir()
+<a name="line430"></a>				if ( ! @ftp_delete($this->conn_id, $item))
+<a name="line431"></a>				{
+<a name="line432"></a>					$this->delete_dir($item);
+<a name="line433"></a>				}
+<a name="line434"></a>			}
+<a name="line435"></a>		}
+<a name="line436"></a>
+<a name="line437"></a>		$result = @ftp_rmdir($this->conn_id, $filepath);
+<a name="line438"></a>
+<a name="line439"></a>		if ($result === FALSE)
+<a name="line440"></a>		{
+<a name="line441"></a>			if ($this->debug == TRUE)
+<a name="line442"></a>			{
+<a name="line443"></a>				$this->_error('ftp_unable_to_delete');
+<a name="line444"></a>			}
+<a name="line445"></a>			return FALSE;
+<a name="line446"></a>		}
+<a name="line447"></a>
+<a name="line448"></a>		return TRUE;
+<a name="line449"></a>	}
+<a name="line450"></a>
+<a name="line451"></a>	// --------------------------------------------------------------------
+<a name="line452"></a>
+<a name="line453"></a>	/**
+<a name="line454"></a>	 * Set file permissions
+<a name="line455"></a>	 *
+<a name="line456"></a>	 * @access	public
+<a name="line457"></a>	 * @param	string 	the file path
+<a name="line458"></a>	 * @param	string	the permissions
+<a name="line459"></a>	 * @return	bool
+<a name="line460"></a>	 */
+<a name="line461"></a>	function chmod($path, $perm)
+<a name="line462"></a>	{
+<a name="line463"></a>		if ( ! $this->_is_conn())
+<a name="line464"></a>		{
+<a name="line465"></a>			return FALSE;
+<a name="line466"></a>		}
 <a name="line467"></a>
-<a name="line468"></a>	// ------------------------------------------------------------------------
-<a name="line469"></a>
-<a name="line470"></a>	/**
-<a name="line471"></a>	 * Read a directory and recreate it remotely
-<a name="line472"></a>	 *
-<a name="line473"></a>	 * This function recursively reads a folder and everything it contains (including
-<a name="line474"></a>	 * sub-folders) and creates a mirror via FTP based on it.  Whatever the directory structure
-<a name="line475"></a>	 * of the original file path will be recreated on the server.
-<a name="line476"></a>	 *
-<a name="line477"></a>	 * @access	public
-<a name="line478"></a>	 * @param	string	path to source with trailing slash
-<a name="line479"></a>	 * @param	string	path to destination - include the base folder with trailing slash
-<a name="line480"></a>	 * @return	bool
-<a name="line481"></a>	 */
-<a name="line482"></a>	function mirror($locpath, $rempath)
-<a name="line483"></a>	{
-<a name="line484"></a>		if ( ! $this->_is_conn())
-<a name="line485"></a>		{
+<a name="line468"></a>		// Permissions can only be set when running PHP 5
+<a name="line469"></a>		if ( ! function_exists('ftp_chmod'))
+<a name="line470"></a>		{
+<a name="line471"></a>			if ($this->debug == TRUE)
+<a name="line472"></a>			{
+<a name="line473"></a>				$this->_error('ftp_unable_to_chmod');
+<a name="line474"></a>			}
+<a name="line475"></a>			return FALSE;
+<a name="line476"></a>		}
+<a name="line477"></a>
+<a name="line478"></a>		$result = @ftp_chmod($this->conn_id, $perm, $path);
+<a name="line479"></a>
+<a name="line480"></a>		if ($result === FALSE)
+<a name="line481"></a>		{
+<a name="line482"></a>			if ($this->debug == TRUE)
+<a name="line483"></a>			{
+<a name="line484"></a>				$this->_error('ftp_unable_to_chmod');
+<a name="line485"></a>			}
 <a name="line486"></a>			return FALSE;
 <a name="line487"></a>		}
 <a name="line488"></a>
-<a name="line489"></a>		// Open the local file path
-<a name="line490"></a>		if ($fp = @opendir($locpath))
-<a name="line491"></a>		{
-<a name="line492"></a>			// Attempt to open the remote file path.
-<a name="line493"></a>			if ( ! $this->changedir($rempath, TRUE))
-<a name="line494"></a>			{
-<a name="line495"></a>				// If it doesn't exist we'll attempt to create the direcotory
-<a name="line496"></a>				if ( ! $this->mkdir($rempath) OR ! $this->changedir($rempath))
-<a name="line497"></a>				{
-<a name="line498"></a>					return FALSE;
-<a name="line499"></a>				}
-<a name="line500"></a>			}
-<a name="line501"></a>
-<a name="line502"></a>			// Recursively read the local directory
-<a name="line503"></a>			while (FALSE !== ($file = readdir($fp)))
-<a name="line504"></a>			{
-<a name="line505"></a>				if (@is_dir($locpath.$file) && substr($file, 0, 1) != '.')
-<a name="line506"></a>				{
-<a name="line507"></a>					$this->mirror($locpath.$file."/", $rempath.$file."/");
-<a name="line508"></a>				}
-<a name="line509"></a>				elseif (substr($file, 0, 1) != ".")
-<a name="line510"></a>				{
-<a name="line511"></a>					// Get the file extension so we can se the upload type
-<a name="line512"></a>					$ext = $this->_getext($file);
-<a name="line513"></a>					$mode = $this->_settype($ext);
-<a name="line514"></a>
-<a name="line515"></a>					$this->upload($locpath.$file, $rempath.$file, $mode);
-<a name="line516"></a>				}
-<a name="line517"></a>			}
-<a name="line518"></a>			return TRUE;
-<a name="line519"></a>		}
-<a name="line520"></a>
-<a name="line521"></a>		return FALSE;
-<a name="line522"></a>	}
-<a name="line523"></a>
-<a name="line524"></a>
-<a name="line525"></a>	// --------------------------------------------------------------------
-<a name="line526"></a>
-<a name="line527"></a>	/**
-<a name="line528"></a>	 * Extract the file extension
-<a name="line529"></a>	 *
-<a name="line530"></a>	 * @access	private
-<a name="line531"></a>	 * @param	string
-<a name="line532"></a>	 * @return	string
-<a name="line533"></a>	 */
-<a name="line534"></a>	function _getext($filename)
-<a name="line535"></a>	{
-<a name="line536"></a>		if (FALSE === strpos($filename, '.'))
-<a name="line537"></a>		{
-<a name="line538"></a>			return 'txt';
-<a name="line539"></a>		}
-<a name="line540"></a>
-<a name="line541"></a>		$x = explode('.', $filename);
-<a name="line542"></a>		return end($x);
-<a name="line543"></a>	}
-<a name="line544"></a>
-<a name="line545"></a>
-<a name="line546"></a>	// --------------------------------------------------------------------
-<a name="line547"></a>
-<a name="line548"></a>	/**
-<a name="line549"></a>	 * Set the upload type
-<a name="line550"></a>	 *
-<a name="line551"></a>	 * @access	private
-<a name="line552"></a>	 * @param	string
-<a name="line553"></a>	 * @return	string
-<a name="line554"></a>	 */
-<a name="line555"></a>	function _settype($ext)
-<a name="line556"></a>	{
-<a name="line557"></a>		$text_types = array(
-<a name="line558"></a>							'txt',
-<a name="line559"></a>							'text',
-<a name="line560"></a>							'php',
-<a name="line561"></a>							'phps',
-<a name="line562"></a>							'php4',
-<a name="line563"></a>							'js',
-<a name="line564"></a>							'css',
-<a name="line565"></a>							'htm',
-<a name="line566"></a>							'html',
-<a name="line567"></a>							'phtml',
-<a name="line568"></a>							'shtml',
-<a name="line569"></a>							'log',
-<a name="line570"></a>							'xml'
-<a name="line571"></a>							);
-<a name="line572"></a>
-<a name="line573"></a>
-<a name="line574"></a>		return (in_array($ext, $text_types)) ? 'ascii' : 'binary';
-<a name="line575"></a>	}
-<a name="line576"></a>
-<a name="line577"></a>	// ------------------------------------------------------------------------
-<a name="line578"></a>
-<a name="line579"></a>	/**
-<a name="line580"></a>	 * Close the connection
-<a name="line581"></a>	 *
-<a name="line582"></a>	 * @access	public
-<a name="line583"></a>	 * @param	string	path to source
-<a name="line584"></a>	 * @param	string	path to destination
-<a name="line585"></a>	 * @return	bool
-<a name="line586"></a>	 */
-<a name="line587"></a>	function close()
-<a name="line588"></a>	{
-<a name="line589"></a>		if ( ! $this->_is_conn())
-<a name="line590"></a>		{
-<a name="line591"></a>			return FALSE;
-<a name="line592"></a>		}
-<a name="line593"></a>
-<a name="line594"></a>		@ftp_close($this->conn_id);
-<a name="line595"></a>	}
-<a name="line596"></a>
-<a name="line597"></a>	// ------------------------------------------------------------------------
-<a name="line598"></a>
-<a name="line599"></a>	/**
-<a name="line600"></a>	 * Display error message
-<a name="line601"></a>	 *
-<a name="line602"></a>	 * @access	private
-<a name="line603"></a>	 * @param	string
-<a name="line604"></a>	 * @return	bool
-<a name="line605"></a>	 */
-<a name="line606"></a>	function _error($line)
-<a name="line607"></a>	{
-<a name="line608"></a>		$CI =& get_instance();
-<a name="line609"></a>		$CI->lang->load('ftp');
-<a name="line610"></a>		show_error($CI->lang->line($line));
-<a name="line611"></a>	}
-<a name="line612"></a>
-<a name="line613"></a>
-<a name="line614"></a>}
-<a name="line615"></a>// END FTP Class
-<a name="line616"></a>
-<a name="line617"></a>/* End of file Ftp.php */
-<a name="line618"></a>/* Location: ./system/libraries/Ftp.php */</pre>
+<a name="line489"></a>		return TRUE;
+<a name="line490"></a>	}
+<a name="line491"></a>
+<a name="line492"></a>	// --------------------------------------------------------------------
+<a name="line493"></a>
+<a name="line494"></a>	/**
+<a name="line495"></a>	 * FTP List files in the specified directory
+<a name="line496"></a>	 *
+<a name="line497"></a>	 * @access	public
+<a name="line498"></a>	 * @return	array
+<a name="line499"></a>	 */
+<a name="line500"></a>	function list_files($path = '.')
+<a name="line501"></a>	{
+<a name="line502"></a>		if ( ! $this->_is_conn())
+<a name="line503"></a>		{
+<a name="line504"></a>			return FALSE;
+<a name="line505"></a>		}
+<a name="line506"></a>
+<a name="line507"></a>		return ftp_nlist($this->conn_id, $path);
+<a name="line508"></a>	}
+<a name="line509"></a>
+<a name="line510"></a>	// ------------------------------------------------------------------------
+<a name="line511"></a>
+<a name="line512"></a>	/**
+<a name="line513"></a>	 * Read a directory and recreate it remotely
+<a name="line514"></a>	 *
+<a name="line515"></a>	 * This function recursively reads a folder and everything it contains (including
+<a name="line516"></a>	 * sub-folders) and creates a mirror via FTP based on it.  Whatever the directory structure
+<a name="line517"></a>	 * of the original file path will be recreated on the server.
+<a name="line518"></a>	 *
+<a name="line519"></a>	 * @access	public
+<a name="line520"></a>	 * @param	string	path to source with trailing slash
+<a name="line521"></a>	 * @param	string	path to destination - include the base folder with trailing slash
+<a name="line522"></a>	 * @return	bool
+<a name="line523"></a>	 */
+<a name="line524"></a>	function mirror($locpath, $rempath)
+<a name="line525"></a>	{
+<a name="line526"></a>		if ( ! $this->_is_conn())
+<a name="line527"></a>		{
+<a name="line528"></a>			return FALSE;
+<a name="line529"></a>		}
+<a name="line530"></a>
+<a name="line531"></a>		// Open the local file path
+<a name="line532"></a>		if ($fp = @opendir($locpath))
+<a name="line533"></a>		{
+<a name="line534"></a>			// Attempt to open the remote file path.
+<a name="line535"></a>			if ( ! $this->changedir($rempath, TRUE))
+<a name="line536"></a>			{
+<a name="line537"></a>				// If it doesn't exist we'll attempt to create the direcotory
+<a name="line538"></a>				if ( ! $this->mkdir($rempath) OR ! $this->changedir($rempath))
+<a name="line539"></a>				{
+<a name="line540"></a>					return FALSE;
+<a name="line541"></a>				}
+<a name="line542"></a>			}
+<a name="line543"></a>
+<a name="line544"></a>			// Recursively read the local directory
+<a name="line545"></a>			while (FALSE !== ($file = readdir($fp)))
+<a name="line546"></a>			{
+<a name="line547"></a>				if (@is_dir($locpath.$file) && substr($file, 0, 1) != '.')
+<a name="line548"></a>				{
+<a name="line549"></a>					$this->mirror($locpath.$file."/", $rempath.$file."/");
+<a name="line550"></a>				}
+<a name="line551"></a>				elseif (substr($file, 0, 1) != ".")
+<a name="line552"></a>				{
+<a name="line553"></a>					// Get the file extension so we can se the upload type
+<a name="line554"></a>					$ext = $this->_getext($file);
+<a name="line555"></a>					$mode = $this->_settype($ext);
+<a name="line556"></a>
+<a name="line557"></a>					$this->upload($locpath.$file, $rempath.$file, $mode);
+<a name="line558"></a>				}
+<a name="line559"></a>			}
+<a name="line560"></a>			return TRUE;
+<a name="line561"></a>		}
+<a name="line562"></a>
+<a name="line563"></a>		return FALSE;
+<a name="line564"></a>	}
+<a name="line565"></a>
+<a name="line566"></a>
+<a name="line567"></a>	// --------------------------------------------------------------------
+<a name="line568"></a>
+<a name="line569"></a>	/**
+<a name="line570"></a>	 * Extract the file extension
+<a name="line571"></a>	 *
+<a name="line572"></a>	 * @access	private
+<a name="line573"></a>	 * @param	string
+<a name="line574"></a>	 * @return	string
+<a name="line575"></a>	 */
+<a name="line576"></a>	function _getext($filename)
+<a name="line577"></a>	{
+<a name="line578"></a>		if (FALSE === strpos($filename, '.'))
+<a name="line579"></a>		{
+<a name="line580"></a>			return 'txt';
+<a name="line581"></a>		}
+<a name="line582"></a>
+<a name="line583"></a>		$x = explode('.', $filename);
+<a name="line584"></a>		return end($x);
+<a name="line585"></a>	}
+<a name="line586"></a>
+<a name="line587"></a>
+<a name="line588"></a>	// --------------------------------------------------------------------
+<a name="line589"></a>
+<a name="line590"></a>	/**
+<a name="line591"></a>	 * Set the upload type
+<a name="line592"></a>	 *
+<a name="line593"></a>	 * @access	private
+<a name="line594"></a>	 * @param	string
+<a name="line595"></a>	 * @return	string
+<a name="line596"></a>	 */
+<a name="line597"></a>	function _settype($ext)
+<a name="line598"></a>	{
+<a name="line599"></a>		$text_types = array(
+<a name="line600"></a>							'txt',
+<a name="line601"></a>							'text',
+<a name="line602"></a>							'php',
+<a name="line603"></a>							'phps',
+<a name="line604"></a>							'php4',
+<a name="line605"></a>							'js',
+<a name="line606"></a>							'css',
+<a name="line607"></a>							'htm',
+<a name="line608"></a>							'html',
+<a name="line609"></a>							'phtml',
+<a name="line610"></a>							'shtml',
+<a name="line611"></a>							'log',
+<a name="line612"></a>							'xml'
+<a name="line613"></a>							);
+<a name="line614"></a>
+<a name="line615"></a>
+<a name="line616"></a>		return (in_array($ext, $text_types)) ? 'ascii' : 'binary';
+<a name="line617"></a>	}
+<a name="line618"></a>
+<a name="line619"></a>	// ------------------------------------------------------------------------
+<a name="line620"></a>
+<a name="line621"></a>	/**
+<a name="line622"></a>	 * Close the connection
+<a name="line623"></a>	 *
+<a name="line624"></a>	 * @access	public
+<a name="line625"></a>	 * @param	string	path to source
+<a name="line626"></a>	 * @param	string	path to destination
+<a name="line627"></a>	 * @return	bool
+<a name="line628"></a>	 */
+<a name="line629"></a>	function close()
+<a name="line630"></a>	{
+<a name="line631"></a>		if ( ! $this->_is_conn())
+<a name="line632"></a>		{
+<a name="line633"></a>			return FALSE;
+<a name="line634"></a>		}
+<a name="line635"></a>
+<a name="line636"></a>		@ftp_close($this->conn_id);
+<a name="line637"></a>	}
+<a name="line638"></a>
+<a name="line639"></a>	// ------------------------------------------------------------------------
+<a name="line640"></a>
+<a name="line641"></a>	/**
+<a name="line642"></a>	 * Display error message
+<a name="line643"></a>	 *
+<a name="line644"></a>	 * @access	private
+<a name="line645"></a>	 * @param	string
+<a name="line646"></a>	 * @return	bool
+<a name="line647"></a>	 */
+<a name="line648"></a>	function _error($line)
+<a name="line649"></a>	{
+<a name="line650"></a>		$CI =& get_instance();
+<a name="line651"></a>		$CI->lang->load('ftp');
+<a name="line652"></a>		show_error($CI->lang->line($line));
+<a name="line653"></a>	}
+<a name="line654"></a>
+<a name="line655"></a>
+<a name="line656"></a>}
+<a name="line657"></a>// END FTP Class
+<a name="line658"></a>
+<a name="line659"></a>/* End of file Ftp.php */
+<a name="line660"></a>/* Location: ./system/libraries/Ftp.php */</pre>
 <div class="header">
 <h1>GiftFlow API</h1>
 <ul>

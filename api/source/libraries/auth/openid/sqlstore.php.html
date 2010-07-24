@@ -1,0 +1,618 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+
+<html lang="en">
+<head>
+
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
+<meta name="generator" content="PHPDoctor 2RC4 (http://peej.github.com/phpdoctor/)">
+<meta name="when" content="Sat, 24 Jul 2010 20:47:45 +0000">
+
+<link rel="stylesheet" type="text/css" href="../../../../stylesheet.css">
+<link rel="start" href="../../../../overview-summary.html">
+
+<title>libraries/Auth/OpenID/SQLStore.php (GiftFlow API)</title>
+
+</head>
+<body id="file" onload="parent.document.title=document.title;">
+
+<div class="header">
+<h1>GiftFlow API</h1>
+<ul>
+<li><a href="../../../../overview-summary.html">Overview</a></li>
+<li>Package</li><li>Class</li><li>Tree</li><li><a href="../../../../overview-files.html">Files</a></li>
+<li><a href="../../../../deprecated-list.html">Deprecated</a></li>
+<li><a href="../../../../index-all.html">Index</a></li>
+</ul>
+</div>
+
+<div class="small_links">
+<a href="../../../../index.html" target="_top">Frames</a>
+<a href="../../../../source/libraries/auth/openid/sqlstore.php.html" target="_top">No frames</a>
+</div>
+<hr>
+
+<h1>libraries/Auth/OpenID/SQLStore.php</h1>
+<div class="comment" id="overview_description"><p>SQL-backed OpenID stores.</p><p>PHP versions 4 and 5</p><p>LICENSE: See the COPYING file included in this distribution.</p></div>
+
+<hr>
+
+<a name="line1"></a><pre><?php
+<a name="line2"></a>
+<a name="line3"></a>/**
+<a name="line4"></a> * SQL-backed OpenID stores.
+<a name="line5"></a> *
+<a name="line6"></a> * PHP versions 4 and 5
+<a name="line7"></a> *
+<a name="line8"></a> * LICENSE: See the COPYING file included in this distribution.
+<a name="line9"></a> *
+<a name="line10"></a> * @package OpenID
+<a name="line11"></a> * @author JanRain, Inc. <openid@janrain.com>
+<a name="line12"></a> * @copyright 2005-2008 Janrain, Inc.
+<a name="line13"></a> * @license http://www.apache.org/licenses/LICENSE-2.0 Apache
+<a name="line14"></a> */
+<a name="line15"></a>
+<a name="line16"></a>/**
+<a name="line17"></a> * @access private
+<a name="line18"></a> */
+<a name="line19"></a>require_once 'Auth/OpenID/Interface.php';
+<a name="line20"></a>require_once 'Auth/OpenID/Nonce.php';
+<a name="line21"></a>
+<a name="line22"></a>/**
+<a name="line23"></a> * @access private
+<a name="line24"></a> */
+<a name="line25"></a>require_once 'Auth/OpenID.php';
+<a name="line26"></a>
+<a name="line27"></a>/**
+<a name="line28"></a> * @access private
+<a name="line29"></a> */
+<a name="line30"></a>require_once 'Auth/OpenID/Nonce.php';
+<a name="line31"></a>
+<a name="line32"></a>/**
+<a name="line33"></a> * This is the parent class for the SQL stores, which contains the
+<a name="line34"></a> * logic common to all of the SQL stores.
+<a name="line35"></a> *
+<a name="line36"></a> * The table names used are determined by the class variables
+<a name="line37"></a> * associations_table_name and nonces_table_name.  To change the name
+<a name="line38"></a> * of the tables used, pass new table names into the constructor.
+<a name="line39"></a> *
+<a name="line40"></a> * To create the tables with the proper schema, see the createTables
+<a name="line41"></a> * method.
+<a name="line42"></a> *
+<a name="line43"></a> * This class shouldn't be used directly.  Use one of its subclasses
+<a name="line44"></a> * instead, as those contain the code necessary to use a specific
+<a name="line45"></a> * database.  If you're an OpenID integrator and you'd like to create
+<a name="line46"></a> * an SQL-driven store that wraps an application's database
+<a name="line47"></a> * abstraction, be sure to create a subclass of
+<a name="line48"></a> * {@link Auth_OpenID_DatabaseConnection} that calls the application's
+<a name="line49"></a> * database abstraction calls.  Then, pass an instance of your new
+<a name="line50"></a> * database connection class to your SQLStore subclass constructor.
+<a name="line51"></a> *
+<a name="line52"></a> * All methods other than the constructor and createTables should be
+<a name="line53"></a> * considered implementation details.
+<a name="line54"></a> *
+<a name="line55"></a> * @package OpenID
+<a name="line56"></a> */
+<a name="line57"></a>class Auth_OpenID_SQLStore extends Auth_OpenID_OpenIDStore {
+<a name="line58"></a>
+<a name="line59"></a>    /**
+<a name="line60"></a>     * This creates a new SQLStore instance.  It requires an
+<a name="line61"></a>     * established database connection be given to it, and it allows
+<a name="line62"></a>     * overriding the default table names.
+<a name="line63"></a>     *
+<a name="line64"></a>     * @param connection $connection This must be an established
+<a name="line65"></a>     * connection to a database of the correct type for the SQLStore
+<a name="line66"></a>     * subclass you're using.  This must either be an PEAR DB
+<a name="line67"></a>     * connection handle or an instance of a subclass of
+<a name="line68"></a>     * Auth_OpenID_DatabaseConnection.
+<a name="line69"></a>     *
+<a name="line70"></a>     * @param associations_table: This is an optional parameter to
+<a name="line71"></a>     * specify the name of the table used for storing associations.
+<a name="line72"></a>     * The default value is 'oid_associations'.
+<a name="line73"></a>     *
+<a name="line74"></a>     * @param nonces_table: This is an optional parameter to specify
+<a name="line75"></a>     * the name of the table used for storing nonces.  The default
+<a name="line76"></a>     * value is 'oid_nonces'.
+<a name="line77"></a>     */
+<a name="line78"></a>    function Auth_OpenID_SQLStore($connection,
+<a name="line79"></a>                                  $associations_table = null,
+<a name="line80"></a>                                  $nonces_table = null)
+<a name="line81"></a>    {
+<a name="line82"></a>        $this->associations_table_name = "oid_associations";
+<a name="line83"></a>        $this->nonces_table_name = "oid_nonces";
+<a name="line84"></a>
+<a name="line85"></a>        // Check the connection object type to be sure it's a PEAR
+<a name="line86"></a>        // database connection.
+<a name="line87"></a>        if (!(is_object($connection) &&
+<a name="line88"></a>              (is_subclass_of($connection, 'db_common') ||
+<a name="line89"></a>               is_subclass_of($connection,
+<a name="line90"></a>                              'auth_openid_databaseconnection')))) {
+<a name="line91"></a>            trigger_error("Auth_OpenID_SQLStore expected PEAR connection " .
+<a name="line92"></a>                          "object (got ".get_class($connection).")",
+<a name="line93"></a>                          E_USER_ERROR);
+<a name="line94"></a>            return;
+<a name="line95"></a>        }
+<a name="line96"></a>
+<a name="line97"></a>        $this->connection = $connection;
+<a name="line98"></a>
+<a name="line99"></a>        // Be sure to set the fetch mode so the results are keyed on
+<a name="line100"></a>        // column name instead of column index.  This is a PEAR
+<a name="line101"></a>        // constant, so only try to use it if PEAR is present.  Note
+<a name="line102"></a>        // that Auth_Openid_Databaseconnection instances need not
+<a name="line103"></a>        // implement ::setFetchMode for this reason.
+<a name="line104"></a>        if (is_subclass_of($this->connection, 'db_common')) {
+<a name="line105"></a>            $this->connection->setFetchMode(DB_FETCHMODE_ASSOC);
+<a name="line106"></a>        }
+<a name="line107"></a>
+<a name="line108"></a>        if ($associations_table) {
+<a name="line109"></a>            $this->associations_table_name = $associations_table;
+<a name="line110"></a>        }
+<a name="line111"></a>
+<a name="line112"></a>        if ($nonces_table) {
+<a name="line113"></a>            $this->nonces_table_name = $nonces_table;
+<a name="line114"></a>        }
+<a name="line115"></a>
+<a name="line116"></a>        $this->max_nonce_age = 6 * 60 * 60;
+<a name="line117"></a>
+<a name="line118"></a>        // Be sure to run the database queries with auto-commit mode
+<a name="line119"></a>        // turned OFF, because we want every function to run in a
+<a name="line120"></a>        // transaction, implicitly.  As a rule, methods named with a
+<a name="line121"></a>        // leading underscore will NOT control transaction behavior.
+<a name="line122"></a>        // Callers of these methods will worry about transactions.
+<a name="line123"></a>        $this->connection->autoCommit(false);
+<a name="line124"></a>
+<a name="line125"></a>        // Create an empty SQL strings array.
+<a name="line126"></a>        $this->sql = array();
+<a name="line127"></a>
+<a name="line128"></a>        // Call this method (which should be overridden by subclasses)
+<a name="line129"></a>        // to populate the $this->sql array with SQL strings.
+<a name="line130"></a>        $this->setSQL();
+<a name="line131"></a>
+<a name="line132"></a>        // Verify that all required SQL statements have been set, and
+<a name="line133"></a>        // raise an error if any expected SQL strings were either
+<a name="line134"></a>        // absent or empty.
+<a name="line135"></a>        list($missing, $empty) = $this->_verifySQL();
+<a name="line136"></a>
+<a name="line137"></a>        if ($missing) {
+<a name="line138"></a>            trigger_error("Expected keys in SQL query list: " .
+<a name="line139"></a>                          implode(", ", $missing),
+<a name="line140"></a>                          E_USER_ERROR);
+<a name="line141"></a>            return;
+<a name="line142"></a>        }
+<a name="line143"></a>
+<a name="line144"></a>        if ($empty) {
+<a name="line145"></a>            trigger_error("SQL list keys have no SQL strings: " .
+<a name="line146"></a>                          implode(", ", $empty),
+<a name="line147"></a>                          E_USER_ERROR);
+<a name="line148"></a>            return;
+<a name="line149"></a>        }
+<a name="line150"></a>
+<a name="line151"></a>        // Add table names to queries.
+<a name="line152"></a>        $this->_fixSQL();
+<a name="line153"></a>    }
+<a name="line154"></a>
+<a name="line155"></a>    function tableExists($table_name)
+<a name="line156"></a>    {
+<a name="line157"></a>        return !$this->isError(
+<a name="line158"></a>                      $this->connection->query(
+<a name="line159"></a>                          sprintf("SELECT * FROM %s LIMIT 0",
+<a name="line160"></a>                                  $table_name)));
+<a name="line161"></a>    }
+<a name="line162"></a>
+<a name="line163"></a>    /**
+<a name="line164"></a>     * Returns true if $value constitutes a database error; returns
+<a name="line165"></a>     * false otherwise.
+<a name="line166"></a>     */
+<a name="line167"></a>    function isError($value)
+<a name="line168"></a>    {
+<a name="line169"></a>        return PEAR::isError($value);
+<a name="line170"></a>    }
+<a name="line171"></a>
+<a name="line172"></a>    /**
+<a name="line173"></a>     * Converts a query result to a boolean.  If the result is a
+<a name="line174"></a>     * database error according to $this->isError(), this returns
+<a name="line175"></a>     * false; otherwise, this returns true.
+<a name="line176"></a>     */
+<a name="line177"></a>    function resultToBool($obj)
+<a name="line178"></a>    {
+<a name="line179"></a>        if ($this->isError($obj)) {
+<a name="line180"></a>            return false;
+<a name="line181"></a>        } else {
+<a name="line182"></a>            return true;
+<a name="line183"></a>        }
+<a name="line184"></a>    }
+<a name="line185"></a>
+<a name="line186"></a>    /**
+<a name="line187"></a>     * This method should be overridden by subclasses.  This method is
+<a name="line188"></a>     * called by the constructor to set values in $this->sql, which is
+<a name="line189"></a>     * an array keyed on sql name.
+<a name="line190"></a>     */
+<a name="line191"></a>    function setSQL()
+<a name="line192"></a>    {
+<a name="line193"></a>    }
+<a name="line194"></a>
+<a name="line195"></a>    /**
+<a name="line196"></a>     * Resets the store by removing all records from the store's
+<a name="line197"></a>     * tables.
+<a name="line198"></a>     */
+<a name="line199"></a>    function reset()
+<a name="line200"></a>    {
+<a name="line201"></a>        $this->connection->query(sprintf("DELETE FROM %s",
+<a name="line202"></a>                                         $this->associations_table_name));
+<a name="line203"></a>
+<a name="line204"></a>        $this->connection->query(sprintf("DELETE FROM %s",
+<a name="line205"></a>                                         $this->nonces_table_name));
+<a name="line206"></a>    }
+<a name="line207"></a>
+<a name="line208"></a>    /**
+<a name="line209"></a>     * @access private
+<a name="line210"></a>     */
+<a name="line211"></a>    function _verifySQL()
+<a name="line212"></a>    {
+<a name="line213"></a>        $missing = array();
+<a name="line214"></a>        $empty = array();
+<a name="line215"></a>
+<a name="line216"></a>        $required_sql_keys = array(
+<a name="line217"></a>                                   'nonce_table',
+<a name="line218"></a>                                   'assoc_table',
+<a name="line219"></a>                                   'set_assoc',
+<a name="line220"></a>                                   'get_assoc',
+<a name="line221"></a>                                   'get_assocs',
+<a name="line222"></a>                                   'remove_assoc'
+<a name="line223"></a>                                   );
+<a name="line224"></a>
+<a name="line225"></a>        foreach ($required_sql_keys as $key) {
+<a name="line226"></a>            if (!array_key_exists($key, $this->sql)) {
+<a name="line227"></a>                $missing[] = $key;
+<a name="line228"></a>            } else if (!$this->sql[$key]) {
+<a name="line229"></a>                $empty[] = $key;
+<a name="line230"></a>            }
+<a name="line231"></a>        }
+<a name="line232"></a>
+<a name="line233"></a>        return array($missing, $empty);
+<a name="line234"></a>    }
+<a name="line235"></a>
+<a name="line236"></a>    /**
+<a name="line237"></a>     * @access private
+<a name="line238"></a>     */
+<a name="line239"></a>    function _fixSQL()
+<a name="line240"></a>    {
+<a name="line241"></a>        $replacements = array(
+<a name="line242"></a>                              array(
+<a name="line243"></a>                                    'value' => $this->nonces_table_name,
+<a name="line244"></a>                                    'keys' => array('nonce_table',
+<a name="line245"></a>                                                    'add_nonce',
+<a name="line246"></a>                                                    'clean_nonce')
+<a name="line247"></a>                                    ),
+<a name="line248"></a>                              array(
+<a name="line249"></a>                                    'value' => $this->associations_table_name,
+<a name="line250"></a>                                    'keys' => array('assoc_table',
+<a name="line251"></a>                                                    'set_assoc',
+<a name="line252"></a>                                                    'get_assoc',
+<a name="line253"></a>                                                    'get_assocs',
+<a name="line254"></a>                                                    'remove_assoc',
+<a name="line255"></a>                                                    'clean_assoc')
+<a name="line256"></a>                                    )
+<a name="line257"></a>                              );
+<a name="line258"></a>
+<a name="line259"></a>        foreach ($replacements as $item) {
+<a name="line260"></a>            $value = $item['value'];
+<a name="line261"></a>            $keys = $item['keys'];
+<a name="line262"></a>
+<a name="line263"></a>            foreach ($keys as $k) {
+<a name="line264"></a>                if (is_array($this->sql[$k])) {
+<a name="line265"></a>                    foreach ($this->sql[$k] as $part_key => $part_value) {
+<a name="line266"></a>                        $this->sql[$k][$part_key] = sprintf($part_value,
+<a name="line267"></a>                                                            $value);
+<a name="line268"></a>                    }
+<a name="line269"></a>                } else {
+<a name="line270"></a>                    $this->sql[$k] = sprintf($this->sql[$k], $value);
+<a name="line271"></a>                }
+<a name="line272"></a>            }
+<a name="line273"></a>        }
+<a name="line274"></a>    }
+<a name="line275"></a>
+<a name="line276"></a>    function blobDecode($blob)
+<a name="line277"></a>    {
+<a name="line278"></a>        return $blob;
+<a name="line279"></a>    }
+<a name="line280"></a>
+<a name="line281"></a>    function blobEncode($str)
+<a name="line282"></a>    {
+<a name="line283"></a>        return $str;
+<a name="line284"></a>    }
+<a name="line285"></a>
+<a name="line286"></a>    function createTables()
+<a name="line287"></a>    {
+<a name="line288"></a>        $this->connection->autoCommit(true);
+<a name="line289"></a>        $n = $this->create_nonce_table();
+<a name="line290"></a>        $a = $this->create_assoc_table();
+<a name="line291"></a>        $this->connection->autoCommit(false);
+<a name="line292"></a>
+<a name="line293"></a>        if ($n && $a) {
+<a name="line294"></a>            return true;
+<a name="line295"></a>        } else {
+<a name="line296"></a>            return false;
+<a name="line297"></a>        }
+<a name="line298"></a>    }
+<a name="line299"></a>
+<a name="line300"></a>    function create_nonce_table()
+<a name="line301"></a>    {
+<a name="line302"></a>        if (!$this->tableExists($this->nonces_table_name)) {
+<a name="line303"></a>            $r = $this->connection->query($this->sql['nonce_table']);
+<a name="line304"></a>            return $this->resultToBool($r);
+<a name="line305"></a>        }
+<a name="line306"></a>        return true;
+<a name="line307"></a>    }
+<a name="line308"></a>
+<a name="line309"></a>    function create_assoc_table()
+<a name="line310"></a>    {
+<a name="line311"></a>        if (!$this->tableExists($this->associations_table_name)) {
+<a name="line312"></a>            $r = $this->connection->query($this->sql['assoc_table']);
+<a name="line313"></a>            return $this->resultToBool($r);
+<a name="line314"></a>        }
+<a name="line315"></a>        return true;
+<a name="line316"></a>    }
+<a name="line317"></a>
+<a name="line318"></a>    /**
+<a name="line319"></a>     * @access private
+<a name="line320"></a>     */
+<a name="line321"></a>    function _set_assoc($server_url, $handle, $secret, $issued,
+<a name="line322"></a>                        $lifetime, $assoc_type)
+<a name="line323"></a>    {
+<a name="line324"></a>        return $this->connection->query($this->sql['set_assoc'],
+<a name="line325"></a>                                        array(
+<a name="line326"></a>                                              $server_url,
+<a name="line327"></a>                                              $handle,
+<a name="line328"></a>                                              $secret,
+<a name="line329"></a>                                              $issued,
+<a name="line330"></a>                                              $lifetime,
+<a name="line331"></a>                                              $assoc_type));
+<a name="line332"></a>    }
+<a name="line333"></a>
+<a name="line334"></a>    function storeAssociation($server_url, $association)
+<a name="line335"></a>    {
+<a name="line336"></a>        if ($this->resultToBool($this->_set_assoc(
+<a name="line337"></a>                                            $server_url,
+<a name="line338"></a>                                            $association->handle,
+<a name="line339"></a>                                            $this->blobEncode(
+<a name="line340"></a>                                                  $association->secret),
+<a name="line341"></a>                                            $association->issued,
+<a name="line342"></a>                                            $association->lifetime,
+<a name="line343"></a>                                            $association->assoc_type
+<a name="line344"></a>                                            ))) {
+<a name="line345"></a>            $this->connection->commit();
+<a name="line346"></a>        } else {
+<a name="line347"></a>            $this->connection->rollback();
+<a name="line348"></a>        }
+<a name="line349"></a>    }
+<a name="line350"></a>
+<a name="line351"></a>    /**
+<a name="line352"></a>     * @access private
+<a name="line353"></a>     */
+<a name="line354"></a>    function _get_assoc($server_url, $handle)
+<a name="line355"></a>    {
+<a name="line356"></a>        $result = $this->connection->getRow($this->sql['get_assoc'],
+<a name="line357"></a>                                            array($server_url, $handle));
+<a name="line358"></a>        if ($this->isError($result)) {
+<a name="line359"></a>            return null;
+<a name="line360"></a>        } else {
+<a name="line361"></a>            return $result;
+<a name="line362"></a>        }
+<a name="line363"></a>    }
+<a name="line364"></a>
+<a name="line365"></a>    /**
+<a name="line366"></a>     * @access private
+<a name="line367"></a>     */
+<a name="line368"></a>    function _get_assocs($server_url)
+<a name="line369"></a>    {
+<a name="line370"></a>        $result = $this->connection->getAll($this->sql['get_assocs'],
+<a name="line371"></a>                                            array($server_url));
+<a name="line372"></a>
+<a name="line373"></a>        if ($this->isError($result)) {
+<a name="line374"></a>            return array();
+<a name="line375"></a>        } else {
+<a name="line376"></a>            return $result;
+<a name="line377"></a>        }
+<a name="line378"></a>    }
+<a name="line379"></a>
+<a name="line380"></a>    function removeAssociation($server_url, $handle)
+<a name="line381"></a>    {
+<a name="line382"></a>        if ($this->_get_assoc($server_url, $handle) == null) {
+<a name="line383"></a>            return false;
+<a name="line384"></a>        }
+<a name="line385"></a>
+<a name="line386"></a>        if ($this->resultToBool($this->connection->query(
+<a name="line387"></a>                              $this->sql['remove_assoc'],
+<a name="line388"></a>                              array($server_url, $handle)))) {
+<a name="line389"></a>            $this->connection->commit();
+<a name="line390"></a>        } else {
+<a name="line391"></a>            $this->connection->rollback();
+<a name="line392"></a>        }
+<a name="line393"></a>
+<a name="line394"></a>        return true;
+<a name="line395"></a>    }
+<a name="line396"></a>
+<a name="line397"></a>    function getAssociation($server_url, $handle = null)
+<a name="line398"></a>    {
+<a name="line399"></a>        if ($handle !== null) {
+<a name="line400"></a>            $assoc = $this->_get_assoc($server_url, $handle);
+<a name="line401"></a>
+<a name="line402"></a>            $assocs = array();
+<a name="line403"></a>            if ($assoc) {
+<a name="line404"></a>                $assocs[] = $assoc;
+<a name="line405"></a>            }
+<a name="line406"></a>        } else {
+<a name="line407"></a>            $assocs = $this->_get_assocs($server_url);
+<a name="line408"></a>        }
+<a name="line409"></a>
+<a name="line410"></a>        if (!$assocs || (count($assocs) == 0)) {
+<a name="line411"></a>            return null;
+<a name="line412"></a>        } else {
+<a name="line413"></a>            $associations = array();
+<a name="line414"></a>
+<a name="line415"></a>            foreach ($assocs as $assoc_row) {
+<a name="line416"></a>                $assoc = new Auth_OpenID_Association($assoc_row['handle'],
+<a name="line417"></a>                                                     $assoc_row['secret'],
+<a name="line418"></a>                                                     $assoc_row['issued'],
+<a name="line419"></a>                                                     $assoc_row['lifetime'],
+<a name="line420"></a>                                                     $assoc_row['assoc_type']);
+<a name="line421"></a>
+<a name="line422"></a>                $assoc->secret = $this->blobDecode($assoc->secret);
+<a name="line423"></a>
+<a name="line424"></a>                if ($assoc->getExpiresIn() == 0) {
+<a name="line425"></a>                    $this->removeAssociation($server_url, $assoc->handle);
+<a name="line426"></a>                } else {
+<a name="line427"></a>                    $associations[] = array($assoc->issued, $assoc);
+<a name="line428"></a>                }
+<a name="line429"></a>            }
+<a name="line430"></a>
+<a name="line431"></a>            if ($associations) {
+<a name="line432"></a>                $issued = array();
+<a name="line433"></a>                $assocs = array();
+<a name="line434"></a>                foreach ($associations as $key => $assoc) {
+<a name="line435"></a>                    $issued[$key] = $assoc[0];
+<a name="line436"></a>                    $assocs[$key] = $assoc[1];
+<a name="line437"></a>                }
+<a name="line438"></a>
+<a name="line439"></a>                array_multisort($issued, SORT_DESC, $assocs, SORT_DESC,
+<a name="line440"></a>                                $associations);
+<a name="line441"></a>
+<a name="line442"></a>                // return the most recently issued one.
+<a name="line443"></a>                list($issued, $assoc) = $associations[0];
+<a name="line444"></a>                return $assoc;
+<a name="line445"></a>            } else {
+<a name="line446"></a>                return null;
+<a name="line447"></a>            }
+<a name="line448"></a>        }
+<a name="line449"></a>    }
+<a name="line450"></a>
+<a name="line451"></a>    /**
+<a name="line452"></a>     * @access private
+<a name="line453"></a>     */
+<a name="line454"></a>    function _add_nonce($server_url, $timestamp, $salt)
+<a name="line455"></a>    {
+<a name="line456"></a>        $sql = $this->sql['add_nonce'];
+<a name="line457"></a>        $result = $this->connection->query($sql, array($server_url,
+<a name="line458"></a>                                                       $timestamp,
+<a name="line459"></a>                                                       $salt));
+<a name="line460"></a>        if ($this->isError($result)) {
+<a name="line461"></a>            $this->connection->rollback();
+<a name="line462"></a>        } else {
+<a name="line463"></a>            $this->connection->commit();
+<a name="line464"></a>        }
+<a name="line465"></a>        return $this->resultToBool($result);
+<a name="line466"></a>    }
+<a name="line467"></a>
+<a name="line468"></a>    function useNonce($server_url, $timestamp, $salt)
+<a name="line469"></a>    {
+<a name="line470"></a>        global $Auth_OpenID_SKEW;
+<a name="line471"></a>
+<a name="line472"></a>        if ( abs($timestamp - time()) > $Auth_OpenID_SKEW ) {
+<a name="line473"></a>            return false;
+<a name="line474"></a>        }
+<a name="line475"></a>
+<a name="line476"></a>        return $this->_add_nonce($server_url, $timestamp, $salt);
+<a name="line477"></a>    }
+<a name="line478"></a>
+<a name="line479"></a>    /**
+<a name="line480"></a>     * "Octifies" a binary string by returning a string with escaped
+<a name="line481"></a>     * octal bytes.  This is used for preparing binary data for
+<a name="line482"></a>     * PostgreSQL BYTEA fields.
+<a name="line483"></a>     *
+<a name="line484"></a>     * @access private
+<a name="line485"></a>     */
+<a name="line486"></a>    function _octify($str)
+<a name="line487"></a>    {
+<a name="line488"></a>        $result = "";
+<a name="line489"></a>        for ($i = 0; $i < Auth_OpenID::bytes($str); $i++) {
+<a name="line490"></a>            $ch = substr($str, $i, 1);
+<a name="line491"></a>            if ($ch == "\\") {
+<a name="line492"></a>                $result .= "\\\\\\\\";
+<a name="line493"></a>            } else if (ord($ch) == 0) {
+<a name="line494"></a>                $result .= "\\\\000";
+<a name="line495"></a>            } else {
+<a name="line496"></a>                $result .= "\\" . strval(decoct(ord($ch)));
+<a name="line497"></a>            }
+<a name="line498"></a>        }
+<a name="line499"></a>        return $result;
+<a name="line500"></a>    }
+<a name="line501"></a>
+<a name="line502"></a>    /**
+<a name="line503"></a>     * "Unoctifies" octal-escaped data from PostgreSQL and returns the
+<a name="line504"></a>     * resulting ASCII (possibly binary) string.
+<a name="line505"></a>     *
+<a name="line506"></a>     * @access private
+<a name="line507"></a>     */
+<a name="line508"></a>    function _unoctify($str)
+<a name="line509"></a>    {
+<a name="line510"></a>        $result = "";
+<a name="line511"></a>        $i = 0;
+<a name="line512"></a>        while ($i < strlen($str)) {
+<a name="line513"></a>            $char = $str[$i];
+<a name="line514"></a>            if ($char == "\\") {
+<a name="line515"></a>                // Look to see if the next char is a backslash and
+<a name="line516"></a>                // append it.
+<a name="line517"></a>                if ($str[$i + 1] != "\\") {
+<a name="line518"></a>                    $octal_digits = substr($str, $i + 1, 3);
+<a name="line519"></a>                    $dec = octdec($octal_digits);
+<a name="line520"></a>                    $char = chr($dec);
+<a name="line521"></a>                    $i += 4;
+<a name="line522"></a>                } else {
+<a name="line523"></a>                    $char = "\\";
+<a name="line524"></a>                    $i += 2;
+<a name="line525"></a>                }
+<a name="line526"></a>            } else {
+<a name="line527"></a>                $i += 1;
+<a name="line528"></a>            }
+<a name="line529"></a>
+<a name="line530"></a>            $result .= $char;
+<a name="line531"></a>        }
+<a name="line532"></a>
+<a name="line533"></a>        return $result;
+<a name="line534"></a>    }
+<a name="line535"></a>
+<a name="line536"></a>    function cleanupNonces()
+<a name="line537"></a>    {
+<a name="line538"></a>        global $Auth_OpenID_SKEW;
+<a name="line539"></a>        $v = time() - $Auth_OpenID_SKEW;
+<a name="line540"></a>
+<a name="line541"></a>        $this->connection->query($this->sql['clean_nonce'], array($v));
+<a name="line542"></a>        $num = $this->connection->affectedRows();
+<a name="line543"></a>        $this->connection->commit();
+<a name="line544"></a>        return $num;
+<a name="line545"></a>    }
+<a name="line546"></a>
+<a name="line547"></a>    function cleanupAssociations()
+<a name="line548"></a>    {
+<a name="line549"></a>        $this->connection->query($this->sql['clean_assoc'],
+<a name="line550"></a>                                 array(time()));
+<a name="line551"></a>        $num = $this->connection->affectedRows();
+<a name="line552"></a>        $this->connection->commit();
+<a name="line553"></a>        return $num;
+<a name="line554"></a>    }
+<a name="line555"></a>}
+<a name="line556"></a>
+<a name="line557"></a>
+<a name="line558"></a></pre>
+<div class="header">
+<h1>GiftFlow API</h1>
+<ul>
+<li><a href="../../../../overview-summary.html">Overview</a></li>
+<li>Package</li><li>Class</li><li>Tree</li><li><a href="../../../../overview-files.html">Files</a></li>
+<li><a href="../../../../deprecated-list.html">Deprecated</a></li>
+<li><a href="../../../../index-all.html">Index</a></li>
+</ul>
+</div>
+
+<div class="small_links">
+<a href="../../../../index.html" target="_top">Frames</a>
+<a href="../../../../source/libraries/auth/openid/sqlstore.php.html" target="_top">No frames</a>
+</div>
+<hr>
+
+<p id="footer">This document was generated by <a href="http://peej.github.com/phpdoctor/">PHPDoctor: The PHP Documentation Creator</a></p>
+
+</body>
+
+</html>

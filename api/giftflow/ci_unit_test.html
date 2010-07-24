@@ -6,7 +6,7 @@
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 
 <meta name="generator" content="PHPDoctor 2RC4 (http://peej.github.com/phpdoctor/)">
-<meta name="when" content="Mon, 19 Jul 2010 17:13:56 +0000">
+<meta name="when" content="Sat, 24 Jul 2010 20:46:31 +0000">
 
 <link rel="stylesheet" type="text/css" href="../stylesheet.css">
 <link rel="start" href="../overview-summary.html">
@@ -73,6 +73,10 @@ Detail: <a href="#detail_field">Field</a> | <a href="#detail_method">Method</a> 
 <td class="description"><p class="name"><a href="#_template_rows">$_template_rows</a></p></td>
 </tr>
 <tr>
+<td class="type">private  mixed</td>
+<td class="description"><p class="name"><a href="#_test_items_visible">$_test_items_visible</a></p></td>
+</tr>
+<tr>
 <td class="type"> mixed</td>
 <td class="description"><p class="name"><a href="#active">$active</a></p></td>
 </tr>
@@ -118,11 +122,15 @@ Detail: <a href="#detail_field">Field</a> | <a href="#detail_method">Method</a> 
 </tr>
 <tr>
 <td class="type"> void</td>
-<td class="description"><p class="name"><a href="#run()">run</a>(mixed test, bool expected, str test_name)</p><p class="description">Run the testsRuns the supplied tests</p></td>
+<td class="description"><p class="name"><a href="#run()">run</a>(mixed test, bool expected, str test_name, str notes)</p><p class="description">Run the testsRuns the supplied tests</p></td>
 </tr>
 <tr>
 <td class="type"> void</td>
 <td class="description"><p class="name"><a href="#set_template()">set_template</a>(mixed template)</p><p class="description">Set the templateThis lets us set the template to be used to display results</p></td>
+</tr>
+<tr>
+<td class="type"> void</td>
+<td class="description"><p class="name"><a href="#set_test_items()">set_test_items</a>(mixed items)</p><p class="description">Run the testsRuns the supplied tests</p></td>
 </tr>
 <tr>
 <td class="type"> void</td>
@@ -144,6 +152,15 @@ Detail: <a href="#detail_field">Field</a> | <a href="#detail_method">Method</a> 
 
 <h3 id="_template_rows">_template_rows</h3>
 <code class="signature">private  mixed <strong>$_template_rows</strong> = NULL</code>
+<div class="details">
+</div>
+
+<hr>
+
+<a href="../source/libraries/unit_test.php.html#line36" class="location">libraries/Unit_test.php at line 36</a>
+
+<h3 id="_test_items_visible">_test_items_visible</h3>
+<code class="signature">private  mixed <strong>$_test_items_visible</strong> = array()</code>
 <div class="details">
 </div>
 
@@ -177,7 +194,7 @@ Detail: <a href="#detail_field">Field</a> | <a href="#detail_method">Method</a> 
 <hr>
 
 <h2 id="detail_method">Method Detail</h2><div class="method_detail">
-<div class='method'><a href="../source/libraries/unit_test.php.html#line37" class="location">libraries/Unit_test.php at line 37</a>
+<div class='method'><a href="../source/libraries/unit_test.php.html#line38" class="location">libraries/Unit_test.php at line 38</a>
 
 <h3 id="__construct()">__construct</h3>
 <code class="signature">public  void <strong>__construct</strong>()</code>
@@ -186,7 +203,7 @@ Detail: <a href="#detail_field">Field</a> | <a href="#detail_method">Method</a> 
 
 
 
-<div class='method'><a href="../source/libraries/unit_test.php.html#line259" class="location">libraries/Unit_test.php at line 259</a>
+<div class='method'><a href="../source/libraries/unit_test.php.html#line295" class="location">libraries/Unit_test.php at line 295</a>
 
 <h3 id="_backtrace()">_backtrace</h3>
 <code class="signature">private  void <strong>_backtrace</strong>()</code>
@@ -199,7 +216,7 @@ Detail: <a href="#detail_field">Field</a> | <a href="#detail_method">Method</a> 
 
 
 
-<div class='method'><a href="../source/libraries/unit_test.php.html#line281" class="location">libraries/Unit_test.php at line 281</a>
+<div class='method'><a href="../source/libraries/unit_test.php.html#line317" class="location">libraries/Unit_test.php at line 317</a>
 
 <h3 id="_default_template()">_default_template</h3>
 <code class="signature">private  void <strong>_default_template</strong>()</code>
@@ -212,7 +229,7 @@ Detail: <a href="#detail_field">Field</a> | <a href="#detail_method">Method</a> 
 
 
 
-<div class='method'><a href="../source/libraries/unit_test.php.html#line303" class="location">libraries/Unit_test.php at line 303</a>
+<div class='method'><a href="../source/libraries/unit_test.php.html#line339" class="location">libraries/Unit_test.php at line 339</a>
 
 <h3 id="_parse_template()">_parse_template</h3>
 <code class="signature">private  void <strong>_parse_template</strong>()</code>
@@ -225,7 +242,7 @@ Detail: <a href="#detail_field">Field</a> | <a href="#detail_method">Method</a> 
 
 
 
-<div class='method'><a href="../source/libraries/unit_test.php.html#line175" class="location">libraries/Unit_test.php at line 175</a>
+<div class='method'><a href="../source/libraries/unit_test.php.html#line206" class="location">libraries/Unit_test.php at line 206</a>
 
 <h3 id="active()">active</h3>
 <code class="signature">public  void <strong>active</strong>(bool state)</code>
@@ -239,7 +256,7 @@ Detail: <a href="#detail_field">Field</a> | <a href="#detail_method">Method</a> 
 
 
 
-<div class='method'><a href="../source/libraries/unit_test.php.html#line104" class="location">libraries/Unit_test.php at line 104</a>
+<div class='method'><a href="../source/libraries/unit_test.php.html#line136" class="location">libraries/Unit_test.php at line 136</a>
 
 <h3 id="report()">report</h3>
 <code class="signature">public  void <strong>report</strong>(mixed result)</code>
@@ -252,7 +269,7 @@ Detail: <a href="#detail_field">Field</a> | <a href="#detail_method">Method</a> 
 
 
 
-<div class='method'><a href="../source/libraries/unit_test.php.html#line190" class="location">libraries/Unit_test.php at line 190</a>
+<div class='method'><a href="../source/libraries/unit_test.php.html#line221" class="location">libraries/Unit_test.php at line 221</a>
 
 <h3 id="result()">result</h3>
 <code class="signature">public  void <strong>result</strong>(mixed results)</code>
@@ -265,10 +282,10 @@ Detail: <a href="#detail_field">Field</a> | <a href="#detail_method">Method</a> 
 
 
 
-<div class='method'><a href="../source/libraries/unit_test.php.html#line55" class="location">libraries/Unit_test.php at line 55</a>
+<div class='method'><a href="../source/libraries/unit_test.php.html#line86" class="location">libraries/Unit_test.php at line 86</a>
 
 <h3 id="run()">run</h3>
-<code class="signature">public  void <strong>run</strong>(mixed test, bool expected, str test_name)</code>
+<code class="signature">public  void <strong>run</strong>(mixed test, bool expected, str test_name, str notes)</code>
 <div class="details">
 <p>Run the tests</p><p>Runs the supplied tests</p><dl>
 <dt>Access	public.</dt>
@@ -279,7 +296,7 @@ Detail: <a href="#detail_field">Field</a> | <a href="#detail_method">Method</a> 
 
 
 
-<div class='method'><a href="../source/libraries/unit_test.php.html#line244" class="location">libraries/Unit_test.php at line 244</a>
+<div class='method'><a href="../source/libraries/unit_test.php.html#line280" class="location">libraries/Unit_test.php at line 280</a>
 
 <h3 id="set_template()">set_template</h3>
 <code class="signature">public  void <strong>set_template</strong>(mixed template)</code>
@@ -293,7 +310,21 @@ Detail: <a href="#detail_field">Field</a> | <a href="#detail_method">Method</a> 
 
 
 
-<div class='method'><a href="../source/libraries/unit_test.php.html#line159" class="location">libraries/Unit_test.php at line 159</a>
+<div class='method'><a href="../source/libraries/unit_test.php.html#line65" class="location">libraries/Unit_test.php at line 65</a>
+
+<h3 id="set_test_items()">set_test_items</h3>
+<code class="signature">public  void <strong>set_test_items</strong>(mixed items)</code>
+<div class="details">
+<p>Run the tests</p><p>Runs the supplied tests</p><dl>
+<dt>Access	public.</dt>
+<dt>Param	array.</dt>
+<dt>Return	void.</dt>
+</dl>
+</div></div>
+
+
+
+<div class='method'><a href="../source/libraries/unit_test.php.html#line190" class="location">libraries/Unit_test.php at line 190</a>
 
 <h3 id="use_strict()">use_strict</h3>
 <code class="signature">public  void <strong>use_strict</strong>(bool state)</code>

@@ -6,7 +6,7 @@
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 
 <meta name="generator" content="PHPDoctor 2RC4 (http://peej.github.com/phpdoctor/)">
-<meta name="when" content="Fri, 18 Jun 2010 15:58:03 +0000">
+<meta name="when" content="Sat, 24 Jul 2010 20:47:45 +0000">
 
 <link rel="stylesheet" type="text/css" href="../../stylesheet.css">
 <link rel="start" href="../../overview-summary.html">
@@ -36,80 +36,88 @@
 <hr>
 
 <a name="line1"></a><pre><?php  if ( ! defined('BASEPATH')) exit('No direct script access allowed');
-<a name="line2"></a>
-<a name="line3"></a>class Facebook
-<a name="line4"></a>{
-<a name="line5"></a>	// Instance of CodeIgniter object
-<a name="line6"></a>	protected $ci;
-<a name="line7"></a>	
-<a name="line8"></a>	// GiftFlow's client id / API key
-<a name="line9"></a>	protected $client_id = "111637438874755";
-<a name="line10"></a>	
-<a name="line11"></a>	// Secret key
-<a name="line12"></a>	protected $client_secret = "797a827203a1ad62cace9fa429100567";
+<a name="line2"></a>/**
+<a name="line3"></a>*	The Facebook library assists in interactions with the Facebook API
+<a name="line4"></a>*
+<a name="line5"></a>*	@author Brandon Jackson
+<a name="line6"></a>* 	@package Libraries
+<a name="line7"></a>*/
+<a name="line8"></a>
+<a name="line9"></a>class Facebook
+<a name="line10"></a>{
+<a name="line11"></a>	// Instance of CodeIgniter object
+<a name="line12"></a>	protected $ci;
 <a name="line13"></a>	
-<a name="line14"></a>	// User
-<a name="line15"></a>	protected $U;
+<a name="line14"></a>	// GiftFlow's client id / API key
+<a name="line15"></a>	protected $client_id = "111637438874755";
 <a name="line16"></a>	
-<a name="line17"></a>	// Empty friends array
-<a name="line18"></a>	protected $friends = array();
+<a name="line17"></a>	// Secret key
+<a name="line18"></a>	protected $client_secret = "797a827203a1ad62cace9fa429100567";
 <a name="line19"></a>	
-<a name="line20"></a>	public function __construct()
-<a name="line21"></a>	{
-<a name="line22"></a>		// Get instance of CodeIgniter
-<a name="line23"></a>		$this->ci =& get_instance();
-<a name="line24"></a>	}
+<a name="line20"></a>	// User
+<a name="line21"></a>	protected $U;
+<a name="line22"></a>	
+<a name="line23"></a>	// Empty friends array
+<a name="line24"></a>	protected $friends = array();
 <a name="line25"></a>	
-<a name="line26"></a>	
-<a name="line27"></a>	/*
-<a name="line28"></a>	*  Generic function to handle Facebook Graph data requests
-<a name="line29"></a>	* @param $user_id
-<a name="line30"></a>	* @param $field: used to load related Facebook connect objects like photos and friends
-<a name="line31"></a>	*/
-<a name="line32"></a>	function graph( $user_id, $field = NULL )
-<a name="line33"></a>	{
-<a name="line34"></a>		// Create new user
-<a name="line35"></a>		$this->U = new User( $user_id );
-<a name="line36"></a>		
-<a name="line37"></a>		// If this user isn't connected via Facebook, return false;
-<a name="line38"></a>		if(empty($this->U->facebook_id)||empty($this->U->facebook_token)) return false;
-<a name="line39"></a>		
-<a name="line40"></a>		// Prep URL for API call
-<a name="line41"></a>		$url = "https://graph.facebook.com/".$this->U->facebook_id;
-<a name="line42"></a>		if(!empty($field)) $url .= "/".$field;
-<a name="line43"></a>		$url .= "?access_token=".$this->U->facebook_token;
-<a name="line44"></a>		
-<a name="line45"></a>		// Decode the JSON object Facebook returned, and then return it
-<a name="line46"></a>		return json_decode(file_get_contents($url));
-<a name="line47"></a>	}
-<a name="line48"></a>	
-<a name="line49"></a>	/*
-<a name="line50"></a>	* Load a user's Facebook friends
-<a name="line51"></a>	*/
-<a name="line52"></a>	public function friends( $user_id )
-<a name="line53"></a>	{
-<a name="line54"></a>		// Make API call
-<a name="line55"></a>		if($graph = $this->graph( $user_id, "friends"))
-<a name="line56"></a>		{
-<a name="line57"></a>			// Foreach friend, add user_id to $this->friends array
-<a name="line58"></a>			foreach($graph->data as $val)
-<a name="line59"></a>			{
-<a name="line60"></a>				$this->friends[] = $val->id;
-<a name="line61"></a>			}
-<a name="line62"></a>			// Create new User object which will store the friends' data
-<a name="line63"></a>			$F = new User();
-<a name="line64"></a>			// Load User objects for each of user's friends, return it
-<a name="line65"></a>			$F->where_in("facebook_id", $this->friends)->order_by('first_name', 'asc')->get();
-<a name="line66"></a>			return $F->all;
-<a name="line67"></a>		}
-<a name="line68"></a>		
-<a name="line69"></a>		// If API call was invalid, return false
-<a name="line70"></a>		else
-<a name="line71"></a>		{
-<a name="line72"></a>			return false;
-<a name="line73"></a>		}
-<a name="line74"></a>	}
-<a name="line75"></a>}</pre>
+<a name="line26"></a>	public function __construct()
+<a name="line27"></a>	{
+<a name="line28"></a>		// Get instance of CodeIgniter
+<a name="line29"></a>		$this->ci =& get_instance();
+<a name="line30"></a>	}
+<a name="line31"></a>	
+<a name="line32"></a>	
+<a name="line33"></a>	/**
+<a name="line34"></a>	*  	Generic function to handle Facebook Graph data requests
+<a name="line35"></a>	* 	@param int $user_id
+<a name="line36"></a>	* 	@param string $field		used to load related Facebook connect objects like photos and friends
+<a name="line37"></a>	*	@return JSON
+<a name="line38"></a>	*/
+<a name="line39"></a>	function graph( $user_id, $field = NULL )
+<a name="line40"></a>	{
+<a name="line41"></a>		// Create new user
+<a name="line42"></a>		$this->U = new User( $user_id );
+<a name="line43"></a>		
+<a name="line44"></a>		// If this user isn't connected via Facebook, return false;
+<a name="line45"></a>		if(empty($this->U->facebook_id)||empty($this->U->facebook_token)) return false;
+<a name="line46"></a>		
+<a name="line47"></a>		// Prep URL for API call
+<a name="line48"></a>		$url = "https://graph.facebook.com/".$this->U->facebook_id;
+<a name="line49"></a>		if(!empty($field)) $url .= "/".$field;
+<a name="line50"></a>		$url .= "?access_token=".$this->U->facebook_token;
+<a name="line51"></a>		
+<a name="line52"></a>		// Decode the JSON object Facebook returned, and then return it
+<a name="line53"></a>		return json_decode(file_get_contents($url));
+<a name="line54"></a>	}
+<a name="line55"></a>	
+<a name="line56"></a>	/**
+<a name="line57"></a>	* 	Load a user's Facebook friends
+<a name="line58"></a>	*	@param int $user_id
+<a name="line59"></a>	*/
+<a name="line60"></a>	public function friends( $user_id )
+<a name="line61"></a>	{
+<a name="line62"></a>		// Make API call
+<a name="line63"></a>		if( $graph = $this->graph( $user_id, "friends") )
+<a name="line64"></a>		{
+<a name="line65"></a>			// Foreach friend, add user_id to $this->friends array
+<a name="line66"></a>			foreach($graph->data as $val)
+<a name="line67"></a>			{
+<a name="line68"></a>				$this->friends[] = $val->id;
+<a name="line69"></a>			}
+<a name="line70"></a>			// Create new User object which will store the friends' data
+<a name="line71"></a>			$F = new User();
+<a name="line72"></a>			// Load User objects for each of user's friends, return it
+<a name="line73"></a>			$F->where_in("facebook_id", $this->friends)->order_by('first_name', 'asc')->get();
+<a name="line74"></a>			return $F->all;
+<a name="line75"></a>		}
+<a name="line76"></a>		
+<a name="line77"></a>		// If API call was invalid, return false
+<a name="line78"></a>		else
+<a name="line79"></a>		{
+<a name="line80"></a>			return false;
+<a name="line81"></a>		}
+<a name="line82"></a>	}
+<a name="line83"></a>}</pre>
 <div class="header">
 <h1>GiftFlow API</h1>
 <ul>

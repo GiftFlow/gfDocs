@@ -6,7 +6,7 @@
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 
 <meta name="generator" content="PHPDoctor 2RC4 (http://peej.github.com/phpdoctor/)">
-<meta name="when" content="Mon, 19 Jul 2010 17:13:58 +0000">
+<meta name="when" content="Sat, 24 Jul 2010 20:46:31 +0000">
 
 <link rel="stylesheet" type="text/css" href="../../stylesheet.css">
 <link rel="start" href="../../overview-summary.html">
@@ -45,7 +45,7 @@
 <a name="line6"></a> *
 <a name="line7"></a> * @package		CodeIgniter
 <a name="line8"></a> * @author		ExpressionEngine Dev Team
-<a name="line9"></a> * @copyright	Copyright (c) 2008 - 2009, EllisLab, Inc.
+<a name="line9"></a> * @copyright	Copyright (c) 2008 - 2010, EllisLab, Inc.
 <a name="line10"></a> * @license		http://codeigniter.com/user_guide/license.html
 <a name="line11"></a> * @link		http://codeigniter.com
 <a name="line12"></a> * @since		Version 1.0
@@ -79,7 +79,7 @@
 <a name="line40"></a> */
 <a name="line41"></a>if ( ! function_exists('smiley_js'))
 <a name="line42"></a>{
-<a name="line43"></a>	function smiley_js($alias = '', $field_id = '')
+<a name="line43"></a>	function smiley_js($alias = '', $field_id = '', $inline = TRUE)
 <a name="line44"></a>	{
 <a name="line45"></a>		static $do_setup = TRUE;
 <a name="line46"></a>
@@ -107,209 +107,215 @@
 <a name="line68"></a>				$m = '{'.implode(',', $m).'}';
 <a name="line69"></a>			
 <a name="line70"></a>				$r .= <<<EOF
-<a name="line71"></a>			
-<a name="line72"></a>				var smiley_map = {$m};
-<a name="line73"></a>
-<a name="line74"></a>				function insert_smiley(smiley, field_id) {
-<a name="line75"></a>					var el = document.getElementById(field_id), newStart;
-<a name="line76"></a>				
-<a name="line77"></a>					if ( ! el && smiley_map[field_id]) {
-<a name="line78"></a>						el = document.getElementById(smiley_map[field_id]);
-<a name="line79"></a>					
-<a name="line80"></a>						if ( ! el)
-<a name="line81"></a>							return false;
-<a name="line82"></a>					}
-<a name="line83"></a>				
-<a name="line84"></a>					el.focus();
-<a name="line85"></a>					smiley = " " + smiley;
-<a name="line86"></a>
-<a name="line87"></a>					if ('selectionStart' in el) {
-<a name="line88"></a>						newStart = el.selectionStart + smiley.length;
-<a name="line89"></a>
-<a name="line90"></a>						el.value = el.value.substr(0, el.selectionStart) +
-<a name="line91"></a>										smiley +
-<a name="line92"></a>										el.value.substr(el.selectionEnd, el.value.length);
-<a name="line93"></a>						el.setSelectionRange(newStart, newStart);
-<a name="line94"></a>					}
-<a name="line95"></a>					else if (document.selection) {
-<a name="line96"></a>						document.selection.createRange().text = text;
-<a name="line97"></a>					}
-<a name="line98"></a>				}
-<a name="line99"></a>EOF;
-<a name="line100"></a>		}
-<a name="line101"></a>		else
-<a name="line102"></a>		{
-<a name="line103"></a>			if (is_array($alias))
-<a name="line104"></a>			{
-<a name="line105"></a>				foreach($alias as $name => $id)
-<a name="line106"></a>				{
-<a name="line107"></a>					$r .= 'smiley_map["'.$name.'"] = "'.$id.'";'."\n";
-<a name="line108"></a>				}
-<a name="line109"></a>			}
-<a name="line110"></a>		}
-<a name="line111"></a>
-<a name="line112"></a>		return '<script type="text/javascript" charset="utf-8">'.$r.'</script>';
-<a name="line113"></a>	}
-<a name="line114"></a>}
-<a name="line115"></a>
-<a name="line116"></a>// ------------------------------------------------------------------------
-<a name="line117"></a>
-<a name="line118"></a>/**
-<a name="line119"></a> * Get Clickable Smileys
-<a name="line120"></a> *
-<a name="line121"></a> * Returns an array of image tag links that can be clicked to be inserted 
-<a name="line122"></a> * into a form field.  
-<a name="line123"></a> *
-<a name="line124"></a> * @access	public
-<a name="line125"></a> * @param	string	the URL to the folder containing the smiley images
-<a name="line126"></a> * @return	array
-<a name="line127"></a> */
-<a name="line128"></a>if ( ! function_exists('get_clickable_smileys'))
-<a name="line129"></a>{
-<a name="line130"></a>	function get_clickable_smileys($image_url, $alias = '', $smileys = NULL)
-<a name="line131"></a>	{
-<a name="line132"></a>		// For backward compatibility with js_insert_smiley
-<a name="line133"></a>		
-<a name="line134"></a>		if (is_array($alias))
-<a name="line135"></a>		{
-<a name="line136"></a>			$smileys = $alias;
-<a name="line137"></a>		}
-<a name="line138"></a>		
-<a name="line139"></a>		if ( ! is_array($smileys))
-<a name="line140"></a>		{
-<a name="line141"></a>			if (FALSE === ($smileys = _get_smiley_array()))
-<a name="line142"></a>			{
-<a name="line143"></a>				return $smileys;
-<a name="line144"></a>			}
-<a name="line145"></a>		}
-<a name="line146"></a>
-<a name="line147"></a>		// Add a trailing slash to the file path if needed
-<a name="line148"></a>		$image_url = rtrim($image_url, '/').'/';
-<a name="line149"></a>	
-<a name="line150"></a>		$used = array();
-<a name="line151"></a>		foreach ($smileys as $key => $val)
-<a name="line152"></a>		{
-<a name="line153"></a>			// Keep duplicates from being used, which can happen if the
-<a name="line154"></a>			// mapping array contains multiple identical replacements.  For example:
-<a name="line155"></a>			// :-) and :) might be replaced with the same image so both smileys
-<a name="line156"></a>			// will be in the array.
-<a name="line157"></a>			if (isset($used[$smileys[$key][0]]))
-<a name="line158"></a>			{
-<a name="line159"></a>				continue;
-<a name="line160"></a>			}
-<a name="line161"></a>			
-<a name="line162"></a>			$link[] = "<a href=\"javascript:void(0);\" onClick=\"insert_smiley('".$key."', '".$alias."')\"><img src=\"".$image_url.$smileys[$key][0]."\" width=\"".$smileys[$key][1]."\" height=\"".$smileys[$key][2]."\" alt=\"".$smileys[$key][3]."\" style=\"border:0;\" /></a>";	
-<a name="line163"></a>	
-<a name="line164"></a>			$used[$smileys[$key][0]] = TRUE;
-<a name="line165"></a>		}
-<a name="line166"></a>	
-<a name="line167"></a>		return $link;
-<a name="line168"></a>	}
-<a name="line169"></a>}
-<a name="line170"></a>
-<a name="line171"></a>// ------------------------------------------------------------------------
-<a name="line172"></a>
-<a name="line173"></a>/**
-<a name="line174"></a> * Parse Smileys
-<a name="line175"></a> *
-<a name="line176"></a> * Takes a string as input and swaps any contained smileys for the actual image
-<a name="line177"></a> *
-<a name="line178"></a> * @access	public
-<a name="line179"></a> * @param	string	the text to be parsed
-<a name="line180"></a> * @param	string	the URL to the folder containing the smiley images
-<a name="line181"></a> * @return	string
-<a name="line182"></a> */
-<a name="line183"></a>if ( ! function_exists('parse_smileys'))
-<a name="line184"></a>{
-<a name="line185"></a>	function parse_smileys($str = '', $image_url = '', $smileys = NULL)
-<a name="line186"></a>	{
-<a name="line187"></a>		if ($image_url == '')
-<a name="line188"></a>		{
-<a name="line189"></a>			return $str;
-<a name="line190"></a>		}
-<a name="line191"></a>
-<a name="line192"></a>		if ( ! is_array($smileys))
-<a name="line193"></a>		{
-<a name="line194"></a>			if (FALSE === ($smileys = _get_smiley_array()))
-<a name="line195"></a>			{
-<a name="line196"></a>				return $str;
-<a name="line197"></a>			}
-<a name="line198"></a>		}
-<a name="line199"></a>
-<a name="line200"></a>		// Add a trailing slash to the file path if needed
-<a name="line201"></a>		$image_url = preg_replace("/(.+?)\/*$/", "\\1/",  $image_url);
-<a name="line202"></a>
-<a name="line203"></a>		foreach ($smileys as $key => $val)
-<a name="line204"></a>		{
-<a name="line205"></a>			$str = str_replace($key, "<img src=\"".$image_url.$smileys[$key][0]."\" width=\"".$smileys[$key][1]."\" height=\"".$smileys[$key][2]."\" alt=\"".$smileys[$key][3]."\" style=\"border:0;\" />", $str);
-<a name="line206"></a>		}
-<a name="line207"></a>
-<a name="line208"></a>		return $str;
-<a name="line209"></a>	}
-<a name="line210"></a>}
-<a name="line211"></a>
-<a name="line212"></a>// ------------------------------------------------------------------------
+<a name="line71"></a>				var smiley_map = {$m};
+<a name="line72"></a>
+<a name="line73"></a>				function insert_smiley(smiley, field_id) {
+<a name="line74"></a>					var el = document.getElementById(field_id), newStart;
+<a name="line75"></a>				
+<a name="line76"></a>					if ( ! el && smiley_map[field_id]) {
+<a name="line77"></a>						el = document.getElementById(smiley_map[field_id]);
+<a name="line78"></a>					
+<a name="line79"></a>						if ( ! el)
+<a name="line80"></a>							return false;
+<a name="line81"></a>					}
+<a name="line82"></a>				
+<a name="line83"></a>					el.focus();
+<a name="line84"></a>					smiley = " " + smiley;
+<a name="line85"></a>
+<a name="line86"></a>					if ('selectionStart' in el) {
+<a name="line87"></a>						newStart = el.selectionStart + smiley.length;
+<a name="line88"></a>
+<a name="line89"></a>						el.value = el.value.substr(0, el.selectionStart) +
+<a name="line90"></a>										smiley +
+<a name="line91"></a>										el.value.substr(el.selectionEnd, el.value.length);
+<a name="line92"></a>						el.setSelectionRange(newStart, newStart);
+<a name="line93"></a>					}
+<a name="line94"></a>					else if (document.selection) {
+<a name="line95"></a>						document.selection.createRange().text = smiley;
+<a name="line96"></a>					}
+<a name="line97"></a>				}
+<a name="line98"></a>EOF;
+<a name="line99"></a>		}
+<a name="line100"></a>		else
+<a name="line101"></a>		{
+<a name="line102"></a>			if (is_array($alias))
+<a name="line103"></a>			{
+<a name="line104"></a>				foreach($alias as $name => $id)
+<a name="line105"></a>				{
+<a name="line106"></a>					$r .= 'smiley_map["'.$name.'"] = "'.$id.'";'."\n";
+<a name="line107"></a>				}
+<a name="line108"></a>			}
+<a name="line109"></a>		}
+<a name="line110"></a>
+<a name="line111"></a>		if ($inline)
+<a name="line112"></a>		{
+<a name="line113"></a>			return '<script type="text/javascript" charset="utf-8">/*<![CDATA[ */'.$r.'// ]]></script>';			
+<a name="line114"></a>		}
+<a name="line115"></a>		else
+<a name="line116"></a>		{
+<a name="line117"></a>			return $r;
+<a name="line118"></a>		}
+<a name="line119"></a>	}
+<a name="line120"></a>}
+<a name="line121"></a>
+<a name="line122"></a>// ------------------------------------------------------------------------
+<a name="line123"></a>
+<a name="line124"></a>/**
+<a name="line125"></a> * Get Clickable Smileys
+<a name="line126"></a> *
+<a name="line127"></a> * Returns an array of image tag links that can be clicked to be inserted 
+<a name="line128"></a> * into a form field.  
+<a name="line129"></a> *
+<a name="line130"></a> * @access	public
+<a name="line131"></a> * @param	string	the URL to the folder containing the smiley images
+<a name="line132"></a> * @return	array
+<a name="line133"></a> */
+<a name="line134"></a>if ( ! function_exists('get_clickable_smileys'))
+<a name="line135"></a>{
+<a name="line136"></a>	function get_clickable_smileys($image_url, $alias = '', $smileys = NULL)
+<a name="line137"></a>	{
+<a name="line138"></a>		// For backward compatibility with js_insert_smiley
+<a name="line139"></a>		
+<a name="line140"></a>		if (is_array($alias))
+<a name="line141"></a>		{
+<a name="line142"></a>			$smileys = $alias;
+<a name="line143"></a>		}
+<a name="line144"></a>		
+<a name="line145"></a>		if ( ! is_array($smileys))
+<a name="line146"></a>		{
+<a name="line147"></a>			if (FALSE === ($smileys = _get_smiley_array()))
+<a name="line148"></a>			{
+<a name="line149"></a>				return $smileys;
+<a name="line150"></a>			}
+<a name="line151"></a>		}
+<a name="line152"></a>
+<a name="line153"></a>		// Add a trailing slash to the file path if needed
+<a name="line154"></a>		$image_url = rtrim($image_url, '/').'/';
+<a name="line155"></a>	
+<a name="line156"></a>		$used = array();
+<a name="line157"></a>		foreach ($smileys as $key => $val)
+<a name="line158"></a>		{
+<a name="line159"></a>			// Keep duplicates from being used, which can happen if the
+<a name="line160"></a>			// mapping array contains multiple identical replacements.  For example:
+<a name="line161"></a>			// :-) and :) might be replaced with the same image so both smileys
+<a name="line162"></a>			// will be in the array.
+<a name="line163"></a>			if (isset($used[$smileys[$key][0]]))
+<a name="line164"></a>			{
+<a name="line165"></a>				continue;
+<a name="line166"></a>			}
+<a name="line167"></a>			
+<a name="line168"></a>			$link[] = "<a href=\"javascript:void(0);\" onclick=\"insert_smiley('".$key."', '".$alias."')\"><img src=\"".$image_url.$smileys[$key][0]."\" width=\"".$smileys[$key][1]."\" height=\"".$smileys[$key][2]."\" alt=\"".$smileys[$key][3]."\" style=\"border:0;\" /></a>";	
+<a name="line169"></a>	
+<a name="line170"></a>			$used[$smileys[$key][0]] = TRUE;
+<a name="line171"></a>		}
+<a name="line172"></a>	
+<a name="line173"></a>		return $link;
+<a name="line174"></a>	}
+<a name="line175"></a>}
+<a name="line176"></a>
+<a name="line177"></a>// ------------------------------------------------------------------------
+<a name="line178"></a>
+<a name="line179"></a>/**
+<a name="line180"></a> * Parse Smileys
+<a name="line181"></a> *
+<a name="line182"></a> * Takes a string as input and swaps any contained smileys for the actual image
+<a name="line183"></a> *
+<a name="line184"></a> * @access	public
+<a name="line185"></a> * @param	string	the text to be parsed
+<a name="line186"></a> * @param	string	the URL to the folder containing the smiley images
+<a name="line187"></a> * @return	string
+<a name="line188"></a> */
+<a name="line189"></a>if ( ! function_exists('parse_smileys'))
+<a name="line190"></a>{
+<a name="line191"></a>	function parse_smileys($str = '', $image_url = '', $smileys = NULL)
+<a name="line192"></a>	{
+<a name="line193"></a>		if ($image_url == '')
+<a name="line194"></a>		{
+<a name="line195"></a>			return $str;
+<a name="line196"></a>		}
+<a name="line197"></a>
+<a name="line198"></a>		if ( ! is_array($smileys))
+<a name="line199"></a>		{
+<a name="line200"></a>			if (FALSE === ($smileys = _get_smiley_array()))
+<a name="line201"></a>			{
+<a name="line202"></a>				return $str;
+<a name="line203"></a>			}
+<a name="line204"></a>		}
+<a name="line205"></a>
+<a name="line206"></a>		// Add a trailing slash to the file path if needed
+<a name="line207"></a>		$image_url = preg_replace("/(.+?)\/*$/", "\\1/",  $image_url);
+<a name="line208"></a>
+<a name="line209"></a>		foreach ($smileys as $key => $val)
+<a name="line210"></a>		{
+<a name="line211"></a>			$str = str_replace($key, "<img src=\"".$image_url.$smileys[$key][0]."\" width=\"".$smileys[$key][1]."\" height=\"".$smileys[$key][2]."\" alt=\"".$smileys[$key][3]."\" style=\"border:0;\" />", $str);
+<a name="line212"></a>		}
 <a name="line213"></a>
-<a name="line214"></a>/**
-<a name="line215"></a> * Get Smiley Array
-<a name="line216"></a> *
-<a name="line217"></a> * Fetches the config/smiley.php file
-<a name="line218"></a> *
-<a name="line219"></a> * @access	private
-<a name="line220"></a> * @return	mixed
-<a name="line221"></a> */
-<a name="line222"></a>if ( ! function_exists('_get_smiley_array'))
-<a name="line223"></a>{
-<a name="line224"></a>	function _get_smiley_array()
-<a name="line225"></a>	{
-<a name="line226"></a>		if ( ! file_exists(APPPATH.'config/smileys'.EXT))
-<a name="line227"></a>		{
-<a name="line228"></a>			return FALSE;
-<a name="line229"></a>		}
-<a name="line230"></a>
-<a name="line231"></a>		include(APPPATH.'config/smileys'.EXT);
-<a name="line232"></a>
-<a name="line233"></a>		if ( ! isset($smileys) OR ! is_array($smileys))
-<a name="line234"></a>		{
-<a name="line235"></a>			return FALSE;
-<a name="line236"></a>		}
-<a name="line237"></a>
-<a name="line238"></a>		return $smileys;
-<a name="line239"></a>	}
-<a name="line240"></a>}
-<a name="line241"></a>
-<a name="line242"></a>// ------------------------------------------------------------------------
+<a name="line214"></a>		return $str;
+<a name="line215"></a>	}
+<a name="line216"></a>}
+<a name="line217"></a>
+<a name="line218"></a>// ------------------------------------------------------------------------
+<a name="line219"></a>
+<a name="line220"></a>/**
+<a name="line221"></a> * Get Smiley Array
+<a name="line222"></a> *
+<a name="line223"></a> * Fetches the config/smiley.php file
+<a name="line224"></a> *
+<a name="line225"></a> * @access	private
+<a name="line226"></a> * @return	mixed
+<a name="line227"></a> */
+<a name="line228"></a>if ( ! function_exists('_get_smiley_array'))
+<a name="line229"></a>{
+<a name="line230"></a>	function _get_smiley_array()
+<a name="line231"></a>	{
+<a name="line232"></a>		if ( ! file_exists(APPPATH.'config/smileys'.EXT))
+<a name="line233"></a>		{
+<a name="line234"></a>			return FALSE;
+<a name="line235"></a>		}
+<a name="line236"></a>
+<a name="line237"></a>		include(APPPATH.'config/smileys'.EXT);
+<a name="line238"></a>
+<a name="line239"></a>		if ( ! isset($smileys) OR ! is_array($smileys))
+<a name="line240"></a>		{
+<a name="line241"></a>			return FALSE;
+<a name="line242"></a>		}
 <a name="line243"></a>
-<a name="line244"></a>/**
-<a name="line245"></a> * JS Insert Smiley
-<a name="line246"></a> *
-<a name="line247"></a> * Generates the javascript function needed to insert smileys into a form field
-<a name="line248"></a> *
-<a name="line249"></a> * DEPRECATED as of version 1.7.2, use smiley_js instead
-<a name="line250"></a> *
-<a name="line251"></a> * @access	public
-<a name="line252"></a> * @param	string	form name
-<a name="line253"></a> * @param	string	field name
-<a name="line254"></a> * @return	string
-<a name="line255"></a> */
-<a name="line256"></a>if ( ! function_exists('js_insert_smiley'))
-<a name="line257"></a>{
-<a name="line258"></a>	function js_insert_smiley($form_name = '', $form_field = '')
-<a name="line259"></a>	{
-<a name="line260"></a>		return <<<EOF
-<a name="line261"></a><script type="text/javascript">
-<a name="line262"></a>	function insert_smiley(smiley)
-<a name="line263"></a>	{
-<a name="line264"></a>		document.{$form_name}.{$form_field}.value += " " + smiley;
-<a name="line265"></a>	}
-<a name="line266"></a></script>
-<a name="line267"></a>EOF;
-<a name="line268"></a>	}
-<a name="line269"></a>}
-<a name="line270"></a>
-<a name="line271"></a>
-<a name="line272"></a>/* End of file smiley_helper.php */
-<a name="line273"></a>/* Location: ./system/helpers/smiley_helper.php */</pre>
+<a name="line244"></a>		return $smileys;
+<a name="line245"></a>	}
+<a name="line246"></a>}
+<a name="line247"></a>
+<a name="line248"></a>// ------------------------------------------------------------------------
+<a name="line249"></a>
+<a name="line250"></a>/**
+<a name="line251"></a> * JS Insert Smiley
+<a name="line252"></a> *
+<a name="line253"></a> * Generates the javascript function needed to insert smileys into a form field
+<a name="line254"></a> *
+<a name="line255"></a> * DEPRECATED as of version 1.7.2, use smiley_js instead
+<a name="line256"></a> *
+<a name="line257"></a> * @access	public
+<a name="line258"></a> * @param	string	form name
+<a name="line259"></a> * @param	string	field name
+<a name="line260"></a> * @return	string
+<a name="line261"></a> */
+<a name="line262"></a>if ( ! function_exists('js_insert_smiley'))
+<a name="line263"></a>{
+<a name="line264"></a>	function js_insert_smiley($form_name = '', $form_field = '')
+<a name="line265"></a>	{
+<a name="line266"></a>		return <<<EOF
+<a name="line267"></a><script type="text/javascript">
+<a name="line268"></a>	function insert_smiley(smiley)
+<a name="line269"></a>	{
+<a name="line270"></a>		document.{$form_name}.{$form_field}.value += " " + smiley;
+<a name="line271"></a>	}
+<a name="line272"></a></script>
+<a name="line273"></a>EOF;
+<a name="line274"></a>	}
+<a name="line275"></a>}
+<a name="line276"></a>
+<a name="line277"></a>
+<a name="line278"></a>/* End of file smiley_helper.php */
+<a name="line279"></a>/* Location: ./system/helpers/smiley_helper.php */</pre>
 <div class="header">
 <h1>GiftFlow API</h1>
 <ul>

@@ -1,0 +1,149 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+
+<html lang="en">
+<head>
+
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
+<meta name="generator" content="PHPDoctor 2RC4 (http://peej.github.com/phpdoctor/)">
+<meta name="when" content="Sat, 24 Jul 2010 20:46:31 +0000">
+
+<link rel="stylesheet" type="text/css" href="../../stylesheet.css">
+<link rel="start" href="../../overview-summary.html">
+
+<title>core/Controller.php (GiftFlow API)</title>
+
+</head>
+<body id="file" onload="parent.document.title=document.title;">
+
+<div class="header">
+<h1>GiftFlow API</h1>
+<ul>
+<li><a href="../../overview-summary.html">Overview</a></li>
+<li>Package</li><li>Class</li><li>Tree</li><li><a href="../../overview-files.html">Files</a></li>
+<li><a href="../../deprecated-list.html">Deprecated</a></li>
+<li><a href="../../index-all.html">Index</a></li>
+</ul>
+</div>
+
+<div class="small_links">
+<a href="../../index.html" target="_top">Frames</a>
+<a href="../../source/core/controller.php.html" target="_top">No frames</a>
+</div>
+<hr>
+
+<h1>core/Controller.php</h1>
+<div class="comment" id="overview_description"><p>CodeIgniter</p><p>An open source application development framework for PHP 4.3.2 or newer</p></div>
+
+<hr>
+
+<a name="line1"></a><pre><?php  if ( ! defined('BASEPATH')) exit('No direct script access allowed');
+<a name="line2"></a>/**
+<a name="line3"></a> * CodeIgniter
+<a name="line4"></a> *
+<a name="line5"></a> * An open source application development framework for PHP 4.3.2 or newer
+<a name="line6"></a> *
+<a name="line7"></a> * @package		CodeIgniter
+<a name="line8"></a> * @author		ExpressionEngine Dev Team
+<a name="line9"></a> * @copyright	Copyright (c) 2008 - 2010, EllisLab, Inc.
+<a name="line10"></a> * @license		http://codeigniter.com/user_guide/license.html
+<a name="line11"></a> * @link		http://codeigniter.com
+<a name="line12"></a> * @since		Version 1.0
+<a name="line13"></a> * @filesource
+<a name="line14"></a> */
+<a name="line15"></a>
+<a name="line16"></a>// ------------------------------------------------------------------------
+<a name="line17"></a>
+<a name="line18"></a>/**
+<a name="line19"></a> * CodeIgniter Application Controller Class
+<a name="line20"></a> *
+<a name="line21"></a> * This class object is the super class that every library in
+<a name="line22"></a> * CodeIgniter will be assigned to.
+<a name="line23"></a> *
+<a name="line24"></a> * @package		CodeIgniter
+<a name="line25"></a> * @subpackage	Libraries
+<a name="line26"></a> * @category	Libraries
+<a name="line27"></a> * @author		ExpressionEngine Dev Team
+<a name="line28"></a> * @link		http://codeigniter.com/user_guide/general/controllers.html
+<a name="line29"></a> */
+<a name="line30"></a>class Controller extends CI_Base {
+<a name="line31"></a>	
+<a name="line32"></a>	/**
+<a name="line33"></a>	 * Constructor
+<a name="line34"></a>	 *
+<a name="line35"></a>	 * Calls the initialize() function
+<a name="line36"></a>	 */
+<a name="line37"></a>	function Controller()
+<a name="line38"></a>	{	
+<a name="line39"></a>		parent::CI_Base();
+<a name="line40"></a>
+<a name="line41"></a>		Console::logSpeed('Loading controller.');
+<a name="line42"></a>
+<a name="line43"></a>
+<a name="line44"></a>		// Assign all the class objects that were instantiated by the
+<a name="line45"></a>		// bootstrap file (CodeIgniter.php) to local class variables 
+<a name="line46"></a>		// so that CI can run as one big super object.
+<a name="line47"></a>		foreach (is_loaded() as $var => $class)
+<a name="line48"></a>		{
+<a name="line49"></a>			$this->$var =& load_class($class);
+<a name="line50"></a>		}
+<a name="line51"></a>		Console::logSpeed('Classes bootstrapped.');
+<a name="line52"></a>		// In PHP 5 the Loader class is run as a discreet
+<a name="line53"></a>		// class.  In PHP 4 it extends the Controller @PHP4
+<a name="line54"></a>	 	if (is_php('5.0.0') == TRUE)
+<a name="line55"></a>		{
+<a name="line56"></a>			
+<a name="line57"></a>			
+<a name="line58"></a>			$this->load =& load_class('Loader', 'core');
+<a name="line59"></a>			
+<a name="line60"></a>			Console::logSpeed('Loader loaded.');
+<a name="line61"></a>
+<a name="line62"></a>			$this->load->_base_classes =& is_loaded();
+<a name="line63"></a>			Console::logSpeed('Autoloading...');
+<a name="line64"></a>			$this->load->_ci_autoloader();
+<a name="line65"></a>			Console::logSpeed('Autoloading...done.');
+<a name="line66"></a>		}
+<a name="line67"></a>		else
+<a name="line68"></a>		{
+<a name="line69"></a>			$this->_ci_autoloader();
+<a name="line70"></a>			
+<a name="line71"></a>			// sync up the objects since PHP4 was working from a copy
+<a name="line72"></a>			foreach (array_keys(get_object_vars($this)) as $attribute)
+<a name="line73"></a>			{
+<a name="line74"></a>				if (is_object($this->$attribute))
+<a name="line75"></a>				{
+<a name="line76"></a>					$this->load->$attribute =& $this->$attribute;
+<a name="line77"></a>				}
+<a name="line78"></a>			}
+<a name="line79"></a>		}
+<a name="line80"></a>		Console::logSpeed('Controller initialized.');
+<a name="line81"></a>		log_message('debug', "Controller Class Initialized");
+<a name="line82"></a>		
+<a name="line83"></a>	}
+<a name="line84"></a>
+<a name="line85"></a>}
+<a name="line86"></a>// END Controller class
+<a name="line87"></a>
+<a name="line88"></a>/* End of file Controller.php */
+<a name="line89"></a>/* Location: ./system/core/Controller.php */</pre>
+<div class="header">
+<h1>GiftFlow API</h1>
+<ul>
+<li><a href="../../overview-summary.html">Overview</a></li>
+<li>Package</li><li>Class</li><li>Tree</li><li><a href="../../overview-files.html">Files</a></li>
+<li><a href="../../deprecated-list.html">Deprecated</a></li>
+<li><a href="../../index-all.html">Index</a></li>
+</ul>
+</div>
+
+<div class="small_links">
+<a href="../../index.html" target="_top">Frames</a>
+<a href="../../source/core/controller.php.html" target="_top">No frames</a>
+</div>
+<hr>
+
+<p id="footer">This document was generated by <a href="http://peej.github.com/phpdoctor/">PHPDoctor: The PHP Documentation Creator</a></p>
+
+</body>
+
+</html>

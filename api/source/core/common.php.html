@@ -1,0 +1,582 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+
+<html lang="en">
+<head>
+
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
+<meta name="generator" content="PHPDoctor 2RC4 (http://peej.github.com/phpdoctor/)">
+<meta name="when" content="Sat, 24 Jul 2010 20:46:31 +0000">
+
+<link rel="stylesheet" type="text/css" href="../../stylesheet.css">
+<link rel="start" href="../../overview-summary.html">
+
+<title>core/Common.php (GiftFlow API)</title>
+
+</head>
+<body id="file" onload="parent.document.title=document.title;">
+
+<div class="header">
+<h1>GiftFlow API</h1>
+<ul>
+<li><a href="../../overview-summary.html">Overview</a></li>
+<li>Package</li><li>Class</li><li>Tree</li><li><a href="../../overview-files.html">Files</a></li>
+<li><a href="../../deprecated-list.html">Deprecated</a></li>
+<li><a href="../../index-all.html">Index</a></li>
+</ul>
+</div>
+
+<div class="small_links">
+<a href="../../index.html" target="_top">Frames</a>
+<a href="../../source/core/common.php.html" target="_top">No frames</a>
+</div>
+<hr>
+
+<h1>core/Common.php</h1>
+<div class="comment" id="overview_description"><p>CodeIgniter</p><p>An open source application development framework for PHP 4.3.2 or newer</p></div>
+
+<hr>
+
+<a name="line1"></a><pre><?php  if ( ! defined('BASEPATH')) exit('No direct script access allowed');
+<a name="line2"></a>/**
+<a name="line3"></a> * CodeIgniter
+<a name="line4"></a> *
+<a name="line5"></a> * An open source application development framework for PHP 4.3.2 or newer
+<a name="line6"></a> *
+<a name="line7"></a> * @package		CodeIgniter
+<a name="line8"></a> * @author		ExpressionEngine Dev Team
+<a name="line9"></a> * @copyright	Copyright (c) 2008 - 2010, EllisLab, Inc.
+<a name="line10"></a> * @license		http://codeigniter.com/user_guide/license.html
+<a name="line11"></a> * @link		http://codeigniter.com
+<a name="line12"></a> * @since		Version 1.0
+<a name="line13"></a> * @filesource
+<a name="line14"></a> */
+<a name="line15"></a>
+<a name="line16"></a>// ------------------------------------------------------------------------
+<a name="line17"></a>
+<a name="line18"></a>/**
+<a name="line19"></a> * Common Functions
+<a name="line20"></a> *
+<a name="line21"></a> * Loads the base classes and executes the request.
+<a name="line22"></a> *
+<a name="line23"></a> * @package		CodeIgniter
+<a name="line24"></a> * @subpackage	codeigniter
+<a name="line25"></a> * @category	Common Functions
+<a name="line26"></a> * @author		ExpressionEngine Dev Team
+<a name="line27"></a> * @link		http://codeigniter.com/user_guide/
+<a name="line28"></a> */
+<a name="line29"></a>
+<a name="line30"></a>// ------------------------------------------------------------------------
+<a name="line31"></a>
+<a name="line32"></a>/**
+<a name="line33"></a>* Determines if the current version of PHP is greater then the supplied value
+<a name="line34"></a>*
+<a name="line35"></a>* Since there are a few places where we conditionally test for PHP > 5
+<a name="line36"></a>* we'll set a static variable.
+<a name="line37"></a>*
+<a name="line38"></a>* @access	public
+<a name="line39"></a>* @param	string
+<a name="line40"></a>* @return	bool	TRUE if the current version is $version or higher
+<a name="line41"></a>*/
+<a name="line42"></a>	function is_php($version = '5.0.0')
+<a name="line43"></a>	{
+<a name="line44"></a>		static $_is_php;
+<a name="line45"></a>		$version = (string)$version;
+<a name="line46"></a>	
+<a name="line47"></a>		if ( ! isset($_is_php[$version]))
+<a name="line48"></a>		{
+<a name="line49"></a>			$_is_php[$version] = (version_compare(PHP_VERSION, $version) < 0) ? FALSE : TRUE;
+<a name="line50"></a>		}
+<a name="line51"></a>
+<a name="line52"></a>		return $_is_php[$version];
+<a name="line53"></a>	}
+<a name="line54"></a>
+<a name="line55"></a>// ------------------------------------------------------------------------
+<a name="line56"></a>
+<a name="line57"></a>/**
+<a name="line58"></a> * Tests for file writability
+<a name="line59"></a> *
+<a name="line60"></a> * is_writable() returns TRUE on Windows servers when you really can't write to 
+<a name="line61"></a> * the file, based on the read-only attribute.  is_writable() is also unreliable
+<a name="line62"></a> * on Unix servers if safe_mode is on.
+<a name="line63"></a> *
+<a name="line64"></a> * @access	private
+<a name="line65"></a> * @return	void
+<a name="line66"></a> */	
+<a name="line67"></a>	function is_really_writable($file)
+<a name="line68"></a>	{
+<a name="line69"></a>		// If we're on a Unix server with safe_mode off we call is_writable
+<a name="line70"></a>		if (DIRECTORY_SEPARATOR == '/' AND @ini_get("safe_mode") == FALSE)
+<a name="line71"></a>		{
+<a name="line72"></a>			return is_writable($file);
+<a name="line73"></a>		}
+<a name="line74"></a>
+<a name="line75"></a>		// For windows servers and safe_mode "on" installations we'll actually
+<a name="line76"></a>		// write a file then read it.  Bah...
+<a name="line77"></a>		if (is_dir($file))
+<a name="line78"></a>		{
+<a name="line79"></a>			$file = rtrim($file, '/').'/'.md5(mt_rand(1,100).mt_rand(1,100));
+<a name="line80"></a>
+<a name="line81"></a>			if (($fp = @fopen($file, FOPEN_WRITE_CREATE)) === FALSE)
+<a name="line82"></a>			{
+<a name="line83"></a>				return FALSE;
+<a name="line84"></a>			}
+<a name="line85"></a>
+<a name="line86"></a>			fclose($fp);
+<a name="line87"></a>			@chmod($file, DIR_WRITE_MODE);
+<a name="line88"></a>			@unlink($file);
+<a name="line89"></a>			return TRUE;
+<a name="line90"></a>		}
+<a name="line91"></a>		elseif (($fp = @fopen($file, FOPEN_WRITE_CREATE)) === FALSE)
+<a name="line92"></a>		{
+<a name="line93"></a>			return FALSE;
+<a name="line94"></a>		}
+<a name="line95"></a>
+<a name="line96"></a>		fclose($fp);
+<a name="line97"></a>		return TRUE;
+<a name="line98"></a>	}
+<a name="line99"></a>
+<a name="line100"></a>// ------------------------------------------------------------------------
+<a name="line101"></a>
+<a name="line102"></a>/**
+<a name="line103"></a>* Class registry
+<a name="line104"></a>*
+<a name="line105"></a>* This function acts as a singleton.  If the requested class does not
+<a name="line106"></a>* exist it is instantiated and set to a static variable.  If it has
+<a name="line107"></a>* previously been instantiated the variable is returned.
+<a name="line108"></a>*
+<a name="line109"></a>* @access	public
+<a name="line110"></a>* @param	string	the class name being requested
+<a name="line111"></a>* @param	string	the directory where the class should be found
+<a name="line112"></a>* @param	string	the class name prefix
+<a name="line113"></a>* @return	object
+<a name="line114"></a>*/
+<a name="line115"></a>	function &load_class($class, $directory = 'libraries', $prefix = 'CI_')
+<a name="line116"></a>	{
+<a name="line117"></a>		static $_classes = array();
+<a name="line118"></a>		
+<a name="line119"></a>		// Does the class exist?  If so, we're done...
+<a name="line120"></a>		if (isset($_classes[$class]))
+<a name="line121"></a>		{
+<a name="line122"></a>			return $_classes[$class];
+<a name="line123"></a>		}
+<a name="line124"></a>
+<a name="line125"></a>		$name = FALSE;
+<a name="line126"></a>
+<a name="line127"></a>		// Look for the class first in the native system/libraries folder
+<a name="line128"></a>		// thenin the local application/libraries folder
+<a name="line129"></a>		foreach (array(BASEPATH, APPPATH) as $path)
+<a name="line130"></a>		{ 
+<a name="line131"></a>			if (file_exists($path.$directory.'/'.$class.EXT))
+<a name="line132"></a>			{
+<a name="line133"></a>				$name = $prefix.$class;
+<a name="line134"></a>		
+<a name="line135"></a>				if (class_exists($name) === FALSE)
+<a name="line136"></a>				{
+<a name="line137"></a>					require($path.$directory.'/'.$class.EXT);
+<a name="line138"></a>				}
+<a name="line139"></a>		
+<a name="line140"></a>				break;
+<a name="line141"></a>			}
+<a name="line142"></a>		}
+<a name="line143"></a>
+<a name="line144"></a>		// Is the request a class extension?  If so we load it too
+<a name="line145"></a>		if (file_exists(APPPATH.$directory.'/'.config_item('subclass_prefix').$class.EXT))
+<a name="line146"></a>		{	
+<a name="line147"></a>			$name = config_item('subclass_prefix').$class;
+<a name="line148"></a>	
+<a name="line149"></a>			if (class_exists($name) === FALSE)
+<a name="line150"></a>			{
+<a name="line151"></a>				require(APPPATH.$directory.'/'.config_item('subclass_prefix').$class.EXT);
+<a name="line152"></a>			}
+<a name="line153"></a>		}
+<a name="line154"></a>
+<a name="line155"></a>		// Did we find the class?
+<a name="line156"></a>		if ($name === FALSE)
+<a name="line157"></a>		{
+<a name="line158"></a>			// Note: We use exit() rather then show_error() in order to avoid a 
+<a name="line159"></a>			// self-referencing loop with the Excptions class 
+<a name="line160"></a>			exit('Unable to locate the specified class: '.$class.EXT);
+<a name="line161"></a>		}
+<a name="line162"></a>
+<a name="line163"></a>		// Keep track of what we just loaded
+<a name="line164"></a>		is_loaded($class);
+<a name="line165"></a>
+<a name="line166"></a>		$_classes[$class] =& instantiate_class(new $name());
+<a name="line167"></a>		return $_classes[$class];
+<a name="line168"></a>	}
+<a name="line169"></a>
+<a name="line170"></a>// ------------------------------------------------------------------------
+<a name="line171"></a>
+<a name="line172"></a>/**
+<a name="line173"></a> * Instantiate Class
+<a name="line174"></a> *
+<a name="line175"></a> * Returns a new class object by reference, used by load_class() and the DB class.
+<a name="line176"></a> * Required to retain PHP 4 compatibility and also not make PHP 5.3 cry.
+<a name="line177"></a> *
+<a name="line178"></a> * Use: $obj =& instantiate_class(new Foo());
+<a name="line179"></a> * 
+<a name="line180"></a> * @access	public
+<a name="line181"></a> * @param	object
+<a name="line182"></a> * @return	object
+<a name="line183"></a> */
+<a name="line184"></a>	function &instantiate_class(&$class_object)
+<a name="line185"></a>	{
+<a name="line186"></a>		return $class_object;
+<a name="line187"></a>	}
+<a name="line188"></a>
+<a name="line189"></a>// --------------------------------------------------------------------
+<a name="line190"></a>
+<a name="line191"></a>/**
+<a name="line192"></a>* Keeps track of which libraries have been loaded.  This function is
+<a name="line193"></a>* called by the load_class() function above
+<a name="line194"></a>*
+<a name="line195"></a>* @access	public
+<a name="line196"></a>* @return	array
+<a name="line197"></a>*/
+<a name="line198"></a>	function is_loaded($class = '')
+<a name="line199"></a>	{
+<a name="line200"></a>		static $_is_loaded = array();
+<a name="line201"></a>
+<a name="line202"></a>		if ($class != '')
+<a name="line203"></a>		{
+<a name="line204"></a>			$_is_loaded[strtolower($class)] = $class;
+<a name="line205"></a>		}
+<a name="line206"></a>
+<a name="line207"></a>		return $_is_loaded;
+<a name="line208"></a>	}
+<a name="line209"></a>
+<a name="line210"></a>// ------------------------------------------------------------------------
+<a name="line211"></a>
+<a name="line212"></a>/**
+<a name="line213"></a>* Loads the main config.php file
+<a name="line214"></a>*
+<a name="line215"></a>* This function lets us grab the config file even if the Config class
+<a name="line216"></a>* hasn't been instantiated yet
+<a name="line217"></a>*
+<a name="line218"></a>* @access	private
+<a name="line219"></a>* @return	array
+<a name="line220"></a>*/
+<a name="line221"></a>	function &get_config($replace = array())
+<a name="line222"></a>	{
+<a name="line223"></a>		static $_config;
+<a name="line224"></a>	
+<a name="line225"></a>		if (isset($_config))
+<a name="line226"></a>		{
+<a name="line227"></a>			return $_config[0];
+<a name="line228"></a>		}	
+<a name="line229"></a>
+<a name="line230"></a>		// Fetch the config file
+<a name="line231"></a>		if ( ! file_exists(APPPATH.'config/config'.EXT))
+<a name="line232"></a>		{
+<a name="line233"></a>			exit('The configuration file does not exist.');
+<a name="line234"></a>		}
+<a name="line235"></a>		else
+<a name="line236"></a>		{
+<a name="line237"></a>			require(APPPATH.'config/config'.EXT);
+<a name="line238"></a>		}
+<a name="line239"></a>
+<a name="line240"></a>		// Does the $config array exist in the file?
+<a name="line241"></a>		if ( ! isset($config) OR ! is_array($config))
+<a name="line242"></a>		{
+<a name="line243"></a>			exit('Your config file does not appear to be formatted correctly.');
+<a name="line244"></a>		}
+<a name="line245"></a>
+<a name="line246"></a>		// Are any values being dynamically replaced?
+<a name="line247"></a>		if (count($replace) > 0)
+<a name="line248"></a>		{
+<a name="line249"></a>			foreach ($replace as $key => $val)
+<a name="line250"></a>			{
+<a name="line251"></a>				if (isset($config[$key]))
+<a name="line252"></a>				{
+<a name="line253"></a>					$config[$key] = $val;
+<a name="line254"></a>				}
+<a name="line255"></a>			}
+<a name="line256"></a>		}
+<a name="line257"></a>	
+<a name="line258"></a>		return $_config[0] =& $config;
+<a name="line259"></a>	}
+<a name="line260"></a>
+<a name="line261"></a>// ------------------------------------------------------------------------
+<a name="line262"></a>
+<a name="line263"></a>/**
+<a name="line264"></a>* Returns the specified config item
+<a name="line265"></a>*
+<a name="line266"></a>* @access	public
+<a name="line267"></a>* @return	mixed
+<a name="line268"></a>*/
+<a name="line269"></a>	function config_item($item)
+<a name="line270"></a>	{
+<a name="line271"></a>		static $_config_item = array();
+<a name="line272"></a>	
+<a name="line273"></a>		if ( ! isset($_config_item[$item]))
+<a name="line274"></a>		{
+<a name="line275"></a>			$config =& get_config();
+<a name="line276"></a>	
+<a name="line277"></a>			if ( ! isset($config[$item]))
+<a name="line278"></a>			{
+<a name="line279"></a>				return FALSE;
+<a name="line280"></a>			}
+<a name="line281"></a>			$_config_item[$item] = $config[$item];
+<a name="line282"></a>		}
+<a name="line283"></a>	
+<a name="line284"></a>		return $_config_item[$item];
+<a name="line285"></a>	}
+<a name="line286"></a>
+<a name="line287"></a>// ------------------------------------------------------------------------
+<a name="line288"></a>
+<a name="line289"></a>/**
+<a name="line290"></a>* Error Handler
+<a name="line291"></a>*
+<a name="line292"></a>* This function lets us invoke the exception class and
+<a name="line293"></a>* display errors using the standard error template located
+<a name="line294"></a>* in application/errors/errors.php
+<a name="line295"></a>* This function will send the error page directly to the
+<a name="line296"></a>* browser and exit.
+<a name="line297"></a>*
+<a name="line298"></a>* @access	public
+<a name="line299"></a>* @return	void
+<a name="line300"></a>*/
+<a name="line301"></a>	function show_error($message, $status_code = 500, $heading = 'An Error Was Encountered')
+<a name="line302"></a>	{
+<a name="line303"></a>		$_error =& load_class('Exceptions', 'core');
+<a name="line304"></a>		echo $_error->show_error($heading, $message, 'error_general', $status_code);
+<a name="line305"></a>		exit;
+<a name="line306"></a>	}
+<a name="line307"></a>
+<a name="line308"></a>// ------------------------------------------------------------------------
+<a name="line309"></a>
+<a name="line310"></a>/**
+<a name="line311"></a>* 404 Page Handler
+<a name="line312"></a>*
+<a name="line313"></a>* This function is similar to the show_error() function above
+<a name="line314"></a>* However, instead of the standard error template it displays
+<a name="line315"></a>* 404 errors.
+<a name="line316"></a>*
+<a name="line317"></a>* @access	public
+<a name="line318"></a>* @return	void
+<a name="line319"></a>*/
+<a name="line320"></a>	function show_404($page = '')
+<a name="line321"></a>	{
+<a name="line322"></a>		$_error =& load_class('Exceptions', 'core');
+<a name="line323"></a>		$_error->show_404($page);
+<a name="line324"></a>		exit;
+<a name="line325"></a>	}
+<a name="line326"></a>
+<a name="line327"></a>// ------------------------------------------------------------------------
+<a name="line328"></a>
+<a name="line329"></a>/**
+<a name="line330"></a>* Error Logging Interface
+<a name="line331"></a>*
+<a name="line332"></a>* We use this as a simple mechanism to access the logging
+<a name="line333"></a>* class and send messages to be logged.
+<a name="line334"></a>*
+<a name="line335"></a>* @access	public
+<a name="line336"></a>* @return	void
+<a name="line337"></a>*/
+<a name="line338"></a>	function log_message($level = 'error', $message, $php_error = FALSE)
+<a name="line339"></a>	{
+<a name="line340"></a>		static $_log;
+<a name="line341"></a>
+<a name="line342"></a>		if (config_item('log_threshold') == 0)
+<a name="line343"></a>		{
+<a name="line344"></a>			return;
+<a name="line345"></a>		}
+<a name="line346"></a>	
+<a name="line347"></a>		$_log =& load_class('Log');
+<a name="line348"></a>		$_log->write_log($level, $message, $php_error);
+<a name="line349"></a>	}
+<a name="line350"></a>
+<a name="line351"></a>// ------------------------------------------------------------------------
+<a name="line352"></a>
+<a name="line353"></a>/**
+<a name="line354"></a> * Set HTTP Status Header
+<a name="line355"></a> *
+<a name="line356"></a> * @access	public
+<a name="line357"></a> * @param	int 	the status code
+<a name="line358"></a> * @param	string	
+<a name="line359"></a> * @return	void
+<a name="line360"></a> */	
+<a name="line361"></a>	function set_status_header($code = 200, $text = '')
+<a name="line362"></a>	{
+<a name="line363"></a>		$stati = array(
+<a name="line364"></a>							200	=> 'OK',
+<a name="line365"></a>							201	=> 'Created',
+<a name="line366"></a>							202	=> 'Accepted',
+<a name="line367"></a>							203	=> 'Non-Authoritative Information',
+<a name="line368"></a>							204	=> 'No Content',
+<a name="line369"></a>							205	=> 'Reset Content',
+<a name="line370"></a>							206	=> 'Partial Content',
+<a name="line371"></a>
+<a name="line372"></a>							300	=> 'Multiple Choices',
+<a name="line373"></a>							301	=> 'Moved Permanently',
+<a name="line374"></a>							302	=> 'Found',
+<a name="line375"></a>							304	=> 'Not Modified',
+<a name="line376"></a>							305	=> 'Use Proxy',
+<a name="line377"></a>							307	=> 'Temporary Redirect',
+<a name="line378"></a>
+<a name="line379"></a>							400	=> 'Bad Request',
+<a name="line380"></a>							401	=> 'Unauthorized',
+<a name="line381"></a>							403	=> 'Forbidden',
+<a name="line382"></a>							404	=> 'Not Found',
+<a name="line383"></a>							405	=> 'Method Not Allowed',
+<a name="line384"></a>							406	=> 'Not Acceptable',
+<a name="line385"></a>							407	=> 'Proxy Authentication Required',
+<a name="line386"></a>							408	=> 'Request Timeout',
+<a name="line387"></a>							409	=> 'Conflict',
+<a name="line388"></a>							410	=> 'Gone',
+<a name="line389"></a>							411	=> 'Length Required',
+<a name="line390"></a>							412	=> 'Precondition Failed',
+<a name="line391"></a>							413	=> 'Request Entity Too Large',
+<a name="line392"></a>							414	=> 'Request-URI Too Long',
+<a name="line393"></a>							415	=> 'Unsupported Media Type',
+<a name="line394"></a>							416	=> 'Requested Range Not Satisfiable',
+<a name="line395"></a>							417	=> 'Expectation Failed',
+<a name="line396"></a>
+<a name="line397"></a>							500	=> 'Internal Server Error',
+<a name="line398"></a>							501	=> 'Not Implemented',
+<a name="line399"></a>							502	=> 'Bad Gateway',
+<a name="line400"></a>							503	=> 'Service Unavailable',
+<a name="line401"></a>							504	=> 'Gateway Timeout',
+<a name="line402"></a>							505	=> 'HTTP Version Not Supported'
+<a name="line403"></a>						);
+<a name="line404"></a>
+<a name="line405"></a>		if ($code == '' OR ! is_numeric($code))
+<a name="line406"></a>		{
+<a name="line407"></a>			show_error('Status codes must be numeric', 500);
+<a name="line408"></a>		}
+<a name="line409"></a>
+<a name="line410"></a>		if (isset($stati[$code]) AND $text == '')
+<a name="line411"></a>		{				
+<a name="line412"></a>			$text = $stati[$code];
+<a name="line413"></a>		}
+<a name="line414"></a>	
+<a name="line415"></a>		if ($text == '')
+<a name="line416"></a>		{
+<a name="line417"></a>			show_error('No status text available.  Please check your status code number or supply your own message text.', 500);
+<a name="line418"></a>		}
+<a name="line419"></a>	
+<a name="line420"></a>		$server_protocol = (isset($_SERVER['SERVER_PROTOCOL'])) ? $_SERVER['SERVER_PROTOCOL'] : FALSE;
+<a name="line421"></a>
+<a name="line422"></a>		if (substr(php_sapi_name(), 0, 3) == 'cgi')
+<a name="line423"></a>		{
+<a name="line424"></a>			header("Status: {$code} {$text}", TRUE);
+<a name="line425"></a>		}
+<a name="line426"></a>		elseif ($server_protocol == 'HTTP/1.1' OR $server_protocol == 'HTTP/1.0')
+<a name="line427"></a>		{
+<a name="line428"></a>			header($server_protocol." {$code} {$text}", TRUE, $code);
+<a name="line429"></a>		}
+<a name="line430"></a>		else
+<a name="line431"></a>		{
+<a name="line432"></a>			header("HTTP/1.1 {$code} {$text}", TRUE, $code);
+<a name="line433"></a>		}
+<a name="line434"></a>	}
+<a name="line435"></a>	
+<a name="line436"></a>// --------------------------------------------------------------------
+<a name="line437"></a>
+<a name="line438"></a>/**
+<a name="line439"></a>* Exception Handler
+<a name="line440"></a>*
+<a name="line441"></a>* This is the custom exception handler that is declaired at the top
+<a name="line442"></a>* of Codeigniter.php.  The main reason we use this is to permit
+<a name="line443"></a>* PHP errors to be logged in our own log files since the user may
+<a name="line444"></a>* not have access to server logs. Since this function
+<a name="line445"></a>* effectively intercepts PHP errors, however, we also need
+<a name="line446"></a>* to display errors based on the current error_reporting level.
+<a name="line447"></a>* We do that with the use of a PHP error template.
+<a name="line448"></a>*
+<a name="line449"></a>* @access	private
+<a name="line450"></a>* @return	void
+<a name="line451"></a>*/
+<a name="line452"></a>	function _exception_handler($severity, $message, $filepath, $line)
+<a name="line453"></a>	{	
+<a name="line454"></a>		 // We don't bother with "strict" notices since they tend to fill up
+<a name="line455"></a>		 // the log file with excess information that isn't normally very helpful.
+<a name="line456"></a>		 // For example, if you are running PHP 5 and you use version 4 style 
+<a name="line457"></a>		 // class functions (without prefixes like "public", "private", etc.) 
+<a name="line458"></a>		 // you'll get notices telling you that these have been deprecated.
+<a name="line459"></a>		if ($severity == E_STRICT)
+<a name="line460"></a>		{
+<a name="line461"></a>			return;
+<a name="line462"></a>		}
+<a name="line463"></a>	
+<a name="line464"></a>		$_error =& load_class('Exceptions', 'core');
+<a name="line465"></a>	
+<a name="line466"></a>		// Should we display the error? We'll get the current error_reporting 
+<a name="line467"></a>		// level and add its bits with the severity bits to find out.
+<a name="line468"></a>		if (($severity & error_reporting()) == $severity)
+<a name="line469"></a>		{
+<a name="line470"></a>			$_error->show_php_error($severity, $message, $filepath, $line);
+<a name="line471"></a>		}
+<a name="line472"></a>
+<a name="line473"></a>		// Should we log the error?  No?  We're done...
+<a name="line474"></a>		if (config_item('log_threshold') == 0)
+<a name="line475"></a>		{
+<a name="line476"></a>			return;
+<a name="line477"></a>		}
+<a name="line478"></a>	
+<a name="line479"></a>		$_error->log_exception($severity, $message, $filepath, $line);
+<a name="line480"></a>	}
+<a name="line481"></a>
+<a name="line482"></a>	// --------------------------------------------------------------------
+<a name="line483"></a>	
+<a name="line484"></a>	/**
+<a name="line485"></a>	 * Remove Invisible Characters
+<a name="line486"></a>	 *
+<a name="line487"></a>	 * This prevents sandwiching null characters
+<a name="line488"></a>	 * between ascii characters, like Java\0script.
+<a name="line489"></a>	 *
+<a name="line490"></a>	 * @access	public
+<a name="line491"></a>	 * @param	string
+<a name="line492"></a>	 * @return	string
+<a name="line493"></a>	 */
+<a name="line494"></a>	function remove_invisible_characters($str)
+<a name="line495"></a>	{
+<a name="line496"></a>		static $non_displayables;
+<a name="line497"></a>		
+<a name="line498"></a>		if ( ! isset($non_displayables))
+<a name="line499"></a>		{
+<a name="line500"></a>			// every control character except newline (dec 10), carriage return (dec 13), and horizontal tab (dec 09),
+<a name="line501"></a>			$non_displayables = array(
+<a name="line502"></a>										'/%0[0-8bcef]/',			// url encoded 00-08, 11, 12, 14, 15
+<a name="line503"></a>										'/%1[0-9a-f]/',				// url encoded 16-31
+<a name="line504"></a>										'/[\x00-\x08]/',			// 00-08
+<a name="line505"></a>										'/\x0b/', '/\x0c/',			// 11, 12
+<a name="line506"></a>										'/[\x0e-\x1f]/'				// 14-31
+<a name="line507"></a>									);
+<a name="line508"></a>		}
+<a name="line509"></a>
+<a name="line510"></a>		do
+<a name="line511"></a>		{
+<a name="line512"></a>			$cleaned = $str;
+<a name="line513"></a>			$str = preg_replace($non_displayables, '', $str);
+<a name="line514"></a>		}
+<a name="line515"></a>		while ($cleaned != $str);
+<a name="line516"></a>
+<a name="line517"></a>		return $str;
+<a name="line518"></a>	}
+<a name="line519"></a>
+<a name="line520"></a>
+<a name="line521"></a>/* End of file Common.php */
+<a name="line522"></a>/* Location: ./system/core/Common.php */</pre>
+<div class="header">
+<h1>GiftFlow API</h1>
+<ul>
+<li><a href="../../overview-summary.html">Overview</a></li>
+<li>Package</li><li>Class</li><li>Tree</li><li><a href="../../overview-files.html">Files</a></li>
+<li><a href="../../deprecated-list.html">Deprecated</a></li>
+<li><a href="../../index-all.html">Index</a></li>
+</ul>
+</div>
+
+<div class="small_links">
+<a href="../../index.html" target="_top">Frames</a>
+<a href="../../source/core/common.php.html" target="_top">No frames</a>
+</div>
+<hr>
+
+<p id="footer">This document was generated by <a href="http://peej.github.com/phpdoctor/">PHPDoctor: The PHP Documentation Creator</a></p>
+
+</body>
+
+</html>

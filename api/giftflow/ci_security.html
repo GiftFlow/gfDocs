@@ -1,0 +1,491 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+
+<html lang="en">
+<head>
+
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
+<meta name="generator" content="PHPDoctor 2RC4 (http://peej.github.com/phpdoctor/)">
+<meta name="when" content="Sat, 24 Jul 2010 20:46:31 +0000">
+
+<link rel="stylesheet" type="text/css" href="../stylesheet.css">
+<link rel="start" href="../overview-summary.html">
+
+<title>CI_Security (GiftFlow API)</title>
+
+</head>
+<body id="definition" onload="parent.document.title=document.title;">
+
+<div class="header">
+<h1>GiftFlow API</h1>
+<ul>
+<li><a href="../overview-summary.html">Overview</a></li>
+<li><a href="../giftflow/package-summary.html">Package</a></li>
+<li class="active">Class</li>
+<li><a href="../giftflow/package-tree.html">Tree</a></li>
+<li><a href="../overview-files.html">Files</a></li>
+<li><a href="../deprecated-list.html">Deprecated</a></li>
+<li><a href="../index-all.html">Index</a></li>
+</ul>
+</div>
+
+<div class="small_links">
+<a href="../index.html" target="_top">Frames</a>
+<a href="../giftflow/ci_security.html" target="_top">No frames</a>
+</div>
+<div class="small_links">
+Summary: <a href="#summary_field">Field</a> | <a href="#summary_method">Method</a> | <a href="#summary_constr">Constr</a>
+Detail: <a href="#detail_field">Field</a> | <a href="#detail_method">Method</a> | <a href="#summary_constr">Constr</a>
+</div>
+<hr>
+
+<div class="qualifiedName">GiftFlow\CI_Security</div>
+<a href="../source/libraries/security.php.html#line27" class="location">libraries/Security.php at line 27</a>
+
+<h1>Class CI_Security</h1>
+
+<pre class="tree"><strong>CI_Security</strong><br /></pre>
+
+<hr>
+
+<p class="signature">public  class <strong>CI_Security</strong></p>
+
+<div class="comment" id="overview_description"><p>Security Class</p></div>
+
+<dl>
+<dt>Package		CodeIgniter.</dt>
+<dt>Subpackage	Libraries.</dt>
+<dt>Category	Security.</dt>
+<dt>Author		ExpressionEngine:</dt>
+<dd>Dev Team</dd>
+<dt>Link		http://codeigniter.com/user_guide/libraries/sessions.html.</dt>
+</dl>
+<hr>
+
+<table id="summary_field">
+<tr><th colspan="2">Field Summary</th></tr>
+<tr>
+<td class="type"> mixed</td>
+<td class="description"><p class="name"><a href="#csrf_expire">$csrf_expire</a></p></td>
+</tr>
+<tr>
+<td class="type"> mixed</td>
+<td class="description"><p class="name"><a href="#csrf_hash">$csrf_hash</a></p></td>
+</tr>
+<tr>
+<td class="type"> mixed</td>
+<td class="description"><p class="name"><a href="#csrf_token_name">$csrf_token_name</a></p></td>
+</tr>
+<tr>
+<td class="type"> mixed</td>
+<td class="description"><p class="name"><a href="#never_allowed_regex">$never_allowed_regex</a></p></td>
+</tr>
+<tr>
+<td class="type"> mixed</td>
+<td class="description"><p class="name"><a href="#never_allowed_str">$never_allowed_str</a></p></td>
+</tr>
+<tr>
+<td class="type"> mixed</td>
+<td class="description"><p class="name"><a href="#xss_hash">$xss_hash</a></p></td>
+</tr>
+</table>
+
+<table id="summary_method">
+<tr><th colspan="2">Method Summary</th></tr>
+<tr>
+<td class="type"> void</td>
+<td class="description"><p class="name"><a href="#__construct()">__construct</a>()</p></td>
+</tr>
+<tr>
+<td class="type">private  void</td>
+<td class="description"><p class="name"><a href="#_compact_exploded_words()">_compact_exploded_words</a>(mixed matches)</p><p class="description">Compact Exploded WordsCallback function for xss_clean() to remove whitespace from
+things like j a v a s c r i p t</p></td>
+</tr>
+<tr>
+<td class="type">private  void</td>
+<td class="description"><p class="name"><a href="#_convert_attribute()">_convert_attribute</a>(mixed match)</p><p class="description">Attribute ConversionUsed as a callback for XSS Clean</p></td>
+</tr>
+<tr>
+<td class="type">private  void</td>
+<td class="description"><p class="name"><a href="#_csrf_set_hash()">_csrf_set_hash</a>()</p><p class="description">Set Cross Site Request Forgery Protection Cookie</p></td>
+</tr>
+<tr>
+<td class="type">private  void</td>
+<td class="description"><p class="name"><a href="#_decode_entity()">_decode_entity</a>(mixed match)</p><p class="description">HTML Entity Decode CallbackUsed as a callback for XSS Clean</p></td>
+</tr>
+<tr>
+<td class="type">private  void</td>
+<td class="description"><p class="name"><a href="#_filter_attributes()">_filter_attributes</a>(mixed str)</p><p class="description">Filter AttributesFilters tag attributes for consistency and safety</p></td>
+</tr>
+<tr>
+<td class="type">private  void</td>
+<td class="description"><p class="name"><a href="#_js_img_removal()">_js_img_removal</a>(mixed match)</p><p class="description">JS Image RemovalCallback function for xss_clean() to sanitize image tags
+This limits the PCRE backtracks, making it more performance friendly
+and prevents PREG_BACKTRACK_LIMIT_ERROR from being triggered in
+PHP 5.2+ on image tag heavy strings</p></td>
+</tr>
+<tr>
+<td class="type">private  void</td>
+<td class="description"><p class="name"><a href="#_js_link_removal()">_js_link_removal</a>(mixed match)</p><p class="description">JS Link RemovalCallback function for xss_clean() to sanitize links
+This limits the PCRE backtracks, making it more performance friendly
+and prevents PREG_BACKTRACK_LIMIT_ERROR from being triggered in
+PHP 5.2+ on link-heavy strings</p></td>
+</tr>
+<tr>
+<td class="type">private  void</td>
+<td class="description"><p class="name"><a href="#_sanitize_naughty_html()">_sanitize_naughty_html</a>(mixed matches)</p><p class="description">Sanitize Naughty HTMLCallback function for xss_clean() to remove naughty HTML elements</p></td>
+</tr>
+<tr>
+<td class="type"> void</td>
+<td class="description"><p class="name"><a href="#csrf_set_cookie()">csrf_set_cookie</a>()</p><p class="description">Set Cross Site Request Forgery Protection Cookie</p></td>
+</tr>
+<tr>
+<td class="type"> void</td>
+<td class="description"><p class="name"><a href="#csrf_show_error()">csrf_show_error</a>()</p><p class="description">Show CSRF Error</p></td>
+</tr>
+<tr>
+<td class="type"> void</td>
+<td class="description"><p class="name"><a href="#csrf_verify()">csrf_verify</a>()</p><p class="description">Verify Cross Site Request Forgery Protection</p></td>
+</tr>
+<tr>
+<td class="type"> void</td>
+<td class="description"><p class="name"><a href="#entity_decode()">entity_decode</a>(mixed str, str charset)</p><p class="description">HTML Entities DecodeThis function is a replacement for html_entity_decode()In some versions of PHP the native function does not work
+when UTF-8 is the specified character set, so this gives us
+a work-around. </p></td>
+</tr>
+<tr>
+<td class="type"> void</td>
+<td class="description"><p class="name"><a href="#sanitize_filename()">sanitize_filename</a>(mixed str)</p><p class="description">Filename Security</p></td>
+</tr>
+<tr>
+<td class="type"> void</td>
+<td class="description"><p class="name"><a href="#xss_clean()">xss_clean</a>(mixed str, bool is_image)</p><p class="description">XSS CleanSanitizes data so that Cross Site Scripting Hacks can be
+prevented. </p></td>
+</tr>
+<tr>
+<td class="type"> void</td>
+<td class="description"><p class="name"><a href="#xss_hash()">xss_hash</a>()</p><p class="description">Random Hash for protecting URLs</p></td>
+</tr>
+</table>
+
+<h2 id="detail_field">Field Detail</h2>
+<a href="../source/libraries/security.php.html#line30" class="location">libraries/Security.php at line 30</a>
+
+<h3 id="csrf_expire">csrf_expire</h3>
+<code class="signature">public  mixed <strong>$csrf_expire</strong> = 7200</code>
+<div class="details">
+</div>
+
+<hr>
+
+<a href="../source/libraries/security.php.html#line29" class="location">libraries/Security.php at line 29</a>
+
+<h3 id="csrf_hash">csrf_hash</h3>
+<code class="signature">public  mixed <strong>$csrf_hash</strong> = ''</code>
+<div class="details">
+</div>
+
+<hr>
+
+<a href="../source/libraries/security.php.html#line31" class="location">libraries/Security.php at line 31</a>
+
+<h3 id="csrf_token_name">csrf_token_name</h3>
+<code class="signature">public  mixed <strong>$csrf_token_name</strong> = 'ci_csrf_token'</code>
+<div class="details">
+</div>
+
+<hr>
+
+<a href="../source/libraries/security.php.html#line36" class="location">libraries/Security.php at line 36</a>
+
+<h3 id="never_allowed_regex">never_allowed_regex</h3>
+<code class="signature">public  mixed <strong>$never_allowed_regex</strong> = array(...)</code>
+<div class="details">
+</div>
+
+<hr>
+
+<a href="../source/libraries/security.php.html#line34" class="location">libraries/Security.php at line 34</a>
+
+<h3 id="never_allowed_str">never_allowed_str</h3>
+<code class="signature">public  mixed <strong>$never_allowed_str</strong> = array(...)</code>
+<div class="details">
+</div>
+
+<hr>
+
+<a href="../source/libraries/security.php.html#line28" class="location">libraries/Security.php at line 28</a>
+
+<h3 id="xss_hash">xss_hash</h3>
+<code class="signature">public  mixed <strong>$xss_hash</strong> = ''</code>
+<div class="details">
+</div>
+
+<hr>
+
+<h2 id="detail_method">Method Detail</h2><div class="method_detail">
+<div class='method'><a href="../source/libraries/security.php.html#line38" class="location">libraries/Security.php at line 38</a>
+
+<h3 id="__construct()">__construct</h3>
+<code class="signature">public  void <strong>__construct</strong>()</code>
+<div class="details">
+</div></div>
+
+
+
+<div class='method'><a href="../source/libraries/security.php.html#line484" class="location">libraries/Security.php at line 484</a>
+
+<h3 id="_compact_exploded_words()">_compact_exploded_words</h3>
+<code class="signature">private  void <strong>_compact_exploded_words</strong>(mixed matches)</code>
+<div class="details">
+<p>Compact Exploded Words</p><p>Callback function for xss_clean() to remove whitespace from
+things like j a v a s c r i p t</p><dl>
+<dt>Access	public.</dt>
+<dt>Param	type.</dt>
+<dt>Return	type.</dt>
+</dl>
+</div></div>
+
+
+
+<div class='method'><a href="../source/libraries/security.php.html#line560" class="location">libraries/Security.php at line 560</a>
+
+<h3 id="_convert_attribute()">_convert_attribute</h3>
+<code class="signature">private  void <strong>_convert_attribute</strong>(mixed match)</code>
+<div class="details">
+<p>Attribute Conversion</p><p>Used as a callback for XSS Clean</p><dl>
+<dt>Access	public.</dt>
+<dt>Param	array.</dt>
+<dt>Return	string.</dt>
+</dl>
+</div></div>
+
+
+
+<div class='method'><a href="../source/libraries/security.php.html#line110" class="location">libraries/Security.php at line 110</a>
+
+<h3 id="_csrf_set_hash()">_csrf_set_hash</h3>
+<code class="signature">private  void <strong>_csrf_set_hash</strong>()</code>
+<div class="details">
+<p>Set Cross Site Request Forgery Protection Cookie</p><dl>
+<dt>Access	public.</dt>
+<dt>Return	null.</dt>
+</dl>
+</div></div>
+
+
+
+<div class='method'><a href="../source/libraries/security.php.html#line602" class="location">libraries/Security.php at line 602</a>
+
+<h3 id="_decode_entity()">_decode_entity</h3>
+<code class="signature">private  void <strong>_decode_entity</strong>(mixed match)</code>
+<div class="details">
+<p>HTML Entity Decode Callback</p><p>Used as a callback for XSS Clean</p><dl>
+<dt>Access	public.</dt>
+<dt>Param	array.</dt>
+<dt>Return	string.</dt>
+</dl>
+</div></div>
+
+
+
+<div class='method'><a href="../source/libraries/security.php.html#line576" class="location">libraries/Security.php at line 576</a>
+
+<h3 id="_filter_attributes()">_filter_attributes</h3>
+<code class="signature">private  void <strong>_filter_attributes</strong>(mixed str)</code>
+<div class="details">
+<p>Filter Attributes</p><p>Filters tag attributes for consistency and safety</p><dl>
+<dt>Access	public.</dt>
+<dt>Param	string.</dt>
+<dt>Return	string.</dt>
+</dl>
+</div></div>
+
+
+
+<div class='method'><a href="../source/libraries/security.php.html#line543" class="location">libraries/Security.php at line 543</a>
+
+<h3 id="_js_img_removal()">_js_img_removal</h3>
+<code class="signature">private  void <strong>_js_img_removal</strong>(mixed match)</code>
+<div class="details">
+<p>JS Image Removal</p><p>Callback function for xss_clean() to sanitize image tags
+This limits the PCRE backtracks, making it more performance friendly
+and prevents PREG_BACKTRACK_LIMIT_ERROR from being triggered in
+PHP 5.2+ on image tag heavy strings</p><dl>
+<dt>Access	private.</dt>
+<dt>Param	array.</dt>
+<dt>Return	string.</dt>
+</dl>
+</div></div>
+
+
+
+<div class='method'><a href="../source/libraries/security.php.html#line525" class="location">libraries/Security.php at line 525</a>
+
+<h3 id="_js_link_removal()">_js_link_removal</h3>
+<code class="signature">private  void <strong>_js_link_removal</strong>(mixed match)</code>
+<div class="details">
+<p>JS Link Removal</p><p>Callback function for xss_clean() to sanitize links
+This limits the PCRE backtracks, making it more performance friendly
+and prevents PREG_BACKTRACK_LIMIT_ERROR from being triggered in
+PHP 5.2+ on link-heavy strings</p><dl>
+<dt>Access	private.</dt>
+<dt>Param	array.</dt>
+<dt>Return	string.</dt>
+</dl>
+</div></div>
+
+
+
+<div class='method'><a href="../source/libraries/security.php.html#line500" class="location">libraries/Security.php at line 500</a>
+
+<h3 id="_sanitize_naughty_html()">_sanitize_naughty_html</h3>
+<code class="signature">private  void <strong>_sanitize_naughty_html</strong>(mixed matches)</code>
+<div class="details">
+<p>Sanitize Naughty HTML</p><p>Callback function for xss_clean() to remove naughty HTML elements</p><dl>
+<dt>Access	private.</dt>
+<dt>Param	array.</dt>
+<dt>Return	string.</dt>
+</dl>
+</div></div>
+
+
+
+<div class='method'><a href="../source/libraries/security.php.html#line91" class="location">libraries/Security.php at line 91</a>
+
+<h3 id="csrf_set_cookie()">csrf_set_cookie</h3>
+<code class="signature">public  void <strong>csrf_set_cookie</strong>()</code>
+<div class="details">
+<p>Set Cross Site Request Forgery Protection Cookie</p><dl>
+<dt>Access	public.</dt>
+<dt>Return	null.</dt>
+</dl>
+</div></div>
+
+
+
+<div class='method'><a href="../source/libraries/security.php.html#line140" class="location">libraries/Security.php at line 140</a>
+
+<h3 id="csrf_show_error()">csrf_show_error</h3>
+<code class="signature">public  void <strong>csrf_show_error</strong>()</code>
+<div class="details">
+<p>Show CSRF Error</p><dl>
+<dt>Access	public.</dt>
+<dt>Return	null.</dt>
+</dl>
+</div></div>
+
+
+
+<div class='method'><a href="../source/libraries/security.php.html#line54" class="location">libraries/Security.php at line 54</a>
+
+<h3 id="csrf_verify()">csrf_verify</h3>
+<code class="signature">public  void <strong>csrf_verify</strong>()</code>
+<div class="details">
+<p>Verify Cross Site Request Forgery Protection</p><dl>
+<dt>Access	public.</dt>
+<dt>Return	null.</dt>
+</dl>
+</div></div>
+
+
+
+<div class='method'><a href="../source/libraries/security.php.html#line628" class="location">libraries/Security.php at line 628</a>
+
+<h3 id="entity_decode()">entity_decode</h3>
+<code class="signature">public  void <strong>entity_decode</strong>(mixed str, str charset)</code>
+<div class="details">
+<p>HTML Entities Decode</p><p>This function is a replacement for html_entity_decode()</p><p>In some versions of PHP the native function does not work
+when UTF-8 is the specified character set, so this gives us
+a work-around.  More info here:
+http://bugs.php.net/bug.php?id=25670</p><p>NOTE: html_entity_decode() has a bug in some PHP versions when UTF-8 is the
+character set, and the PHP developers said they were not back porting the
+fix to versions other than PHP 5.x.</p><dl>
+<dt>Access	public.</dt>
+<dt>Return	string.</dt>
+</dl>
+</div></div>
+
+
+
+<div class='method'><a href="../source/libraries/security.php.html#line667" class="location">libraries/Security.php at line 667</a>
+
+<h3 id="sanitize_filename()">sanitize_filename</h3>
+<code class="signature">public  void <strong>sanitize_filename</strong>(mixed str)</code>
+<div class="details">
+<p>Filename Security</p><dl>
+<dt>Access	public.</dt>
+<dt>Param	string.</dt>
+<dt>Return	string.</dt>
+</dl>
+</div></div>
+
+
+
+<div class='method'><a href="../source/libraries/security.php.html#line173" class="location">libraries/Security.php at line 173</a>
+
+<h3 id="xss_clean()">xss_clean</h3>
+<code class="signature">public  void <strong>xss_clean</strong>(mixed str, bool is_image)</code>
+<div class="details">
+<p>XSS Clean</p><p>Sanitizes data so that Cross Site Scripting Hacks can be
+prevented.  This function does a fair amount of work but
+it is extremely thorough, designed to prevent even the
+most obscure XSS attempts.  Nothing is ever 100% foolproof,
+of course, but I haven't been able to get anything passed
+the filter.</p><p>Note: This function should only be used to deal with data
+upon submission.  It's not something that should
+be used for general runtime processing.</p><p>This function was based in part on some code and ideas I
+got from Bitflux: http://channel.bitflux.ch/wiki/XSS_Prevention</p><p>To help develop this script I used this great list of
+vulnerabilities along with a few other hacks I've
+harvested from examining vulnerabilities in other programs:
+http://ha.ckers.org/xss.html</p><dl>
+<dt>Access	public.</dt>
+<dt>Param	mixed	string:</dt>
+<dd>or array</dd>
+<dt>Return	string.</dt>
+</dl>
+</div></div>
+
+
+
+<div class='method'><a href="../source/libraries/security.php.html#line457" class="location">libraries/Security.php at line 457</a>
+
+<h3 id="xss_hash()">xss_hash</h3>
+<code class="signature">public  void <strong>xss_hash</strong>()</code>
+<div class="details">
+<p>Random Hash for protecting URLs</p><dl>
+<dt>Access	public.</dt>
+<dt>Return	string.</dt>
+</dl>
+</div></div>
+
+
+
+</div><div class="header">
+<h1>GiftFlow API</h1>
+<ul>
+<li><a href="../overview-summary.html">Overview</a></li>
+<li><a href="../giftflow/package-summary.html">Package</a></li>
+<li class="active">Class</li>
+<li><a href="../giftflow/package-tree.html">Tree</a></li>
+<li><a href="../overview-files.html">Files</a></li>
+<li><a href="../deprecated-list.html">Deprecated</a></li>
+<li><a href="../index-all.html">Index</a></li>
+</ul>
+</div>
+
+<div class="small_links">
+<a href="../index.html" target="_top">Frames</a>
+<a href="../giftflow/ci_security.html" target="_top">No frames</a>
+</div>
+<div class="small_links">
+Summary: <a href="#summary_field">Field</a> | <a href="#summary_method">Method</a> | <a href="#summary_constr">Constr</a>
+Detail: <a href="#detail_field">Field</a> | <a href="#detail_method">Method</a> | <a href="#summary_constr">Constr</a>
+</div>
+<hr>
+
+<p id="footer">This document was generated by <a href="http://peej.github.com/phpdoctor/">PHPDoctor: The PHP Documentation Creator</a></p>
+
+</body>
+
+</html>

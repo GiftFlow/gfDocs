@@ -7,7 +7,7 @@ function create_menu(basepath)
 		'<td class="td" valign="top">' +
 
 		'<ul>' +
-		'<li><a href="../'+base+'index.html">User Guide Home</a></li>' +	
+		'<li><a href="'+base+'index.html">User Guide Home</a></li>' +	
 		'<li><a href="'+base+'toc.html">Table of Contents Page</a></li>' +
 		'</ul>' +	
 
@@ -49,14 +49,12 @@ function create_menu(basepath)
 			'<li><a href="'+base+'general/views.html">Views</a></li>' +
 			'<li><a href="'+base+'general/models.html">Models</a></li>' +
 			'<li><a href="'+base+'general/helpers.html">Helpers</a></li>' +
-			'<li><a href="'+base+'general/plugins.html">Plugins</a></li>' +
 			'<li><a href="'+base+'general/libraries.html">Using CodeIgniter Libraries</a></li>' +
 			'<li><a href="'+base+'general/creating_libraries.html">Creating Your Own Libraries</a></li>' +
 			'<li><a href="'+base+'general/core_classes.html">Creating Core Classes</a></li>' +
 			'<li><a href="'+base+'general/hooks.html">Hooks - Extending the Core</a></li>' +
 			'<li><a href="'+base+'general/autoloader.html">Auto-loading Resources</a></li>' +
 			'<li><a href="'+base+'general/common_functions.html">Common Functions</a></li>' +
-			'<li><a href="'+base+'general/scaffolding.html">Scaffolding</a></li>' +
 			'<li><a href="'+base+'general/routing.html">URI Routing</a></li>' +
 			'<li><a href="'+base+'general/errors.html">Error Handling</a></li>' +
 			'<li><a href="'+base+'general/caching.html">Caching</a></li>' +
@@ -85,11 +83,12 @@ function create_menu(basepath)
 		'<li><a href="'+base+'libraries/ftp.html">FTP Class</a></li>' +
 		'<li><a href="'+base+'libraries/table.html">HTML Table Class</a></li>' +
 		'<li><a href="'+base+'libraries/image_lib.html">Image Manipulation Class</a></li>' +		
-		'<li><a href="'+base+'libraries/input.html">Input and Security Class</a></li>' +
+		'<li><a href="'+base+'libraries/input.html">Input Class</a></li>' +
 		'<li><a href="'+base+'libraries/loader.html">Loader Class</a></li>' +
 		'<li><a href="'+base+'libraries/language.html">Language Class</a></li>' +
 		'<li><a href="'+base+'libraries/output.html">Output Class</a></li>' +
 		'<li><a href="'+base+'libraries/pagination.html">Pagination Class</a></li>' +
+		'<li><a href="'+base+'libraries/security.html">Security Class</a></li>' +
 		'<li><a href="'+base+'libraries/sessions.html">Session Class</a></li>' +
 		'<li><a href="'+base+'libraries/trackback.html">Trackback Class</a></li>' +
 		'<li><a href="'+base+'libraries/parser.html">Template Parser Class</a></li>' +

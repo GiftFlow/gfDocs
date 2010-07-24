@@ -6,7 +6,7 @@
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 
 <meta name="generator" content="PHPDoctor 2RC4 (http://peej.github.com/phpdoctor/)">
-<meta name="when" content="Fri, 18 Jun 2010 15:58:03 +0000">
+<meta name="when" content="Sat, 24 Jul 2010 20:47:45 +0000">
 
 <link rel="stylesheet" type="text/css" href="../../stylesheet.css">
 <link rel="start" href="../../overview-summary.html">
@@ -37,37 +37,45 @@
 
 <a name="line1"></a><pre><?php  if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 <a name="line2"></a>
-<a name="line3"></a>class Market
-<a name="line4"></a>{
-<a name="line5"></a>	// CI Object
-<a name="line6"></a>	protected $ci;
-<a name="line7"></a>
-<a name="line8"></a>	public function __construct()
-<a name="line9"></a>	{
-<a name="line10"></a>		$this->ci =& get_instance();
-<a name="line11"></a>	}
-<a name="line12"></a>	
-<a name="line13"></a>	
-<a name="line14"></a>	/**
-<a name="line15"></a>	*	Accepts a request
-<a name="line16"></a>	*	
-<a name="line17"></a>	*	@param int id		transaction_id
-<a name="line18"></a>	*/
-<a name="line19"></a>	public function request_accept( $id )
-<a name="line20"></a>	{
-<a name="line21"></a>		// load transaction
-<a name="line22"></a>		$T = new Transaction();
-<a name="line23"></a>		$T->where('id', $id)->include_related("recipient", "*", NULL, TRUE)->get();
-<a name="line24"></a>		
-<a name="line25"></a>		// change status
-<a name="line26"></a>		$T->accepted();
-<a name="line27"></a>		
-<a name="line28"></a>		// @TODO: send notification
-<a name="line29"></a>	}
-<a name="line30"></a>	
-<a name="line31"></a>	
-<a name="line32"></a>}
-<a name="line33"></a></pre>
+<a name="line3"></a>/**
+<a name="line4"></a>*	The Market library
+<a name="line5"></a>*	
+<a name="line6"></a>*	@author Brandon Jackson
+<a name="line7"></a>*	@package Libraries
+<a name="line8"></a>*/
+<a name="line9"></a>
+<a name="line10"></a>
+<a name="line11"></a>class Market
+<a name="line12"></a>{
+<a name="line13"></a>	// CI Object
+<a name="line14"></a>	protected $ci;
+<a name="line15"></a>
+<a name="line16"></a>	public function __construct()
+<a name="line17"></a>	{
+<a name="line18"></a>		$this->ci =& get_instance();
+<a name="line19"></a>	}
+<a name="line20"></a>	
+<a name="line21"></a>	
+<a name="line22"></a>	/**
+<a name="line23"></a>	*	Accepts a request
+<a name="line24"></a>	*	
+<a name="line25"></a>	*	@param int id		transaction_id
+<a name="line26"></a>	*/
+<a name="line27"></a>	public function request_accept( $id )
+<a name="line28"></a>	{
+<a name="line29"></a>		// load transaction
+<a name="line30"></a>		$T = new Transaction();
+<a name="line31"></a>		$T->where('id', $id)->include_related("recipient", "*", NULL, TRUE)->get();
+<a name="line32"></a>		
+<a name="line33"></a>		// change status
+<a name="line34"></a>		$T->accepted();
+<a name="line35"></a>		
+<a name="line36"></a>		// @TODO: send notification
+<a name="line37"></a>	}
+<a name="line38"></a>	
+<a name="line39"></a>	
+<a name="line40"></a>}
+<a name="line41"></a></pre>
 <div class="header">
 <h1>GiftFlow API</h1>
 <ul>

@@ -6,7 +6,7 @@
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 
 <meta name="generator" content="PHPDoctor 2RC4 (http://peej.github.com/phpdoctor/)">
-<meta name="when" content="Mon, 19 Jul 2010 17:13:56 +0000">
+<meta name="when" content="Sat, 24 Jul 2010 20:47:44 +0000">
 
 <link rel="stylesheet" type="text/css" href="../stylesheet.css">
 <link rel="start" href="../overview-summary.html">
@@ -40,7 +40,7 @@ Detail: <a href="#detail_field">Field</a> | <a href="#detail_method">Method</a> 
 <hr>
 
 <div class="qualifiedName">Libraries\Auth</div>
-<a href="../source/application/libraries/auth.php.html#line8" class="location">application/libraries/auth.php at line 8</a>
+<a href="../source/libraries/auth.php.html#line8" class="location">libraries/auth.php at line 8</a>
 
 <h1>Class Auth</h1>
 
@@ -87,6 +87,10 @@ to either an access denied page or login page.</p></td>
 </tr>
 <tr>
 <td class="type"> <a href="../models/user.html">User</a></td>
+<td class="description"><p class="name"><a href="#is_signed_in()">is_signed_in</a>()</p><p class="description">Handles logins. </p></td>
+</tr>
+<tr>
+<td class="type"> <a href="../models/user.html">User</a></td>
 <td class="description"><p class="name"><a href="#login()">login</a>()</p><p class="description">Handles logins. </p></td>
 </tr>
 <tr>
@@ -94,8 +98,16 @@ to either an access denied page or login page.</p></td>
 <td class="description"><p class="name"><a href="#logout()">logout</a>()</p><p class="description">Logs user out. </p></td>
 </tr>
 <tr>
+<td class="type"> void</td>
+<td class="description"><p class="name"><a href="#manual_login()">manual_login</a>(object U, boolean redirect)</p><p class="description">Logs in users manually</p></td>
+</tr>
+<tr>
 <td class="type">protected  boolean</td>
 <td class="description"><p class="name"><a href="#new_session()">new_session</a>()</p><p class="description">Creates new CodeIgniter session</p></td>
+</tr>
+<tr>
+<td class="type"> void</td>
+<td class="description"><p class="name"><a href="#openid_login()">openid_login</a>(mixed U)</p><p class="description">Logs in users authenticated by OpenID</p></td>
 </tr>
 <tr>
 <td class="type"> void</td>
@@ -112,7 +124,7 @@ to either an access denied page or login page.</p></td>
 </table>
 
 <h2 id="detail_field">Field Detail</h2>
-<a href="../source/application/libraries/auth.php.html#line16" class="location">application/libraries/auth.php at line 16</a>
+<a href="../source/libraries/auth.php.html#line16" class="location">libraries/auth.php at line 16</a>
 
 <h3 id="U">U</h3>
 <code class="signature">public  <a href="../models/user.html">User</a> <strong>$U</strong></code>
@@ -121,7 +133,7 @@ to either an access denied page or login page.</p></td>
 
 <hr>
 
-<a href="../source/application/libraries/auth.php.html#line11" class="location">application/libraries/auth.php at line 11</a>
+<a href="../source/libraries/auth.php.html#line11" class="location">libraries/auth.php at line 11</a>
 
 <h3 id="create">create</h3>
 <code class="signature">protected  mixed <strong>$create</strong> = null</code>
@@ -131,7 +143,7 @@ to either an access denied page or login page.</p></td>
 <hr>
 
 <h2 id="detail_method">Method Detail</h2><div class="method_detail">
-<div class='method'><a href="../source/application/libraries/auth.php.html#line21" class="location">application/libraries/auth.php at line 21</a>
+<div class='method'><a href="../source/libraries/auth.php.html#line21" class="location">libraries/auth.php at line 21</a>
 
 <h3 id="__construct()">__construct</h3>
 <code class="signature">public  void <strong>__construct</strong>()</code>
@@ -140,7 +152,7 @@ to either an access denied page or login page.</p></td>
 
 
 
-<div class='method'><a href="../source/application/libraries/auth.php.html#line206" class="location">application/libraries/auth.php at line 206</a>
+<div class='method'><a href="../source/libraries/auth.php.html#line217" class="location">libraries/auth.php at line 217</a>
 
 <h3 id="bouncer()">bouncer</h3>
 <code class="signature">public  void <strong>bouncer</strong>(int min, string redirect)</code>
@@ -155,7 +167,7 @@ to either an access denied page or login page.</p><dl>
 
 
 
-<div class='method'><a href="../source/application/libraries/auth.php.html#line226" class="location">application/libraries/auth.php at line 226</a>
+<div class='method'><a href="../source/libraries/auth.php.html#line240" class="location">libraries/auth.php at line 240</a>
 
 <h3 id="facebook()">facebook</h3>
 <code class="signature">public  void <strong>facebook</strong>(mixed data)</code>
@@ -164,7 +176,16 @@ to either an access denied page or login page.</p><dl>
 
 
 
-<div class='method'><a href="../source/application/libraries/auth.php.html#line72" class="location">application/libraries/auth.php at line 72</a>
+<div class='method'><a href="../source/libraries/auth.php.html#line73" class="location">libraries/auth.php at line 73</a>
+
+<h3 id="is_signed_in()">is_signed_in</h3>
+<code class="signature">public  <a href="../models/user.html">User</a> <strong>is_signed_in</strong>()</code>
+<div class="details">
+<p>Handles logins. if user is login or not</p></div></div>
+
+
+
+<div class='method'><a href="../source/libraries/auth.php.html#line83" class="location">libraries/auth.php at line 83</a>
 
 <h3 id="login()">login</h3>
 <code class="signature">public  <a href="../models/user.html">User</a> <strong>login</strong>()</code>
@@ -174,7 +195,7 @@ methods stored in the User model. If successful, creates new session.</p></div><
 
 
 
-<div class='method'><a href="../source/application/libraries/auth.php.html#line100" class="location">application/libraries/auth.php at line 100</a>
+<div class='method'><a href="../source/libraries/auth.php.html#line111" class="location">libraries/auth.php at line 111</a>
 
 <h3 id="logout()">logout</h3>
 <code class="signature">public  void <strong>logout</strong>()</code>
@@ -183,7 +204,21 @@ methods stored in the User model. If successful, creates new session.</p></div><
 
 
 
-<div class='method'><a href="../source/application/libraries/auth.php.html#line114" class="location">application/libraries/auth.php at line 114</a>
+<div class='method'><a href="../source/libraries/auth.php.html#line347" class="location">libraries/auth.php at line 347</a>
+
+<h3 id="manual_login()">manual_login</h3>
+<code class="signature">public  void <strong>manual_login</strong>(object U, boolean redirect)</code>
+<div class="details">
+<p>Logs in users manually</p><dl>
+<dt>Parameters:</dt>
+<dd>U - User object to log in</dd>
+<dd>redirect - If true, redirect to homepage</dd>
+</dl>
+</div></div>
+
+
+
+<div class='method'><a href="../source/libraries/auth.php.html#line125" class="location">libraries/auth.php at line 125</a>
 
 <h3 id="new_session()">new_session</h3>
 <code class="signature">protected  boolean <strong>new_session</strong>()</code>
@@ -192,7 +227,16 @@ methods stored in the User model. If successful, creates new session.</p></div><
 
 
 
-<div class='method'><a href="../source/application/libraries/auth.php.html#line314" class="location">application/libraries/auth.php at line 314</a>
+<div class='method'><a href="../source/libraries/auth.php.html#line326" class="location">libraries/auth.php at line 326</a>
+
+<h3 id="openid_login()">openid_login</h3>
+<code class="signature">public  void <strong>openid_login</strong>(mixed U)</code>
+<div class="details">
+<p>Logs in users authenticated by OpenID</p></div></div>
+
+
+
+<div class='method'><a href="../source/libraries/auth.php.html#line371" class="location">libraries/auth.php at line 371</a>
 
 <h3 id="page_lister()">page_lister</h3>
 <code class="signature">public  void <strong>page_lister</strong>()</code>
@@ -204,7 +248,7 @@ methods stored in the User model. If successful, creates new session.</p></div><
 
 
 
-<div class='method'><a href="../source/application/libraries/auth.php.html#line34" class="location">application/libraries/auth.php at line 34</a>
+<div class='method'><a href="../source/libraries/auth.php.html#line34" class="location">libraries/auth.php at line 34</a>
 
 <h3 id="register()">register</h3>
 <code class="signature">public  <a href="../models/user.html">User</a> <strong>register</strong>()</code>
@@ -213,7 +257,7 @@ methods stored in the User model. If successful, creates new session.</p></div><
 
 
 
-<div class='method'><a href="../source/application/libraries/auth.php.html#line174" class="location">application/libraries/auth.php at line 174</a>
+<div class='method'><a href="../source/libraries/auth.php.html#line185" class="location">libraries/auth.php at line 185</a>
 
 <h3 id="validate()">validate</h3>
 <code class="signature">public  boolean <strong>validate</strong>(int min)</code>

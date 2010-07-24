@@ -6,7 +6,7 @@
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 
 <meta name="generator" content="PHPDoctor 2RC4 (http://peej.github.com/phpdoctor/)">
-<meta name="when" content="Mon, 19 Jul 2010 17:13:56 +0000">
+<meta name="when" content="Sat, 24 Jul 2010 20:47:44 +0000">
 
 <link rel="stylesheet" type="text/css" href="../stylesheet.css">
 <link rel="start" href="../overview-summary.html">
@@ -40,11 +40,11 @@ Detail: <a href="#detail_field">Field</a> | <a href="#detail_method">Method</a> 
 <hr>
 
 <div class="qualifiedName">GiftFlow\OAuthStoreAnymeta</div>
-<a href="../source/application/libraries/oauth/store/oauthstoreanymeta.php.html#line39" class="location">application/libraries/oauth/store/OAuthStoreAnyMeta.php at line 39</a>
+<a href="../source/libraries/oauth/store/oauthstoreanymeta.php.html#line38" class="location">libraries/oauth/store/OAuthStoreAnyMeta.php at line 38</a>
 
 <h1>Class OAuthStoreAnymeta</h1>
 
-<pre class="tree"><a href="../giftflow/oauthstoreabstract.html">OAuthStoreAbstract</a><br>    └─<a href="../giftflow/oauthstoremysql.html">OAuthStoreMySQL</a><br>       └─<strong>OAuthStoreAnymeta</strong><br /></pre>
+<pre class="tree"><a href="../giftflow/oauthstoreabstract.html">OAuthStoreAbstract</a><br>    └─<a href="../giftflow/oauthstoresql.html">OAuthStoreSQL</a><br>       └─<a href="../giftflow/oauthstoremysql.html">OAuthStoreMySQL</a><br>          └─<strong>OAuthStoreAnymeta</strong><br /></pre>
 
 <hr>
 
@@ -57,7 +57,7 @@ This file can only be used in conjunction with anyMeta.</p></div>
 
 <dl>
 <dt>Version:</dt>
-<dd>$Id: OAuthStoreAnyMeta.php 49 2008-10-01 09:43:19Z marcw@pobox.com $</dd>
+<dd>$Id: OAuthStoreAnyMeta.php 68 2010-01-12 18:59:23Z brunobg@corollarium.com $</dd>
 <dt>Author:</dt>
 <dd>Marc Worrell <marcw@pobox.com></dd>
 <dt>Date:</dt>
@@ -67,7 +67,11 @@ This file can only be used in conjunction with anyMeta.</p></div>
 
 <table class="inherit">
 <tr><th colspan="2">Fields inherited from GiftFlow\OAuthStoreMySQL</th></tr>
-<tr><td><a href="../giftflow/oauthstoremysql.html#max_request_token_ttl">max_request_token_ttl</a>, <a href="../giftflow/oauthstoremysql.html#max_timestamp_skew">max_timestamp_skew</a>, <a href="../giftflow/oauthstoremysql.html#sql_args">sql_args</a></td></tr></table>
+<tr><td><a href="../giftflow/oauthstoremysql.html#sql_args">sql_args</a></td></tr></table>
+
+<table class="inherit">
+<tr><th colspan="2">Fields inherited from GiftFlow\OAuthStoreSQL</th></tr>
+<tr><td><a href="../giftflow/oauthstoresql.html#max_request_token_ttl">max_request_token_ttl</a>, <a href="../giftflow/oauthstoresql.html#max_timestamp_skew">max_timestamp_skew</a></td></tr></table>
 
 <table id="summary_method">
 <tr><th colspan="2">Method Summary</th></tr>
@@ -123,14 +127,18 @@ This file can only be used in conjunction with anyMeta.</p></div>
 
 <table class="inherit">
 <tr><th colspan="2">Methods inherited from GiftFlow\OAuthStoreMySQL</th></tr>
-<tr><td><a href="../giftflow/oauthstoremysql.html#__construct()">__construct</a>, <a href="../giftflow/oauthstoremysql.html#addConsumerRequestToken()">addConsumerRequestToken</a>, <a href="../giftflow/oauthstoremysql.html#addLog()">addLog</a>, <a href="../giftflow/oauthstoremysql.html#addServerToken()">addServerToken</a>, <a href="../giftflow/oauthstoremysql.html#authorizeConsumerRequestToken()">authorizeConsumerRequestToken</a>, <a href="../giftflow/oauthstoremysql.html#checkServerNonce()">checkServerNonce</a>, <a href="../giftflow/oauthstoremysql.html#countConsumerAccessTokens()">countConsumerAccessTokens</a>, <a href="../giftflow/oauthstoremysql.html#countServerTokens()">countServerTokens</a>, <a href="../giftflow/oauthstoremysql.html#deleteConsumer()">deleteConsumer</a>, <a href="../giftflow/oauthstoremysql.html#deleteConsumerAccessToken()">deleteConsumerAccessToken</a>, <a href="../giftflow/oauthstoremysql.html#deleteConsumerRequestToken()">deleteConsumerRequestToken</a>, <a href="../giftflow/oauthstoremysql.html#deleteServer()">deleteServer</a>, <a href="../giftflow/oauthstoremysql.html#deleteServerToken()">deleteServerToken</a>, <a href="../giftflow/oauthstoremysql.html#exchangeConsumerRequestForAccessToken()">exchangeConsumerRequestForAccessToken</a>, <a href="../giftflow/oauthstoremysql.html#getConsumer()">getConsumer</a>, <a href="../giftflow/oauthstoremysql.html#getConsumerAccessToken()">getConsumerAccessToken</a>, <a href="../giftflow/oauthstoremysql.html#getConsumerRequestToken()">getConsumerRequestToken</a>, <a href="../giftflow/oauthstoremysql.html#getConsumerStatic()">getConsumerStatic</a>, <a href="../giftflow/oauthstoremysql.html#getSecretsForSignature()">getSecretsForSignature</a>, <a href="../giftflow/oauthstoremysql.html#getSecretsForVerify()">getSecretsForVerify</a>, <a href="../giftflow/oauthstoremysql.html#getServer()">getServer</a>, <a href="../giftflow/oauthstoremysql.html#getServerForUri()">getServerForUri</a>, <a href="../giftflow/oauthstoremysql.html#getServerToken()">getServerToken</a>, <a href="../giftflow/oauthstoremysql.html#getServerTokenSecrets()">getServerTokenSecrets</a>, <a href="../giftflow/oauthstoremysql.html#install()">install</a>, <a href="../giftflow/oauthstoremysql.html#listConsumerTokens()">listConsumerTokens</a>, <a href="../giftflow/oauthstoremysql.html#listConsumers()">listConsumers</a>, <a href="../giftflow/oauthstoremysql.html#listLog()">listLog</a>, <a href="../giftflow/oauthstoremysql.html#listServerTokens()">listServerTokens</a>, <a href="../giftflow/oauthstoremysql.html#listServers()">listServers</a>, <a href="../giftflow/oauthstoremysql.html#query()">query</a>, <a href="../giftflow/oauthstoremysql.html#query_affected_rows()">query_affected_rows</a>, <a href="../giftflow/oauthstoremysql.html#query_all_assoc()">query_all_assoc</a>, <a href="../giftflow/oauthstoremysql.html#query_insert_id()">query_insert_id</a>, <a href="../giftflow/oauthstoremysql.html#query_one()">query_one</a>, <a href="../giftflow/oauthstoremysql.html#query_row()">query_row</a>, <a href="../giftflow/oauthstoremysql.html#query_row_assoc()">query_row_assoc</a>, <a href="../giftflow/oauthstoremysql.html#setConsumerAccessTokenTtl()">setConsumerAccessTokenTtl</a>, <a href="../giftflow/oauthstoremysql.html#setServerTokenTtl()">setServerTokenTtl</a>, <a href="../giftflow/oauthstoremysql.html#sql_errcheck()">sql_errcheck</a>, <a href="../giftflow/oauthstoremysql.html#sql_escape_string()">sql_escape_string</a>, <a href="../giftflow/oauthstoremysql.html#sql_printf()">sql_printf</a>, <a href="../giftflow/oauthstoremysql.html#updateConsumer()">updateConsumer</a>, <a href="../giftflow/oauthstoremysql.html#updateServer()">updateServer</a></td></tr></table>
+<tr><td><a href="../giftflow/oauthstoremysql.html#install()">install</a>, <a href="../giftflow/oauthstoremysql.html#query()">query</a>, <a href="../giftflow/oauthstoremysql.html#query_affected_rows()">query_affected_rows</a>, <a href="../giftflow/oauthstoremysql.html#query_all_assoc()">query_all_assoc</a>, <a href="../giftflow/oauthstoremysql.html#query_insert_id()">query_insert_id</a>, <a href="../giftflow/oauthstoremysql.html#query_one()">query_one</a>, <a href="../giftflow/oauthstoremysql.html#query_row()">query_row</a>, <a href="../giftflow/oauthstoremysql.html#query_row_assoc()">query_row_assoc</a>, <a href="../giftflow/oauthstoremysql.html#sql_errcheck()">sql_errcheck</a>, <a href="../giftflow/oauthstoremysql.html#sql_escape_string()">sql_escape_string</a>, <a href="../giftflow/oauthstoremysql.html#sql_printf()">sql_printf</a></td></tr></table>
+
+<table class="inherit">
+<tr><th colspan="2">Methods inherited from GiftFlow\OAuthStoreSQL</th></tr>
+<tr><td><a href="../giftflow/oauthstoresql.html#__construct()">__construct</a>, <a href="../giftflow/oauthstoresql.html#addConsumerRequestToken()">addConsumerRequestToken</a>, <a href="../giftflow/oauthstoresql.html#addLog()">addLog</a>, <a href="../giftflow/oauthstoresql.html#addServerToken()">addServerToken</a>, <a href="../giftflow/oauthstoresql.html#authorizeConsumerRequestToken()">authorizeConsumerRequestToken</a>, <a href="../giftflow/oauthstoresql.html#checkServerNonce()">checkServerNonce</a>, <a href="../giftflow/oauthstoresql.html#countConsumerAccessTokens()">countConsumerAccessTokens</a>, <a href="../giftflow/oauthstoresql.html#countServerTokens()">countServerTokens</a>, <a href="../giftflow/oauthstoresql.html#deleteConsumer()">deleteConsumer</a>, <a href="../giftflow/oauthstoresql.html#deleteConsumerAccessToken()">deleteConsumerAccessToken</a>, <a href="../giftflow/oauthstoresql.html#deleteConsumerRequestToken()">deleteConsumerRequestToken</a>, <a href="../giftflow/oauthstoresql.html#deleteServer()">deleteServer</a>, <a href="../giftflow/oauthstoresql.html#deleteServerToken()">deleteServerToken</a>, <a href="../giftflow/oauthstoresql.html#exchangeConsumerRequestForAccessToken()">exchangeConsumerRequestForAccessToken</a>, <a href="../giftflow/oauthstoresql.html#getConsumer()">getConsumer</a>, <a href="../giftflow/oauthstoresql.html#getConsumerAccessToken()">getConsumerAccessToken</a>, <a href="../giftflow/oauthstoresql.html#getConsumerRequestToken()">getConsumerRequestToken</a>, <a href="../giftflow/oauthstoresql.html#getConsumerStatic()">getConsumerStatic</a>, <a href="../giftflow/oauthstoresql.html#getSecretsForSignature()">getSecretsForSignature</a>, <a href="../giftflow/oauthstoresql.html#getSecretsForVerify()">getSecretsForVerify</a>, <a href="../giftflow/oauthstoresql.html#getServer()">getServer</a>, <a href="../giftflow/oauthstoresql.html#getServerForUri()">getServerForUri</a>, <a href="../giftflow/oauthstoresql.html#getServerToken()">getServerToken</a>, <a href="../giftflow/oauthstoresql.html#getServerTokenSecrets()">getServerTokenSecrets</a>, <a href="../giftflow/oauthstoresql.html#listConsumerTokens()">listConsumerTokens</a>, <a href="../giftflow/oauthstoresql.html#listConsumers()">listConsumers</a>, <a href="../giftflow/oauthstoresql.html#listLog()">listLog</a>, <a href="../giftflow/oauthstoresql.html#listServerTokens()">listServerTokens</a>, <a href="../giftflow/oauthstoresql.html#listServers()">listServers</a>, <a href="../giftflow/oauthstoresql.html#query()">query</a>, <a href="../giftflow/oauthstoresql.html#query_affected_rows()">query_affected_rows</a>, <a href="../giftflow/oauthstoresql.html#query_all_assoc()">query_all_assoc</a>, <a href="../giftflow/oauthstoresql.html#query_insert_id()">query_insert_id</a>, <a href="../giftflow/oauthstoresql.html#query_one()">query_one</a>, <a href="../giftflow/oauthstoresql.html#query_row()">query_row</a>, <a href="../giftflow/oauthstoresql.html#query_row_assoc()">query_row_assoc</a>, <a href="../giftflow/oauthstoresql.html#setConsumerAccessTokenTtl()">setConsumerAccessTokenTtl</a>, <a href="../giftflow/oauthstoresql.html#setServerTokenTtl()">setServerTokenTtl</a>, <a href="../giftflow/oauthstoresql.html#sql_errcheck()">sql_errcheck</a>, <a href="../giftflow/oauthstoresql.html#sql_escape_string()">sql_escape_string</a>, <a href="../giftflow/oauthstoresql.html#sql_printf()">sql_printf</a>, <a href="../giftflow/oauthstoresql.html#updateConsumer()">updateConsumer</a>, <a href="../giftflow/oauthstoresql.html#updateServer()">updateServer</a></td></tr></table>
 
 <table class="inherit">
 <tr><th colspan="2">Methods inherited from GiftFlow\OAuthStoreAbstract</th></tr>
 <tr><td><a href="../giftflow/oauthstoreabstract.html#addConsumerRequestToken()">addConsumerRequestToken</a>, <a href="../giftflow/oauthstoreabstract.html#addLog()">addLog</a>, <a href="../giftflow/oauthstoreabstract.html#addServerToken()">addServerToken</a>, <a href="../giftflow/oauthstoreabstract.html#authorizeConsumerRequestToken()">authorizeConsumerRequestToken</a>, <a href="../giftflow/oauthstoreabstract.html#checkServerNonce()">checkServerNonce</a>, <a href="../giftflow/oauthstoreabstract.html#countConsumerAccessTokens()">countConsumerAccessTokens</a>, <a href="../giftflow/oauthstoreabstract.html#countServerTokens()">countServerTokens</a>, <a href="../giftflow/oauthstoreabstract.html#deleteConsumer()">deleteConsumer</a>, <a href="../giftflow/oauthstoreabstract.html#deleteConsumerAccessToken()">deleteConsumerAccessToken</a>, <a href="../giftflow/oauthstoreabstract.html#deleteConsumerRequestToken()">deleteConsumerRequestToken</a>, <a href="../giftflow/oauthstoreabstract.html#deleteServer()">deleteServer</a>, <a href="../giftflow/oauthstoreabstract.html#deleteServerToken()">deleteServerToken</a>, <a href="../giftflow/oauthstoreabstract.html#exchangeConsumerRequestForAccessToken()">exchangeConsumerRequestForAccessToken</a>, <a href="../giftflow/oauthstoreabstract.html#generateKey()">generateKey</a>, <a href="../giftflow/oauthstoreabstract.html#getConsumer()">getConsumer</a>, <a href="../giftflow/oauthstoreabstract.html#getConsumerAccessToken()">getConsumerAccessToken</a>, <a href="../giftflow/oauthstoreabstract.html#getConsumerRequestToken()">getConsumerRequestToken</a>, <a href="../giftflow/oauthstoreabstract.html#getConsumerStatic()">getConsumerStatic</a>, <a href="../giftflow/oauthstoreabstract.html#getSecretsForSignature()">getSecretsForSignature</a>, <a href="../giftflow/oauthstoreabstract.html#getSecretsForVerify()">getSecretsForVerify</a>, <a href="../giftflow/oauthstoreabstract.html#getServer()">getServer</a>, <a href="../giftflow/oauthstoreabstract.html#getServerForUri()">getServerForUri</a>, <a href="../giftflow/oauthstoreabstract.html#getServerToken()">getServerToken</a>, <a href="../giftflow/oauthstoreabstract.html#getServerTokenSecrets()">getServerTokenSecrets</a>, <a href="../giftflow/oauthstoreabstract.html#install()">install</a>, <a href="../giftflow/oauthstoreabstract.html#isUTF8()">isUTF8</a>, <a href="../giftflow/oauthstoreabstract.html#listConsumerTokens()">listConsumerTokens</a>, <a href="../giftflow/oauthstoreabstract.html#listConsumers()">listConsumers</a>, <a href="../giftflow/oauthstoreabstract.html#listLog()">listLog</a>, <a href="../giftflow/oauthstoreabstract.html#listServerTokens()">listServerTokens</a>, <a href="../giftflow/oauthstoreabstract.html#listServers()">listServers</a>, <a href="../giftflow/oauthstoreabstract.html#makeUTF8()">makeUTF8</a>, <a href="../giftflow/oauthstoreabstract.html#setConsumerAccessTokenTtl()">setConsumerAccessTokenTtl</a>, <a href="../giftflow/oauthstoreabstract.html#updateConsumer()">updateConsumer</a>, <a href="../giftflow/oauthstoreabstract.html#updateServer()">updateServer</a></td></tr></table>
 
 <h2 id="detail_method">Method Detail</h2><div class="method_detail">
-<div class='method'><a href="../source/application/libraries/oauth/store/oauthstoreanymeta.php.html#line46" class="location">application/libraries/oauth/store/OAuthStoreAnyMeta.php at line 46</a>
+<div class='method'><a href="../source/libraries/oauth/store/oauthstoreanymeta.php.html#line45" class="location">libraries/oauth/store/OAuthStoreAnyMeta.php at line 45</a>
 
 <h3 id="__construct()">__construct</h3>
 <code class="signature">public  void <strong>__construct</strong>(array options)</code>
@@ -139,7 +147,7 @@ This file can only be used in conjunction with anyMeta.</p></div>
 
 
 
-<div class='method'><a href="../source/application/libraries/oauth/store/oauthstoreanymeta.php.html#line62" class="location">application/libraries/oauth/store/OAuthStoreAnyMeta.php at line 62</a>
+<div class='method'><a href="../source/libraries/oauth/store/oauthstoreanymeta.php.html#line61" class="location">libraries/oauth/store/OAuthStoreAnyMeta.php at line 61</a>
 
 <h3 id="addLog()">addLog</h3>
 <code class="signature">public  void <strong>addLog</strong>(array keys, string received, string sent, string base_string, string notes, mixed user_id, int (optional))</code>
@@ -157,7 +165,7 @@ This file can only be used in conjunction with anyMeta.</p></div>
 
 
 
-<div class='method'><a href="../source/application/libraries/oauth/store/oauthstoreanymeta.php.html#line138" class="location">application/libraries/oauth/store/OAuthStoreAnyMeta.php at line 138</a>
+<div class='method'><a href="../source/libraries/oauth/store/oauthstoreanymeta.php.html#line137" class="location">libraries/oauth/store/OAuthStoreAnyMeta.php at line 137</a>
 
 <h3 id="install()">install</h3>
 <code class="signature">public  void <strong>install</strong>()</code>
@@ -166,7 +174,7 @@ This file can only be used in conjunction with anyMeta.</p></div>
 
 
 
-<div class='method'><a href="../source/application/libraries/oauth/store/oauthstoreanymeta.php.html#line80" class="location">application/libraries/oauth/store/OAuthStoreAnyMeta.php at line 80</a>
+<div class='method'><a href="../source/libraries/oauth/store/oauthstoreanymeta.php.html#line79" class="location">libraries/oauth/store/OAuthStoreAnyMeta.php at line 79</a>
 
 <h3 id="listLog()">listLog</h3>
 <code class="signature">public  array <strong>listLog</strong>(array options, int user_id)</code>
@@ -183,7 +191,7 @@ matching the options given.</p><dl>
 
 
 
-<div class='method'><a href="../source/application/libraries/oauth/store/oauthstoreanymeta.php.html#line165" class="location">application/libraries/oauth/store/OAuthStoreAnyMeta.php at line 165</a>
+<div class='method'><a href="../source/libraries/oauth/store/oauthstoreanymeta.php.html#line164" class="location">libraries/oauth/store/OAuthStoreAnyMeta.php at line 164</a>
 
 <h3 id="query()">query</h3>
 <code class="signature">protected  void <strong>query</strong>(string sql, vararg arguments)</code>
@@ -197,7 +205,7 @@ matching the options given.</p><dl>
 
 
 
-<div class='method'><a href="../source/application/libraries/oauth/store/oauthstoreanymeta.php.html#line233" class="location">application/libraries/oauth/store/OAuthStoreAnyMeta.php at line 233</a>
+<div class='method'><a href="../source/libraries/oauth/store/oauthstoreanymeta.php.html#line232" class="location">libraries/oauth/store/OAuthStoreAnyMeta.php at line 232</a>
 
 <h3 id="query_affected_rows()">query_affected_rows</h3>
 <code class="signature">protected  int <strong>query_affected_rows</strong>()</code>
@@ -206,7 +214,7 @@ matching the options given.</p><dl>
 
 
 
-<div class='method'><a href="../source/application/libraries/oauth/store/oauthstoreanymeta.php.html#line179" class="location">application/libraries/oauth/store/OAuthStoreAnyMeta.php at line 179</a>
+<div class='method'><a href="../source/libraries/oauth/store/oauthstoreanymeta.php.html#line178" class="location">libraries/oauth/store/OAuthStoreAnyMeta.php at line 178</a>
 
 <h3 id="query_all_assoc()">query_all_assoc</h3>
 <code class="signature">protected  array <strong>query_all_assoc</strong>(string sql, vararg arguments)</code>
@@ -220,7 +228,7 @@ matching the options given.</p><dl>
 
 
 
-<div class='method'><a href="../source/application/libraries/oauth/store/oauthstoreanymeta.php.html#line244" class="location">application/libraries/oauth/store/OAuthStoreAnyMeta.php at line 244</a>
+<div class='method'><a href="../source/libraries/oauth/store/oauthstoreanymeta.php.html#line243" class="location">libraries/oauth/store/OAuthStoreAnyMeta.php at line 243</a>
 
 <h3 id="query_insert_id()">query_insert_id</h3>
 <code class="signature">protected  int <strong>query_insert_id</strong>()</code>
@@ -229,7 +237,7 @@ matching the options given.</p><dl>
 
 
 
-<div class='method'><a href="../source/application/libraries/oauth/store/oauthstoreanymeta.php.html#line221" class="location">application/libraries/oauth/store/OAuthStoreAnyMeta.php at line 221</a>
+<div class='method'><a href="../source/libraries/oauth/store/oauthstoreanymeta.php.html#line220" class="location">libraries/oauth/store/OAuthStoreAnyMeta.php at line 220</a>
 
 <h3 id="query_one()">query_one</h3>
 <code class="signature">protected  mixed <strong>query_one</strong>(string sql, vararg arguments)</code>
@@ -243,7 +251,7 @@ matching the options given.</p><dl>
 
 
 
-<div class='method'><a href="../source/application/libraries/oauth/store/oauthstoreanymeta.php.html#line207" class="location">application/libraries/oauth/store/OAuthStoreAnyMeta.php at line 207</a>
+<div class='method'><a href="../source/libraries/oauth/store/oauthstoreanymeta.php.html#line206" class="location">libraries/oauth/store/OAuthStoreAnyMeta.php at line 206</a>
 
 <h3 id="query_row()">query_row</h3>
 <code class="signature">protected  array <strong>query_row</strong>(string sql, vararg arguments)</code>
@@ -257,7 +265,7 @@ matching the options given.</p><dl>
 
 
 
-<div class='method'><a href="../source/application/libraries/oauth/store/oauthstoreanymeta.php.html#line193" class="location">application/libraries/oauth/store/OAuthStoreAnyMeta.php at line 193</a>
+<div class='method'><a href="../source/libraries/oauth/store/oauthstoreanymeta.php.html#line192" class="location">libraries/oauth/store/OAuthStoreAnyMeta.php at line 192</a>
 
 <h3 id="query_row_assoc()">query_row_assoc</h3>
 <code class="signature">protected  array <strong>query_row_assoc</strong>(string sql, vararg arguments)</code>
@@ -271,7 +279,7 @@ matching the options given.</p><dl>
 
 
 
-<div class='method'><a href="../source/application/libraries/oauth/store/oauthstoreanymeta.php.html#line250" class="location">application/libraries/oauth/store/OAuthStoreAnyMeta.php at line 250</a>
+<div class='method'><a href="../source/libraries/oauth/store/oauthstoreanymeta.php.html#line249" class="location">libraries/oauth/store/OAuthStoreAnyMeta.php at line 249</a>
 
 <h3 id="sql_args()">sql_args</h3>
 <code class="signature">private  void <strong>sql_args</strong>(mixed args)</code>

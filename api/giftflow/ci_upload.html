@@ -6,7 +6,7 @@
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 
 <meta name="generator" content="PHPDoctor 2RC4 (http://peej.github.com/phpdoctor/)">
-<meta name="when" content="Mon, 19 Jul 2010 17:13:56 +0000">
+<meta name="when" content="Sat, 24 Jul 2010 20:46:31 +0000">
 
 <link rel="stylesheet" type="text/css" href="../stylesheet.css">
 <link rel="start" href="../overview-summary.html">
@@ -65,8 +65,16 @@ Detail: <a href="#detail_field">Field</a> | <a href="#detail_method">Method</a> 
 <table id="summary_field">
 <tr><th colspan="2">Field Summary</th></tr>
 <tr>
+<td class="type">private  mixed</td>
+<td class="description"><p class="name"><a href="#_file_name_override">$_file_name_override</a></p></td>
+</tr>
+<tr>
 <td class="type"> mixed</td>
 <td class="description"><p class="name"><a href="#allowed_types">$allowed_types</a></p></td>
+</tr>
+<tr>
+<td class="type"> mixed</td>
+<td class="description"><p class="name"><a href="#client_name">$client_name</a></p></td>
 </tr>
 <tr>
 <td class="type"> mixed</td>
@@ -213,7 +221,7 @@ related to the upload, allowing the developer easy access in one array.</p></td>
 </tr>
 <tr>
 <td class="type"> void</td>
-<td class="description"><p class="name"><a href="#is_allowed_filetype()">is_allowed_filetype</a>()</p><p class="description">Verify that the filetype is allowed</p></td>
+<td class="description"><p class="name"><a href="#is_allowed_filetype()">is_allowed_filetype</a>(bool ignore_mime)</p><p class="description">Verify that the filetype is allowed</p></td>
 </tr>
 <tr>
 <td class="type"> void</td>
@@ -276,10 +284,28 @@ will be run through the XSS filter.</p></td>
 </table>
 
 <h2 id="detail_field">Field Detail</h2>
+<a href="../source/libraries/upload.php.html#line55" class="location">libraries/Upload.php at line 55</a>
+
+<h3 id="_file_name_override">_file_name_override</h3>
+<code class="signature">private  mixed <strong>$_file_name_override</strong> = ''</code>
+<div class="details">
+</div>
+
+<hr>
+
 <a href="../source/libraries/upload.php.html#line33" class="location">libraries/Upload.php at line 33</a>
 
 <h3 id="allowed_types">allowed_types</h3>
 <code class="signature">public  mixed <strong>$allowed_types</strong> = &quot;&quot;</code>
+<div class="details">
+</div>
+
+<hr>
+
+<a href="../source/libraries/upload.php.html#line53" class="location">libraries/Upload.php at line 53</a>
+
+<h3 id="client_name">client_name</h3>
+<code class="signature">public  mixed <strong>$client_name</strong> = ''</code>
 <div class="details">
 </div>
 
@@ -493,7 +519,7 @@ will be run through the XSS filter.</p></td>
 <hr>
 
 <h2 id="detail_method">Method Detail</h2><div class="method_detail">
-<div class='method'><a href="../source/libraries/upload.php.html#line59" class="location">libraries/Upload.php at line 59</a>
+<div class='method'><a href="../source/libraries/upload.php.html#line62" class="location">libraries/Upload.php at line 62</a>
 
 <h3 id="__construct()">__construct</h3>
 <code class="signature">public  void <strong>__construct</strong>(mixed props)</code>
@@ -505,7 +531,7 @@ will be run through the XSS filter.</p></td>
 
 
 
-<div class='method'><a href="../source/libraries/upload.php.html#line908" class="location">libraries/Upload.php at line 908</a>
+<div class='method'><a href="../source/libraries/upload.php.html#line989" class="location">libraries/Upload.php at line 989</a>
 
 <h3 id="_prep_filename()">_prep_filename</h3>
 <code class="signature">private  void <strong>_prep_filename</strong>(mixed filename)</code>
@@ -520,7 +546,7 @@ http://httpd.apache.org/docs/1.3/mod/mod_mime.html#multipleext</p><dl>
 
 
 
-<div class='method'><a href="../source/libraries/upload.php.html#line713" class="location">libraries/Upload.php at line 713</a>
+<div class='method'><a href="../source/libraries/upload.php.html#line758" class="location">libraries/Upload.php at line 758</a>
 
 <h3 id="clean_file_name()">clean_file_name</h3>
 <code class="signature">public  void <strong>clean_file_name</strong>(mixed filename)</code>
@@ -534,7 +560,7 @@ http://httpd.apache.org/docs/1.3/mod/mod_mime.html#multipleext</p><dl>
 
 
 
-<div class='method'><a href="../source/libraries/upload.php.html#line306" class="location">libraries/Upload.php at line 306</a>
+<div class='method'><a href="../source/libraries/upload.php.html#line334" class="location">libraries/Upload.php at line 334</a>
 
 <h3 id="data()">data</h3>
 <code class="signature">public  void <strong>data</strong>()</code>
@@ -548,7 +574,7 @@ related to the upload, allowing the developer easy access in one array.</p><dl>
 
 
 
-<div class='method'><a href="../source/libraries/upload.php.html#line857" class="location">libraries/Upload.php at line 857</a>
+<div class='method'><a href="../source/libraries/upload.php.html#line938" class="location">libraries/Upload.php at line 938</a>
 
 <h3 id="display_errors()">display_errors</h3>
 <code class="signature">public  void <strong>display_errors</strong>(str open, str close)</code>
@@ -561,7 +587,7 @@ related to the upload, allowing the developer easy access in one array.</p><dl>
 
 
 
-<div class='method'><a href="../source/libraries/upload.php.html#line137" class="location">libraries/Upload.php at line 137</a>
+<div class='method'><a href="../source/libraries/upload.php.html#line146" class="location">libraries/Upload.php at line 146</a>
 
 <h3 id="do_upload()">do_upload</h3>
 <code class="signature">public  void <strong>do_upload</strong>(str field)</code>
@@ -574,7 +600,7 @@ related to the upload, allowing the developer easy access in one array.</p><dl>
 
 
 
-<div class='method'><a href="../source/libraries/upload.php.html#line788" class="location">libraries/Upload.php at line 788</a>
+<div class='method'><a href="../source/libraries/upload.php.html#line833" class="location">libraries/Upload.php at line 833</a>
 
 <h3 id="do_xss_clean()">do_xss_clean</h3>
 <code class="signature">public  void <strong>do_xss_clean</strong>()</code>
@@ -589,7 +615,7 @@ but so far I haven't found that it causes trouble.</p><dl>
 
 
 
-<div class='method'><a href="../source/libraries/upload.php.html#line698" class="location">libraries/Upload.php at line 698</a>
+<div class='method'><a href="../source/libraries/upload.php.html#line743" class="location">libraries/Upload.php at line 743</a>
 
 <h3 id="get_extension()">get_extension</h3>
 <code class="signature">public  void <strong>get_extension</strong>(mixed filename)</code>
@@ -603,7 +629,7 @@ but so far I haven't found that it causes trouble.</p><dl>
 
 
 
-<div class='method'><a href="../source/libraries/upload.php.html#line78" class="location">libraries/Upload.php at line 78</a>
+<div class='method'><a href="../source/libraries/upload.php.html#line82" class="location">libraries/Upload.php at line 82</a>
 
 <h3 id="initialize()">initialize</h3>
 <code class="signature">public  void <strong>initialize</strong>(mixed config)</code>
@@ -617,7 +643,7 @@ but so far I haven't found that it causes trouble.</p><dl>
 
 
 
-<div class='method'><a href="../source/libraries/upload.php.html#line622" class="location">libraries/Upload.php at line 622</a>
+<div class='method'><a href="../source/libraries/upload.php.html#line667" class="location">libraries/Upload.php at line 667</a>
 
 <h3 id="is_allowed_dimensions()">is_allowed_dimensions</h3>
 <code class="signature">public  void <strong>is_allowed_dimensions</strong>()</code>
@@ -630,7 +656,7 @@ but so far I haven't found that it causes trouble.</p><dl>
 
 
 
-<div class='method'><a href="../source/libraries/upload.php.html#line602" class="location">libraries/Upload.php at line 602</a>
+<div class='method'><a href="../source/libraries/upload.php.html#line647" class="location">libraries/Upload.php at line 647</a>
 
 <h3 id="is_allowed_filesize()">is_allowed_filesize</h3>
 <code class="signature">public  void <strong>is_allowed_filesize</strong>()</code>
@@ -643,10 +669,10 @@ but so far I haven't found that it causes trouble.</p><dl>
 
 
 
-<div class='method'><a href="../source/libraries/upload.php.html#line552" class="location">libraries/Upload.php at line 552</a>
+<div class='method'><a href="../source/libraries/upload.php.html#line586" class="location">libraries/Upload.php at line 586</a>
 
 <h3 id="is_allowed_filetype()">is_allowed_filetype</h3>
-<code class="signature">public  void <strong>is_allowed_filetype</strong>()</code>
+<code class="signature">public  void <strong>is_allowed_filetype</strong>(bool ignore_mime)</code>
 <div class="details">
 <p>Verify that the filetype is allowed</p><dl>
 <dt>Access	public.</dt>
@@ -656,7 +682,7 @@ but so far I haven't found that it causes trouble.</p><dl>
 
 
 
-<div class='method'><a href="../source/libraries/upload.php.html#line517" class="location">libraries/Upload.php at line 517</a>
+<div class='method'><a href="../source/libraries/upload.php.html#line551" class="location">libraries/Upload.php at line 551</a>
 
 <h3 id="is_image()">is_image</h3>
 <code class="signature">public  void <strong>is_image</strong>()</code>
@@ -669,7 +695,7 @@ but so far I haven't found that it causes trouble.</p><dl>
 
 
 
-<div class='method'><a href="../source/libraries/upload.php.html#line758" class="location">libraries/Upload.php at line 758</a>
+<div class='method'><a href="../source/libraries/upload.php.html#line803" class="location">libraries/Upload.php at line 803</a>
 
 <h3 id="limit_filename_length()">limit_filename_length</h3>
 <code class="signature">public  void <strong>limit_filename_length</strong>(mixed filename, mixed length)</code>
@@ -683,7 +709,7 @@ but so far I haven't found that it causes trouble.</p><dl>
 
 
 
-<div class='method'><a href="../source/libraries/upload.php.html#line880" class="location">libraries/Upload.php at line 880</a>
+<div class='method'><a href="../source/libraries/upload.php.html#line961" class="location">libraries/Upload.php at line 961</a>
 
 <h3 id="mimes_types()">mimes_types</h3>
 <code class="signature">public  void <strong>mimes_types</strong>(mixed mime)</code>
@@ -698,7 +724,7 @@ the "allowed types" set by the developer</p><dl>
 
 
 
-<div class='method'><a href="../source/libraries/upload.php.html#line455" class="location">libraries/Upload.php at line 455</a>
+<div class='method'><a href="../source/libraries/upload.php.html#line484" class="location">libraries/Upload.php at line 484</a>
 
 <h3 id="set_allowed_types()">set_allowed_types</h3>
 <code class="signature">public  void <strong>set_allowed_types</strong>(mixed types)</code>
@@ -712,7 +738,7 @@ the "allowed types" set by the developer</p><dl>
 
 
 
-<div class='method'><a href="../source/libraries/upload.php.html#line825" class="location">libraries/Upload.php at line 825</a>
+<div class='method'><a href="../source/libraries/upload.php.html#line906" class="location">libraries/Upload.php at line 906</a>
 
 <h3 id="set_error()">set_error</h3>
 <code class="signature">public  void <strong>set_error</strong>(mixed msg)</code>
@@ -726,7 +752,7 @@ the "allowed types" set by the developer</p><dl>
 
 
 
-<div class='method'><a href="../source/libraries/upload.php.html#line354" class="location">libraries/Upload.php at line 354</a>
+<div class='method'><a href="../source/libraries/upload.php.html#line383" class="location">libraries/Upload.php at line 383</a>
 
 <h3 id="set_filename()">set_filename</h3>
 <code class="signature">public  void <strong>set_filename</strong>(mixed path, mixed filename)</code>
@@ -741,7 +767,7 @@ number to the end of the filename to avoid overwriting a pre-existing file.</p><
 
 
 
-<div class='method'><a href="../source/libraries/upload.php.html#line471" class="location">libraries/Upload.php at line 471</a>
+<div class='method'><a href="../source/libraries/upload.php.html#line505" class="location">libraries/Upload.php at line 505</a>
 
 <h3 id="set_image_properties()">set_image_properties</h3>
 <code class="signature">public  void <strong>set_image_properties</strong>(str path)</code>
@@ -755,7 +781,7 @@ number to the end of the filename to avoid overwriting a pre-existing file.</p><
 
 
 
-<div class='method'><a href="../source/libraries/upload.php.html#line413" class="location">libraries/Upload.php at line 413</a>
+<div class='method'><a href="../source/libraries/upload.php.html#line442" class="location">libraries/Upload.php at line 442</a>
 
 <h3 id="set_max_filename()">set_max_filename</h3>
 <code class="signature">public  void <strong>set_max_filename</strong>(mixed n)</code>
@@ -769,7 +795,7 @@ number to the end of the filename to avoid overwriting a pre-existing file.</p><
 
 
 
-<div class='method'><a href="../source/libraries/upload.php.html#line399" class="location">libraries/Upload.php at line 399</a>
+<div class='method'><a href="../source/libraries/upload.php.html#line428" class="location">libraries/Upload.php at line 428</a>
 
 <h3 id="set_max_filesize()">set_max_filesize</h3>
 <code class="signature">public  void <strong>set_max_filesize</strong>(mixed n)</code>
@@ -783,7 +809,7 @@ number to the end of the filename to avoid overwriting a pre-existing file.</p><
 
 
 
-<div class='method'><a href="../source/libraries/upload.php.html#line441" class="location">libraries/Upload.php at line 441</a>
+<div class='method'><a href="../source/libraries/upload.php.html#line470" class="location">libraries/Upload.php at line 470</a>
 
 <h3 id="set_max_height()">set_max_height</h3>
 <code class="signature">public  void <strong>set_max_height</strong>(mixed n)</code>
@@ -797,7 +823,7 @@ number to the end of the filename to avoid overwriting a pre-existing file.</p><
 
 
 
-<div class='method'><a href="../source/libraries/upload.php.html#line427" class="location">libraries/Upload.php at line 427</a>
+<div class='method'><a href="../source/libraries/upload.php.html#line456" class="location">libraries/Upload.php at line 456</a>
 
 <h3 id="set_max_width()">set_max_width</h3>
 <code class="signature">public  void <strong>set_max_width</strong>(mixed n)</code>
@@ -811,7 +837,7 @@ number to the end of the filename to avoid overwriting a pre-existing file.</p><
 
 
 
-<div class='method'><a href="../source/libraries/upload.php.html#line334" class="location">libraries/Upload.php at line 334</a>
+<div class='method'><a href="../source/libraries/upload.php.html#line363" class="location">libraries/Upload.php at line 363</a>
 
 <h3 id="set_upload_path()">set_upload_path</h3>
 <code class="signature">public  void <strong>set_upload_path</strong>(mixed path)</code>
@@ -825,7 +851,7 @@ number to the end of the filename to avoid overwriting a pre-existing file.</p><
 
 
 
-<div class='method'><a href="../source/libraries/upload.php.html#line504" class="location">libraries/Upload.php at line 504</a>
+<div class='method'><a href="../source/libraries/upload.php.html#line538" class="location">libraries/Upload.php at line 538</a>
 
 <h3 id="set_xss_clean()">set_xss_clean</h3>
 <code class="signature">public  void <strong>set_xss_clean</strong>(bool flag)</code>
@@ -840,7 +866,7 @@ will be run through the XSS filter.</p><dl>
 
 
 
-<div class='method'><a href="../source/libraries/upload.php.html#line660" class="location">libraries/Upload.php at line 660</a>
+<div class='method'><a href="../source/libraries/upload.php.html#line705" class="location">libraries/Upload.php at line 705</a>
 
 <h3 id="validate_upload_path()">validate_upload_path</h3>
 <code class="signature">public  void <strong>validate_upload_path</strong>()</code>

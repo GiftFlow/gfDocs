@@ -6,7 +6,7 @@
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 
 <meta name="generator" content="PHPDoctor 2RC4 (http://peej.github.com/phpdoctor/)">
-<meta name="when" content="Mon, 19 Jul 2010 17:13:55 +0000">
+<meta name="when" content="Sat, 24 Jul 2010 20:46:31 +0000">
 
 <link rel="stylesheet" type="text/css" href="../stylesheet.css">
 <link rel="start" href="../overview-summary.html">
@@ -217,6 +217,10 @@ locally called ones.</p></td>
 </tr>
 <tr>
 <td class="type">private  void</td>
+<td class="description"><p class="name"><a href="#_object_to_array_batch()">_object_to_array_batch</a>(mixed object)</p><p class="description">Object to ArrayTakes an object as input and converts the class variables to array key/vals</p></td>
+</tr>
+<tr>
+<td class="type">private  void</td>
 <td class="description"><p class="name"><a href="#_reset_run()">_reset_run</a>(mixed ar_reset_items)</p><p class="description">Resets the active record values. </p></td>
 </tr>
 <tr>
@@ -304,6 +308,10 @@ groupby() has been deprecated</p></td>
 </tr>
 <tr>
 <td class="type"> void</td>
+<td class="description"><p class="name"><a href="#insert_batch()">insert_batch</a>(str table, mixed set)</p><p class="description">Insert_BatchCompiles batch insert strings and runs the queries</p></td>
+</tr>
+<tr>
+<td class="type"> void</td>
 <td class="description"><p class="name"><a href="#join()">join</a>(mixed table, mixed cond, str type)</p><p class="description">JoinGenerates the JOIN portion of the query</p></td>
 </tr>
 <tr>
@@ -378,6 +386,10 @@ orwhere() has been deprecated</p></td>
 </tr>
 <tr>
 <td class="type"> void</td>
+<td class="description"><p class="name"><a href="#replace()">replace</a>(str table, mixed set)</p></td>
+</tr>
+<tr>
+<td class="type"> void</td>
 <td class="description"><p class="name"><a href="#select()">select</a>(str select, mixed escape)</p><p class="description">SelectGenerates the SELECT portion of the query</p></td>
 </tr>
 <tr>
@@ -402,6 +414,14 @@ orwhere() has been deprecated</p></td>
 </tr>
 <tr>
 <td class="type"> void</td>
+<td class="description"><p class="name"><a href="#set_insert_batch()">set_insert_batch</a>(mixed key, str value, bool escape)</p><p class="description">The "set_insert_batch" function. </p></td>
+</tr>
+<tr>
+<td class="type"> void</td>
+<td class="description"><p class="name"><a href="#set_update_batch()">set_update_batch</a>(mixed key, str index, bool escape)</p><p class="description">The "set_update_batch" function. </p></td>
+</tr>
+<tr>
+<td class="type"> void</td>
 <td class="description"><p class="name"><a href="#start_cache()">start_cache</a>()</p><p class="description">Start CacheStarts AR caching</p></td>
 </tr>
 <tr>
@@ -417,6 +437,10 @@ This function maps to "DELETE FROM table"</p></td>
 <tr>
 <td class="type"> void</td>
 <td class="description"><p class="name"><a href="#update()">update</a>(str table, mixed set, mixed where, mixed limit)</p><p class="description">UpdateCompiles an update string and runs the query</p></td>
+</tr>
+<tr>
+<td class="type"> void</td>
+<td class="description"><p class="name"><a href="#update_batch()">update_batch</a>(str table, mixed set, mixed index)</p><p class="description">Update_BatchCompiles an update string and runs the query</p></td>
 </tr>
 <tr>
 <td class="type"> void</td>
@@ -683,7 +707,7 @@ with AND if appropriate</p></td>
 <hr>
 
 <h2 id="detail_method">Method Detail</h2><div class="method_detail">
-<div class='method'><a href="../source/database/db_active_rec.php.html#line1481" class="location">database/DB_active_rec.php at line 1481</a>
+<div class='method'><a href="../source/database/db_active_rec.php.html#line1764" class="location">database/DB_active_rec.php at line 1764</a>
 
 <h3 id="_compile_select()">_compile_select</h3>
 <code class="signature">private  void <strong>_compile_select</strong>(bool select_override)</code>
@@ -758,7 +782,7 @@ select_sum()</p><dl>
 
 
 
-<div class='method'><a href="../source/database/db_active_rec.php.html#line1714" class="location">database/DB_active_rec.php at line 1714</a>
+<div class='method'><a href="../source/database/db_active_rec.php.html#line2037" class="location">database/DB_active_rec.php at line 2037</a>
 
 <h3 id="_merge_cache()">_merge_cache</h3>
 <code class="signature">private  void <strong>_merge_cache</strong>()</code>
@@ -772,7 +796,7 @@ locally called ones.</p><dl>
 
 
 
-<div class='method'><a href="../source/database/db_active_rec.php.html#line1625" class="location">database/DB_active_rec.php at line 1625</a>
+<div class='method'><a href="../source/database/db_active_rec.php.html#line1908" class="location">database/DB_active_rec.php at line 1908</a>
 
 <h3 id="_object_to_array()">_object_to_array</h3>
 <code class="signature">private  void <strong>_object_to_array</strong>(mixed object)</code>
@@ -786,7 +810,21 @@ locally called ones.</p><dl>
 
 
 
-<div class='method'><a href="../source/database/db_active_rec.php.html#line1751" class="location">database/DB_active_rec.php at line 1751</a>
+<div class='method'><a href="../source/database/db_active_rec.php.html#line1939" class="location">database/DB_active_rec.php at line 1939</a>
+
+<h3 id="_object_to_array_batch()">_object_to_array_batch</h3>
+<code class="signature">private  void <strong>_object_to_array_batch</strong>(mixed object)</code>
+<div class="details">
+<p>Object to Array</p><p>Takes an object as input and converts the class variables to array key/vals</p><dl>
+<dt>Access	public.</dt>
+<dt>Param	object.</dt>
+<dt>Return	array.</dt>
+</dl>
+</div></div>
+
+
+
+<div class='method'><a href="../source/database/db_active_rec.php.html#line2074" class="location">database/DB_active_rec.php at line 2074</a>
 
 <h3 id="_reset_run()">_reset_run</h3>
 <code class="signature">private  void <strong>_reset_run</strong>(mixed ar_reset_items)</code>
@@ -801,7 +839,7 @@ locally called ones.</p><dl>
 
 
 
-<div class='method'><a href="../source/database/db_active_rec.php.html#line1770" class="location">database/DB_active_rec.php at line 1770</a>
+<div class='method'><a href="../source/database/db_active_rec.php.html#line2093" class="location">database/DB_active_rec.php at line 2093</a>
 
 <h3 id="_reset_select()">_reset_select</h3>
 <code class="signature">private  void <strong>_reset_select</strong>()</code>
@@ -814,7 +852,7 @@ locally called ones.</p><dl>
 
 
 
-<div class='method'><a href="../source/database/db_active_rec.php.html#line1802" class="location">database/DB_active_rec.php at line 1802</a>
+<div class='method'><a href="../source/database/db_active_rec.php.html#line2125" class="location">database/DB_active_rec.php at line 2125</a>
 
 <h3 id="_reset_write()">_reset_write</h3>
 <code class="signature">private  void <strong>_reset_write</strong>()</code>
@@ -827,7 +865,7 @@ locally called ones.</p><dl>
 
 
 
-<div class='method'><a href="../source/database/db_active_rec.php.html#line1435" class="location">database/DB_active_rec.php at line 1435</a>
+<div class='method'><a href="../source/database/db_active_rec.php.html#line1718" class="location">database/DB_active_rec.php at line 1718</a>
 
 <h3 id="_track_aliases()">_track_aliases</h3>
 <code class="signature">private  void <strong>_track_aliases</strong>(mixed table)</code>
@@ -891,7 +929,7 @@ returned by an Active Record query.</p><dl>
 
 
 
-<div class='method'><a href="../source/database/db_active_rec.php.html#line1414" class="location">database/DB_active_rec.php at line 1414</a>
+<div class='method'><a href="../source/database/db_active_rec.php.html#line1697" class="location">database/DB_active_rec.php at line 1697</a>
 
 <h3 id="dbprefix()">dbprefix</h3>
 <code class="signature">public  void <strong>dbprefix</strong>(str table)</code>
@@ -906,7 +944,7 @@ returned by an Active Record query.</p><dl>
 
 
 
-<div class='method'><a href="../source/database/db_active_rec.php.html#line1340" class="location">database/DB_active_rec.php at line 1340</a>
+<div class='method'><a href="../source/database/db_active_rec.php.html#line1623" class="location">database/DB_active_rec.php at line 1623</a>
 
 <h3 id="delete()">delete</h3>
 <code class="signature">public  void <strong>delete</strong>(str table, str where, mixed limit, bool reset_data)</code>
@@ -938,7 +976,7 @@ returned by an Active Record query.</p><dl>
 
 
 
-<div class='method'><a href="../source/database/db_active_rec.php.html#line1259" class="location">database/DB_active_rec.php at line 1259</a>
+<div class='method'><a href="../source/database/db_active_rec.php.html#line1542" class="location">database/DB_active_rec.php at line 1542</a>
 
 <h3 id="empty_table()">empty_table</h3>
 <code class="signature">public  void <strong>empty_table</strong>(str table)</code>
@@ -953,7 +991,7 @@ returned by an Active Record query.</p><dl>
 
 
 
-<div class='method'><a href="../source/database/db_active_rec.php.html#line1685" class="location">database/DB_active_rec.php at line 1685</a>
+<div class='method'><a href="../source/database/db_active_rec.php.html#line2008" class="location">database/DB_active_rec.php at line 2008</a>
 
 <h3 id="flush_cache()">flush_cache</h3>
 <code class="signature">public  void <strong>flush_cache</strong>()</code>
@@ -1065,12 +1103,29 @@ groupby() has been deprecated</p></div></div>
 
 
 
-<div class='method'><a href="../source/database/db_active_rec.php.html#line1150" class="location">database/DB_active_rec.php at line 1150</a>
+<div class='method'><a href="../source/database/db_active_rec.php.html#line1270" class="location">database/DB_active_rec.php at line 1270</a>
 
 <h3 id="insert()">insert</h3>
 <code class="signature">public  void <strong>insert</strong>(str table, mixed set)</code>
 <div class="details">
 <p>Insert</p><p>Compiles an insert string and runs the query</p><dl>
+<dt>Access	public.</dt>
+<dt>Param	string	the:</dt>
+<dd>table to retrieve the results from</dd>
+<dt>Param	array	an:</dt>
+<dd>associative array of insert values</dd>
+<dt>Return	object.</dt>
+</dl>
+</div></div>
+
+
+
+<div class='method'><a href="../source/database/db_active_rec.php.html#line1150" class="location">database/DB_active_rec.php at line 1150</a>
+
+<h3 id="insert_batch()">insert_batch</h3>
+<code class="signature">public  void <strong>insert_batch</strong>(str table, mixed set)</code>
+<div class="details">
+<p>Insert_Batch</p><p>Compiles batch insert strings and runs the queries</p><dl>
 <dt>Access	public.</dt>
 <dt>Param	string	the:</dt>
 <dd>table to retrieve the results from</dd>
@@ -1309,6 +1364,15 @@ orwhere() has been deprecated</p></div></div>
 
 
 
+<div class='method'><a href="../source/database/db_active_rec.php.html#line1306" class="location">database/DB_active_rec.php at line 1306</a>
+
+<h3 id="replace()">replace</h3>
+<code class="signature">public  void <strong>replace</strong>(str table, mixed set)</code>
+<div class="details">
+</div></div>
+
+
+
 <div class='method'><a href="../source/database/db_active_rec.php.html#line73" class="location">database/DB_active_rec.php at line 73</a>
 
 <h3 id="select()">select</h3>
@@ -1407,7 +1471,39 @@ orwhere() has been deprecated</p></div></div>
 
 
 
-<div class='method'><a href="../source/database/db_active_rec.php.html#line1655" class="location">database/DB_active_rec.php at line 1655</a>
+<div class='method'><a href="../source/database/db_active_rec.php.html#line1210" class="location">database/DB_active_rec.php at line 1210</a>
+
+<h3 id="set_insert_batch()">set_insert_batch</h3>
+<code class="signature">public  void <strong>set_insert_batch</strong>(mixed key, str value, bool escape)</code>
+<div class="details">
+<p>The "set_insert_batch" function.  Allows key/value pairs to be set for batch inserts</p><dl>
+<dt>Access	public.</dt>
+<dt>Param	mixed.</dt>
+<dt>Param	string.</dt>
+<dt>Param	boolean.</dt>
+<dt>Return	object.</dt>
+</dl>
+</div></div>
+
+
+
+<div class='method'><a href="../source/database/db_active_rec.php.html#line1485" class="location">database/DB_active_rec.php at line 1485</a>
+
+<h3 id="set_update_batch()">set_update_batch</h3>
+<code class="signature">public  void <strong>set_update_batch</strong>(mixed key, str index, bool escape)</code>
+<div class="details">
+<p>The "set_update_batch" function.  Allows key/value pairs to be set for batch updating</p><dl>
+<dt>Access	public.</dt>
+<dt>Param	array.</dt>
+<dt>Param	string.</dt>
+<dt>Param	boolean.</dt>
+<dt>Return	object.</dt>
+</dl>
+</div></div>
+
+
+
+<div class='method'><a href="../source/database/db_active_rec.php.html#line1978" class="location">database/DB_active_rec.php at line 1978</a>
 
 <h3 id="start_cache()">start_cache</h3>
 <code class="signature">public  void <strong>start_cache</strong>()</code>
@@ -1420,7 +1516,7 @@ orwhere() has been deprecated</p></div></div>
 
 
 
-<div class='method'><a href="../source/database/db_active_rec.php.html#line1670" class="location">database/DB_active_rec.php at line 1670</a>
+<div class='method'><a href="../source/database/db_active_rec.php.html#line1993" class="location">database/DB_active_rec.php at line 1993</a>
 
 <h3 id="stop_cache()">stop_cache</h3>
 <code class="signature">public  void <strong>stop_cache</strong>()</code>
@@ -1433,7 +1529,7 @@ orwhere() has been deprecated</p></div></div>
 
 
 
-<div class='method'><a href="../source/database/db_active_rec.php.html#line1299" class="location">database/DB_active_rec.php at line 1299</a>
+<div class='method'><a href="../source/database/db_active_rec.php.html#line1582" class="location">database/DB_active_rec.php at line 1582</a>
 
 <h3 id="truncate()">truncate</h3>
 <code class="signature">public  void <strong>truncate</strong>(str table)</code>
@@ -1450,7 +1546,7 @@ This function maps to "DELETE FROM table"</p><dl>
 
 
 
-<div class='method'><a href="../source/database/db_active_rec.php.html#line1199" class="location">database/DB_active_rec.php at line 1199</a>
+<div class='method'><a href="../source/database/db_active_rec.php.html#line1355" class="location">database/DB_active_rec.php at line 1355</a>
 
 <h3 id="update()">update</h3>
 <code class="signature">public  void <strong>update</strong>(str table, mixed set, mixed where, mixed limit)</code>
@@ -1463,6 +1559,24 @@ This function maps to "DELETE FROM table"</p><dl>
 <dd>associative array of update values</dd>
 <dt>Param	mixed	the:</dt>
 <dd>where clause</dd>
+<dt>Return	object.</dt>
+</dl>
+</div></div>
+
+
+
+<div class='method'><a href="../source/database/db_active_rec.php.html#line1418" class="location">database/DB_active_rec.php at line 1418</a>
+
+<h3 id="update_batch()">update_batch</h3>
+<code class="signature">public  void <strong>update_batch</strong>(str table, mixed set, mixed index)</code>
+<div class="details">
+<p>Update_Batch</p><p>Compiles an update string and runs the query</p><dl>
+<dt>Access	public.</dt>
+<dt>Param	string	the:</dt>
+<dd>table to retrieve the results from</dd>
+<dd>where key</dd>
+<dt>Param	array	an:</dt>
+<dd>associative array of update values</dd>
 <dt>Return	object.</dt>
 </dl>
 </div></div>

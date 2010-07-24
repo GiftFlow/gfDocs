@@ -6,7 +6,7 @@
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 
 <meta name="generator" content="PHPDoctor 2RC4 (http://peej.github.com/phpdoctor/)">
-<meta name="when" content="Fri, 18 Jun 2010 15:58:03 +0000">
+<meta name="when" content="Sat, 24 Jul 2010 20:47:45 +0000">
 
 <link rel="stylesheet" type="text/css" href="../../../stylesheet.css">
 <link rel="start" href="../../../overview-summary.html">
@@ -82,124 +82,126 @@
 <a name="line45"></a>		
 <a name="line46"></a>		
 <a name="line47"></a>		<div id='request_gift' class='wizard_panel <?php echo $menu['request_gift']; ?>'>
-<a name="line48"></a>			<h2>Request the Gift</h2>
-<a name="line49"></a>		</div>
-<a name="line50"></a>		<div id='arrange_meeting' class='wizard_panel <?php echo $menu['arrange_meeting']; ?>'>
-<a name="line51"></a>			<h2>Arrange a Meeting</h2>
-<a name="line52"></a>			<?php
-<a name="line53"></a>			/* 
-<a name="line54"></a>			*	Outline.
-<a name="line55"></a>			*
-<a name="line56"></a>			*	Interface should resemble Tumblr, with the following being the post types
+<a name="line48"></a>			<h2>Gift Requested</h2>
+<a name="line49"></a>			<p>Request Status: <span style='font-style: italic; color: #aaa; font-family: georgia;'><?php echo $request->status; ?></span></p>
+<a name="line50"></a>			<a href="<?php echo site_url('gift/'.$G->id.'/unrequest'); ?>">Cancel this Request</a>
+<a name="line51"></a>		</div>
+<a name="line52"></a>		<div id='arrange_meeting' class='wizard_panel <?php echo $menu['arrange_meeting']; ?>'>
+<a name="line53"></a>			<h2>Arrange a Meeting</h2>
+<a name="line54"></a>			<?php
+<a name="line55"></a>			/* 
+<a name="line56"></a>			*	Outline.
 <a name="line57"></a>			*
-<a name="line58"></a>			*	1) Share your contact information
-<a name="line59"></a>			*	2) Suggest a location
-<a name="line60"></a>			*	3) Suggest a time
-<a name="line61"></a>			*	4) Say something
-<a name="line62"></a>			*	5) "Gift given" button / "Confirm that gift was given"
-<a name="line63"></a>			*/
-<a name="line64"></a>			?>
-<a name="line65"></a>			<p><?php echo $G->user->screen_name; ?> wants to give <?php echo $G->title; ?> to you. Now let's set up a meeting between you.</p>
-<a name="line66"></a>			<h3>Say Something!</h3>
-<a name="line67"></a>			<div id='say_something' class='ui-widget'>
-<a name="line68"></a>				<img src='<?php echo site_url('api/member/'.$logged_in_user_id.'/photo/thumb'); ?>' class='thumb css_left' />
-<a name="line69"></a>				<form name='arrange_meeting' method='post' action='<?php echo current_url(); ?>/message'>
-<a name="line70"></a>					<textarea name='message'></textarea>
-<a name="line71"></a>					<br />
-<a name="line72"></a>					<input type='submit' value='Say It' class='css_right'>
-<a name="line73"></a>				</form>
-<a name="line74"></a>				<div class='clear'></div>
-<a name="line75"></a>			</div>
-<a name="line76"></a>			<div id='conversation'>
-<a name="line77"></a>			<h3>The Conversation</h3>
-<a name="line78"></a>			<ul>
-<a name="line79"></a>			<?php foreach($messages as $msg) {  ?>
-<a name="line80"></a>			<li>
-<a name="line81"></a>				<div class='author'>
-<a name="line82"></a>					<img src='<?php echo site_url('api/member/'.$msg['author_id'].'/photo/thumb'); ?>' class='thumb css_left' />
-<a name="line83"></a>					<a class='author_link' href='<?php echo site_url('profile/'.$msg['author_id']); ?>'>
-<a name="line84"></a>					<?php if($msg['author_id']==$logged_in_user_id) echo "You"; else echo $msg['screen_name']; ?></a>
-<a name="line85"></a>					<p class='time_ago'><?php echo time_ago( strtotime( $msg['created'] ) - 4000 ); ?></p>
-<a name="line86"></a>				</div>
-<a name="line87"></a>				<p class='message'><?php echo nl2br($msg['body']); ?></p>
-<a name="line88"></a>				<div class='clear'></div>
-<a name="line89"></a>			</li>
-<a name="line90"></a>			<?php } ?>
-<a name="line91"></a>			</ul>
-<a name="line92"></a>			</div>
-<a name="line93"></a>			<a class='button' href='<?php echo site_url('gift/'.$G->id . '/exchanged/' . $request->id);  ?>'>Gift Exchanged</a>
-<a name="line94"></a>		</div>
-<a name="line95"></a>		<div id='leave_feedback' class='wizard_panel <?php echo $menu['leave_feedback']; ?>'>
-<a name="line96"></a>			<h2>Leave Feedback</h2>
-<a name="line97"></a>			<form name='feedback' id='feedback' method='post' class='ui-widget' action="<?php echo site_url('gift/'.$G->id); ?>">
-<a name="line98"></a>			<p>
-<a name="line99"></a>				<label>Do you have any comments about this transaction?</label>
-<a name="line100"></a>				<textarea name='comment'></textarea>
-<a name="line101"></a>			</p>
-<a name="line102"></a>			<p>
-<a name="line103"></a>				<label>Rate this transaction</label>
-<a name="line104"></a>				<select name='rating'>
-<a name="line105"></a>					<option>Rate this transaction</option>
-<a name="line106"></a>					<option value='positive'>Positive</option>
-<a name="line107"></a>					<option value='neutral'>Neutral</option>
-<a name="line108"></a>					<option value='negative'>Negative</option>
-<a name="line109"></a>				</select>
-<a name="line110"></a>			</p>
-<a name="line111"></a>			<p>
-<a name="line112"></a>				<input type='submit' value='Save' />
-<a name="line113"></a>			</p>
-<a name="line114"></a>			</form>
-<a name="line115"></a>		</div>
-<a name="line116"></a>		<div style='clear: both;'></div>
-<a name="line117"></a>	</div>
-<a name="line118"></a>
-<a name="line119"></a>
-<a name="line120"></a></div>
+<a name="line58"></a>			*	Interface should resemble Tumblr, with the following being the post types
+<a name="line59"></a>			*
+<a name="line60"></a>			*	1) Share your contact information
+<a name="line61"></a>			*	2) Suggest a location
+<a name="line62"></a>			*	3) Suggest a time
+<a name="line63"></a>			*	4) Say something
+<a name="line64"></a>			*	5) "Gift given" button / "Confirm that gift was given"
+<a name="line65"></a>			*/
+<a name="line66"></a>			?>
+<a name="line67"></a>			<p><?php echo $G->user->screen_name; ?> wants to give <?php echo $G->title; ?> to you. Now let's set up a meeting between you.</p>
+<a name="line68"></a>			<h3>Say Something!</h3>
+<a name="line69"></a>			<div id='say_something' class='ui-widget'>
+<a name="line70"></a>				<img src='<?php echo site_url('api/member/'.$logged_in_user_id.'/photo/thumb'); ?>' class='thumb css_left' />
+<a name="line71"></a>				<form name='arrange_meeting' method='post' action='<?php echo current_url(); ?>/message'>
+<a name="line72"></a>					<textarea name='message'></textarea>
+<a name="line73"></a>					<br />
+<a name="line74"></a>					<input type='submit' value='Say It' class='css_right'>
+<a name="line75"></a>				</form>
+<a name="line76"></a>				<div class='clear'></div>
+<a name="line77"></a>			</div>
+<a name="line78"></a>			<div id='conversation'>
+<a name="line79"></a>			<h3>The Conversation</h3>
+<a name="line80"></a>			<ul>
+<a name="line81"></a>			<?php foreach($messages as $msg) {  ?>
+<a name="line82"></a>			<li>
+<a name="line83"></a>				<div class='author'>
+<a name="line84"></a>					<img src='<?php echo site_url('api/member/'.$msg['author_id'].'/photo/thumb'); ?>' class='thumb css_left' />
+<a name="line85"></a>					<a class='author_link' href='<?php echo site_url('profile/'.$msg['author_id']); ?>'>
+<a name="line86"></a>					<?php if($msg['author_id']==$logged_in_user_id) echo "You"; else echo $msg['screen_name']; ?></a>
+<a name="line87"></a>					<p class='time_ago'><?php echo time_ago( strtotime( $msg['created'] ) - 4000 ); ?></p>
+<a name="line88"></a>				</div>
+<a name="line89"></a>				<p class='message'><?php echo nl2br($msg['body']); ?></p>
+<a name="line90"></a>				<div class='clear'></div>
+<a name="line91"></a>			</li>
+<a name="line92"></a>			<?php } ?>
+<a name="line93"></a>			</ul>
+<a name="line94"></a>			</div>
+<a name="line95"></a>			<a class='button' href='<?php echo site_url('gift/'.$G->id . '/exchanged/' . $request->id);  ?>'>Gift Exchanged</a>
+<a name="line96"></a>		</div>
+<a name="line97"></a>		<div id='leave_feedback' class='wizard_panel <?php echo $menu['leave_feedback']; ?>'>
+<a name="line98"></a>			<h2>Leave Feedback</h2>
+<a name="line99"></a>			<form name='feedback' id='feedback' method='post' class='ui-widget' action="<?php echo site_url('gift/'.$G->id); ?>">
+<a name="line100"></a>			<p>
+<a name="line101"></a>				<label>Do you have any comments about this transaction?</label>
+<a name="line102"></a>				<textarea name='comment'></textarea>
+<a name="line103"></a>			</p>
+<a name="line104"></a>			<p>
+<a name="line105"></a>				<label>Rate this transaction</label>
+<a name="line106"></a>				<select name='rating'>
+<a name="line107"></a>					<option>Rate this transaction</option>
+<a name="line108"></a>					<option value='positive'>Positive</option>
+<a name="line109"></a>					<option value='neutral'>Neutral</option>
+<a name="line110"></a>					<option value='negative'>Negative</option>
+<a name="line111"></a>				</select>
+<a name="line112"></a>			</p>
+<a name="line113"></a>			<p>
+<a name="line114"></a>				<input type='submit' value='Save' />
+<a name="line115"></a>			</p>
+<a name="line116"></a>			</form>
+<a name="line117"></a>		</div>
+<a name="line118"></a>		<div style='clear: both;'></div>
+<a name="line119"></a>	</div>
+<a name="line120"></a>
 <a name="line121"></a>
-<a name="line122"></a><div class='jqmWindow' id='social_iframe' style='display: none;'>
-<a name="line123"></a>	<iframe src=''>
-<a name="line124"></a>	</iframe>
-<a name="line125"></a></div>
-<a name="line126"></a>
-<a name="line127"></a><script>
-<a name="line128"></a>var tags = new Array();
-<a name="line129"></a>$(function(){
-<a name="line130"></a>
-<a name="line131"></a>	$("ul#gift_wizard_steps li a").click(function(){
-<a name="line132"></a>		if(!$(this).parent().hasClass("disabled"))
-<a name="line133"></a>		{
-<a name="line134"></a>			$("ul#gift_wizard_steps li").removeClass("active");
-<a name="line135"></a>			$(this).parent().addClass("active");
-<a name="line136"></a>			var id = "#" + $(this).attr("rel");
-<a name="line137"></a>			$(".wizard_panel").hide();
-<a name="line138"></a>			$(id).fadeIn();
-<a name="line139"></a>		}
-<a name="line140"></a>		return false;
-<a name="line141"></a>	});
-<a name="line142"></a>	
-<a name="line143"></a>	
-<a name="line144"></a>	/*
-<a name="line145"></a>	*  Toggle drawer
-<a name="line146"></a>	*/
-<a name="line147"></a>	
-<a name="line148"></a>	$("#edit_this_gift_info").click(drawer);
-<a name="line149"></a>	$("#cancel_edit").click(drawer);
-<a name="line150"></a>	
-<a name="line151"></a>	function drawer()
-<a name="line152"></a>	{
-<a name="line153"></a>		$("#edit_gift_form").slideToggle(1000);
-<a name="line154"></a>		$("#edit_this_gift_info").toggle();
-<a name="line155"></a>		$("#edit_this_gift_photos").toggle();
-<a name="line156"></a>		return false;
-<a name="line157"></a>	}
-<a name="line158"></a>	
-<a name="line159"></a>	$("input:submit").button();
-<a name="line160"></a>	/*
-<a name="line161"></a>	* Notifybar code
-<a name="line162"></a>	*/
-<a name="line163"></a>	<?php echo notify(); ?>
-<a name="line164"></a>});
-<a name="line165"></a></script></pre>
+<a name="line122"></a></div>
+<a name="line123"></a>
+<a name="line124"></a><div class='jqmWindow' id='social_iframe' style='display: none;'>
+<a name="line125"></a>	<iframe src=''>
+<a name="line126"></a>	</iframe>
+<a name="line127"></a></div>
+<a name="line128"></a>
+<a name="line129"></a><script>
+<a name="line130"></a>var tags = new Array();
+<a name="line131"></a>$(function(){
+<a name="line132"></a>
+<a name="line133"></a>	$("ul#gift_wizard_steps li a").click(function(){
+<a name="line134"></a>		if(!$(this).parent().hasClass("disabled"))
+<a name="line135"></a>		{
+<a name="line136"></a>			$("ul#gift_wizard_steps li").removeClass("active");
+<a name="line137"></a>			$(this).parent().addClass("active");
+<a name="line138"></a>			var id = "#" + $(this).attr("rel");
+<a name="line139"></a>			$(".wizard_panel").hide();
+<a name="line140"></a>			$(id).fadeIn();
+<a name="line141"></a>		}
+<a name="line142"></a>		return false;
+<a name="line143"></a>	});
+<a name="line144"></a>	
+<a name="line145"></a>	
+<a name="line146"></a>	/*
+<a name="line147"></a>	*  Toggle drawer
+<a name="line148"></a>	*/
+<a name="line149"></a>	
+<a name="line150"></a>	$("#edit_this_gift_info").click(drawer);
+<a name="line151"></a>	$("#cancel_edit").click(drawer);
+<a name="line152"></a>	
+<a name="line153"></a>	function drawer()
+<a name="line154"></a>	{
+<a name="line155"></a>		$("#edit_gift_form").slideToggle(1000);
+<a name="line156"></a>		$("#edit_this_gift_info").toggle();
+<a name="line157"></a>		$("#edit_this_gift_photos").toggle();
+<a name="line158"></a>		return false;
+<a name="line159"></a>	}
+<a name="line160"></a>	
+<a name="line161"></a>	$("input:submit").button();
+<a name="line162"></a>	/*
+<a name="line163"></a>	* Notifybar code
+<a name="line164"></a>	*/
+<a name="line165"></a>	<?php echo notify(); ?>
+<a name="line166"></a>});
+<a name="line167"></a></script></pre>
 <div class="header">
 <h1>GiftFlow API</h1>
 <ul>

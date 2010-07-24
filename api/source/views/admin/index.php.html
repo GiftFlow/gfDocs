@@ -6,7 +6,7 @@
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 
 <meta name="generator" content="PHPDoctor 2RC4 (http://peej.github.com/phpdoctor/)">
-<meta name="when" content="Fri, 18 Jun 2010 15:58:03 +0000">
+<meta name="when" content="Sat, 24 Jul 2010 20:47:45 +0000">
 
 <link rel="stylesheet" type="text/css" href="../../../stylesheet.css">
 <link rel="start" href="../../../overview-summary.html">
@@ -41,14 +41,20 @@
 <a name="line4"></a>	<li><a href='<?php echo site_url('admin/gifts'); ?>'>Gifts</a></li>
 <a name="line5"></a>	<li><a href='<?php echo site_url('admin/needs'); ?>'>Needs</a></li>
 <a name="line6"></a>	<li><a href='<?php echo site_url('admin/tags'); ?>'>Tags</a></li>
-<a name="line7"></a></ul>
+<a name="line7"></a>    <li><a href='<?php echo site_url('admin/alert_templates'); ?>'>Alert Templates</a></li>
 <a name="line8"></a>
-<a name="line9"></a><script>
-<a name="line10"></a>$(function(){
-<a name="line11"></a>	//$(".tabs").tabs();
-<a name="line12"></a>});
-<a name="line13"></a></script>
-<a name="line14"></a></pre>
+<a name="line9"></a></ul>
+<a name="line10"></a>
+<a name="line11"></a><a href='<?php echo site_url('admin/toggle_profiler'); ?>'>
+<a name="line12"></a>	Turn Profiler <?php echo $profiler ? "Off" : "On"; ?>
+<a name="line13"></a></a>
+<a name="line14"></a>
+<a name="line15"></a><script>
+<a name="line16"></a>$(function(){
+<a name="line17"></a>	//$(".tabs").tabs();
+<a name="line18"></a>});
+<a name="line19"></a></script>
+<a name="line20"></a></pre>
 <div class="header">
 <h1>GiftFlow API</h1>
 <ul>

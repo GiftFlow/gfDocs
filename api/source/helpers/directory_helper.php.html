@@ -6,7 +6,7 @@
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 
 <meta name="generator" content="PHPDoctor 2RC4 (http://peej.github.com/phpdoctor/)">
-<meta name="when" content="Mon, 19 Jul 2010 17:13:58 +0000">
+<meta name="when" content="Sat, 24 Jul 2010 20:46:31 +0000">
 
 <link rel="stylesheet" type="text/css" href="../../stylesheet.css">
 <link rel="start" href="../../overview-summary.html">
@@ -45,7 +45,7 @@
 <a name="line6"></a> *
 <a name="line7"></a> * @package		CodeIgniter
 <a name="line8"></a> * @author		ExpressionEngine Dev Team
-<a name="line9"></a> * @copyright	Copyright (c) 2008 - 2009, EllisLab, Inc.
+<a name="line9"></a> * @copyright	Copyright (c) 2008 - 2010, EllisLab, Inc.
 <a name="line10"></a> * @license		http://codeigniter.com/user_guide/license.html
 <a name="line11"></a> * @link		http://codeigniter.com
 <a name="line12"></a> * @since		Version 1.0
@@ -75,52 +75,48 @@
 <a name="line36"></a> *
 <a name="line37"></a> * @access	public
 <a name="line38"></a> * @param	string	path to source
-<a name="line39"></a> * @param	bool	whether to limit the result to the top level only
+<a name="line39"></a> * @param	int		depth of directories to traverse (0 = fully recursive, 1 = current dir, etc)
 <a name="line40"></a> * @return	array
 <a name="line41"></a> */	
 <a name="line42"></a>if ( ! function_exists('directory_map'))
 <a name="line43"></a>{
-<a name="line44"></a>	function directory_map($source_dir, $top_level_only = FALSE, $hidden = FALSE)
-<a name="line45"></a>	{	
+<a name="line44"></a>	function directory_map($source_dir, $directory_depth = 0, $hidden = FALSE)
+<a name="line45"></a>	{
 <a name="line46"></a>		if ($fp = @opendir($source_dir))
 <a name="line47"></a>		{
-<a name="line48"></a>			$source_dir = rtrim($source_dir, DIRECTORY_SEPARATOR).DIRECTORY_SEPARATOR;		
-<a name="line49"></a>			$filedata = array();
-<a name="line50"></a>			
-<a name="line51"></a>			while (FALSE !== ($file = readdir($fp)))
-<a name="line52"></a>			{
-<a name="line53"></a>				if (($hidden == FALSE && strncmp($file, '.', 1) == 0) OR ($file == '.' OR $file == '..'))
-<a name="line54"></a>				{
-<a name="line55"></a>					continue;
-<a name="line56"></a>				}
-<a name="line57"></a>				
-<a name="line58"></a>				if ($top_level_only == FALSE && @is_dir($source_dir.$file))
-<a name="line59"></a>				{
-<a name="line60"></a>					$temp_array = array();
-<a name="line61"></a>				
-<a name="line62"></a>					$temp_array = directory_map($source_dir.$file.DIRECTORY_SEPARATOR, $top_level_only, $hidden);
-<a name="line63"></a>				
-<a name="line64"></a>					$filedata[$file] = $temp_array;
-<a name="line65"></a>				}
-<a name="line66"></a>				else
-<a name="line67"></a>				{
-<a name="line68"></a>					$filedata[] = $file;
-<a name="line69"></a>				}
-<a name="line70"></a>			}
-<a name="line71"></a>			
-<a name="line72"></a>			closedir($fp);
-<a name="line73"></a>			return $filedata;
-<a name="line74"></a>		}
-<a name="line75"></a>		else
-<a name="line76"></a>		{
-<a name="line77"></a>			return FALSE;
-<a name="line78"></a>		}
-<a name="line79"></a>	}
-<a name="line80"></a>}
-<a name="line81"></a>
-<a name="line82"></a>
-<a name="line83"></a>/* End of file directory_helper.php */
-<a name="line84"></a>/* Location: ./system/helpers/directory_helper.php */</pre>
+<a name="line48"></a>			$filedata	= array();
+<a name="line49"></a>			$new_depth	= $directory_depth - 1;
+<a name="line50"></a>			$source_dir	= rtrim($source_dir, DIRECTORY_SEPARATOR).DIRECTORY_SEPARATOR;		
+<a name="line51"></a>						
+<a name="line52"></a>			while (FALSE !== ($file = readdir($fp)))
+<a name="line53"></a>			{
+<a name="line54"></a>				// Remove '.', '..', and hidden files [optional]
+<a name="line55"></a>				if ( ! trim($file, '.') OR ($hidden == FALSE && $file[0] == '.'))
+<a name="line56"></a>				{
+<a name="line57"></a>					continue;
+<a name="line58"></a>				}
+<a name="line59"></a>
+<a name="line60"></a>				if (($directory_depth < 1 OR $new_depth > 0) && @is_dir($source_dir.$file))
+<a name="line61"></a>				{
+<a name="line62"></a>					$filedata[$file] = directory_map($source_dir.$file.DIRECTORY_SEPARATOR, $new_depth, $hidden);
+<a name="line63"></a>				}
+<a name="line64"></a>				else
+<a name="line65"></a>				{
+<a name="line66"></a>					$filedata[] = $file;
+<a name="line67"></a>				}
+<a name="line68"></a>			}
+<a name="line69"></a>			
+<a name="line70"></a>			closedir($fp);
+<a name="line71"></a>			return $filedata;
+<a name="line72"></a>		}
+<a name="line73"></a>
+<a name="line74"></a>		return FALSE;
+<a name="line75"></a>	}
+<a name="line76"></a>}
+<a name="line77"></a>
+<a name="line78"></a>
+<a name="line79"></a>/* End of file directory_helper.php */
+<a name="line80"></a>/* Location: ./system/helpers/directory_helper.php */</pre>
 <div class="header">
 <h1>GiftFlow API</h1>
 <ul>

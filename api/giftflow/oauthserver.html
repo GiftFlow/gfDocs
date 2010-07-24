@@ -6,7 +6,7 @@
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 
 <meta name="generator" content="PHPDoctor 2RC4 (http://peej.github.com/phpdoctor/)">
-<meta name="when" content="Mon, 19 Jul 2010 17:13:56 +0000">
+<meta name="when" content="Sat, 24 Jul 2010 20:47:44 +0000">
 
 <link rel="stylesheet" type="text/css" href="../stylesheet.css">
 <link rel="start" href="../overview-summary.html">
@@ -40,7 +40,7 @@ Detail: <a href="#detail_field">Field</a> | <a href="#detail_method">Method</a> 
 <hr>
 
 <div class="qualifiedName">GiftFlow\OAuthServer</div>
-<a href="../source/application/libraries/oauth/oauthserver.php.html#line36" class="location">application/libraries/oauth/OAuthServer.php at line 36</a>
+<a href="../source/libraries/oauth/oauthserver.php.html#line36" class="location">libraries/oauth/OAuthServer.php at line 36</a>
 
 <h1>Class OAuthServer</h1>
 
@@ -56,7 +56,7 @@ Detail: <a href="#detail_field">Field</a> | <a href="#detail_method">Method</a> 
 
 <dl>
 <dt>Version:</dt>
-<dd>$Id: OAuthServer.php 51 2008-10-15 15:15:47Z marcw@pobox.com $</dd>
+<dd>$Id: OAuthServer.php 88 2010-02-19 18:20:35Z brunobg@corollarium.com $</dd>
 <dt>Author:</dt>
 <dd>Marc Worrell <marcw@pobox.com></dd>
 <dt>Date:</dt>
@@ -66,7 +66,7 @@ Detail: <a href="#detail_field">Field</a> | <a href="#detail_method">Method</a> 
 
 <table class="inherit">
 <tr><th colspan="2">Fields inherited from GiftFlow\OAuthRequestVerifier</th></tr>
-<tr><td><a href="../giftflow/oauthrequestverifier.html#getQueryString">getQueryString</a>, <a href="../giftflow/oauthrequestverifier.html#store">store</a></td></tr></table>
+<tr><td><a href="../giftflow/oauthrequestverifier.html#accepted_signatures">accepted_signatures</a>, <a href="../giftflow/oauthrequestverifier.html#getQueryString">getQueryString</a>, <a href="../giftflow/oauthrequestverifier.html#store">store</a></td></tr></table>
 
 <table class="inherit">
 <tr><th colspan="2">Fields inherited from GiftFlow\OAuthRequest</th></tr>
@@ -86,7 +86,7 @@ the authorization is finished. </p></td>
 </tr>
 <tr>
 <td class="type"> array</td>
-<td class="description"><p class="name"><a href="#authorizeVerify()">authorizeVerify</a>()</p><p class="description">Verify the start of an authorization request. </p></td>
+<td class="description"><p class="name"><a href="#authorizeVerify()">authorizeVerify</a>(string token)</p><p class="description">Verify the start of an authorization request. </p></td>
 </tr>
 <tr>
 <td class="type"> string</td>
@@ -97,14 +97,14 @@ the authorization is finished. </p></td>
 
 <table class="inherit">
 <tr><th colspan="2">Methods inherited from GiftFlow\OAuthRequestVerifier</th></tr>
-<tr><td><a href="../giftflow/oauthrequestverifier.html#__construct()">__construct</a>, <a href="../giftflow/oauthrequestverifier.html#requestIsSigned()">requestIsSigned</a>, <a href="../giftflow/oauthrequestverifier.html#verify()">verify</a>, <a href="../giftflow/oauthrequestverifier.html#verifyDataSignature()">verifyDataSignature</a>, <a href="../giftflow/oauthrequestverifier.html#verifyIfSigned()">verifyIfSigned</a>, <a href="../giftflow/oauthrequestverifier.html#verifySignature()">verifySignature</a></td></tr></table>
+<tr><td><a href="../giftflow/oauthrequestverifier.html#__construct()">__construct</a>, <a href="../giftflow/oauthrequestverifier.html#requestIsSigned()">requestIsSigned</a>, <a href="../giftflow/oauthrequestverifier.html#setAcceptedSignatureMethods()">setAcceptedSignatureMethods</a>, <a href="../giftflow/oauthrequestverifier.html#verify()">verify</a>, <a href="../giftflow/oauthrequestverifier.html#verifyDataSignature()">verifyDataSignature</a>, <a href="../giftflow/oauthrequestverifier.html#verifyExtended()">verifyExtended</a>, <a href="../giftflow/oauthrequestverifier.html#verifyIfSigned()">verifyIfSigned</a>, <a href="../giftflow/oauthrequestverifier.html#verifySignature()">verifySignature</a></td></tr></table>
 
 <table class="inherit">
 <tr><th colspan="2">Methods inherited from GiftFlow\OAuthRequest</th></tr>
 <tr><td><a href="../giftflow/oauthrequest.html#__construct()">__construct</a>, <a href="../giftflow/oauthrequest.html#calculateDataSignature()">calculateDataSignature</a>, <a href="../giftflow/oauthrequest.html#calculateSignature()">calculateSignature</a>, <a href="../giftflow/oauthrequest.html#checks()">checks</a>, <a href="../giftflow/oauthrequest.html#defaultPortForScheme()">defaultPortForScheme</a>, <a href="../giftflow/oauthrequest.html#getBody()">getBody</a>, <a href="../giftflow/oauthrequest.html#getMethod()">getMethod</a>, <a href="../giftflow/oauthrequest.html#getNormalizedParams()">getNormalizedParams</a>, <a href="../giftflow/oauthrequest.html#getParam()">getParam</a>, <a href="../giftflow/oauthrequest.html#getRequestBody()">getRequestBody</a>, <a href="../giftflow/oauthrequest.html#getRequestContentType()">getRequestContentType</a>, <a href="../giftflow/oauthrequest.html#getRequestUrl()">getRequestUrl</a>, <a href="../giftflow/oauthrequest.html#getSignatureMethod()">getSignatureMethod</a>, <a href="../giftflow/oauthrequest.html#parseHeaders()">parseHeaders</a>, <a href="../giftflow/oauthrequest.html#parseUri()">parseUri</a>, <a href="../giftflow/oauthrequest.html#redirect()">redirect</a>, <a href="../giftflow/oauthrequest.html#selectSignatureMethod()">selectSignatureMethod</a>, <a href="../giftflow/oauthrequest.html#setBody()">setBody</a>, <a href="../giftflow/oauthrequest.html#setParam()">setParam</a>, <a href="../giftflow/oauthrequest.html#signatureBaseString()">signatureBaseString</a>, <a href="../giftflow/oauthrequest.html#transcodeParams()">transcodeParams</a>, <a href="../giftflow/oauthrequest.html#urldecode()">urldecode</a>, <a href="../giftflow/oauthrequest.html#urlencode()">urlencode</a>, <a href="../giftflow/oauthrequest.html#urltranscode()">urltranscode</a></td></tr></table>
 
 <h2 id="detail_method">Method Detail</h2><div class="method_detail">
-<div class='method'><a href="../source/application/libraries/oauth/oauthserver.php.html#line186" class="location">application/libraries/oauth/OAuthServer.php at line 186</a>
+<div class='method'><a href="../source/libraries/oauth/oauthserver.php.html#line189" class="location">libraries/oauth/OAuthServer.php at line 189</a>
 
 <h3 id="accessToken()">accessToken</h3>
 <code class="signature">public  void <strong>accessToken</strong>()</code>
@@ -114,7 +114,7 @@ The exchange is only succesful iff the request token has been authorized.</p><p>
 
 
 
-<div class='method'><a href="../source/application/libraries/oauth/oauthserver.php.html#line136" class="location">application/libraries/oauth/OAuthServer.php at line 136</a>
+<div class='method'><a href="../source/libraries/oauth/oauthserver.php.html#line139" class="location">libraries/oauth/OAuthServer.php at line 139</a>
 
 <h3 id="authorizeFinish()">authorizeFinish</h3>
 <code class="signature">public  void <strong>authorizeFinish</strong>(boolean authorized, int user_id)</code>
@@ -130,15 +130,17 @@ succesfull, you need to check the token in the database.</p><dl>
 
 
 
-<div class='method'><a href="../source/application/libraries/oauth/oauthserver.php.html#line103" class="location">application/libraries/oauth/OAuthServer.php at line 103</a>
+<div class='method'><a href="../source/libraries/oauth/oauthserver.php.html#line106" class="location">libraries/oauth/OAuthServer.php at line 106</a>
 
 <h3 id="authorizeVerify()">authorizeVerify</h3>
-<code class="signature">public  array <strong>authorizeVerify</strong>()</code>
+<code class="signature">public  array <strong>authorizeVerify</strong>(string token)</code>
 <div class="details">
 <p>Verify the start of an authorization request.  Verifies if the request token is valid.
 Next step is the method authorizeFinish()</p><p>Nota bene: this stores the current token, consumer key and callback in the _SESSION</p><dl>
+<dt>Parameters:</dt>
+<dd>token - If not null, overrides the token. Useful for complex redirections that use third-party authentication (such as OpenID).</dd>
 <dt>Exception:</dt>
-<dd>OAuthException thrown when not a valid request</dd>
+<dd>OAuthException2 thrown when not a valid request</dd>
 <dt>Returns:</dt>
 <dd>token description</dd>
 </dl>
@@ -146,7 +148,7 @@ Next step is the method authorizeFinish()</p><p>Nota bene: this stores the curre
 
 
 
-<div class='method'><a href="../source/application/libraries/oauth/oauthserver.php.html#line46" class="location">application/libraries/oauth/OAuthServer.php at line 46</a>
+<div class='method'><a href="../source/libraries/oauth/oauthserver.php.html#line46" class="location">libraries/oauth/OAuthServer.php at line 46</a>
 
 <h3 id="requestToken()">requestToken</h3>
 <code class="signature">public  string <strong>requestToken</strong>()</code>

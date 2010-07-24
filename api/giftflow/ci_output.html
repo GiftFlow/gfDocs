@@ -6,7 +6,7 @@
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 
 <meta name="generator" content="PHPDoctor 2RC4 (http://peej.github.com/phpdoctor/)">
-<meta name="when" content="Mon, 19 Jul 2010 17:13:56 +0000">
+<meta name="when" content="Sat, 24 Jul 2010 20:46:31 +0000">
 
 <link rel="stylesheet" type="text/css" href="../stylesheet.css">
 <link rel="start" href="../overview-summary.html">
@@ -40,7 +40,7 @@ Detail: <a href="#detail_field">Field</a> | <a href="#detail_method">Method</a> 
 <hr>
 
 <div class="qualifiedName">GiftFlow\CI_Output</div>
-<a href="../source/libraries/output.php.html#line29" class="location">libraries/Output.php at line 29</a>
+<a href="../source/core/output.php.html#line29" class="location">core/Output.php at line 29</a>
 
 <h1>Class CI_Output</h1>
 
@@ -69,6 +69,14 @@ Detail: <a href="#detail_field">Field</a> | <a href="#detail_method">Method</a> 
 <td class="description"><p class="name"><a href="#_assign_libraries">$_assign_libraries</a></p></td>
 </tr>
 <tr>
+<td class="type">private  mixed</td>
+<td class="description"><p class="name"><a href="#_profiler_sections">$_profiler_sections</a></p></td>
+</tr>
+<tr>
+<td class="type">private  mixed</td>
+<td class="description"><p class="name"><a href="#_zlib_oc">$_zlib_oc</a></p></td>
+</tr>
+<tr>
 <td class="type"> mixed</td>
 <td class="description"><p class="name"><a href="#cache_expiration">$cache_expiration</a></p></td>
 </tr>
@@ -79,6 +87,10 @@ Detail: <a href="#detail_field">Field</a> | <a href="#detail_method">Method</a> 
 <tr>
 <td class="type"> mixed</td>
 <td class="description"><p class="name"><a href="#headers">$headers</a></p></td>
+</tr>
+<tr>
+<td class="type"> mixed</td>
+<td class="description"><p class="name"><a href="#parse_exec_vars">$parse_exec_vars</a></p></td>
 </tr>
 </table>
 
@@ -128,13 +140,17 @@ with any server headers and profile data. </p></td>
 </tr>
 <tr>
 <td class="type"> void</td>
-<td class="description"><p class="name"><a href="#set_status_header()">set_status_header</a>(str code, str text)</p><p class="description">Set HTTP Status Header
+<td class="description"><p class="name"><a href="#set_profiler_sections()">set_profiler_sections</a>(mixed sections)</p><p class="description">Set Profiler SectionsAllows override of default / config settings for Profiler section display</p></td>
+</tr>
+<tr>
+<td class="type"> void</td>
+<td class="description"><p class="name"><a href="#set_status_header()">set_status_header</a>(int code, str text)</p><p class="description">Set HTTP Status Header
 moved to Common procedural functions in 1.7.2</p></td>
 </tr>
 </table>
 
 <h2 id="detail_field">Field Detail</h2>
-<a href="../source/libraries/output.php.html#line31" class="location">libraries/Output.php at line 31</a>
+<a href="../source/core/output.php.html#line31" class="location">core/Output.php at line 31</a>
 
 <h3 id="_assign_libraries">_assign_libraries</h3>
 <code class="signature">private  mixed <strong>$_assign_libraries</strong> = TRUE</code>
@@ -143,7 +159,25 @@ moved to Common procedural functions in 1.7.2</p></td>
 
 <hr>
 
-<a href="../source/libraries/output.php.html#line32" class="location">libraries/Output.php at line 32</a>
+<a href="../source/core/output.php.html#line38" class="location">core/Output.php at line 38</a>
+
+<h3 id="_profiler_sections">_profiler_sections</h3>
+<code class="signature">private  mixed <strong>$_profiler_sections</strong> = array()</code>
+<div class="details">
+</div>
+
+<hr>
+
+<a href="../source/core/output.php.html#line37" class="location">core/Output.php at line 37</a>
+
+<h3 id="_zlib_oc">_zlib_oc</h3>
+<code class="signature">private  mixed <strong>$_zlib_oc</strong> = FALSE</code>
+<div class="details">
+</div>
+
+<hr>
+
+<a href="../source/core/output.php.html#line32" class="location">core/Output.php at line 32</a>
 
 <h3 id="cache_expiration">cache_expiration</h3>
 <code class="signature">public  mixed <strong>$cache_expiration</strong></code>
@@ -152,7 +186,7 @@ moved to Common procedural functions in 1.7.2</p></td>
 
 <hr>
 
-<a href="../source/libraries/output.php.html#line34" class="location">libraries/Output.php at line 34</a>
+<a href="../source/core/output.php.html#line34" class="location">core/Output.php at line 34</a>
 
 <h3 id="enable_profiler">enable_profiler</h3>
 <code class="signature">public  mixed <strong>$enable_profiler</strong> = FALSE</code>
@@ -161,7 +195,7 @@ moved to Common procedural functions in 1.7.2</p></td>
 
 <hr>
 
-<a href="../source/libraries/output.php.html#line33" class="location">libraries/Output.php at line 33</a>
+<a href="../source/core/output.php.html#line33" class="location">core/Output.php at line 33</a>
 
 <h3 id="headers">headers</h3>
 <code class="signature">public  mixed <strong>$headers</strong> = array()</code>
@@ -170,8 +204,17 @@ moved to Common procedural functions in 1.7.2</p></td>
 
 <hr>
 
+<a href="../source/core/output.php.html#line35" class="location">core/Output.php at line 35</a>
+
+<h3 id="parse_exec_vars">parse_exec_vars</h3>
+<code class="signature">public  mixed <strong>$parse_exec_vars</strong> = TRUE</code>
+<div class="details">
+</div>
+
+<hr>
+
 <h2 id="detail_method">Method Detail</h2><div class="method_detail">
-<div class='method'><a href="../source/libraries/output.php.html#line37" class="location">libraries/Output.php at line 37</a>
+<div class='method'><a href="../source/core/output.php.html#line40" class="location">core/Output.php at line 40</a>
 
 <h3 id="__construct()">__construct</h3>
 <code class="signature">public  void <strong>__construct</strong>()</code>
@@ -180,7 +223,7 @@ moved to Common procedural functions in 1.7.2</p></td>
 
 
 
-<div class='method'><a href="../source/libraries/output.php.html#line175" class="location">libraries/Output.php at line 175</a>
+<div class='method'><a href="../source/core/output.php.html#line209" class="location">core/Output.php at line 209</a>
 
 <h3 id="_display()">_display</h3>
 <code class="signature">private  void <strong>_display</strong>(str output)</code>
@@ -195,7 +238,7 @@ benchmark timer so the page rendering speed and memory usage can be shown.</p><d
 
 
 
-<div class='method'><a href="../source/libraries/output.php.html#line347" class="location">libraries/Output.php at line 347</a>
+<div class='method'><a href="../source/core/output.php.html#line390" class="location">core/Output.php at line 390</a>
 
 <h3 id="_display_cache()">_display_cache</h3>
 <code class="signature">private  void <strong>_display_cache</strong>(mixed CFG, mixed URI)</code>
@@ -208,7 +251,7 @@ benchmark timer so the page rendering speed and memory usage can be shown.</p><d
 
 
 
-<div class='method'><a href="../source/libraries/output.php.html#line297" class="location">libraries/Output.php at line 297</a>
+<div class='method'><a href="../source/core/output.php.html#line340" class="location">core/Output.php at line 340</a>
 
 <h3 id="_write_cache()">_write_cache</h3>
 <code class="signature">private  void <strong>_write_cache</strong>(mixed output)</code>
@@ -221,7 +264,7 @@ benchmark timer so the page rendering speed and memory usage can be shown.</p><d
 
 
 
-<div class='method'><a href="../source/libraries/output.php.html#line84" class="location">libraries/Output.php at line 84</a>
+<div class='method'><a href="../source/core/output.php.html#line89" class="location">core/Output.php at line 89</a>
 
 <h3 id="append_output()">append_output</h3>
 <code class="signature">public  void <strong>append_output</strong>(mixed output)</code>
@@ -235,7 +278,7 @@ benchmark timer so the page rendering speed and memory usage can be shown.</p><d
 
 
 
-<div class='method'><a href="../source/libraries/output.php.html#line154" class="location">libraries/Output.php at line 154</a>
+<div class='method'><a href="../source/core/output.php.html#line188" class="location">core/Output.php at line 188</a>
 
 <h3 id="cache()">cache</h3>
 <code class="signature">public  void <strong>cache</strong>(mixed time)</code>
@@ -249,7 +292,7 @@ benchmark timer so the page rendering speed and memory usage can be shown.</p><d
 
 
 
-<div class='method'><a href="../source/libraries/output.php.html#line140" class="location">libraries/Output.php at line 140</a>
+<div class='method'><a href="../source/core/output.php.html#line155" class="location">core/Output.php at line 155</a>
 
 <h3 id="enable_profiler()">enable_profiler</h3>
 <code class="signature">public  void <strong>enable_profiler</strong>(bool val)</code>
@@ -263,7 +306,7 @@ benchmark timer so the page rendering speed and memory usage can be shown.</p><d
 
 
 
-<div class='method'><a href="../source/libraries/output.php.html#line52" class="location">libraries/Output.php at line 52</a>
+<div class='method'><a href="../source/core/output.php.html#line57" class="location">core/Output.php at line 57</a>
 
 <h3 id="get_output()">get_output</h3>
 <code class="signature">public  void <strong>get_output</strong>()</code>
@@ -276,7 +319,7 @@ benchmark timer so the page rendering speed and memory usage can be shown.</p><d
 
 
 
-<div class='method'><a href="../source/libraries/output.php.html#line110" class="location">libraries/Output.php at line 110</a>
+<div class='method'><a href="../source/core/output.php.html#line115" class="location">core/Output.php at line 115</a>
 
 <h3 id="set_header()">set_header</h3>
 <code class="signature">public  void <strong>set_header</strong>(mixed header, bool replace)</code>
@@ -291,7 +334,7 @@ how to permit header data to be saved with the cache data...</p><dl>
 
 
 
-<div class='method'><a href="../source/libraries/output.php.html#line68" class="location">libraries/Output.php at line 68</a>
+<div class='method'><a href="../source/core/output.php.html#line73" class="location">core/Output.php at line 73</a>
 
 <h3 id="set_output()">set_output</h3>
 <code class="signature">public  void <strong>set_output</strong>(mixed output)</code>
@@ -305,10 +348,24 @@ how to permit header data to be saved with the cache data...</p><dl>
 
 
 
-<div class='method'><a href="../source/libraries/output.php.html#line126" class="location">libraries/Output.php at line 126</a>
+<div class='method'><a href="../source/core/output.php.html#line171" class="location">core/Output.php at line 171</a>
+
+<h3 id="set_profiler_sections()">set_profiler_sections</h3>
+<code class="signature">public  void <strong>set_profiler_sections</strong>(mixed sections)</code>
+<div class="details">
+<p>Set Profiler Sections</p><p>Allows override of default / config settings for Profiler section display</p><dl>
+<dt>Access	public.</dt>
+<dt>Param	array.</dt>
+<dt>Return	void.</dt>
+</dl>
+</div></div>
+
+
+
+<div class='method'><a href="../source/core/output.php.html#line141" class="location">core/Output.php at line 141</a>
 
 <h3 id="set_status_header()">set_status_header</h3>
-<code class="signature">public  void <strong>set_status_header</strong>(str code, str text)</code>
+<code class="signature">public  void <strong>set_status_header</strong>(int code, str text)</code>
 <div class="details">
 <p>Set HTTP Status Header
 moved to Common procedural functions in 1.7.2</p><dl>

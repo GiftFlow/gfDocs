@@ -6,7 +6,7 @@
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 
 <meta name="generator" content="PHPDoctor 2RC4 (http://peej.github.com/phpdoctor/)">
-<meta name="when" content="Mon, 19 Jul 2010 17:13:58 +0000">
+<meta name="when" content="Sat, 24 Jul 2010 20:46:31 +0000">
 
 <link rel="stylesheet" type="text/css" href="../../../../stylesheet.css">
 <link rel="start" href="../../../../overview-summary.html">
@@ -45,7 +45,7 @@
 <a name="line6"></a> *
 <a name="line7"></a> * @package		CodeIgniter
 <a name="line8"></a> * @author		ExpressionEngine Dev Team
-<a name="line9"></a> * @copyright	Copyright (c) 2008 - 2009, EllisLab, Inc.
+<a name="line9"></a> * @copyright	Copyright (c) 2008 - 2010, EllisLab, Inc.
 <a name="line10"></a> * @license		http://codeigniter.com/user_guide/license.html
 <a name="line11"></a> * @link		http://codeigniter.com
 <a name="line12"></a> * @since		Version 1.0
@@ -448,7 +448,7 @@
 <a name="line409"></a>	 */
 <a name="line410"></a>	function _list_columns($table = '')
 <a name="line411"></a>	{
-<a name="line412"></a>		return "SHOW COLUMNS FROM ".$table;
+<a name="line412"></a>		return "SHOW COLUMNS FROM ".$this->_protect_identifiers($table, TRUE, NULL, FALSE);
 <a name="line413"></a>	}
 <a name="line414"></a>
 <a name="line415"></a>	// --------------------------------------------------------------------

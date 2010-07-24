@@ -6,7 +6,7 @@
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 
 <meta name="generator" content="PHPDoctor 2RC4 (http://peej.github.com/phpdoctor/)">
-<meta name="when" content="Fri, 18 Jun 2010 15:58:03 +0000">
+<meta name="when" content="Sat, 24 Jul 2010 20:47:45 +0000">
 
 <link rel="stylesheet" type="text/css" href="../../stylesheet.css">
 <link rel="start" href="../../overview-summary.html">
@@ -46,60 +46,66 @@
 <a name="line9"></a>		parent::Controller();
 <a name="line10"></a>		$this->util->config();
 <a name="line11"></a>		$this->data = $this->util->parse_globals();
-<a name="line12"></a>	}
-<a name="line13"></a>
-<a name="line14"></a>	public function member( $id, $method, $param = null )
-<a name="line15"></a>	{
-<a name="line16"></a>		if($method=="photo")
-<a name="line17"></a>			$this->_member_photo( $id, $param );
-<a name="line18"></a>		
+<a name="line12"></a>		/*
+<a name="line13"></a>		require_once APPPATH.'libraries/oauth/library/OAuthServer.php';
+<a name="line14"></a>		require_once APPPATH.'libraries/oauth/library/OAuthStore.php';
+<a name="line15"></a>		$DB = $this->load->database('default', TRUE);
+<a name="line16"></a>		$this->store = OAuthStore::instance($DB->dbdriver, array('conn' => $DB->conn_id));
+<a name="line17"></a>		$this->server = new OAuthServer();
+<a name="line18"></a>		*/
 <a name="line19"></a>	}
-<a name="line20"></a>	protected function _member_photo( $id, $param = null )
-<a name="line21"></a>	{
-<a name="line22"></a>
-<a name="line23"></a>
-<a name="line24"></a>		$U = new User( $id );
-<a name="line25"></a>		if(!$U->exists())
-<a name="line26"></a>		{
-<a name="line27"></a>			echo "User Does Not Exist.";
-<a name="line28"></a>			return false;
-<a name="line29"></a>		}
-<a name="line30"></a>		if($U->facebook_photo==1)
-<a name="line31"></a>		{
-<a name="line32"></a>			if($param=='thumb') $url = "http://graph.facebook.com/".$U->facebook_id."/picture?type=square";
-<a name="line33"></a>			else $url = "http://graph.facebook.com/".$U->facebook_id."/picture?type=large";
-<a name="line34"></a>		}
-<a name="line35"></a>		else
-<a name="line36"></a>		{
-<a name="line37"></a>			$U->default_photo->get();
-<a name="line38"></a>		 	if($U->default_photo->exists())
-<a name="line39"></a>		 	{
-<a name="line40"></a>		 		if($param == "thumb") $url = $U->default_photo->thumb_url;
-<a name="line41"></a>		 		else $url = $U->default_photo->url;
-<a name="line42"></a>		 		
-<a name="line43"></a>		 		// Check to see if local file exists
-<a name="line44"></a>		 		
-<a name="line45"></a>		 		// first, generate path
-<a name="line46"></a>		 		$path = $this->config->item('base_path');
-<a name="line47"></a>		 		if($param == "thumb" ) $path  .= "uploads/thumbnails/".basename($url);
-<a name="line48"></a>		 		else $path .= "uploads/".basename($url);
-<a name="line49"></a>		 		
-<a name="line50"></a>		 		// If it doesn't, use default URL
-<a name="line51"></a>		 		if( !file_exists( $path ) )
-<a name="line52"></a>		 		{
-<a name="line53"></a>		 			$url =  base_url()."assets/images/default_user_photo.jpg";
-<a name="line54"></a>		 		}
-<a name="line55"></a>		 	}
-<a name="line56"></a>		 	else
-<a name="line57"></a>		 	{
-<a name="line58"></a>		 		$url =  base_url()."assets/images/default_user_photo.jpg";
-<a name="line59"></a>		 	}
-<a name="line60"></a>		}
-<a name="line61"></a>
-<a name="line62"></a>		header( "Location: ".$url);
-<a name="line63"></a>	
-<a name="line64"></a>	}
-<a name="line65"></a>}</pre>
+<a name="line20"></a>
+<a name="line21"></a>	public function member( $id, $method, $param = null )
+<a name="line22"></a>	{
+<a name="line23"></a>		if($method=="photo")
+<a name="line24"></a>			$this->_member_photo( $id, $param );
+<a name="line25"></a>		
+<a name="line26"></a>	}
+<a name="line27"></a>	protected function _member_photo( $id, $param = null )
+<a name="line28"></a>	{
+<a name="line29"></a>		$U = new User();
+<a name="line30"></a>		$url = $U->photo( $id, $param );
+<a name="line31"></a>		if( $url != FALSE )
+<a name="line32"></a>		{
+<a name="line33"></a>			$ext = pathinfo($url, PATHINFO_EXTENSION);
+<a name="line34"></a>			header ('HTTP/1.1 301 Moved Permanently');
+<a name="line35"></a>			header ('Content-type: image/'.$ext);
+<a name="line36"></a>			header( "Location: ".$url);
+<a name="line37"></a>			die();
+<a name="line38"></a>		}
+<a name="line39"></a>		else
+<a name="line40"></a>		{
+<a name="line41"></a>			echo "User not valid.";
+<a name="line42"></a>			die();
+<a name="line43"></a>		}
+<a name="line44"></a>	}
+<a name="line45"></a>	/*
+<a name="line46"></a>	function secure_method()
+<a name="line47"></a>	{
+<a name="line48"></a>		try
+<a name="line49"></a>		{
+<a name="line50"></a>			$request_verifier = new OAuthRequestVerifier();
+<a name="line51"></a>			
+<a name="line52"></a>			if ($user_id = $request_verifier->verify())
+<a name="line53"></a>			{
+<a name="line54"></a>				echo "Congratulation! you're authenticated as user id $user_id.<br />";
+<a name="line55"></a>				echo "Now we just need to check if user id $user_id has been granted permission (authorization) to make this call.";
+<a name="line56"></a>			}
+<a name="line57"></a>		}
+<a name="line58"></a>		catch (OAuthException $e)
+<a name="line59"></a>		{
+<a name="line60"></a>			if (OAuthRequestVerifier::requestIsSigned())
+<a name="line61"></a>			{
+<a name="line62"></a>				// The request was signed, but failed verification
+<a name="line63"></a>				header('HTTP/1.1 401 Unauthorized');
+<a name="line64"></a>				header('WWW-Authenticate: OAuth realm=""');
+<a name="line65"></a>				header('Content-Type: text/plain; charset=utf8');
+<a name="line66"></a>			}					
+<a name="line67"></a>			echo $e->getMessage();
+<a name="line68"></a>			exit();
+<a name="line69"></a>		}
+<a name="line70"></a>	}*/
+<a name="line71"></a>}</pre>
 <div class="header">
 <h1>GiftFlow API</h1>
 <ul>

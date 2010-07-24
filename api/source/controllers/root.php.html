@@ -6,7 +6,7 @@
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 
 <meta name="generator" content="PHPDoctor 2RC4 (http://peej.github.com/phpdoctor/)">
-<meta name="when" content="Fri, 18 Jun 2010 15:58:03 +0000">
+<meta name="when" content="Sat, 24 Jul 2010 20:47:45 +0000">
 
 <link rel="stylesheet" type="text/css" href="../../stylesheet.css">
 <link rel="start" href="../../overview-summary.html">
@@ -67,54 +67,53 @@
 <a name="line30"></a>	}
 <a name="line31"></a>	function _dash()
 <a name="line32"></a>	{
-<a name="line33"></a>		$this->data['title'] = "Your Dashboard";
-<a name="line34"></a>		$U = new User($this->data['userdata']['user_id']);
-<a name="line35"></a>		$U->following->get();
-<a name="line36"></a>		if(count($U->following->all)>0)
-<a name="line37"></a>		{
-<a name="line38"></a>			foreach($U->following->all as $val) $following[] = $val->id;
-<a name="line39"></a>			$G = new Good();
-<a name="line40"></a>			$G->where_in_related_user('id', $following)->get();
-<a name="line41"></a>			$this->data['follow_feed'] = $G->all;
-<a name="line42"></a>		}
-<a name="line43"></a>		else
-<a name="line44"></a>		{
-<a name="line45"></a>			$this->data['follow_feed'] = false;
-<a name="line46"></a>		}
-<a name="line47"></a>		$this->load->library('facebook');
-<a name="line48"></a>		if(!empty($U->facebook_id)) $this->data['friends'] = $this->facebook->friends( $U->id );
-<a name="line49"></a>		$this->data['your_gifts'] = $U->gifts();
-<a name="line50"></a>		$this->data['your_needs'] = $U->needs();
-<a name="line51"></a>		$this->data['your_requests'] = $U->requests();
-<a name="line52"></a>		$this->load->view('header', $this->data);
-<a name="line53"></a>		$this->load->view('member/index', $this->data);
-<a name="line54"></a>		$this->load->view('footer', $this->data);
-<a name="line55"></a>	}
-<a name="line56"></a>	function test()
-<a name="line57"></a>	{
-<a name="line58"></a>		$T = new Transaction(4);
-<a name="line59"></a>	}
-<a name="line60"></a>	function lost()
-<a name="line61"></a>	{
-<a name="line62"></a>		$this->data['title'] = "Oops! Page cannot be found.";
-<a name="line63"></a>
-<a name="line64"></a>		$this->load->view('header', $this->data);
-<a name="line65"></a>		$this->load->view('404', $this->data);
-<a name="line66"></a>		$this->load->view('footer', $this->data);
-<a name="line67"></a>	}
-<a name="line68"></a>	function restricted()
-<a name="line69"></a>	{
-<a name="line70"></a>		$this->data['title'] = "Restricted area";
-<a name="line71"></a>
-<a name="line72"></a>		$this->load->view('header', $this->data);
-<a name="line73"></a>		$this->load->view('restricted', $this->data);
-<a name="line74"></a>		$this->load->view('footer', $this->data);
-<a name="line75"></a>	}
-<a name="line76"></a>}
-<a name="line77"></a>
-<a name="line78"></a>/* End of file member.php */
-<a name="line79"></a>/* Location: ./system/application/controllers/welcome.php */
-<a name="line80"></a></pre>
+<a name="line33"></a>		$this->benchmark->mark('dash_start');
+<a name="line34"></a>		$this->data['title'] = "Your Dashboard";
+<a name="line35"></a>		$this->load->library('finder');
+<a name="line36"></a>		$this->data['googlemaps'] = TRUE;
+<a name="line37"></a>		
+<a name="line38"></a>		$U = new User($this->data['logged_in_user_id']);
+<a name="line39"></a>		$this->finder->format = 'object';
+<a name="line40"></a>		
+<a name="line41"></a>		$this->data['giftflow'] = $this->finder->giftflow();
+<a name="line42"></a>		
+<a name="line43"></a>		$this->data['your_gifts'] = $U->gifts();
+<a name="line44"></a>		$this->data['your_needs'] = $U->needs();
+<a name="line45"></a>		$this->data['your_requests'] = $U->requests;
+<a name="line46"></a>		
+<a name="line47"></a>		$this->load->view('header', $this->data);
+<a name="line48"></a>		$this->load->view('member/index', $this->data);
+<a name="line49"></a>		$this->load->view('footer', $this->data);
+<a name="line50"></a>		$this->benchmark->mark('dash_end');
+<a name="line51"></a>	}
+<a name="line52"></a>
+<a name="line53"></a>	function lost()
+<a name="line54"></a>	{
+<a name="line55"></a>		$this->data['title'] = "Oops! Page cannot be found.";
+<a name="line56"></a>
+<a name="line57"></a>		$this->load->view('header', $this->data);
+<a name="line58"></a>		$this->load->view('404', $this->data);
+<a name="line59"></a>		$this->load->view('footer', $this->data);
+<a name="line60"></a>	}
+<a name="line61"></a>	function restricted()
+<a name="line62"></a>	{
+<a name="line63"></a>		$this->data['title'] = "Restricted area";
+<a name="line64"></a>
+<a name="line65"></a>		$this->load->view('header', $this->data);
+<a name="line66"></a>		$this->load->view('restricted', $this->data);
+<a name="line67"></a>		$this->load->view('footer', $this->data);
+<a name="line68"></a>	}
+<a name="line69"></a>	
+<a name="line70"></a>	function test()
+<a name="line71"></a>	{
+<a name="line72"></a>		$this->load->library('finder');
+<a name="line73"></a>		$this->finder->follower_search();
+<a name="line74"></a>	}
+<a name="line75"></a>}
+<a name="line76"></a>
+<a name="line77"></a>/* End of file member.php */
+<a name="line78"></a>/* Location: ./system/application/controllers/welcome.php */
+<a name="line79"></a></pre>
 <div class="header">
 <h1>GiftFlow API</h1>
 <ul>

@@ -6,7 +6,7 @@
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 
 <meta name="generator" content="PHPDoctor 2RC4 (http://peej.github.com/phpdoctor/)">
-<meta name="when" content="Mon, 19 Jul 2010 17:13:56 +0000">
+<meta name="when" content="Sat, 24 Jul 2010 20:47:43 +0000">
 
 <link rel="stylesheet" type="text/css" href="../stylesheet.css">
 <link rel="start" href="../overview-summary.html">
@@ -40,15 +40,15 @@ Detail: <a href="#detail_field">Field</a> | <a href="#detail_method">Method</a> 
 <hr>
 
 <div class="qualifiedName">GiftFlow\Gift</div>
-<a href="../source/application/controllers/gift.php.html#line3" class="location">application/controllers/gift.php at line 3</a>
+<a href="../source/controllers/gift.php.html#line3" class="location">controllers/gift.php at line 3</a>
 
 <h1>Class Gift</h1>
 
-<pre class="tree">CI_Base<br> └─<a href="../giftflow/controller.html">Controller</a><br>       └─<strong>Gift</strong><br /></pre>
+<pre class="tree">Controller<br> └─<strong>Gift</strong><br /></pre>
 
 <hr>
 
-<p class="signature">public  class <strong>Gift</strong><br>extends <a href="../giftflow/controller.html">Controller</a>
+<p class="signature">public  class <strong>Gift</strong><br>extends Controller
 
 </p>
 
@@ -85,14 +85,10 @@ Detail: <a href="#detail_field">Field</a> | <a href="#detail_method">Method</a> 
 <td class="description"><p class="name"><a href="#param">$param</a></p><p class="description">Extra parameter / Fourth URL Segment</p></td>
 </tr>
 <tr>
-<td class="type"> mixed</td>
+<td class="type"> string</td>
 <td class="description"><p class="name"><a href="#recipient_status">$recipient_status</a></p><p class="description">Stores the status of a recipient's request</p></td>
 </tr>
 </table>
-
-<table class="inherit">
-<tr><th colspan="2">Fields inherited from GiftFlow\Controller</th></tr>
-<tr><td><a href="../giftflow/controller.html#_ci_scaff_table">_ci_scaff_table</a>, <a href="../giftflow/controller.html#_ci_scaffolding">_ci_scaffolding</a></td></tr></table>
 
 <table id="summary_method">
 <tr><th colspan="2">Method Summary</th></tr>
@@ -134,11 +130,11 @@ Detail: <a href="#detail_field">Field</a> | <a href="#detail_method">Method</a> 
 </tr>
 <tr>
 <td class="type">private  void</td>
-<td class="description"><p class="name"><a href="#_recipient_dashboard()">_recipient_dashboard</a>()</p></td>
+<td class="description"><p class="name"><a href="#_recipient_dashboard()">_recipient_dashboard</a>()</p><p class="description">Dashboard displayed after a user has requested a gift</p></td>
 </tr>
 <tr>
 <td class="type">private  void</td>
-<td class="description"><p class="name"><a href="#_request()">_request</a>()</p></td>
+<td class="description"><p class="name"><a href="#_request()">_request</a>()</p><p class="description">User requests a gift</p></td>
 </tr>
 <tr>
 <td class="type">private  void</td>
@@ -146,7 +142,7 @@ Detail: <a href="#detail_field">Field</a> | <a href="#detail_method">Method</a> 
 </tr>
 <tr>
 <td class="type">private  void</td>
-<td class="description"><p class="name"><a href="#_unrequest()">_unrequest</a>()</p></td>
+<td class="description"><p class="name"><a href="#_unrequest()">_unrequest</a>()</p><p class="description">Undo a request</p></td>
 </tr>
 <tr>
 <td class="type">private  void</td>
@@ -154,20 +150,16 @@ Detail: <a href="#detail_field">Field</a> | <a href="#detail_method">Method</a> 
 </tr>
 <tr>
 <td class="type"> void</td>
-<td class="description"><p class="name"><a href="#index()">index</a>()</p></td>
+<td class="description"><p class="name"><a href="#index()">index</a>()</p><p class="description">Index page. </p></td>
 </tr>
 <tr>
 <td class="type"> void</td>
-<td class="description"><p class="name"><a href="#view()">view</a>()</p></td>
+<td class="description"><p class="name"><a href="#view()">view</a>()</p><p class="description">Routes requests to appropriate protected method</p></td>
 </tr>
 </table>
 
-<table class="inherit">
-<tr><th colspan="2">Methods inherited from GiftFlow\Controller</th></tr>
-<tr><td><a href="../giftflow/controller.html#__construct()">__construct</a>, <a href="../giftflow/controller.html#_ci_initialize()">_ci_initialize</a>, <a href="../giftflow/controller.html#_ci_scaffolding()">_ci_scaffolding</a></td></tr></table>
-
 <h2 id="detail_field">Field Detail</h2>
-<a href="../source/application/controllers/gift.php.html#line15" class="location">application/controllers/gift.php at line 15</a>
+<a href="../source/controllers/gift.php.html#line17" class="location">controllers/gift.php at line 17</a>
 
 <h3 id="G">G</h3>
 <code class="signature">public  Object <strong>$G</strong></code>
@@ -176,7 +168,7 @@ Detail: <a href="#detail_field">Field</a> | <a href="#detail_method">Method</a> 
 
 <hr>
 
-<a href="../source/application/controllers/gift.php.html#line27" class="location">application/controllers/gift.php at line 27</a>
+<a href="../source/controllers/gift.php.html#line31" class="location">controllers/gift.php at line 31</a>
 
 <h3 id="T">T</h3>
 <code class="signature">public  Object <strong>$T</strong></code>
@@ -185,7 +177,7 @@ Detail: <a href="#detail_field">Field</a> | <a href="#detail_method">Method</a> 
 
 <hr>
 
-<a href="../source/application/controllers/gift.php.html#line21" class="location">application/controllers/gift.php at line 21</a>
+<a href="../source/controllers/gift.php.html#line24" class="location">controllers/gift.php at line 24</a>
 
 <h3 id="U">U</h3>
 <code class="signature">public  Object <strong>$U</strong></code>
@@ -194,7 +186,7 @@ Detail: <a href="#detail_field">Field</a> | <a href="#detail_method">Method</a> 
 
 <hr>
 
-<a href="../source/application/controllers/gift.php.html#line9" class="location">application/controllers/gift.php at line 9</a>
+<a href="../source/controllers/gift.php.html#line10" class="location">controllers/gift.php at line 10</a>
 
 <h3 id="_need_dashboard">_need_dashboard</h3>
 <code class="signature">private  array <strong>$_need_dashboard</strong> = NULL</code>
@@ -203,7 +195,7 @@ Detail: <a href="#detail_field">Field</a> | <a href="#detail_method">Method</a> 
 
 <hr>
 
-<a href="../source/application/controllers/gift.php.html#line33" class="location">application/controllers/gift.php at line 33</a>
+<a href="../source/controllers/gift.php.html#line38" class="location">controllers/gift.php at line 38</a>
 
 <h3 id="good_id">good_id</h3>
 <code class="signature">public  int <strong>$good_id</strong></code>
@@ -212,7 +204,7 @@ Detail: <a href="#detail_field">Field</a> | <a href="#detail_method">Method</a> 
 
 <hr>
 
-<a href="../source/application/controllers/gift.php.html#line39" class="location">application/controllers/gift.php at line 39</a>
+<a href="../source/controllers/gift.php.html#line45" class="location">controllers/gift.php at line 45</a>
 
 <h3 id="method">method</h3>
 <code class="signature">public  string <strong>$method</strong></code>
@@ -221,7 +213,7 @@ Detail: <a href="#detail_field">Field</a> | <a href="#detail_method">Method</a> 
 
 <hr>
 
-<a href="../source/application/controllers/gift.php.html#line45" class="location">application/controllers/gift.php at line 45</a>
+<a href="../source/controllers/gift.php.html#line52" class="location">controllers/gift.php at line 52</a>
 
 <h3 id="param">param</h3>
 <code class="signature">public  string <strong>$param</strong></code>
@@ -230,17 +222,17 @@ Detail: <a href="#detail_field">Field</a> | <a href="#detail_method">Method</a> 
 
 <hr>
 
-<a href="../source/application/controllers/gift.php.html#line50" class="location">application/controllers/gift.php at line 50</a>
+<a href="../source/controllers/gift.php.html#line59" class="location">controllers/gift.php at line 59</a>
 
 <h3 id="recipient_status">recipient_status</h3>
-<code class="signature">public  mixed <strong>$recipient_status</strong></code>
+<code class="signature">public  string <strong>$recipient_status</strong></code>
 <div class="details">
 <p>Stores the status of a recipient's request</p></div>
 
 <hr>
 
 <h2 id="detail_method">Method Detail</h2><div class="method_detail">
-<div class='method'><a href="../source/application/controllers/gift.php.html#line52" class="location">application/controllers/gift.php at line 52</a>
+<div class='method'><a href="../source/controllers/gift.php.html#line61" class="location">controllers/gift.php at line 61</a>
 
 <h3 id="__construct()">__construct</h3>
 <code class="signature">public  void <strong>__construct</strong>()</code>
@@ -249,7 +241,7 @@ Detail: <a href="#detail_field">Field</a> | <a href="#detail_method">Method</a> 
 
 
 
-<div class='method'><a href="../source/application/controllers/gift.php.html#line443" class="location">application/controllers/gift.php at line 443</a>
+<div class='method'><a href="../source/controllers/gift.php.html#line474" class="location">controllers/gift.php at line 474</a>
 
 <h3 id="_abort()">_abort</h3>
 <code class="signature">private  void <strong>_abort</strong>()</code>
@@ -258,7 +250,7 @@ Detail: <a href="#detail_field">Field</a> | <a href="#detail_method">Method</a> 
 
 
 
-<div class='method'><a href="../source/application/controllers/gift.php.html#line456" class="location">application/controllers/gift.php at line 456</a>
+<div class='method'><a href="../source/controllers/gift.php.html#line487" class="location">controllers/gift.php at line 487</a>
 
 <h3 id="_accept()">_accept</h3>
 <code class="signature">private  void <strong>_accept</strong>()</code>
@@ -267,7 +259,7 @@ Detail: <a href="#detail_field">Field</a> | <a href="#detail_method">Method</a> 
 
 
 
-<div class='method'><a href="../source/application/controllers/gift.php.html#line480" class="location">application/controllers/gift.php at line 480</a>
+<div class='method'><a href="../source/controllers/gift.php.html#line512" class="location">controllers/gift.php at line 512</a>
 
 <h3 id="_delete()">_delete</h3>
 <code class="signature">private  void <strong>_delete</strong>()</code>
@@ -276,7 +268,7 @@ Detail: <a href="#detail_field">Field</a> | <a href="#detail_method">Method</a> 
 
 
 
-<div class='method'><a href="../source/application/controllers/gift.php.html#line496" class="location">application/controllers/gift.php at line 496</a>
+<div class='method'><a href="../source/controllers/gift.php.html#line528" class="location">controllers/gift.php at line 528</a>
 
 <h3 id="_exchanged()">_exchanged</h3>
 <code class="signature">private  void <strong>_exchanged</strong>()</code>
@@ -285,7 +277,7 @@ Detail: <a href="#detail_field">Field</a> | <a href="#detail_method">Method</a> 
 
 
 
-<div class='method'><a href="../source/application/controllers/gift.php.html#line304" class="location">application/controllers/gift.php at line 304</a>
+<div class='method'><a href="../source/controllers/gift.php.html#line320" class="location">controllers/gift.php at line 320</a>
 
 <h3 id="_giver_dashboard()">_giver_dashboard</h3>
 <code class="signature">private  void <strong>_giver_dashboard</strong>()</code>
@@ -294,7 +286,7 @@ Detail: <a href="#detail_field">Field</a> | <a href="#detail_method">Method</a> 
 
 
 
-<div class='method'><a href="../source/application/controllers/gift.php.html#line388" class="location">application/controllers/gift.php at line 388</a>
+<div class='method'><a href="../source/controllers/gift.php.html#line420" class="location">controllers/gift.php at line 420</a>
 
 <h3 id="_giver_dashboard_save()">_giver_dashboard_save</h3>
 <code class="signature">private  void <strong>_giver_dashboard_save</strong>()</code>
@@ -303,7 +295,7 @@ Detail: <a href="#detail_field">Field</a> | <a href="#detail_method">Method</a> 
 
 
 
-<div class='method'><a href="../source/application/controllers/gift.php.html#line519" class="location">application/controllers/gift.php at line 519</a>
+<div class='method'><a href="../source/controllers/gift.php.html#line551" class="location">controllers/gift.php at line 551</a>
 
 <h3 id="_ignore()">_ignore</h3>
 <code class="signature">private  void <strong>_ignore</strong>()</code>
@@ -312,7 +304,7 @@ Detail: <a href="#detail_field">Field</a> | <a href="#detail_method">Method</a> 
 
 
 
-<div class='method'><a href="../source/application/controllers/gift.php.html#line554" class="location">application/controllers/gift.php at line 554</a>
+<div class='method'><a href="../source/controllers/gift.php.html#line586" class="location">controllers/gift.php at line 586</a>
 
 <h3 id="_message()">_message</h3>
 <code class="signature">private  void <strong>_message</strong>()</code>
@@ -321,25 +313,25 @@ Detail: <a href="#detail_field">Field</a> | <a href="#detail_method">Method</a> 
 
 
 
-<div class='method'><a href="../source/application/controllers/gift.php.html#line188" class="location">application/controllers/gift.php at line 188</a>
+<div class='method'><a href="../source/controllers/gift.php.html#line198" class="location">controllers/gift.php at line 198</a>
 
 <h3 id="_recipient_dashboard()">_recipient_dashboard</h3>
 <code class="signature">private  void <strong>_recipient_dashboard</strong>()</code>
 <div class="details">
-</div></div>
+<p>Dashboard displayed after a user has requested a gift</p></div></div>
 
 
 
-<div class='method'><a href="../source/application/controllers/gift.php.html#line256" class="location">application/controllers/gift.php at line 256</a>
+<div class='method'><a href="../source/controllers/gift.php.html#line269" class="location">controllers/gift.php at line 269</a>
 
 <h3 id="_request()">_request</h3>
 <code class="signature">private  void <strong>_request</strong>()</code>
 <div class="details">
-</div></div>
+<p>User requests a gift</p></div></div>
 
 
 
-<div class='method'><a href="../source/application/controllers/gift.php.html#line580" class="location">application/controllers/gift.php at line 580</a>
+<div class='method'><a href="../source/controllers/gift.php.html#line613" class="location">controllers/gift.php at line 613</a>
 
 <h3 id="_restrict()">_restrict</h3>
 <code class="signature">private  void <strong>_restrict</strong>(bool redirect)</code>
@@ -348,16 +340,16 @@ Detail: <a href="#detail_field">Field</a> | <a href="#detail_method">Method</a> 
 
 
 
-<div class='method'><a href="../source/application/controllers/gift.php.html#line283" class="location">application/controllers/gift.php at line 283</a>
+<div class='method'><a href="../source/controllers/gift.php.html#line299" class="location">controllers/gift.php at line 299</a>
 
 <h3 id="_unrequest()">_unrequest</h3>
 <code class="signature">private  void <strong>_unrequest</strong>()</code>
 <div class="details">
-</div></div>
+<p>Undo a request</p></div></div>
 
 
 
-<div class='method'><a href="../source/application/controllers/gift.php.html#line136" class="location">application/controllers/gift.php at line 136</a>
+<div class='method'><a href="../source/controllers/gift.php.html#line162" class="location">controllers/gift.php at line 162</a>
 
 <h3 id="_view()">_view</h3>
 <code class="signature">private  void <strong>_view</strong>()</code>
@@ -366,21 +358,21 @@ Detail: <a href="#detail_field">Field</a> | <a href="#detail_method">Method</a> 
 
 
 
-<div class='method'><a href="../source/application/controllers/gift.php.html#line89" class="location">application/controllers/gift.php at line 89</a>
+<div class='method'><a href="../source/controllers/gift.php.html#line112" class="location">controllers/gift.php at line 112</a>
 
 <h3 id="index()">index</h3>
 <code class="signature">public  void <strong>index</strong>()</code>
 <div class="details">
-</div></div>
+<p>Index page. Redirects to find page, displays error.</p></div></div>
 
 
 
-<div class='method'><a href="../source/application/controllers/gift.php.html#line94" class="location">application/controllers/gift.php at line 94</a>
+<div class='method'><a href="../source/controllers/gift.php.html#line121" class="location">controllers/gift.php at line 121</a>
 
 <h3 id="view()">view</h3>
 <code class="signature">public  void <strong>view</strong>()</code>
 <div class="details">
-</div></div>
+<p>Routes requests to appropriate protected method</p></div></div>
 
 
 

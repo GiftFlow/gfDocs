@@ -6,7 +6,7 @@
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 
 <meta name="generator" content="PHPDoctor 2RC4 (http://peej.github.com/phpdoctor/)">
-<meta name="when" content="Mon, 19 Jul 2010 17:13:58 +0000">
+<meta name="when" content="Sat, 24 Jul 2010 20:46:31 +0000">
 
 <link rel="stylesheet" type="text/css" href="../../stylesheet.css">
 <link rel="start" href="../../overview-summary.html">
@@ -45,7 +45,7 @@
 <a name="line6"></a> *
 <a name="line7"></a> * @package		CodeIgniter
 <a name="line8"></a> * @author		ExpressionEngine Dev Team
-<a name="line9"></a> * @copyright	Copyright (c) 2008 - 2009, EllisLab, Inc.
+<a name="line9"></a> * @copyright	Copyright (c) 2008 - 2010, EllisLab, Inc.
 <a name="line10"></a> * @license		http://codeigniter.com/user_guide/license.html
 <a name="line11"></a> * @link		http://codeigniter.com
 <a name="line12"></a> * @since		Version 1.0
@@ -760,13 +760,13 @@
 <a name="line721"></a>			{
 <a name="line722"></a>				$like_statement = $prefix." $k $not LIKE '%{$v}%'";
 <a name="line723"></a>			}
-<a name="line724"></a>			
+<a name="line724"></a>
 <a name="line725"></a>			// some platforms require an escape sequence definition for LIKE wildcards
 <a name="line726"></a>			if ($this->_like_escape_str != '')
 <a name="line727"></a>			{
-<a name="line728"></a>				$like_statement = $like_statement.sprintf($this->_like_escape_str, $this->_like_escape_char);
+<a name="line728"></a>				$like_statement = $like_statement.sprintf($this->_like_escape_str, $this->_like_escape_chr);
 <a name="line729"></a>			}
-<a name="line730"></a>			
+<a name="line730"></a>
 <a name="line731"></a>			$this->ar_like[] = $like_statement;
 <a name="line732"></a>			if ($this->ar_caching === TRUE)
 <a name="line733"></a>			{
@@ -1173,690 +1173,1013 @@
 <a name="line1134"></a>	{
 <a name="line1135"></a>		return $this->get_where($table, $where, $limit, $offset);
 <a name="line1136"></a>	}
-<a name="line1137"></a>	
+<a name="line1137"></a>
 <a name="line1138"></a>	// --------------------------------------------------------------------
 <a name="line1139"></a>
 <a name="line1140"></a>	/**
-<a name="line1141"></a>	 * Insert
+<a name="line1141"></a>	 * Insert_Batch
 <a name="line1142"></a>	 *
-<a name="line1143"></a>	 * Compiles an insert string and runs the query
+<a name="line1143"></a>	 * Compiles batch insert strings and runs the queries
 <a name="line1144"></a>	 *
 <a name="line1145"></a>	 * @access	public
 <a name="line1146"></a>	 * @param	string	the table to retrieve the results from
 <a name="line1147"></a>	 * @param	array	an associative array of insert values
 <a name="line1148"></a>	 * @return	object
 <a name="line1149"></a>	 */
-<a name="line1150"></a>	function insert($table = '', $set = NULL)
+<a name="line1150"></a>	function insert_batch($table = '', $set = NULL)
 <a name="line1151"></a>	{	
 <a name="line1152"></a>		if ( ! is_null($set))
 <a name="line1153"></a>		{
-<a name="line1154"></a>			$this->set($set);
+<a name="line1154"></a>			$this->set_insert_batch($set);
 <a name="line1155"></a>		}
 <a name="line1156"></a>	
 <a name="line1157"></a>		if (count($this->ar_set) == 0)
 <a name="line1158"></a>		{
 <a name="line1159"></a>			if ($this->db_debug)
 <a name="line1160"></a>			{
-<a name="line1161"></a>				return $this->display_error('db_must_use_set');
-<a name="line1162"></a>			}
-<a name="line1163"></a>			return FALSE;
-<a name="line1164"></a>		}
-<a name="line1165"></a>
-<a name="line1166"></a>		if ($table == '')
-<a name="line1167"></a>		{
-<a name="line1168"></a>			if ( ! isset($this->ar_from[0]))
-<a name="line1169"></a>			{
-<a name="line1170"></a>				if ($this->db_debug)
-<a name="line1171"></a>				{
-<a name="line1172"></a>					return $this->display_error('db_must_set_table');
-<a name="line1173"></a>				}
-<a name="line1174"></a>				return FALSE;
-<a name="line1175"></a>			}
-<a name="line1176"></a>			
-<a name="line1177"></a>			$table = $this->ar_from[0];
-<a name="line1178"></a>		}
-<a name="line1179"></a>
-<a name="line1180"></a>		$sql = $this->_insert($this->_protect_identifiers($table, TRUE, NULL, FALSE), array_keys($this->ar_set), array_values($this->ar_set));
-<a name="line1181"></a>		
-<a name="line1182"></a>		$this->_reset_write();
-<a name="line1183"></a>		return $this->query($sql);		
-<a name="line1184"></a>	}
-<a name="line1185"></a>	
-<a name="line1186"></a>	// --------------------------------------------------------------------
-<a name="line1187"></a>
-<a name="line1188"></a>	/**
-<a name="line1189"></a>	 * Update
-<a name="line1190"></a>	 *
-<a name="line1191"></a>	 * Compiles an update string and runs the query
-<a name="line1192"></a>	 *
-<a name="line1193"></a>	 * @access	public
-<a name="line1194"></a>	 * @param	string	the table to retrieve the results from
-<a name="line1195"></a>	 * @param	array	an associative array of update values
-<a name="line1196"></a>	 * @param	mixed	the where clause
-<a name="line1197"></a>	 * @return	object
-<a name="line1198"></a>	 */
-<a name="line1199"></a>	function update($table = '', $set = NULL, $where = NULL, $limit = NULL)
-<a name="line1200"></a>	{
-<a name="line1201"></a>		// Combine any cached components with the current statements
-<a name="line1202"></a>		$this->_merge_cache();
-<a name="line1203"></a>
-<a name="line1204"></a>		if ( ! is_null($set))
-<a name="line1205"></a>		{
-<a name="line1206"></a>			$this->set($set);
-<a name="line1207"></a>		}
-<a name="line1208"></a>	
-<a name="line1209"></a>		if (count($this->ar_set) == 0)
-<a name="line1210"></a>		{
-<a name="line1211"></a>			if ($this->db_debug)
-<a name="line1212"></a>			{
-<a name="line1213"></a>				return $this->display_error('db_must_use_set');
-<a name="line1214"></a>			}
-<a name="line1215"></a>			return FALSE;
-<a name="line1216"></a>		}
-<a name="line1217"></a>
-<a name="line1218"></a>		if ($table == '')
-<a name="line1219"></a>		{
-<a name="line1220"></a>			if ( ! isset($this->ar_from[0]))
-<a name="line1221"></a>			{
-<a name="line1222"></a>				if ($this->db_debug)
-<a name="line1223"></a>				{
-<a name="line1224"></a>					return $this->display_error('db_must_set_table');
-<a name="line1225"></a>				}
-<a name="line1226"></a>				return FALSE;
-<a name="line1227"></a>			}
-<a name="line1228"></a>			
-<a name="line1229"></a>			$table = $this->ar_from[0];
-<a name="line1230"></a>		}
-<a name="line1231"></a>		
-<a name="line1232"></a>		if ($where != NULL)
-<a name="line1233"></a>		{
-<a name="line1234"></a>			$this->where($where);
-<a name="line1235"></a>		}
-<a name="line1236"></a>
-<a name="line1237"></a>		if ($limit != NULL)
-<a name="line1238"></a>		{
-<a name="line1239"></a>			$this->limit($limit);
-<a name="line1240"></a>		}
-<a name="line1241"></a>		
-<a name="line1242"></a>		$sql = $this->_update($this->_protect_identifiers($table, TRUE, NULL, FALSE), $this->ar_set, $this->ar_where, $this->ar_orderby, $this->ar_limit);
-<a name="line1243"></a>		
-<a name="line1244"></a>		$this->_reset_write();
-<a name="line1245"></a>		return $this->query($sql);
-<a name="line1246"></a>	}
-<a name="line1247"></a>
-<a name="line1248"></a>	// --------------------------------------------------------------------
+<a name="line1161"></a>				//No valid data array.  Folds in cases where keys and values did not match up 
+<a name="line1162"></a>				return $this->display_error('db_must_use_set');
+<a name="line1163"></a>			}
+<a name="line1164"></a>			return FALSE;
+<a name="line1165"></a>		}
+<a name="line1166"></a>
+<a name="line1167"></a>		if ($table == '')
+<a name="line1168"></a>		{
+<a name="line1169"></a>			if ( ! isset($this->ar_from[0]))
+<a name="line1170"></a>			{
+<a name="line1171"></a>				if ($this->db_debug)
+<a name="line1172"></a>				{
+<a name="line1173"></a>					return $this->display_error('db_must_set_table');
+<a name="line1174"></a>				}
+<a name="line1175"></a>				return FALSE;
+<a name="line1176"></a>			}
+<a name="line1177"></a>			
+<a name="line1178"></a>			$table = $this->ar_from[0];
+<a name="line1179"></a>		}
+<a name="line1180"></a>
+<a name="line1181"></a>		// Batch this baby
+<a name="line1182"></a>		for ($i = 0, $total = count($this->ar_set); $i < $total; $i = $i + 100)
+<a name="line1183"></a>		{
+<a name="line1184"></a>		
+<a name="line1185"></a>			$sql = $this->_insert_batch($this->_protect_identifiers($table, TRUE, NULL, FALSE), $this->ar_keys, array_slice($this->ar_set, $i, 100));
+<a name="line1186"></a>
+<a name="line1187"></a>			//echo $sql;
+<a name="line1188"></a>
+<a name="line1189"></a>			$this->query($sql);
+<a name="line1190"></a>		}
+<a name="line1191"></a>		
+<a name="line1192"></a>		$this->_reset_write();
+<a name="line1193"></a>
+<a name="line1194"></a>
+<a name="line1195"></a>		return TRUE;		
+<a name="line1196"></a>	}
+<a name="line1197"></a>
+<a name="line1198"></a>	// --------------------------------------------------------------------
+<a name="line1199"></a>
+<a name="line1200"></a>	/**
+<a name="line1201"></a>	 * The "set_insert_batch" function.  Allows key/value pairs to be set for batch inserts
+<a name="line1202"></a>	 *
+<a name="line1203"></a>	 * @access	public
+<a name="line1204"></a>	 * @param	mixed
+<a name="line1205"></a>	 * @param	string
+<a name="line1206"></a>	 * @param	boolean
+<a name="line1207"></a>	 * @return	object
+<a name="line1208"></a>	 */
+<a name="line1209"></a>
+<a name="line1210"></a>	function set_insert_batch($key, $value = '', $escape = TRUE)
+<a name="line1211"></a>	{
+<a name="line1212"></a>		$key = $this->_object_to_array_batch($key);
+<a name="line1213"></a>		
+<a name="line1214"></a>		if ( ! is_array($key))
+<a name="line1215"></a>		{
+<a name="line1216"></a>			$key = array($key => $value);
+<a name="line1217"></a>		}	
+<a name="line1218"></a>
+<a name="line1219"></a>		$keys = array_keys(current($key));
+<a name="line1220"></a>		sort($keys);
+<a name="line1221"></a>
+<a name="line1222"></a>		foreach ($key as $row)
+<a name="line1223"></a>		{
+<a name="line1224"></a>		    if (count(array_diff($keys, array_keys($row))) > 0 OR count(array_diff(array_keys($row), $keys)) > 0)
+<a name="line1225"></a>		    {
+<a name="line1226"></a>		        // batch function above returns an error on an empty array 
+<a name="line1227"></a>		        $this->ar_set[] = array();
+<a name="line1228"></a>		        return;
+<a name="line1229"></a>		    }
+<a name="line1230"></a>		    
+<a name="line1231"></a>		    ksort($row); // puts $row in the same order as our keys
+<a name="line1232"></a>		
+<a name="line1233"></a>			if ($escape === FALSE)
+<a name="line1234"></a>			{
+<a name="line1235"></a>				$this->ar_set[] =  '('.implode(',', $row).')';
+<a name="line1236"></a>			}
+<a name="line1237"></a>			else
+<a name="line1238"></a>			{
+<a name="line1239"></a>				$clean = array();
+<a name="line1240"></a>
+<a name="line1241"></a>				foreach($row as $value)
+<a name="line1242"></a>				{
+<a name="line1243"></a>				 	$clean[] = $this->escape($value);					
+<a name="line1244"></a>				}
+<a name="line1245"></a>
+<a name="line1246"></a>				$this->ar_set[] =  '('.implode(',', $clean).')';		
+<a name="line1247"></a>			} 
+<a name="line1248"></a>		}
 <a name="line1249"></a>
-<a name="line1250"></a>	/**
-<a name="line1251"></a>	 * Empty Table
-<a name="line1252"></a>	 *
-<a name="line1253"></a>	 * Compiles a delete string and runs "DELETE FROM table"
-<a name="line1254"></a>	 *
-<a name="line1255"></a>	 * @access	public
-<a name="line1256"></a>	 * @param	string	the table to empty
-<a name="line1257"></a>	 * @return	object
-<a name="line1258"></a>	 */
-<a name="line1259"></a>	function empty_table($table = '')
-<a name="line1260"></a>	{
-<a name="line1261"></a>		if ($table == '')
-<a name="line1262"></a>		{
-<a name="line1263"></a>			if ( ! isset($this->ar_from[0]))
-<a name="line1264"></a>			{
-<a name="line1265"></a>				if ($this->db_debug)
-<a name="line1266"></a>				{
-<a name="line1267"></a>					return $this->display_error('db_must_set_table');
-<a name="line1268"></a>				}
-<a name="line1269"></a>				return FALSE;
-<a name="line1270"></a>			}
-<a name="line1271"></a>
-<a name="line1272"></a>			$table = $this->ar_from[0];
-<a name="line1273"></a>		}
-<a name="line1274"></a>		else
-<a name="line1275"></a>		{
-<a name="line1276"></a>			$table = $this->_protect_identifiers($table, TRUE, NULL, FALSE);
-<a name="line1277"></a>		}
-<a name="line1278"></a>
-<a name="line1279"></a>		$sql = $this->_delete($table);
-<a name="line1280"></a>
-<a name="line1281"></a>		$this->_reset_write();
-<a name="line1282"></a>		
-<a name="line1283"></a>		return $this->query($sql);
-<a name="line1284"></a>	}
+<a name="line1250"></a>		foreach ($keys as $k)
+<a name="line1251"></a>		{
+<a name="line1252"></a>			$this->ar_keys[] = $this->_protect_identifiers($k);
+<a name="line1253"></a>		}
+<a name="line1254"></a>		
+<a name="line1255"></a>		return $this;
+<a name="line1256"></a>	}
+<a name="line1257"></a>
+<a name="line1258"></a>	// --------------------------------------------------------------------
+<a name="line1259"></a>
+<a name="line1260"></a>	/**
+<a name="line1261"></a>	 * Insert
+<a name="line1262"></a>	 *
+<a name="line1263"></a>	 * Compiles an insert string and runs the query
+<a name="line1264"></a>	 *
+<a name="line1265"></a>	 * @access	public
+<a name="line1266"></a>	 * @param	string	the table to retrieve the results from
+<a name="line1267"></a>	 * @param	array	an associative array of insert values
+<a name="line1268"></a>	 * @return	object
+<a name="line1269"></a>	 */
+<a name="line1270"></a>	function insert($table = '', $set = NULL)
+<a name="line1271"></a>	{	
+<a name="line1272"></a>		if ( ! is_null($set))
+<a name="line1273"></a>		{
+<a name="line1274"></a>			$this->set($set);
+<a name="line1275"></a>		}
+<a name="line1276"></a>	
+<a name="line1277"></a>		if (count($this->ar_set) == 0)
+<a name="line1278"></a>		{
+<a name="line1279"></a>			if ($this->db_debug)
+<a name="line1280"></a>			{
+<a name="line1281"></a>				return $this->display_error('db_must_use_set');
+<a name="line1282"></a>			}
+<a name="line1283"></a>			return FALSE;
+<a name="line1284"></a>		}
 <a name="line1285"></a>
-<a name="line1286"></a>	// --------------------------------------------------------------------
-<a name="line1287"></a>
-<a name="line1288"></a>	/**
-<a name="line1289"></a>	 * Truncate
-<a name="line1290"></a>	 *
-<a name="line1291"></a>	 * Compiles a truncate string and runs the query
-<a name="line1292"></a>	 * If the database does not support the truncate() command
-<a name="line1293"></a>	 * This function maps to "DELETE FROM table"
-<a name="line1294"></a>	 *
-<a name="line1295"></a>	 * @access	public
-<a name="line1296"></a>	 * @param	string	the table to truncate
-<a name="line1297"></a>	 * @return	object
-<a name="line1298"></a>	 */
-<a name="line1299"></a>	function truncate($table = '')
-<a name="line1300"></a>	{
-<a name="line1301"></a>		if ($table == '')
-<a name="line1302"></a>		{
-<a name="line1303"></a>			if ( ! isset($this->ar_from[0]))
-<a name="line1304"></a>			{
-<a name="line1305"></a>				if ($this->db_debug)
-<a name="line1306"></a>				{
-<a name="line1307"></a>					return $this->display_error('db_must_set_table');
-<a name="line1308"></a>				}
-<a name="line1309"></a>				return FALSE;
-<a name="line1310"></a>			}
-<a name="line1311"></a>
-<a name="line1312"></a>			$table = $this->ar_from[0];
-<a name="line1313"></a>		}
-<a name="line1314"></a>		else
-<a name="line1315"></a>		{
-<a name="line1316"></a>			$table = $this->_protect_identifiers($table, TRUE, NULL, FALSE);
-<a name="line1317"></a>		}
-<a name="line1318"></a>
-<a name="line1319"></a>		$sql = $this->_truncate($table);
-<a name="line1320"></a>
-<a name="line1321"></a>		$this->_reset_write();
-<a name="line1322"></a>		
-<a name="line1323"></a>		return $this->query($sql);
-<a name="line1324"></a>	}
-<a name="line1325"></a>	
-<a name="line1326"></a>	// --------------------------------------------------------------------
-<a name="line1327"></a>
-<a name="line1328"></a>	/**
-<a name="line1329"></a>	 * Delete
-<a name="line1330"></a>	 *
-<a name="line1331"></a>	 * Compiles a delete string and runs the query
-<a name="line1332"></a>	 *
-<a name="line1333"></a>	 * @access	public
-<a name="line1334"></a>	 * @param	mixed	the table(s) to delete from. String or array
-<a name="line1335"></a>	 * @param	mixed	the where clause
-<a name="line1336"></a>	 * @param	mixed	the limit clause
-<a name="line1337"></a>	 * @param	boolean
-<a name="line1338"></a>	 * @return	object
-<a name="line1339"></a>	 */
-<a name="line1340"></a>	function delete($table = '', $where = '', $limit = NULL, $reset_data = TRUE)
-<a name="line1341"></a>	{
-<a name="line1342"></a>		// Combine any cached components with the current statements
-<a name="line1343"></a>		$this->_merge_cache();
-<a name="line1344"></a>
-<a name="line1345"></a>		if ($table == '')
-<a name="line1346"></a>		{
-<a name="line1347"></a>			if ( ! isset($this->ar_from[0]))
-<a name="line1348"></a>			{
-<a name="line1349"></a>				if ($this->db_debug)
-<a name="line1350"></a>				{
-<a name="line1351"></a>					return $this->display_error('db_must_set_table');
-<a name="line1352"></a>				}
-<a name="line1353"></a>				return FALSE;
-<a name="line1354"></a>			}
-<a name="line1355"></a>
-<a name="line1356"></a>			$table = $this->ar_from[0];
-<a name="line1357"></a>		}
-<a name="line1358"></a>		elseif (is_array($table))
-<a name="line1359"></a>		{
-<a name="line1360"></a>			foreach($table as $single_table)
-<a name="line1361"></a>			{
-<a name="line1362"></a>				$this->delete($single_table, $where, $limit, FALSE);
-<a name="line1363"></a>			}
-<a name="line1364"></a>
-<a name="line1365"></a>			$this->_reset_write();
-<a name="line1366"></a>			return;
-<a name="line1367"></a>		}
-<a name="line1368"></a>		else
-<a name="line1369"></a>		{
-<a name="line1370"></a>			$table = $this->_protect_identifiers($table, TRUE, NULL, FALSE);
-<a name="line1371"></a>		}
-<a name="line1372"></a>
-<a name="line1373"></a>		if ($where != '')
-<a name="line1374"></a>		{
-<a name="line1375"></a>			$this->where($where);
-<a name="line1376"></a>		}
-<a name="line1377"></a>
-<a name="line1378"></a>		if ($limit != NULL)
-<a name="line1379"></a>		{
-<a name="line1380"></a>			$this->limit($limit);
-<a name="line1381"></a>		}
-<a name="line1382"></a>
-<a name="line1383"></a>		if (count($this->ar_where) == 0 && count($this->ar_wherein) == 0 && count($this->ar_like) == 0)
-<a name="line1384"></a>		{
-<a name="line1385"></a>			if ($this->db_debug)
-<a name="line1386"></a>			{
-<a name="line1387"></a>				return $this->display_error('db_del_must_use_where');
-<a name="line1388"></a>			}
-<a name="line1389"></a>
-<a name="line1390"></a>			return FALSE;
-<a name="line1391"></a>		}		
+<a name="line1286"></a>		if ($table == '')
+<a name="line1287"></a>		{
+<a name="line1288"></a>			if ( ! isset($this->ar_from[0]))
+<a name="line1289"></a>			{
+<a name="line1290"></a>				if ($this->db_debug)
+<a name="line1291"></a>				{
+<a name="line1292"></a>					return $this->display_error('db_must_set_table');
+<a name="line1293"></a>				}
+<a name="line1294"></a>				return FALSE;
+<a name="line1295"></a>			}
+<a name="line1296"></a>			
+<a name="line1297"></a>			$table = $this->ar_from[0];
+<a name="line1298"></a>		}
+<a name="line1299"></a>
+<a name="line1300"></a>		$sql = $this->_insert($this->_protect_identifiers($table, TRUE, NULL, FALSE), array_keys($this->ar_set), array_values($this->ar_set));
+<a name="line1301"></a>		
+<a name="line1302"></a>		$this->_reset_write();
+<a name="line1303"></a>		return $this->query($sql);		
+<a name="line1304"></a>	}
+<a name="line1305"></a>	
+<a name="line1306"></a>	function replace($table = '', $set = NULL)
+<a name="line1307"></a>	{
+<a name="line1308"></a>		if ( ! is_null($set))
+<a name="line1309"></a>		{
+<a name="line1310"></a>			$this->set($set);
+<a name="line1311"></a>		}
+<a name="line1312"></a>	
+<a name="line1313"></a>		if (count($this->ar_set) == 0)
+<a name="line1314"></a>		{
+<a name="line1315"></a>			if ($this->db_debug)
+<a name="line1316"></a>			{
+<a name="line1317"></a>				return $this->display_error('db_must_use_set');
+<a name="line1318"></a>			}
+<a name="line1319"></a>			return FALSE;
+<a name="line1320"></a>		}
+<a name="line1321"></a>
+<a name="line1322"></a>		if ($table == '')
+<a name="line1323"></a>		{
+<a name="line1324"></a>			if ( ! isset($this->ar_from[0]))
+<a name="line1325"></a>			{
+<a name="line1326"></a>				if ($this->db_debug)
+<a name="line1327"></a>				{
+<a name="line1328"></a>					return $this->display_error('db_must_set_table');
+<a name="line1329"></a>				}
+<a name="line1330"></a>				return FALSE;
+<a name="line1331"></a>			}
+<a name="line1332"></a>			
+<a name="line1333"></a>			$table = $this->ar_from[0];
+<a name="line1334"></a>		}
+<a name="line1335"></a>
+<a name="line1336"></a>		$sql = $this->_replace($this->_protect_identifiers($table, TRUE, NULL, FALSE), array_keys($this->ar_set), array_values($this->ar_set));
+<a name="line1337"></a>		
+<a name="line1338"></a>		$this->_reset_write();
+<a name="line1339"></a>		return $this->query($sql);		
+<a name="line1340"></a>	}
+<a name="line1341"></a>
+<a name="line1342"></a>	// --------------------------------------------------------------------
+<a name="line1343"></a>
+<a name="line1344"></a>	/**
+<a name="line1345"></a>	 * Update
+<a name="line1346"></a>	 *
+<a name="line1347"></a>	 * Compiles an update string and runs the query
+<a name="line1348"></a>	 *
+<a name="line1349"></a>	 * @access	public
+<a name="line1350"></a>	 * @param	string	the table to retrieve the results from
+<a name="line1351"></a>	 * @param	array	an associative array of update values
+<a name="line1352"></a>	 * @param	mixed	the where clause
+<a name="line1353"></a>	 * @return	object
+<a name="line1354"></a>	 */
+<a name="line1355"></a>	function update($table = '', $set = NULL, $where = NULL, $limit = NULL)
+<a name="line1356"></a>	{
+<a name="line1357"></a>		// Combine any cached components with the current statements
+<a name="line1358"></a>		$this->_merge_cache();
+<a name="line1359"></a>
+<a name="line1360"></a>		if ( ! is_null($set))
+<a name="line1361"></a>		{
+<a name="line1362"></a>			$this->set($set);
+<a name="line1363"></a>		}
+<a name="line1364"></a>	
+<a name="line1365"></a>		if (count($this->ar_set) == 0)
+<a name="line1366"></a>		{
+<a name="line1367"></a>			if ($this->db_debug)
+<a name="line1368"></a>			{
+<a name="line1369"></a>				return $this->display_error('db_must_use_set');
+<a name="line1370"></a>			}
+<a name="line1371"></a>			return FALSE;
+<a name="line1372"></a>		}
+<a name="line1373"></a>
+<a name="line1374"></a>		if ($table == '')
+<a name="line1375"></a>		{
+<a name="line1376"></a>			if ( ! isset($this->ar_from[0]))
+<a name="line1377"></a>			{
+<a name="line1378"></a>				if ($this->db_debug)
+<a name="line1379"></a>				{
+<a name="line1380"></a>					return $this->display_error('db_must_set_table');
+<a name="line1381"></a>				}
+<a name="line1382"></a>				return FALSE;
+<a name="line1383"></a>			}
+<a name="line1384"></a>			
+<a name="line1385"></a>			$table = $this->ar_from[0];
+<a name="line1386"></a>		}
+<a name="line1387"></a>		
+<a name="line1388"></a>		if ($where != NULL)
+<a name="line1389"></a>		{
+<a name="line1390"></a>			$this->where($where);
+<a name="line1391"></a>		}
 <a name="line1392"></a>
-<a name="line1393"></a>		$sql = $this->_delete($table, $this->ar_where, $this->ar_like, $this->ar_limit);
-<a name="line1394"></a>
-<a name="line1395"></a>		if ($reset_data)
-<a name="line1396"></a>		{
-<a name="line1397"></a>			$this->_reset_write();
-<a name="line1398"></a>		}
+<a name="line1393"></a>		if ($limit != NULL)
+<a name="line1394"></a>		{
+<a name="line1395"></a>			$this->limit($limit);
+<a name="line1396"></a>		}
+<a name="line1397"></a>		
+<a name="line1398"></a>		$sql = $this->_update($this->_protect_identifiers($table, TRUE, NULL, FALSE), $this->ar_set, $this->ar_where, $this->ar_orderby, $this->ar_limit);
 <a name="line1399"></a>		
-<a name="line1400"></a>		return $this->query($sql);
-<a name="line1401"></a>	}
-<a name="line1402"></a>
-<a name="line1403"></a>	// --------------------------------------------------------------------
+<a name="line1400"></a>		$this->_reset_write();
+<a name="line1401"></a>		return $this->query($sql);
+<a name="line1402"></a>	}
+<a name="line1403"></a>
 <a name="line1404"></a>
-<a name="line1405"></a>	/**
-<a name="line1406"></a>	 * DB Prefix
-<a name="line1407"></a>	 *
-<a name="line1408"></a>	 * Prepends a database prefix if one exists in configuration
+<a name="line1405"></a>	// --------------------------------------------------------------------
+<a name="line1406"></a>
+<a name="line1407"></a>	/**
+<a name="line1408"></a>	 * Update_Batch
 <a name="line1409"></a>	 *
-<a name="line1410"></a>	 * @access	public
-<a name="line1411"></a>	 * @param	string	the table
-<a name="line1412"></a>	 * @return	string
-<a name="line1413"></a>	 */
-<a name="line1414"></a>	function dbprefix($table = '')
-<a name="line1415"></a>	{
-<a name="line1416"></a>		if ($table == '')
-<a name="line1417"></a>		{
-<a name="line1418"></a>			$this->display_error('db_table_name_required');
-<a name="line1419"></a>		}
-<a name="line1420"></a>
-<a name="line1421"></a>		return $this->dbprefix.$table;
-<a name="line1422"></a>	}
-<a name="line1423"></a>
-<a name="line1424"></a>	// --------------------------------------------------------------------
-<a name="line1425"></a>
-<a name="line1426"></a>	/**
-<a name="line1427"></a>	 * Track Aliases
-<a name="line1428"></a>	 *
-<a name="line1429"></a>	 * Used to track SQL statements written with aliased tables.
-<a name="line1430"></a>	 *
-<a name="line1431"></a>	 * @access	private
-<a name="line1432"></a>	 * @param	string	The table to inspect
-<a name="line1433"></a>	 * @return	string
-<a name="line1434"></a>	 */	
-<a name="line1435"></a>	function _track_aliases($table)
-<a name="line1436"></a>	{
-<a name="line1437"></a>		if (is_array($table))
-<a name="line1438"></a>		{
-<a name="line1439"></a>			foreach ($table as $t)
-<a name="line1440"></a>			{
-<a name="line1441"></a>				$this->_track_aliases($t);
-<a name="line1442"></a>			}
-<a name="line1443"></a>			return;
-<a name="line1444"></a>		}
-<a name="line1445"></a>		
-<a name="line1446"></a>		// Does the string contain a comma?  If so, we need to separate
-<a name="line1447"></a>		// the string into discreet statements
-<a name="line1448"></a>		if (strpos($table, ',') !== FALSE)
+<a name="line1410"></a>	 * Compiles an update string and runs the query
+<a name="line1411"></a>	 *
+<a name="line1412"></a>	 * @access	public
+<a name="line1413"></a>	 * @param	string	the table to retrieve the results from
+<a name="line1414"></a>	 * @param	array	an associative array of update values
+<a name="line1415"></a>	 * @param	string	the where key
+<a name="line1416"></a>	 * @return	object
+<a name="line1417"></a>	 */
+<a name="line1418"></a>	function update_batch($table = '', $set = NULL, $index = NULL)
+<a name="line1419"></a>	{
+<a name="line1420"></a>		// Combine any cached components with the current statements
+<a name="line1421"></a>		$this->_merge_cache();
+<a name="line1422"></a>		
+<a name="line1423"></a>		if (is_null($index))
+<a name="line1424"></a>		{
+<a name="line1425"></a>			if ($this->db_debug)
+<a name="line1426"></a>			{
+<a name="line1427"></a>				return $this->display_error('db_myst_use_index');
+<a name="line1428"></a>			}
+<a name="line1429"></a>
+<a name="line1430"></a>			return FALSE;
+<a name="line1431"></a>		}
+<a name="line1432"></a>
+<a name="line1433"></a>		if ( ! is_null($set))
+<a name="line1434"></a>		{
+<a name="line1435"></a>			$this->set_update_batch($set, $index);
+<a name="line1436"></a>		}
+<a name="line1437"></a>
+<a name="line1438"></a>		if (count($this->ar_set) == 0)
+<a name="line1439"></a>		{
+<a name="line1440"></a>			if ($this->db_debug)
+<a name="line1441"></a>			{
+<a name="line1442"></a>				return $this->display_error('db_must_use_set');
+<a name="line1443"></a>			}
+<a name="line1444"></a>
+<a name="line1445"></a>			return FALSE;
+<a name="line1446"></a>		}
+<a name="line1447"></a>
+<a name="line1448"></a>		if ($table == '')
 <a name="line1449"></a>		{
-<a name="line1450"></a>			return $this->_track_aliases(explode(',', $table));
-<a name="line1451"></a>		}
-<a name="line1452"></a>	
-<a name="line1453"></a>		// if a table alias is used we can recognize it by a space
-<a name="line1454"></a>		if (strpos($table, " ") !== FALSE)
-<a name="line1455"></a>		{
-<a name="line1456"></a>			// if the alias is written with the AS keyword, remove it
-<a name="line1457"></a>			$table = preg_replace('/ AS /i', ' ', $table);
+<a name="line1450"></a>			if ( ! isset($this->ar_from[0]))
+<a name="line1451"></a>			{
+<a name="line1452"></a>				if ($this->db_debug)
+<a name="line1453"></a>				{
+<a name="line1454"></a>					return $this->display_error('db_must_set_table');
+<a name="line1455"></a>				}
+<a name="line1456"></a>				return FALSE;
+<a name="line1457"></a>			}
 <a name="line1458"></a>			
-<a name="line1459"></a>			// Grab the alias
-<a name="line1460"></a>			$table = trim(strrchr($table, " "));
-<a name="line1461"></a>			
-<a name="line1462"></a>			// Store the alias, if it doesn't already exist
-<a name="line1463"></a>			if ( ! in_array($table, $this->ar_aliased_tables))
-<a name="line1464"></a>			{
-<a name="line1465"></a>				$this->ar_aliased_tables[] = $table;
-<a name="line1466"></a>			}
-<a name="line1467"></a>		}
-<a name="line1468"></a>	}
-<a name="line1469"></a>
-<a name="line1470"></a>	// --------------------------------------------------------------------
-<a name="line1471"></a>
-<a name="line1472"></a>	/**
-<a name="line1473"></a>	 * Compile the SELECT statement
-<a name="line1474"></a>	 *
-<a name="line1475"></a>	 * Generates a query string based on which functions were used.
-<a name="line1476"></a>	 * Should not be called directly.  The get() function calls it.
+<a name="line1459"></a>			$table = $this->ar_from[0];
+<a name="line1460"></a>		}
+<a name="line1461"></a>		
+<a name="line1462"></a>		// Batch this baby
+<a name="line1463"></a>		for ($i = 0, $total = count($this->ar_set); $i < $total; $i = $i + 100)
+<a name="line1464"></a>		{
+<a name="line1465"></a>			$sql = $this->_update_batch($this->_protect_identifiers($table, TRUE, NULL, FALSE), array_slice($this->ar_set, $i, 100), $this->_protect_identifiers($index), $this->ar_where);
+<a name="line1466"></a>
+<a name="line1467"></a>			$this->query($sql);
+<a name="line1468"></a>		}
+<a name="line1469"></a>		
+<a name="line1470"></a>		$this->_reset_write();
+<a name="line1471"></a>	}
+<a name="line1472"></a>
+<a name="line1473"></a>	// --------------------------------------------------------------------
+<a name="line1474"></a>
+<a name="line1475"></a>	/**
+<a name="line1476"></a>	 * The "set_update_batch" function.  Allows key/value pairs to be set for batch updating
 <a name="line1477"></a>	 *
-<a name="line1478"></a>	 * @access	private
-<a name="line1479"></a>	 * @return	string
-<a name="line1480"></a>	 */
-<a name="line1481"></a>	function _compile_select($select_override = FALSE)
-<a name="line1482"></a>	{
-<a name="line1483"></a>		// Combine any cached components with the current statements
-<a name="line1484"></a>		$this->_merge_cache();
-<a name="line1485"></a>
-<a name="line1486"></a>		// ----------------------------------------------------------------
-<a name="line1487"></a>		
-<a name="line1488"></a>		// Write the "select" portion of the query
-<a name="line1489"></a>
-<a name="line1490"></a>		if ($select_override !== FALSE)
-<a name="line1491"></a>		{
-<a name="line1492"></a>			$sql = $select_override;
-<a name="line1493"></a>		}
-<a name="line1494"></a>		else
+<a name="line1478"></a>	 * @access	public
+<a name="line1479"></a>	 * @param	array
+<a name="line1480"></a>	 * @param	string
+<a name="line1481"></a>	 * @param	boolean
+<a name="line1482"></a>	 * @return	object
+<a name="line1483"></a>	 */
+<a name="line1484"></a>
+<a name="line1485"></a>	function set_update_batch($key, $index = '', $escape = TRUE)
+<a name="line1486"></a>	{
+<a name="line1487"></a>		$key = $this->_object_to_array_batch($key);
+<a name="line1488"></a>	
+<a name="line1489"></a>		if ( ! is_array($key))
+<a name="line1490"></a>		{
+<a name="line1491"></a>			// @todo error
+<a name="line1492"></a>		}	
+<a name="line1493"></a>
+<a name="line1494"></a>		foreach ($key as $k => $v)
 <a name="line1495"></a>		{
-<a name="line1496"></a>			$sql = ( ! $this->ar_distinct) ? 'SELECT ' : 'SELECT DISTINCT ';
-<a name="line1497"></a>		
-<a name="line1498"></a>			if (count($this->ar_select) == 0)
-<a name="line1499"></a>			{
-<a name="line1500"></a>				$sql .= '*';		
-<a name="line1501"></a>			}
-<a name="line1502"></a>			else
-<a name="line1503"></a>			{				
-<a name="line1504"></a>				// Cycle through the "select" portion of the query and prep each column name.
-<a name="line1505"></a>				// The reason we protect identifiers here rather then in the select() function
-<a name="line1506"></a>				// is because until the user calls the from() function we don't know if there are aliases
-<a name="line1507"></a>				foreach ($this->ar_select as $key => $val)
-<a name="line1508"></a>				{
-<a name="line1509"></a>					$this->ar_select[$key] = $this->_protect_identifiers($val);
-<a name="line1510"></a>				}
-<a name="line1511"></a>				
-<a name="line1512"></a>				$sql .= implode(', ', $this->ar_select);
-<a name="line1513"></a>			}
-<a name="line1514"></a>		}
-<a name="line1515"></a>
-<a name="line1516"></a>		// ----------------------------------------------------------------
-<a name="line1517"></a>		
-<a name="line1518"></a>		// Write the "FROM" portion of the query
+<a name="line1496"></a>			$index_set = FALSE;
+<a name="line1497"></a>			$clean = array();
+<a name="line1498"></a>
+<a name="line1499"></a>			foreach($v as $k2 => $v2)
+<a name="line1500"></a>			{
+<a name="line1501"></a>				if ($k2 == $index)
+<a name="line1502"></a>				{
+<a name="line1503"></a>					$index_set = TRUE;
+<a name="line1504"></a>				}
+<a name="line1505"></a>				else
+<a name="line1506"></a>				{
+<a name="line1507"></a>					$not[] = $k.'-'.$v;
+<a name="line1508"></a>				}
+<a name="line1509"></a>
+<a name="line1510"></a>				if ($escape === FALSE)
+<a name="line1511"></a>				{
+<a name="line1512"></a>					$clean[$this->_protect_identifiers($k2)] = $v2;
+<a name="line1513"></a>				}
+<a name="line1514"></a>				else
+<a name="line1515"></a>				{
+<a name="line1516"></a>				 	$clean[$this->_protect_identifiers($k2)] = $this->escape($v2);					
+<a name="line1517"></a>				}
+<a name="line1518"></a>			}
 <a name="line1519"></a>
-<a name="line1520"></a>		if (count($this->ar_from) > 0)
-<a name="line1521"></a>		{
-<a name="line1522"></a>			$sql .= "\nFROM ";
-<a name="line1523"></a>
-<a name="line1524"></a>			$sql .= $this->_from_tables($this->ar_from);
-<a name="line1525"></a>		}
-<a name="line1526"></a>
-<a name="line1527"></a>		// ----------------------------------------------------------------
-<a name="line1528"></a>		
-<a name="line1529"></a>		// Write the "JOIN" portion of the query
+<a name="line1520"></a>			if ($index_set == FALSE)
+<a name="line1521"></a>			{
+<a name="line1522"></a>				return $this->display_error('db_batch_missing_index');
+<a name="line1523"></a>			}
+<a name="line1524"></a>
+<a name="line1525"></a>			$this->ar_set[] = $clean;
+<a name="line1526"></a>		}
+<a name="line1527"></a>		
+<a name="line1528"></a>		return $this;
+<a name="line1529"></a>	}
 <a name="line1530"></a>
-<a name="line1531"></a>		if (count($this->ar_join) > 0)
-<a name="line1532"></a>		{
-<a name="line1533"></a>			$sql .= "\n";
-<a name="line1534"></a>
-<a name="line1535"></a>			$sql .= implode("\n", $this->ar_join);
-<a name="line1536"></a>		}
-<a name="line1537"></a>
-<a name="line1538"></a>		// ----------------------------------------------------------------
-<a name="line1539"></a>		
-<a name="line1540"></a>		// Write the "WHERE" portion of the query
-<a name="line1541"></a>
-<a name="line1542"></a>		if (count($this->ar_where) > 0 OR count($this->ar_like) > 0)
-<a name="line1543"></a>		{
-<a name="line1544"></a>			$sql .= "\n";
-<a name="line1545"></a>
-<a name="line1546"></a>			$sql .= "WHERE ";
-<a name="line1547"></a>		}
-<a name="line1548"></a>
-<a name="line1549"></a>		$sql .= implode("\n", $this->ar_where);
-<a name="line1550"></a>
-<a name="line1551"></a>		// ----------------------------------------------------------------
-<a name="line1552"></a>		
-<a name="line1553"></a>		// Write the "LIKE" portion of the query
-<a name="line1554"></a>	
-<a name="line1555"></a>		if (count($this->ar_like) > 0)
-<a name="line1556"></a>		{
-<a name="line1557"></a>			if (count($this->ar_where) > 0)
-<a name="line1558"></a>			{
-<a name="line1559"></a>				$sql .= "\nAND ";
-<a name="line1560"></a>			}
+<a name="line1531"></a>	// --------------------------------------------------------------------
+<a name="line1532"></a>
+<a name="line1533"></a>	/**
+<a name="line1534"></a>	 * Empty Table
+<a name="line1535"></a>	 *
+<a name="line1536"></a>	 * Compiles a delete string and runs "DELETE FROM table"
+<a name="line1537"></a>	 *
+<a name="line1538"></a>	 * @access	public
+<a name="line1539"></a>	 * @param	string	the table to empty
+<a name="line1540"></a>	 * @return	object
+<a name="line1541"></a>	 */
+<a name="line1542"></a>	function empty_table($table = '')
+<a name="line1543"></a>	{
+<a name="line1544"></a>		if ($table == '')
+<a name="line1545"></a>		{
+<a name="line1546"></a>			if ( ! isset($this->ar_from[0]))
+<a name="line1547"></a>			{
+<a name="line1548"></a>				if ($this->db_debug)
+<a name="line1549"></a>				{
+<a name="line1550"></a>					return $this->display_error('db_must_set_table');
+<a name="line1551"></a>				}
+<a name="line1552"></a>				return FALSE;
+<a name="line1553"></a>			}
+<a name="line1554"></a>
+<a name="line1555"></a>			$table = $this->ar_from[0];
+<a name="line1556"></a>		}
+<a name="line1557"></a>		else
+<a name="line1558"></a>		{
+<a name="line1559"></a>			$table = $this->_protect_identifiers($table, TRUE, NULL, FALSE);
+<a name="line1560"></a>		}
 <a name="line1561"></a>
-<a name="line1562"></a>			$sql .= implode("\n", $this->ar_like);
-<a name="line1563"></a>		}
-<a name="line1564"></a>
-<a name="line1565"></a>		// ----------------------------------------------------------------
-<a name="line1566"></a>		
-<a name="line1567"></a>		// Write the "GROUP BY" portion of the query
-<a name="line1568"></a>	
-<a name="line1569"></a>		if (count($this->ar_groupby) > 0)
-<a name="line1570"></a>		{
-<a name="line1571"></a>			$sql .= "\nGROUP BY ";
-<a name="line1572"></a>			
-<a name="line1573"></a>			$sql .= implode(', ', $this->ar_groupby);
-<a name="line1574"></a>		}
-<a name="line1575"></a>
-<a name="line1576"></a>		// ----------------------------------------------------------------
-<a name="line1577"></a>		
-<a name="line1578"></a>		// Write the "HAVING" portion of the query
-<a name="line1579"></a>		
-<a name="line1580"></a>		if (count($this->ar_having) > 0)
-<a name="line1581"></a>		{
-<a name="line1582"></a>			$sql .= "\nHAVING ";
-<a name="line1583"></a>			$sql .= implode("\n", $this->ar_having);
-<a name="line1584"></a>		}
-<a name="line1585"></a>
-<a name="line1586"></a>		// ----------------------------------------------------------------
-<a name="line1587"></a>		
-<a name="line1588"></a>		// Write the "ORDER BY" portion of the query
-<a name="line1589"></a>
-<a name="line1590"></a>		if (count($this->ar_orderby) > 0)
-<a name="line1591"></a>		{
-<a name="line1592"></a>			$sql .= "\nORDER BY ";
-<a name="line1593"></a>			$sql .= implode(', ', $this->ar_orderby);
-<a name="line1594"></a>			
-<a name="line1595"></a>			if ($this->ar_order !== FALSE)
-<a name="line1596"></a>			{
-<a name="line1597"></a>				$sql .= ($this->ar_order == 'desc') ? ' DESC' : ' ASC';
-<a name="line1598"></a>			}		
-<a name="line1599"></a>		}
-<a name="line1600"></a>
-<a name="line1601"></a>		// ----------------------------------------------------------------
-<a name="line1602"></a>		
-<a name="line1603"></a>		// Write the "LIMIT" portion of the query
-<a name="line1604"></a>		
-<a name="line1605"></a>		if (is_numeric($this->ar_limit))
-<a name="line1606"></a>		{
-<a name="line1607"></a>			$sql .= "\n";
-<a name="line1608"></a>			$sql = $this->_limit($sql, $this->ar_limit, $this->ar_offset);
-<a name="line1609"></a>		}
+<a name="line1562"></a>		$sql = $this->_delete($table);
+<a name="line1563"></a>
+<a name="line1564"></a>		$this->_reset_write();
+<a name="line1565"></a>		
+<a name="line1566"></a>		return $this->query($sql);
+<a name="line1567"></a>	}
+<a name="line1568"></a>
+<a name="line1569"></a>	// --------------------------------------------------------------------
+<a name="line1570"></a>
+<a name="line1571"></a>	/**
+<a name="line1572"></a>	 * Truncate
+<a name="line1573"></a>	 *
+<a name="line1574"></a>	 * Compiles a truncate string and runs the query
+<a name="line1575"></a>	 * If the database does not support the truncate() command
+<a name="line1576"></a>	 * This function maps to "DELETE FROM table"
+<a name="line1577"></a>	 *
+<a name="line1578"></a>	 * @access	public
+<a name="line1579"></a>	 * @param	string	the table to truncate
+<a name="line1580"></a>	 * @return	object
+<a name="line1581"></a>	 */
+<a name="line1582"></a>	function truncate($table = '')
+<a name="line1583"></a>	{
+<a name="line1584"></a>		if ($table == '')
+<a name="line1585"></a>		{
+<a name="line1586"></a>			if ( ! isset($this->ar_from[0]))
+<a name="line1587"></a>			{
+<a name="line1588"></a>				if ($this->db_debug)
+<a name="line1589"></a>				{
+<a name="line1590"></a>					return $this->display_error('db_must_set_table');
+<a name="line1591"></a>				}
+<a name="line1592"></a>				return FALSE;
+<a name="line1593"></a>			}
+<a name="line1594"></a>
+<a name="line1595"></a>			$table = $this->ar_from[0];
+<a name="line1596"></a>		}
+<a name="line1597"></a>		else
+<a name="line1598"></a>		{
+<a name="line1599"></a>			$table = $this->_protect_identifiers($table, TRUE, NULL, FALSE);
+<a name="line1600"></a>		}
+<a name="line1601"></a>
+<a name="line1602"></a>		$sql = $this->_truncate($table);
+<a name="line1603"></a>
+<a name="line1604"></a>		$this->_reset_write();
+<a name="line1605"></a>		
+<a name="line1606"></a>		return $this->query($sql);
+<a name="line1607"></a>	}
+<a name="line1608"></a>	
+<a name="line1609"></a>	// --------------------------------------------------------------------
 <a name="line1610"></a>
-<a name="line1611"></a>		return $sql;
-<a name="line1612"></a>	}
-<a name="line1613"></a>
-<a name="line1614"></a>	// --------------------------------------------------------------------
-<a name="line1615"></a>
-<a name="line1616"></a>	/**
-<a name="line1617"></a>	 * Object to Array
-<a name="line1618"></a>	 *
-<a name="line1619"></a>	 * Takes an object as input and converts the class variables to array key/vals
-<a name="line1620"></a>	 *
-<a name="line1621"></a>	 * @access	public
-<a name="line1622"></a>	 * @param	object
-<a name="line1623"></a>	 * @return	array
-<a name="line1624"></a>	 */
-<a name="line1625"></a>	function _object_to_array($object)
-<a name="line1626"></a>	{
-<a name="line1627"></a>		if ( ! is_object($object))
-<a name="line1628"></a>		{
-<a name="line1629"></a>			return $object;
-<a name="line1630"></a>		}
-<a name="line1631"></a>		
-<a name="line1632"></a>		$array = array();
-<a name="line1633"></a>		foreach (get_object_vars($object) as $key => $val)
-<a name="line1634"></a>		{
-<a name="line1635"></a>			// There are some built in keys we need to ignore for this conversion
-<a name="line1636"></a>			if ( ! is_object($val) && ! is_array($val) && $key != '_parent_name' && $key != '_ci_scaffolding' && $key != '_ci_scaff_table')
-<a name="line1637"></a>			{
-<a name="line1638"></a>				$array[$key] = $val;
-<a name="line1639"></a>			}
+<a name="line1611"></a>	/**
+<a name="line1612"></a>	 * Delete
+<a name="line1613"></a>	 *
+<a name="line1614"></a>	 * Compiles a delete string and runs the query
+<a name="line1615"></a>	 *
+<a name="line1616"></a>	 * @access	public
+<a name="line1617"></a>	 * @param	mixed	the table(s) to delete from. String or array
+<a name="line1618"></a>	 * @param	mixed	the where clause
+<a name="line1619"></a>	 * @param	mixed	the limit clause
+<a name="line1620"></a>	 * @param	boolean
+<a name="line1621"></a>	 * @return	object
+<a name="line1622"></a>	 */
+<a name="line1623"></a>	function delete($table = '', $where = '', $limit = NULL, $reset_data = TRUE)
+<a name="line1624"></a>	{
+<a name="line1625"></a>		// Combine any cached components with the current statements
+<a name="line1626"></a>		$this->_merge_cache();
+<a name="line1627"></a>
+<a name="line1628"></a>		if ($table == '')
+<a name="line1629"></a>		{
+<a name="line1630"></a>			if ( ! isset($this->ar_from[0]))
+<a name="line1631"></a>			{
+<a name="line1632"></a>				if ($this->db_debug)
+<a name="line1633"></a>				{
+<a name="line1634"></a>					return $this->display_error('db_must_set_table');
+<a name="line1635"></a>				}
+<a name="line1636"></a>				return FALSE;
+<a name="line1637"></a>			}
+<a name="line1638"></a>
+<a name="line1639"></a>			$table = $this->ar_from[0];
 <a name="line1640"></a>		}
-<a name="line1641"></a>	
-<a name="line1642"></a>		return $array;
-<a name="line1643"></a>	}
-<a name="line1644"></a>	
-<a name="line1645"></a>	// --------------------------------------------------------------------
-<a name="line1646"></a>
-<a name="line1647"></a>	/**
-<a name="line1648"></a>	 * Start Cache
-<a name="line1649"></a>	 *
-<a name="line1650"></a>	 * Starts AR caching
-<a name="line1651"></a>	 *
-<a name="line1652"></a>	 * @access	public
-<a name="line1653"></a>	 * @return	void
-<a name="line1654"></a>	 */		
-<a name="line1655"></a>	function start_cache()
-<a name="line1656"></a>	{
-<a name="line1657"></a>		$this->ar_caching = TRUE;
-<a name="line1658"></a>	}
-<a name="line1659"></a>
-<a name="line1660"></a>	// --------------------------------------------------------------------
-<a name="line1661"></a>
-<a name="line1662"></a>	/**
-<a name="line1663"></a>	 * Stop Cache
-<a name="line1664"></a>	 *
-<a name="line1665"></a>	 * Stops AR caching
-<a name="line1666"></a>	 *
-<a name="line1667"></a>	 * @access	public
-<a name="line1668"></a>	 * @return	void
-<a name="line1669"></a>	 */		
-<a name="line1670"></a>	function stop_cache()
-<a name="line1671"></a>	{
-<a name="line1672"></a>		$this->ar_caching = FALSE;
-<a name="line1673"></a>	}
-<a name="line1674"></a>
-<a name="line1675"></a>	// --------------------------------------------------------------------
-<a name="line1676"></a>
-<a name="line1677"></a>	/**
-<a name="line1678"></a>	 * Flush Cache
-<a name="line1679"></a>	 *
-<a name="line1680"></a>	 * Empties the AR cache
-<a name="line1681"></a>	 *
-<a name="line1682"></a>	 * @access	public
-<a name="line1683"></a>	 * @return	void
-<a name="line1684"></a>	 */	
-<a name="line1685"></a>	function flush_cache()
-<a name="line1686"></a>	{	
-<a name="line1687"></a>		$this->_reset_run(
-<a name="line1688"></a>							array(
-<a name="line1689"></a>									'ar_cache_select'	=> array(), 
-<a name="line1690"></a>									'ar_cache_from'		=> array(), 
-<a name="line1691"></a>									'ar_cache_join'		=> array(),
-<a name="line1692"></a>									'ar_cache_where'	=> array(), 
-<a name="line1693"></a>									'ar_cache_like'		=> array(), 
-<a name="line1694"></a>									'ar_cache_groupby'	=> array(), 
-<a name="line1695"></a>									'ar_cache_having'	=> array(), 
-<a name="line1696"></a>									'ar_cache_orderby'	=> array(), 
-<a name="line1697"></a>									'ar_cache_set'		=> array(),
-<a name="line1698"></a>									'ar_cache_exists'	=> array()
-<a name="line1699"></a>								)
-<a name="line1700"></a>							);	
-<a name="line1701"></a>	}
-<a name="line1702"></a>
-<a name="line1703"></a>	// --------------------------------------------------------------------
-<a name="line1704"></a>
-<a name="line1705"></a>	/**
-<a name="line1706"></a>	 * Merge Cache
-<a name="line1707"></a>	 *
-<a name="line1708"></a>	 * When called, this function merges any cached AR arrays with 
-<a name="line1709"></a>	 * locally called ones.
-<a name="line1710"></a>	 *
-<a name="line1711"></a>	 * @access	private
-<a name="line1712"></a>	 * @return	void
-<a name="line1713"></a>	 */
-<a name="line1714"></a>	function _merge_cache()
-<a name="line1715"></a>	{
-<a name="line1716"></a>		if (count($this->ar_cache_exists) == 0)
-<a name="line1717"></a>		{
-<a name="line1718"></a>			return;
-<a name="line1719"></a>		}
-<a name="line1720"></a>
-<a name="line1721"></a>		foreach ($this->ar_cache_exists as $val)
-<a name="line1722"></a>		{
-<a name="line1723"></a>			$ar_variable	= 'ar_'.$val;
-<a name="line1724"></a>			$ar_cache_var	= 'ar_cache_'.$val;
-<a name="line1725"></a>
-<a name="line1726"></a>			if (count($this->$ar_cache_var) == 0)
-<a name="line1727"></a>			{
-<a name="line1728"></a>				continue;
-<a name="line1729"></a>			}
-<a name="line1730"></a>
-<a name="line1731"></a>			$this->$ar_variable = array_unique(array_merge($this->$ar_cache_var, $this->$ar_variable));
-<a name="line1732"></a>		}
-<a name="line1733"></a>
-<a name="line1734"></a>		// If we are "protecting identifiers" we need to examine the "from"
-<a name="line1735"></a>		// portion of the query to determine if there are any aliases
-<a name="line1736"></a>		if ($this->_protect_identifiers === TRUE AND count($this->ar_cache_from) > 0)
-<a name="line1737"></a>		{
-<a name="line1738"></a>			$this->_track_aliases($this->ar_from);
-<a name="line1739"></a>		}
-<a name="line1740"></a>	}
-<a name="line1741"></a>
-<a name="line1742"></a>	// --------------------------------------------------------------------
-<a name="line1743"></a>
-<a name="line1744"></a>	/**
-<a name="line1745"></a>	 * Resets the active record values.  Called by the get() function
-<a name="line1746"></a>	 *
-<a name="line1747"></a>	 * @access	private
-<a name="line1748"></a>	 * @param	array	An array of fields to reset
-<a name="line1749"></a>	 * @return	void
-<a name="line1750"></a>	 */
-<a name="line1751"></a>	function _reset_run($ar_reset_items)
-<a name="line1752"></a>	{
-<a name="line1753"></a>		foreach ($ar_reset_items as $item => $default_value)
-<a name="line1754"></a>		{
-<a name="line1755"></a>			if ( ! in_array($item, $this->ar_store_array))
-<a name="line1756"></a>			{
-<a name="line1757"></a>				$this->$item = $default_value;
-<a name="line1758"></a>			}
-<a name="line1759"></a>		}
-<a name="line1760"></a>	}
-<a name="line1761"></a>
-<a name="line1762"></a>	// --------------------------------------------------------------------
-<a name="line1763"></a>
-<a name="line1764"></a>	/**
-<a name="line1765"></a>	 * Resets the active record values.  Called by the get() function
-<a name="line1766"></a>	 *
-<a name="line1767"></a>	 * @access	private
-<a name="line1768"></a>	 * @return	void
-<a name="line1769"></a>	 */
-<a name="line1770"></a>	function _reset_select()
-<a name="line1771"></a>	{
-<a name="line1772"></a>		$ar_reset_items = array(
-<a name="line1773"></a>								'ar_select'			=> array(), 
-<a name="line1774"></a>								'ar_from'			=> array(), 
-<a name="line1775"></a>								'ar_join'			=> array(), 
-<a name="line1776"></a>								'ar_where'			=> array(), 
-<a name="line1777"></a>								'ar_like'			=> array(), 
-<a name="line1778"></a>								'ar_groupby'		=> array(), 
-<a name="line1779"></a>								'ar_having'			=> array(), 
-<a name="line1780"></a>								'ar_orderby'		=> array(), 
-<a name="line1781"></a>								'ar_wherein'		=> array(), 
-<a name="line1782"></a>								'ar_aliased_tables'	=> array(),
-<a name="line1783"></a>								'ar_distinct'		=> FALSE, 
-<a name="line1784"></a>								'ar_limit'			=> FALSE, 
-<a name="line1785"></a>								'ar_offset'			=> FALSE, 
-<a name="line1786"></a>								'ar_order'			=> FALSE,
-<a name="line1787"></a>							);
-<a name="line1788"></a>		
-<a name="line1789"></a>		$this->_reset_run($ar_reset_items);
-<a name="line1790"></a>	}
-<a name="line1791"></a>	
-<a name="line1792"></a>	// --------------------------------------------------------------------
-<a name="line1793"></a>
-<a name="line1794"></a>	/**
-<a name="line1795"></a>	 * Resets the active record "write" values.
-<a name="line1796"></a>	 *
-<a name="line1797"></a>	 * Called by the insert() update() and delete() functions
-<a name="line1798"></a>	 *
-<a name="line1799"></a>	 * @access	private
-<a name="line1800"></a>	 * @return	void
-<a name="line1801"></a>	 */
-<a name="line1802"></a>	function _reset_write()
-<a name="line1803"></a>	{	
-<a name="line1804"></a>		$ar_reset_items = array(
-<a name="line1805"></a>								'ar_set'		=> array(), 
-<a name="line1806"></a>								'ar_from'		=> array(), 
-<a name="line1807"></a>								'ar_where'		=> array(), 
-<a name="line1808"></a>								'ar_like'		=> array(),
-<a name="line1809"></a>								'ar_orderby'	=> array(), 
-<a name="line1810"></a>								'ar_limit'		=> FALSE, 
-<a name="line1811"></a>								'ar_order'		=> FALSE
-<a name="line1812"></a>								);
+<a name="line1641"></a>		elseif (is_array($table))
+<a name="line1642"></a>		{
+<a name="line1643"></a>			foreach($table as $single_table)
+<a name="line1644"></a>			{
+<a name="line1645"></a>				$this->delete($single_table, $where, $limit, FALSE);
+<a name="line1646"></a>			}
+<a name="line1647"></a>
+<a name="line1648"></a>			$this->_reset_write();
+<a name="line1649"></a>			return;
+<a name="line1650"></a>		}
+<a name="line1651"></a>		else
+<a name="line1652"></a>		{
+<a name="line1653"></a>			$table = $this->_protect_identifiers($table, TRUE, NULL, FALSE);
+<a name="line1654"></a>		}
+<a name="line1655"></a>
+<a name="line1656"></a>		if ($where != '')
+<a name="line1657"></a>		{
+<a name="line1658"></a>			$this->where($where);
+<a name="line1659"></a>		}
+<a name="line1660"></a>
+<a name="line1661"></a>		if ($limit != NULL)
+<a name="line1662"></a>		{
+<a name="line1663"></a>			$this->limit($limit);
+<a name="line1664"></a>		}
+<a name="line1665"></a>
+<a name="line1666"></a>		if (count($this->ar_where) == 0 && count($this->ar_wherein) == 0 && count($this->ar_like) == 0)
+<a name="line1667"></a>		{
+<a name="line1668"></a>			if ($this->db_debug)
+<a name="line1669"></a>			{
+<a name="line1670"></a>				return $this->display_error('db_del_must_use_where');
+<a name="line1671"></a>			}
+<a name="line1672"></a>
+<a name="line1673"></a>			return FALSE;
+<a name="line1674"></a>		}		
+<a name="line1675"></a>
+<a name="line1676"></a>		$sql = $this->_delete($table, $this->ar_where, $this->ar_like, $this->ar_limit);
+<a name="line1677"></a>
+<a name="line1678"></a>		if ($reset_data)
+<a name="line1679"></a>		{
+<a name="line1680"></a>			$this->_reset_write();
+<a name="line1681"></a>		}
+<a name="line1682"></a>		
+<a name="line1683"></a>		return $this->query($sql);
+<a name="line1684"></a>	}
+<a name="line1685"></a>
+<a name="line1686"></a>	// --------------------------------------------------------------------
+<a name="line1687"></a>
+<a name="line1688"></a>	/**
+<a name="line1689"></a>	 * DB Prefix
+<a name="line1690"></a>	 *
+<a name="line1691"></a>	 * Prepends a database prefix if one exists in configuration
+<a name="line1692"></a>	 *
+<a name="line1693"></a>	 * @access	public
+<a name="line1694"></a>	 * @param	string	the table
+<a name="line1695"></a>	 * @return	string
+<a name="line1696"></a>	 */
+<a name="line1697"></a>	function dbprefix($table = '')
+<a name="line1698"></a>	{
+<a name="line1699"></a>		if ($table == '')
+<a name="line1700"></a>		{
+<a name="line1701"></a>			$this->display_error('db_table_name_required');
+<a name="line1702"></a>		}
+<a name="line1703"></a>
+<a name="line1704"></a>		return $this->dbprefix.$table;
+<a name="line1705"></a>	}
+<a name="line1706"></a>
+<a name="line1707"></a>	// --------------------------------------------------------------------
+<a name="line1708"></a>
+<a name="line1709"></a>	/**
+<a name="line1710"></a>	 * Track Aliases
+<a name="line1711"></a>	 *
+<a name="line1712"></a>	 * Used to track SQL statements written with aliased tables.
+<a name="line1713"></a>	 *
+<a name="line1714"></a>	 * @access	private
+<a name="line1715"></a>	 * @param	string	The table to inspect
+<a name="line1716"></a>	 * @return	string
+<a name="line1717"></a>	 */	
+<a name="line1718"></a>	function _track_aliases($table)
+<a name="line1719"></a>	{
+<a name="line1720"></a>		if (is_array($table))
+<a name="line1721"></a>		{
+<a name="line1722"></a>			foreach ($table as $t)
+<a name="line1723"></a>			{
+<a name="line1724"></a>				$this->_track_aliases($t);
+<a name="line1725"></a>			}
+<a name="line1726"></a>			return;
+<a name="line1727"></a>		}
+<a name="line1728"></a>		
+<a name="line1729"></a>		// Does the string contain a comma?  If so, we need to separate
+<a name="line1730"></a>		// the string into discreet statements
+<a name="line1731"></a>		if (strpos($table, ',') !== FALSE)
+<a name="line1732"></a>		{
+<a name="line1733"></a>			return $this->_track_aliases(explode(',', $table));
+<a name="line1734"></a>		}
+<a name="line1735"></a>	
+<a name="line1736"></a>		// if a table alias is used we can recognize it by a space
+<a name="line1737"></a>		if (strpos($table, " ") !== FALSE)
+<a name="line1738"></a>		{
+<a name="line1739"></a>			// if the alias is written with the AS keyword, remove it
+<a name="line1740"></a>			$table = preg_replace('/ AS /i', ' ', $table);
+<a name="line1741"></a>			
+<a name="line1742"></a>			// Grab the alias
+<a name="line1743"></a>			$table = trim(strrchr($table, " "));
+<a name="line1744"></a>			
+<a name="line1745"></a>			// Store the alias, if it doesn't already exist
+<a name="line1746"></a>			if ( ! in_array($table, $this->ar_aliased_tables))
+<a name="line1747"></a>			{
+<a name="line1748"></a>				$this->ar_aliased_tables[] = $table;
+<a name="line1749"></a>			}
+<a name="line1750"></a>		}
+<a name="line1751"></a>	}
+<a name="line1752"></a>
+<a name="line1753"></a>	// --------------------------------------------------------------------
+<a name="line1754"></a>
+<a name="line1755"></a>	/**
+<a name="line1756"></a>	 * Compile the SELECT statement
+<a name="line1757"></a>	 *
+<a name="line1758"></a>	 * Generates a query string based on which functions were used.
+<a name="line1759"></a>	 * Should not be called directly.  The get() function calls it.
+<a name="line1760"></a>	 *
+<a name="line1761"></a>	 * @access	private
+<a name="line1762"></a>	 * @return	string
+<a name="line1763"></a>	 */
+<a name="line1764"></a>	function _compile_select($select_override = FALSE)
+<a name="line1765"></a>	{
+<a name="line1766"></a>		// Combine any cached components with the current statements
+<a name="line1767"></a>		$this->_merge_cache();
+<a name="line1768"></a>
+<a name="line1769"></a>		// ----------------------------------------------------------------
+<a name="line1770"></a>		
+<a name="line1771"></a>		// Write the "select" portion of the query
+<a name="line1772"></a>
+<a name="line1773"></a>		if ($select_override !== FALSE)
+<a name="line1774"></a>		{
+<a name="line1775"></a>			$sql = $select_override;
+<a name="line1776"></a>		}
+<a name="line1777"></a>		else
+<a name="line1778"></a>		{
+<a name="line1779"></a>			$sql = ( ! $this->ar_distinct) ? 'SELECT ' : 'SELECT DISTINCT ';
+<a name="line1780"></a>		
+<a name="line1781"></a>			if (count($this->ar_select) == 0)
+<a name="line1782"></a>			{
+<a name="line1783"></a>				$sql .= '*';		
+<a name="line1784"></a>			}
+<a name="line1785"></a>			else
+<a name="line1786"></a>			{				
+<a name="line1787"></a>				// Cycle through the "select" portion of the query and prep each column name.
+<a name="line1788"></a>				// The reason we protect identifiers here rather then in the select() function
+<a name="line1789"></a>				// is because until the user calls the from() function we don't know if there are aliases
+<a name="line1790"></a>				foreach ($this->ar_select as $key => $val)
+<a name="line1791"></a>				{
+<a name="line1792"></a>					$this->ar_select[$key] = $this->_protect_identifiers($val);
+<a name="line1793"></a>				}
+<a name="line1794"></a>				
+<a name="line1795"></a>				$sql .= implode(', ', $this->ar_select);
+<a name="line1796"></a>			}
+<a name="line1797"></a>		}
+<a name="line1798"></a>
+<a name="line1799"></a>		// ----------------------------------------------------------------
+<a name="line1800"></a>		
+<a name="line1801"></a>		// Write the "FROM" portion of the query
+<a name="line1802"></a>
+<a name="line1803"></a>		if (count($this->ar_from) > 0)
+<a name="line1804"></a>		{
+<a name="line1805"></a>			$sql .= "\nFROM ";
+<a name="line1806"></a>
+<a name="line1807"></a>			$sql .= $this->_from_tables($this->ar_from);
+<a name="line1808"></a>		}
+<a name="line1809"></a>
+<a name="line1810"></a>		// ----------------------------------------------------------------
+<a name="line1811"></a>		
+<a name="line1812"></a>		// Write the "JOIN" portion of the query
 <a name="line1813"></a>
-<a name="line1814"></a>		$this->_reset_run($ar_reset_items);
-<a name="line1815"></a>	}
-<a name="line1816"></a>	
-<a name="line1817"></a>}
-<a name="line1818"></a>
-<a name="line1819"></a>/* End of file DB_active_rec.php */
-<a name="line1820"></a>/* Location: ./system/database/DB_active_rec.php */</pre>
+<a name="line1814"></a>		if (count($this->ar_join) > 0)
+<a name="line1815"></a>		{
+<a name="line1816"></a>			$sql .= "\n";
+<a name="line1817"></a>
+<a name="line1818"></a>			$sql .= implode("\n", $this->ar_join);
+<a name="line1819"></a>		}
+<a name="line1820"></a>
+<a name="line1821"></a>		// ----------------------------------------------------------------
+<a name="line1822"></a>		
+<a name="line1823"></a>		// Write the "WHERE" portion of the query
+<a name="line1824"></a>
+<a name="line1825"></a>		if (count($this->ar_where) > 0 OR count($this->ar_like) > 0)
+<a name="line1826"></a>		{
+<a name="line1827"></a>			$sql .= "\n";
+<a name="line1828"></a>
+<a name="line1829"></a>			$sql .= "WHERE ";
+<a name="line1830"></a>		}
+<a name="line1831"></a>
+<a name="line1832"></a>		$sql .= implode("\n", $this->ar_where);
+<a name="line1833"></a>
+<a name="line1834"></a>		// ----------------------------------------------------------------
+<a name="line1835"></a>		
+<a name="line1836"></a>		// Write the "LIKE" portion of the query
+<a name="line1837"></a>	
+<a name="line1838"></a>		if (count($this->ar_like) > 0)
+<a name="line1839"></a>		{
+<a name="line1840"></a>			if (count($this->ar_where) > 0)
+<a name="line1841"></a>			{
+<a name="line1842"></a>				$sql .= "\nAND ";
+<a name="line1843"></a>			}
+<a name="line1844"></a>
+<a name="line1845"></a>			$sql .= implode("\n", $this->ar_like);
+<a name="line1846"></a>		}
+<a name="line1847"></a>
+<a name="line1848"></a>		// ----------------------------------------------------------------
+<a name="line1849"></a>		
+<a name="line1850"></a>		// Write the "GROUP BY" portion of the query
+<a name="line1851"></a>	
+<a name="line1852"></a>		if (count($this->ar_groupby) > 0)
+<a name="line1853"></a>		{
+<a name="line1854"></a>			$sql .= "\nGROUP BY ";
+<a name="line1855"></a>			
+<a name="line1856"></a>			$sql .= implode(', ', $this->ar_groupby);
+<a name="line1857"></a>		}
+<a name="line1858"></a>
+<a name="line1859"></a>		// ----------------------------------------------------------------
+<a name="line1860"></a>		
+<a name="line1861"></a>		// Write the "HAVING" portion of the query
+<a name="line1862"></a>		
+<a name="line1863"></a>		if (count($this->ar_having) > 0)
+<a name="line1864"></a>		{
+<a name="line1865"></a>			$sql .= "\nHAVING ";
+<a name="line1866"></a>			$sql .= implode("\n", $this->ar_having);
+<a name="line1867"></a>		}
+<a name="line1868"></a>
+<a name="line1869"></a>		// ----------------------------------------------------------------
+<a name="line1870"></a>		
+<a name="line1871"></a>		// Write the "ORDER BY" portion of the query
+<a name="line1872"></a>
+<a name="line1873"></a>		if (count($this->ar_orderby) > 0)
+<a name="line1874"></a>		{
+<a name="line1875"></a>			$sql .= "\nORDER BY ";
+<a name="line1876"></a>			$sql .= implode(', ', $this->ar_orderby);
+<a name="line1877"></a>			
+<a name="line1878"></a>			if ($this->ar_order !== FALSE)
+<a name="line1879"></a>			{
+<a name="line1880"></a>				$sql .= ($this->ar_order == 'desc') ? ' DESC' : ' ASC';
+<a name="line1881"></a>			}		
+<a name="line1882"></a>		}
+<a name="line1883"></a>
+<a name="line1884"></a>		// ----------------------------------------------------------------
+<a name="line1885"></a>		
+<a name="line1886"></a>		// Write the "LIMIT" portion of the query
+<a name="line1887"></a>		
+<a name="line1888"></a>		if (is_numeric($this->ar_limit))
+<a name="line1889"></a>		{
+<a name="line1890"></a>			$sql .= "\n";
+<a name="line1891"></a>			$sql = $this->_limit($sql, $this->ar_limit, $this->ar_offset);
+<a name="line1892"></a>		}
+<a name="line1893"></a>
+<a name="line1894"></a>		return $sql;
+<a name="line1895"></a>	}
+<a name="line1896"></a>
+<a name="line1897"></a>	// --------------------------------------------------------------------
+<a name="line1898"></a>
+<a name="line1899"></a>	/**
+<a name="line1900"></a>	 * Object to Array
+<a name="line1901"></a>	 *
+<a name="line1902"></a>	 * Takes an object as input and converts the class variables to array key/vals
+<a name="line1903"></a>	 *
+<a name="line1904"></a>	 * @access	public
+<a name="line1905"></a>	 * @param	object
+<a name="line1906"></a>	 * @return	array
+<a name="line1907"></a>	 */
+<a name="line1908"></a>	function _object_to_array($object)
+<a name="line1909"></a>	{
+<a name="line1910"></a>		if ( ! is_object($object))
+<a name="line1911"></a>		{
+<a name="line1912"></a>			return $object;
+<a name="line1913"></a>		}
+<a name="line1914"></a>		
+<a name="line1915"></a>		$array = array();
+<a name="line1916"></a>		foreach (get_object_vars($object) as $key => $val)
+<a name="line1917"></a>		{
+<a name="line1918"></a>			// There are some built in keys we need to ignore for this conversion
+<a name="line1919"></a>			if ( ! is_object($val) && ! is_array($val) && $key != '_parent_name')
+<a name="line1920"></a>			{
+<a name="line1921"></a>				$array[$key] = $val;
+<a name="line1922"></a>			}
+<a name="line1923"></a>		}
+<a name="line1924"></a>
+<a name="line1925"></a>		return $array;
+<a name="line1926"></a>	}
+<a name="line1927"></a>	
+<a name="line1928"></a>	// --------------------------------------------------------------------
+<a name="line1929"></a>
+<a name="line1930"></a>	/**
+<a name="line1931"></a>	 * Object to Array
+<a name="line1932"></a>	 *
+<a name="line1933"></a>	 * Takes an object as input and converts the class variables to array key/vals
+<a name="line1934"></a>	 *
+<a name="line1935"></a>	 * @access	public
+<a name="line1936"></a>	 * @param	object
+<a name="line1937"></a>	 * @return	array
+<a name="line1938"></a>	 */
+<a name="line1939"></a>	function _object_to_array_batch($object)
+<a name="line1940"></a>	{
+<a name="line1941"></a>		if ( ! is_object($object))
+<a name="line1942"></a>		{
+<a name="line1943"></a>			return $object;
+<a name="line1944"></a>		}
+<a name="line1945"></a>		
+<a name="line1946"></a>		$array = array();
+<a name="line1947"></a>		$out = get_object_vars($object);
+<a name="line1948"></a>		$fields = array_keys($out);
+<a name="line1949"></a>
+<a name="line1950"></a>		foreach ($fields as $val)
+<a name="line1951"></a>		{
+<a name="line1952"></a>			// There are some built in keys we need to ignore for this conversion
+<a name="line1953"></a>			if ($val != '_parent_name')
+<a name="line1954"></a>			{
+<a name="line1955"></a>
+<a name="line1956"></a>				$i = 0;
+<a name="line1957"></a>				foreach ($out[$val] as $data)
+<a name="line1958"></a>				{
+<a name="line1959"></a>					$array[$i][$val] = $data;
+<a name="line1960"></a>					$i++;
+<a name="line1961"></a>				}
+<a name="line1962"></a>			}
+<a name="line1963"></a>		}
+<a name="line1964"></a>
+<a name="line1965"></a>		return $array;
+<a name="line1966"></a>	}
+<a name="line1967"></a>	
+<a name="line1968"></a>	// --------------------------------------------------------------------
+<a name="line1969"></a>
+<a name="line1970"></a>	/**
+<a name="line1971"></a>	 * Start Cache
+<a name="line1972"></a>	 *
+<a name="line1973"></a>	 * Starts AR caching
+<a name="line1974"></a>	 *
+<a name="line1975"></a>	 * @access	public
+<a name="line1976"></a>	 * @return	void
+<a name="line1977"></a>	 */		
+<a name="line1978"></a>	function start_cache()
+<a name="line1979"></a>	{
+<a name="line1980"></a>		$this->ar_caching = TRUE;
+<a name="line1981"></a>	}
+<a name="line1982"></a>
+<a name="line1983"></a>	// --------------------------------------------------------------------
+<a name="line1984"></a>
+<a name="line1985"></a>	/**
+<a name="line1986"></a>	 * Stop Cache
+<a name="line1987"></a>	 *
+<a name="line1988"></a>	 * Stops AR caching
+<a name="line1989"></a>	 *
+<a name="line1990"></a>	 * @access	public
+<a name="line1991"></a>	 * @return	void
+<a name="line1992"></a>	 */		
+<a name="line1993"></a>	function stop_cache()
+<a name="line1994"></a>	{
+<a name="line1995"></a>		$this->ar_caching = FALSE;
+<a name="line1996"></a>	}
+<a name="line1997"></a>
+<a name="line1998"></a>	// --------------------------------------------------------------------
+<a name="line1999"></a>
+<a name="line2000"></a>	/**
+<a name="line2001"></a>	 * Flush Cache
+<a name="line2002"></a>	 *
+<a name="line2003"></a>	 * Empties the AR cache
+<a name="line2004"></a>	 *
+<a name="line2005"></a>	 * @access	public
+<a name="line2006"></a>	 * @return	void
+<a name="line2007"></a>	 */	
+<a name="line2008"></a>	function flush_cache()
+<a name="line2009"></a>	{	
+<a name="line2010"></a>		$this->_reset_run(
+<a name="line2011"></a>							array(
+<a name="line2012"></a>									'ar_cache_select'	=> array(), 
+<a name="line2013"></a>									'ar_cache_from'		=> array(), 
+<a name="line2014"></a>									'ar_cache_join'		=> array(),
+<a name="line2015"></a>									'ar_cache_where'	=> array(), 
+<a name="line2016"></a>									'ar_cache_like'		=> array(), 
+<a name="line2017"></a>									'ar_cache_groupby'	=> array(), 
+<a name="line2018"></a>									'ar_cache_having'	=> array(), 
+<a name="line2019"></a>									'ar_cache_orderby'	=> array(), 
+<a name="line2020"></a>									'ar_cache_set'		=> array(),
+<a name="line2021"></a>									'ar_cache_exists'	=> array()
+<a name="line2022"></a>								)
+<a name="line2023"></a>							);	
+<a name="line2024"></a>	}
+<a name="line2025"></a>
+<a name="line2026"></a>	// --------------------------------------------------------------------
+<a name="line2027"></a>
+<a name="line2028"></a>	/**
+<a name="line2029"></a>	 * Merge Cache
+<a name="line2030"></a>	 *
+<a name="line2031"></a>	 * When called, this function merges any cached AR arrays with 
+<a name="line2032"></a>	 * locally called ones.
+<a name="line2033"></a>	 *
+<a name="line2034"></a>	 * @access	private
+<a name="line2035"></a>	 * @return	void
+<a name="line2036"></a>	 */
+<a name="line2037"></a>	function _merge_cache()
+<a name="line2038"></a>	{
+<a name="line2039"></a>		if (count($this->ar_cache_exists) == 0)
+<a name="line2040"></a>		{
+<a name="line2041"></a>			return;
+<a name="line2042"></a>		}
+<a name="line2043"></a>
+<a name="line2044"></a>		foreach ($this->ar_cache_exists as $val)
+<a name="line2045"></a>		{
+<a name="line2046"></a>			$ar_variable	= 'ar_'.$val;
+<a name="line2047"></a>			$ar_cache_var	= 'ar_cache_'.$val;
+<a name="line2048"></a>
+<a name="line2049"></a>			if (count($this->$ar_cache_var) == 0)
+<a name="line2050"></a>			{
+<a name="line2051"></a>				continue;
+<a name="line2052"></a>			}
+<a name="line2053"></a>
+<a name="line2054"></a>			$this->$ar_variable = array_unique(array_merge($this->$ar_cache_var, $this->$ar_variable));
+<a name="line2055"></a>		}
+<a name="line2056"></a>
+<a name="line2057"></a>		// If we are "protecting identifiers" we need to examine the "from"
+<a name="line2058"></a>		// portion of the query to determine if there are any aliases
+<a name="line2059"></a>		if ($this->_protect_identifiers === TRUE AND count($this->ar_cache_from) > 0)
+<a name="line2060"></a>		{
+<a name="line2061"></a>			$this->_track_aliases($this->ar_from);
+<a name="line2062"></a>		}
+<a name="line2063"></a>	}
+<a name="line2064"></a>
+<a name="line2065"></a>	// --------------------------------------------------------------------
+<a name="line2066"></a>
+<a name="line2067"></a>	/**
+<a name="line2068"></a>	 * Resets the active record values.  Called by the get() function
+<a name="line2069"></a>	 *
+<a name="line2070"></a>	 * @access	private
+<a name="line2071"></a>	 * @param	array	An array of fields to reset
+<a name="line2072"></a>	 * @return	void
+<a name="line2073"></a>	 */
+<a name="line2074"></a>	function _reset_run($ar_reset_items)
+<a name="line2075"></a>	{
+<a name="line2076"></a>		foreach ($ar_reset_items as $item => $default_value)
+<a name="line2077"></a>		{
+<a name="line2078"></a>			if ( ! in_array($item, $this->ar_store_array))
+<a name="line2079"></a>			{
+<a name="line2080"></a>				$this->$item = $default_value;
+<a name="line2081"></a>			}
+<a name="line2082"></a>		}
+<a name="line2083"></a>	}
+<a name="line2084"></a>
+<a name="line2085"></a>	// --------------------------------------------------------------------
+<a name="line2086"></a>
+<a name="line2087"></a>	/**
+<a name="line2088"></a>	 * Resets the active record values.  Called by the get() function
+<a name="line2089"></a>	 *
+<a name="line2090"></a>	 * @access	private
+<a name="line2091"></a>	 * @return	void
+<a name="line2092"></a>	 */
+<a name="line2093"></a>	function _reset_select()
+<a name="line2094"></a>	{
+<a name="line2095"></a>		$ar_reset_items = array(
+<a name="line2096"></a>								'ar_select'			=> array(), 
+<a name="line2097"></a>								'ar_from'			=> array(), 
+<a name="line2098"></a>								'ar_join'			=> array(), 
+<a name="line2099"></a>								'ar_where'			=> array(), 
+<a name="line2100"></a>								'ar_like'			=> array(), 
+<a name="line2101"></a>								'ar_groupby'		=> array(), 
+<a name="line2102"></a>								'ar_having'			=> array(), 
+<a name="line2103"></a>								'ar_orderby'		=> array(), 
+<a name="line2104"></a>								'ar_wherein'		=> array(), 
+<a name="line2105"></a>								'ar_aliased_tables'	=> array(),
+<a name="line2106"></a>								'ar_distinct'		=> FALSE, 
+<a name="line2107"></a>								'ar_limit'			=> FALSE, 
+<a name="line2108"></a>								'ar_offset'			=> FALSE, 
+<a name="line2109"></a>								'ar_order'			=> FALSE,
+<a name="line2110"></a>							);
+<a name="line2111"></a>		
+<a name="line2112"></a>		$this->_reset_run($ar_reset_items);
+<a name="line2113"></a>	}
+<a name="line2114"></a>	
+<a name="line2115"></a>	// --------------------------------------------------------------------
+<a name="line2116"></a>
+<a name="line2117"></a>	/**
+<a name="line2118"></a>	 * Resets the active record "write" values.
+<a name="line2119"></a>	 *
+<a name="line2120"></a>	 * Called by the insert() update() and delete() functions
+<a name="line2121"></a>	 *
+<a name="line2122"></a>	 * @access	private
+<a name="line2123"></a>	 * @return	void
+<a name="line2124"></a>	 */
+<a name="line2125"></a>	function _reset_write()
+<a name="line2126"></a>	{	
+<a name="line2127"></a>		$ar_reset_items = array(
+<a name="line2128"></a>								'ar_set'		=> array(), 
+<a name="line2129"></a>								'ar_from'		=> array(), 
+<a name="line2130"></a>								'ar_where'		=> array(), 
+<a name="line2131"></a>								'ar_like'		=> array(),
+<a name="line2132"></a>								'ar_orderby'	=> array(), 
+<a name="line2133"></a>								'ar_limit'		=> FALSE, 
+<a name="line2134"></a>								'ar_order'		=> FALSE
+<a name="line2135"></a>								);
+<a name="line2136"></a>
+<a name="line2137"></a>		$this->_reset_run($ar_reset_items);
+<a name="line2138"></a>	}
+<a name="line2139"></a>	
+<a name="line2140"></a>}
+<a name="line2141"></a>
+<a name="line2142"></a>/* End of file DB_active_rec.php */
+<a name="line2143"></a>/* Location: ./system/database/DB_active_rec.php */</pre>
 <div class="header">
 <h1>GiftFlow API</h1>
 <ul>

@@ -6,7 +6,7 @@
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 
 <meta name="generator" content="PHPDoctor 2RC4 (http://peej.github.com/phpdoctor/)">
-<meta name="when" content="Mon, 19 Jul 2010 17:13:58 +0000">
+<meta name="when" content="Sat, 24 Jul 2010 20:46:31 +0000">
 
 <link rel="stylesheet" type="text/css" href="../../../../stylesheet.css">
 <link rel="start" href="../../../../overview-summary.html">
@@ -45,7 +45,7 @@
 <a name="line6"></a> *
 <a name="line7"></a> * @package	 	CodeIgniter
 <a name="line8"></a> * @author	  	ExpressionEngine Dev Team
-<a name="line9"></a> * @copyright   Copyright (c) 2008 - 2009, EllisLab, Inc.
+<a name="line9"></a> * @copyright   Copyright (c) 2008 - 2010, EllisLab, Inc.
 <a name="line10"></a> * @license	 	http://codeigniter.com/user_guide/license.html
 <a name="line11"></a> * @link		http://codeigniter.com
 <a name="line12"></a> * @since	   	Version 1.0
@@ -442,381 +442,378 @@
 <a name="line403"></a>	   		return $str;
 <a name="line404"></a>	   	}
 <a name="line405"></a>
-<a name="line406"></a>		// Access the CI object
-<a name="line407"></a>		$CI =& get_instance();
-<a name="line408"></a>
-<a name="line409"></a>		$str = $CI->input->_remove_invisible_characters($str);
-<a name="line410"></a>		
-<a name="line411"></a>		// escape LIKE condition wildcards
-<a name="line412"></a>		if ($like === TRUE)
-<a name="line413"></a>		{
-<a name="line414"></a>			$str = str_replace(	array('%', '_', $this->_like_escape_chr),
-<a name="line415"></a>								array($this->_like_escape_chr.'%', $this->_like_escape_chr.'_', $this->_like_escape_chr.$this->_like_escape_chr),
-<a name="line416"></a>								$str);
-<a name="line417"></a>		}
-<a name="line418"></a>		
-<a name="line419"></a>		return $str;
-<a name="line420"></a>	}
-<a name="line421"></a>
-<a name="line422"></a>	// --------------------------------------------------------------------
-<a name="line423"></a>
-<a name="line424"></a>	/**
-<a name="line425"></a>	 * Affected Rows
-<a name="line426"></a>	 *
-<a name="line427"></a>	 * @access  public
-<a name="line428"></a>	 * @return  integer
-<a name="line429"></a>	 */
-<a name="line430"></a>	function affected_rows()
-<a name="line431"></a>	{
-<a name="line432"></a>		return @ocirowcount($this->stmt_id);
-<a name="line433"></a>	}
-<a name="line434"></a>
-<a name="line435"></a>	// --------------------------------------------------------------------
-<a name="line436"></a>
-<a name="line437"></a>	/**
-<a name="line438"></a>	 * Insert ID
-<a name="line439"></a>	 *
-<a name="line440"></a>	 * @access  public
-<a name="line441"></a>	 * @return  integer
-<a name="line442"></a>	 */
-<a name="line443"></a>	function insert_id()
-<a name="line444"></a>	{
-<a name="line445"></a>		// not supported in oracle
-<a name="line446"></a>		return $this->display_error('db_unsupported_function');
-<a name="line447"></a>	}
-<a name="line448"></a>
-<a name="line449"></a>	// --------------------------------------------------------------------
-<a name="line450"></a>
-<a name="line451"></a>	/**
-<a name="line452"></a>	 * "Count All" query
+<a name="line406"></a>		$str = remove_invisible_characters($str);
+<a name="line407"></a>		
+<a name="line408"></a>		// escape LIKE condition wildcards
+<a name="line409"></a>		if ($like === TRUE)
+<a name="line410"></a>		{
+<a name="line411"></a>			$str = str_replace(	array('%', '_', $this->_like_escape_chr),
+<a name="line412"></a>								array($this->_like_escape_chr.'%', $this->_like_escape_chr.'_', $this->_like_escape_chr.$this->_like_escape_chr),
+<a name="line413"></a>								$str);
+<a name="line414"></a>		}
+<a name="line415"></a>		
+<a name="line416"></a>		return $str;
+<a name="line417"></a>	}
+<a name="line418"></a>
+<a name="line419"></a>	// --------------------------------------------------------------------
+<a name="line420"></a>
+<a name="line421"></a>	/**
+<a name="line422"></a>	 * Affected Rows
+<a name="line423"></a>	 *
+<a name="line424"></a>	 * @access  public
+<a name="line425"></a>	 * @return  integer
+<a name="line426"></a>	 */
+<a name="line427"></a>	function affected_rows()
+<a name="line428"></a>	{
+<a name="line429"></a>		return @ocirowcount($this->stmt_id);
+<a name="line430"></a>	}
+<a name="line431"></a>
+<a name="line432"></a>	// --------------------------------------------------------------------
+<a name="line433"></a>
+<a name="line434"></a>	/**
+<a name="line435"></a>	 * Insert ID
+<a name="line436"></a>	 *
+<a name="line437"></a>	 * @access  public
+<a name="line438"></a>	 * @return  integer
+<a name="line439"></a>	 */
+<a name="line440"></a>	function insert_id()
+<a name="line441"></a>	{
+<a name="line442"></a>		// not supported in oracle
+<a name="line443"></a>		return $this->display_error('db_unsupported_function');
+<a name="line444"></a>	}
+<a name="line445"></a>
+<a name="line446"></a>	// --------------------------------------------------------------------
+<a name="line447"></a>
+<a name="line448"></a>	/**
+<a name="line449"></a>	 * "Count All" query
+<a name="line450"></a>	 *
+<a name="line451"></a>	 * Generates a platform-specific query string that counts all records in
+<a name="line452"></a>	 * the specified database
 <a name="line453"></a>	 *
-<a name="line454"></a>	 * Generates a platform-specific query string that counts all records in
-<a name="line455"></a>	 * the specified database
-<a name="line456"></a>	 *
-<a name="line457"></a>	 * @access  public
-<a name="line458"></a>	 * @param   string
-<a name="line459"></a>	 * @return  string
-<a name="line460"></a>	 */
-<a name="line461"></a>	function count_all($table = '')
-<a name="line462"></a>	{
-<a name="line463"></a>		if ($table == '')
-<a name="line464"></a>		{
-<a name="line465"></a>			return 0;
-<a name="line466"></a>		}
-<a name="line467"></a>
-<a name="line468"></a>		$query = $this->query($this->_count_string . $this->_protect_identifiers('numrows') . " FROM " . $this->_protect_identifiers($table, TRUE, NULL, FALSE));
-<a name="line469"></a>
-<a name="line470"></a>		if ($query == FALSE)
-<a name="line471"></a>		{
-<a name="line472"></a>			return 0;
-<a name="line473"></a>		}
-<a name="line474"></a>
-<a name="line475"></a>		$row = $query->row();
-<a name="line476"></a>		return (int) $row->numrows;
-<a name="line477"></a>	}
-<a name="line478"></a>
-<a name="line479"></a>	// --------------------------------------------------------------------
-<a name="line480"></a>
-<a name="line481"></a>	/**
-<a name="line482"></a>	 * Show table query
-<a name="line483"></a>	 *
-<a name="line484"></a>	 * Generates a platform-specific query string so that the table names can be fetched
-<a name="line485"></a>	 *
-<a name="line486"></a>	 * @access  private
-<a name="line487"></a>	 * @param	boolean
-<a name="line488"></a>	 * @return  string
-<a name="line489"></a>	 */
-<a name="line490"></a>	function _list_tables($prefix_limit = FALSE)
-<a name="line491"></a>	{
-<a name="line492"></a>		$sql = "SELECT TABLE_NAME FROM ALL_TABLES";
-<a name="line493"></a>
-<a name="line494"></a>		if ($prefix_limit !== FALSE AND $this->dbprefix != '')
-<a name="line495"></a>		{
-<a name="line496"></a>			$sql .= " WHERE TABLE_NAME LIKE '".$this->escape_like_str($this->dbprefix)."%' ".sprintf($this->_like_escape_str, $this->_like_escape_char);
-<a name="line497"></a>		}
-<a name="line498"></a>		
-<a name="line499"></a>		return $sql;
-<a name="line500"></a>	}
-<a name="line501"></a>
-<a name="line502"></a>	// --------------------------------------------------------------------
-<a name="line503"></a>
-<a name="line504"></a>	/**
-<a name="line505"></a>	 * Show column query
-<a name="line506"></a>	 *
-<a name="line507"></a>	 * Generates a platform-specific query string so that the column names can be fetched
-<a name="line508"></a>	 *
-<a name="line509"></a>	 * @access  public
-<a name="line510"></a>	 * @param   string  the table name
-<a name="line511"></a>	 * @return  string
-<a name="line512"></a>	 */
-<a name="line513"></a>	function _list_columns($table = '')
-<a name="line514"></a>	{
-<a name="line515"></a>		return "SELECT COLUMN_NAME FROM all_tab_columns WHERE table_name = '$table'";
-<a name="line516"></a>	}
-<a name="line517"></a>
-<a name="line518"></a>	// --------------------------------------------------------------------
-<a name="line519"></a>
-<a name="line520"></a>	/**
-<a name="line521"></a>	 * Field data query
-<a name="line522"></a>	 *
-<a name="line523"></a>	 * Generates a platform-specific query so that the column data can be retrieved
-<a name="line524"></a>	 *
-<a name="line525"></a>	 * @access  public
-<a name="line526"></a>	 * @param   string  the table name
-<a name="line527"></a>	 * @return  object
-<a name="line528"></a>	 */
-<a name="line529"></a>	function _field_data($table)
-<a name="line530"></a>	{
-<a name="line531"></a>		return "SELECT * FROM ".$table." where rownum = 1";
-<a name="line532"></a>	}
-<a name="line533"></a>
-<a name="line534"></a>	// --------------------------------------------------------------------
-<a name="line535"></a>
-<a name="line536"></a>	/**
-<a name="line537"></a>	 * The error message string
-<a name="line538"></a>	 *
-<a name="line539"></a>	 * @access  private
-<a name="line540"></a>	 * @return  string
-<a name="line541"></a>	 */
-<a name="line542"></a>	function _error_message()
-<a name="line543"></a>	{
-<a name="line544"></a>		$error = ocierror($this->conn_id);
-<a name="line545"></a>		return $error['message'];
-<a name="line546"></a>	}
-<a name="line547"></a>
-<a name="line548"></a>	// --------------------------------------------------------------------
-<a name="line549"></a>
-<a name="line550"></a>	/**
-<a name="line551"></a>	 * The error message number
-<a name="line552"></a>	 *
-<a name="line553"></a>	 * @access  private
-<a name="line554"></a>	 * @return  integer
-<a name="line555"></a>	 */
-<a name="line556"></a>	function _error_number()
-<a name="line557"></a>	{
-<a name="line558"></a>		$error = ocierror($this->conn_id);
-<a name="line559"></a>		return $error['code'];
-<a name="line560"></a>	}
-<a name="line561"></a>	
-<a name="line562"></a>	// --------------------------------------------------------------------
-<a name="line563"></a>
-<a name="line564"></a>	/**
-<a name="line565"></a>	 * Escape the SQL Identifiers
-<a name="line566"></a>	 *
-<a name="line567"></a>	 * This function escapes column and table names
-<a name="line568"></a>	 *
-<a name="line569"></a>	 * @access	private
-<a name="line570"></a>	 * @param	string
-<a name="line571"></a>	 * @return	string
-<a name="line572"></a>	 */
-<a name="line573"></a>	function _escape_identifiers($item)
-<a name="line574"></a>	{
-<a name="line575"></a>		if ($this->_escape_char == '')
-<a name="line576"></a>		{
-<a name="line577"></a>			return $item;
-<a name="line578"></a>		}
-<a name="line579"></a>
-<a name="line580"></a>		foreach ($this->_reserved_identifiers as $id)
-<a name="line581"></a>		{
-<a name="line582"></a>			if (strpos($item, '.'.$id) !== FALSE)
-<a name="line583"></a>			{
-<a name="line584"></a>				$str = $this->_escape_char. str_replace('.', $this->_escape_char.'.', $item);  
-<a name="line585"></a>				
-<a name="line586"></a>				// remove duplicates if the user already included the escape
-<a name="line587"></a>				return preg_replace('/['.$this->_escape_char.']+/', $this->_escape_char, $str);
-<a name="line588"></a>			}		
-<a name="line589"></a>		}
-<a name="line590"></a>	
-<a name="line591"></a>		if (strpos($item, '.') !== FALSE)
-<a name="line592"></a>		{
-<a name="line593"></a>			$str = $this->_escape_char.str_replace('.', $this->_escape_char.'.'.$this->_escape_char, $item).$this->_escape_char;			
-<a name="line594"></a>		}
-<a name="line595"></a>		else
-<a name="line596"></a>		{
-<a name="line597"></a>			$str = $this->_escape_char.$item.$this->_escape_char;
-<a name="line598"></a>		}
-<a name="line599"></a>		
-<a name="line600"></a>		// remove duplicates if the user already included the escape
-<a name="line601"></a>		return preg_replace('/['.$this->_escape_char.']+/', $this->_escape_char, $str);
-<a name="line602"></a>	}
-<a name="line603"></a>	
-<a name="line604"></a>	// --------------------------------------------------------------------
-<a name="line605"></a>
-<a name="line606"></a>	/**
-<a name="line607"></a>	 * From Tables
+<a name="line454"></a>	 * @access  public
+<a name="line455"></a>	 * @param   string
+<a name="line456"></a>	 * @return  string
+<a name="line457"></a>	 */
+<a name="line458"></a>	function count_all($table = '')
+<a name="line459"></a>	{
+<a name="line460"></a>		if ($table == '')
+<a name="line461"></a>		{
+<a name="line462"></a>			return 0;
+<a name="line463"></a>		}
+<a name="line464"></a>
+<a name="line465"></a>		$query = $this->query($this->_count_string . $this->_protect_identifiers('numrows') . " FROM " . $this->_protect_identifiers($table, TRUE, NULL, FALSE));
+<a name="line466"></a>
+<a name="line467"></a>		if ($query == FALSE)
+<a name="line468"></a>		{
+<a name="line469"></a>			return 0;
+<a name="line470"></a>		}
+<a name="line471"></a>
+<a name="line472"></a>		$row = $query->row();
+<a name="line473"></a>		return (int) $row->numrows;
+<a name="line474"></a>	}
+<a name="line475"></a>
+<a name="line476"></a>	// --------------------------------------------------------------------
+<a name="line477"></a>
+<a name="line478"></a>	/**
+<a name="line479"></a>	 * Show table query
+<a name="line480"></a>	 *
+<a name="line481"></a>	 * Generates a platform-specific query string so that the table names can be fetched
+<a name="line482"></a>	 *
+<a name="line483"></a>	 * @access  private
+<a name="line484"></a>	 * @param	boolean
+<a name="line485"></a>	 * @return  string
+<a name="line486"></a>	 */
+<a name="line487"></a>	function _list_tables($prefix_limit = FALSE)
+<a name="line488"></a>	{
+<a name="line489"></a>		$sql = "SELECT TABLE_NAME FROM ALL_TABLES";
+<a name="line490"></a>
+<a name="line491"></a>		if ($prefix_limit !== FALSE AND $this->dbprefix != '')
+<a name="line492"></a>		{
+<a name="line493"></a>			$sql .= " WHERE TABLE_NAME LIKE '".$this->escape_like_str($this->dbprefix)."%' ".sprintf($this->_like_escape_str, $this->_like_escape_chr);
+<a name="line494"></a>		}
+<a name="line495"></a>		
+<a name="line496"></a>		return $sql;
+<a name="line497"></a>	}
+<a name="line498"></a>
+<a name="line499"></a>	// --------------------------------------------------------------------
+<a name="line500"></a>
+<a name="line501"></a>	/**
+<a name="line502"></a>	 * Show column query
+<a name="line503"></a>	 *
+<a name="line504"></a>	 * Generates a platform-specific query string so that the column names can be fetched
+<a name="line505"></a>	 *
+<a name="line506"></a>	 * @access  public
+<a name="line507"></a>	 * @param   string  the table name
+<a name="line508"></a>	 * @return  string
+<a name="line509"></a>	 */
+<a name="line510"></a>	function _list_columns($table = '')
+<a name="line511"></a>	{
+<a name="line512"></a>		return "SELECT COLUMN_NAME FROM all_tab_columns WHERE table_name = '$table'";
+<a name="line513"></a>	}
+<a name="line514"></a>
+<a name="line515"></a>	// --------------------------------------------------------------------
+<a name="line516"></a>
+<a name="line517"></a>	/**
+<a name="line518"></a>	 * Field data query
+<a name="line519"></a>	 *
+<a name="line520"></a>	 * Generates a platform-specific query so that the column data can be retrieved
+<a name="line521"></a>	 *
+<a name="line522"></a>	 * @access  public
+<a name="line523"></a>	 * @param   string  the table name
+<a name="line524"></a>	 * @return  object
+<a name="line525"></a>	 */
+<a name="line526"></a>	function _field_data($table)
+<a name="line527"></a>	{
+<a name="line528"></a>		return "SELECT * FROM ".$table." where rownum = 1";
+<a name="line529"></a>	}
+<a name="line530"></a>
+<a name="line531"></a>	// --------------------------------------------------------------------
+<a name="line532"></a>
+<a name="line533"></a>	/**
+<a name="line534"></a>	 * The error message string
+<a name="line535"></a>	 *
+<a name="line536"></a>	 * @access  private
+<a name="line537"></a>	 * @return  string
+<a name="line538"></a>	 */
+<a name="line539"></a>	function _error_message()
+<a name="line540"></a>	{
+<a name="line541"></a>		$error = ocierror($this->conn_id);
+<a name="line542"></a>		return $error['message'];
+<a name="line543"></a>	}
+<a name="line544"></a>
+<a name="line545"></a>	// --------------------------------------------------------------------
+<a name="line546"></a>
+<a name="line547"></a>	/**
+<a name="line548"></a>	 * The error message number
+<a name="line549"></a>	 *
+<a name="line550"></a>	 * @access  private
+<a name="line551"></a>	 * @return  integer
+<a name="line552"></a>	 */
+<a name="line553"></a>	function _error_number()
+<a name="line554"></a>	{
+<a name="line555"></a>		$error = ocierror($this->conn_id);
+<a name="line556"></a>		return $error['code'];
+<a name="line557"></a>	}
+<a name="line558"></a>	
+<a name="line559"></a>	// --------------------------------------------------------------------
+<a name="line560"></a>
+<a name="line561"></a>	/**
+<a name="line562"></a>	 * Escape the SQL Identifiers
+<a name="line563"></a>	 *
+<a name="line564"></a>	 * This function escapes column and table names
+<a name="line565"></a>	 *
+<a name="line566"></a>	 * @access	private
+<a name="line567"></a>	 * @param	string
+<a name="line568"></a>	 * @return	string
+<a name="line569"></a>	 */
+<a name="line570"></a>	function _escape_identifiers($item)
+<a name="line571"></a>	{
+<a name="line572"></a>		if ($this->_escape_char == '')
+<a name="line573"></a>		{
+<a name="line574"></a>			return $item;
+<a name="line575"></a>		}
+<a name="line576"></a>
+<a name="line577"></a>		foreach ($this->_reserved_identifiers as $id)
+<a name="line578"></a>		{
+<a name="line579"></a>			if (strpos($item, '.'.$id) !== FALSE)
+<a name="line580"></a>			{
+<a name="line581"></a>				$str = $this->_escape_char. str_replace('.', $this->_escape_char.'.', $item);  
+<a name="line582"></a>				
+<a name="line583"></a>				// remove duplicates if the user already included the escape
+<a name="line584"></a>				return preg_replace('/['.$this->_escape_char.']+/', $this->_escape_char, $str);
+<a name="line585"></a>			}		
+<a name="line586"></a>		}
+<a name="line587"></a>	
+<a name="line588"></a>		if (strpos($item, '.') !== FALSE)
+<a name="line589"></a>		{
+<a name="line590"></a>			$str = $this->_escape_char.str_replace('.', $this->_escape_char.'.'.$this->_escape_char, $item).$this->_escape_char;			
+<a name="line591"></a>		}
+<a name="line592"></a>		else
+<a name="line593"></a>		{
+<a name="line594"></a>			$str = $this->_escape_char.$item.$this->_escape_char;
+<a name="line595"></a>		}
+<a name="line596"></a>		
+<a name="line597"></a>		// remove duplicates if the user already included the escape
+<a name="line598"></a>		return preg_replace('/['.$this->_escape_char.']+/', $this->_escape_char, $str);
+<a name="line599"></a>	}
+<a name="line600"></a>	
+<a name="line601"></a>	// --------------------------------------------------------------------
+<a name="line602"></a>
+<a name="line603"></a>	/**
+<a name="line604"></a>	 * From Tables
+<a name="line605"></a>	 *
+<a name="line606"></a>	 * This function implicitly groups FROM tables so there is no confusion
+<a name="line607"></a>	 * about operator precedence in harmony with SQL standards
 <a name="line608"></a>	 *
-<a name="line609"></a>	 * This function implicitly groups FROM tables so there is no confusion
-<a name="line610"></a>	 * about operator precedence in harmony with SQL standards
-<a name="line611"></a>	 *
-<a name="line612"></a>	 * @access	public
-<a name="line613"></a>	 * @param	type
-<a name="line614"></a>	 * @return	type
-<a name="line615"></a>	 */
-<a name="line616"></a>	function _from_tables($tables)
-<a name="line617"></a>	{
-<a name="line618"></a>		if ( ! is_array($tables))
-<a name="line619"></a>		{
-<a name="line620"></a>			$tables = array($tables);
-<a name="line621"></a>		}
-<a name="line622"></a>		
-<a name="line623"></a>		return implode(', ', $tables);
-<a name="line624"></a>	}
-<a name="line625"></a>
-<a name="line626"></a>	// --------------------------------------------------------------------
-<a name="line627"></a>	
-<a name="line628"></a>	/**
-<a name="line629"></a>	 * Insert statement
-<a name="line630"></a>	 *
-<a name="line631"></a>	 * Generates a platform-specific insert string from the supplied data
-<a name="line632"></a>	 *
-<a name="line633"></a>	 * @access  public
-<a name="line634"></a>	 * @param   string  the table name
-<a name="line635"></a>	 * @param   array   the insert keys
-<a name="line636"></a>	 * @param   array   the insert values
-<a name="line637"></a>	 * @return  string
-<a name="line638"></a>	 */
-<a name="line639"></a>	function _insert($table, $keys, $values)
-<a name="line640"></a>	{
-<a name="line641"></a>	return "INSERT INTO ".$table." (".implode(', ', $keys).") VALUES (".implode(', ', $values).")";
-<a name="line642"></a>	}
-<a name="line643"></a>
-<a name="line644"></a>	// --------------------------------------------------------------------
-<a name="line645"></a>
-<a name="line646"></a>	/**
-<a name="line647"></a>	 * Update statement
-<a name="line648"></a>	 *
-<a name="line649"></a>	 * Generates a platform-specific update string from the supplied data
-<a name="line650"></a>	 *
-<a name="line651"></a>	 * @access	public
-<a name="line652"></a>	 * @param	string	the table name
-<a name="line653"></a>	 * @param	array	the update data
-<a name="line654"></a>	 * @param	array	the where clause
-<a name="line655"></a>	 * @param	array	the orderby clause
-<a name="line656"></a>	 * @param	array	the limit clause
-<a name="line657"></a>	 * @return	string
-<a name="line658"></a>	 */
-<a name="line659"></a>	function _update($table, $values, $where, $orderby = array(), $limit = FALSE)
-<a name="line660"></a>	{
-<a name="line661"></a>		foreach($values as $key => $val)
-<a name="line662"></a>		{
-<a name="line663"></a>			$valstr[] = $key." = ".$val;
-<a name="line664"></a>		}
-<a name="line665"></a>		
-<a name="line666"></a>		$limit = ( ! $limit) ? '' : ' LIMIT '.$limit;
-<a name="line667"></a>		
-<a name="line668"></a>		$orderby = (count($orderby) >= 1)?' ORDER BY '.implode(", ", $orderby):'';
-<a name="line669"></a>	
-<a name="line670"></a>		$sql = "UPDATE ".$table." SET ".implode(', ', $valstr);
-<a name="line671"></a>
-<a name="line672"></a>		$sql .= ($where != '' AND count($where) >=1) ? " WHERE ".implode(" ", $where) : '';
-<a name="line673"></a>
-<a name="line674"></a>		$sql .= $orderby.$limit;
-<a name="line675"></a>		
-<a name="line676"></a>		return $sql;
-<a name="line677"></a>	}
-<a name="line678"></a>
-<a name="line679"></a>	// --------------------------------------------------------------------
-<a name="line680"></a>
-<a name="line681"></a>	/**
-<a name="line682"></a>	 * Truncate statement
-<a name="line683"></a>	 *
-<a name="line684"></a>	 * Generates a platform-specific truncate string from the supplied data
-<a name="line685"></a>	 * If the database does not support the truncate() command
-<a name="line686"></a>	 * This function maps to "DELETE FROM table"
-<a name="line687"></a>	 *
-<a name="line688"></a>	 * @access	public
-<a name="line689"></a>	 * @param	string	the table name
-<a name="line690"></a>	 * @return	string
-<a name="line691"></a>	 */	
-<a name="line692"></a>	function _truncate($table)
-<a name="line693"></a>	{
-<a name="line694"></a>		return "TRUNCATE TABLE ".$table;
-<a name="line695"></a>	}
-<a name="line696"></a>	
-<a name="line697"></a>	// --------------------------------------------------------------------
-<a name="line698"></a>
-<a name="line699"></a>	/**
-<a name="line700"></a>	 * Delete statement
-<a name="line701"></a>	 *
-<a name="line702"></a>	 * Generates a platform-specific delete string from the supplied data
-<a name="line703"></a>	 *
-<a name="line704"></a>	 * @access	public
-<a name="line705"></a>	 * @param	string	the table name
-<a name="line706"></a>	 * @param	array	the where clause
-<a name="line707"></a>	 * @param	string	the limit clause
-<a name="line708"></a>	 * @return	string
-<a name="line709"></a>	 */	
-<a name="line710"></a>	function _delete($table, $where = array(), $like = array(), $limit = FALSE)
-<a name="line711"></a>	{
-<a name="line712"></a>		$conditions = '';
-<a name="line713"></a>
-<a name="line714"></a>		if (count($where) > 0 OR count($like) > 0)
-<a name="line715"></a>		{
-<a name="line716"></a>			$conditions = "\nWHERE ";
-<a name="line717"></a>			$conditions .= implode("\n", $this->ar_where);
-<a name="line718"></a>
-<a name="line719"></a>			if (count($where) > 0 && count($like) > 0)
-<a name="line720"></a>			{
-<a name="line721"></a>				$conditions .= " AND ";
-<a name="line722"></a>			}
-<a name="line723"></a>			$conditions .= implode("\n", $like);
-<a name="line724"></a>		}
-<a name="line725"></a>
-<a name="line726"></a>		$limit = ( ! $limit) ? '' : ' LIMIT '.$limit;
-<a name="line727"></a>	
-<a name="line728"></a>		return "DELETE FROM ".$table.$conditions.$limit;
-<a name="line729"></a>	}
-<a name="line730"></a>
-<a name="line731"></a>	// --------------------------------------------------------------------
-<a name="line732"></a>
-<a name="line733"></a>	/**
-<a name="line734"></a>	 * Limit string
-<a name="line735"></a>	 *
-<a name="line736"></a>	 * Generates a platform-specific LIMIT clause
-<a name="line737"></a>	 *
-<a name="line738"></a>	 * @access  public
-<a name="line739"></a>	 * @param   string  the sql query string
-<a name="line740"></a>	 * @param   integer the number of rows to limit the query to
-<a name="line741"></a>	 * @param   integer the offset value
-<a name="line742"></a>	 * @return  string
-<a name="line743"></a>	 */
-<a name="line744"></a>	function _limit($sql, $limit, $offset)
-<a name="line745"></a>	{
-<a name="line746"></a>		$limit = $offset + $limit;
-<a name="line747"></a>		$newsql = "SELECT * FROM (select inner_query.*, rownum rnum FROM ($sql) inner_query WHERE rownum < $limit)";
-<a name="line748"></a>
-<a name="line749"></a>		if ($offset != 0)
-<a name="line750"></a>		{
-<a name="line751"></a>			$newsql .= " WHERE rnum >= $offset";
-<a name="line752"></a>		}
+<a name="line609"></a>	 * @access	public
+<a name="line610"></a>	 * @param	type
+<a name="line611"></a>	 * @return	type
+<a name="line612"></a>	 */
+<a name="line613"></a>	function _from_tables($tables)
+<a name="line614"></a>	{
+<a name="line615"></a>		if ( ! is_array($tables))
+<a name="line616"></a>		{
+<a name="line617"></a>			$tables = array($tables);
+<a name="line618"></a>		}
+<a name="line619"></a>		
+<a name="line620"></a>		return implode(', ', $tables);
+<a name="line621"></a>	}
+<a name="line622"></a>
+<a name="line623"></a>	// --------------------------------------------------------------------
+<a name="line624"></a>	
+<a name="line625"></a>	/**
+<a name="line626"></a>	 * Insert statement
+<a name="line627"></a>	 *
+<a name="line628"></a>	 * Generates a platform-specific insert string from the supplied data
+<a name="line629"></a>	 *
+<a name="line630"></a>	 * @access  public
+<a name="line631"></a>	 * @param   string  the table name
+<a name="line632"></a>	 * @param   array   the insert keys
+<a name="line633"></a>	 * @param   array   the insert values
+<a name="line634"></a>	 * @return  string
+<a name="line635"></a>	 */
+<a name="line636"></a>	function _insert($table, $keys, $values)
+<a name="line637"></a>	{
+<a name="line638"></a>	return "INSERT INTO ".$table." (".implode(', ', $keys).") VALUES (".implode(', ', $values).")";
+<a name="line639"></a>	}
+<a name="line640"></a>
+<a name="line641"></a>	// --------------------------------------------------------------------
+<a name="line642"></a>
+<a name="line643"></a>	/**
+<a name="line644"></a>	 * Update statement
+<a name="line645"></a>	 *
+<a name="line646"></a>	 * Generates a platform-specific update string from the supplied data
+<a name="line647"></a>	 *
+<a name="line648"></a>	 * @access	public
+<a name="line649"></a>	 * @param	string	the table name
+<a name="line650"></a>	 * @param	array	the update data
+<a name="line651"></a>	 * @param	array	the where clause
+<a name="line652"></a>	 * @param	array	the orderby clause
+<a name="line653"></a>	 * @param	array	the limit clause
+<a name="line654"></a>	 * @return	string
+<a name="line655"></a>	 */
+<a name="line656"></a>	function _update($table, $values, $where, $orderby = array(), $limit = FALSE)
+<a name="line657"></a>	{
+<a name="line658"></a>		foreach($values as $key => $val)
+<a name="line659"></a>		{
+<a name="line660"></a>			$valstr[] = $key." = ".$val;
+<a name="line661"></a>		}
+<a name="line662"></a>		
+<a name="line663"></a>		$limit = ( ! $limit) ? '' : ' LIMIT '.$limit;
+<a name="line664"></a>		
+<a name="line665"></a>		$orderby = (count($orderby) >= 1)?' ORDER BY '.implode(", ", $orderby):'';
+<a name="line666"></a>	
+<a name="line667"></a>		$sql = "UPDATE ".$table." SET ".implode(', ', $valstr);
+<a name="line668"></a>
+<a name="line669"></a>		$sql .= ($where != '' AND count($where) >=1) ? " WHERE ".implode(" ", $where) : '';
+<a name="line670"></a>
+<a name="line671"></a>		$sql .= $orderby.$limit;
+<a name="line672"></a>		
+<a name="line673"></a>		return $sql;
+<a name="line674"></a>	}
+<a name="line675"></a>
+<a name="line676"></a>	// --------------------------------------------------------------------
+<a name="line677"></a>
+<a name="line678"></a>	/**
+<a name="line679"></a>	 * Truncate statement
+<a name="line680"></a>	 *
+<a name="line681"></a>	 * Generates a platform-specific truncate string from the supplied data
+<a name="line682"></a>	 * If the database does not support the truncate() command
+<a name="line683"></a>	 * This function maps to "DELETE FROM table"
+<a name="line684"></a>	 *
+<a name="line685"></a>	 * @access	public
+<a name="line686"></a>	 * @param	string	the table name
+<a name="line687"></a>	 * @return	string
+<a name="line688"></a>	 */	
+<a name="line689"></a>	function _truncate($table)
+<a name="line690"></a>	{
+<a name="line691"></a>		return "TRUNCATE TABLE ".$table;
+<a name="line692"></a>	}
+<a name="line693"></a>	
+<a name="line694"></a>	// --------------------------------------------------------------------
+<a name="line695"></a>
+<a name="line696"></a>	/**
+<a name="line697"></a>	 * Delete statement
+<a name="line698"></a>	 *
+<a name="line699"></a>	 * Generates a platform-specific delete string from the supplied data
+<a name="line700"></a>	 *
+<a name="line701"></a>	 * @access	public
+<a name="line702"></a>	 * @param	string	the table name
+<a name="line703"></a>	 * @param	array	the where clause
+<a name="line704"></a>	 * @param	string	the limit clause
+<a name="line705"></a>	 * @return	string
+<a name="line706"></a>	 */	
+<a name="line707"></a>	function _delete($table, $where = array(), $like = array(), $limit = FALSE)
+<a name="line708"></a>	{
+<a name="line709"></a>		$conditions = '';
+<a name="line710"></a>
+<a name="line711"></a>		if (count($where) > 0 OR count($like) > 0)
+<a name="line712"></a>		{
+<a name="line713"></a>			$conditions = "\nWHERE ";
+<a name="line714"></a>			$conditions .= implode("\n", $this->ar_where);
+<a name="line715"></a>
+<a name="line716"></a>			if (count($where) > 0 && count($like) > 0)
+<a name="line717"></a>			{
+<a name="line718"></a>				$conditions .= " AND ";
+<a name="line719"></a>			}
+<a name="line720"></a>			$conditions .= implode("\n", $like);
+<a name="line721"></a>		}
+<a name="line722"></a>
+<a name="line723"></a>		$limit = ( ! $limit) ? '' : ' LIMIT '.$limit;
+<a name="line724"></a>	
+<a name="line725"></a>		return "DELETE FROM ".$table.$conditions.$limit;
+<a name="line726"></a>	}
+<a name="line727"></a>
+<a name="line728"></a>	// --------------------------------------------------------------------
+<a name="line729"></a>
+<a name="line730"></a>	/**
+<a name="line731"></a>	 * Limit string
+<a name="line732"></a>	 *
+<a name="line733"></a>	 * Generates a platform-specific LIMIT clause
+<a name="line734"></a>	 *
+<a name="line735"></a>	 * @access  public
+<a name="line736"></a>	 * @param   string  the sql query string
+<a name="line737"></a>	 * @param   integer the number of rows to limit the query to
+<a name="line738"></a>	 * @param   integer the offset value
+<a name="line739"></a>	 * @return  string
+<a name="line740"></a>	 */
+<a name="line741"></a>	function _limit($sql, $limit, $offset)
+<a name="line742"></a>	{
+<a name="line743"></a>		$limit = $offset + $limit;
+<a name="line744"></a>		$newsql = "SELECT * FROM (select inner_query.*, rownum rnum FROM ($sql) inner_query WHERE rownum < $limit)";
+<a name="line745"></a>
+<a name="line746"></a>		if ($offset != 0)
+<a name="line747"></a>		{
+<a name="line748"></a>			$newsql .= " WHERE rnum >= $offset";
+<a name="line749"></a>		}
+<a name="line750"></a>
+<a name="line751"></a>		// remember that we used limits
+<a name="line752"></a>		$this->limit_used = TRUE;
 <a name="line753"></a>
-<a name="line754"></a>		// remember that we used limits
-<a name="line755"></a>		$this->limit_used = TRUE;
+<a name="line754"></a>		return $newsql;
+<a name="line755"></a>	}	
 <a name="line756"></a>
-<a name="line757"></a>		return $newsql;
-<a name="line758"></a>	}	
-<a name="line759"></a>
-<a name="line760"></a>	// --------------------------------------------------------------------
-<a name="line761"></a>
-<a name="line762"></a>	/**
-<a name="line763"></a>	 * Close DB Connection
-<a name="line764"></a>	 *
-<a name="line765"></a>	 * @access  public
-<a name="line766"></a>	 * @param   resource
-<a name="line767"></a>	 * @return  void
-<a name="line768"></a>	 */
-<a name="line769"></a>	function _close($conn_id)
-<a name="line770"></a>	{
-<a name="line771"></a>		@ocilogoff($conn_id);
-<a name="line772"></a>	}
+<a name="line757"></a>	// --------------------------------------------------------------------
+<a name="line758"></a>
+<a name="line759"></a>	/**
+<a name="line760"></a>	 * Close DB Connection
+<a name="line761"></a>	 *
+<a name="line762"></a>	 * @access  public
+<a name="line763"></a>	 * @param   resource
+<a name="line764"></a>	 * @return  void
+<a name="line765"></a>	 */
+<a name="line766"></a>	function _close($conn_id)
+<a name="line767"></a>	{
+<a name="line768"></a>		@ocilogoff($conn_id);
+<a name="line769"></a>	}
+<a name="line770"></a>
+<a name="line771"></a>
+<a name="line772"></a>}
 <a name="line773"></a>
 <a name="line774"></a>
-<a name="line775"></a>}
-<a name="line776"></a>
-<a name="line777"></a>
-<a name="line778"></a>
-<a name="line779"></a>/* End of file oci8_driver.php */
-<a name="line780"></a>/* Location: ./system/database/drivers/oci8/oci8_driver.php */</pre>
+<a name="line775"></a>
+<a name="line776"></a>/* End of file oci8_driver.php */
+<a name="line777"></a>/* Location: ./system/database/drivers/oci8/oci8_driver.php */</pre>
 <div class="header">
 <h1>GiftFlow API</h1>
 <ul>

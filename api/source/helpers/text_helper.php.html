@@ -6,7 +6,7 @@
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 
 <meta name="generator" content="PHPDoctor 2RC4 (http://peej.github.com/phpdoctor/)">
-<meta name="when" content="Mon, 19 Jul 2010 17:13:58 +0000">
+<meta name="when" content="Sat, 24 Jul 2010 20:46:31 +0000">
 
 <link rel="stylesheet" type="text/css" href="../../stylesheet.css">
 <link rel="start" href="../../overview-summary.html">
@@ -45,7 +45,7 @@
 <a name="line6"></a> *
 <a name="line7"></a> * @package		CodeIgniter
 <a name="line8"></a> * @author		ExpressionEngine Dev Team
-<a name="line9"></a> * @copyright	Copyright (c) 2008 - 2009, EllisLab, Inc.
+<a name="line9"></a> * @copyright	Copyright (c) 2008 - 2010, EllisLab, Inc.
 <a name="line10"></a> * @license		http://codeigniter.com/user_guide/license.html
 <a name="line11"></a> * @link		http://codeigniter.com
 <a name="line12"></a> * @since		Version 1.0
@@ -126,7 +126,7 @@
 <a name="line87"></a>		{
 <a name="line88"></a>			return $str;
 <a name="line89"></a>		}
-<a name="line90"></a>
+<a name="line90"></a>									
 <a name="line91"></a>		$out = "";
 <a name="line92"></a>		foreach (explode(' ', trim($str)) as $val)
 <a name="line93"></a>		{
@@ -175,7 +175,7 @@
 <a name="line136"></a>					$out  .= '&#'.array_shift($temp).';';
 <a name="line137"></a>					$count = 1;
 <a name="line138"></a>				}
-<a name="line139"></a>
+<a name="line139"></a>			
 <a name="line140"></a>				$out .= $str[$i];
 <a name="line141"></a>		   }
 <a name="line142"></a>		   else
@@ -287,7 +287,7 @@
 <a name="line248"></a>		// \w, \b and a few others do not match on a unicode character
 <a name="line249"></a>		// set for performance reasons. As a result words like über
 <a name="line250"></a>		// will not match on a word boundary. Instead, we'll assume that
-<a name="line251"></a>		// a bad word will be bookended by any of these characters.
+<a name="line251"></a>		// a bad word will be bookeneded by any of these characters.
 <a name="line252"></a>		$delim = '[-_\'\"`(){}<>\[\]|!?@#%&,.:;^~*+=\/ 0-9\n\r\t]';
 <a name="line253"></a>
 <a name="line254"></a>		foreach ($censored as $badword)
@@ -391,114 +391,152 @@
 <a name="line352"></a>		return $str;
 <a name="line353"></a>	}
 <a name="line354"></a>}
-<a name="line355"></a>	
+<a name="line355"></a>
 <a name="line356"></a>// ------------------------------------------------------------------------
 <a name="line357"></a>
 <a name="line358"></a>/**
-<a name="line359"></a> * Word Wrap
+<a name="line359"></a> * Convert Accented Foreign Characters to ASCII
 <a name="line360"></a> *
-<a name="line361"></a> * Wraps text at the specified character.  Maintains the integrity of words.
-<a name="line362"></a> * Anything placed between {unwrap}{/unwrap} will not be word wrapped, nor
-<a name="line363"></a> * will URLs.
-<a name="line364"></a> *
-<a name="line365"></a> * @access	public
-<a name="line366"></a> * @param	string	the text string
-<a name="line367"></a> * @param	integer	the number of characters to wrap at
-<a name="line368"></a> * @return	string
-<a name="line369"></a> */	
-<a name="line370"></a>if ( ! function_exists('word_wrap'))
-<a name="line371"></a>{
-<a name="line372"></a>	function word_wrap($str, $charlim = '76')
-<a name="line373"></a>	{
-<a name="line374"></a>		// Se the character limit
-<a name="line375"></a>		if ( ! is_numeric($charlim))
-<a name="line376"></a>			$charlim = 76;
-<a name="line377"></a>	
-<a name="line378"></a>		// Reduce multiple spaces
-<a name="line379"></a>		$str = preg_replace("| +|", " ", $str);
-<a name="line380"></a>	
-<a name="line381"></a>		// Standardize newlines
-<a name="line382"></a>		if (strpos($str, "\r") !== FALSE)
-<a name="line383"></a>		{
-<a name="line384"></a>			$str = str_replace(array("\r\n", "\r"), "\n", $str);			
-<a name="line385"></a>		}
-<a name="line386"></a>	
-<a name="line387"></a>		// If the current word is surrounded by {unwrap} tags we'll 
-<a name="line388"></a>		// strip the entire chunk and replace it with a marker.
-<a name="line389"></a>		$unwrap = array();
-<a name="line390"></a>		if (preg_match_all("|(\{unwrap\}.+?\{/unwrap\})|s", $str, $matches))
-<a name="line391"></a>		{
-<a name="line392"></a>			for ($i = 0; $i < count($matches['0']); $i++)
-<a name="line393"></a>			{
-<a name="line394"></a>				$unwrap[] = $matches['1'][$i];				
-<a name="line395"></a>				$str = str_replace($matches['1'][$i], "{{unwrapped".$i."}}", $str);
-<a name="line396"></a>			}
-<a name="line397"></a>		}
-<a name="line398"></a>	
-<a name="line399"></a>		// Use PHP's native function to do the initial wordwrap.  
-<a name="line400"></a>		// We set the cut flag to FALSE so that any individual words that are 
-<a name="line401"></a>		// too long get left alone.  In the next step we'll deal with them.
-<a name="line402"></a>		$str = wordwrap($str, $charlim, "\n", FALSE);
-<a name="line403"></a>	
-<a name="line404"></a>		// Split the string into individual lines of text and cycle through them
-<a name="line405"></a>		$output = "";
-<a name="line406"></a>		foreach (explode("\n", $str) as $line) 
-<a name="line407"></a>		{
-<a name="line408"></a>			// Is the line within the allowed character count?
-<a name="line409"></a>			// If so we'll join it to the output and continue
-<a name="line410"></a>			if (strlen($line) <= $charlim)
-<a name="line411"></a>			{
-<a name="line412"></a>				$output .= $line."\n";			
-<a name="line413"></a>				continue;
-<a name="line414"></a>			}
-<a name="line415"></a>			
-<a name="line416"></a>			$temp = '';
-<a name="line417"></a>			while((strlen($line)) > $charlim) 
-<a name="line418"></a>			{
-<a name="line419"></a>				// If the over-length word is a URL we won't wrap it
-<a name="line420"></a>				if (preg_match("!\[url.+\]|://|wwww.!", $line))
-<a name="line421"></a>				{
-<a name="line422"></a>					break;
-<a name="line423"></a>				}
-<a name="line424"></a>
-<a name="line425"></a>				// Trim the word down
-<a name="line426"></a>				$temp .= substr($line, 0, $charlim-1);
-<a name="line427"></a>				$line = substr($line, $charlim-1);
-<a name="line428"></a>			}
-<a name="line429"></a>		
-<a name="line430"></a>			// If $temp contains data it means we had to split up an over-length 
-<a name="line431"></a>			// word into smaller chunks so we'll add it back to our current line
-<a name="line432"></a>			if ($temp != '')
-<a name="line433"></a>			{
-<a name="line434"></a>				$output .= $temp . "\n" . $line; 
-<a name="line435"></a>			}
-<a name="line436"></a>			else
-<a name="line437"></a>			{
-<a name="line438"></a>				$output .= $line;
-<a name="line439"></a>			}
-<a name="line440"></a>
-<a name="line441"></a>			$output .= "\n";
-<a name="line442"></a>		}
-<a name="line443"></a>
-<a name="line444"></a>		// Put our markers back
-<a name="line445"></a>		if (count($unwrap) > 0)
-<a name="line446"></a>		{	
-<a name="line447"></a>			foreach ($unwrap as $key => $val)
-<a name="line448"></a>			{
-<a name="line449"></a>				$output = str_replace("{{unwrapped".$key."}}", $val, $output);
-<a name="line450"></a>			}
-<a name="line451"></a>		}
-<a name="line452"></a>
-<a name="line453"></a>		// Remove the unwrap tags
-<a name="line454"></a>		$output = str_replace(array('{unwrap}', '{/unwrap}'), '', $output);
-<a name="line455"></a>
-<a name="line456"></a>		return $output;	
-<a name="line457"></a>	}
-<a name="line458"></a>}
-<a name="line459"></a>
-<a name="line460"></a>
-<a name="line461"></a>/* End of file text_helper.php */
-<a name="line462"></a>/* Location: ./system/helpers/text_helper.php */</pre>
+<a name="line361"></a> * @access	public
+<a name="line362"></a> * @param	string	the text string
+<a name="line363"></a> * @return	string
+<a name="line364"></a> */	
+<a name="line365"></a>if ( ! function_exists('convert_accented_characters'))
+<a name="line366"></a>{
+<a name="line367"></a>	function convert_accented_characters($match)
+<a name="line368"></a>	{
+<a name="line369"></a>		if ( ! file_exists(APPPATH.'config/foreign_chars'.EXT))
+<a name="line370"></a>		{
+<a name="line371"></a>			return $match;
+<a name="line372"></a>		}
+<a name="line373"></a>	
+<a name="line374"></a>		include APPPATH.'config/foreign_chars'.EXT;
+<a name="line375"></a>	
+<a name="line376"></a>		if ( ! isset($foreign_characters))
+<a name="line377"></a>		{
+<a name="line378"></a>			return $match;
+<a name="line379"></a>		}
+<a name="line380"></a>								
+<a name="line381"></a>		$ord = ord($match['1']);
+<a name="line382"></a>		
+<a name="line383"></a>		if (isset($foreign_characters[$ord]))
+<a name="line384"></a>		{
+<a name="line385"></a>			return $foreign_characters[$ord];
+<a name="line386"></a>		}
+<a name="line387"></a>		else
+<a name="line388"></a>		{
+<a name="line389"></a>			return $match['1'];
+<a name="line390"></a>		}
+<a name="line391"></a>	}
+<a name="line392"></a>}
+<a name="line393"></a>	
+<a name="line394"></a>// ------------------------------------------------------------------------
+<a name="line395"></a>
+<a name="line396"></a>/**
+<a name="line397"></a> * Word Wrap
+<a name="line398"></a> *
+<a name="line399"></a> * Wraps text at the specified character.  Maintains the integrity of words.
+<a name="line400"></a> * Anything placed between {unwrap}{/unwrap} will not be word wrapped, nor
+<a name="line401"></a> * will URLs.
+<a name="line402"></a> *
+<a name="line403"></a> * @access	public
+<a name="line404"></a> * @param	string	the text string
+<a name="line405"></a> * @param	integer	the number of characters to wrap at
+<a name="line406"></a> * @return	string
+<a name="line407"></a> */	
+<a name="line408"></a>if ( ! function_exists('word_wrap'))
+<a name="line409"></a>{
+<a name="line410"></a>	function word_wrap($str, $charlim = '76')
+<a name="line411"></a>	{
+<a name="line412"></a>		// Se the character limit
+<a name="line413"></a>		if ( ! is_numeric($charlim))
+<a name="line414"></a>			$charlim = 76;
+<a name="line415"></a>	
+<a name="line416"></a>		// Reduce multiple spaces
+<a name="line417"></a>		$str = preg_replace("| +|", " ", $str);
+<a name="line418"></a>	
+<a name="line419"></a>		// Standardize newlines
+<a name="line420"></a>		if (strpos($str, "\r") !== FALSE)
+<a name="line421"></a>		{
+<a name="line422"></a>			$str = str_replace(array("\r\n", "\r"), "\n", $str);			
+<a name="line423"></a>		}
+<a name="line424"></a>	
+<a name="line425"></a>		// If the current word is surrounded by {unwrap} tags we'll 
+<a name="line426"></a>		// strip the entire chunk and replace it with a marker.
+<a name="line427"></a>		$unwrap = array();
+<a name="line428"></a>		if (preg_match_all("|(\{unwrap\}.+?\{/unwrap\})|s", $str, $matches))
+<a name="line429"></a>		{
+<a name="line430"></a>			for ($i = 0; $i < count($matches['0']); $i++)
+<a name="line431"></a>			{
+<a name="line432"></a>				$unwrap[] = $matches['1'][$i];				
+<a name="line433"></a>				$str = str_replace($matches['1'][$i], "{{unwrapped".$i."}}", $str);
+<a name="line434"></a>			}
+<a name="line435"></a>		}
+<a name="line436"></a>	
+<a name="line437"></a>		// Use PHP's native function to do the initial wordwrap.  
+<a name="line438"></a>		// We set the cut flag to FALSE so that any individual words that are 
+<a name="line439"></a>		// too long get left alone.  In the next step we'll deal with them.
+<a name="line440"></a>		$str = wordwrap($str, $charlim, "\n", FALSE);
+<a name="line441"></a>	
+<a name="line442"></a>		// Split the string into individual lines of text and cycle through them
+<a name="line443"></a>		$output = "";
+<a name="line444"></a>		foreach (explode("\n", $str) as $line) 
+<a name="line445"></a>		{
+<a name="line446"></a>			// Is the line within the allowed character count?
+<a name="line447"></a>			// If so we'll join it to the output and continue
+<a name="line448"></a>			if (strlen($line) <= $charlim)
+<a name="line449"></a>			{
+<a name="line450"></a>				$output .= $line."\n";			
+<a name="line451"></a>				continue;
+<a name="line452"></a>			}
+<a name="line453"></a>			
+<a name="line454"></a>			$temp = '';
+<a name="line455"></a>			while((strlen($line)) > $charlim) 
+<a name="line456"></a>			{
+<a name="line457"></a>				// If the over-length word is a URL we won't wrap it
+<a name="line458"></a>				if (preg_match("!\[url.+\]|://|wwww.!", $line))
+<a name="line459"></a>				{
+<a name="line460"></a>					break;
+<a name="line461"></a>				}
+<a name="line462"></a>
+<a name="line463"></a>				// Trim the word down
+<a name="line464"></a>				$temp .= substr($line, 0, $charlim-1);
+<a name="line465"></a>				$line = substr($line, $charlim-1);
+<a name="line466"></a>			}
+<a name="line467"></a>		
+<a name="line468"></a>			// If $temp contains data it means we had to split up an over-length 
+<a name="line469"></a>			// word into smaller chunks so we'll add it back to our current line
+<a name="line470"></a>			if ($temp != '')
+<a name="line471"></a>			{
+<a name="line472"></a>				$output .= $temp."\n".$line; 
+<a name="line473"></a>			}
+<a name="line474"></a>			else
+<a name="line475"></a>			{
+<a name="line476"></a>				$output .= $line;
+<a name="line477"></a>			}
+<a name="line478"></a>
+<a name="line479"></a>			$output .= "\n";
+<a name="line480"></a>		}
+<a name="line481"></a>
+<a name="line482"></a>		// Put our markers back
+<a name="line483"></a>		if (count($unwrap) > 0)
+<a name="line484"></a>		{	
+<a name="line485"></a>			foreach ($unwrap as $key => $val)
+<a name="line486"></a>			{
+<a name="line487"></a>				$output = str_replace("{{unwrapped".$key."}}", $val, $output);
+<a name="line488"></a>			}
+<a name="line489"></a>		}
+<a name="line490"></a>
+<a name="line491"></a>		// Remove the unwrap tags
+<a name="line492"></a>		$output = str_replace(array('{unwrap}', '{/unwrap}'), '', $output);
+<a name="line493"></a>
+<a name="line494"></a>		return $output;	
+<a name="line495"></a>	}
+<a name="line496"></a>}
+<a name="line497"></a> 
+<a name="line498"></a>
+<a name="line499"></a>/* End of file text_helper.php */
+<a name="line500"></a>/* Location: ./system/helpers/text_helper.php */</pre>
 <div class="header">
 <h1>GiftFlow API</h1>
 <ul>

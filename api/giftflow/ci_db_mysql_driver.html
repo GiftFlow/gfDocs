@@ -6,7 +6,7 @@
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 
 <meta name="generator" content="PHPDoctor 2RC4 (http://peej.github.com/phpdoctor/)">
-<meta name="when" content="Mon, 19 Jul 2010 17:13:56 +0000">
+<meta name="when" content="Sat, 24 Jul 2010 20:46:31 +0000">
 
 <link rel="stylesheet" type="text/css" href="../stylesheet.css">
 <link rel="start" href="../overview-summary.html">
@@ -142,6 +142,10 @@ about operator precedence in harmony with SQL standards</p></td>
 </tr>
 <tr>
 <td class="type">private  void</td>
+<td class="description"><p class="name"><a href="#_insert_batch()">_insert_batch</a>(mixed table, mixed keys, mixed values)</p><p class="description">Insert_batch statementGenerates a platform-specific insert string from the supplied data</p></td>
+</tr>
+<tr>
+<td class="type">private  void</td>
 <td class="description"><p class="name"><a href="#_limit()">_limit</a>(mixed sql, mixed limit, mixed offset)</p><p class="description">Limit stringGenerates a platform-specific LIMIT clause</p></td>
 </tr>
 <tr>
@@ -158,6 +162,10 @@ about operator precedence in harmony with SQL standards</p></td>
 </tr>
 <tr>
 <td class="type">private  void</td>
+<td class="description"><p class="name"><a href="#_replace()">_replace</a>(mixed table, mixed keys, mixed values)</p><p class="description">Replace statementGenerates a platform-specific replace string from the supplied data</p></td>
+</tr>
+<tr>
+<td class="type">private  void</td>
 <td class="description"><p class="name"><a href="#_truncate()">_truncate</a>(mixed table)</p><p class="description">Truncate statementGenerates a platform-specific truncate string from the supplied data
 If the database does not support the truncate() command
 This function maps to "DELETE FROM table"</p></td>
@@ -165,6 +173,10 @@ This function maps to "DELETE FROM table"</p></td>
 <tr>
 <td class="type">private  void</td>
 <td class="description"><p class="name"><a href="#_update()">_update</a>(mixed table, mixed values, mixed where, mixed orderby)</p><p class="description">Update statementGenerates a platform-specific update string from the supplied data</p></td>
+</tr>
+<tr>
+<td class="type">private  void</td>
+<td class="description"><p class="name"><a href="#_update_batch()">_update_batch</a>(mixed table, mixed values, mixed index, mixed where)</p><p class="description">Update_Batch statementGenerates a platform-specific batch update string from the supplied data</p></td>
 </tr>
 <tr>
 <td class="type">private  void</td>
@@ -291,7 +303,7 @@ adding a bit more processing to all queries.</p></div>
 <hr>
 
 <h2 id="detail_method">Method Detail</h2><div class="method_detail">
-<div class='method'><a href="../source/database/drivers/mysql/mysql_driver.php.html#line661" class="location">database/drivers/mysql/mysql_driver.php at line 661</a>
+<div class='method'><a href="../source/database/drivers/mysql/mysql_driver.php.html#line753" class="location">database/drivers/mysql/mysql_driver.php at line 753</a>
 
 <h3 id="_close()">_close</h3>
 <code class="signature">private  void <strong>_close</strong>(mixed conn_id)</code>
@@ -305,7 +317,7 @@ adding a bit more processing to all queries.</p></div>
 
 
 
-<div class='method'><a href="../source/database/drivers/mysql/mysql_driver.php.html#line604" class="location">database/drivers/mysql/mysql_driver.php at line 604</a>
+<div class='method'><a href="../source/database/drivers/mysql/mysql_driver.php.html#line696" class="location">database/drivers/mysql/mysql_driver.php at line 696</a>
 
 <h3 id="_delete()">_delete</h3>
 <code class="signature">private  void <strong>_delete</strong>(mixed table, mixed where)</code>
@@ -427,7 +439,25 @@ about operator precedence in harmony with SQL standards</p><dl>
 
 
 
-<div class='method'><a href="../source/database/drivers/mysql/mysql_driver.php.html#line638" class="location">database/drivers/mysql/mysql_driver.php at line 638</a>
+<div class='method'><a href="../source/database/drivers/mysql/mysql_driver.php.html#line570" class="location">database/drivers/mysql/mysql_driver.php at line 570</a>
+
+<h3 id="_insert_batch()">_insert_batch</h3>
+<code class="signature">private  void <strong>_insert_batch</strong>(mixed table, mixed keys, mixed values)</code>
+<div class="details">
+<p>Insert_batch statement</p><p>Generates a platform-specific insert string from the supplied data</p><dl>
+<dt>Access	public.</dt>
+<dt>Param	string	the:</dt>
+<dd>table name</dd>
+<dt>Param	array	the:</dt>
+<dd>insert keys</dd>
+<dd>insert values</dd>
+<dt>Return	string.</dt>
+</dl>
+</div></div>
+
+
+
+<div class='method'><a href="../source/database/drivers/mysql/mysql_driver.php.html#line730" class="location">database/drivers/mysql/mysql_driver.php at line 730</a>
 
 <h3 id="_limit()">_limit</h3>
 <code class="signature">private  void <strong>_limit</strong>(mixed sql, mixed limit, mixed offset)</code>
@@ -490,7 +520,25 @@ about operator precedence in harmony with SQL standards</p><dl>
 
 
 
-<div class='method'><a href="../source/database/drivers/mysql/mysql_driver.php.html#line586" class="location">database/drivers/mysql/mysql_driver.php at line 586</a>
+<div class='method'><a href="../source/database/drivers/mysql/mysql_driver.php.html#line552" class="location">database/drivers/mysql/mysql_driver.php at line 552</a>
+
+<h3 id="_replace()">_replace</h3>
+<code class="signature">private  void <strong>_replace</strong>(mixed table, mixed keys, mixed values)</code>
+<div class="details">
+<p>Replace statement</p><p>Generates a platform-specific replace string from the supplied data</p><dl>
+<dt>Access	public.</dt>
+<dt>Param	string	the:</dt>
+<dd>table name</dd>
+<dt>Param	array	the:</dt>
+<dd>insert keys</dd>
+<dd>insert values</dd>
+<dt>Return	string.</dt>
+</dl>
+</div></div>
+
+
+
+<div class='method'><a href="../source/database/drivers/mysql/mysql_driver.php.html#line678" class="location">database/drivers/mysql/mysql_driver.php at line 678</a>
 
 <h3 id="_truncate()">_truncate</h3>
 <code class="signature">private  void <strong>_truncate</strong>(mixed table)</code>
@@ -507,7 +555,7 @@ This function maps to "DELETE FROM table"</p><dl>
 
 
 
-<div class='method'><a href="../source/database/drivers/mysql/mysql_driver.php.html#line553" class="location">database/drivers/mysql/mysql_driver.php at line 553</a>
+<div class='method'><a href="../source/database/drivers/mysql/mysql_driver.php.html#line591" class="location">database/drivers/mysql/mysql_driver.php at line 591</a>
 
 <h3 id="_update()">_update</h3>
 <code class="signature">private  void <strong>_update</strong>(mixed table, mixed values, mixed where, mixed orderby)</code>
@@ -521,6 +569,24 @@ This function maps to "DELETE FROM table"</p><dl>
 <dd>where clause</dd>
 <dd>orderby clause</dd>
 <dd>limit clause</dd>
+<dt>Return	string.</dt>
+</dl>
+</div></div>
+
+
+
+<div class='method'><a href="../source/database/drivers/mysql/mysql_driver.php.html#line625" class="location">database/drivers/mysql/mysql_driver.php at line 625</a>
+
+<h3 id="_update_batch()">_update_batch</h3>
+<code class="signature">private  void <strong>_update_batch</strong>(mixed table, mixed values, mixed index, mixed where)</code>
+<div class="details">
+<p>Update_Batch statement</p><p>Generates a platform-specific batch update string from the supplied data</p><dl>
+<dt>Access	public.</dt>
+<dt>Param	string	the:</dt>
+<dd>table name</dd>
+<dt>Param	array	the:</dt>
+<dd>update data</dd>
+<dd>where clause</dd>
 <dt>Return	string.</dt>
 </dl>
 </div></div>

@@ -6,7 +6,7 @@
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 
 <meta name="generator" content="PHPDoctor 2RC4 (http://peej.github.com/phpdoctor/)">
-<meta name="when" content="Mon, 19 Jul 2010 17:13:58 +0000">
+<meta name="when" content="Sat, 24 Jul 2010 20:46:31 +0000">
 
 <link rel="stylesheet" type="text/css" href="../../stylesheet.css">
 <link rel="start" href="../../overview-summary.html">
@@ -45,7 +45,7 @@
 <a name="line6"></a> *
 <a name="line7"></a> * @package		CodeIgniter
 <a name="line8"></a> * @author		ExpressionEngine Dev Team
-<a name="line9"></a> * @copyright	Copyright (c) 2008 - 2009, EllisLab, Inc.
+<a name="line9"></a> * @copyright	Copyright (c) 2008 - 2010, EllisLab, Inc.
 <a name="line10"></a> * @license		http://codeigniter.com/user_guide/license.html
 <a name="line11"></a> * @link		http://codeigniter.com
 <a name="line12"></a> * @since		Version 1.0
@@ -93,21 +93,44 @@
 <a name="line54"></a> *
 <a name="line55"></a> * @access	public
 <a name="line56"></a> * @param	string
-<a name="line57"></a> * @param	bool	whether to reduce multiple instances of double newlines to two
-<a name="line58"></a> * @return	string
-<a name="line59"></a> */
-<a name="line60"></a>if ( ! function_exists('auto_typography'))
-<a name="line61"></a>{
-<a name="line62"></a>	function auto_typography($str, $reduce_linebreaks = FALSE)
-<a name="line63"></a>	{
-<a name="line64"></a>		$CI =& get_instance();	
-<a name="line65"></a>		$CI->load->library('typography');
-<a name="line66"></a>		return $CI->typography->auto_typography($str, $reduce_linebreaks);
-<a name="line67"></a>	}
-<a name="line68"></a>}
-<a name="line69"></a>
-<a name="line70"></a>/* End of file typography_helper.php */
-<a name="line71"></a>/* Location: ./system/helpers/typography_helper.php */</pre>
+<a name="line57"></a> * @param	bool	whether to allow javascript event handlers
+<a name="line58"></a> * @param	bool	whether to reduce multiple instances of double newlines to two
+<a name="line59"></a> * @return	string
+<a name="line60"></a> */
+<a name="line61"></a>if ( ! function_exists('auto_typography'))
+<a name="line62"></a>{
+<a name="line63"></a>	function auto_typography($str, $strip_js_event_handlers = TRUE, $reduce_linebreaks = FALSE)
+<a name="line64"></a>	{
+<a name="line65"></a>		$CI =& get_instance();	
+<a name="line66"></a>		$CI->load->library('typography');
+<a name="line67"></a>		return $CI->typography->auto_typography($str, $strip_js_event_handlers, $reduce_linebreaks);
+<a name="line68"></a>	}
+<a name="line69"></a>}
+<a name="line70"></a>
+<a name="line71"></a>
+<a name="line72"></a>// --------------------------------------------------------------------
+<a name="line73"></a>
+<a name="line74"></a>/**
+<a name="line75"></a> * HTML Entities Decode
+<a name="line76"></a> *
+<a name="line77"></a> * This function is a replacement for html_entity_decode()
+<a name="line78"></a> *
+<a name="line79"></a> * @access	public
+<a name="line80"></a> * @param	string
+<a name="line81"></a> * @return	string
+<a name="line82"></a> */
+<a name="line83"></a>if ( ! function_exists('entity_decode'))
+<a name="line84"></a>{
+<a name="line85"></a>	function entity_decode($str, $charset='UTF-8')
+<a name="line86"></a>	{
+<a name="line87"></a>		$CI =& get_instance();	
+<a name="line88"></a>		$CI->load->library('security');
+<a name="line89"></a>		return $CI->security->entity_decode($str, $charset);
+<a name="line90"></a>	}
+<a name="line91"></a>}
+<a name="line92"></a>
+<a name="line93"></a>/* End of file typography_helper.php */
+<a name="line94"></a>/* Location: ./system/helpers/typography_helper.php */</pre>
 <div class="header">
 <h1>GiftFlow API</h1>
 <ul>

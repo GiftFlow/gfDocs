@@ -6,7 +6,7 @@
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 
 <meta name="generator" content="PHPDoctor 2RC4 (http://peej.github.com/phpdoctor/)">
-<meta name="when" content="Mon, 19 Jul 2010 17:13:56 +0000">
+<meta name="when" content="Sat, 24 Jul 2010 20:46:31 +0000">
 
 <link rel="stylesheet" type="text/css" href="../stylesheet.css">
 <link rel="start" href="../overview-summary.html">
@@ -40,7 +40,7 @@ Detail: <a href="#detail_field">Field</a> | <a href="#detail_method">Method</a> 
 <hr>
 
 <div class="qualifiedName">GiftFlow\CI_Loader</div>
-<a href="../source/libraries/loader.php.html#line29" class="location">libraries/Loader.php at line 29</a>
+<a href="../source/core/loader.php.html#line29" class="location">core/Loader.php at line 29</a>
 
 <h1>Class CI_Loader</h1>
 
@@ -66,11 +66,19 @@ Detail: <a href="#detail_field">Field</a> | <a href="#detail_method">Method</a> 
 <tr><th colspan="2">Field Summary</th></tr>
 <tr>
 <td class="type">private  mixed</td>
+<td class="description"><p class="name"><a href="#_base_classes">$_base_classes</a></p></td>
+</tr>
+<tr>
+<td class="type">private  mixed</td>
 <td class="description"><p class="name"><a href="#_ci_cached_vars">$_ci_cached_vars</a></p></td>
 </tr>
 <tr>
 <td class="type">private  mixed</td>
 <td class="description"><p class="name"><a href="#_ci_classes">$_ci_classes</a></p></td>
+</tr>
+<tr>
+<td class="type">private  mixed</td>
+<td class="description"><p class="name"><a href="#_ci_helper_paths">$_ci_helper_paths</a></p></td>
 </tr>
 <tr>
 <td class="type">private  mixed</td>
@@ -82,7 +90,7 @@ Detail: <a href="#detail_field">Field</a> | <a href="#detail_method">Method</a> 
 </tr>
 <tr>
 <td class="type">private  mixed</td>
-<td class="description"><p class="name"><a href="#_ci_is_php5">$_ci_is_php5</a></p></td>
+<td class="description"><p class="name"><a href="#_ci_library_paths">$_ci_library_paths</a></p></td>
 </tr>
 <tr>
 <td class="type">private  mixed</td>
@@ -90,11 +98,11 @@ Detail: <a href="#detail_field">Field</a> | <a href="#detail_method">Method</a> 
 </tr>
 <tr>
 <td class="type">private  mixed</td>
-<td class="description"><p class="name"><a href="#_ci_models">$_ci_models</a></p></td>
+<td class="description"><p class="name"><a href="#_ci_model_paths">$_ci_model_paths</a></p></td>
 </tr>
 <tr>
 <td class="type">private  mixed</td>
-<td class="description"><p class="name"><a href="#_ci_plugins">$_ci_plugins</a></p></td>
+<td class="description"><p class="name"><a href="#_ci_models">$_ci_models</a></p></td>
 </tr>
 <tr>
 <td class="type">private  mixed</td>
@@ -118,13 +126,17 @@ Detail: <a href="#detail_field">Field</a> | <a href="#detail_method">Method</a> 
 </tr>
 <tr>
 <td class="type">private  void</td>
-<td class="description"><p class="name"><a href="#_ci_assign_to_models()">_ci_assign_to_models</a>()</p><p class="description">Assign to ModelsMakes sure that anything loaded by the loader class (libraries, plugins, etc.)
+<td class="description"><p class="name"><a href="#_ci_assign_to_models()">_ci_assign_to_models</a>()</p><p class="description">Assign to ModelsMakes sure that anything loaded by the loader class (libraries, etc.)
 will be available to models, if any exist.</p></td>
 </tr>
 <tr>
 <td class="type">private  void</td>
 <td class="description"><p class="name"><a href="#_ci_autoloader()">_ci_autoloader</a>()</p><p class="description">AutoloaderThe config/autoload.php file contains an array that permits sub-systems,
-libraries, plugins, and helpers to be loaded automatically.</p></td>
+libraries, and helpers to be loaded automatically.</p></td>
+</tr>
+<tr>
+<td class="type">private  void</td>
+<td class="description"><p class="name"><a href="#_ci_get_component()">_ci_get_component</a>(mixed component)</p><p class="description">Get a reference to a specific library or model</p></td>
 </tr>
 <tr>
 <td class="type">private  void</td>
@@ -148,12 +160,20 @@ libraries, plugins, and helpers to be loaded automatically.</p></td>
 <td class="description"><p class="name"><a href="#_ci_object_to_array()">_ci_object_to_array</a>(mixed object)</p><p class="description">Object to ArrayTakes an object as input and converts the class variables to array key/vals</p></td>
 </tr>
 <tr>
+<td class="type">private  void</td>
+<td class="description"><p class="name"><a href="#_ci_prep_filename()">_ci_prep_filename</a>(mixed filename, mixed extension)</p><p class="description">Prep filenameThis function preps the name of various items to make loading them more reliable.</p></td>
+</tr>
+<tr>
+<td class="type"> void</td>
+<td class="description"><p class="name"><a href="#add_package_path()">add_package_path</a>(mixed path)</p><p class="description">Add Package PathPrepends a parent path to the library, model, helper, and config path arrays</p></td>
+</tr>
+<tr>
 <td class="type"> void</td>
 <td class="description"><p class="name"><a href="#config()">config</a>(str file, bool use_sections, bool fail_gracefully)</p><p class="description">Loads a config file</p></td>
 </tr>
 <tr>
 <td class="type"> void</td>
-<td class="description"><p class="name"><a href="#database()">database</a>(str params, bool return, bool active_record)</p><p class="description">Database Loader</p></td>
+<td class="description"><p class="name"><a href="#database()">database</a>(str params, bool return, mixed active_record)</p><p class="description">Database Loader</p></td>
 </tr>
 <tr>
 <td class="type"> void</td>
@@ -162,6 +182,10 @@ libraries, plugins, and helpers to be loaded automatically.</p></td>
 <tr>
 <td class="type"> void</td>
 <td class="description"><p class="name"><a href="#dbutil()">dbutil</a>()</p><p class="description">Load the Utilities Class</p></td>
+</tr>
+<tr>
+<td class="type"> void</td>
+<td class="description"><p class="name"><a href="#driver()">driver</a>(str library, mixed params, mixed object_name)</p><p class="description">DriverLoads a driver library</p></td>
 </tr>
 <tr>
 <td class="type"> void</td>
@@ -191,21 +215,8 @@ user has written the plural form of this function.</p></td>
 </tr>
 <tr>
 <td class="type"> void</td>
-<td class="description"><p class="name"><a href="#plugin()">plugin</a>(mixed plugins)</p><p class="description">Load PluginThis function loads the specified plugin.</p></td>
-</tr>
-<tr>
-<td class="type"> void</td>
-<td class="description"><p class="name"><a href="#plugins()">plugins</a>(mixed plugins)</p><p class="description">Load PluginsThis is simply an alias to the above function in case the
-user has written the plural form of this function.</p></td>
-</tr>
-<tr>
-<td class="type"> void</td>
-<td class="description"><p class="name"><a href="#scaffold_language()">scaffold_language</a>(str file, str lang, bool return)</p><p class="description">Loads language files for scaffolding</p></td>
-</tr>
-<tr>
-<td class="type"> void</td>
-<td class="description"><p class="name"><a href="#scaffolding()">scaffolding</a>(str table)</p><p class="description">Scaffolding LoaderThis initializing function works a bit different than the
-others. </p></td>
+<td class="description"><p class="name"><a href="#remove_package_path()">remove_package_path</a>(str path, bool remove_config_path)</p><p class="description">Remove Package PathRemove a path from the library, model, and helper path arrays if it exists
+If no path is provided, the most recently added path is removed.</p></td>
 </tr>
 <tr>
 <td class="type"> void</td>
@@ -219,7 +230,16 @@ the controller class and its "view" files.</p></td>
 </table>
 
 <h2 id="detail_field">Field Detail</h2>
-<a href="../source/libraries/loader.php.html#line36" class="location">libraries/Loader.php at line 36</a>
+<a href="../source/core/loader.php.html#line38" class="location">core/Loader.php at line 38</a>
+
+<h3 id="_base_classes">_base_classes</h3>
+<code class="signature">private  mixed <strong>$_base_classes</strong> = array()</code>
+<div class="details">
+</div>
+
+<hr>
+
+<a href="../source/core/loader.php.html#line39" class="location">core/Loader.php at line 39</a>
 
 <h3 id="_ci_cached_vars">_ci_cached_vars</h3>
 <code class="signature">private  mixed <strong>$_ci_cached_vars</strong> = array()</code>
@@ -228,7 +248,7 @@ the controller class and its "view" files.</p></td>
 
 <hr>
 
-<a href="../source/libraries/loader.php.html#line37" class="location">libraries/Loader.php at line 37</a>
+<a href="../source/core/loader.php.html#line40" class="location">core/Loader.php at line 40</a>
 
 <h3 id="_ci_classes">_ci_classes</h3>
 <code class="signature">private  mixed <strong>$_ci_classes</strong> = array()</code>
@@ -237,7 +257,16 @@ the controller class and its "view" files.</p></td>
 
 <hr>
 
-<a href="../source/libraries/loader.php.html#line40" class="location">libraries/Loader.php at line 40</a>
+<a href="../source/core/loader.php.html#line36" class="location">core/Loader.php at line 36</a>
+
+<h3 id="_ci_helper_paths">_ci_helper_paths</h3>
+<code class="signature">private  mixed <strong>$_ci_helper_paths</strong> = array()</code>
+<div class="details">
+</div>
+
+<hr>
+
+<a href="../source/core/loader.php.html#line43" class="location">core/Loader.php at line 43</a>
 
 <h3 id="_ci_helpers">_ci_helpers</h3>
 <code class="signature">private  mixed <strong>$_ci_helpers</strong> = array()</code>
@@ -246,7 +275,7 @@ the controller class and its "view" files.</p></td>
 
 <hr>
 
-<a href="../source/libraries/loader.php.html#line35" class="location">libraries/Loader.php at line 35</a>
+<a href="../source/core/loader.php.html#line37" class="location">core/Loader.php at line 37</a>
 
 <h3 id="_ci_is_instance">_ci_is_instance</h3>
 <code class="signature">private  mixed <strong>$_ci_is_instance</strong> = FALSE</code>
@@ -255,16 +284,16 @@ the controller class and its "view" files.</p></td>
 
 <hr>
 
-<a href="../source/libraries/loader.php.html#line34" class="location">libraries/Loader.php at line 34</a>
+<a href="../source/core/loader.php.html#line34" class="location">core/Loader.php at line 34</a>
 
-<h3 id="_ci_is_php5">_ci_is_php5</h3>
-<code class="signature">private  mixed <strong>$_ci_is_php5</strong> = FALSE</code>
+<h3 id="_ci_library_paths">_ci_library_paths</h3>
+<code class="signature">private  mixed <strong>$_ci_library_paths</strong> = array()</code>
 <div class="details">
 </div>
 
 <hr>
 
-<a href="../source/libraries/loader.php.html#line38" class="location">libraries/Loader.php at line 38</a>
+<a href="../source/core/loader.php.html#line41" class="location">core/Loader.php at line 41</a>
 
 <h3 id="_ci_loaded_files">_ci_loaded_files</h3>
 <code class="signature">private  mixed <strong>$_ci_loaded_files</strong> = array()</code>
@@ -273,7 +302,16 @@ the controller class and its "view" files.</p></td>
 
 <hr>
 
-<a href="../source/libraries/loader.php.html#line39" class="location">libraries/Loader.php at line 39</a>
+<a href="../source/core/loader.php.html#line35" class="location">core/Loader.php at line 35</a>
+
+<h3 id="_ci_model_paths">_ci_model_paths</h3>
+<code class="signature">private  mixed <strong>$_ci_model_paths</strong> = array()</code>
+<div class="details">
+</div>
+
+<hr>
+
+<a href="../source/core/loader.php.html#line42" class="location">core/Loader.php at line 42</a>
 
 <h3 id="_ci_models">_ci_models</h3>
 <code class="signature">private  mixed <strong>$_ci_models</strong> = array()</code>
@@ -282,16 +320,7 @@ the controller class and its "view" files.</p></td>
 
 <hr>
 
-<a href="../source/libraries/loader.php.html#line41" class="location">libraries/Loader.php at line 41</a>
-
-<h3 id="_ci_plugins">_ci_plugins</h3>
-<code class="signature">private  mixed <strong>$_ci_plugins</strong> = array()</code>
-<div class="details">
-</div>
-
-<hr>
-
-<a href="../source/libraries/loader.php.html#line42" class="location">libraries/Loader.php at line 42</a>
+<a href="../source/core/loader.php.html#line44" class="location">core/Loader.php at line 44</a>
 
 <h3 id="_ci_varmap">_ci_varmap</h3>
 <code class="signature">private  mixed <strong>$_ci_varmap</strong> = array(...)</code>
@@ -300,7 +329,7 @@ the controller class and its "view" files.</p></td>
 
 <hr>
 
-<a href="../source/libraries/loader.php.html#line33" class="location">libraries/Loader.php at line 33</a>
+<a href="../source/core/loader.php.html#line33" class="location">core/Loader.php at line 33</a>
 
 <h3 id="_ci_view_path">_ci_view_path</h3>
 <code class="signature">private  mixed <strong>$_ci_view_path</strong> = ''</code>
@@ -309,7 +338,7 @@ the controller class and its "view" files.</p></td>
 
 <hr>
 
-<a href="../source/libraries/loader.php.html#line32" class="location">libraries/Loader.php at line 32</a>
+<a href="../source/core/loader.php.html#line32" class="location">core/Loader.php at line 32</a>
 
 <h3 id="line">line</h3>
 <code class="signature">public  mixed <strong>$line</strong> = ''</code>
@@ -319,7 +348,7 @@ the controller class and its "view" files.</p></td>
 <hr>
 
 <h2 id="detail_method">Method Detail</h2><div class="method_detail">
-<div class='method'><a href="../source/libraries/loader.php.html#line52" class="location">libraries/Loader.php at line 52</a>
+<div class='method'><a href="../source/core/loader.php.html#line54" class="location">core/Loader.php at line 54</a>
 
 <h3 id="__construct()">__construct</h3>
 <code class="signature">public  void <strong>__construct</strong>()</code>
@@ -331,12 +360,12 @@ the controller class and its "view" files.</p></td>
 
 
 
-<div class='method'><a href="../source/libraries/loader.php.html#line1023" class="location">libraries/Loader.php at line 1023</a>
+<div class='method'><a href="../source/core/loader.php.html#line1018" class="location">core/Loader.php at line 1018</a>
 
 <h3 id="_ci_assign_to_models()">_ci_assign_to_models</h3>
 <code class="signature">private  void <strong>_ci_assign_to_models</strong>()</code>
 <div class="details">
-<p>Assign to Models</p><p>Makes sure that anything loaded by the loader class (libraries, plugins, etc.)
+<p>Assign to Models</p><p>Makes sure that anything loaded by the loader class (libraries, etc.)
 will be available to models, if any exist.</p><dl>
 <dt>Access	private.</dt>
 <dt>Param	object.</dt>
@@ -346,13 +375,13 @@ will be available to models, if any exist.</p><dl>
 
 
 
-<div class='method'><a href="../source/libraries/loader.php.html#line944" class="location">libraries/Loader.php at line 944</a>
+<div class='method'><a href="../source/core/loader.php.html#line937" class="location">core/Loader.php at line 937</a>
 
 <h3 id="_ci_autoloader()">_ci_autoloader</h3>
 <code class="signature">private  void <strong>_ci_autoloader</strong>()</code>
 <div class="details">
 <p>Autoloader</p><p>The config/autoload.php file contains an array that permits sub-systems,
-libraries, plugins, and helpers to be loaded automatically.</p><dl>
+libraries, and helpers to be loaded automatically.</p><dl>
 <dt>Access	private.</dt>
 <dt>Param	array.</dt>
 <dt>Return	void.</dt>
@@ -361,7 +390,20 @@ libraries, plugins, and helpers to be loaded automatically.</p><dl>
 
 
 
-<div class='method'><a href="../source/libraries/loader.php.html#line860" class="location">libraries/Loader.php at line 860</a>
+<div class='method'><a href="../source/core/loader.php.html#line1076" class="location">core/Loader.php at line 1076</a>
+
+<h3 id="_ci_get_component()">_ci_get_component</h3>
+<code class="signature">private  void <strong>_ci_get_component</strong>(mixed component)</code>
+<div class="details">
+<p>Get a reference to a specific library or model</p><dl>
+<dt>Access	private.</dt>
+<dt>Return	bool.</dt>
+</dl>
+</div></div>
+
+
+
+<div class='method'><a href="../source/core/loader.php.html#line853" class="location">core/Loader.php at line 853</a>
 
 <h3 id="_ci_init_class()">_ci_init_class</h3>
 <code class="signature">private  void <strong>_ci_init_class</strong>(mixed class, str prefix, bool config, mixed object_name)</code>
@@ -376,12 +418,13 @@ libraries, plugins, and helpers to be loaded automatically.</p><dl>
 
 
 
-<div class='method'><a href="../source/libraries/loader.php.html#line1071" class="location">libraries/Loader.php at line 1071</a>
+<div class='method'><a href="../source/core/loader.php.html#line1057" class="location">core/Loader.php at line 1057</a>
 
 <h3 id="_ci_is_instance()">_ci_is_instance</h3>
 <code class="signature">private  void <strong>_ci_is_instance</strong>()</code>
 <div class="details">
 <p>Determines whether we should use the CI instance or $this</p><dl>
+<dt>PHP4.</dt>
 <dt>Access	private.</dt>
 <dt>Return	bool.</dt>
 </dl>
@@ -389,7 +432,7 @@ libraries, plugins, and helpers to be loaded automatically.</p><dl>
 
 
 
-<div class='method'><a href="../source/libraries/loader.php.html#line597" class="location">libraries/Loader.php at line 597</a>
+<div class='method'><a href="../source/core/loader.php.html#line596" class="location">core/Loader.php at line 596</a>
 
 <h3 id="_ci_load()">_ci_load</h3>
 <code class="signature">private  void <strong>_ci_load</strong>(mixed _ci_data)</code>
@@ -405,7 +448,7 @@ variables made available to view files</p><dl>
 
 
 
-<div class='method'><a href="../source/libraries/loader.php.html#line726" class="location">libraries/Loader.php at line 726</a>
+<div class='method'><a href="../source/core/loader.php.html#line725" class="location">core/Loader.php at line 725</a>
 
 <h3 id="_ci_load_class()">_ci_load_class</h3>
 <code class="signature">private  void <strong>_ci_load_class</strong>(mixed class, mixed params, mixed object_name, string the)</code>
@@ -423,7 +466,7 @@ variables made available to view files</p><dl>
 
 
 
-<div class='method'><a href="../source/libraries/loader.php.html#line1058" class="location">libraries/Loader.php at line 1058</a>
+<div class='method'><a href="../source/core/loader.php.html#line1043" class="location">core/Loader.php at line 1043</a>
 
 <h3 id="_ci_object_to_array()">_ci_object_to_array</h3>
 <code class="signature">private  void <strong>_ci_object_to_array</strong>(mixed object)</code>
@@ -437,7 +480,35 @@ variables made available to view files</p><dl>
 
 
 
-<div class='method'><a href="../source/libraries/loader.php.html#line549" class="location">libraries/Loader.php at line 549</a>
+<div class='method'><a href="../source/core/loader.php.html#line1100" class="location">core/Loader.php at line 1100</a>
+
+<h3 id="_ci_prep_filename()">_ci_prep_filename</h3>
+<code class="signature">private  void <strong>_ci_prep_filename</strong>(mixed filename, mixed extension)</code>
+<div class="details">
+<p>Prep filename</p><p>This function preps the name of various items to make loading them more reliable.</p><dl>
+<dt>Access	private.</dt>
+<dt>Param	mixed.</dt>
+<dt>Return	array.</dt>
+</dl>
+</div></div>
+
+
+
+<div class='method'><a href="../source/core/loader.php.html#line526" class="location">core/Loader.php at line 526</a>
+
+<h3 id="add_package_path()">add_package_path</h3>
+<code class="signature">public  void <strong>add_package_path</strong>(mixed path)</code>
+<div class="details">
+<p>Add Package Path</p><p>Prepends a parent path to the library, model, helper, and config path arrays</p><dl>
+<dt>Access	public.</dt>
+<dt>Param	string.</dt>
+<dt>Return	void.</dt>
+</dl>
+</div></div>
+
+
+
+<div class='method'><a href="../source/core/loader.php.html#line479" class="location">core/Loader.php at line 479</a>
 
 <h3 id="config()">config</h3>
 <code class="signature">public  void <strong>config</strong>(str file, bool use_sections, bool fail_gracefully)</code>
@@ -451,10 +522,10 @@ variables made available to view files</p><dl>
 
 
 
-<div class='method'><a href="../source/libraries/loader.php.html#line201" class="location">libraries/Loader.php at line 201</a>
+<div class='method'><a href="../source/core/loader.php.html#line211" class="location">core/Loader.php at line 211</a>
 
 <h3 id="database()">database</h3>
-<code class="signature">public  void <strong>database</strong>(str params, bool return, bool active_record)</code>
+<code class="signature">public  void <strong>database</strong>(str params, bool return, mixed active_record)</code>
 <div class="details">
 <p>Database Loader</p><dl>
 <dt>Access	public.</dt>
@@ -469,7 +540,7 @@ variables made available to view files</p><dl>
 
 
 
-<div class='method'><a href="../source/libraries/loader.php.html#line268" class="location">libraries/Loader.php at line 268</a>
+<div class='method'><a href="../source/core/loader.php.html#line278" class="location">core/Loader.php at line 278</a>
 
 <h3 id="dbforge()">dbforge</h3>
 <code class="signature">public  void <strong>dbforge</strong>()</code>
@@ -482,7 +553,7 @@ variables made available to view files</p><dl>
 
 
 
-<div class='method'><a href="../source/libraries/loader.php.html#line238" class="location">libraries/Loader.php at line 238</a>
+<div class='method'><a href="../source/core/loader.php.html#line248" class="location">core/Loader.php at line 248</a>
 
 <h3 id="dbutil()">dbutil</h3>
 <code class="signature">public  void <strong>dbutil</strong>()</code>
@@ -495,7 +566,25 @@ variables made available to view files</p><dl>
 
 
 
-<div class='method'><a href="../source/libraries/loader.php.html#line322" class="location">libraries/Loader.php at line 322</a>
+<div class='method'><a href="../source/core/loader.php.html#line497" class="location">core/Loader.php at line 497</a>
+
+<h3 id="driver()">driver</h3>
+<code class="signature">public  void <strong>driver</strong>(str library, mixed params, mixed object_name)</code>
+<div class="details">
+<p>Driver</p><p>Loads a driver library</p><dl>
+<dt>Param	string	the:</dt>
+<dd>name of the class</dd>
+<dt>Param	mixed	the:</dt>
+<dd>optional parameters</dd>
+<dt>Param	string	an:</dt>
+<dd>optional object name</dd>
+<dt>Return	void.</dt>
+</dl>
+</div></div>
+
+
+
+<div class='method'><a href="../source/core/loader.php.html#line332" class="location">core/Loader.php at line 332</a>
 
 <h3 id="file()">file</h3>
 <code class="signature">public  void <strong>file</strong>(mixed path, bool return)</code>
@@ -510,7 +599,7 @@ variables made available to view files</p><dl>
 
 
 
-<div class='method'><a href="../source/libraries/loader.php.html#line368" class="location">libraries/Loader.php at line 368</a>
+<div class='method'><a href="../source/core/loader.php.html#line378" class="location">core/Loader.php at line 378</a>
 
 <h3 id="helper()">helper</h3>
 <code class="signature">public  void <strong>helper</strong>(mixed helpers)</code>
@@ -524,7 +613,7 @@ variables made available to view files</p><dl>
 
 
 
-<div class='method'><a href="../source/libraries/loader.php.html#line432" class="location">libraries/Loader.php at line 432</a>
+<div class='method'><a href="../source/core/loader.php.html#line440" class="location">core/Loader.php at line 440</a>
 
 <h3 id="helpers()">helpers</h3>
 <code class="signature">public  void <strong>helpers</strong>(mixed helpers)</code>
@@ -539,7 +628,7 @@ user has written the plural form of this function.</p><dl>
 
 
 
-<div class='method'><a href="../source/libraries/loader.php.html#line512" class="location">libraries/Loader.php at line 512</a>
+<div class='method'><a href="../source/core/loader.php.html#line455" class="location">core/Loader.php at line 455</a>
 
 <h3 id="language()">language</h3>
 <code class="signature">public  void <strong>language</strong>(mixed file)</code>
@@ -554,7 +643,7 @@ user has written the plural form of this function.</p><dl>
 
 
 
-<div class='method'><a href="../source/libraries/loader.php.html#line75" class="location">libraries/Loader.php at line 75</a>
+<div class='method'><a href="../source/core/loader.php.html#line79" class="location">core/Loader.php at line 79</a>
 
 <h3 id="library()">library</h3>
 <code class="signature">public  void <strong>library</strong>(str library, mixed params, mixed object_name)</code>
@@ -574,7 +663,7 @@ It is designed to be called from a user's app controllers.</p><dl>
 
 
 
-<div class='method'><a href="../source/libraries/loader.php.html#line115" class="location">libraries/Loader.php at line 115</a>
+<div class='method'><a href="../source/core/loader.php.html#line119" class="location">core/Loader.php at line 119</a>
 
 <h3 id="model()">model</h3>
 <code class="signature">public  void <strong>model</strong>(mixed model, str name, bool db_conn)</code>
@@ -593,70 +682,22 @@ It is designed to be called from a user's app controllers.</p><dl>
 
 
 
-<div class='method'><a href="../source/libraries/loader.php.html#line448" class="location">libraries/Loader.php at line 448</a>
+<div class='method'><a href="../source/core/loader.php.html#line549" class="location">core/Loader.php at line 549</a>
 
-<h3 id="plugin()">plugin</h3>
-<code class="signature">public  void <strong>plugin</strong>(mixed plugins)</code>
+<h3 id="remove_package_path()">remove_package_path</h3>
+<code class="signature">public  void <strong>remove_package_path</strong>(str path, bool remove_config_path)</code>
 <div class="details">
-<p>Load Plugin</p><p>This function loads the specified plugin.</p><dl>
+<p>Remove Package Path</p><p>Remove a path from the library, model, and helper path arrays if it exists
+If no path is provided, the most recently added path is removed.</p><dl>
 <dt>Access	public.</dt>
-<dt>Param	array.</dt>
-<dt>Return	void.</dt>
+<dt>Param	type.</dt>
+<dt>Return	type.</dt>
 </dl>
 </div></div>
 
 
 
-<div class='method'><a href="../source/libraries/loader.php.html#line497" class="location">libraries/Loader.php at line 497</a>
-
-<h3 id="plugins()">plugins</h3>
-<code class="signature">public  void <strong>plugins</strong>(mixed plugins)</code>
-<div class="details">
-<p>Load Plugins</p><p>This is simply an alias to the above function in case the
-user has written the plural form of this function.</p><dl>
-<dt>Access	public.</dt>
-<dt>Param	array.</dt>
-<dt>Return	void.</dt>
-</dl>
-</div></div>
-
-
-
-<div class='method'><a href="../source/libraries/loader.php.html#line534" class="location">libraries/Loader.php at line 534</a>
-
-<h3 id="scaffold_language()">scaffold_language</h3>
-<code class="signature">public  void <strong>scaffold_language</strong>(str file, str lang, bool return)</code>
-<div class="details">
-<p>Loads language files for scaffolding</p><dl>
-<dt>Access	public.</dt>
-<dt>Param	string.</dt>
-<dt>Return	arra.</dt>
-</dl>
-</div></div>
-
-
-
-<div class='method'><a href="../source/libraries/loader.php.html#line572" class="location">libraries/Loader.php at line 572</a>
-
-<h3 id="scaffolding()">scaffolding</h3>
-<code class="signature">public  void <strong>scaffolding</strong>(str table)</code>
-<div class="details">
-<p>Scaffolding Loader</p><p>This initializing function works a bit different than the
-others. It doesn't load the class.  Instead, it simply
-sets a flag indicating that scaffolding is allowed to be
-used.  The actual scaffolding function below is
-called by the front controller based on whether the
-second segment of the URL matches the "secret" scaffolding
-word stored in the application/config/routes.php</p><dl>
-<dt>Access	public.</dt>
-<dt>Param	string.</dt>
-<dt>Return	void.</dt>
-</dl>
-</div></div>
-
-
-
-<div class='method'><a href="../source/libraries/loader.php.html#line339" class="location">libraries/Loader.php at line 339</a>
+<div class='method'><a href="../source/core/loader.php.html#line349" class="location">core/Loader.php at line 349</a>
 
 <h3 id="vars()">vars</h3>
 <code class="signature">public  void <strong>vars</strong>(mixed vars)</code>
@@ -671,7 +712,7 @@ the controller class and its "view" files.</p><dl>
 
 
 
-<div class='method'><a href="../source/libraries/loader.php.html#line305" class="location">libraries/Loader.php at line 305</a>
+<div class='method'><a href="../source/core/loader.php.html#line315" class="location">core/Loader.php at line 315</a>
 
 <h3 id="view()">view</h3>
 <code class="signature">public  void <strong>view</strong>(mixed view, mixed vars)</code>

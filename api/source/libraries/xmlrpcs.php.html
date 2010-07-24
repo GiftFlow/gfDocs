@@ -6,7 +6,7 @@
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 
 <meta name="generator" content="PHPDoctor 2RC4 (http://peej.github.com/phpdoctor/)">
-<meta name="when" content="Mon, 19 Jul 2010 17:13:58 +0000">
+<meta name="when" content="Sat, 24 Jul 2010 20:46:32 +0000">
 
 <link rel="stylesheet" type="text/css" href="../../stylesheet.css">
 <link rel="start" href="../../overview-summary.html">
@@ -45,7 +45,7 @@
 <a name="line6"></a> *
 <a name="line7"></a> * @package		CodeIgniter
 <a name="line8"></a> * @author		ExpressionEngine Dev Team
-<a name="line9"></a> * @copyright	Copyright (c) 2008 - 2009, EllisLab, Inc.
+<a name="line9"></a> * @copyright	Copyright (c) 2008 - 2010, EllisLab, Inc.
 <a name="line10"></a> * @license		http://codeigniter.com/user_guide/license.html
 <a name="line11"></a> * @link		http://codeigniter.com
 <a name="line12"></a> * @since		Version 1.0
@@ -79,10 +79,10 @@
 <a name="line40"></a>	var $debug_msg		= '';		// Debug Message
 <a name="line41"></a>	var $system_methods = array(); // XML RPC Server methods
 <a name="line42"></a>	var $controller_obj;
-<a name="line43"></a>
+<a name="line43"></a>	
 <a name="line44"></a>	var $object			= FALSE;
-<a name="line45"></a>	
-<a name="line46"></a>	
+<a name="line45"></a>
+<a name="line46"></a>
 <a name="line47"></a>	//-------------------------------------
 <a name="line48"></a>	//  Constructor, more or less
 <a name="line49"></a>	//-------------------------------------
@@ -120,459 +120,469 @@
 <a name="line81"></a>		{
 <a name="line82"></a>			$this->object = $config['object'];
 <a name="line83"></a>		}
-<a name="line84"></a>	}
-<a name="line85"></a>	
-<a name="line86"></a>	//-------------------------------------
-<a name="line87"></a>	//  Setting of System Methods
-<a name="line88"></a>	//-------------------------------------
-<a name="line89"></a>	
-<a name="line90"></a>	function set_system_methods ()
-<a name="line91"></a>	{
-<a name="line92"></a>		$this->methods = array(
-<a name="line93"></a>					'system.listMethods'	 => array(
-<a name="line94"></a>													'function' => 'this.listMethods',
-<a name="line95"></a>													'signature' => array(array($this->xmlrpcArray, $this->xmlrpcString), array($this->xmlrpcArray)),
-<a name="line96"></a>													'docstring' => 'Returns an array of available methods on this server'),
-<a name="line97"></a>					'system.methodHelp'		 => array(
-<a name="line98"></a>													'function' => 'this.methodHelp',
-<a name="line99"></a>													'signature' => array(array($this->xmlrpcString, $this->xmlrpcString)),
-<a name="line100"></a>													'docstring' => 'Returns a documentation string for the specified method'),
-<a name="line101"></a>					'system.methodSignature' => array(
-<a name="line102"></a>													'function' => 'this.methodSignature',
-<a name="line103"></a>													'signature' => array(array($this->xmlrpcArray, $this->xmlrpcString)),
-<a name="line104"></a>													'docstring' => 'Returns an array describing the return type and required parameters of a method'),
-<a name="line105"></a>					'system.multicall'		 => array(
-<a name="line106"></a>												'function' => 'this.multicall',
-<a name="line107"></a>												'signature' => array(array($this->xmlrpcArray, $this->xmlrpcArray)),
-<a name="line108"></a>												'docstring' => 'Combine multiple RPC calls in one request. See http://www.xmlrpc.com/discuss/msgReader$1208 for details')
-<a name="line109"></a>					);
-<a name="line110"></a>	}
-<a name="line111"></a>
-<a name="line112"></a>
-<a name="line113"></a>	//-------------------------------------
-<a name="line114"></a>	//  Main Server Function
-<a name="line115"></a>	//-------------------------------------
-<a name="line116"></a>	
-<a name="line117"></a>	function serve()
-<a name="line118"></a>	{
-<a name="line119"></a>		$r = $this->parseRequest();
-<a name="line120"></a>		$payload  = '<?xml version="1.0" encoding="'.$this->xmlrpc_defencoding.'"?'.'>'."\n";
-<a name="line121"></a>		$payload .= $this->debug_msg;
-<a name="line122"></a>		$payload .= $r->prepare_response();
-<a name="line123"></a>		
-<a name="line124"></a>		header("Content-Type: text/xml");
-<a name="line125"></a>		header("Content-Length: ".strlen($payload));
-<a name="line126"></a>		exit($payload);
-<a name="line127"></a>	}
-<a name="line128"></a>
-<a name="line129"></a>	//-------------------------------------
-<a name="line130"></a>	//  Add Method to Class
-<a name="line131"></a>	//-------------------------------------
-<a name="line132"></a>	
-<a name="line133"></a>	function add_to_map($methodname,$function,$sig,$doc)
-<a name="line134"></a>	{
-<a name="line135"></a>		$this->methods[$methodname] = array(
-<a name="line136"></a>			'function'  => $function,
-<a name="line137"></a>			'signature' => $sig,
-<a name="line138"></a>			'docstring' => $doc
-<a name="line139"></a>		);
-<a name="line140"></a>	}
-<a name="line141"></a>
-<a name="line142"></a>
-<a name="line143"></a>	//-------------------------------------
-<a name="line144"></a>	//  Parse Server Request
-<a name="line145"></a>	//-------------------------------------
-<a name="line146"></a>	
-<a name="line147"></a>	function parseRequest($data='')
-<a name="line148"></a>	{
-<a name="line149"></a>		global $HTTP_RAW_POST_DATA;
-<a name="line150"></a>		
-<a name="line151"></a>		//-------------------------------------
-<a name="line152"></a>		//  Get Data
-<a name="line153"></a>		//-------------------------------------
-<a name="line154"></a>
-<a name="line155"></a>		if ($data == '')
-<a name="line156"></a>		{
-<a name="line157"></a>			$data = $HTTP_RAW_POST_DATA;
-<a name="line158"></a>		}
+<a name="line84"></a>		
+<a name="line85"></a>		if (isset($config['xss_clean']))
+<a name="line86"></a>		{
+<a name="line87"></a>			$this->xss_clean = $config['xss_clean'];
+<a name="line88"></a>		}
+<a name="line89"></a>	}
+<a name="line90"></a>	
+<a name="line91"></a>	//-------------------------------------
+<a name="line92"></a>	//  Setting of System Methods
+<a name="line93"></a>	//-------------------------------------
+<a name="line94"></a>	
+<a name="line95"></a>	function set_system_methods ()
+<a name="line96"></a>	{
+<a name="line97"></a>		$this->methods = array(
+<a name="line98"></a>					'system.listMethods'	 => array(
+<a name="line99"></a>													'function' => 'this.listMethods',
+<a name="line100"></a>													'signature' => array(array($this->xmlrpcArray, $this->xmlrpcString), array($this->xmlrpcArray)),
+<a name="line101"></a>													'docstring' => 'Returns an array of available methods on this server'),
+<a name="line102"></a>					'system.methodHelp'		 => array(
+<a name="line103"></a>													'function' => 'this.methodHelp',
+<a name="line104"></a>													'signature' => array(array($this->xmlrpcString, $this->xmlrpcString)),
+<a name="line105"></a>													'docstring' => 'Returns a documentation string for the specified method'),
+<a name="line106"></a>					'system.methodSignature' => array(
+<a name="line107"></a>													'function' => 'this.methodSignature',
+<a name="line108"></a>													'signature' => array(array($this->xmlrpcArray, $this->xmlrpcString)),
+<a name="line109"></a>													'docstring' => 'Returns an array describing the return type and required parameters of a method'),
+<a name="line110"></a>					'system.multicall'		 => array(
+<a name="line111"></a>												'function' => 'this.multicall',
+<a name="line112"></a>												'signature' => array(array($this->xmlrpcArray, $this->xmlrpcArray)),
+<a name="line113"></a>												'docstring' => 'Combine multiple RPC calls in one request. See http://www.xmlrpc.com/discuss/msgReader$1208 for details')
+<a name="line114"></a>					);
+<a name="line115"></a>	}
+<a name="line116"></a>
+<a name="line117"></a>
+<a name="line118"></a>	//-------------------------------------
+<a name="line119"></a>	//  Main Server Function
+<a name="line120"></a>	//-------------------------------------
+<a name="line121"></a>	
+<a name="line122"></a>	function serve()
+<a name="line123"></a>	{
+<a name="line124"></a>		$r = $this->parseRequest();
+<a name="line125"></a>		$payload  = '<?xml version="1.0" encoding="'.$this->xmlrpc_defencoding.'"?'.'>'."\n";
+<a name="line126"></a>		$payload .= $this->debug_msg;
+<a name="line127"></a>		$payload .= $r->prepare_response();
+<a name="line128"></a>		
+<a name="line129"></a>		header("Content-Type: text/xml");
+<a name="line130"></a>		header("Content-Length: ".strlen($payload));
+<a name="line131"></a>		exit($payload);
+<a name="line132"></a>	}
+<a name="line133"></a>
+<a name="line134"></a>	//-------------------------------------
+<a name="line135"></a>	//  Add Method to Class
+<a name="line136"></a>	//-------------------------------------
+<a name="line137"></a>	
+<a name="line138"></a>	function add_to_map($methodname,$function,$sig,$doc)
+<a name="line139"></a>	{
+<a name="line140"></a>		$this->methods[$methodname] = array(
+<a name="line141"></a>			'function'  => $function,
+<a name="line142"></a>			'signature' => $sig,
+<a name="line143"></a>			'docstring' => $doc
+<a name="line144"></a>		);
+<a name="line145"></a>	}
+<a name="line146"></a>
+<a name="line147"></a>
+<a name="line148"></a>	//-------------------------------------
+<a name="line149"></a>	//  Parse Server Request
+<a name="line150"></a>	//-------------------------------------
+<a name="line151"></a>	
+<a name="line152"></a>	function parseRequest($data='')
+<a name="line153"></a>	{
+<a name="line154"></a>		global $HTTP_RAW_POST_DATA;
+<a name="line155"></a>		
+<a name="line156"></a>		//-------------------------------------
+<a name="line157"></a>		//  Get Data
+<a name="line158"></a>		//-------------------------------------
 <a name="line159"></a>
-<a name="line160"></a>		//-------------------------------------
-<a name="line161"></a>		//  Set up XML Parser
-<a name="line162"></a>		//-------------------------------------
-<a name="line163"></a>		
-<a name="line164"></a>		$parser = xml_parser_create($this->xmlrpc_defencoding);
-<a name="line165"></a>		$parser_object = new XML_RPC_Message("filler");
-<a name="line166"></a>		
-<a name="line167"></a>		$parser_object->xh[$parser]					= array();
-<a name="line168"></a>		$parser_object->xh[$parser]['isf']			= 0;
-<a name="line169"></a>		$parser_object->xh[$parser]['isf_reason']	= '';
-<a name="line170"></a>		$parser_object->xh[$parser]['params']		= array();
-<a name="line171"></a>		$parser_object->xh[$parser]['stack']		= array();
-<a name="line172"></a>		$parser_object->xh[$parser]['valuestack']	= array();
-<a name="line173"></a>		$parser_object->xh[$parser]['method']		= '';
-<a name="line174"></a>
-<a name="line175"></a>		xml_set_object($parser, $parser_object);
-<a name="line176"></a>		xml_parser_set_option($parser, XML_OPTION_CASE_FOLDING, true);
-<a name="line177"></a>		xml_set_element_handler($parser, 'open_tag', 'closing_tag');
-<a name="line178"></a>		xml_set_character_data_handler($parser, 'character_data');
-<a name="line179"></a>		//xml_set_default_handler($parser, 'default_handler');
-<a name="line180"></a>		
-<a name="line181"></a>		
-<a name="line182"></a>		//-------------------------------------
-<a name="line183"></a>		//  PARSE + PROCESS XML DATA
-<a name="line184"></a>		//-------------------------------------  	
+<a name="line160"></a>		if ($data == '')
+<a name="line161"></a>		{
+<a name="line162"></a>			$data = $HTTP_RAW_POST_DATA;
+<a name="line163"></a>		}
+<a name="line164"></a>
+<a name="line165"></a>		//-------------------------------------
+<a name="line166"></a>		//  Set up XML Parser
+<a name="line167"></a>		//-------------------------------------
+<a name="line168"></a>		
+<a name="line169"></a>		$parser = xml_parser_create($this->xmlrpc_defencoding);
+<a name="line170"></a>		$parser_object = new XML_RPC_Message("filler");
+<a name="line171"></a>		
+<a name="line172"></a>		$parser_object->xh[$parser]					= array();
+<a name="line173"></a>		$parser_object->xh[$parser]['isf']			= 0;
+<a name="line174"></a>		$parser_object->xh[$parser]['isf_reason']	= '';
+<a name="line175"></a>		$parser_object->xh[$parser]['params']		= array();
+<a name="line176"></a>		$parser_object->xh[$parser]['stack']		= array();
+<a name="line177"></a>		$parser_object->xh[$parser]['valuestack']	= array();
+<a name="line178"></a>		$parser_object->xh[$parser]['method']		= '';
+<a name="line179"></a>
+<a name="line180"></a>		xml_set_object($parser, $parser_object);
+<a name="line181"></a>		xml_parser_set_option($parser, XML_OPTION_CASE_FOLDING, true);
+<a name="line182"></a>		xml_set_element_handler($parser, 'open_tag', 'closing_tag');
+<a name="line183"></a>		xml_set_character_data_handler($parser, 'character_data');
+<a name="line184"></a>		//xml_set_default_handler($parser, 'default_handler');
 <a name="line185"></a>		
-<a name="line186"></a>		if ( ! xml_parse($parser, $data, 1))
-<a name="line187"></a>		{
-<a name="line188"></a>			// return XML error as a faultCode
-<a name="line189"></a>			$r = new XML_RPC_Response(0,
-<a name="line190"></a>			$this->xmlrpcerrxml + xml_get_error_code($parser),
-<a name="line191"></a>			sprintf('XML error: %s at line %d',
-<a name="line192"></a>				xml_error_string(xml_get_error_code($parser)),
-<a name="line193"></a>				xml_get_current_line_number($parser)));
-<a name="line194"></a>			xml_parser_free($parser);
-<a name="line195"></a>		}
-<a name="line196"></a>		elseif($parser_object->xh[$parser]['isf'])
-<a name="line197"></a>		{
-<a name="line198"></a>			return new XML_RPC_Response(0, $this->xmlrpcerr['invalid_return'], $this->xmlrpcstr['invalid_return']);
-<a name="line199"></a>		}
-<a name="line200"></a>		else
-<a name="line201"></a>		{
-<a name="line202"></a>			xml_parser_free($parser);
-<a name="line203"></a>			
-<a name="line204"></a>			$m = new XML_RPC_Message($parser_object->xh[$parser]['method']);
-<a name="line205"></a>			$plist='';
-<a name="line206"></a>			
-<a name="line207"></a>			for($i=0; $i < count($parser_object->xh[$parser]['params']); $i++)
-<a name="line208"></a>			{
-<a name="line209"></a>				if ($this->debug === TRUE)
-<a name="line210"></a>				{
-<a name="line211"></a>					$plist .= "$i - " .  print_r(get_object_vars($parser_object->xh[$parser]['params'][$i]), TRUE). ";\n";
-<a name="line212"></a>				}
-<a name="line213"></a>				
-<a name="line214"></a>				$m->addParam($parser_object->xh[$parser]['params'][$i]);
-<a name="line215"></a>			}
-<a name="line216"></a>			
-<a name="line217"></a>			if ($this->debug === TRUE)
-<a name="line218"></a>			{
-<a name="line219"></a>				echo "<pre>";
-<a name="line220"></a>				echo "---PLIST---\n" . $plist . "\n---PLIST END---\n\n";
-<a name="line221"></a>				echo "</pre>";
-<a name="line222"></a>			}
-<a name="line223"></a>			
-<a name="line224"></a>			$r = $this->_execute($m);
-<a name="line225"></a>		}
-<a name="line226"></a>		
-<a name="line227"></a>		//-------------------------------------
-<a name="line228"></a>		//  SET DEBUGGING MESSAGE
-<a name="line229"></a>		//-------------------------------------  	
-<a name="line230"></a>		
-<a name="line231"></a>		if ($this->debug === TRUE)
-<a name="line232"></a>		{
-<a name="line233"></a>			$this->debug_msg = "<!-- DEBUG INFO:\n\n".$plist."\n END DEBUG-->\n";
-<a name="line234"></a>		}
+<a name="line186"></a>		
+<a name="line187"></a>		//-------------------------------------
+<a name="line188"></a>		//  PARSE + PROCESS XML DATA
+<a name="line189"></a>		//-------------------------------------  	
+<a name="line190"></a>		
+<a name="line191"></a>		if ( ! xml_parse($parser, $data, 1))
+<a name="line192"></a>		{
+<a name="line193"></a>			// return XML error as a faultCode
+<a name="line194"></a>			$r = new XML_RPC_Response(0,
+<a name="line195"></a>			$this->xmlrpcerrxml + xml_get_error_code($parser),
+<a name="line196"></a>			sprintf('XML error: %s at line %d',
+<a name="line197"></a>				xml_error_string(xml_get_error_code($parser)),
+<a name="line198"></a>				xml_get_current_line_number($parser)));
+<a name="line199"></a>			xml_parser_free($parser);
+<a name="line200"></a>		}
+<a name="line201"></a>		elseif($parser_object->xh[$parser]['isf'])
+<a name="line202"></a>		{
+<a name="line203"></a>			return new XML_RPC_Response(0, $this->xmlrpcerr['invalid_return'], $this->xmlrpcstr['invalid_return']);
+<a name="line204"></a>		}
+<a name="line205"></a>		else
+<a name="line206"></a>		{
+<a name="line207"></a>			xml_parser_free($parser);
+<a name="line208"></a>			
+<a name="line209"></a>			$m = new XML_RPC_Message($parser_object->xh[$parser]['method']);
+<a name="line210"></a>			$plist='';
+<a name="line211"></a>			
+<a name="line212"></a>			for($i=0; $i < count($parser_object->xh[$parser]['params']); $i++)
+<a name="line213"></a>			{
+<a name="line214"></a>				if ($this->debug === TRUE)
+<a name="line215"></a>				{
+<a name="line216"></a>					$plist .= "$i - " .  print_r(get_object_vars($parser_object->xh[$parser]['params'][$i]), TRUE). ";\n";
+<a name="line217"></a>				}
+<a name="line218"></a>				
+<a name="line219"></a>				$m->addParam($parser_object->xh[$parser]['params'][$i]);
+<a name="line220"></a>			}
+<a name="line221"></a>			
+<a name="line222"></a>			if ($this->debug === TRUE)
+<a name="line223"></a>			{
+<a name="line224"></a>				echo "<pre>";
+<a name="line225"></a>				echo "---PLIST---\n" . $plist . "\n---PLIST END---\n\n";
+<a name="line226"></a>				echo "</pre>";
+<a name="line227"></a>			}
+<a name="line228"></a>			
+<a name="line229"></a>			$r = $this->_execute($m);
+<a name="line230"></a>		}
+<a name="line231"></a>		
+<a name="line232"></a>		//-------------------------------------
+<a name="line233"></a>		//  SET DEBUGGING MESSAGE
+<a name="line234"></a>		//-------------------------------------  	
 <a name="line235"></a>		
-<a name="line236"></a>		return $r;
-<a name="line237"></a>	}
-<a name="line238"></a>
-<a name="line239"></a>	//-------------------------------------
-<a name="line240"></a>	//  Executes the Method
-<a name="line241"></a>	//-------------------------------------
-<a name="line242"></a>	
-<a name="line243"></a>	function _execute($m)
-<a name="line244"></a>	{
-<a name="line245"></a>		$methName = $m->method_name;
-<a name="line246"></a>		
-<a name="line247"></a>		// Check to see if it is a system call
-<a name="line248"></a>		$system_call = (strncmp($methName, 'system', 5) == 0) ? TRUE : FALSE;
-<a name="line249"></a>		
-<a name="line250"></a>		//-------------------------------------
-<a name="line251"></a>		//  Valid Method
-<a name="line252"></a>		//-------------------------------------
-<a name="line253"></a>		
-<a name="line254"></a>		if ( ! isset($this->methods[$methName]['function']))
-<a name="line255"></a>		{
-<a name="line256"></a>			return new XML_RPC_Response(0, $this->xmlrpcerr['unknown_method'], $this->xmlrpcstr['unknown_method']);
-<a name="line257"></a>		}
-<a name="line258"></a>		
-<a name="line259"></a>		//-------------------------------------
-<a name="line260"></a>		//  Check for Method (and Object)
-<a name="line261"></a>		//-------------------------------------
-<a name="line262"></a>			
-<a name="line263"></a>		$method_parts = explode(".", $this->methods[$methName]['function']);
-<a name="line264"></a>		$objectCall = (isset($method_parts['1']) && $method_parts['1'] != "") ? TRUE : FALSE;
-<a name="line265"></a>		
-<a name="line266"></a>		if ($system_call === TRUE)
-<a name="line267"></a>		{
-<a name="line268"></a>			if ( ! is_callable(array($this,$method_parts['1'])))
-<a name="line269"></a>			{
-<a name="line270"></a>				return new XML_RPC_Response(0, $this->xmlrpcerr['unknown_method'], $this->xmlrpcstr['unknown_method']);
-<a name="line271"></a>			}
-<a name="line272"></a>		}
-<a name="line273"></a>		else
-<a name="line274"></a>		{
-<a name="line275"></a>			if ($objectCall && ! is_callable(array($method_parts['0'],$method_parts['1'])))
-<a name="line276"></a>			{
-<a name="line277"></a>				return new XML_RPC_Response(0, $this->xmlrpcerr['unknown_method'], $this->xmlrpcstr['unknown_method']);
-<a name="line278"></a>			}
-<a name="line279"></a>			elseif ( ! $objectCall && ! is_callable($this->methods[$methName]['function']))
-<a name="line280"></a>			{
-<a name="line281"></a>				return new XML_RPC_Response(0, $this->xmlrpcerr['unknown_method'], $this->xmlrpcstr['unknown_method']);
-<a name="line282"></a>			}
-<a name="line283"></a>		}
-<a name="line284"></a>		
-<a name="line285"></a>		//-------------------------------------
-<a name="line286"></a>		//  Checking Methods Signature
-<a name="line287"></a>		//-------------------------------------
-<a name="line288"></a>		
-<a name="line289"></a>		if (isset($this->methods[$methName]['signature']))
-<a name="line290"></a>		{
-<a name="line291"></a>			$sig = $this->methods[$methName]['signature'];
-<a name="line292"></a>			for($i=0; $i<count($sig); $i++)
-<a name="line293"></a>			{
-<a name="line294"></a>				$current_sig = $sig[$i];
-<a name="line295"></a>		
-<a name="line296"></a>				if (count($current_sig) == count($m->params)+1)
-<a name="line297"></a>				{
-<a name="line298"></a>					for($n=0; $n < count($m->params); $n++)
-<a name="line299"></a>					{
-<a name="line300"></a>						$p = $m->params[$n];
-<a name="line301"></a>						$pt = ($p->kindOf() == 'scalar') ? $p->scalarval() : $p->kindOf();
-<a name="line302"></a>						
-<a name="line303"></a>						if ($pt != $current_sig[$n+1])
-<a name="line304"></a>						{
-<a name="line305"></a>							$pno = $n+1;
-<a name="line306"></a>							$wanted = $current_sig[$n+1];
-<a name="line307"></a>							
-<a name="line308"></a>							return new XML_RPC_Response(0,
-<a name="line309"></a>								$this->xmlrpcerr['incorrect_params'],
-<a name="line310"></a>								$this->xmlrpcstr['incorrect_params'] .
-<a name="line311"></a>								": Wanted {$wanted}, got {$pt} at param {$pno})");
-<a name="line312"></a>						}
-<a name="line313"></a>					}
-<a name="line314"></a>				}
-<a name="line315"></a>			}
-<a name="line316"></a>		}
-<a name="line317"></a>
-<a name="line318"></a>		//-------------------------------------
-<a name="line319"></a>		//  Calls the Function
-<a name="line320"></a>		//-------------------------------------
-<a name="line321"></a>
-<a name="line322"></a>		if ($objectCall === TRUE)
-<a name="line323"></a>		{
-<a name="line324"></a>			if ($method_parts[0] == "this" && $system_call == TRUE)
-<a name="line325"></a>			{
-<a name="line326"></a>				return call_user_func(array($this, $method_parts[1]), $m);
-<a name="line327"></a>			}
-<a name="line328"></a>			else
-<a name="line329"></a>			{
-<a name="line330"></a>				if ($this->object === FALSE)
-<a name="line331"></a>				{
-<a name="line332"></a>					$CI =& get_instance();
-<a name="line333"></a>					return $CI->$method_parts['1']($m);
-<a name="line334"></a>				}
-<a name="line335"></a>				else
-<a name="line336"></a>				{
-<a name="line337"></a>					return $this->object->$method_parts['1']($m);
-<a name="line338"></a>					//return call_user_func(array(&$method_parts['0'],$method_parts['1']), $m);
-<a name="line339"></a>				}
-<a name="line340"></a>			}
-<a name="line341"></a>		}
-<a name="line342"></a>		else
-<a name="line343"></a>		{
-<a name="line344"></a>			return call_user_func($this->methods[$methName]['function'], $m);
-<a name="line345"></a>		}
-<a name="line346"></a>	}
-<a name="line347"></a>	
-<a name="line348"></a>	
-<a name="line349"></a>	//-------------------------------------
-<a name="line350"></a>	//  Server Function:  List Methods
-<a name="line351"></a>	//-------------------------------------
-<a name="line352"></a>	
-<a name="line353"></a>	function listMethods($m)
-<a name="line354"></a>	{
-<a name="line355"></a>		$v = new XML_RPC_Values();
-<a name="line356"></a>		$output = array();
-<a name="line357"></a>		
-<a name="line358"></a>		foreach($this->methods as $key => $value)
-<a name="line359"></a>		{
-<a name="line360"></a>			$output[] = new XML_RPC_Values($key, 'string');
-<a name="line361"></a>		}
-<a name="line362"></a>		
-<a name="line363"></a>		foreach($this->system_methods as $key => $value)
-<a name="line364"></a>		{
-<a name="line365"></a>			$output[]= new XML_RPC_Values($key, 'string');
-<a name="line366"></a>		}
-<a name="line367"></a>
-<a name="line368"></a>		$v->addArray($output);
-<a name="line369"></a>		return new XML_RPC_Response($v);
-<a name="line370"></a>	}
-<a name="line371"></a>	
-<a name="line372"></a>	//-------------------------------------
-<a name="line373"></a>	//  Server Function:  Return Signature for Method
-<a name="line374"></a>	//-------------------------------------
-<a name="line375"></a>		
-<a name="line376"></a>	function methodSignature($m)
-<a name="line377"></a>	{
-<a name="line378"></a>		$parameters = $m->output_parameters();
-<a name="line379"></a>		$method_name = $parameters[0];
-<a name="line380"></a>		
-<a name="line381"></a>		if (isset($this->methods[$method_name]))
-<a name="line382"></a>		{
-<a name="line383"></a>			if ($this->methods[$method_name]['signature'])
-<a name="line384"></a>			{
-<a name="line385"></a>				$sigs = array();
-<a name="line386"></a>				$signature = $this->methods[$method_name]['signature'];
-<a name="line387"></a>				
-<a name="line388"></a>				for($i=0; $i < count($signature); $i++)
-<a name="line389"></a>				{
-<a name="line390"></a>					$cursig = array();
-<a name="line391"></a>					$inSig = $signature[$i];
-<a name="line392"></a>					for($j=0; $j<count($inSig); $j++)
-<a name="line393"></a>					{
-<a name="line394"></a>						$cursig[]= new XML_RPC_Values($inSig[$j], 'string');
-<a name="line395"></a>					}
-<a name="line396"></a>					$sigs[]= new XML_RPC_Values($cursig, 'array');
-<a name="line397"></a>				}
-<a name="line398"></a>				$r = new XML_RPC_Response(new XML_RPC_Values($sigs, 'array'));
-<a name="line399"></a>			}
-<a name="line400"></a>			else
-<a name="line401"></a>			{
-<a name="line402"></a>				$r = new XML_RPC_Response(new XML_RPC_Values('undef', 'string'));
-<a name="line403"></a>			}
-<a name="line404"></a>		}
-<a name="line405"></a>		else
-<a name="line406"></a>		{
-<a name="line407"></a>			$r = new XML_RPC_Response(0,$this->xmlrpcerr['introspect_unknown'], $this->xmlrpcstr['introspect_unknown']);
-<a name="line408"></a>		}
-<a name="line409"></a>		return $r;
-<a name="line410"></a>	}
-<a name="line411"></a>	
-<a name="line412"></a>	//-------------------------------------
-<a name="line413"></a>	//  Server Function:  Doc String for Method
-<a name="line414"></a>	//-------------------------------------
-<a name="line415"></a>	
-<a name="line416"></a>	function methodHelp($m)
-<a name="line417"></a>	{
-<a name="line418"></a>		$parameters = $m->output_parameters();
-<a name="line419"></a>		$method_name = $parameters[0];
-<a name="line420"></a>	
-<a name="line421"></a>		if (isset($this->methods[$method_name]))
-<a name="line422"></a>		{
-<a name="line423"></a>			$docstring = isset($this->methods[$method_name]['docstring']) ? $this->methods[$method_name]['docstring'] : '';
-<a name="line424"></a>			
-<a name="line425"></a>			return new XML_RPC_Response(new XML_RPC_Values($docstring, 'string'));
-<a name="line426"></a>		}
-<a name="line427"></a>		else
-<a name="line428"></a>		{
-<a name="line429"></a>			return new XML_RPC_Response(0, $this->xmlrpcerr['introspect_unknown'], $this->xmlrpcstr['introspect_unknown']);
-<a name="line430"></a>		}
-<a name="line431"></a>	}
-<a name="line432"></a>
-<a name="line433"></a>	//-------------------------------------
-<a name="line434"></a>	//  Server Function:  Multi-call
-<a name="line435"></a>	//-------------------------------------
-<a name="line436"></a>
-<a name="line437"></a>	function multicall($m)
-<a name="line438"></a>	{
-<a name="line439"></a>		// Disabled
-<a name="line440"></a>		return new XML_RPC_Response(0, $this->xmlrpcerr['unknown_method'], $this->xmlrpcstr['unknown_method']);
-<a name="line441"></a>		
-<a name="line442"></a>		$parameters = $m->output_parameters();
-<a name="line443"></a>		$calls = $parameters[0];
-<a name="line444"></a>
-<a name="line445"></a>		$result = array();
+<a name="line236"></a>		if ($this->debug === TRUE)
+<a name="line237"></a>		{
+<a name="line238"></a>			$this->debug_msg = "<!-- DEBUG INFO:\n\n".$plist."\n END DEBUG-->\n";
+<a name="line239"></a>		}
+<a name="line240"></a>		
+<a name="line241"></a>		return $r;
+<a name="line242"></a>	}
+<a name="line243"></a>
+<a name="line244"></a>	//-------------------------------------
+<a name="line245"></a>	//  Executes the Method
+<a name="line246"></a>	//-------------------------------------
+<a name="line247"></a>	
+<a name="line248"></a>	function _execute($m)
+<a name="line249"></a>	{
+<a name="line250"></a>		$methName = $m->method_name;
+<a name="line251"></a>		
+<a name="line252"></a>		// Check to see if it is a system call
+<a name="line253"></a>		$system_call = (strncmp($methName, 'system', 5) == 0) ? TRUE : FALSE;
+<a name="line254"></a>		
+<a name="line255"></a>		if ($this->xss_clean == FALSE)
+<a name="line256"></a>		{
+<a name="line257"></a>			$m->xss_clean = FALSE;
+<a name="line258"></a>		}
+<a name="line259"></a>
+<a name="line260"></a>		//-------------------------------------
+<a name="line261"></a>		//  Valid Method
+<a name="line262"></a>		//-------------------------------------
+<a name="line263"></a>		
+<a name="line264"></a>		if ( ! isset($this->methods[$methName]['function']))
+<a name="line265"></a>		{
+<a name="line266"></a>			return new XML_RPC_Response(0, $this->xmlrpcerr['unknown_method'], $this->xmlrpcstr['unknown_method']);
+<a name="line267"></a>		}
+<a name="line268"></a>		
+<a name="line269"></a>		//-------------------------------------
+<a name="line270"></a>		//  Check for Method (and Object)
+<a name="line271"></a>		//-------------------------------------
+<a name="line272"></a>			
+<a name="line273"></a>		$method_parts = explode(".", $this->methods[$methName]['function']);
+<a name="line274"></a>		$objectCall = (isset($method_parts['1']) && $method_parts['1'] != "") ? TRUE : FALSE;
+<a name="line275"></a>		
+<a name="line276"></a>		if ($system_call === TRUE)
+<a name="line277"></a>		{
+<a name="line278"></a>			if ( ! is_callable(array($this,$method_parts['1'])))
+<a name="line279"></a>			{
+<a name="line280"></a>				return new XML_RPC_Response(0, $this->xmlrpcerr['unknown_method'], $this->xmlrpcstr['unknown_method']);
+<a name="line281"></a>			}
+<a name="line282"></a>		}
+<a name="line283"></a>		else
+<a name="line284"></a>		{
+<a name="line285"></a>			if ($objectCall && ! is_callable(array($method_parts['0'],$method_parts['1'])))
+<a name="line286"></a>			{
+<a name="line287"></a>				return new XML_RPC_Response(0, $this->xmlrpcerr['unknown_method'], $this->xmlrpcstr['unknown_method']);
+<a name="line288"></a>			}
+<a name="line289"></a>			elseif ( ! $objectCall && ! is_callable($this->methods[$methName]['function']))
+<a name="line290"></a>			{
+<a name="line291"></a>				return new XML_RPC_Response(0, $this->xmlrpcerr['unknown_method'], $this->xmlrpcstr['unknown_method']);
+<a name="line292"></a>			}
+<a name="line293"></a>		}
+<a name="line294"></a>		
+<a name="line295"></a>		//-------------------------------------
+<a name="line296"></a>		//  Checking Methods Signature
+<a name="line297"></a>		//-------------------------------------
+<a name="line298"></a>		
+<a name="line299"></a>		if (isset($this->methods[$methName]['signature']))
+<a name="line300"></a>		{
+<a name="line301"></a>			$sig = $this->methods[$methName]['signature'];
+<a name="line302"></a>			for($i=0; $i<count($sig); $i++)
+<a name="line303"></a>			{
+<a name="line304"></a>				$current_sig = $sig[$i];
+<a name="line305"></a>		
+<a name="line306"></a>				if (count($current_sig) == count($m->params)+1)
+<a name="line307"></a>				{
+<a name="line308"></a>					for($n=0; $n < count($m->params); $n++)
+<a name="line309"></a>					{
+<a name="line310"></a>						$p = $m->params[$n];
+<a name="line311"></a>						$pt = ($p->kindOf() == 'scalar') ? $p->scalarval() : $p->kindOf();
+<a name="line312"></a>						
+<a name="line313"></a>						if ($pt != $current_sig[$n+1])
+<a name="line314"></a>						{
+<a name="line315"></a>							$pno = $n+1;
+<a name="line316"></a>							$wanted = $current_sig[$n+1];
+<a name="line317"></a>							
+<a name="line318"></a>							return new XML_RPC_Response(0,
+<a name="line319"></a>								$this->xmlrpcerr['incorrect_params'],
+<a name="line320"></a>								$this->xmlrpcstr['incorrect_params'] .
+<a name="line321"></a>								": Wanted {$wanted}, got {$pt} at param {$pno})");
+<a name="line322"></a>						}
+<a name="line323"></a>					}
+<a name="line324"></a>				}
+<a name="line325"></a>			}
+<a name="line326"></a>		}
+<a name="line327"></a>
+<a name="line328"></a>		//-------------------------------------
+<a name="line329"></a>		//  Calls the Function
+<a name="line330"></a>		//-------------------------------------
+<a name="line331"></a>
+<a name="line332"></a>		if ($objectCall === TRUE)
+<a name="line333"></a>		{
+<a name="line334"></a>			if ($method_parts[0] == "this" && $system_call == TRUE)
+<a name="line335"></a>			{
+<a name="line336"></a>				return call_user_func(array($this, $method_parts[1]), $m);
+<a name="line337"></a>			}
+<a name="line338"></a>			else
+<a name="line339"></a>			{
+<a name="line340"></a>				if ($this->object === FALSE)
+<a name="line341"></a>				{
+<a name="line342"></a>					$CI =& get_instance();
+<a name="line343"></a>					return $CI->$method_parts['1']($m);
+<a name="line344"></a>				}
+<a name="line345"></a>				else
+<a name="line346"></a>				{
+<a name="line347"></a>					return $this->object->$method_parts['1']($m);
+<a name="line348"></a>					//return call_user_func(array(&$method_parts['0'],$method_parts['1']), $m);
+<a name="line349"></a>				}
+<a name="line350"></a>			}
+<a name="line351"></a>		}
+<a name="line352"></a>		else
+<a name="line353"></a>		{
+<a name="line354"></a>			return call_user_func($this->methods[$methName]['function'], $m);
+<a name="line355"></a>		}
+<a name="line356"></a>	}
+<a name="line357"></a>	
+<a name="line358"></a>	
+<a name="line359"></a>	//-------------------------------------
+<a name="line360"></a>	//  Server Function:  List Methods
+<a name="line361"></a>	//-------------------------------------
+<a name="line362"></a>	
+<a name="line363"></a>	function listMethods($m)
+<a name="line364"></a>	{
+<a name="line365"></a>		$v = new XML_RPC_Values();
+<a name="line366"></a>		$output = array();
+<a name="line367"></a>		
+<a name="line368"></a>		foreach($this->methods as $key => $value)
+<a name="line369"></a>		{
+<a name="line370"></a>			$output[] = new XML_RPC_Values($key, 'string');
+<a name="line371"></a>		}
+<a name="line372"></a>		
+<a name="line373"></a>		foreach($this->system_methods as $key => $value)
+<a name="line374"></a>		{
+<a name="line375"></a>			$output[]= new XML_RPC_Values($key, 'string');
+<a name="line376"></a>		}
+<a name="line377"></a>
+<a name="line378"></a>		$v->addArray($output);
+<a name="line379"></a>		return new XML_RPC_Response($v);
+<a name="line380"></a>	}
+<a name="line381"></a>	
+<a name="line382"></a>	//-------------------------------------
+<a name="line383"></a>	//  Server Function:  Return Signature for Method
+<a name="line384"></a>	//-------------------------------------
+<a name="line385"></a>		
+<a name="line386"></a>	function methodSignature($m)
+<a name="line387"></a>	{
+<a name="line388"></a>		$parameters = $m->output_parameters();
+<a name="line389"></a>		$method_name = $parameters[0];
+<a name="line390"></a>		
+<a name="line391"></a>		if (isset($this->methods[$method_name]))
+<a name="line392"></a>		{
+<a name="line393"></a>			if ($this->methods[$method_name]['signature'])
+<a name="line394"></a>			{
+<a name="line395"></a>				$sigs = array();
+<a name="line396"></a>				$signature = $this->methods[$method_name]['signature'];
+<a name="line397"></a>				
+<a name="line398"></a>				for($i=0; $i < count($signature); $i++)
+<a name="line399"></a>				{
+<a name="line400"></a>					$cursig = array();
+<a name="line401"></a>					$inSig = $signature[$i];
+<a name="line402"></a>					for($j=0; $j<count($inSig); $j++)
+<a name="line403"></a>					{
+<a name="line404"></a>						$cursig[]= new XML_RPC_Values($inSig[$j], 'string');
+<a name="line405"></a>					}
+<a name="line406"></a>					$sigs[]= new XML_RPC_Values($cursig, 'array');
+<a name="line407"></a>				}
+<a name="line408"></a>				$r = new XML_RPC_Response(new XML_RPC_Values($sigs, 'array'));
+<a name="line409"></a>			}
+<a name="line410"></a>			else
+<a name="line411"></a>			{
+<a name="line412"></a>				$r = new XML_RPC_Response(new XML_RPC_Values('undef', 'string'));
+<a name="line413"></a>			}
+<a name="line414"></a>		}
+<a name="line415"></a>		else
+<a name="line416"></a>		{
+<a name="line417"></a>			$r = new XML_RPC_Response(0,$this->xmlrpcerr['introspect_unknown'], $this->xmlrpcstr['introspect_unknown']);
+<a name="line418"></a>		}
+<a name="line419"></a>		return $r;
+<a name="line420"></a>	}
+<a name="line421"></a>	
+<a name="line422"></a>	//-------------------------------------
+<a name="line423"></a>	//  Server Function:  Doc String for Method
+<a name="line424"></a>	//-------------------------------------
+<a name="line425"></a>	
+<a name="line426"></a>	function methodHelp($m)
+<a name="line427"></a>	{
+<a name="line428"></a>		$parameters = $m->output_parameters();
+<a name="line429"></a>		$method_name = $parameters[0];
+<a name="line430"></a>	
+<a name="line431"></a>		if (isset($this->methods[$method_name]))
+<a name="line432"></a>		{
+<a name="line433"></a>			$docstring = isset($this->methods[$method_name]['docstring']) ? $this->methods[$method_name]['docstring'] : '';
+<a name="line434"></a>			
+<a name="line435"></a>			return new XML_RPC_Response(new XML_RPC_Values($docstring, 'string'));
+<a name="line436"></a>		}
+<a name="line437"></a>		else
+<a name="line438"></a>		{
+<a name="line439"></a>			return new XML_RPC_Response(0, $this->xmlrpcerr['introspect_unknown'], $this->xmlrpcstr['introspect_unknown']);
+<a name="line440"></a>		}
+<a name="line441"></a>	}
+<a name="line442"></a>
+<a name="line443"></a>	//-------------------------------------
+<a name="line444"></a>	//  Server Function:  Multi-call
+<a name="line445"></a>	//-------------------------------------
 <a name="line446"></a>
-<a name="line447"></a>		foreach ($calls as $value)
-<a name="line448"></a>		{
-<a name="line449"></a>			//$attempt = $this->_execute(new XML_RPC_Message($value[0], $value[1]));
-<a name="line450"></a>			
-<a name="line451"></a>			$m = new XML_RPC_Message($value[0]);
-<a name="line452"></a>			$plist='';
-<a name="line453"></a>			
-<a name="line454"></a>			for($i=0; $i < count($value[1]); $i++)
-<a name="line455"></a>			{
-<a name="line456"></a>				$m->addParam(new XML_RPC_Values($value[1][$i], 'string'));
-<a name="line457"></a>			}
-<a name="line458"></a>			
-<a name="line459"></a>			$attempt = $this->_execute($m);
-<a name="line460"></a>
-<a name="line461"></a>			if ($attempt->faultCode() != 0)
-<a name="line462"></a>			{
-<a name="line463"></a>				return $attempt;
-<a name="line464"></a>			}
-<a name="line465"></a>
-<a name="line466"></a>			$result[] = new XML_RPC_Values(array($attempt->value()), 'array');
-<a name="line467"></a>		}
-<a name="line468"></a>
-<a name="line469"></a>		return new XML_RPC_Response(new XML_RPC_Values($result, 'array'));
-<a name="line470"></a>	}
-<a name="line471"></a>	
-<a name="line472"></a>	
-<a name="line473"></a>	//-------------------------------------
-<a name="line474"></a>	//  Multi-call Function:  Error Handling
-<a name="line475"></a>	//-------------------------------------
-<a name="line476"></a>
-<a name="line477"></a>	function multicall_error($err)
-<a name="line478"></a>	{
-<a name="line479"></a>		$str  = is_string($err) ? $this->xmlrpcstr["multicall_${err}"] : $err->faultString();
-<a name="line480"></a>		$code = is_string($err) ? $this->xmlrpcerr["multicall_${err}"] : $err->faultCode();
-<a name="line481"></a>		
-<a name="line482"></a>		$struct['faultCode'] = new XML_RPC_Values($code, 'int');
-<a name="line483"></a>		$struct['faultString'] = new XML_RPC_Values($str, 'string');
-<a name="line484"></a>	
-<a name="line485"></a>		return new XML_RPC_Values($struct, 'struct');
-<a name="line486"></a>	}
-<a name="line487"></a>	
-<a name="line488"></a>	
-<a name="line489"></a>	//-------------------------------------
-<a name="line490"></a>	//  Multi-call Function:  Processes method
-<a name="line491"></a>	//-------------------------------------
-<a name="line492"></a>	
-<a name="line493"></a>	function do_multicall($call)
-<a name="line494"></a>	{
-<a name="line495"></a>		if ($call->kindOf() != 'struct')
-<a name="line496"></a>			return $this->multicall_error('notstruct');
-<a name="line497"></a>		elseif ( ! $methName = $call->me['struct']['methodName'])
-<a name="line498"></a>			return $this->multicall_error('nomethod');
-<a name="line499"></a>		
-<a name="line500"></a>		list($scalar_type,$scalar_value)=each($methName->me);
-<a name="line501"></a>		$scalar_type = $scalar_type == $this->xmlrpcI4 ? $this->xmlrpcInt : $scalar_type;
-<a name="line502"></a>			
-<a name="line503"></a>		if ($methName->kindOf() != 'scalar' OR $scalar_type != 'string')
-<a name="line504"></a>			return $this->multicall_error('notstring');
-<a name="line505"></a>		elseif ($scalar_value == 'system.multicall')
-<a name="line506"></a>			return $this->multicall_error('recursion');
-<a name="line507"></a>		elseif ( ! $params = $call->me['struct']['params'])
-<a name="line508"></a>			return $this->multicall_error('noparams');
-<a name="line509"></a>		elseif ($params->kindOf() != 'array')
-<a name="line510"></a>			return $this->multicall_error('notarray');
-<a name="line511"></a>			
-<a name="line512"></a>		list($a,$b)=each($params->me);
-<a name="line513"></a>		$numParams = count($b);
-<a name="line514"></a>
-<a name="line515"></a>		$msg = new XML_RPC_Message($scalar_value);
-<a name="line516"></a>		for ($i = 0; $i < $numParams; $i++)
-<a name="line517"></a>		{
-<a name="line518"></a>			$msg->params[] = $params->me['array'][$i];
-<a name="line519"></a>		}
-<a name="line520"></a>
-<a name="line521"></a>		$result = $this->_execute($msg);
-<a name="line522"></a>
-<a name="line523"></a>		if ($result->faultCode() != 0)
-<a name="line524"></a>		{
-<a name="line525"></a>			return $this->multicall_error($result);
-<a name="line526"></a>		}
-<a name="line527"></a>
-<a name="line528"></a>		return new XML_RPC_Values(array($result->value()), 'array');
-<a name="line529"></a>	}	
-<a name="line530"></a>	
-<a name="line531"></a>}
-<a name="line532"></a>// END XML_RPC_Server class
-<a name="line533"></a>
-<a name="line534"></a>
-<a name="line535"></a>/* End of file Xmlrpcs.php */
-<a name="line536"></a>/* Location: ./system/libraries/Xmlrpcs.php */</pre>
+<a name="line447"></a>	function multicall($m)
+<a name="line448"></a>	{
+<a name="line449"></a>		// Disabled
+<a name="line450"></a>		return new XML_RPC_Response(0, $this->xmlrpcerr['unknown_method'], $this->xmlrpcstr['unknown_method']);
+<a name="line451"></a>		
+<a name="line452"></a>		$parameters = $m->output_parameters();
+<a name="line453"></a>		$calls = $parameters[0];
+<a name="line454"></a>
+<a name="line455"></a>		$result = array();
+<a name="line456"></a>
+<a name="line457"></a>		foreach ($calls as $value)
+<a name="line458"></a>		{
+<a name="line459"></a>			//$attempt = $this->_execute(new XML_RPC_Message($value[0], $value[1]));
+<a name="line460"></a>			
+<a name="line461"></a>			$m = new XML_RPC_Message($value[0]);
+<a name="line462"></a>			$plist='';
+<a name="line463"></a>			
+<a name="line464"></a>			for($i=0; $i < count($value[1]); $i++)
+<a name="line465"></a>			{
+<a name="line466"></a>				$m->addParam(new XML_RPC_Values($value[1][$i], 'string'));
+<a name="line467"></a>			}
+<a name="line468"></a>			
+<a name="line469"></a>			$attempt = $this->_execute($m);
+<a name="line470"></a>
+<a name="line471"></a>			if ($attempt->faultCode() != 0)
+<a name="line472"></a>			{
+<a name="line473"></a>				return $attempt;
+<a name="line474"></a>			}
+<a name="line475"></a>
+<a name="line476"></a>			$result[] = new XML_RPC_Values(array($attempt->value()), 'array');
+<a name="line477"></a>		}
+<a name="line478"></a>
+<a name="line479"></a>		return new XML_RPC_Response(new XML_RPC_Values($result, 'array'));
+<a name="line480"></a>	}
+<a name="line481"></a>	
+<a name="line482"></a>	
+<a name="line483"></a>	//-------------------------------------
+<a name="line484"></a>	//  Multi-call Function:  Error Handling
+<a name="line485"></a>	//-------------------------------------
+<a name="line486"></a>
+<a name="line487"></a>	function multicall_error($err)
+<a name="line488"></a>	{
+<a name="line489"></a>		$str  = is_string($err) ? $this->xmlrpcstr["multicall_${err}"] : $err->faultString();
+<a name="line490"></a>		$code = is_string($err) ? $this->xmlrpcerr["multicall_${err}"] : $err->faultCode();
+<a name="line491"></a>		
+<a name="line492"></a>		$struct['faultCode'] = new XML_RPC_Values($code, 'int');
+<a name="line493"></a>		$struct['faultString'] = new XML_RPC_Values($str, 'string');
+<a name="line494"></a>	
+<a name="line495"></a>		return new XML_RPC_Values($struct, 'struct');
+<a name="line496"></a>	}
+<a name="line497"></a>	
+<a name="line498"></a>	
+<a name="line499"></a>	//-------------------------------------
+<a name="line500"></a>	//  Multi-call Function:  Processes method
+<a name="line501"></a>	//-------------------------------------
+<a name="line502"></a>	
+<a name="line503"></a>	function do_multicall($call)
+<a name="line504"></a>	{
+<a name="line505"></a>		if ($call->kindOf() != 'struct')
+<a name="line506"></a>			return $this->multicall_error('notstruct');
+<a name="line507"></a>		elseif ( ! $methName = $call->me['struct']['methodName'])
+<a name="line508"></a>			return $this->multicall_error('nomethod');
+<a name="line509"></a>		
+<a name="line510"></a>		list($scalar_type,$scalar_value)=each($methName->me);
+<a name="line511"></a>		$scalar_type = $scalar_type == $this->xmlrpcI4 ? $this->xmlrpcInt : $scalar_type;
+<a name="line512"></a>			
+<a name="line513"></a>		if ($methName->kindOf() != 'scalar' OR $scalar_type != 'string')
+<a name="line514"></a>			return $this->multicall_error('notstring');
+<a name="line515"></a>		elseif ($scalar_value == 'system.multicall')
+<a name="line516"></a>			return $this->multicall_error('recursion');
+<a name="line517"></a>		elseif ( ! $params = $call->me['struct']['params'])
+<a name="line518"></a>			return $this->multicall_error('noparams');
+<a name="line519"></a>		elseif ($params->kindOf() != 'array')
+<a name="line520"></a>			return $this->multicall_error('notarray');
+<a name="line521"></a>			
+<a name="line522"></a>		list($a,$b)=each($params->me);
+<a name="line523"></a>		$numParams = count($b);
+<a name="line524"></a>
+<a name="line525"></a>		$msg = new XML_RPC_Message($scalar_value);
+<a name="line526"></a>		for ($i = 0; $i < $numParams; $i++)
+<a name="line527"></a>		{
+<a name="line528"></a>			$msg->params[] = $params->me['array'][$i];
+<a name="line529"></a>		}
+<a name="line530"></a>
+<a name="line531"></a>		$result = $this->_execute($msg);
+<a name="line532"></a>
+<a name="line533"></a>		if ($result->faultCode() != 0)
+<a name="line534"></a>		{
+<a name="line535"></a>			return $this->multicall_error($result);
+<a name="line536"></a>		}
+<a name="line537"></a>
+<a name="line538"></a>		return new XML_RPC_Values(array($result->value()), 'array');
+<a name="line539"></a>	}	
+<a name="line540"></a>	
+<a name="line541"></a>}
+<a name="line542"></a>// END XML_RPC_Server class
+<a name="line543"></a>
+<a name="line544"></a>
+<a name="line545"></a>/* End of file Xmlrpcs.php */
+<a name="line546"></a>/* Location: ./system/libraries/Xmlrpcs.php */</pre>
 <div class="header">
 <h1>GiftFlow API</h1>
 <ul>

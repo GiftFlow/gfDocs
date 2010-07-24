@@ -6,7 +6,7 @@
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 
 <meta name="generator" content="PHPDoctor 2RC4 (http://peej.github.com/phpdoctor/)">
-<meta name="when" content="Mon, 19 Jul 2010 17:13:58 +0000">
+<meta name="when" content="Sat, 24 Jul 2010 20:46:31 +0000">
 
 <link rel="stylesheet" type="text/css" href="../../stylesheet.css">
 <link rel="start" href="../../overview-summary.html">
@@ -45,7 +45,7 @@
 <a name="line6"></a> *
 <a name="line7"></a> * @package		CodeIgniter
 <a name="line8"></a> * @author		ExpressionEngine Dev Team
-<a name="line9"></a> * @copyright	Copyright (c) 2008 - 2009, EllisLab, Inc.
+<a name="line9"></a> * @copyright	Copyright (c) 2008 - 2010, EllisLab, Inc.
 <a name="line10"></a> * @license		http://codeigniter.com/user_guide/license.html
 <a name="line11"></a> * @link		http://codeigniter.com
 <a name="line12"></a> * @since		Version 1.0
@@ -298,8 +298,8 @@
 <a name="line259"></a>		// add field info into field array, but we can only do one at a time
 <a name="line260"></a>		// so we cycle through
 <a name="line261"></a>
-<a name="line262"></a>		foreach ($field as $k => $v)
-<a name="line263"></a>		{
+<a name="line262"></a>       foreach ($field as $k => $v)
+<a name="line263"></a>       {
 <a name="line264"></a>			$this->add_field(array($k => $field[$k]));		
 <a name="line265"></a>
 <a name="line266"></a>			if (count($this->fields) == 0)
@@ -318,100 +318,101 @@
 <a name="line279"></a>		}
 <a name="line280"></a>		
 <a name="line281"></a>		return TRUE;
-<a name="line282"></a>	}
-<a name="line283"></a>
-<a name="line284"></a>	// --------------------------------------------------------------------
-<a name="line285"></a>
-<a name="line286"></a>	/**
-<a name="line287"></a>	 * Column Drop
-<a name="line288"></a>	 *
-<a name="line289"></a>	 * @access	public
-<a name="line290"></a>	 * @param	string	the table name
-<a name="line291"></a>	 * @param	string	the column name
-<a name="line292"></a>	 * @return	bool
-<a name="line293"></a>	 */
-<a name="line294"></a>	function drop_column($table = '', $column_name = '')
-<a name="line295"></a>	{
-<a name="line296"></a>	
-<a name="line297"></a>		if ($table == '')
-<a name="line298"></a>		{
-<a name="line299"></a>			show_error('A table name is required for that operation.');
-<a name="line300"></a>		}
-<a name="line301"></a>
-<a name="line302"></a>		if ($column_name == '')
-<a name="line303"></a>		{
-<a name="line304"></a>			show_error('A column name is required for that operation.');
-<a name="line305"></a>		}
-<a name="line306"></a>
-<a name="line307"></a>		$sql = $this->_alter_table('DROP', $this->db->dbprefix.$table, $column_name);
-<a name="line308"></a>	
-<a name="line309"></a>		return $this->db->query($sql);
-<a name="line310"></a>	}
-<a name="line311"></a>
-<a name="line312"></a>	// --------------------------------------------------------------------
-<a name="line313"></a>
-<a name="line314"></a>	/**
-<a name="line315"></a>	 * Column Modify
-<a name="line316"></a>	 *
-<a name="line317"></a>	 * @access	public
-<a name="line318"></a>	 * @param	string	the table name
-<a name="line319"></a>	 * @param	string	the column name
-<a name="line320"></a>	 * @param	string	the column definition
-<a name="line321"></a>	 * @return	bool
-<a name="line322"></a>	 */
-<a name="line323"></a>	function modify_column($table = '', $field = array())
-<a name="line324"></a>	{
-<a name="line325"></a>		if ($table == '')
-<a name="line326"></a>		{
-<a name="line327"></a>			show_error('A table name is required for that operation.');
-<a name="line328"></a>		}
-<a name="line329"></a>
-<a name="line330"></a>		// add field info into field array, but we can only do one at a time
-<a name="line331"></a>		// so we cycle through
-<a name="line332"></a>
-<a name="line333"></a>		foreach ($field as $k => $v)
-<a name="line334"></a>		{
-<a name="line335"></a>			$this->add_field(array($k => $field[$k]));
-<a name="line336"></a>
-<a name="line337"></a>			if (count($this->fields) == 0)
-<a name="line338"></a>			{	
-<a name="line339"></a>				show_error('Field information is required.');
-<a name="line340"></a>			}
-<a name="line341"></a>		
-<a name="line342"></a>			$sql = $this->_alter_table('CHANGE', $this->db->dbprefix.$table, $this->fields);
-<a name="line343"></a>
-<a name="line344"></a>			$this->_reset();
-<a name="line345"></a>	
-<a name="line346"></a>			if ($this->db->query($sql) === FALSE)
-<a name="line347"></a>			{
-<a name="line348"></a>				return FALSE;
-<a name="line349"></a>			}
-<a name="line350"></a>		}
-<a name="line351"></a>		
-<a name="line352"></a>		return TRUE;
-<a name="line353"></a>	}
-<a name="line354"></a>
-<a name="line355"></a>	// --------------------------------------------------------------------
-<a name="line356"></a>
-<a name="line357"></a>	/**
-<a name="line358"></a>	 * Reset
-<a name="line359"></a>	 *
-<a name="line360"></a>	 * Resets table creation vars
-<a name="line361"></a>	 *
-<a name="line362"></a>	 * @access	private
-<a name="line363"></a>	 * @return	void
-<a name="line364"></a>	 */
-<a name="line365"></a>	function _reset()
-<a name="line366"></a>	{
-<a name="line367"></a>		$this->fields 		= array();
-<a name="line368"></a>		$this->keys			= array();
-<a name="line369"></a>		$this->primary_keys 	= array();
-<a name="line370"></a>	}
-<a name="line371"></a>
-<a name="line372"></a>}
-<a name="line373"></a>
-<a name="line374"></a>/* End of file DB_forge.php */
-<a name="line375"></a>/* Location: ./system/database/DB_forge.php */</pre>
+<a name="line282"></a>
+<a name="line283"></a>	}
+<a name="line284"></a>
+<a name="line285"></a>	// --------------------------------------------------------------------
+<a name="line286"></a>
+<a name="line287"></a>	/**
+<a name="line288"></a>	 * Column Drop
+<a name="line289"></a>	 *
+<a name="line290"></a>	 * @access	public
+<a name="line291"></a>	 * @param	string	the table name
+<a name="line292"></a>	 * @param	string	the column name
+<a name="line293"></a>	 * @return	bool
+<a name="line294"></a>	 */
+<a name="line295"></a>	function drop_column($table = '', $column_name = '')
+<a name="line296"></a>	{
+<a name="line297"></a>	
+<a name="line298"></a>		if ($table == '')
+<a name="line299"></a>		{
+<a name="line300"></a>			show_error('A table name is required for that operation.');
+<a name="line301"></a>		}
+<a name="line302"></a>
+<a name="line303"></a>		if ($column_name == '')
+<a name="line304"></a>		{
+<a name="line305"></a>			show_error('A column name is required for that operation.');
+<a name="line306"></a>		}
+<a name="line307"></a>
+<a name="line308"></a>		$sql = $this->_alter_table('DROP', $this->db->dbprefix.$table, $column_name);
+<a name="line309"></a>	
+<a name="line310"></a>		return $this->db->query($sql);
+<a name="line311"></a>	}
+<a name="line312"></a>
+<a name="line313"></a>	// --------------------------------------------------------------------
+<a name="line314"></a>
+<a name="line315"></a>	/**
+<a name="line316"></a>	 * Column Modify
+<a name="line317"></a>	 *
+<a name="line318"></a>	 * @access	public
+<a name="line319"></a>	 * @param	string	the table name
+<a name="line320"></a>	 * @param	string	the column name
+<a name="line321"></a>	 * @param	string	the column definition
+<a name="line322"></a>	 * @return	bool
+<a name="line323"></a>	 */
+<a name="line324"></a>	function modify_column($table = '', $field = array())
+<a name="line325"></a>	{
+<a name="line326"></a>		if ($table == '')
+<a name="line327"></a>		{
+<a name="line328"></a>			show_error('A table name is required for that operation.');
+<a name="line329"></a>		}
+<a name="line330"></a>
+<a name="line331"></a>		// add field info into field array, but we can only do one at a time
+<a name="line332"></a>		// so we cycle through
+<a name="line333"></a>
+<a name="line334"></a>		foreach ($field as $k => $v)
+<a name="line335"></a>		{
+<a name="line336"></a>			$this->add_field(array($k => $field[$k]));
+<a name="line337"></a>
+<a name="line338"></a>			if (count($this->fields) == 0)
+<a name="line339"></a>			{	
+<a name="line340"></a>				show_error('Field information is required.');
+<a name="line341"></a>			}
+<a name="line342"></a>		
+<a name="line343"></a>			$sql = $this->_alter_table('CHANGE', $this->db->dbprefix.$table, $this->fields);
+<a name="line344"></a>
+<a name="line345"></a>			$this->_reset();
+<a name="line346"></a>	
+<a name="line347"></a>			if ($this->db->query($sql) === FALSE)
+<a name="line348"></a>			{
+<a name="line349"></a>				return FALSE;
+<a name="line350"></a>			}
+<a name="line351"></a>		}
+<a name="line352"></a>		
+<a name="line353"></a>		return TRUE;
+<a name="line354"></a>	}
+<a name="line355"></a>
+<a name="line356"></a>	// --------------------------------------------------------------------
+<a name="line357"></a>
+<a name="line358"></a>	/**
+<a name="line359"></a>	 * Reset
+<a name="line360"></a>	 *
+<a name="line361"></a>	 * Resets table creation vars
+<a name="line362"></a>	 *
+<a name="line363"></a>	 * @access	private
+<a name="line364"></a>	 * @return	void
+<a name="line365"></a>	 */
+<a name="line366"></a>	function _reset()
+<a name="line367"></a>	{
+<a name="line368"></a>		$this->fields 		= array();
+<a name="line369"></a>		$this->keys			= array();
+<a name="line370"></a>		$this->primary_keys 	= array();
+<a name="line371"></a>	}
+<a name="line372"></a>
+<a name="line373"></a>}
+<a name="line374"></a>
+<a name="line375"></a>/* End of file DB_forge.php */
+<a name="line376"></a>/* Location: ./system/database/DB_forge.php */</pre>
 <div class="header">
 <h1>GiftFlow API</h1>
 <ul>

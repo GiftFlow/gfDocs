@@ -28,7 +28,7 @@
 <div id="masthead">
 <table cellpadding="0" cellspacing="0" border="0" style="width:100%">
 <tr>
-<td><h1>CodeIgniter User Guide Version 1.7.2</h1></td>
+<td><h1>CodeIgniter User Guide Version 2.0.0</h1></td>
 <td id="breadcrumb_right"><a href="../toc.html">Table of Contents Page</a></td>
 </tr>
 </table>
@@ -123,7 +123,7 @@ and encrypting the data automatically.</p>
 
 <p>Note: Session cookies are only updated every five minutes by default to reduce processor load.  If you repeatedly reload a page
 you'll notice that the "last activity" time only updates if five minutes or more has passed since the last time
-the cookie was written. This time is configurable by changing the $config['time_to_update'] line in your system/config/config.php file.</p>
+the cookie was written. This time is configurable by changing the $config['sess_time_to_update'] line in your system/config/config.php file.</p>
 
 <h2>Retrieving Session Data</h2>
 
@@ -202,7 +202,7 @@ session_id varchar(40) DEFAULT '0' NOT NULL,
 ip_address varchar(16) DEFAULT '0' NOT NULL,
 user_agent varchar(50) NOT NULL,
 last_activity int(10) unsigned DEFAULT 0 NOT NULL,
-user_data text NOT NULL,
+user_data text DEFAULT '' NOT NULL,
 PRIMARY KEY (session_id)
 );</textarea>
 
@@ -216,7 +216,7 @@ Once you have created your database table you can enable the database option in 
 
 <p>Make sure you've specified the table name in your config file as well:</p>
 
-<code>$config['sess_table_name'] = 'ci_sessions";</code>
+<code>$config['sess_table_name'] = 'ci_sessions';</code>
 
 <p class="important"><strong>Note:</strong> The Session class has built-in garbage collection which clears out expired sessions so you
 do not need to write your own routine to do it.</p>
@@ -298,13 +298,13 @@ do not need to write your own routine to do it.</p>
 
 <div id="footer">
 <p>
-Previous Topic:&nbsp;&nbsp;<a href="pagination.html">Pagination Class</a>
+Previous Topic:&nbsp;&nbsp;<a href="security.html">Security Class</a>
 &nbsp;&nbsp;&nbsp;&middot;&nbsp;&nbsp;
 <a href="#top">Top of Page</a>&nbsp;&nbsp;&nbsp;&middot;&nbsp;&nbsp;
 <a href="../index.html">User Guide Home</a>&nbsp;&nbsp;&nbsp;&middot;&nbsp;&nbsp;
 Next Topic:&nbsp;&nbsp;<a href="trackback.html">Trackback Class</a>
 </p>
-<p><a href="http://codeigniter.com">CodeIgniter</a> &nbsp;&middot;&nbsp; Copyright &#169; 2006-2009 &nbsp;&middot;&nbsp; <a href="http://ellislab.com/">Ellislab, Inc.</a></p>
+<p><a href="http://codeigniter.com">CodeIgniter</a> &nbsp;&middot;&nbsp; Copyright &#169; 2006-2010 &nbsp;&middot;&nbsp; <a href="http://ellislab.com/">EllisLab, Inc.</a></p>
 </div>
 
 </body>

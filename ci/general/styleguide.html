@@ -34,7 +34,7 @@
 <div id="masthead">
 <table cellpadding="0" cellspacing="0" border="0" style="width:100%">
 <tr>
-<td><h1>CodeIgniter User Guide Version 1.7.2</h1></td>
+<td><h1>CodeIgniter User Guide Version 2.0.0</h1></td>
 <td id="breadcrumb_right"><a href="../toc.html">Table of Contents Page</a></td>
 </tr>
 </table>
@@ -64,7 +64,7 @@ Style Guide
 
 <h1>General Style and Syntax</h1>
 
-<p>The following page describes the coding rules use adhere to when developing CodeIgniter.</p>
+<p>The following page describes the use of coding rules adhered to when developing CodeIgniter.</p>
 
 
 <h2>Table of Contents</h2>
@@ -88,7 +88,7 @@ Style Guide
 	<li><a href="#line_breaks">Line Breaks</a></li>
 	<li><a href="#code_indenting">Code Indenting</a></li>
 	<li><a href="#bracket_spacing">Bracket and Parenthetic Spacing</li>
-	<li><a href="#localized_text_in_control_panel">Localized Text in Control Panel</a></li>
+	<li><a href="#localized_text">Localized Text</a></li>
 	<li><a href="#private_methods_and_variables">Private Methods and Variables</a></li>
 	<li><a href="#php_errors">PHP Errors</a></li>
 	<li><a href="#short_open_tags">Short Open Tags</a></li>
@@ -96,7 +96,6 @@ Style Guide
 	<li><a href="#strings">Strings</a></li>
 	<li><a href="#sql_queries">SQL Queries</a></li>
 	<li><a href="#default_function_arguments">Default Function Arguments</a></li>
-	<li><a href="#overlapping_tag_parameters">Overlapping Tag Parameters</a></li>
 </ul>
 
 <li>
@@ -535,15 +534,15 @@ foreach ($query->result() as $row) // single space following PHP control structu
 	
 	
 	
-		<h2><a name="localized_text_in_control_panel"></a>Localized Text in Control Panel</h2>
+		<h2><a name="localized_text"></a>Localized Text</h2>
 		<div class="guidelineDetails">
-			<p>Any text that is output in the control panel should use language variables in your module's lang file to allow localization.</p>
+			<p>Any text that is output in the control panel should use language variables in your lang file to allow localization.</p>
 
 <code>INCORRECT:
 return "Invalid Selection";
 
 CORRECT:
-return $LANG->line('invalid_selection');</code>
+return $this->lang->line('invalid_selection');</code>
 		</div>
 	
 
@@ -657,12 +656,6 @@ $query = $this->db->query("SELECT foo, bar, baz, foofoo, foobar AS raboof, fooba
 		</div>
 	
 
-	
-		<h2><a name="overlapping_tag_parameters"></a>Overlapping Tag Parameters</h2>
-		<div class="guidelineDetails">
-			<p>Avoid multiple tag parameters that have effect on the same thing.  For instance, instead of <strong>include=</strong> and <strong>exclude=</strong>, perhaps allow <strong>include=</strong> to handle the parameter alone, with the addition of "not", e.g. <strong>include="not bar"</strong>.  This will prevent problems of parameters overlapping or having to worry about which parameter has priority over another.</p>
-		</div>
-	
 
 </div>
 
@@ -680,7 +673,7 @@ Previous Topic:&nbsp;&nbsp;<a href="security.html">Security</a>
 <a href="../index.html">User Guide Home</a>&nbsp;&nbsp;&nbsp;&middot;&nbsp;&nbsp;
 Next Topic:&nbsp;&nbsp;<a href="../doc_style/index.html">Writing Documentation</a>
 </p>
-<p><a href="http://codeigniter.com">CodeIgniter</a> &nbsp;&middot;&nbsp; Copyright &#169; 2006-2009 &nbsp;&middot;&nbsp; <a href="http://ellislab.com/">Ellislab, Inc.</a></p>
+<p><a href="http://codeigniter.com">CodeIgniter</a> &nbsp;&middot;&nbsp; Copyright &#169; 2006-2010 &nbsp;&middot;&nbsp; <a href="http://ellislab.com/">EllisLab, Inc.</a></p>
 </div>
 
 </body>

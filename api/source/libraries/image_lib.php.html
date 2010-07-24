@@ -6,7 +6,7 @@
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 
 <meta name="generator" content="PHPDoctor 2RC4 (http://peej.github.com/phpdoctor/)">
-<meta name="when" content="Mon, 19 Jul 2010 17:13:58 +0000">
+<meta name="when" content="Sat, 24 Jul 2010 20:46:32 +0000">
 
 <link rel="stylesheet" type="text/css" href="../../stylesheet.css">
 <link rel="start" href="../../overview-summary.html">
@@ -45,7 +45,7 @@
 <a name="line6"></a> *
 <a name="line7"></a> * @package		CodeIgniter
 <a name="line8"></a> * @author		ExpressionEngine Dev Team
-<a name="line9"></a> * @copyright	Copyright (c) 2008 - 2009, EllisLab, Inc.
+<a name="line9"></a> * @copyright	Copyright (c) 2008 - 2010, EllisLab, Inc.
 <a name="line10"></a> * @license		http://codeigniter.com/user_guide/license.html
 <a name="line11"></a> * @link		http://codeigniter.com
 <a name="line12"></a> * @since		Version 1.0
@@ -498,7 +498,7 @@
 <a name="line459"></a> 				{
 <a name="line460"></a>					if (@copy($this->full_src_path, $this->full_dst_path))
 <a name="line461"></a>					{
-<a name="line462"></a>						@chmod($this->full_dst_path, DIR_WRITE_MODE);
+<a name="line462"></a>						@chmod($this->full_dst_path, FILE_WRITE_MODE);
 <a name="line463"></a>					}
 <a name="line464"></a>				}
 <a name="line465"></a>
@@ -573,7 +573,7 @@
 <a name="line534"></a>		imagedestroy($src_img);
 <a name="line535"></a>
 <a name="line536"></a>		// Set the file to 777
-<a name="line537"></a>		@chmod($this->full_dst_path, DIR_WRITE_MODE);
+<a name="line537"></a>		@chmod($this->full_dst_path, FILE_WRITE_MODE);
 <a name="line538"></a>
 <a name="line539"></a>		return TRUE;
 <a name="line540"></a>	}
@@ -643,7 +643,7 @@
 <a name="line604"></a>		}
 <a name="line605"></a>
 <a name="line606"></a>		// Set the file to 777
-<a name="line607"></a>		@chmod($this->full_dst_path, DIR_WRITE_MODE);
+<a name="line607"></a>		@chmod($this->full_dst_path, FILE_WRITE_MODE);
 <a name="line608"></a>
 <a name="line609"></a>		return TRUE;
 <a name="line610"></a>	}
@@ -729,7 +729,7 @@
 <a name="line690"></a>		// we have to rename the temp file.
 <a name="line691"></a>		copy ($this->dest_folder.'netpbm.tmp', $this->full_dst_path);
 <a name="line692"></a>		unlink ($this->dest_folder.'netpbm.tmp');
-<a name="line693"></a>		@chmod($this->full_dst_path, DIR_WRITE_MODE);
+<a name="line693"></a>		@chmod($this->full_dst_path, FILE_WRITE_MODE);
 <a name="line694"></a>
 <a name="line695"></a>		return TRUE;
 <a name="line696"></a>	}
@@ -788,7 +788,7 @@
 <a name="line749"></a>
 <a name="line750"></a>		// Set the file to 777
 <a name="line751"></a>
-<a name="line752"></a>		@chmod($this->full_dst_path, DIR_WRITE_MODE);
+<a name="line752"></a>		@chmod($this->full_dst_path, FILE_WRITE_MODE);
 <a name="line753"></a>
 <a name="line754"></a>		return true;
 <a name="line755"></a>	}
@@ -872,7 +872,7 @@
 <a name="line833"></a>		imagedestroy($src_img);
 <a name="line834"></a>
 <a name="line835"></a>		// Set the file to 777
-<a name="line836"></a>		@chmod($this->full_dst_path, DIR_WRITE_MODE);
+<a name="line836"></a>		@chmod($this->full_dst_path, FILE_WRITE_MODE);
 <a name="line837"></a>
 <a name="line838"></a>		return TRUE;
 <a name="line839"></a>	}

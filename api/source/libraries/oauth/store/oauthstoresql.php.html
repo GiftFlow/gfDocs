@@ -1,0 +1,1777 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+
+<html lang="en">
+<head>
+
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
+<meta name="generator" content="PHPDoctor 2RC4 (http://peej.github.com/phpdoctor/)">
+<meta name="when" content="Sat, 24 Jul 2010 20:47:45 +0000">
+
+<link rel="stylesheet" type="text/css" href="../../../../stylesheet.css">
+<link rel="start" href="../../../../overview-summary.html">
+
+<title>libraries/oauth/store/OAuthStoreSQL.php (GiftFlow API)</title>
+
+</head>
+<body id="file" onload="parent.document.title=document.title;">
+
+<div class="header">
+<h1>GiftFlow API</h1>
+<ul>
+<li><a href="../../../../overview-summary.html">Overview</a></li>
+<li>Package</li><li>Class</li><li>Tree</li><li><a href="../../../../overview-files.html">Files</a></li>
+<li><a href="../../../../deprecated-list.html">Deprecated</a></li>
+<li><a href="../../../../index-all.html">Index</a></li>
+</ul>
+</div>
+
+<div class="small_links">
+<a href="../../../../index.html" target="_top">Frames</a>
+<a href="../../../../source/libraries/oauth/store/oauthstoresql.php.html" target="_top">No frames</a>
+</div>
+<hr>
+
+<h1>libraries/oauth/store/OAuthStoreSQL.php</h1>
+<hr>
+
+<a name="line1"></a><pre><?php
+<a name="line2"></a>
+<a name="line3"></a>/**
+<a name="line4"></a> * Storage container for the oauth credentials, both server and consumer side.
+<a name="line5"></a> * Based on MySQL
+<a name="line6"></a> * 
+<a name="line7"></a> * @version $Id: OAuthStoreMySQL.php 76 2010-01-27 19:51:17Z brunobg@corollarium.com $
+<a name="line8"></a> * @author Marc Worrell <marcw@pobox.com>
+<a name="line9"></a> * @date  Nov 16, 2007 4:03:30 PM
+<a name="line10"></a> * 
+<a name="line11"></a> * 
+<a name="line12"></a> * The MIT License
+<a name="line13"></a> * 
+<a name="line14"></a> * Copyright (c) 2007-2008 Mediamatic Lab
+<a name="line15"></a> * 
+<a name="line16"></a> * Permission is hereby granted, free of charge, to any person obtaining a copy
+<a name="line17"></a> * of this software and associated documentation files (the "Software"), to deal
+<a name="line18"></a> * in the Software without restriction, including without limitation the rights
+<a name="line19"></a> * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+<a name="line20"></a> * copies of the Software, and to permit persons to whom the Software is
+<a name="line21"></a> * furnished to do so, subject to the following conditions:
+<a name="line22"></a> * 
+<a name="line23"></a> * The above copyright notice and this permission notice shall be included in
+<a name="line24"></a> * all copies or substantial portions of the Software.
+<a name="line25"></a> * 
+<a name="line26"></a> * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+<a name="line27"></a> * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+<a name="line28"></a> * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+<a name="line29"></a> * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+<a name="line30"></a> * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+<a name="line31"></a> * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+<a name="line32"></a> * THE SOFTWARE.
+<a name="line33"></a> */
+<a name="line34"></a>
+<a name="line35"></a>
+<a name="line36"></a>require_once dirname(__FILE__) . '/OAuthStoreAbstract.class.php';
+<a name="line37"></a>
+<a name="line38"></a>
+<a name="line39"></a>abstract class OAuthStoreSQL extends OAuthStoreAbstract
+<a name="line40"></a>{
+<a name="line41"></a>	/**
+<a name="line42"></a>	 * Maximum delta a timestamp may be off from a previous timestamp.
+<a name="line43"></a>	 * Allows multiple consumers with some clock skew to work with the same token.
+<a name="line44"></a>	 * Unit is seconds, default max skew is 10 minutes.
+<a name="line45"></a>	 */
+<a name="line46"></a>	protected $max_timestamp_skew = 600;
+<a name="line47"></a>
+<a name="line48"></a>	/**
+<a name="line49"></a>	 * Default ttl for request tokens
+<a name="line50"></a>	 */
+<a name="line51"></a>	protected $max_request_token_ttl = 3600;
+<a name="line52"></a>	
+<a name="line53"></a>
+<a name="line54"></a>	/**
+<a name="line55"></a>	 * Construct the OAuthStoreMySQL.
+<a name="line56"></a>	 * In the options you have to supply either:
+<a name="line57"></a>	 * - server, username, password and database (for a mysql_connect)
+<a name="line58"></a>	 * - conn (for the connection to be used)
+<a name="line59"></a>	 * 
+<a name="line60"></a>	 * @param array options
+<a name="line61"></a>	 */
+<a name="line62"></a>	function __construct ( $options = array() )
+<a name="line63"></a>	{
+<a name="line64"></a>		if (isset($options['conn']))
+<a name="line65"></a>		{
+<a name="line66"></a>			$this->conn = $options['conn'];
+<a name="line67"></a>		}
+<a name="line68"></a>		else
+<a name="line69"></a>		{
+<a name="line70"></a>			if (isset($options['server']))
+<a name="line71"></a>			{
+<a name="line72"></a>				$server   = $options['server'];
+<a name="line73"></a>				$username = $options['username'];
+<a name="line74"></a>				
+<a name="line75"></a>				if (isset($options['password']))
+<a name="line76"></a>				{
+<a name="line77"></a>					$this->conn = mysql_connect($server, $username, $options['password']);
+<a name="line78"></a>				}
+<a name="line79"></a>				else
+<a name="line80"></a>				{
+<a name="line81"></a>					$this->conn = mysql_connect($server, $username);
+<a name="line82"></a>				}
+<a name="line83"></a>			}
+<a name="line84"></a>			else
+<a name="line85"></a>			{
+<a name="line86"></a>				// Try the default mysql connect
+<a name="line87"></a>				$this->conn = mysql_connect();
+<a name="line88"></a>			}
+<a name="line89"></a>
+<a name="line90"></a>			if ($this->conn === false)
+<a name="line91"></a>			{
+<a name="line92"></a>				throw new OAuthException2('Could not connect to MySQL database: ' . mysql_error());
+<a name="line93"></a>			}
+<a name="line94"></a>
+<a name="line95"></a>			if (isset($options['database']))
+<a name="line96"></a>			{
+<a name="line97"></a>				if (!mysql_select_db($options['database'], $this->conn))
+<a name="line98"></a>				{
+<a name="line99"></a>					$this->sql_errcheck();
+<a name="line100"></a>				}
+<a name="line101"></a>			}
+<a name="line102"></a>			$this->query('set character set utf8');
+<a name="line103"></a>		}
+<a name="line104"></a>	}
+<a name="line105"></a>
+<a name="line106"></a>
+<a name="line107"></a>	/**
+<a name="line108"></a>	 * Find stored credentials for the consumer key and token. Used by an OAuth server
+<a name="line109"></a>	 * when verifying an OAuth request.
+<a name="line110"></a>	 * 
+<a name="line111"></a>	 * @param string consumer_key
+<a name="line112"></a>	 * @param string token
+<a name="line113"></a>	 * @param string token_type		false, 'request' or 'access'
+<a name="line114"></a>	 * @exception OAuthException2 when no secrets where found
+<a name="line115"></a>	 * @return array	assoc (consumer_secret, token_secret, osr_id, ost_id, user_id)
+<a name="line116"></a>	 */
+<a name="line117"></a>	public function getSecretsForVerify ( $consumer_key, $token, $token_type = 'access' )
+<a name="line118"></a>	{
+<a name="line119"></a>		if ($token_type === false)
+<a name="line120"></a>		{
+<a name="line121"></a>			$rs = $this->query_row_assoc('
+<a name="line122"></a>						SELECT	osr_id, 
+<a name="line123"></a>								osr_consumer_key		as consumer_key,
+<a name="line124"></a>								osr_consumer_secret		as consumer_secret
+<a name="line125"></a>						FROM oauth_server_registry
+<a name="line126"></a>						WHERE osr_consumer_key	= \'%s\'
+<a name="line127"></a>						  AND osr_disabled_on 	IS NULL
+<a name="line128"></a>						  AND osr_deleted_on	IS NULL
+<a name="line129"></a>						', 
+<a name="line130"></a>						$consumer_key);
+<a name="line131"></a>			
+<a name="line132"></a>			if ($rs)
+<a name="line133"></a>			{
+<a name="line134"></a>				$rs['token'] 		= false;
+<a name="line135"></a>				$rs['token_secret']	= false;
+<a name="line136"></a>				$rs['user_id']		= false;
+<a name="line137"></a>				$rs['ost_id']		= false;
+<a name="line138"></a>			}
+<a name="line139"></a>		}
+<a name="line140"></a>		else
+<a name="line141"></a>		{
+<a name="line142"></a>			$rs = $this->query_row_assoc('
+<a name="line143"></a>						SELECT	osr_id, 
+<a name="line144"></a>								ost_id,
+<a name="line145"></a>								ost_usa_id_ref			as user_id,
+<a name="line146"></a>								osr_consumer_key		as consumer_key,
+<a name="line147"></a>								osr_consumer_secret		as consumer_secret,
+<a name="line148"></a>								ost_token				as token,
+<a name="line149"></a>								ost_token_secret		as token_secret
+<a name="line150"></a>						FROM oauth_server_registry
+<a name="line151"></a>								JOIN oauth_server_token
+<a name="line152"></a>								ON ost_osr_id_ref = osr_id
+<a name="line153"></a>						WHERE ost_token_type	= \'%s\'
+<a name="line154"></a>						  AND osr_consumer_key	= \'%s\'
+<a name="line155"></a>						  AND ost_token			= \'%s\'
+<a name="line156"></a>						  AND osr_disabled_on 	IS NULL
+<a name="line157"></a>						  AND osr_deleted_on	IS NULL
+<a name="line158"></a>						  AND ost_token_ttl     >= NOW()
+<a name="line159"></a>						',
+<a name="line160"></a>						$token_type, $consumer_key, $token);
+<a name="line161"></a>		}
+<a name="line162"></a>		
+<a name="line163"></a>		if (empty($rs))
+<a name="line164"></a>		{
+<a name="line165"></a>			throw new OAuthException2('The consumer_key "'.$consumer_key.'" token "'.$token.'" combination does not exist or is not enabled.');
+<a name="line166"></a>		}
+<a name="line167"></a>		return $rs;
+<a name="line168"></a>	}
+<a name="line169"></a>
+<a name="line170"></a>
+<a name="line171"></a>	/**
+<a name="line172"></a>	 * Find the server details for signing a request, always looks for an access token.
+<a name="line173"></a>	 * The returned credentials depend on which local user is making the request.
+<a name="line174"></a>	 * 
+<a name="line175"></a>	 * The consumer_key must belong to the user or be public (user id is null)
+<a name="line176"></a>	 * 
+<a name="line177"></a>	 * For signing we need all of the following:
+<a name="line178"></a>	 * 
+<a name="line179"></a>	 * consumer_key			consumer key associated with the server
+<a name="line180"></a>	 * consumer_secret		consumer secret associated with this server
+<a name="line181"></a>	 * token				access token associated with this server
+<a name="line182"></a>	 * token_secret			secret for the access token
+<a name="line183"></a>	 * signature_methods	signing methods supported by the server (array)
+<a name="line184"></a>	 * 
+<a name="line185"></a>	 * @todo filter on token type (we should know how and with what to sign this request, and there might be old access tokens)
+<a name="line186"></a>	 * @param string uri	uri of the server
+<a name="line187"></a>	 * @param int user_id	id of the logged on user
+<a name="line188"></a>	 * @param string name	(optional) name of the token (case sensitive)
+<a name="line189"></a>	 * @exception OAuthException2 when no credentials found
+<a name="line190"></a>	 * @return array
+<a name="line191"></a>	 */
+<a name="line192"></a>	public function getSecretsForSignature ( $uri, $user_id, $name = '' )
+<a name="line193"></a>	{
+<a name="line194"></a>		// Find a consumer key and token for the given uri
+<a name="line195"></a>		$ps		= parse_url($uri);
+<a name="line196"></a>		$host	= isset($ps['host']) ? $ps['host'] : 'localhost';
+<a name="line197"></a>		$path	= isset($ps['path']) ? $ps['path'] : '';
+<a name="line198"></a>		
+<a name="line199"></a>		if (empty($path) || substr($path, -1) != '/')
+<a name="line200"></a>		{
+<a name="line201"></a>			$path .= '/';
+<a name="line202"></a>		}
+<a name="line203"></a>
+<a name="line204"></a>		// The owner of the consumer_key is either the user or nobody (public consumer key)
+<a name="line205"></a>		$secrets = $this->query_row_assoc('
+<a name="line206"></a>					SELECT	ocr_consumer_key		as consumer_key,
+<a name="line207"></a>							ocr_consumer_secret		as consumer_secret,
+<a name="line208"></a>							oct_token				as token,
+<a name="line209"></a>							oct_token_secret		as token_secret,
+<a name="line210"></a>							ocr_signature_methods	as signature_methods
+<a name="line211"></a>					FROM oauth_consumer_registry
+<a name="line212"></a>						JOIN oauth_consumer_token ON oct_ocr_id_ref = ocr_id
+<a name="line213"></a>					WHERE ocr_server_uri_host = \'%s\'
+<a name="line214"></a>					  AND ocr_server_uri_path = LEFT(\'%s\', LENGTH(ocr_server_uri_path))
+<a name="line215"></a>					  AND (ocr_usa_id_ref = %s OR ocr_usa_id_ref IS NULL)
+<a name="line216"></a>					  AND oct_usa_id_ref	  = %d
+<a name="line217"></a>					  AND oct_token_type      = \'access\'
+<a name="line218"></a>					  AND oct_name			  = \'%s\'
+<a name="line219"></a>					  AND oct_token_ttl       >= NOW()
+<a name="line220"></a>					ORDER BY ocr_usa_id_ref DESC, ocr_consumer_secret DESC, LENGTH(ocr_server_uri_path) DESC
+<a name="line221"></a>					LIMIT 0,1
+<a name="line222"></a>					', $host, $path, $user_id, $user_id, $name
+<a name="line223"></a>					);
+<a name="line224"></a>		
+<a name="line225"></a>		if (empty($secrets))
+<a name="line226"></a>		{
+<a name="line227"></a>			throw new OAuthException2('No server tokens available for '.$uri);
+<a name="line228"></a>		}
+<a name="line229"></a>		$secrets['signature_methods'] = explode(',', $secrets['signature_methods']);
+<a name="line230"></a>		return $secrets;
+<a name="line231"></a>	}
+<a name="line232"></a>
+<a name="line233"></a>
+<a name="line234"></a>	/**
+<a name="line235"></a>	 * Get the token and token secret we obtained from a server.
+<a name="line236"></a>	 * 
+<a name="line237"></a>	 * @param string	consumer_key
+<a name="line238"></a>	 * @param string 	token
+<a name="line239"></a>	 * @param string	token_type
+<a name="line240"></a>	 * @param int		user_id			the user owning the token
+<a name="line241"></a>	 * @param string	name			optional name for a named token
+<a name="line242"></a>	 * @exception OAuthException2 when no credentials found
+<a name="line243"></a>	 * @return array
+<a name="line244"></a>	 */
+<a name="line245"></a>	public function getServerTokenSecrets ( $consumer_key, $token, $token_type, $user_id, $name = '' )
+<a name="line246"></a>	{
+<a name="line247"></a>		if ($token_type != 'request' && $token_type != 'access')
+<a name="line248"></a>		{
+<a name="line249"></a>			throw new OAuthException2('Unkown token type "'.$token_type.'", must be either "request" or "access"');
+<a name="line250"></a>		}
+<a name="line251"></a>
+<a name="line252"></a>		// Take the most recent token of the given type
+<a name="line253"></a>		$r = $this->query_row_assoc('
+<a name="line254"></a>					SELECT	ocr_consumer_key		as consumer_key,
+<a name="line255"></a>							ocr_consumer_secret		as consumer_secret,
+<a name="line256"></a>							oct_token				as token,
+<a name="line257"></a>							oct_token_secret		as token_secret,
+<a name="line258"></a>							oct_name				as token_name,
+<a name="line259"></a>							ocr_signature_methods	as signature_methods,
+<a name="line260"></a>							ocr_server_uri			as server_uri,
+<a name="line261"></a>							ocr_request_token_uri	as request_token_uri,
+<a name="line262"></a>							ocr_authorize_uri		as authorize_uri,
+<a name="line263"></a>							ocr_access_token_uri	as access_token_uri,
+<a name="line264"></a>							IF(oct_token_ttl >= \'9999-12-31\', NULL, UNIX_TIMESTAMP(oct_token_ttl) - UNIX_TIMESTAMP(NOW())) as token_ttl
+<a name="line265"></a>					FROM oauth_consumer_registry
+<a name="line266"></a>							JOIN oauth_consumer_token
+<a name="line267"></a>							ON oct_ocr_id_ref = ocr_id
+<a name="line268"></a>					WHERE ocr_consumer_key = \'%s\'
+<a name="line269"></a>					  AND oct_token_type   = \'%s\'
+<a name="line270"></a>					  AND oct_token        = \'%s\'
+<a name="line271"></a>					  AND oct_usa_id_ref   = %d
+<a name="line272"></a>					  AND oct_token_ttl    >= NOW()
+<a name="line273"></a>					', $consumer_key, $token_type, $token, $user_id
+<a name="line274"></a>					);
+<a name="line275"></a>		
+<a name="line276"></a>					
+<a name="line277"></a>		if (empty($r))
+<a name="line278"></a>		{
+<a name="line279"></a>			throw new OAuthException2('Could not find a "'.$token_type.'" token for consumer "'.$consumer_key.'" and user '.$user_id);
+<a name="line280"></a>		}
+<a name="line281"></a>		if (isset($r['signature_methods']) && !empty($r['signature_methods']))
+<a name="line282"></a>		{
+<a name="line283"></a>			$r['signature_methods'] = explode(',',$r['signature_methods']);
+<a name="line284"></a>		}
+<a name="line285"></a>		else
+<a name="line286"></a>		{
+<a name="line287"></a>			$r['signature_methods'] = array();
+<a name="line288"></a>		}
+<a name="line289"></a>		return $r;		
+<a name="line290"></a>	}
+<a name="line291"></a>
+<a name="line292"></a>
+<a name="line293"></a>	/**
+<a name="line294"></a>	 * Add a request token we obtained from a server.
+<a name="line295"></a>	 * 
+<a name="line296"></a>	 * @todo remove old tokens for this user and this ocr_id
+<a name="line297"></a>	 * @param string consumer_key	key of the server in the consumer registry
+<a name="line298"></a>	 * @param string token_type		one of 'request' or 'access'
+<a name="line299"></a>	 * @param string token
+<a name="line300"></a>	 * @param string token_secret
+<a name="line301"></a>	 * @param int 	 user_id			the user owning the token
+<a name="line302"></a>	 * @param array  options			extra options, name and token_ttl
+<a name="line303"></a>	 * @exception OAuthException2 when server is not known
+<a name="line304"></a>	 * @exception OAuthException2 when we received a duplicate token
+<a name="line305"></a>	 */
+<a name="line306"></a>	public function addServerToken ( $consumer_key, $token_type, $token, $token_secret, $user_id, $options = array() )
+<a name="line307"></a>	{
+<a name="line308"></a>		if ($token_type != 'request' && $token_type != 'access')
+<a name="line309"></a>		{
+<a name="line310"></a>			throw new OAuthException2('Unknown token type "'.$token_type.'", must be either "request" or "access"');
+<a name="line311"></a>		}
+<a name="line312"></a>
+<a name="line313"></a>		// Maximum time to live for this token
+<a name="line314"></a>		if (isset($options['token_ttl']) && is_numeric($options['token_ttl']))
+<a name="line315"></a>		{
+<a name="line316"></a>			$ttl = 'DATE_ADD(NOW(), INTERVAL '.intval($options['token_ttl']).' SECOND)';
+<a name="line317"></a>		}
+<a name="line318"></a>		else if ($token_type == 'request')
+<a name="line319"></a>		{
+<a name="line320"></a>			$ttl = 'DATE_ADD(NOW(), INTERVAL '.$this->max_request_token_ttl.' SECOND)';
+<a name="line321"></a>		}
+<a name="line322"></a>		else
+<a name="line323"></a>		{
+<a name="line324"></a>			$ttl = "'9999-12-31'";
+<a name="line325"></a>		}
+<a name="line326"></a>		
+<a name="line327"></a>		$ocr_id = $this->query_one('
+<a name="line328"></a>					SELECT ocr_id
+<a name="line329"></a>					FROM oauth_consumer_registry
+<a name="line330"></a>					WHERE ocr_consumer_key = \'%s\'
+<a name="line331"></a>					', $consumer_key);
+<a name="line332"></a>					
+<a name="line333"></a>		if (empty($ocr_id))
+<a name="line334"></a>		{
+<a name="line335"></a>			throw new OAuthException2('No server associated with consumer_key "'.$consumer_key.'"');
+<a name="line336"></a>		}
+<a name="line337"></a>		
+<a name="line338"></a>		// Named tokens, unique per user/consumer key
+<a name="line339"></a>		if (isset($options['name']) && $options['name'] != '')
+<a name="line340"></a>		{
+<a name="line341"></a>			$name = $options['name'];
+<a name="line342"></a>		}
+<a name="line343"></a>		else
+<a name="line344"></a>		{
+<a name="line345"></a>			$name = '';
+<a name="line346"></a>		}
+<a name="line347"></a>
+<a name="line348"></a>		// Delete any old tokens with the same type and name for this user/server combination
+<a name="line349"></a>		$this->query('
+<a name="line350"></a>					DELETE FROM oauth_consumer_token
+<a name="line351"></a>					WHERE oct_ocr_id_ref = %d
+<a name="line352"></a>					  AND oct_usa_id_ref = %d
+<a name="line353"></a>					  AND oct_token_type = LOWER(\'%s\')
+<a name="line354"></a>					  AND oct_name       = \'%s\'
+<a name="line355"></a>					',
+<a name="line356"></a>					$ocr_id,
+<a name="line357"></a>					$user_id,
+<a name="line358"></a>					$token_type,
+<a name="line359"></a>					$name);
+<a name="line360"></a>
+<a name="line361"></a>		// Insert the new token
+<a name="line362"></a>		$this->query('
+<a name="line363"></a>					INSERT IGNORE INTO oauth_consumer_token
+<a name="line364"></a>					SET oct_ocr_id_ref	= %d,
+<a name="line365"></a>						oct_usa_id_ref  = %d,
+<a name="line366"></a>						oct_name		= \'%s\',
+<a name="line367"></a>						oct_token		= \'%s\',
+<a name="line368"></a>						oct_token_secret= \'%s\',
+<a name="line369"></a>						oct_token_type	= LOWER(\'%s\'),
+<a name="line370"></a>						oct_timestamp	= NOW(),
+<a name="line371"></a>						oct_token_ttl	= '.$ttl.'
+<a name="line372"></a>					',
+<a name="line373"></a>					$ocr_id,
+<a name="line374"></a>					$user_id,
+<a name="line375"></a>					$name,
+<a name="line376"></a>					$token,
+<a name="line377"></a>					$token_secret,
+<a name="line378"></a>					$token_type);
+<a name="line379"></a>		
+<a name="line380"></a>		if (!$this->query_affected_rows())
+<a name="line381"></a>		{
+<a name="line382"></a>			throw new OAuthException2('Received duplicate token "'.$token.'" for the same consumer_key "'.$consumer_key.'"');
+<a name="line383"></a>		}
+<a name="line384"></a>	}
+<a name="line385"></a>
+<a name="line386"></a>
+<a name="line387"></a>	/**
+<a name="line388"></a>	 * Delete a server key.  This removes access to that site.
+<a name="line389"></a>	 * 
+<a name="line390"></a>	 * @param string consumer_key
+<a name="line391"></a>	 * @param int user_id	user registering this server
+<a name="line392"></a>	 * @param boolean user_is_admin
+<a name="line393"></a>	 */
+<a name="line394"></a>	public function deleteServer ( $consumer_key, $user_id, $user_is_admin = false )
+<a name="line395"></a>	{
+<a name="line396"></a>		if ($user_is_admin)
+<a name="line397"></a>		{
+<a name="line398"></a>			$this->query('
+<a name="line399"></a>					DELETE FROM oauth_consumer_registry
+<a name="line400"></a>					WHERE ocr_consumer_key = \'%s\'
+<a name="line401"></a>					  AND (ocr_usa_id_ref = %d OR ocr_usa_id_ref IS NULL)
+<a name="line402"></a>					', $consumer_key, $user_id);
+<a name="line403"></a>		}
+<a name="line404"></a>		else
+<a name="line405"></a>		{
+<a name="line406"></a>			$this->query('
+<a name="line407"></a>					DELETE FROM oauth_consumer_registry
+<a name="line408"></a>					WHERE ocr_consumer_key = \'%s\'
+<a name="line409"></a>					  AND ocr_usa_id_ref   = %d
+<a name="line410"></a>					', $consumer_key, $user_id);
+<a name="line411"></a>		}
+<a name="line412"></a>	}
+<a name="line413"></a>	
+<a name="line414"></a>	
+<a name="line415"></a>	/**
+<a name="line416"></a>	 * Get a server from the consumer registry using the consumer key
+<a name="line417"></a>	 * 
+<a name="line418"></a>	 * @param string consumer_key
+<a name="line419"></a>	 * @param int user_id
+<a name="line420"></a>	 * @param boolean user_is_admin (optional)
+<a name="line421"></a>	 * @exception OAuthException2 when server is not found
+<a name="line422"></a>	 * @return array
+<a name="line423"></a>	 */	
+<a name="line424"></a>	public function getServer ( $consumer_key, $user_id, $user_is_admin = false )
+<a name="line425"></a>	{
+<a name="line426"></a>		$r = $this->query_row_assoc('
+<a name="line427"></a>				SELECT	ocr_id					as id,
+<a name="line428"></a>						ocr_usa_id_ref			as user_id,
+<a name="line429"></a>						ocr_consumer_key 		as consumer_key,
+<a name="line430"></a>						ocr_consumer_secret 	as consumer_secret,
+<a name="line431"></a>						ocr_signature_methods	as signature_methods,
+<a name="line432"></a>						ocr_server_uri			as server_uri,
+<a name="line433"></a>						ocr_request_token_uri	as request_token_uri,
+<a name="line434"></a>						ocr_authorize_uri		as authorize_uri,
+<a name="line435"></a>						ocr_access_token_uri	as access_token_uri
+<a name="line436"></a>				FROM oauth_consumer_registry
+<a name="line437"></a>				WHERE ocr_consumer_key = \'%s\'
+<a name="line438"></a>				  AND (ocr_usa_id_ref = %d OR ocr_usa_id_ref IS NULL)
+<a name="line439"></a>				',	$consumer_key, $user_id);
+<a name="line440"></a>		
+<a name="line441"></a>		if (empty($r))
+<a name="line442"></a>		{
+<a name="line443"></a>			throw new OAuthException2('No server with consumer_key "'.$consumer_key.'" has been registered (for this user)');
+<a name="line444"></a>		}
+<a name="line445"></a>			
+<a name="line446"></a>		if (isset($r['signature_methods']) && !empty($r['signature_methods']))
+<a name="line447"></a>		{
+<a name="line448"></a>			$r['signature_methods'] = explode(',',$r['signature_methods']);
+<a name="line449"></a>		}
+<a name="line450"></a>		else
+<a name="line451"></a>		{
+<a name="line452"></a>			$r['signature_methods'] = array();
+<a name="line453"></a>		}
+<a name="line454"></a>		return $r;
+<a name="line455"></a>	}
+<a name="line456"></a>
+<a name="line457"></a>
+<a name="line458"></a>
+<a name="line459"></a>	/**
+<a name="line460"></a>	 * Find the server details that might be used for a request
+<a name="line461"></a>	 * 
+<a name="line462"></a>	 * The consumer_key must belong to the user or be public (user id is null)
+<a name="line463"></a>	 * 
+<a name="line464"></a>	 * @param string uri	uri of the server
+<a name="line465"></a>	 * @param int user_id	id of the logged on user
+<a name="line466"></a>	 * @exception OAuthException2 when no credentials found
+<a name="line467"></a>	 * @return array
+<a name="line468"></a>	 */
+<a name="line469"></a>	public function getServerForUri ( $uri, $user_id )
+<a name="line470"></a>	{
+<a name="line471"></a>		// Find a consumer key and token for the given uri
+<a name="line472"></a>		$ps		= parse_url($uri);
+<a name="line473"></a>		$host	= isset($ps['host']) ? $ps['host'] : 'localhost';
+<a name="line474"></a>		$path	= isset($ps['path']) ? $ps['path'] : '';
+<a name="line475"></a>		
+<a name="line476"></a>		if (empty($path) || substr($path, -1) != '/')
+<a name="line477"></a>		{
+<a name="line478"></a>			$path .= '/';
+<a name="line479"></a>		}
+<a name="line480"></a>
+<a name="line481"></a>		// The owner of the consumer_key is either the user or nobody (public consumer key)
+<a name="line482"></a>		$server = $this->query_row_assoc('
+<a name="line483"></a>					SELECT	ocr_id					as id,
+<a name="line484"></a>							ocr_usa_id_ref			as user_id,
+<a name="line485"></a>							ocr_consumer_key		as consumer_key,
+<a name="line486"></a>							ocr_consumer_secret		as consumer_secret,
+<a name="line487"></a>							ocr_signature_methods	as signature_methods,
+<a name="line488"></a>							ocr_server_uri			as server_uri,
+<a name="line489"></a>							ocr_request_token_uri	as request_token_uri,
+<a name="line490"></a>							ocr_authorize_uri		as authorize_uri,
+<a name="line491"></a>							ocr_access_token_uri	as access_token_uri
+<a name="line492"></a>					FROM oauth_consumer_registry
+<a name="line493"></a>					WHERE ocr_server_uri_host = \'%s\'
+<a name="line494"></a>					  AND ocr_server_uri_path = LEFT(\'%s\', LENGTH(ocr_server_uri_path))
+<a name="line495"></a>					  AND (ocr_usa_id_ref = %s OR ocr_usa_id_ref IS NULL)
+<a name="line496"></a>					ORDER BY ocr_usa_id_ref DESC, consumer_secret DESC, LENGTH(ocr_server_uri_path) DESC
+<a name="line497"></a>					LIMIT 0,1
+<a name="line498"></a>					', $host, $path, $user_id
+<a name="line499"></a>					);
+<a name="line500"></a>		
+<a name="line501"></a>		if (empty($server))
+<a name="line502"></a>		{
+<a name="line503"></a>			throw new OAuthException2('No server available for '.$uri);
+<a name="line504"></a>		}
+<a name="line505"></a>		$server['signature_methods'] = explode(',', $server['signature_methods']);
+<a name="line506"></a>		return $server;
+<a name="line507"></a>	}
+<a name="line508"></a>
+<a name="line509"></a>
+<a name="line510"></a>	/**
+<a name="line511"></a>	 * Get a list of all server token this user has access to.
+<a name="line512"></a>	 * 
+<a name="line513"></a>	 * @param int usr_id
+<a name="line514"></a>	 * @return array
+<a name="line515"></a>	 */
+<a name="line516"></a>	public function listServerTokens ( $user_id )
+<a name="line517"></a>	{
+<a name="line518"></a>		$ts = $this->query_all_assoc('
+<a name="line519"></a>					SELECT	ocr_consumer_key		as consumer_key,
+<a name="line520"></a>							ocr_consumer_secret		as consumer_secret,
+<a name="line521"></a>							oct_id					as token_id,
+<a name="line522"></a>							oct_token				as token,
+<a name="line523"></a>							oct_token_secret		as token_secret,
+<a name="line524"></a>							oct_usa_id_ref			as user_id,
+<a name="line525"></a>							ocr_signature_methods	as signature_methods,
+<a name="line526"></a>							ocr_server_uri			as server_uri,
+<a name="line527"></a>							ocr_server_uri_host		as server_uri_host,
+<a name="line528"></a>							ocr_server_uri_path		as server_uri_path,
+<a name="line529"></a>							ocr_request_token_uri	as request_token_uri,
+<a name="line530"></a>							ocr_authorize_uri		as authorize_uri,
+<a name="line531"></a>							ocr_access_token_uri	as access_token_uri,
+<a name="line532"></a>							oct_timestamp			as timestamp
+<a name="line533"></a>					FROM oauth_consumer_registry
+<a name="line534"></a>							JOIN oauth_consumer_token
+<a name="line535"></a>							ON oct_ocr_id_ref = ocr_id
+<a name="line536"></a>					WHERE oct_usa_id_ref = %d
+<a name="line537"></a>					  AND oct_token_type = \'access\'
+<a name="line538"></a>					  AND oct_token_ttl  >= NOW()
+<a name="line539"></a>					ORDER BY ocr_server_uri_host, ocr_server_uri_path
+<a name="line540"></a>					', $user_id);
+<a name="line541"></a>		return $ts;
+<a name="line542"></a>	}
+<a name="line543"></a>
+<a name="line544"></a>
+<a name="line545"></a>	/**
+<a name="line546"></a>	 * Count how many tokens we have for the given server
+<a name="line547"></a>	 * 
+<a name="line548"></a>	 * @param string consumer_key
+<a name="line549"></a>	 * @return int
+<a name="line550"></a>	 */
+<a name="line551"></a>	public function countServerTokens ( $consumer_key )
+<a name="line552"></a>	{
+<a name="line553"></a>		$count = $this->query_one('
+<a name="line554"></a>					SELECT COUNT(oct_id)
+<a name="line555"></a>					FROM oauth_consumer_token
+<a name="line556"></a>							JOIN oauth_consumer_registry
+<a name="line557"></a>							ON oct_ocr_id_ref = ocr_id
+<a name="line558"></a>					WHERE oct_token_type   = \'access\'
+<a name="line559"></a>					  AND ocr_consumer_key = \'%s\'
+<a name="line560"></a>					  AND oct_token_ttl    >= NOW()
+<a name="line561"></a>					', $consumer_key);
+<a name="line562"></a>		
+<a name="line563"></a>		return $count;
+<a name="line564"></a>	}
+<a name="line565"></a>
+<a name="line566"></a>
+<a name="line567"></a>	/**
+<a name="line568"></a>	 * Get a specific server token for the given user
+<a name="line569"></a>	 * 
+<a name="line570"></a>	 * @param string consumer_key
+<a name="line571"></a>	 * @param string token
+<a name="line572"></a>	 * @param int user_id
+<a name="line573"></a>	 * @exception OAuthException2 when no such token found
+<a name="line574"></a>	 * @return array
+<a name="line575"></a>	 */
+<a name="line576"></a>	public function getServerToken ( $consumer_key, $token, $user_id )
+<a name="line577"></a>	{
+<a name="line578"></a>		$ts = $this->query_row_assoc('
+<a name="line579"></a>					SELECT	ocr_consumer_key		as consumer_key,
+<a name="line580"></a>							ocr_consumer_secret		as consumer_secret,
+<a name="line581"></a>							oct_token				as token,
+<a name="line582"></a>							oct_token_secret		as token_secret,
+<a name="line583"></a>							oct_usa_id_ref			as usr_id,
+<a name="line584"></a>							ocr_signature_methods	as signature_methods,
+<a name="line585"></a>							ocr_server_uri			as server_uri,
+<a name="line586"></a>							ocr_server_uri_host		as server_uri_host,
+<a name="line587"></a>							ocr_server_uri_path		as server_uri_path,
+<a name="line588"></a>							ocr_request_token_uri	as request_token_uri,
+<a name="line589"></a>							ocr_authorize_uri		as authorize_uri,
+<a name="line590"></a>							ocr_access_token_uri	as access_token_uri,
+<a name="line591"></a>							oct_timestamp			as timestamp
+<a name="line592"></a>					FROM oauth_consumer_registry
+<a name="line593"></a>							JOIN oauth_consumer_token
+<a name="line594"></a>							ON oct_ocr_id_ref = ocr_id
+<a name="line595"></a>					WHERE ocr_consumer_key = \'%s\'
+<a name="line596"></a>					  AND oct_usa_id_ref   = %d
+<a name="line597"></a>					  AND oct_token_type   = \'access\'
+<a name="line598"></a>					  AND oct_token        = \'%s\'
+<a name="line599"></a>					  AND oct_token_ttl    >= NOW()
+<a name="line600"></a>					', $consumer_key, $user_id, $token);
+<a name="line601"></a>		
+<a name="line602"></a>		if (empty($ts))
+<a name="line603"></a>		{
+<a name="line604"></a>			throw new OAuthException2('No such consumer key ('.$consumer_key.') and token ('.$token.') combination for user "'.$user_id.'"');
+<a name="line605"></a>		}
+<a name="line606"></a>		return $ts;
+<a name="line607"></a>	}
+<a name="line608"></a>
+<a name="line609"></a>
+<a name="line610"></a>	/**
+<a name="line611"></a>	 * Delete a token we obtained from a server.
+<a name="line612"></a>	 * 
+<a name="line613"></a>	 * @param string consumer_key
+<a name="line614"></a>	 * @param string token
+<a name="line615"></a>	 * @param int user_id
+<a name="line616"></a>	 * @param boolean user_is_admin
+<a name="line617"></a>	 */
+<a name="line618"></a>	public function deleteServerToken ( $consumer_key, $token, $user_id, $user_is_admin = false )
+<a name="line619"></a>	{
+<a name="line620"></a>		if ($user_is_admin)
+<a name="line621"></a>		{
+<a name="line622"></a>			$this->query('
+<a name="line623"></a>				DELETE oauth_consumer_token 
+<a name="line624"></a>				FROM oauth_consumer_token
+<a name="line625"></a>						JOIN oauth_consumer_registry
+<a name="line626"></a>						ON oct_ocr_id_ref = ocr_id
+<a name="line627"></a>				WHERE ocr_consumer_key	= \'%s\'
+<a name="line628"></a>				  AND oct_token			= \'%s\'
+<a name="line629"></a>				', $consumer_key, $token);
+<a name="line630"></a>		}
+<a name="line631"></a>		else
+<a name="line632"></a>		{
+<a name="line633"></a>			$this->query('
+<a name="line634"></a>				DELETE oauth_consumer_token 
+<a name="line635"></a>				FROM oauth_consumer_token
+<a name="line636"></a>						JOIN oauth_consumer_registry
+<a name="line637"></a>						ON oct_ocr_id_ref = ocr_id
+<a name="line638"></a>				WHERE ocr_consumer_key	= \'%s\'
+<a name="line639"></a>				  AND oct_token			= \'%s\'
+<a name="line640"></a>				  AND oct_usa_id_ref	= %d
+<a name="line641"></a>				', $consumer_key, $token, $user_id);
+<a name="line642"></a>		}
+<a name="line643"></a>	}
+<a name="line644"></a>
+<a name="line645"></a>
+<a name="line646"></a>	/**
+<a name="line647"></a>	 * Set the ttl of a server access token.  This is done when the
+<a name="line648"></a>	 * server receives a valid request with a xoauth_token_ttl parameter in it.
+<a name="line649"></a>	 * 
+<a name="line650"></a>	 * @param string consumer_key
+<a name="line651"></a>	 * @param string token
+<a name="line652"></a>	 * @param int token_ttl
+<a name="line653"></a>	 */
+<a name="line654"></a>	public function setServerTokenTtl ( $consumer_key, $token, $token_ttl )
+<a name="line655"></a>	{
+<a name="line656"></a>		if ($token_ttl <= 0)
+<a name="line657"></a>		{
+<a name="line658"></a>			// Immediate delete when the token is past its ttl
+<a name="line659"></a>			$this->deleteServerToken($consumer_key, $token, 0, true);
+<a name="line660"></a>		}
+<a name="line661"></a>		else
+<a name="line662"></a>		{
+<a name="line663"></a>			// Set maximum time to live for this token
+<a name="line664"></a>			$this->query('
+<a name="line665"></a>						UPDATE oauth_consumer_token, oauth_consumer_registry
+<a name="line666"></a>						SET ost_token_ttl = DATE_ADD(NOW(), INTERVAL %d SECOND)
+<a name="line667"></a>						WHERE ocr_consumer_key	= \'%s\'
+<a name="line668"></a>						  AND oct_ocr_id_ref    = ocr_id
+<a name="line669"></a>						  AND oct_token 	    = \'%s\'
+<a name="line670"></a>						', $token_ttl, $consumer_key, $token);
+<a name="line671"></a>		}
+<a name="line672"></a>	}
+<a name="line673"></a>
+<a name="line674"></a>
+<a name="line675"></a>	/**
+<a name="line676"></a>	 * Get a list of all consumers from the consumer registry.
+<a name="line677"></a>	 * The consumer keys belong to the user or are public (user id is null)
+<a name="line678"></a>	 * 
+<a name="line679"></a>	 * @param string q	query term
+<a name="line680"></a>	 * @param int user_id
+<a name="line681"></a>	 * @return array
+<a name="line682"></a>	 */	
+<a name="line683"></a>	public function listServers ( $q = '', $user_id )
+<a name="line684"></a>	{
+<a name="line685"></a>		$q    = trim(str_replace('%', '', $q));
+<a name="line686"></a>		$args = array();
+<a name="line687"></a>
+<a name="line688"></a>		if (!empty($q))
+<a name="line689"></a>		{
+<a name="line690"></a>			$where = ' WHERE (	ocr_consumer_key like \'%%%s%%\'
+<a name="line691"></a>						  	 OR ocr_server_uri like \'%%%s%%\'
+<a name="line692"></a>						  	 OR ocr_server_uri_host like \'%%%s%%\'
+<a name="line693"></a>						  	 OR ocr_server_uri_path like \'%%%s%%\')
+<a name="line694"></a>						 AND (ocr_usa_id_ref = %d OR ocr_usa_id_ref IS NULL)
+<a name="line695"></a>					';
+<a name="line696"></a>			
+<a name="line697"></a>			$args[] = $q;
+<a name="line698"></a>			$args[] = $q;
+<a name="line699"></a>			$args[] = $q;
+<a name="line700"></a>			$args[] = $q;
+<a name="line701"></a>			$args[] = $user_id;
+<a name="line702"></a>		}
+<a name="line703"></a>		else
+<a name="line704"></a>		{
+<a name="line705"></a>			$where  = ' WHERE ocr_usa_id_ref = %d OR ocr_usa_id_ref IS NULL';
+<a name="line706"></a>			$args[] = $user_id;
+<a name="line707"></a>		}
+<a name="line708"></a>
+<a name="line709"></a>		$servers = $this->query_all_assoc('
+<a name="line710"></a>					SELECT	ocr_id					as id,
+<a name="line711"></a>							ocr_usa_id_ref			as user_id,
+<a name="line712"></a>							ocr_consumer_key 		as consumer_key,
+<a name="line713"></a>							ocr_consumer_secret 	as consumer_secret,
+<a name="line714"></a>							ocr_signature_methods	as signature_methods,
+<a name="line715"></a>							ocr_server_uri			as server_uri,
+<a name="line716"></a>							ocr_server_uri_host		as server_uri_host,
+<a name="line717"></a>							ocr_server_uri_path		as server_uri_path,
+<a name="line718"></a>							ocr_request_token_uri	as request_token_uri,
+<a name="line719"></a>							ocr_authorize_uri		as authorize_uri,
+<a name="line720"></a>							ocr_access_token_uri	as access_token_uri
+<a name="line721"></a>					FROM oauth_consumer_registry
+<a name="line722"></a>					'.$where.'
+<a name="line723"></a>					ORDER BY ocr_server_uri_host, ocr_server_uri_path
+<a name="line724"></a>					', $args);
+<a name="line725"></a>		return $servers;
+<a name="line726"></a>	}
+<a name="line727"></a>
+<a name="line728"></a>
+<a name="line729"></a>	/**
+<a name="line730"></a>	 * Register or update a server for our site (we will be the consumer)
+<a name="line731"></a>	 * 
+<a name="line732"></a>	 * (This is the registry at the consumers, registering servers ;-) )
+<a name="line733"></a>	 * 
+<a name="line734"></a>	 * @param array server
+<a name="line735"></a>	 * @param int user_id	user registering this server
+<a name="line736"></a>	 * @param boolean user_is_admin
+<a name="line737"></a>	 * @exception OAuthException2 when fields are missing or on duplicate consumer_key
+<a name="line738"></a>	 * @return consumer_key
+<a name="line739"></a>	 */
+<a name="line740"></a>	public function updateServer ( $server, $user_id, $user_is_admin = false )
+<a name="line741"></a>	{
+<a name="line742"></a>		foreach (array('consumer_key', 'server_uri') as $f)
+<a name="line743"></a>		{
+<a name="line744"></a>			if (empty($server[$f]))
+<a name="line745"></a>			{
+<a name="line746"></a>				throw new OAuthException2('The field "'.$f.'" must be set and non empty');
+<a name="line747"></a>			}
+<a name="line748"></a>		}
+<a name="line749"></a>		
+<a name="line750"></a>		if (!empty($server['id']))
+<a name="line751"></a>		{
+<a name="line752"></a>			$exists = $this->query_one('
+<a name="line753"></a>						SELECT ocr_id
+<a name="line754"></a>						FROM oauth_consumer_registry
+<a name="line755"></a>						WHERE ocr_consumer_key = \'%s\'
+<a name="line756"></a>						  AND ocr_id <> %d
+<a name="line757"></a>						  AND (ocr_usa_id_ref = %d OR ocr_usa_id_ref IS NULL)
+<a name="line758"></a>						', $server['consumer_key'], $server['id'], $user_id);
+<a name="line759"></a>		}
+<a name="line760"></a>		else
+<a name="line761"></a>		{
+<a name="line762"></a>			$exists = $this->query_one('
+<a name="line763"></a>						SELECT ocr_id
+<a name="line764"></a>						FROM oauth_consumer_registry
+<a name="line765"></a>						WHERE ocr_consumer_key = \'%s\'
+<a name="line766"></a>						  AND (ocr_usa_id_ref = %d OR ocr_usa_id_ref IS NULL)
+<a name="line767"></a>						', $server['consumer_key'], $user_id);
+<a name="line768"></a>		}
+<a name="line769"></a>
+<a name="line770"></a>		if ($exists)
+<a name="line771"></a>		{
+<a name="line772"></a>			throw new OAuthException2('The server with key "'.$server['consumer_key'].'" has already been registered');
+<a name="line773"></a>		}
+<a name="line774"></a>
+<a name="line775"></a>		$parts = parse_url($server['server_uri']);
+<a name="line776"></a>		$host  = (isset($parts['host']) ? $parts['host'] : 'localhost');
+<a name="line777"></a>		$path  = (isset($parts['path']) ? $parts['path'] : '/');
+<a name="line778"></a>
+<a name="line779"></a>		if (isset($server['signature_methods']))
+<a name="line780"></a>		{
+<a name="line781"></a>			if (is_array($server['signature_methods']))
+<a name="line782"></a>			{
+<a name="line783"></a>				$server['signature_methods'] = strtoupper(implode(',', $server['signature_methods']));
+<a name="line784"></a>			}
+<a name="line785"></a>		}	
+<a name="line786"></a>		else
+<a name="line787"></a>		{
+<a name="line788"></a>			$server['signature_methods'] = '';
+<a name="line789"></a>		}
+<a name="line790"></a>
+<a name="line791"></a>		// When the user is an admin, then the user can update the user_id of this record
+<a name="line792"></a>		if ($user_is_admin && array_key_exists('user_id', $server))
+<a name="line793"></a>		{
+<a name="line794"></a>			if (is_null($server['user_id']))
+<a name="line795"></a>			{
+<a name="line796"></a>				$update_user =  ', ocr_usa_id_ref = NULL';
+<a name="line797"></a>			}
+<a name="line798"></a>			else
+<a name="line799"></a>			{
+<a name="line800"></a>				$update_user =  ', ocr_usa_id_ref = '.intval($server['user_id']);
+<a name="line801"></a>			}
+<a name="line802"></a>		}
+<a name="line803"></a>		else
+<a name="line804"></a>		{
+<a name="line805"></a>			$update_user = '';
+<a name="line806"></a>		}
+<a name="line807"></a>		
+<a name="line808"></a>		if (!empty($server['id']))
+<a name="line809"></a>		{
+<a name="line810"></a>			// Check if the current user can update this server definition
+<a name="line811"></a>			if (!$user_is_admin)
+<a name="line812"></a>			{
+<a name="line813"></a>				$ocr_usa_id_ref = $this->query_one('
+<a name="line814"></a>									SELECT ocr_usa_id_ref
+<a name="line815"></a>									FROM oauth_consumer_registry
+<a name="line816"></a>									WHERE ocr_id = %d
+<a name="line817"></a>									', $server['id']);
+<a name="line818"></a>				
+<a name="line819"></a>				if ($ocr_usa_id_ref != $user_id)
+<a name="line820"></a>				{
+<a name="line821"></a>					throw new OAuthException2('The user "'.$user_id.'" is not allowed to update this server');
+<a name="line822"></a>				}
+<a name="line823"></a>			}
+<a name="line824"></a>			
+<a name="line825"></a>			// Update the consumer registration	
+<a name="line826"></a>			$this->query('
+<a name="line827"></a>					UPDATE oauth_consumer_registry
+<a name="line828"></a>					SET ocr_consumer_key    	= \'%s\',
+<a name="line829"></a>						ocr_consumer_secret 	= \'%s\',
+<a name="line830"></a>						ocr_server_uri	    	= \'%s\',
+<a name="line831"></a>						ocr_server_uri_host 	= \'%s\',
+<a name="line832"></a>						ocr_server_uri_path 	= \'%s\',
+<a name="line833"></a>						ocr_timestamp       	= NOW(),
+<a name="line834"></a>						ocr_request_token_uri	= \'%s\',
+<a name="line835"></a>						ocr_authorize_uri		= \'%s\',
+<a name="line836"></a>						ocr_access_token_uri	= \'%s\',
+<a name="line837"></a>						ocr_signature_methods	= \'%s\'
+<a name="line838"></a>						'.$update_user.'
+<a name="line839"></a>					WHERE ocr_id = %d
+<a name="line840"></a>					', 
+<a name="line841"></a>					$server['consumer_key'],
+<a name="line842"></a>					$server['consumer_secret'],
+<a name="line843"></a>					$server['server_uri'],
+<a name="line844"></a>					strtolower($host),
+<a name="line845"></a>					$path,
+<a name="line846"></a>					isset($server['request_token_uri']) ? $server['request_token_uri'] : '',
+<a name="line847"></a>					isset($server['authorize_uri'])     ? $server['authorize_uri']     : '',
+<a name="line848"></a>					isset($server['access_token_uri'])  ? $server['access_token_uri']  : '',
+<a name="line849"></a>					$server['signature_methods'],
+<a name="line850"></a>					$server['id']
+<a name="line851"></a>					);
+<a name="line852"></a>		}
+<a name="line853"></a>		else
+<a name="line854"></a>		{
+<a name="line855"></a>			if (empty($update_user))
+<a name="line856"></a>			{
+<a name="line857"></a>				// Per default the user owning the key is the user registering the key
+<a name="line858"></a>				$update_user =  ', ocr_usa_id_ref = '.intval($user_id);
+<a name="line859"></a>			}
+<a name="line860"></a>
+<a name="line861"></a>			$this->query('
+<a name="line862"></a>					INSERT INTO oauth_consumer_registry
+<a name="line863"></a>					SET ocr_consumer_key    	= \'%s\',
+<a name="line864"></a>						ocr_consumer_secret 	= \'%s\',
+<a name="line865"></a>						ocr_server_uri	    	= \'%s\',
+<a name="line866"></a>						ocr_server_uri_host 	= \'%s\',
+<a name="line867"></a>						ocr_server_uri_path 	= \'%s\',
+<a name="line868"></a>						ocr_timestamp       	= NOW(),
+<a name="line869"></a>						ocr_request_token_uri	= \'%s\',
+<a name="line870"></a>						ocr_authorize_uri		= \'%s\',
+<a name="line871"></a>						ocr_access_token_uri	= \'%s\',
+<a name="line872"></a>						ocr_signature_methods	= \'%s\'
+<a name="line873"></a>						'.$update_user, 
+<a name="line874"></a>					$server['consumer_key'],
+<a name="line875"></a>					$server['consumer_secret'],
+<a name="line876"></a>					$server['server_uri'],
+<a name="line877"></a>					strtolower($host),
+<a name="line878"></a>					$path,
+<a name="line879"></a>					isset($server['request_token_uri']) ? $server['request_token_uri'] : '',
+<a name="line880"></a>					isset($server['authorize_uri'])     ? $server['authorize_uri']     : '',
+<a name="line881"></a>					isset($server['access_token_uri'])  ? $server['access_token_uri']  : '',
+<a name="line882"></a>					$server['signature_methods']
+<a name="line883"></a>					);
+<a name="line884"></a>		
+<a name="line885"></a>			$ocr_id = $this->query_insert_id();
+<a name="line886"></a>		}
+<a name="line887"></a>		return $server['consumer_key'];
+<a name="line888"></a>	}
+<a name="line889"></a>
+<a name="line890"></a>
+<a name="line891"></a>	/**
+<a name="line892"></a>	 * Insert/update a new consumer with this server (we will be the server)
+<a name="line893"></a>	 * When this is a new consumer, then also generate the consumer key and secret.
+<a name="line894"></a>	 * Never updates the consumer key and secret.
+<a name="line895"></a>	 * When the id is set, then the key and secret must correspond to the entry
+<a name="line896"></a>	 * being updated.
+<a name="line897"></a>	 * 
+<a name="line898"></a>	 * (This is the registry at the server, registering consumers ;-) )
+<a name="line899"></a>	 * 
+<a name="line900"></a>	 * @param array consumer
+<a name="line901"></a>	 * @param int user_id	user registering this consumer
+<a name="line902"></a>	 * @param boolean user_is_admin
+<a name="line903"></a>	 * @return string consumer key
+<a name="line904"></a>	 */
+<a name="line905"></a>	public function updateConsumer ( $consumer, $user_id, $user_is_admin = false )
+<a name="line906"></a>	{
+<a name="line907"></a>		if (!empty($consumer['id']))
+<a name="line908"></a>		{
+<a name="line909"></a>			if (empty($consumer['consumer_key']))
+<a name="line910"></a>			{
+<a name="line911"></a>				throw new OAuthException2('The field "consumer_key" must be set and non empty');
+<a name="line912"></a>			}
+<a name="line913"></a>			if (!$user_is_admin && empty($consumer['consumer_secret']))
+<a name="line914"></a>			{
+<a name="line915"></a>				throw new OAuthException2('The field "consumer_secret" must be set and non empty');
+<a name="line916"></a>			}
+<a name="line917"></a>
+<a name="line918"></a>			// Check if the current user can update this server definition
+<a name="line919"></a>			if (!$user_is_admin)
+<a name="line920"></a>			{
+<a name="line921"></a>				$osr_usa_id_ref = $this->query_one('
+<a name="line922"></a>									SELECT osr_usa_id_ref
+<a name="line923"></a>									FROM oauth_server_registry
+<a name="line924"></a>									WHERE osr_id = %d
+<a name="line925"></a>									', $consumer['id']);
+<a name="line926"></a>				
+<a name="line927"></a>				if ($osr_usa_id_ref != $user_id)
+<a name="line928"></a>				{
+<a name="line929"></a>					throw new OAuthException2('The user "'.$user_id.'" is not allowed to update this consumer');
+<a name="line930"></a>				}
+<a name="line931"></a>			}
+<a name="line932"></a>			else
+<a name="line933"></a>			{
+<a name="line934"></a>				// User is an admin, allow a key owner to be changed or key to be shared
+<a name="line935"></a>				if (array_key_exists('user_id',$consumer))
+<a name="line936"></a>				{
+<a name="line937"></a>					if (is_null($consumer['user_id']))
+<a name="line938"></a>					{
+<a name="line939"></a>						$this->query('
+<a name="line940"></a>							UPDATE oauth_server_registry
+<a name="line941"></a>							SET osr_usa_id_ref = NULL
+<a name="line942"></a>							WHERE osr_id = %d
+<a name="line943"></a>							', $consumer['id']);
+<a name="line944"></a>					}
+<a name="line945"></a>					else
+<a name="line946"></a>					{
+<a name="line947"></a>						$this->query('
+<a name="line948"></a>							UPDATE oauth_server_registry
+<a name="line949"></a>							SET osr_usa_id_ref = %d
+<a name="line950"></a>							WHERE osr_id = %d
+<a name="line951"></a>							', $consumer['user_id'], $consumer['id']);	
+<a name="line952"></a>					}
+<a name="line953"></a>				}
+<a name="line954"></a>			}
+<a name="line955"></a>			
+<a name="line956"></a>			$this->query('
+<a name="line957"></a>				UPDATE oauth_server_registry
+<a name="line958"></a>				SET osr_application_uri		= \'%s\',
+<a name="line959"></a>					osr_application_title	= \'%s\',
+<a name="line960"></a>					osr_application_descr	= \'%s\',
+<a name="line961"></a>					osr_application_icon	= \'%s\',
+<a name="line962"></a>					osr_timestamp			= NOW()
+<a name="line963"></a>				WHERE osr_id              = %d
+<a name="line964"></a>				  AND osr_consumer_key    = \'%s\'
+<a name="line965"></a>				  AND osr_consumer_secret = \'%s\'
+<a name="line966"></a>				',
+<a name="line967"></a>				isset($consumer['application_uri']) 	? $consumer['application_uri'] 			 : '',
+<a name="line968"></a>				isset($consumer['application_title'])	? $consumer['application_title'] 		 : '',
+<a name="line969"></a>				isset($consumer['application_descr'])	? $consumer['application_descr'] 		 : '',
+<a name="line970"></a>				isset($consumer['application_icon'])	? $consumer['application_icon'] 		 : '',
+<a name="line971"></a>				$consumer['id'],
+<a name="line972"></a>				$consumer['consumer_key'],
+<a name="line973"></a>				$consumer['consumer_secret']
+<a name="line974"></a>				);
+<a name="line975"></a>				
+<a name="line976"></a>
+<a name="line977"></a>			$consumer_key = $consumer['consumer_key'];
+<a name="line978"></a>		}
+<a name="line979"></a>		else
+<a name="line980"></a>		{
+<a name="line981"></a>			$consumer_key	= $this->generateKey(true);
+<a name="line982"></a>			$consumer_secret= $this->generateKey();
+<a name="line983"></a>
+<a name="line984"></a>			// When the user is an admin, then the user can be forced to something else that the user
+<a name="line985"></a>			if ($user_is_admin && array_key_exists('user_id',$consumer))
+<a name="line986"></a>			{
+<a name="line987"></a>				if (is_null($consumer['user_id']))
+<a name="line988"></a>				{
+<a name="line989"></a>					$owner_id = 'NULL';
+<a name="line990"></a>				}
+<a name="line991"></a>				else
+<a name="line992"></a>				{
+<a name="line993"></a>					$owner_id = intval($consumer['user_id']);
+<a name="line994"></a>				}
+<a name="line995"></a>			}
+<a name="line996"></a>			else
+<a name="line997"></a>			{
+<a name="line998"></a>				// No admin, take the user id as the owner id.
+<a name="line999"></a>				$owner_id = intval($user_id);
+<a name="line1000"></a>			}
+<a name="line1001"></a>
+<a name="line1002"></a>			$this->query('
+<a name="line1003"></a>				INSERT INTO oauth_server_registry
+<a name="line1004"></a>				SET osr_usa_id_ref			= %s,
+<a name="line1005"></a>					osr_consumer_key		= \'%s\',
+<a name="line1006"></a>					osr_consumer_secret		= \'%s\',
+<a name="line1007"></a>					osr_application_uri		= \'%s\',
+<a name="line1008"></a>					osr_application_title	= \'%s\',
+<a name="line1009"></a>					osr_application_descr	= \'%s\',
+<a name="line1010"></a>					osr_application_icon	= \'%s\',
+<a name="line1011"></a>					osr_timestamp			= NOW(),
+<a name="line1012"></a>					osr_issue_date			= NOW(),
+<a name="line1013"></a>					osr_disabled_on			= NULL,
+<a name="line1014"></a>					osr_deleted_on			= NULL
+<a name="line1015"></a>				',
+<a name="line1016"></a>				$owner_id,
+<a name="line1017"></a>				$consumer_key,
+<a name="line1018"></a>				$consumer_secret,
+<a name="line1019"></a>				isset($consumer['application_uri']) 	? $consumer['application_uri'] 			 : '',
+<a name="line1020"></a>				isset($consumer['application_title'])	? $consumer['application_title'] 		 : '',
+<a name="line1021"></a>				isset($consumer['application_descr'])	? $consumer['application_descr'] 		 : '',
+<a name="line1022"></a>				isset($consumer['application_icon'])	? $consumer['application_icon'] 		 : ''
+<a name="line1023"></a>				);
+<a name="line1024"></a>		}
+<a name="line1025"></a>		return $consumer_key;
+<a name="line1026"></a>
+<a name="line1027"></a>	}
+<a name="line1028"></a>
+<a name="line1029"></a>
+<a name="line1030"></a>
+<a name="line1031"></a>	/**
+<a name="line1032"></a>	 * Delete a consumer key.  This removes access to our site for all applications using this key.
+<a name="line1033"></a>	 * 
+<a name="line1034"></a>	 * @param string consumer_key
+<a name="line1035"></a>	 * @param int user_id	user registering this server
+<a name="line1036"></a>	 * @param boolean user_is_admin
+<a name="line1037"></a>	 */
+<a name="line1038"></a>	public function deleteConsumer ( $consumer_key, $user_id, $user_is_admin = false )
+<a name="line1039"></a>	{
+<a name="line1040"></a>		if ($user_is_admin)
+<a name="line1041"></a>		{
+<a name="line1042"></a>			$this->query('
+<a name="line1043"></a>					DELETE FROM oauth_server_registry
+<a name="line1044"></a>					WHERE osr_consumer_key = \'%s\'
+<a name="line1045"></a>					  AND (osr_usa_id_ref = %d OR osr_usa_id_ref IS NULL)
+<a name="line1046"></a>					', $consumer_key, $user_id);
+<a name="line1047"></a>		}
+<a name="line1048"></a>		else
+<a name="line1049"></a>		{
+<a name="line1050"></a>			$this->query('
+<a name="line1051"></a>					DELETE FROM oauth_server_registry
+<a name="line1052"></a>					WHERE osr_consumer_key = \'%s\'
+<a name="line1053"></a>					  AND osr_usa_id_ref   = %d
+<a name="line1054"></a>					', $consumer_key, $user_id);
+<a name="line1055"></a>		}
+<a name="line1056"></a>	}	
+<a name="line1057"></a>	
+<a name="line1058"></a>	
+<a name="line1059"></a>	
+<a name="line1060"></a>	/**
+<a name="line1061"></a>	 * Fetch a consumer of this server, by consumer_key.
+<a name="line1062"></a>	 * 
+<a name="line1063"></a>	 * @param string consumer_key
+<a name="line1064"></a>	 * @param int user_id
+<a name="line1065"></a>	 * @param boolean user_is_admin (optional)
+<a name="line1066"></a>	 * @exception OAuthException2 when consumer not found
+<a name="line1067"></a>	 * @return array
+<a name="line1068"></a>	 */
+<a name="line1069"></a>	public function getConsumer ( $consumer_key, $user_id, $user_is_admin = false )
+<a name="line1070"></a>	{
+<a name="line1071"></a>		$consumer = $this->query_row_assoc('
+<a name="line1072"></a>						SELECT	*
+<a name="line1073"></a>						FROM oauth_server_registry
+<a name="line1074"></a>						WHERE osr_consumer_key = \'%s\'
+<a name="line1075"></a>						', $consumer_key);
+<a name="line1076"></a>		
+<a name="line1077"></a>		if (!is_array($consumer))
+<a name="line1078"></a>		{
+<a name="line1079"></a>			throw new OAuthException2('No consumer with consumer_key "'.$consumer_key.'"');
+<a name="line1080"></a>		}
+<a name="line1081"></a>
+<a name="line1082"></a>		$c = array();
+<a name="line1083"></a>		foreach ($consumer as $key => $value)
+<a name="line1084"></a>		{
+<a name="line1085"></a>			$c[substr($key, 4)] = $value;
+<a name="line1086"></a>		}
+<a name="line1087"></a>		$c['user_id'] = $c['usa_id_ref'];
+<a name="line1088"></a>
+<a name="line1089"></a>		if (!$user_is_admin && !empty($c['user_id']) && $c['user_id'] != $user_id)
+<a name="line1090"></a>		{
+<a name="line1091"></a>			throw new OAuthException2('No access to the consumer information for consumer_key "'.$consumer_key.'"');
+<a name="line1092"></a>		}
+<a name="line1093"></a>		return $c;
+<a name="line1094"></a>	}
+<a name="line1095"></a>
+<a name="line1096"></a>
+<a name="line1097"></a>	/**
+<a name="line1098"></a>	 * Fetch the static consumer key for this provider.  The user for the static consumer 
+<a name="line1099"></a>	 * key is NULL (no user, shared key).  If the key did not exist then the key is created.
+<a name="line1100"></a>	 * 
+<a name="line1101"></a>	 * @return string
+<a name="line1102"></a>	 */
+<a name="line1103"></a>	public function getConsumerStatic ()
+<a name="line1104"></a>	{
+<a name="line1105"></a>		$consumer = $this->query_one('
+<a name="line1106"></a>						SELECT osr_consumer_key
+<a name="line1107"></a>						FROM oauth_server_registry
+<a name="line1108"></a>						WHERE osr_consumer_key LIKE \'sc-%%\'
+<a name="line1109"></a>						  AND osr_usa_id_ref IS NULL
+<a name="line1110"></a>						');
+<a name="line1111"></a>
+<a name="line1112"></a>		if (empty($consumer))
+<a name="line1113"></a>		{
+<a name="line1114"></a>			$consumer_key = 'sc-'.$this->generateKey(true);
+<a name="line1115"></a>			$this->query('
+<a name="line1116"></a>				INSERT INTO oauth_server_registry
+<a name="line1117"></a>				SET osr_usa_id_ref			= NULL,
+<a name="line1118"></a>					osr_consumer_key		= \'%s\',
+<a name="line1119"></a>					osr_consumer_secret		= \'\',
+<a name="line1120"></a>					osr_application_uri		= \'\',
+<a name="line1121"></a>					osr_application_title	= \'Static shared consumer key\',
+<a name="line1122"></a>					osr_application_descr	= \'\',
+<a name="line1123"></a>					osr_application_icon	= \'Static shared consumer key\',
+<a name="line1124"></a>					osr_timestamp			= NOW(),
+<a name="line1125"></a>					osr_issue_date			= NOW(),
+<a name="line1126"></a>					osr_disabled_on			= NULL,
+<a name="line1127"></a>					osr_deleted_on			= NULL
+<a name="line1128"></a>				',
+<a name="line1129"></a>				$consumer_key
+<a name="line1130"></a>				);
+<a name="line1131"></a>			
+<a name="line1132"></a>			// Just make sure that if the consumer key is truncated that we get the truncated string
+<a name="line1133"></a>			$consumer = $this->getConsumerStatic();
+<a name="line1134"></a>		}
+<a name="line1135"></a>		return $consumer;
+<a name="line1136"></a>	}
+<a name="line1137"></a>
+<a name="line1138"></a>
+<a name="line1139"></a>	/**
+<a name="line1140"></a>	 * Add an unautorized request token to our server.
+<a name="line1141"></a>	 * 
+<a name="line1142"></a>	 * @param string consumer_key
+<a name="line1143"></a>	 * @param array options		(eg. token_ttl)
+<a name="line1144"></a>	 * @return array (token, token_secret)
+<a name="line1145"></a>	 */
+<a name="line1146"></a>	public function addConsumerRequestToken ( $consumer_key, $options = array() )
+<a name="line1147"></a>	{
+<a name="line1148"></a>		$token  = $this->generateKey(true);
+<a name="line1149"></a>		$secret = $this->generateKey();
+<a name="line1150"></a>		$osr_id	= $this->query_one('
+<a name="line1151"></a>						SELECT osr_id
+<a name="line1152"></a>						FROM oauth_server_registry
+<a name="line1153"></a>						WHERE osr_consumer_key = \'%s\'
+<a name="line1154"></a>						  AND osr_disabled_on 	IS NULL
+<a name="line1155"></a>						  AND osr_deleted_on	IS NULL
+<a name="line1156"></a>						', $consumer_key);
+<a name="line1157"></a>
+<a name="line1158"></a>		if (!$osr_id)
+<a name="line1159"></a>		{
+<a name="line1160"></a>			throw new OAuthException2('No server with consumer_key "'.$consumer_key.'" or consumer_key is disabled');
+<a name="line1161"></a>		}
+<a name="line1162"></a>
+<a name="line1163"></a>		if (isset($options['token_ttl']) && is_numeric($options['token_ttl']))
+<a name="line1164"></a>		{
+<a name="line1165"></a>			$ttl = intval($options['token_ttl']);
+<a name="line1166"></a>		}
+<a name="line1167"></a>		else
+<a name="line1168"></a>		{
+<a name="line1169"></a>			$ttl = $this->max_request_token_ttl;
+<a name="line1170"></a>		}
+<a name="line1171"></a>
+<a name="line1172"></a>		$this->query('
+<a name="line1173"></a>				INSERT INTO oauth_server_token
+<a name="line1174"></a>				SET ost_osr_id_ref		= %d,
+<a name="line1175"></a>					ost_usa_id_ref		= 1,
+<a name="line1176"></a>					ost_token			= \'%s\',
+<a name="line1177"></a>					ost_token_secret	= \'%s\',
+<a name="line1178"></a>					ost_token_type		= \'request\',
+<a name="line1179"></a>					ost_token_ttl       = DATE_ADD(NOW(), INTERVAL %d SECOND)
+<a name="line1180"></a>				ON DUPLICATE KEY UPDATE
+<a name="line1181"></a>					ost_osr_id_ref		= VALUES(ost_osr_id_ref),
+<a name="line1182"></a>					ost_usa_id_ref		= VALUES(ost_usa_id_ref),
+<a name="line1183"></a>					ost_token			= VALUES(ost_token),
+<a name="line1184"></a>					ost_token_secret	= VALUES(ost_token_secret),
+<a name="line1185"></a>					ost_token_type		= VALUES(ost_token_type),
+<a name="line1186"></a>					ost_token_ttl       = VALUES(ost_token_ttl),
+<a name="line1187"></a>					ost_timestamp		= NOW()
+<a name="line1188"></a>				', $osr_id, $token, $secret, $ttl);
+<a name="line1189"></a>		
+<a name="line1190"></a>		return array('token'=>$token, 'token_secret'=>$secret, 'token_ttl'=>$ttl);
+<a name="line1191"></a>	}
+<a name="line1192"></a>	
+<a name="line1193"></a>	
+<a name="line1194"></a>	/**
+<a name="line1195"></a>	 * Fetch the consumer request token, by request token.
+<a name="line1196"></a>	 * 
+<a name="line1197"></a>	 * @param string token
+<a name="line1198"></a>	 * @return array  token and consumer details
+<a name="line1199"></a>	 */
+<a name="line1200"></a>	public function getConsumerRequestToken ( $token )
+<a name="line1201"></a>	{
+<a name="line1202"></a>		$rs = $this->query_row_assoc('
+<a name="line1203"></a>				SELECT	ost_token			as token,
+<a name="line1204"></a>						ost_token_secret	as token_secret,
+<a name="line1205"></a>						osr_consumer_key	as consumer_key,
+<a name="line1206"></a>						osr_consumer_secret	as consumer_secret,
+<a name="line1207"></a>						ost_token_type		as token_type
+<a name="line1208"></a>				FROM oauth_server_token
+<a name="line1209"></a>						JOIN oauth_server_registry
+<a name="line1210"></a>						ON ost_osr_id_ref = osr_id
+<a name="line1211"></a>				WHERE ost_token_type = \'request\'
+<a name="line1212"></a>				  AND ost_token      = \'%s\'
+<a name="line1213"></a>				  AND ost_token_ttl  >= NOW()
+<a name="line1214"></a>				', $token);
+<a name="line1215"></a>		
+<a name="line1216"></a>		return $rs;
+<a name="line1217"></a>	}
+<a name="line1218"></a>	
+<a name="line1219"></a>
+<a name="line1220"></a>	/**
+<a name="line1221"></a>	 * Delete a consumer token.  The token must be a request or authorized token.
+<a name="line1222"></a>	 * 
+<a name="line1223"></a>	 * @param string token
+<a name="line1224"></a>	 */
+<a name="line1225"></a>	public function deleteConsumerRequestToken ( $token )
+<a name="line1226"></a>	{
+<a name="line1227"></a>		$this->query('
+<a name="line1228"></a>					DELETE FROM oauth_server_token
+<a name="line1229"></a>					WHERE ost_token 	 = \'%s\'
+<a name="line1230"></a>					  AND ost_token_type = \'request\'
+<a name="line1231"></a>					', $token);
+<a name="line1232"></a>	}
+<a name="line1233"></a>	
+<a name="line1234"></a>
+<a name="line1235"></a>	/**
+<a name="line1236"></a>	 * Upgrade a request token to be an authorized request token.
+<a name="line1237"></a>	 * 
+<a name="line1238"></a>	 * @param string token
+<a name="line1239"></a>	 * @param int	 user_id  user authorizing the token
+<a name="line1240"></a>	 * @param string referrer_host used to set the referrer host for this token, for user feedback
+<a name="line1241"></a>	 */
+<a name="line1242"></a>	public function authorizeConsumerRequestToken ( $token, $user_id, $referrer_host = '' )
+<a name="line1243"></a>	{
+<a name="line1244"></a>		$this->query('
+<a name="line1245"></a>					UPDATE oauth_server_token
+<a name="line1246"></a>					SET ost_authorized    = 1,
+<a name="line1247"></a>						ost_usa_id_ref    = %d,
+<a name="line1248"></a>						ost_timestamp     = NOW(),
+<a name="line1249"></a>						ost_referrer_host = \'%s\'
+<a name="line1250"></a>					WHERE ost_token      = \'%s\'
+<a name="line1251"></a>					  AND ost_token_type = \'request\'
+<a name="line1252"></a>					', $user_id, $referrer_host, $token);
+<a name="line1253"></a>	}
+<a name="line1254"></a>
+<a name="line1255"></a>
+<a name="line1256"></a>	/**
+<a name="line1257"></a>	 * Count the consumer access tokens for the given consumer.
+<a name="line1258"></a>	 * 
+<a name="line1259"></a>	 * @param string consumer_key
+<a name="line1260"></a>	 * @return int
+<a name="line1261"></a>	 */
+<a name="line1262"></a>	public function countConsumerAccessTokens ( $consumer_key )
+<a name="line1263"></a>	{
+<a name="line1264"></a>		$count = $this->query_one('
+<a name="line1265"></a>					SELECT COUNT(ost_id)
+<a name="line1266"></a>					FROM oauth_server_token
+<a name="line1267"></a>							JOIN oauth_server_registry
+<a name="line1268"></a>							ON ost_osr_id_ref = osr_id
+<a name="line1269"></a>					WHERE ost_token_type   = \'access\'
+<a name="line1270"></a>					  AND osr_consumer_key = \'%s\'
+<a name="line1271"></a>					  AND ost_token_ttl    >= NOW()
+<a name="line1272"></a>					', $consumer_key);
+<a name="line1273"></a>		
+<a name="line1274"></a>		return $count;
+<a name="line1275"></a>	}
+<a name="line1276"></a>
+<a name="line1277"></a>
+<a name="line1278"></a>	/**
+<a name="line1279"></a>	 * Exchange an authorized request token for new access token.
+<a name="line1280"></a>	 * 
+<a name="line1281"></a>	 * @param string token
+<a name="line1282"></a>	 * @param array options		options for the token, token_ttl
+<a name="line1283"></a>	 * @exception OAuthException2 when token could not be exchanged
+<a name="line1284"></a>	 * @return array (token, token_secret)
+<a name="line1285"></a>	 */
+<a name="line1286"></a>	public function exchangeConsumerRequestForAccessToken ( $token, $options = array() )
+<a name="line1287"></a>	{
+<a name="line1288"></a>		$new_token  = $this->generateKey(true);
+<a name="line1289"></a>		$new_secret = $this->generateKey();
+<a name="line1290"></a>
+<a name="line1291"></a>		// Maximum time to live for this token
+<a name="line1292"></a>		if (isset($options['token_ttl']) && is_numeric($options['token_ttl']))
+<a name="line1293"></a>		{
+<a name="line1294"></a>			$ttl_sql = 'DATE_ADD(NOW(), INTERVAL '.intval($options['token_ttl']).' SECOND)';
+<a name="line1295"></a>		}
+<a name="line1296"></a>		else
+<a name="line1297"></a>		{
+<a name="line1298"></a>			$ttl_sql = "'9999-12-31'";
+<a name="line1299"></a>		}
+<a name="line1300"></a>
+<a name="line1301"></a>		$this->query('
+<a name="line1302"></a>					UPDATE oauth_server_token
+<a name="line1303"></a>					SET ost_token			= \'%s\',
+<a name="line1304"></a>						ost_token_secret	= \'%s\',
+<a name="line1305"></a>						ost_token_type		= \'access\',
+<a name="line1306"></a>						ost_timestamp		= NOW(),
+<a name="line1307"></a>						ost_token_ttl       = '.$ttl_sql.'
+<a name="line1308"></a>					WHERE ost_token      = \'%s\'
+<a name="line1309"></a>					  AND ost_token_type = \'request\'
+<a name="line1310"></a>					  AND ost_authorized = 1
+<a name="line1311"></a>					  AND ost_token_ttl  >= NOW()
+<a name="line1312"></a>					', $new_token, $new_secret, $token);
+<a name="line1313"></a>		
+<a name="line1314"></a>		if ($this->query_affected_rows() != 1)
+<a name="line1315"></a>		{
+<a name="line1316"></a>			throw new OAuthException2('Can\'t exchange request token "'.$token.'" for access token. No such token or not authorized');
+<a name="line1317"></a>		}
+<a name="line1318"></a>
+<a name="line1319"></a>		$ret = array('token' => $new_token, 'token_secret' => $new_secret);
+<a name="line1320"></a>		$ttl = $this->query_one('
+<a name="line1321"></a>					SELECT	IF(ost_token_ttl >= \'9999-12-31\', NULL, UNIX_TIMESTAMP(ost_token_ttl) - UNIX_TIMESTAMP(NOW())) as token_ttl
+<a name="line1322"></a>					FROM oauth_server_token
+<a name="line1323"></a>					WHERE ost_token = \'%s\'', $new_token);
+<a name="line1324"></a>
+<a name="line1325"></a>		if (is_numeric($ttl))
+<a name="line1326"></a>		{
+<a name="line1327"></a>			$ret['token_ttl'] = intval($ttl);
+<a name="line1328"></a>		}
+<a name="line1329"></a>		return $ret;
+<a name="line1330"></a>	}
+<a name="line1331"></a>
+<a name="line1332"></a>
+<a name="line1333"></a>	/**
+<a name="line1334"></a>	 * Fetch the consumer access token, by access token.
+<a name="line1335"></a>	 * 
+<a name="line1336"></a>	 * @param string token
+<a name="line1337"></a>	 * @param int user_id
+<a name="line1338"></a>	 * @exception OAuthException2 when token is not found
+<a name="line1339"></a>	 * @return array  token and consumer details
+<a name="line1340"></a>	 */
+<a name="line1341"></a>	public function getConsumerAccessToken ( $token, $user_id )
+<a name="line1342"></a>	{
+<a name="line1343"></a>		$rs = $this->query_row_assoc('
+<a name="line1344"></a>				SELECT	ost_token				as token,
+<a name="line1345"></a>						ost_token_secret		as token_secret,
+<a name="line1346"></a>						ost_referrer_host		as token_referrer_host,
+<a name="line1347"></a>						osr_consumer_key		as consumer_key,
+<a name="line1348"></a>						osr_consumer_secret		as consumer_secret,
+<a name="line1349"></a>						osr_application_uri		as application_uri,
+<a name="line1350"></a>						osr_application_title	as application_title,
+<a name="line1351"></a>						osr_application_descr	as application_descr,
+<a name="line1352"></a>						osr_callback_uri		as callback_uri
+<a name="line1353"></a>				FROM oauth_server_token
+<a name="line1354"></a>						JOIN oauth_server_registry
+<a name="line1355"></a>						ON ost_osr_id_ref = osr_id
+<a name="line1356"></a>				WHERE ost_token_type = \'access\'
+<a name="line1357"></a>				  AND ost_token      = \'%s\'
+<a name="line1358"></a>				  AND ost_usa_id_ref = %d
+<a name="line1359"></a>				  AND ost_token_ttl  >= NOW()
+<a name="line1360"></a>				', $token, $user_id);
+<a name="line1361"></a>		
+<a name="line1362"></a>		if (empty($rs))
+<a name="line1363"></a>		{
+<a name="line1364"></a>			throw new OAuthException2('No server_token "'.$token.'" for user "'.$user_id.'"');
+<a name="line1365"></a>		}
+<a name="line1366"></a>		return $rs;
+<a name="line1367"></a>	}
+<a name="line1368"></a>
+<a name="line1369"></a>
+<a name="line1370"></a>	/**
+<a name="line1371"></a>	 * Delete a consumer access token.
+<a name="line1372"></a>	 * 
+<a name="line1373"></a>	 * @param string token
+<a name="line1374"></a>	 * @param int user_id
+<a name="line1375"></a>	 * @param boolean user_is_admin
+<a name="line1376"></a>	 */
+<a name="line1377"></a>	public function deleteConsumerAccessToken ( $token, $user_id, $user_is_admin = false )
+<a name="line1378"></a>	{
+<a name="line1379"></a>		if ($user_is_admin)
+<a name="line1380"></a>		{
+<a name="line1381"></a>			$this->query('
+<a name="line1382"></a>						DELETE FROM oauth_server_token
+<a name="line1383"></a>						WHERE ost_token 	 = \'%s\'
+<a name="line1384"></a>						  AND ost_token_type = \'access\'
+<a name="line1385"></a>						', $token);
+<a name="line1386"></a>		}
+<a name="line1387"></a>		else
+<a name="line1388"></a>		{
+<a name="line1389"></a>			$this->query('
+<a name="line1390"></a>						DELETE FROM oauth_server_token
+<a name="line1391"></a>						WHERE ost_token 	 = \'%s\'
+<a name="line1392"></a>						  AND ost_token_type = \'access\'
+<a name="line1393"></a>						  AND ost_usa_id_ref = %d
+<a name="line1394"></a>						', $token, $user_id);
+<a name="line1395"></a>		}
+<a name="line1396"></a>	}
+<a name="line1397"></a>
+<a name="line1398"></a>
+<a name="line1399"></a>	/**
+<a name="line1400"></a>	 * Set the ttl of a consumer access token.  This is done when the
+<a name="line1401"></a>	 * server receives a valid request with a xoauth_token_ttl parameter in it.
+<a name="line1402"></a>	 * 
+<a name="line1403"></a>	 * @param string token
+<a name="line1404"></a>	 * @param int ttl
+<a name="line1405"></a>	 */
+<a name="line1406"></a>	public function setConsumerAccessTokenTtl ( $token, $token_ttl )
+<a name="line1407"></a>	{
+<a name="line1408"></a>		if ($token_ttl <= 0)
+<a name="line1409"></a>		{
+<a name="line1410"></a>			// Immediate delete when the token is past its ttl
+<a name="line1411"></a>			$this->deleteConsumerAccessToken($token, 0, true);
+<a name="line1412"></a>		}
+<a name="line1413"></a>		else
+<a name="line1414"></a>		{
+<a name="line1415"></a>			// Set maximum time to live for this token
+<a name="line1416"></a>			$this->query('
+<a name="line1417"></a>						UPDATE oauth_server_token
+<a name="line1418"></a>						SET ost_token_ttl = DATE_ADD(NOW(), INTERVAL %d SECOND)
+<a name="line1419"></a>						WHERE ost_token 	 = \'%s\'
+<a name="line1420"></a>						  AND ost_token_type = \'access\'
+<a name="line1421"></a>						', $token_ttl, $token);
+<a name="line1422"></a>		}
+<a name="line1423"></a>	}
+<a name="line1424"></a>
+<a name="line1425"></a>
+<a name="line1426"></a>	/**
+<a name="line1427"></a>	 * Fetch a list of all consumer keys, secrets etc.
+<a name="line1428"></a>	 * Returns the public (user_id is null) and the keys owned by the user
+<a name="line1429"></a>	 * 
+<a name="line1430"></a>	 * @param int user_id
+<a name="line1431"></a>	 * @return array
+<a name="line1432"></a>	 */
+<a name="line1433"></a>	public function listConsumers ( $user_id )
+<a name="line1434"></a>	{
+<a name="line1435"></a>		$rs = $this->query_all_assoc('
+<a name="line1436"></a>				SELECT	osr_id					as id,
+<a name="line1437"></a>						osr_usa_id_ref			as user_id,
+<a name="line1438"></a>						osr_consumer_key 		as consumer_key,
+<a name="line1439"></a>						osr_consumer_secret		as consumer_secret,
+<a name="line1440"></a>						osr_issue_date			as issue_date,
+<a name="line1441"></a>						osr_application_uri		as application_uri,
+<a name="line1442"></a>						osr_application_title	as application_title,
+<a name="line1443"></a>						osr_application_descr	as application_descr,
+<a name="line1444"></a>						osr_application_icon	as application_icon,
+<a name="line1445"></a>						osr_disabled_on			as disabled_on,
+<a name="line1446"></a>						osr_deleted_on			as deleted_on
+<a name="line1447"></a>				FROM oauth_server_registry
+<a name="line1448"></a>				WHERE (osr_usa_id_ref = %d OR osr_usa_id_ref IS NULL)
+<a name="line1449"></a>				ORDER BY osr_application_title
+<a name="line1450"></a>				', $user_id);
+<a name="line1451"></a>		return $rs;
+<a name="line1452"></a>	}
+<a name="line1453"></a>
+<a name="line1454"></a>
+<a name="line1455"></a>	/**
+<a name="line1456"></a>	 * Fetch a list of all consumer tokens accessing the account of the given user.
+<a name="line1457"></a>	 * 
+<a name="line1458"></a>	 * @param int user_id
+<a name="line1459"></a>	 * @return array
+<a name="line1460"></a>	 */
+<a name="line1461"></a>	public function listConsumerTokens ( $user_id )
+<a name="line1462"></a>	{
+<a name="line1463"></a>		$rs = $this->query_all_assoc('
+<a name="line1464"></a>				SELECT	osr_consumer_key 		as consumer_key,
+<a name="line1465"></a>						osr_consumer_secret		as consumer_secret,
+<a name="line1466"></a>						osr_application_uri		as application_uri,
+<a name="line1467"></a>						osr_application_title	as application_title,
+<a name="line1468"></a>						osr_application_descr	as application_descr,
+<a name="line1469"></a>						ost_timestamp			as timestamp,	
+<a name="line1470"></a>						ost_token				as token,
+<a name="line1471"></a>						ost_token_secret		as token_secret,
+<a name="line1472"></a>						ost_referrer_host		as token_referrer_host,
+<a name="line1473"></a>						osr_callback_uri		as callback_uri,
+<a name="line1474"></a>						osr_disabled_on			as disabled_on,
+<a name="line1475"></a>						osr_deleted_on			as deleted_on,
+<a name="line1476"></a>				FROM oauth_server_registry
+<a name="line1477"></a>					JOIN oauth_server_token
+<a name="line1478"></a>					ON ost_osr_id_ref = osr_id
+<a name="line1479"></a>				WHERE ost_usa_id_ref = %d
+<a name="line1480"></a>				  AND ost_token_type = \'access\'
+<a name="line1481"></a>				  AND ost_token_ttl  >= NOW()
+<a name="line1482"></a>				ORDER BY osr_application_title
+<a name="line1483"></a>				', $user_id);
+<a name="line1484"></a>		return $rs;
+<a name="line1485"></a>	}
+<a name="line1486"></a>
+<a name="line1487"></a>
+<a name="line1488"></a>	/**
+<a name="line1489"></a>	 * Check an nonce/timestamp combination.  Clears any nonce combinations
+<a name="line1490"></a>	 * that are older than the one received.
+<a name="line1491"></a>	 * 
+<a name="line1492"></a>	 * @param string	consumer_key
+<a name="line1493"></a>	 * @param string 	token
+<a name="line1494"></a>	 * @param int		timestamp
+<a name="line1495"></a>	 * @param string 	nonce
+<a name="line1496"></a>	 * @exception OAuthException2	thrown when the timestamp is not in sequence or nonce is not unique
+<a name="line1497"></a>	 */
+<a name="line1498"></a>	public function checkServerNonce ( $consumer_key, $token, $timestamp, $nonce )
+<a name="line1499"></a>	{
+<a name="line1500"></a>		$r = $this->query_row('
+<a name="line1501"></a>							SELECT MAX(osn_timestamp), MAX(osn_timestamp) > %d + %d
+<a name="line1502"></a>							FROM oauth_server_nonce
+<a name="line1503"></a>							WHERE osn_consumer_key = \'%s\'
+<a name="line1504"></a>							  AND osn_token        = \'%s\'
+<a name="line1505"></a>							', $timestamp, $this->max_timestamp_skew, $consumer_key, $token);
+<a name="line1506"></a>
+<a name="line1507"></a>		if (!empty($r) && $r[1])
+<a name="line1508"></a>		{
+<a name="line1509"></a>			throw new OAuthException2('Timestamp is out of sequence. Request rejected. Got '.$timestamp.' last max is '.$r[0].' allowed skew is '.$this->max_timestamp_skew);
+<a name="line1510"></a>		}
+<a name="line1511"></a>		
+<a name="line1512"></a>		// Insert the new combination
+<a name="line1513"></a>		$this->query('
+<a name="line1514"></a>				INSERT IGNORE INTO oauth_server_nonce
+<a name="line1515"></a>				SET osn_consumer_key	= \'%s\',
+<a name="line1516"></a>					osn_token			= \'%s\',
+<a name="line1517"></a>					osn_timestamp		= %d,
+<a name="line1518"></a>					osn_nonce			= \'%s\'
+<a name="line1519"></a>				', $consumer_key, $token, $timestamp, $nonce);
+<a name="line1520"></a>		
+<a name="line1521"></a>		if ($this->query_affected_rows() == 0)
+<a name="line1522"></a>		{
+<a name="line1523"></a>			throw new OAuthException2('Duplicate timestamp/nonce combination, possible replay attack.  Request rejected.');
+<a name="line1524"></a>		}
+<a name="line1525"></a>
+<a name="line1526"></a>		// Clean up all timestamps older than the one we just received
+<a name="line1527"></a>		$this->query('
+<a name="line1528"></a>				DELETE FROM oauth_server_nonce
+<a name="line1529"></a>				WHERE osn_consumer_key	= \'%s\'
+<a name="line1530"></a>				  AND osn_token			= \'%s\'
+<a name="line1531"></a>				  AND osn_timestamp     < %d - %d
+<a name="line1532"></a>				', $consumer_key, $token, $timestamp, $this->max_timestamp_skew);
+<a name="line1533"></a>	}
+<a name="line1534"></a>
+<a name="line1535"></a>
+<a name="line1536"></a>	/**
+<a name="line1537"></a>	 * Add an entry to the log table
+<a name="line1538"></a>	 * 
+<a name="line1539"></a>	 * @param array keys (osr_consumer_key, ost_token, ocr_consumer_key, oct_token)
+<a name="line1540"></a>	 * @param string received
+<a name="line1541"></a>	 * @param string sent
+<a name="line1542"></a>	 * @param string base_string
+<a name="line1543"></a>	 * @param string notes
+<a name="line1544"></a>	 * @param int (optional) user_id
+<a name="line1545"></a>	 */
+<a name="line1546"></a>	public function addLog ( $keys, $received, $sent, $base_string, $notes, $user_id = null )
+<a name="line1547"></a>	{
+<a name="line1548"></a>		$args = array();
+<a name="line1549"></a>		$ps   = array();
+<a name="line1550"></a>		foreach ($keys as $key => $value)
+<a name="line1551"></a>		{
+<a name="line1552"></a>			$args[] = $value;
+<a name="line1553"></a>			$ps[]   = "olg_$key = '%s'";
+<a name="line1554"></a>		}
+<a name="line1555"></a>
+<a name="line1556"></a>		if (!empty($_SERVER['REMOTE_ADDR']))
+<a name="line1557"></a>		{
+<a name="line1558"></a>			$remote_ip = $_SERVER['REMOTE_ADDR'];
+<a name="line1559"></a>		}	
+<a name="line1560"></a>		else if (!empty($_SERVER['REMOTE_IP']))
+<a name="line1561"></a>		{
+<a name="line1562"></a>			$remote_ip = $_SERVER['REMOTE_IP'];
+<a name="line1563"></a>		}
+<a name="line1564"></a>		else
+<a name="line1565"></a>		{
+<a name="line1566"></a>			$remote_ip = '0.0.0.0';
+<a name="line1567"></a>		}
+<a name="line1568"></a>
+<a name="line1569"></a>		// Build the SQL
+<a name="line1570"></a>		$ps[] = "olg_received  	= '%s'";						$args[] = $this->makeUTF8($received);
+<a name="line1571"></a>		$ps[] = "olg_sent   	= '%s'";						$args[] = $this->makeUTF8($sent);
+<a name="line1572"></a>		$ps[] = "olg_base_string= '%s'";						$args[] = $base_string;
+<a name="line1573"></a>		$ps[] = "olg_notes   	= '%s'";						$args[] = $this->makeUTF8($notes);
+<a name="line1574"></a>		$ps[] = "olg_usa_id_ref = NULLIF(%d,0)";				$args[] = $user_id;
+<a name="line1575"></a>		$ps[] = "olg_remote_ip  = IFNULL(INET_ATON('%s'),0)";	$args[] = $remote_ip;
+<a name="line1576"></a>
+<a name="line1577"></a>		$this->query('INSERT INTO oauth_log SET '.implode(',', $ps), $args);
+<a name="line1578"></a>	}
+<a name="line1579"></a>	
+<a name="line1580"></a>	
+<a name="line1581"></a>	/**
+<a name="line1582"></a>	 * Get a page of entries from the log.  Returns the last 100 records
+<a name="line1583"></a>	 * matching the options given.
+<a name="line1584"></a>	 * 
+<a name="line1585"></a>	 * @param array options
+<a name="line1586"></a>	 * @param int user_id	current user
+<a name="line1587"></a>	 * @return array log records
+<a name="line1588"></a>	 */
+<a name="line1589"></a>	public function listLog ( $options, $user_id )
+<a name="line1590"></a>	{
+<a name="line1591"></a>		$where = array();
+<a name="line1592"></a>		$args  = array();
+<a name="line1593"></a>		if (empty($options))
+<a name="line1594"></a>		{
+<a name="line1595"></a>			$where[] = 'olg_usa_id_ref = %d';
+<a name="line1596"></a>			$args[]  = $user_id;
+<a name="line1597"></a>		}
+<a name="line1598"></a>		else
+<a name="line1599"></a>		{
+<a name="line1600"></a>			foreach ($options as $option => $value)
+<a name="line1601"></a>			{
+<a name="line1602"></a>				if (strlen($value) > 0)
+<a name="line1603"></a>				{
+<a name="line1604"></a>					switch ($option)
+<a name="line1605"></a>					{
+<a name="line1606"></a>					case 'osr_consumer_key':
+<a name="line1607"></a>					case 'ocr_consumer_key':
+<a name="line1608"></a>					case 'ost_token':
+<a name="line1609"></a>					case 'oct_token':
+<a name="line1610"></a>						$where[] = 'olg_'.$option.' = \'%s\'';
+<a name="line1611"></a>						$args[]  = $value;	
+<a name="line1612"></a>						break;				
+<a name="line1613"></a>					}
+<a name="line1614"></a>				}
+<a name="line1615"></a>			}
+<a name="line1616"></a>			
+<a name="line1617"></a>			$where[] = '(olg_usa_id_ref IS NULL OR olg_usa_id_ref = %d)';
+<a name="line1618"></a>			$args[]  = $user_id;
+<a name="line1619"></a>		}
+<a name="line1620"></a>
+<a name="line1621"></a>		$rs = $this->query_all_assoc('
+<a name="line1622"></a>					SELECT olg_id,
+<a name="line1623"></a>							olg_osr_consumer_key 	AS osr_consumer_key,
+<a name="line1624"></a>							olg_ost_token			AS ost_token,
+<a name="line1625"></a>							olg_ocr_consumer_key	AS ocr_consumer_key,
+<a name="line1626"></a>							olg_oct_token			AS oct_token,
+<a name="line1627"></a>							olg_usa_id_ref			AS user_id,
+<a name="line1628"></a>							olg_received			AS received,
+<a name="line1629"></a>							olg_sent				AS sent,
+<a name="line1630"></a>							olg_base_string			AS base_string,
+<a name="line1631"></a>							olg_notes				AS notes,
+<a name="line1632"></a>							olg_timestamp			AS timestamp,
+<a name="line1633"></a>							INET_NTOA(olg_remote_ip) AS remote_ip
+<a name="line1634"></a>					FROM oauth_log
+<a name="line1635"></a>					WHERE '.implode(' AND ', $where).'
+<a name="line1636"></a>					ORDER BY olg_id DESC
+<a name="line1637"></a>					LIMIT 0,100', $args);
+<a name="line1638"></a>
+<a name="line1639"></a>		return $rs;
+<a name="line1640"></a>	}
+<a name="line1641"></a>
+<a name="line1642"></a>	
+<a name="line1643"></a>	/* ** Some simple helper functions for querying the mysql db ** */
+<a name="line1644"></a>
+<a name="line1645"></a>	/**
+<a name="line1646"></a>	 * Perform a query, ignore the results
+<a name="line1647"></a>	 * 
+<a name="line1648"></a>	 * @param string sql
+<a name="line1649"></a>	 * @param vararg arguments (for sprintf)
+<a name="line1650"></a>	 */
+<a name="line1651"></a>	abstract protected function query ( $sql );
+<a name="line1652"></a>	
+<a name="line1653"></a>
+<a name="line1654"></a>	/**
+<a name="line1655"></a>	 * Perform a query, ignore the results
+<a name="line1656"></a>	 * 
+<a name="line1657"></a>	 * @param string sql
+<a name="line1658"></a>	 * @param vararg arguments (for sprintf)
+<a name="line1659"></a>	 * @return array
+<a name="line1660"></a>	 */
+<a name="line1661"></a>	abstract protected function query_all_assoc ( $sql );
+<a name="line1662"></a>	
+<a name="line1663"></a>	
+<a name="line1664"></a>	/**
+<a name="line1665"></a>	 * Perform a query, return the first row
+<a name="line1666"></a>	 * 
+<a name="line1667"></a>	 * @param string sql
+<a name="line1668"></a>	 * @param vararg arguments (for sprintf)
+<a name="line1669"></a>	 * @return array
+<a name="line1670"></a>	 */
+<a name="line1671"></a>	abstract protected function query_row_assoc ( $sql );
+<a name="line1672"></a>	
+<a name="line1673"></a>	/**
+<a name="line1674"></a>	 * Perform a query, return the first row
+<a name="line1675"></a>	 * 
+<a name="line1676"></a>	 * @param string sql
+<a name="line1677"></a>	 * @param vararg arguments (for sprintf)
+<a name="line1678"></a>	 * @return array
+<a name="line1679"></a>	 */
+<a name="line1680"></a>	abstract protected function query_row ( $sql );
+<a name="line1681"></a>	
+<a name="line1682"></a>		
+<a name="line1683"></a>	/**
+<a name="line1684"></a>	 * Perform a query, return the first column of the first row
+<a name="line1685"></a>	 * 
+<a name="line1686"></a>	 * @param string sql
+<a name="line1687"></a>	 * @param vararg arguments (for sprintf)
+<a name="line1688"></a>	 * @return mixed
+<a name="line1689"></a>	 */
+<a name="line1690"></a>	abstract protected function query_one ( $sql );
+<a name="line1691"></a>	
+<a name="line1692"></a>	
+<a name="line1693"></a>	/**
+<a name="line1694"></a>	 * Return the number of rows affected in the last query
+<a name="line1695"></a>	 */
+<a name="line1696"></a>	abstract protected function query_affected_rows ();
+<a name="line1697"></a>
+<a name="line1698"></a>
+<a name="line1699"></a>	/**
+<a name="line1700"></a>	 * Return the id of the last inserted row
+<a name="line1701"></a>	 * 
+<a name="line1702"></a>	 * @return int
+<a name="line1703"></a>	 */
+<a name="line1704"></a>	abstract protected function query_insert_id ();
+<a name="line1705"></a>	
+<a name="line1706"></a>	
+<a name="line1707"></a>	abstract protected function sql_printf ( $args );
+<a name="line1708"></a>	
+<a name="line1709"></a>	
+<a name="line1710"></a>	abstract protected function sql_escape_string ( $s );
+<a name="line1711"></a>	
+<a name="line1712"></a>	
+<a name="line1713"></a>	abstract protected function sql_errcheck ( $sql );
+<a name="line1714"></a>}
+<a name="line1715"></a>
+<a name="line1716"></a>
+<a name="line1717"></a>/* vi:set ts=4 sts=4 sw=4 binary noeol: */
+<a name="line1718"></a>
+<a name="line1719"></a>?></pre>
+<div class="header">
+<h1>GiftFlow API</h1>
+<ul>
+<li><a href="../../../../overview-summary.html">Overview</a></li>
+<li>Package</li><li>Class</li><li>Tree</li><li><a href="../../../../overview-files.html">Files</a></li>
+<li><a href="../../../../deprecated-list.html">Deprecated</a></li>
+<li><a href="../../../../index-all.html">Index</a></li>
+</ul>
+</div>
+
+<div class="small_links">
+<a href="../../../../index.html" target="_top">Frames</a>
+<a href="../../../../source/libraries/oauth/store/oauthstoresql.php.html" target="_top">No frames</a>
+</div>
+<hr>
+
+<p id="footer">This document was generated by <a href="http://peej.github.com/phpdoctor/">PHPDoctor: The PHP Documentation Creator</a></p>
+
+</body>
+
+</html>

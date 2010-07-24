@@ -6,7 +6,7 @@
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 
 <meta name="generator" content="PHPDoctor 2RC4 (http://peej.github.com/phpdoctor/)">
-<meta name="when" content="Mon, 19 Jul 2010 17:13:58 +0000">
+<meta name="when" content="Sat, 24 Jul 2010 20:46:31 +0000">
 
 <link rel="stylesheet" type="text/css" href="../../stylesheet.css">
 <link rel="start" href="../../overview-summary.html">
@@ -45,7 +45,7 @@
 <a name="line6"></a> *
 <a name="line7"></a> * @package		CodeIgniter
 <a name="line8"></a> * @author		ExpressionEngine Dev Team
-<a name="line9"></a> * @copyright	Copyright (c) 2008 - 2009, EllisLab, Inc.
+<a name="line9"></a> * @copyright	Copyright (c) 2008 - 2010, EllisLab, Inc.
 <a name="line10"></a> * @license		http://codeigniter.com/user_guide/license.html
 <a name="line11"></a> * @link		http://codeigniter.com
 <a name="line12"></a> * @since		Version 1.0
@@ -69,7 +69,7 @@
 <a name="line30"></a>/**
 <a name="line31"></a> * Trim Slashes
 <a name="line32"></a> *
-<a name="line33"></a> * Removes any leading/traling slashes from a string:
+<a name="line33"></a> * Removes any leading/trailing slashes from a string:
 <a name="line34"></a> *
 <a name="line35"></a> * /this/that/theother/
 <a name="line36"></a> *
@@ -85,10 +85,10 @@
 <a name="line46"></a>{
 <a name="line47"></a>	function trim_slashes($str)
 <a name="line48"></a>	{
-<a name="line49"></a>		return trim($str, '/');
-<a name="line50"></a>	} 
+<a name="line49"></a>	    return trim($str, '/');
+<a name="line50"></a>	}
 <a name="line51"></a>}
-<a name="line52"></a>	
+<a name="line52"></a>
 <a name="line53"></a>// ------------------------------------------------------------------------
 <a name="line54"></a>
 <a name="line55"></a>/**
@@ -159,157 +159,174 @@
 <a name="line120"></a>}
 <a name="line121"></a>
 <a name="line122"></a>// ------------------------------------------------------------------------
-<a name="line123"></a>/**
-<a name="line124"></a> * Reduce Double Slashes
-<a name="line125"></a> *
-<a name="line126"></a> * Converts double slashes in a string to a single slash,
-<a name="line127"></a> * except those found in http://
-<a name="line128"></a> *
-<a name="line129"></a> * http://www.some-site.com//index.php
-<a name="line130"></a> *
-<a name="line131"></a> * becomes:
-<a name="line132"></a> *
-<a name="line133"></a> * http://www.some-site.com/index.php
-<a name="line134"></a> *
-<a name="line135"></a> * @access	public
-<a name="line136"></a> * @param	string
-<a name="line137"></a> * @return	string
-<a name="line138"></a> */	
-<a name="line139"></a>if ( ! function_exists('reduce_double_slashes'))
-<a name="line140"></a>{
-<a name="line141"></a>	function reduce_double_slashes($str)
-<a name="line142"></a>	{
-<a name="line143"></a>		return preg_replace("#([^:])//+#", "\\1/", $str);
-<a name="line144"></a>	}
-<a name="line145"></a>}
-<a name="line146"></a>	
-<a name="line147"></a>// ------------------------------------------------------------------------
-<a name="line148"></a>
-<a name="line149"></a>/**
-<a name="line150"></a> * Reduce Multiples
-<a name="line151"></a> *
-<a name="line152"></a> * Reduces multiple instances of a particular character.  Example:
-<a name="line153"></a> *
-<a name="line154"></a> * Fred, Bill,, Joe, Jimmy
-<a name="line155"></a> *
-<a name="line156"></a> * becomes:
-<a name="line157"></a> *
-<a name="line158"></a> * Fred, Bill, Joe, Jimmy
-<a name="line159"></a> *
-<a name="line160"></a> * @access	public
-<a name="line161"></a> * @param	string
-<a name="line162"></a> * @param	string	the character you wish to reduce
-<a name="line163"></a> * @param	bool	TRUE/FALSE - whether to trim the character from the beginning/end
-<a name="line164"></a> * @return	string
-<a name="line165"></a> */	
-<a name="line166"></a>if ( ! function_exists('reduce_multiples'))
-<a name="line167"></a>{
-<a name="line168"></a>	function reduce_multiples($str, $character = ',', $trim = FALSE)
-<a name="line169"></a>	{
-<a name="line170"></a>		$str = preg_replace('#'.preg_quote($character, '#').'{2,}#', $character, $str);
-<a name="line171"></a>
-<a name="line172"></a>		if ($trim === TRUE)
-<a name="line173"></a>		{
-<a name="line174"></a>			$str = trim($str, $character);
-<a name="line175"></a>		}
-<a name="line176"></a>
-<a name="line177"></a>		return $str;
-<a name="line178"></a>	}
-<a name="line179"></a>}
-<a name="line180"></a>	
-<a name="line181"></a>// ------------------------------------------------------------------------
-<a name="line182"></a>
-<a name="line183"></a>/**
-<a name="line184"></a> * Create a Random String
-<a name="line185"></a> *
-<a name="line186"></a> * Useful for generating passwords or hashes.
-<a name="line187"></a> *
-<a name="line188"></a> * @access	public
-<a name="line189"></a> * @param	string 	type of random string.  Options: alunum, numeric, nozero, unique
-<a name="line190"></a> * @param	integer	number of characters
-<a name="line191"></a> * @return	string
-<a name="line192"></a> */
-<a name="line193"></a>if ( ! function_exists('random_string'))
-<a name="line194"></a>{	
-<a name="line195"></a>	function random_string($type = 'alnum', $len = 8)
-<a name="line196"></a>	{					
-<a name="line197"></a>		switch($type)
-<a name="line198"></a>		{
-<a name="line199"></a>			case 'alnum'	:
-<a name="line200"></a>			case 'numeric'	:
-<a name="line201"></a>			case 'nozero'	:
-<a name="line202"></a>		
-<a name="line203"></a>					switch ($type)
-<a name="line204"></a>					{
-<a name="line205"></a>						case 'alnum'	:	$pool = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
-<a name="line206"></a>							break;
-<a name="line207"></a>						case 'numeric'	:	$pool = '0123456789';
-<a name="line208"></a>							break;
-<a name="line209"></a>						case 'nozero'	:	$pool = '123456789';
+<a name="line123"></a>
+<a name="line124"></a>/**
+<a name="line125"></a> * Reduce Double Slashes
+<a name="line126"></a> *
+<a name="line127"></a> * Converts double slashes in a string to a single slash,
+<a name="line128"></a> * except those found in http://
+<a name="line129"></a> *
+<a name="line130"></a> * http://www.some-site.com//index.php
+<a name="line131"></a> *
+<a name="line132"></a> * becomes:
+<a name="line133"></a> *
+<a name="line134"></a> * http://www.some-site.com/index.php
+<a name="line135"></a> *
+<a name="line136"></a> * @access	public
+<a name="line137"></a> * @param	string
+<a name="line138"></a> * @return	string
+<a name="line139"></a> */	
+<a name="line140"></a>if ( ! function_exists('reduce_double_slashes'))
+<a name="line141"></a>{
+<a name="line142"></a>	function reduce_double_slashes($str)
+<a name="line143"></a>	{
+<a name="line144"></a>		return preg_replace("#(^|[^:])//+#", "\\1/", $str);
+<a name="line145"></a>	}
+<a name="line146"></a>}
+<a name="line147"></a>
+<a name="line148"></a>// ------------------------------------------------------------------------
+<a name="line149"></a>
+<a name="line150"></a>/**
+<a name="line151"></a> * Reduce Multiples
+<a name="line152"></a> *
+<a name="line153"></a> * Reduces multiple instances of a particular character.  Example:
+<a name="line154"></a> *
+<a name="line155"></a> * Fred, Bill,, Joe, Jimmy
+<a name="line156"></a> *
+<a name="line157"></a> * becomes:
+<a name="line158"></a> *
+<a name="line159"></a> * Fred, Bill, Joe, Jimmy
+<a name="line160"></a> *
+<a name="line161"></a> * @access	public
+<a name="line162"></a> * @param	string
+<a name="line163"></a> * @param	string	the character you wish to reduce
+<a name="line164"></a> * @param	bool	TRUE/FALSE - whether to trim the character from the beginning/end
+<a name="line165"></a> * @return	string
+<a name="line166"></a> */	
+<a name="line167"></a>if ( ! function_exists('reduce_multiples'))
+<a name="line168"></a>{
+<a name="line169"></a>	function reduce_multiples($str, $character = ',', $trim = FALSE)
+<a name="line170"></a>	{
+<a name="line171"></a>		$str = preg_replace('#'.preg_quote($character, '#').'{2,}#', $character, $str);
+<a name="line172"></a>
+<a name="line173"></a>		if ($trim === TRUE)
+<a name="line174"></a>		{
+<a name="line175"></a>			$str = trim($str, $character);
+<a name="line176"></a>		}
+<a name="line177"></a>    
+<a name="line178"></a>		return $str;
+<a name="line179"></a>	}
+<a name="line180"></a>}
+<a name="line181"></a>	
+<a name="line182"></a>// ------------------------------------------------------------------------
+<a name="line183"></a>
+<a name="line184"></a>/**
+<a name="line185"></a> * Create a Random String
+<a name="line186"></a> *
+<a name="line187"></a> * Useful for generating passwords or hashes.
+<a name="line188"></a> *
+<a name="line189"></a> * @access	public
+<a name="line190"></a> * @param	string 	type of random string.  basic, alpha, alunum, numeric, nozero, unique, md5, encrypt and sha1
+<a name="line191"></a> * @param	integer	number of characters
+<a name="line192"></a> * @return	string
+<a name="line193"></a> */	
+<a name="line194"></a>if ( ! function_exists('random_string'))
+<a name="line195"></a>{
+<a name="line196"></a>	function random_string($type = 'alnum', $len = 8)
+<a name="line197"></a>	{					
+<a name="line198"></a>		switch($type)
+<a name="line199"></a>		{
+<a name="line200"></a>			case 'basic'	: return mt_rand();
+<a name="line201"></a>			  break;
+<a name="line202"></a>			case 'alnum'	:
+<a name="line203"></a>			case 'numeric'	:
+<a name="line204"></a>			case 'nozero'	:
+<a name="line205"></a>			case 'alpha'	:
+<a name="line206"></a>		
+<a name="line207"></a>					switch ($type)
+<a name="line208"></a>					{
+<a name="line209"></a>						case 'alpha'	:	$pool = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
 <a name="line210"></a>							break;
-<a name="line211"></a>					}
-<a name="line212"></a>
-<a name="line213"></a>					$str = '';
-<a name="line214"></a>					for ($i=0; $i < $len; $i++)
-<a name="line215"></a>					{
-<a name="line216"></a>						$str .= substr($pool, mt_rand(0, strlen($pool) -1), 1);
+<a name="line211"></a>						case 'alnum'	:	$pool = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
+<a name="line212"></a>							break;
+<a name="line213"></a>						case 'numeric'	:	$pool = '0123456789';
+<a name="line214"></a>							break;
+<a name="line215"></a>						case 'nozero'	:	$pool = '123456789';
+<a name="line216"></a>							break;
 <a name="line217"></a>					}
-<a name="line218"></a>					return $str;
-<a name="line219"></a>			  break;
-<a name="line220"></a>			case 'unique' : return md5(uniqid(mt_rand()));
-<a name="line221"></a>			  break;
-<a name="line222"></a>		}
-<a name="line223"></a>	}
-<a name="line224"></a>}
-<a name="line225"></a>
-<a name="line226"></a>// ------------------------------------------------------------------------
-<a name="line227"></a>
-<a name="line228"></a>/**
-<a name="line229"></a> * Alternator
-<a name="line230"></a> *
-<a name="line231"></a> * Allows strings to be alternated.  See docs...
-<a name="line232"></a> *
-<a name="line233"></a> * @access	public
-<a name="line234"></a> * @param	string (as many parameters as needed)
-<a name="line235"></a> * @return	string
-<a name="line236"></a> */	
-<a name="line237"></a>if ( ! function_exists('alternator'))
-<a name="line238"></a>{
-<a name="line239"></a>	function alternator()
-<a name="line240"></a>	{
-<a name="line241"></a>		static $i;	
+<a name="line218"></a>
+<a name="line219"></a>					$str = '';
+<a name="line220"></a>					for ($i=0; $i < $len; $i++)
+<a name="line221"></a>					{
+<a name="line222"></a>						$str .= substr($pool, mt_rand(0, strlen($pool) -1), 1);
+<a name="line223"></a>					}
+<a name="line224"></a>					return $str;
+<a name="line225"></a>			  break;
+<a name="line226"></a>			case 'unique'	: 
+<a name="line227"></a>			case 'md5' 		: 
+<a name="line228"></a>				
+<a name="line229"></a>						return md5(uniqid(mt_rand()));
+<a name="line230"></a>			  break;
+<a name="line231"></a>			case 'encrypt'	: 
+<a name="line232"></a>			case 'sha1'	: 
+<a name="line233"></a>		
+<a name="line234"></a>						$CI =& get_instance();
+<a name="line235"></a>						$CI->load->helper('security');
+<a name="line236"></a>		
+<a name="line237"></a>						return do_hash(uniqid(mt_rand(), TRUE), 'sha1');
+<a name="line238"></a>			  break;
+<a name="line239"></a>		}
+<a name="line240"></a>	}
+<a name="line241"></a>}
 <a name="line242"></a>
-<a name="line243"></a>		if (func_num_args() == 0)
-<a name="line244"></a>		{
-<a name="line245"></a>			$i = 0;
-<a name="line246"></a>			return '';
-<a name="line247"></a>		}
-<a name="line248"></a>		$args = func_get_args();
-<a name="line249"></a>		return $args[($i++ % count($args))];
-<a name="line250"></a>	}
-<a name="line251"></a>}
-<a name="line252"></a>
-<a name="line253"></a>// ------------------------------------------------------------------------
-<a name="line254"></a>
-<a name="line255"></a>/**
-<a name="line256"></a> * Repeater function
-<a name="line257"></a> *
-<a name="line258"></a> * @access	public
-<a name="line259"></a> * @param	string
-<a name="line260"></a> * @param	integer	number of repeats
-<a name="line261"></a> * @return	string
-<a name="line262"></a> */	
-<a name="line263"></a>if ( ! function_exists('repeater'))
-<a name="line264"></a>{
-<a name="line265"></a>	function repeater($data, $num = 1)
-<a name="line266"></a>	{
-<a name="line267"></a>		return (($num > 0) ? str_repeat($data, $num) : '');
-<a name="line268"></a>	} 
-<a name="line269"></a>}
-<a name="line270"></a>
+<a name="line243"></a>// ------------------------------------------------------------------------
+<a name="line244"></a>
+<a name="line245"></a>/**
+<a name="line246"></a> * Alternator
+<a name="line247"></a> *
+<a name="line248"></a> * Allows strings to be alternated.  See docs...
+<a name="line249"></a> *
+<a name="line250"></a> * @access	public
+<a name="line251"></a> * @param	string (as many parameters as needed)
+<a name="line252"></a> * @return	string
+<a name="line253"></a> */	
+<a name="line254"></a>if ( ! function_exists('alternator'))
+<a name="line255"></a>{
+<a name="line256"></a>	function alternator()
+<a name="line257"></a>	{
+<a name="line258"></a>		static $i;	
+<a name="line259"></a>
+<a name="line260"></a>		if (func_num_args() == 0)
+<a name="line261"></a>		{
+<a name="line262"></a>			$i = 0;
+<a name="line263"></a>			return '';
+<a name="line264"></a>		}
+<a name="line265"></a>		$args = func_get_args();
+<a name="line266"></a>		return $args[($i++ % count($args))];
+<a name="line267"></a>	}
+<a name="line268"></a>}
+<a name="line269"></a>
+<a name="line270"></a>// ------------------------------------------------------------------------
 <a name="line271"></a>
-<a name="line272"></a>/* End of file string_helper.php */
-<a name="line273"></a>/* Location: ./system/helpers/string_helper.php */</pre>
+<a name="line272"></a>/**
+<a name="line273"></a> * Repeater function
+<a name="line274"></a> *
+<a name="line275"></a> * @access	public
+<a name="line276"></a> * @param	string
+<a name="line277"></a> * @param	integer	number of repeats
+<a name="line278"></a> * @return	string
+<a name="line279"></a> */	
+<a name="line280"></a>if ( ! function_exists('repeater'))
+<a name="line281"></a>{
+<a name="line282"></a>	function repeater($data, $num = 1)
+<a name="line283"></a>	{
+<a name="line284"></a>		return (($num > 0) ? str_repeat($data, $num) : '');
+<a name="line285"></a>	} 
+<a name="line286"></a>}
+<a name="line287"></a>
+<a name="line288"></a>
+<a name="line289"></a>/* End of file string_helper.php */
+<a name="line290"></a>/* Location: ./system/helpers/string_helper.php */</pre>
 <div class="header">
 <h1>GiftFlow API</h1>
 <ul>

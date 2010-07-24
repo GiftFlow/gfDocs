@@ -6,7 +6,7 @@
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 
 <meta name="generator" content="PHPDoctor 2RC4 (http://peej.github.com/phpdoctor/)">
-<meta name="when" content="Mon, 19 Jul 2010 17:13:56 +0000">
+<meta name="when" content="Sat, 24 Jul 2010 20:46:31 +0000">
 
 <link rel="stylesheet" type="text/css" href="../stylesheet.css">
 <link rel="start" href="../overview-summary.html">
@@ -40,7 +40,7 @@ Detail: <a href="#detail_field">Field</a> | <a href="#detail_method">Method</a> 
 <hr>
 
 <div class="qualifiedName">GiftFlow\CI_Router</div>
-<a href="../source/libraries/router.php.html#line29" class="location">libraries/Router.php at line 29</a>
+<a href="../source/core/router.php.html#line29" class="location">core/Router.php at line 29</a>
 
 <h1>Class CI_Router</h1>
 
@@ -65,6 +65,10 @@ Detail: <a href="#detail_field">Field</a> | <a href="#detail_method">Method</a> 
 <table id="summary_field">
 <tr><th colspan="2">Field Summary</th></tr>
 <tr>
+<td class="type">private  mixed</td>
+<td class="description"><p class="name"><a href="#_display_cache">$_display_cache</a></p></td>
+</tr>
+<tr>
 <td class="type"> mixed</td>
 <td class="description"><p class="name"><a href="#class">$class</a></p></td>
 </tr>
@@ -88,18 +92,6 @@ Detail: <a href="#detail_field">Field</a> | <a href="#detail_method">Method</a> 
 <td class="type"> mixed</td>
 <td class="description"><p class="name"><a href="#routes">$routes</a></p></td>
 </tr>
-<tr>
-<td class="type"> mixed</td>
-<td class="description"><p class="name"><a href="#run">$run</a></p></td>
-</tr>
-<tr>
-<td class="type"> mixed</td>
-<td class="description"><p class="name"><a href="#scaffolding_request">$scaffolding_request</a></p></td>
-</tr>
-<tr>
-<td class="type"> mixed</td>
-<td class="description"><p class="name"><a href="#uri_protocol">$uri_protocol</a></p></td>
-</tr>
 </table>
 
 <table id="summary_method">
@@ -113,6 +105,14 @@ Detail: <a href="#detail_field">Field</a> | <a href="#detail_method">Method</a> 
 <td class="description"><p class="name"><a href="#_parse_routes()">_parse_routes</a>()</p><p class="description">Parse RoutesThis function matches any routes that may exist in
 the config/routes.php file against the URI to
 determine if the class/method need to be remapped.</p></td>
+</tr>
+<tr>
+<td class="type">private  void</td>
+<td class="description"><p class="name"><a href="#_set_default_controller()">_set_default_controller</a>()</p><p class="description">Set the default controller</p></td>
+</tr>
+<tr>
+<td class="type">private  void</td>
+<td class="description"><p class="name"><a href="#_set_overrides()">_set_overrides</a>(mixed routing)</p><p class="description">Set the controller overrides</p></td>
 </tr>
 <tr>
 <td class="type">private  void</td>
@@ -155,7 +155,16 @@ as well as any "routes" that have been set in the routing config file.</p></td>
 </table>
 
 <h2 id="detail_field">Field Detail</h2>
-<a href="../source/libraries/router.php.html#line34" class="location">libraries/Router.php at line 34</a>
+<a href="../source/core/router.php.html#line31" class="location">core/Router.php at line 31</a>
+
+<h3 id="_display_cache">_display_cache</h3>
+<code class="signature">private  mixed <strong>$_display_cache</strong> = ''</code>
+<div class="details">
+</div>
+
+<hr>
+
+<a href="../source/core/router.php.html#line34" class="location">core/Router.php at line 34</a>
 
 <h3 id="class">class</h3>
 <code class="signature">public  mixed <strong>$class</strong> = ''</code>
@@ -164,7 +173,7 @@ as well as any "routes" that have been set in the routing config file.</p></td>
 
 <hr>
 
-<a href="../source/libraries/router.php.html#line38" class="location">libraries/Router.php at line 38</a>
+<a href="../source/core/router.php.html#line37" class="location">core/Router.php at line 37</a>
 
 <h3 id="default_controller">default_controller</h3>
 <code class="signature">public  mixed <strong>$default_controller</strong></code>
@@ -173,7 +182,7 @@ as well as any "routes" that have been set in the routing config file.</p></td>
 
 <hr>
 
-<a href="../source/libraries/router.php.html#line36" class="location">libraries/Router.php at line 36</a>
+<a href="../source/core/router.php.html#line36" class="location">core/Router.php at line 36</a>
 
 <h3 id="directory">directory</h3>
 <code class="signature">public  mixed <strong>$directory</strong> = ''</code>
@@ -182,7 +191,7 @@ as well as any "routes" that have been set in the routing config file.</p></td>
 
 <hr>
 
-<a href="../source/libraries/router.php.html#line33" class="location">libraries/Router.php at line 33</a>
+<a href="../source/core/router.php.html#line33" class="location">core/Router.php at line 33</a>
 
 <h3 id="error_routes">error_routes</h3>
 <code class="signature">public  mixed <strong>$error_routes</strong> = array()</code>
@@ -191,7 +200,7 @@ as well as any "routes" that have been set in the routing config file.</p></td>
 
 <hr>
 
-<a href="../source/libraries/router.php.html#line35" class="location">libraries/Router.php at line 35</a>
+<a href="../source/core/router.php.html#line35" class="location">core/Router.php at line 35</a>
 
 <h3 id="method">method</h3>
 <code class="signature">public  mixed <strong>$method</strong> = 'index'</code>
@@ -200,7 +209,7 @@ as well as any "routes" that have been set in the routing config file.</p></td>
 
 <hr>
 
-<a href="../source/libraries/router.php.html#line32" class="location">libraries/Router.php at line 32</a>
+<a href="../source/core/router.php.html#line32" class="location">core/Router.php at line 32</a>
 
 <h3 id="routes">routes</h3>
 <code class="signature">public  mixed <strong>$routes</strong> = array()</code>
@@ -209,35 +218,8 @@ as well as any "routes" that have been set in the routing config file.</p></td>
 
 <hr>
 
-<a href="../source/libraries/router.php.html#line31" class="location">libraries/Router.php at line 31</a>
-
-<h3 id="run">run</h3>
-<code class="signature">public  mixed <strong>$run</strong></code>
-<div class="details">
-</div>
-
-<hr>
-
-<a href="../source/libraries/router.php.html#line39" class="location">libraries/Router.php at line 39</a>
-
-<h3 id="scaffolding_request">scaffolding_request</h3>
-<code class="signature">public  mixed <strong>$scaffolding_request</strong> = FALSE</code>
-<div class="details">
-</div>
-
-<hr>
-
-<a href="../source/libraries/router.php.html#line37" class="location">libraries/Router.php at line 37</a>
-
-<h3 id="uri_protocol">uri_protocol</h3>
-<code class="signature">public  mixed <strong>$uri_protocol</strong> = 'auto'</code>
-<div class="details">
-</div>
-
-<hr>
-
 <h2 id="detail_method">Method Detail</h2><div class="method_detail">
-<div class='method'><a href="../source/libraries/router.php.html#line46" class="location">libraries/Router.php at line 46</a>
+<div class='method'><a href="../source/core/router.php.html#line44" class="location">core/Router.php at line 44</a>
 
 <h3 id="__construct()">__construct</h3>
 <code class="signature">public  void <strong>__construct</strong>()</code>
@@ -246,7 +228,7 @@ as well as any "routes" that have been set in the routing config file.</p></td>
 
 
 
-<div class='method'><a href="../source/libraries/router.php.html#line254" class="location">libraries/Router.php at line 254</a>
+<div class='method'><a href="../source/core/router.php.html#line302" class="location">core/Router.php at line 302</a>
 
 <h3 id="_parse_routes()">_parse_routes</h3>
 <code class="signature">private  void <strong>_parse_routes</strong>()</code>
@@ -261,7 +243,34 @@ determine if the class/method need to be remapped.</p><dl>
 
 
 
-<div class='method'><a href="../source/libraries/router.php.html#line150" class="location">libraries/Router.php at line 150</a>
+<div class='method'><a href="../source/core/router.php.html#line134" class="location">core/Router.php at line 134</a>
+
+<h3 id="_set_default_controller()">_set_default_controller</h3>
+<code class="signature">private  void <strong>_set_default_controller</strong>()</code>
+<div class="details">
+<p>Set the default controller</p><dl>
+<dt>Access	private.</dt>
+<dt>Return	void.</dt>
+</dl>
+</div></div>
+
+
+
+<div class='method'><a href="../source/core/router.php.html#line432" class="location">core/Router.php at line 432</a>
+
+<h3 id="_set_overrides()">_set_overrides</h3>
+<code class="signature">private  void <strong>_set_overrides</strong>(mixed routing)</code>
+<div class="details">
+<p>Set the controller overrides</p><dl>
+<dt>Access	public.</dt>
+<dt>Param	array.</dt>
+<dt>Return	null.</dt>
+</dl>
+</div></div>
+
+
+
+<div class='method'><a href="../source/core/router.php.html#line175" class="location">core/Router.php at line 175</a>
 
 <h3 id="_set_request()">_set_request</h3>
 <code class="signature">private  void <strong>_set_request</strong>(mixed segments)</code>
@@ -277,7 +286,7 @@ input, and sets the current class/method</p><dl>
 
 
 
-<div class='method'><a href="../source/libraries/router.php.html#line65" class="location">libraries/Router.php at line 65</a>
+<div class='method'><a href="../source/core/router.php.html#line62" class="location">core/Router.php at line 62</a>
 
 <h3 id="_set_routing()">_set_routing</h3>
 <code class="signature">private  void <strong>_set_routing</strong>()</code>
@@ -291,7 +300,7 @@ as well as any "routes" that have been set in the routing config file.</p><dl>
 
 
 
-<div class='method'><a href="../source/libraries/router.php.html#line198" class="location">libraries/Router.php at line 198</a>
+<div class='method'><a href="../source/core/router.php.html#line214" class="location">core/Router.php at line 214</a>
 
 <h3 id="_validate_request()">_validate_request</h3>
 <code class="signature">private  void <strong>_validate_request</strong>(mixed segments)</code>
@@ -306,7 +315,7 @@ the controller.</p><dl>
 
 
 
-<div class='method'><a href="../source/libraries/router.php.html#line321" class="location">libraries/Router.php at line 321</a>
+<div class='method'><a href="../source/core/router.php.html#line359" class="location">core/Router.php at line 359</a>
 
 <h3 id="fetch_class()">fetch_class</h3>
 <code class="signature">public  void <strong>fetch_class</strong>()</code>
@@ -319,7 +328,7 @@ the controller.</p><dl>
 
 
 
-<div class='method'><a href="../source/libraries/router.php.html#line380" class="location">libraries/Router.php at line 380</a>
+<div class='method'><a href="../source/core/router.php.html#line418" class="location">core/Router.php at line 418</a>
 
 <h3 id="fetch_directory()">fetch_directory</h3>
 <code class="signature">public  void <strong>fetch_directory</strong>()</code>
@@ -332,7 +341,7 @@ the controller.</p><dl>
 
 
 
-<div class='method'><a href="../source/libraries/router.php.html#line348" class="location">libraries/Router.php at line 348</a>
+<div class='method'><a href="../source/core/router.php.html#line386" class="location">core/Router.php at line 386</a>
 
 <h3 id="fetch_method()">fetch_method</h3>
 <code class="signature">public  void <strong>fetch_method</strong>()</code>
@@ -345,7 +354,7 @@ the controller.</p><dl>
 
 
 
-<div class='method'><a href="../source/libraries/router.php.html#line308" class="location">libraries/Router.php at line 308</a>
+<div class='method'><a href="../source/core/router.php.html#line346" class="location">core/Router.php at line 346</a>
 
 <h3 id="set_class()">set_class</h3>
 <code class="signature">public  void <strong>set_class</strong>(mixed class)</code>
@@ -359,7 +368,7 @@ the controller.</p><dl>
 
 
 
-<div class='method'><a href="../source/libraries/router.php.html#line367" class="location">libraries/Router.php at line 367</a>
+<div class='method'><a href="../source/core/router.php.html#line405" class="location">core/Router.php at line 405</a>
 
 <h3 id="set_directory()">set_directory</h3>
 <code class="signature">public  void <strong>set_directory</strong>(mixed dir)</code>
@@ -373,7 +382,7 @@ the controller.</p><dl>
 
 
 
-<div class='method'><a href="../source/libraries/router.php.html#line335" class="location">libraries/Router.php at line 335</a>
+<div class='method'><a href="../source/core/router.php.html#line373" class="location">core/Router.php at line 373</a>
 
 <h3 id="set_method()">set_method</h3>
 <code class="signature">public  void <strong>set_method</strong>(mixed method)</code>

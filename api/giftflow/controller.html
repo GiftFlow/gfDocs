@@ -6,7 +6,7 @@
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 
 <meta name="generator" content="PHPDoctor 2RC4 (http://peej.github.com/phpdoctor/)">
-<meta name="when" content="Mon, 19 Jul 2010 17:13:56 +0000">
+<meta name="when" content="Sat, 24 Jul 2010 20:46:31 +0000">
 
 <link rel="stylesheet" type="text/css" href="../stylesheet.css">
 <link rel="start" href="../overview-summary.html">
@@ -40,15 +40,15 @@ Detail: <a href="#detail_field">Field</a> | <a href="#detail_method">Method</a> 
 <hr>
 
 <div class="qualifiedName">GiftFlow\Controller</div>
-<a href="../source/libraries/controller.php.html#line30" class="location">libraries/Controller.php at line 30</a>
+<a href="../source/core/controller.php.html#line30" class="location">core/Controller.php at line 30</a>
 
 <h1>Class Controller</h1>
 
-<pre class="tree">CI_Base<br> └─<strong>Controller</strong><br /></pre>
+<pre class="tree"><a href="../giftflow/ci_base.html">CI_Base</a><br>    └─<strong>Controller</strong><br /></pre>
 
 <hr>
 
-<p class="signature">public  class <strong>Controller</strong><br>extends CI_Base
+<p class="signature">public  class <strong>Controller</strong><br>extends <a href="../giftflow/ci_base.html">CI_Base</a>
 
 </p>
 
@@ -62,20 +62,17 @@ CodeIgniter will be assigned to.</p></div>
 <dt>Author		ExpressionEngine:</dt>
 <dd>Dev Team</dd>
 <dt>Link		http://codeigniter.com/user_guide/general/controllers.html.</dt>
+<dt>PHP4:</dt>
+<dd>(no need for separate Bases after PHP 4 is gone)</dd>
+<dt>Subpackage	codeigniter.</dt>
+<dt>Category	front-controller.</dt>
+<dt>Link		http://codeigniter.com/user_guide/.</dt>
 </dl>
 <hr>
 
-<table id="summary_field">
-<tr><th colspan="2">Field Summary</th></tr>
-<tr>
-<td class="type">private  mixed</td>
-<td class="description"><p class="name"><a href="#_ci_scaff_table">$_ci_scaff_table</a></p></td>
-</tr>
-<tr>
-<td class="type">private  mixed</td>
-<td class="description"><p class="name"><a href="#_ci_scaffolding">$_ci_scaffolding</a></p></td>
-</tr>
-</table>
+<table class="inherit">
+<tr><th colspan="2">Fields inherited from GiftFlow\CI_Base</th></tr>
+<tr><td><a href="../giftflow/ci_base.html#get_instance">get_instance</a></td></tr></table>
 
 <table id="summary_method">
 <tr><th colspan="2">Method Summary</th></tr>
@@ -83,70 +80,19 @@ CodeIgniter will be assigned to.</p></div>
 <td class="type"> void</td>
 <td class="description"><p class="name"><a href="#__construct()">__construct</a>()</p><p class="description">ConstructorCalls the initialize() function</p></td>
 </tr>
-<tr>
-<td class="type">private  void</td>
-<td class="description"><p class="name"><a href="#_ci_initialize()">_ci_initialize</a>()</p><p class="description">InitializeAssigns all the bases classes loaded by the front controller to
-variables in this class. </p></td>
-</tr>
-<tr>
-<td class="type">private  void</td>
-<td class="description"><p class="name"><a href="#_ci_scaffolding()">_ci_scaffolding</a>()</p><p class="description">Run Scaffolding</p></td>
-</tr>
 </table>
 
-<h2 id="detail_field">Field Detail</h2>
-<a href="../source/libraries/controller.php.html#line33" class="location">libraries/Controller.php at line 33</a>
-
-<h3 id="_ci_scaff_table">_ci_scaff_table</h3>
-<code class="signature">private  mixed <strong>$_ci_scaff_table</strong> = FALSE</code>
-<div class="details">
-</div>
-
-<hr>
-
-<a href="../source/libraries/controller.php.html#line32" class="location">libraries/Controller.php at line 32</a>
-
-<h3 id="_ci_scaffolding">_ci_scaffolding</h3>
-<code class="signature">private  mixed <strong>$_ci_scaffolding</strong> = FALSE</code>
-<div class="details">
-</div>
-
-<hr>
+<table class="inherit">
+<tr><th colspan="2">Methods inherited from GiftFlow\CI_Base</th></tr>
+<tr><td><a href="../giftflow/ci_base.html#__construct()">__construct</a>, <a href="../giftflow/ci_base.html#get_instance()">get_instance</a></td></tr></table>
 
 <h2 id="detail_method">Method Detail</h2><div class="method_detail">
-<div class='method'><a href="../source/libraries/controller.php.html#line40" class="location">libraries/Controller.php at line 40</a>
+<div class='method'><a href="../source/core/controller.php.html#line37" class="location">core/Controller.php at line 37</a>
 
 <h3 id="__construct()">__construct</h3>
 <code class="signature">public  void <strong>__construct</strong>()</code>
 <div class="details">
 <p>Constructor</p><p>Calls the initialize() function</p></div></div>
-
-
-
-<div class='method'><a href="../source/libraries/controller.php.html#line58" class="location">libraries/Controller.php at line 58</a>
-
-<h3 id="_ci_initialize()">_ci_initialize</h3>
-<code class="signature">private  void <strong>_ci_initialize</strong>()</code>
-<div class="details">
-<p>Initialize</p><p>Assigns all the bases classes loaded by the front controller to
-variables in this class.  Also calls the autoload routine.</p><dl>
-<dt>Access	private.</dt>
-<dt>Return	void.</dt>
-</dl>
-</div></div>
-
-
-
-<div class='method'><a href="../source/libraries/controller.php.html#line108" class="location">libraries/Controller.php at line 108</a>
-
-<h3 id="_ci_scaffolding()">_ci_scaffolding</h3>
-<code class="signature">private  void <strong>_ci_scaffolding</strong>()</code>
-<div class="details">
-<p>Run Scaffolding</p><dl>
-<dt>Access	private.</dt>
-<dt>Return	void.</dt>
-</dl>
-</div></div>
 
 
 

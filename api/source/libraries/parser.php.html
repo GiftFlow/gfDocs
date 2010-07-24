@@ -6,7 +6,7 @@
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 
 <meta name="generator" content="PHPDoctor 2RC4 (http://peej.github.com/phpdoctor/)">
-<meta name="when" content="Mon, 19 Jul 2010 17:13:58 +0000">
+<meta name="when" content="Sat, 24 Jul 2010 20:46:32 +0000">
 
 <link rel="stylesheet" type="text/css" href="../../stylesheet.css">
 <link rel="start" href="../../overview-summary.html">
@@ -45,7 +45,7 @@
 <a name="line6"></a> *
 <a name="line7"></a> * @package		CodeIgniter
 <a name="line8"></a> * @author		ExpressionEngine Dev Team
-<a name="line9"></a> * @copyright	Copyright (c) 2008 - 2009, EllisLab, Inc.
+<a name="line9"></a> * @copyright	Copyright (c) 2008 - 2010, EllisLab, Inc.
 <a name="line10"></a> * @license		http://codeigniter.com/user_guide/license.html
 <a name="line11"></a> * @link		http://codeigniter.com
 <a name="line12"></a> * @since		Version 1.0
@@ -68,11 +68,11 @@
 <a name="line29"></a>	var $l_delim = '{';
 <a name="line30"></a>	var $r_delim = '}';
 <a name="line31"></a>	var $object;
-<a name="line32"></a>		
+<a name="line32"></a>
 <a name="line33"></a>	/**
 <a name="line34"></a>	 *  Parse a template
 <a name="line35"></a>	 *
-<a name="line36"></a>	 * Parses pseudo-variables contained in the specified template,
+<a name="line36"></a>	 * Parses pseudo-variables contained in the specified template view,
 <a name="line37"></a>	 * replacing them with the data in the second param
 <a name="line38"></a>	 *
 <a name="line39"></a>	 * @access	public
@@ -85,131 +85,170 @@
 <a name="line46"></a>	{
 <a name="line47"></a>		$CI =& get_instance();
 <a name="line48"></a>		$template = $CI->load->view($template, $data, TRUE);
-<a name="line49"></a>		
-<a name="line50"></a>		if ($template == '')
-<a name="line51"></a>		{
-<a name="line52"></a>			return FALSE;
-<a name="line53"></a>		}
-<a name="line54"></a>		
-<a name="line55"></a>		foreach ($data as $key => $val)
-<a name="line56"></a>		{
-<a name="line57"></a>			if (is_array($val))
-<a name="line58"></a>			{
-<a name="line59"></a>				$template = $this->_parse_pair($key, $val, $template);		
-<a name="line60"></a>			}
-<a name="line61"></a>			else
-<a name="line62"></a>			{
-<a name="line63"></a>				$template = $this->_parse_single($key, (string)$val, $template);
-<a name="line64"></a>			}
-<a name="line65"></a>		}
-<a name="line66"></a>		
-<a name="line67"></a>		if ($return == FALSE)
-<a name="line68"></a>		{
-<a name="line69"></a>			$CI->output->append_output($template);
-<a name="line70"></a>		}
-<a name="line71"></a>		
-<a name="line72"></a>		return $template;
-<a name="line73"></a>	}
-<a name="line74"></a>	
-<a name="line75"></a>	// --------------------------------------------------------------------
-<a name="line76"></a>	
-<a name="line77"></a>	/**
-<a name="line78"></a>	 *  Set the left/right variable delimiters
+<a name="line49"></a>
+<a name="line50"></a>		return $this->_parse($template, $data, $return);
+<a name="line51"></a>	}
+<a name="line52"></a>
+<a name="line53"></a>	// --------------------------------------------------------------------
+<a name="line54"></a>
+<a name="line55"></a>	/**
+<a name="line56"></a>	 *  Parse a String
+<a name="line57"></a>	 *
+<a name="line58"></a>	 * Parses pseudo-variables contained in the specified string,
+<a name="line59"></a>	 * replacing them with the data in the second param
+<a name="line60"></a>	 *
+<a name="line61"></a>	 * @access	public
+<a name="line62"></a>	 * @param	string
+<a name="line63"></a>	 * @param	array
+<a name="line64"></a>	 * @param	bool
+<a name="line65"></a>	 * @return	string
+<a name="line66"></a>	 */
+<a name="line67"></a>	function parse_string($template, $data, $return = FALSE)
+<a name="line68"></a>	{
+<a name="line69"></a>		return $this->_parse($template, $data, $return);
+<a name="line70"></a>	}
+<a name="line71"></a>
+<a name="line72"></a>	// --------------------------------------------------------------------
+<a name="line73"></a>
+<a name="line74"></a>	/**
+<a name="line75"></a>	 *  Parse a template
+<a name="line76"></a>	 *
+<a name="line77"></a>	 * Parses pseudo-variables contained in the specified template,
+<a name="line78"></a>	 * replacing them with the data in the second param
 <a name="line79"></a>	 *
 <a name="line80"></a>	 * @access	public
 <a name="line81"></a>	 * @param	string
-<a name="line82"></a>	 * @param	string
-<a name="line83"></a>	 * @return	void
-<a name="line84"></a>	 */
-<a name="line85"></a>	function set_delimiters($l = '{', $r = '}')
-<a name="line86"></a>	{
-<a name="line87"></a>		$this->l_delim = $l;
-<a name="line88"></a>		$this->r_delim = $r;
-<a name="line89"></a>	}
-<a name="line90"></a>	
-<a name="line91"></a>	// --------------------------------------------------------------------
-<a name="line92"></a>	
-<a name="line93"></a>	/**
-<a name="line94"></a>	 *  Parse a single key/value
-<a name="line95"></a>	 *
-<a name="line96"></a>	 * @access	private
-<a name="line97"></a>	 * @param	string
-<a name="line98"></a>	 * @param	string
-<a name="line99"></a>	 * @param	string
-<a name="line100"></a>	 * @return	string
-<a name="line101"></a>	 */
-<a name="line102"></a>	function _parse_single($key, $val, $string)
-<a name="line103"></a>	{
-<a name="line104"></a>		return str_replace($this->l_delim.$key.$this->r_delim, $val, $string);
-<a name="line105"></a>	}
-<a name="line106"></a>	
-<a name="line107"></a>	// --------------------------------------------------------------------
-<a name="line108"></a>	
-<a name="line109"></a>	/**
-<a name="line110"></a>	 *  Parse a tag pair
-<a name="line111"></a>	 *
-<a name="line112"></a>	 * Parses tag pairs:  {some_tag} string... {/some_tag}
-<a name="line113"></a>	 *
-<a name="line114"></a>	 * @access	private
-<a name="line115"></a>	 * @param	string
-<a name="line116"></a>	 * @param	array
-<a name="line117"></a>	 * @param	string
-<a name="line118"></a>	 * @return	string
-<a name="line119"></a>	 */
-<a name="line120"></a>	function _parse_pair($variable, $data, $string)
-<a name="line121"></a>	{	
-<a name="line122"></a>		if (FALSE === ($match = $this->_match_pair($string, $variable)))
-<a name="line123"></a>		{
-<a name="line124"></a>			return $string;
-<a name="line125"></a>		}
-<a name="line126"></a>
-<a name="line127"></a>		$str = '';
-<a name="line128"></a>		foreach ($data as $row)
-<a name="line129"></a>		{
-<a name="line130"></a>			$temp = $match['1'];
-<a name="line131"></a>			foreach ($row as $key => $val)
-<a name="line132"></a>			{
-<a name="line133"></a>				if ( ! is_array($val))
-<a name="line134"></a>				{
-<a name="line135"></a>					$temp = $this->_parse_single($key, $val, $temp);
-<a name="line136"></a>				}
-<a name="line137"></a>				else
-<a name="line138"></a>				{
-<a name="line139"></a>					$temp = $this->_parse_pair($key, $val, $temp);
-<a name="line140"></a>				}
-<a name="line141"></a>			}
-<a name="line142"></a>			
-<a name="line143"></a>			$str .= $temp;
-<a name="line144"></a>		}
-<a name="line145"></a>		
-<a name="line146"></a>		return str_replace($match['0'], $str, $string);
-<a name="line147"></a>	}
-<a name="line148"></a>	
-<a name="line149"></a>	// --------------------------------------------------------------------
-<a name="line150"></a>	
-<a name="line151"></a>	/**
-<a name="line152"></a>	 *  Matches a variable pair
-<a name="line153"></a>	 *
-<a name="line154"></a>	 * @access	private
-<a name="line155"></a>	 * @param	string
+<a name="line82"></a>	 * @param	array
+<a name="line83"></a>	 * @param	bool
+<a name="line84"></a>	 * @return	string
+<a name="line85"></a>	 */
+<a name="line86"></a>	function _parse($template, $data, $return = FALSE)
+<a name="line87"></a>	{
+<a name="line88"></a>		if ($template == '')
+<a name="line89"></a>		{
+<a name="line90"></a>			return FALSE;
+<a name="line91"></a>		}
+<a name="line92"></a>
+<a name="line93"></a>		foreach ($data as $key => $val)
+<a name="line94"></a>		{
+<a name="line95"></a>			if (is_array($val))
+<a name="line96"></a>			{
+<a name="line97"></a>				$template = $this->_parse_pair($key, $val, $template);		
+<a name="line98"></a>			}
+<a name="line99"></a>			else
+<a name="line100"></a>			{
+<a name="line101"></a>				$template = $this->_parse_single($key, (string)$val, $template);
+<a name="line102"></a>			}
+<a name="line103"></a>		}
+<a name="line104"></a>
+<a name="line105"></a>		if ($return == FALSE)
+<a name="line106"></a>		{
+<a name="line107"></a>			$CI =& get_instance();
+<a name="line108"></a>			$CI->output->append_output($template);
+<a name="line109"></a>		}
+<a name="line110"></a>
+<a name="line111"></a>		return $template;
+<a name="line112"></a>	}
+<a name="line113"></a>	
+<a name="line114"></a>	// --------------------------------------------------------------------
+<a name="line115"></a>	
+<a name="line116"></a>	/**
+<a name="line117"></a>	 *  Set the left/right variable delimiters
+<a name="line118"></a>	 *
+<a name="line119"></a>	 * @access	public
+<a name="line120"></a>	 * @param	string
+<a name="line121"></a>	 * @param	string
+<a name="line122"></a>	 * @return	void
+<a name="line123"></a>	 */
+<a name="line124"></a>	function set_delimiters($l = '{', $r = '}')
+<a name="line125"></a>	{
+<a name="line126"></a>		$this->l_delim = $l;
+<a name="line127"></a>		$this->r_delim = $r;
+<a name="line128"></a>	}
+<a name="line129"></a>	
+<a name="line130"></a>	// --------------------------------------------------------------------
+<a name="line131"></a>	
+<a name="line132"></a>	/**
+<a name="line133"></a>	 *  Parse a single key/value
+<a name="line134"></a>	 *
+<a name="line135"></a>	 * @access	private
+<a name="line136"></a>	 * @param	string
+<a name="line137"></a>	 * @param	string
+<a name="line138"></a>	 * @param	string
+<a name="line139"></a>	 * @return	string
+<a name="line140"></a>	 */
+<a name="line141"></a>	function _parse_single($key, $val, $string)
+<a name="line142"></a>	{
+<a name="line143"></a>		return str_replace($this->l_delim.$key.$this->r_delim, $val, $string);
+<a name="line144"></a>	}
+<a name="line145"></a>	
+<a name="line146"></a>	// --------------------------------------------------------------------
+<a name="line147"></a>	
+<a name="line148"></a>	/**
+<a name="line149"></a>	 *  Parse a tag pair
+<a name="line150"></a>	 *
+<a name="line151"></a>	 * Parses tag pairs:  {some_tag} string... {/some_tag}
+<a name="line152"></a>	 *
+<a name="line153"></a>	 * @access	private
+<a name="line154"></a>	 * @param	string
+<a name="line155"></a>	 * @param	array
 <a name="line156"></a>	 * @param	string
-<a name="line157"></a>	 * @return	mixed
+<a name="line157"></a>	 * @return	string
 <a name="line158"></a>	 */
-<a name="line159"></a>	function _match_pair($string, $variable)
-<a name="line160"></a>	{
-<a name="line161"></a>		if ( ! preg_match("|".$this->l_delim . $variable . $this->r_delim."(.+?)".$this->l_delim . '/' . $variable . $this->r_delim."|s", $string, $match))
+<a name="line159"></a>	function _parse_pair($variable, $data, $string)
+<a name="line160"></a>	{	
+<a name="line161"></a>		if (FALSE === ($match = $this->_match_pair($string, $variable)))
 <a name="line162"></a>		{
-<a name="line163"></a>			return FALSE;
+<a name="line163"></a>			return $string;
 <a name="line164"></a>		}
-<a name="line165"></a>		
-<a name="line166"></a>		return $match;
-<a name="line167"></a>	}
-<a name="line168"></a>
-<a name="line169"></a>}
-<a name="line170"></a>// END Parser Class
-<a name="line171"></a>
-<a name="line172"></a>/* End of file Parser.php */
-<a name="line173"></a>/* Location: ./system/libraries/Parser.php */</pre>
+<a name="line165"></a>
+<a name="line166"></a>		$str = '';
+<a name="line167"></a>		foreach ($data as $row)
+<a name="line168"></a>		{
+<a name="line169"></a>			$temp = $match['1'];
+<a name="line170"></a>			foreach ($row as $key => $val)
+<a name="line171"></a>			{
+<a name="line172"></a>				if ( ! is_array($val))
+<a name="line173"></a>				{
+<a name="line174"></a>					$temp = $this->_parse_single($key, $val, $temp);
+<a name="line175"></a>				}
+<a name="line176"></a>				else
+<a name="line177"></a>				{
+<a name="line178"></a>					$temp = $this->_parse_pair($key, $val, $temp);
+<a name="line179"></a>				}
+<a name="line180"></a>			}
+<a name="line181"></a>			
+<a name="line182"></a>			$str .= $temp;
+<a name="line183"></a>		}
+<a name="line184"></a>		
+<a name="line185"></a>		return str_replace($match['0'], $str, $string);
+<a name="line186"></a>	}
+<a name="line187"></a>	
+<a name="line188"></a>	// --------------------------------------------------------------------
+<a name="line189"></a>	
+<a name="line190"></a>	/**
+<a name="line191"></a>	 *  Matches a variable pair
+<a name="line192"></a>	 *
+<a name="line193"></a>	 * @access	private
+<a name="line194"></a>	 * @param	string
+<a name="line195"></a>	 * @param	string
+<a name="line196"></a>	 * @return	mixed
+<a name="line197"></a>	 */
+<a name="line198"></a>	function _match_pair($string, $variable)
+<a name="line199"></a>	{
+<a name="line200"></a>		if ( ! preg_match("|" . preg_quote($this->l_delim) . $variable . preg_quote($this->r_delim) . "(.+?)". preg_quote($this->l_delim) . '/' . $variable . preg_quote($this->r_delim) . "|s", $string, $match))
+<a name="line201"></a>		{
+<a name="line202"></a>			return FALSE;
+<a name="line203"></a>		}
+<a name="line204"></a>		
+<a name="line205"></a>		return $match;
+<a name="line206"></a>	}
+<a name="line207"></a>
+<a name="line208"></a>}
+<a name="line209"></a>// END Parser Class
+<a name="line210"></a>
+<a name="line211"></a>/* End of file Parser.php */
+<a name="line212"></a>/* Location: ./system/libraries/Parser.php */</pre>
 <div class="header">
 <h1>GiftFlow API</h1>
 <ul>

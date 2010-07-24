@@ -1,0 +1,159 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+
+<html lang="en">
+<head>
+
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
+<meta name="generator" content="PHPDoctor 2RC4 (http://peej.github.com/phpdoctor/)">
+<meta name="when" content="Sat, 24 Jul 2010 20:46:31 +0000">
+
+<link rel="stylesheet" type="text/css" href="../../stylesheet.css">
+<link rel="start" href="../../overview-summary.html">
+
+<title>core/Compat.php (GiftFlow API)</title>
+
+</head>
+<body id="file" onload="parent.document.title=document.title;">
+
+<div class="header">
+<h1>GiftFlow API</h1>
+<ul>
+<li><a href="../../overview-summary.html">Overview</a></li>
+<li>Package</li><li>Class</li><li>Tree</li><li><a href="../../overview-files.html">Files</a></li>
+<li><a href="../../deprecated-list.html">Deprecated</a></li>
+<li><a href="../../index-all.html">Index</a></li>
+</ul>
+</div>
+
+<div class="small_links">
+<a href="../../index.html" target="_top">Frames</a>
+<a href="../../source/core/compat.php.html" target="_top">No frames</a>
+</div>
+<hr>
+
+<h1>core/Compat.php</h1>
+<div class="comment" id="overview_description"><p>CodeIgniter</p><p>An open source application development framework for PHP 4.3.2 or newer</p></div>
+
+<hr>
+
+<a name="line1"></a><pre><?php  if ( ! defined('BASEPATH')) exit('No direct script access allowed');
+<a name="line2"></a>/**
+<a name="line3"></a> * CodeIgniter
+<a name="line4"></a> *
+<a name="line5"></a> * An open source application development framework for PHP 4.3.2 or newer
+<a name="line6"></a> *
+<a name="line7"></a> * @package		CodeIgniter
+<a name="line8"></a> * @author		ExpressionEngine Dev Team
+<a name="line9"></a> * @copyright	Copyright (c) 2008 - 2010, EllisLab, Inc.
+<a name="line10"></a> * @license		http://codeigniter.com/user_guide/license.html
+<a name="line11"></a> * @link		http://codeigniter.com
+<a name="line12"></a> * @since		Version 1.0
+<a name="line13"></a> * @filesource
+<a name="line14"></a> */
+<a name="line15"></a>
+<a name="line16"></a>// ------------------------------------------------------------------------
+<a name="line17"></a>
+<a name="line18"></a>/**
+<a name="line19"></a> * Compatibility Functions
+<a name="line20"></a> *
+<a name="line21"></a> * Function overrides for older versions of PHP or PHP environments missing
+<a name="line22"></a> * certain extensions / libraries
+<a name="line23"></a> *
+<a name="line24"></a> * @package		CodeIgniter
+<a name="line25"></a> * @subpackage	codeigniter
+<a name="line26"></a> * @category	Compatibility Functions
+<a name="line27"></a> * @author		ExpressionEngine Dev Team
+<a name="line28"></a> * @link		http://codeigniter.com/user_guide/
+<a name="line29"></a> */
+<a name="line30"></a>
+<a name="line31"></a>// ------------------------------------------------------------------------
+<a name="line32"></a>
+<a name="line33"></a>/*
+<a name="line34"></a> * PHP versions prior to 5.0 don't support the E_STRICT constant
+<a name="line35"></a> * so we need to explicitly define it otherwise the Exception class 
+<a name="line36"></a> * will generate errors when running under PHP 4
+<a name="line37"></a> * @PHP4
+<a name="line38"></a> *
+<a name="line39"></a> */
+<a name="line40"></a>if ( ! defined('E_STRICT'))
+<a name="line41"></a>{
+<a name="line42"></a>	define('E_STRICT', 2048);
+<a name="line43"></a>}
+<a name="line44"></a>
+<a name="line45"></a>/**
+<a name="line46"></a> * ctype_digit()
+<a name="line47"></a> *
+<a name="line48"></a> * Determines if a string is comprised only of digits
+<a name="line49"></a> * http://us.php.net/manual/en/function.ctype_digit.php
+<a name="line50"></a> * @PHP4
+<a name="line51"></a> *
+<a name="line52"></a> * @access	public
+<a name="line53"></a> * @param	string
+<a name="line54"></a> * @return	bool
+<a name="line55"></a> */
+<a name="line56"></a>if ( ! function_exists('ctype_digit'))
+<a name="line57"></a>{
+<a name="line58"></a>	function ctype_digit($str)
+<a name="line59"></a>	{
+<a name="line60"></a>		if ( ! is_string($str) OR $str == '')
+<a name="line61"></a>		{
+<a name="line62"></a>			return FALSE;
+<a name="line63"></a>		}
+<a name="line64"></a>		
+<a name="line65"></a>		return ! preg_match('/[^0-9]/', $str);
+<a name="line66"></a>	}	
+<a name="line67"></a>}
+<a name="line68"></a>
+<a name="line69"></a>// --------------------------------------------------------------------
+<a name="line70"></a>
+<a name="line71"></a>/**
+<a name="line72"></a> * ctype_alnum()
+<a name="line73"></a> *
+<a name="line74"></a> * Determines if a string is comprised of only alphanumeric characters
+<a name="line75"></a> * http://us.php.net/manual/en/function.ctype-alnum.php
+<a name="line76"></a> * @PHP4
+<a name="line77"></a> *
+<a name="line78"></a> * @access	public
+<a name="line79"></a> * @param	string
+<a name="line80"></a> * @return	bool
+<a name="line81"></a> */
+<a name="line82"></a>if ( ! function_exists('ctype_alnum'))
+<a name="line83"></a>{
+<a name="line84"></a>	function ctype_alnum($str)
+<a name="line85"></a>	{
+<a name="line86"></a>		if ( ! is_string($str) OR $str == '')
+<a name="line87"></a>		{
+<a name="line88"></a>			return FALSE;
+<a name="line89"></a>		}
+<a name="line90"></a>		
+<a name="line91"></a>		return ! preg_match('/[^0-9a-z]/i', $str);
+<a name="line92"></a>	}	
+<a name="line93"></a>}
+<a name="line94"></a>
+<a name="line95"></a>// --------------------------------------------------------------------
+<a name="line96"></a>
+<a name="line97"></a>
+<a name="line98"></a>/* End of file Compat.php */
+<a name="line99"></a>/* Location: ./system/core/Compat.php */</pre>
+<div class="header">
+<h1>GiftFlow API</h1>
+<ul>
+<li><a href="../../overview-summary.html">Overview</a></li>
+<li>Package</li><li>Class</li><li>Tree</li><li><a href="../../overview-files.html">Files</a></li>
+<li><a href="../../deprecated-list.html">Deprecated</a></li>
+<li><a href="../../index-all.html">Index</a></li>
+</ul>
+</div>
+
+<div class="small_links">
+<a href="../../index.html" target="_top">Frames</a>
+<a href="../../source/core/compat.php.html" target="_top">No frames</a>
+</div>
+<hr>
+
+<p id="footer">This document was generated by <a href="http://peej.github.com/phpdoctor/">PHPDoctor: The PHP Documentation Creator</a></p>
+
+</body>
+
+</html>

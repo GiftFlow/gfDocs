@@ -6,7 +6,7 @@
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 
 <meta name="generator" content="PHPDoctor 2RC4 (http://peej.github.com/phpdoctor/)">
-<meta name="when" content="Mon, 19 Jul 2010 17:13:55 +0000">
+<meta name="when" content="Sat, 24 Jul 2010 20:47:43 +0000">
 
 <link rel="stylesheet" type="text/css" href="../stylesheet.css">
 <link rel="start" href="../overview-summary.html">
@@ -40,15 +40,15 @@ Detail: <a href="#detail_field">Field</a> | <a href="#detail_method">Method</a> 
 <hr>
 
 <div class="qualifiedName">GiftFlow\Account</div>
-<a href="../source/application/controllers/account.php.html#line3" class="location">application/controllers/account.php at line 3</a>
+<a href="../source/libraries/openauth.php.html#line3" class="location">libraries/openauth.php at line 3</a>
 
 <h1>Class Account</h1>
 
-<pre class="tree">CI_Base<br> └─<a href="../giftflow/controller.html">Controller</a><br>       └─<strong>Account</strong><br /></pre>
+<pre class="tree">Controller<br> └─<strong>Account</strong><br /></pre>
 
 <hr>
 
-<p class="signature">public  class <strong>Account</strong><br>extends <a href="../giftflow/controller.html">Controller</a>
+<p class="signature">public  class <strong>Account</strong><br>extends Controller
 
 </p>
 
@@ -58,17 +58,13 @@ Detail: <a href="#detail_field">Field</a> | <a href="#detail_method">Method</a> 
 <tr><th colspan="2">Field Summary</th></tr>
 <tr>
 <td class="type"> mixed</td>
-<td class="description"><p class="name"><a href="#data">$data</a></p></td>
+<td class="description"><p class="name"><a href="#alert_request_new">$alert_request_new</a></p></td>
 </tr>
 <tr>
 <td class="type"> mixed</td>
-<td class="description"><p class="name"><a href="#press">$press</a></p></td>
+<td class="description"><p class="name"><a href="#data">$data</a></p></td>
 </tr>
 </table>
-
-<table class="inherit">
-<tr><th colspan="2">Fields inherited from GiftFlow\Controller</th></tr>
-<tr><td><a href="../giftflow/controller.html#_ci_scaff_table">_ci_scaff_table</a>, <a href="../giftflow/controller.html#_ci_scaffolding">_ci_scaffolding</a></td></tr></table>
 
 <table id="summary_method">
 <tr><th colspan="2">Method Summary</th></tr>
@@ -122,11 +118,11 @@ Detail: <a href="#detail_field">Field</a> | <a href="#detail_method">Method</a> 
 </tr>
 <tr>
 <td class="type"> void</td>
-<td class="description"><p class="name"><a href="#email()">email</a>()</p></td>
+<td class="description"><p class="name"><a href="#index()">index</a>()</p></td>
 </tr>
 <tr>
 <td class="type"> void</td>
-<td class="description"><p class="name"><a href="#index()">index</a>()</p></td>
+<td class="description"><p class="name"><a href="#link()">link</a>(string service, mixed step)</p><p class="description">Links GiftFlow and Third-Party accounts</p></td>
 </tr>
 <tr>
 <td class="type"> void</td>
@@ -135,10 +131,6 @@ Detail: <a href="#detail_field">Field</a> | <a href="#detail_method">Method</a> 
 <tr>
 <td class="type"> void</td>
 <td class="description"><p class="name"><a href="#locations()">locations</a>(mixed segment, mixed action)</p></td>
-</tr>
-<tr>
-<td class="type"> void</td>
-<td class="description"><p class="name"><a href="#password()">password</a>()</p></td>
 </tr>
 <tr>
 <td class="type"> void</td>
@@ -154,16 +146,25 @@ Detail: <a href="#detail_field">Field</a> | <a href="#detail_method">Method</a> 
 </tr>
 <tr>
 <td class="type"> void</td>
-<td class="description"><p class="name"><a href="#unlink()">unlink</a>(mixed service)</p></td>
+<td class="description"><p class="name"><a href="#show_list_contact()">show_list_contact</a>()</p></td>
+</tr>
+<tr>
+<td class="type"> void</td>
+<td class="description"><p class="name"><a href="#unlink()">unlink</a>(string service)</p><p class="description">Unlinks GiftFlow and Third-Party accounts</p></td>
 </tr>
 </table>
 
-<table class="inherit">
-<tr><th colspan="2">Methods inherited from GiftFlow\Controller</th></tr>
-<tr><td><a href="../giftflow/controller.html#__construct()">__construct</a>, <a href="../giftflow/controller.html#_ci_initialize()">_ci_initialize</a>, <a href="../giftflow/controller.html#_ci_scaffolding()">_ci_scaffolding</a></td></tr></table>
-
 <h2 id="detail_field">Field Detail</h2>
-<a href="../source/application/controllers/account.php.html#line6" class="location">application/controllers/account.php at line 6</a>
+<a href="../source/libraries/openauth.php.html#line5" class="location">libraries/openauth.php at line 5</a>
+
+<h3 id="alert_request_new">alert_request_new</h3>
+<code class="signature">public  mixed <strong>$alert_request_new</strong> = NULL</code>
+<div class="details">
+</div>
+
+<hr>
+
+<a href="../source/libraries/openauth.php.html#line6" class="location">libraries/openauth.php at line 6</a>
 
 <h3 id="data">data</h3>
 <code class="signature">public  mixed <strong>$data</strong></code>
@@ -172,17 +173,8 @@ Detail: <a href="#detail_field">Field</a> | <a href="#detail_method">Method</a> 
 
 <hr>
 
-<a href="../source/application/controllers/account.php.html#line5" class="location">application/controllers/account.php at line 5</a>
-
-<h3 id="press">press</h3>
-<code class="signature">public  mixed <strong>$press</strong></code>
-<div class="details">
-</div>
-
-<hr>
-
 <h2 id="detail_method">Method Detail</h2><div class="method_detail">
-<div class='method'><a href="../source/application/controllers/account.php.html#line8" class="location">application/controllers/account.php at line 8</a>
+<div class='method'><a href="../source/libraries/openauth.php.html#line8" class="location">libraries/openauth.php at line 8</a>
 
 <h3 id="__construct()">__construct</h3>
 <code class="signature">public  void <strong>__construct</strong>()</code>
@@ -191,7 +183,7 @@ Detail: <a href="#detail_field">Field</a> | <a href="#detail_method">Method</a> 
 
 
 
-<div class='method'><a href="../source/application/controllers/account.php.html#line222" class="location">application/controllers/account.php at line 222</a>
+<div class='method'><a href="../source/libraries/openauth.php.html#line279" class="location">libraries/openauth.php at line 279</a>
 
 <h3 id="_locations_add()">_locations_add</h3>
 <code class="signature">protected  void <strong>_locations_add</strong>()</code>
@@ -200,7 +192,7 @@ Detail: <a href="#detail_field">Field</a> | <a href="#detail_method">Method</a> 
 
 
 
-<div class='method'><a href="../source/application/controllers/account.php.html#line267" class="location">application/controllers/account.php at line 267</a>
+<div class='method'><a href="../source/libraries/openauth.php.html#line324" class="location">libraries/openauth.php at line 324</a>
 
 <h3 id="_locations_default()">_locations_default</h3>
 <code class="signature">protected  void <strong>_locations_default</strong>(mixed id)</code>
@@ -209,7 +201,7 @@ Detail: <a href="#detail_field">Field</a> | <a href="#detail_method">Method</a> 
 
 
 
-<div class='method'><a href="../source/application/controllers/account.php.html#line260" class="location">application/controllers/account.php at line 260</a>
+<div class='method'><a href="../source/libraries/openauth.php.html#line317" class="location">libraries/openauth.php at line 317</a>
 
 <h3 id="_locations_delete()">_locations_delete</h3>
 <code class="signature">protected  void <strong>_locations_delete</strong>(mixed id)</code>
@@ -218,7 +210,7 @@ Detail: <a href="#detail_field">Field</a> | <a href="#detail_method">Method</a> 
 
 
 
-<div class='method'><a href="../source/application/controllers/account.php.html#line239" class="location">application/controllers/account.php at line 239</a>
+<div class='method'><a href="../source/libraries/openauth.php.html#line296" class="location">libraries/openauth.php at line 296</a>
 
 <h3 id="_locations_edit()">_locations_edit</h3>
 <code class="signature">protected  void <strong>_locations_edit</strong>(mixed id)</code>
@@ -227,7 +219,7 @@ Detail: <a href="#detail_field">Field</a> | <a href="#detail_method">Method</a> 
 
 
 
-<div class='method'><a href="../source/application/controllers/account.php.html#line193" class="location">application/controllers/account.php at line 193</a>
+<div class='method'><a href="../source/libraries/openauth.php.html#line250" class="location">libraries/openauth.php at line 250</a>
 
 <h3 id="_locations_list()">_locations_list</h3>
 <code class="signature">protected  void <strong>_locations_list</strong>()</code>
@@ -236,7 +228,7 @@ Detail: <a href="#detail_field">Field</a> | <a href="#detail_method">Method</a> 
 
 
 
-<div class='method'><a href="../source/application/controllers/account.php.html#line294" class="location">application/controllers/account.php at line 294</a>
+<div class='method'><a href="../source/libraries/openauth.php.html#line351" class="location">libraries/openauth.php at line 351</a>
 
 <h3 id="_photos_add()">_photos_add</h3>
 <code class="signature">protected  void <strong>_photos_add</strong>()</code>
@@ -245,7 +237,7 @@ Detail: <a href="#detail_field">Field</a> | <a href="#detail_method">Method</a> 
 
 
 
-<div class='method'><a href="../source/application/controllers/account.php.html#line304" class="location">application/controllers/account.php at line 304</a>
+<div class='method'><a href="../source/libraries/openauth.php.html#line361" class="location">libraries/openauth.php at line 361</a>
 
 <h3 id="_photos_edit()">_photos_edit</h3>
 <code class="signature">protected  void <strong>_photos_edit</strong>(mixed id, mixed param)</code>
@@ -254,7 +246,7 @@ Detail: <a href="#detail_field">Field</a> | <a href="#detail_method">Method</a> 
 
 
 
-<div class='method'><a href="../source/application/controllers/account.php.html#line275" class="location">application/controllers/account.php at line 275</a>
+<div class='method'><a href="../source/libraries/openauth.php.html#line332" class="location">libraries/openauth.php at line 332</a>
 
 <h3 id="_photos_list()">_photos_list</h3>
 <code class="signature">protected  void <strong>_photos_list</strong>()</code>
@@ -263,7 +255,7 @@ Detail: <a href="#detail_field">Field</a> | <a href="#detail_method">Method</a> 
 
 
 
-<div class='method'><a href="../source/application/controllers/account.php.html#line375" class="location">application/controllers/account.php at line 375</a>
+<div class='method'><a href="../source/libraries/openauth.php.html#line432" class="location">libraries/openauth.php at line 432</a>
 
 <h3 id="_process_settings()">_process_settings</h3>
 <code class="signature">private  void <strong>_process_settings</strong>()</code>
@@ -272,7 +264,7 @@ Detail: <a href="#detail_field">Field</a> | <a href="#detail_method">Method</a> 
 
 
 
-<div class='method'><a href="../source/application/controllers/account.php.html#line156" class="location">application/controllers/account.php at line 156</a>
+<div class='method'><a href="../source/libraries/openauth.php.html#line213" class="location">libraries/openauth.php at line 213</a>
 
 <h3 id="_profile_edit()">_profile_edit</h3>
 <code class="signature">protected  void <strong>_profile_edit</strong>()</code>
@@ -281,7 +273,7 @@ Detail: <a href="#detail_field">Field</a> | <a href="#detail_method">Method</a> 
 
 
 
-<div class='method'><a href="../source/application/controllers/account.php.html#line343" class="location">application/controllers/account.php at line 343</a>
+<div class='method'><a href="../source/libraries/openauth.php.html#line400" class="location">libraries/openauth.php at line 400</a>
 
 <h3 id="do_upload()">do_upload</h3>
 <code class="signature">public  void <strong>do_upload</strong>()</code>
@@ -290,16 +282,7 @@ Detail: <a href="#detail_field">Field</a> | <a href="#detail_method">Method</a> 
 
 
 
-<div class='method'><a href="../source/application/controllers/account.php.html#line147" class="location">application/controllers/account.php at line 147</a>
-
-<h3 id="email()">email</h3>
-<code class="signature">public  void <strong>email</strong>()</code>
-<div class="details">
-</div></div>
-
-
-
-<div class='method'><a href="../source/application/controllers/account.php.html#line19" class="location">application/controllers/account.php at line 19</a>
+<div class='method'><a href="../source/libraries/openauth.php.html#line22" class="location">libraries/openauth.php at line 22</a>
 
 <h3 id="index()">index</h3>
 <code class="signature">public  void <strong>index</strong>()</code>
@@ -308,7 +291,20 @@ Detail: <a href="#detail_field">Field</a> | <a href="#detail_method">Method</a> 
 
 
 
-<div class='method'><a href="../source/application/controllers/account.php.html#line116" class="location">application/controllers/account.php at line 116</a>
+<div class='method'><a href="../source/libraries/openauth.php.html#line168" class="location">libraries/openauth.php at line 168</a>
+
+<h3 id="link()">link</h3>
+<code class="signature">public  void <strong>link</strong>(string service, mixed step)</code>
+<div class="details">
+<p>Links GiftFlow and Third-Party accounts</p><dl>
+<dt>Parameters:</dt>
+<dd>service - The name of the service to link, ie facebook or google</dd>
+</dl>
+</div></div>
+
+
+
+<div class='method'><a href="../source/libraries/openauth.php.html#line132" class="location">libraries/openauth.php at line 132</a>
 
 <h3 id="links()">links</h3>
 <code class="signature">public  void <strong>links</strong>()</code>
@@ -317,7 +313,7 @@ Detail: <a href="#detail_field">Field</a> | <a href="#detail_method">Method</a> 
 
 
 
-<div class='method'><a href="../source/application/controllers/account.php.html#line52" class="location">application/controllers/account.php at line 52</a>
+<div class='method'><a href="../source/libraries/openauth.php.html#line56" class="location">libraries/openauth.php at line 56</a>
 
 <h3 id="locations()">locations</h3>
 <code class="signature">public  void <strong>locations</strong>(mixed segment, mixed action)</code>
@@ -326,16 +322,7 @@ Detail: <a href="#detail_field">Field</a> | <a href="#detail_method">Method</a> 
 
 
 
-<div class='method'><a href="../source/application/controllers/account.php.html#line152" class="location">application/controllers/account.php at line 152</a>
-
-<h3 id="password()">password</h3>
-<code class="signature">public  void <strong>password</strong>()</code>
-<div class="details">
-</div></div>
-
-
-
-<div class='method'><a href="../source/application/controllers/account.php.html#line76" class="location">application/controllers/account.php at line 76</a>
+<div class='method'><a href="../source/libraries/openauth.php.html#line81" class="location">libraries/openauth.php at line 81</a>
 
 <h3 id="photos()">photos</h3>
 <code class="signature">public  void <strong>photos</strong>(bool segment, bool param)</code>
@@ -344,7 +331,7 @@ Detail: <a href="#detail_field">Field</a> | <a href="#detail_method">Method</a> 
 
 
 
-<div class='method'><a href="../source/application/controllers/account.php.html#line25" class="location">application/controllers/account.php at line 25</a>
+<div class='method'><a href="../source/libraries/openauth.php.html#line28" class="location">libraries/openauth.php at line 28</a>
 
 <h3 id="profile()">profile</h3>
 <code class="signature">public  void <strong>profile</strong>()</code>
@@ -353,7 +340,7 @@ Detail: <a href="#detail_field">Field</a> | <a href="#detail_method">Method</a> 
 
 
 
-<div class='method'><a href="../source/application/controllers/account.php.html#line98" class="location">application/controllers/account.php at line 98</a>
+<div class='method'><a href="../source/libraries/openauth.php.html#line112" class="location">libraries/openauth.php at line 112</a>
 
 <h3 id="settings()">settings</h3>
 <code class="signature">public  void <strong>settings</strong>()</code>
@@ -362,11 +349,24 @@ Detail: <a href="#detail_field">Field</a> | <a href="#detail_method">Method</a> 
 
 
 
-<div class='method'><a href="../source/application/controllers/account.php.html#line136" class="location">application/controllers/account.php at line 136</a>
+<div class='method'><a href="../source/libraries/openauth.php.html#line104" class="location">libraries/openauth.php at line 104</a>
+
+<h3 id="show_list_contact()">show_list_contact</h3>
+<code class="signature">public  void <strong>show_list_contact</strong>()</code>
+<div class="details">
+</div></div>
+
+
+
+<div class='method'><a href="../source/libraries/openauth.php.html#line197" class="location">libraries/openauth.php at line 197</a>
 
 <h3 id="unlink()">unlink</h3>
-<code class="signature">public  void <strong>unlink</strong>(mixed service)</code>
+<code class="signature">public  void <strong>unlink</strong>(string service)</code>
 <div class="details">
+<p>Unlinks GiftFlow and Third-Party accounts</p><dl>
+<dt>Parameters:</dt>
+<dd>service - The name of the service to unlink, ie facebook or google</dd>
+</dl>
 </div></div>
 
 

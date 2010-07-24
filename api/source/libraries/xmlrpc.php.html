@@ -6,7 +6,7 @@
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 
 <meta name="generator" content="PHPDoctor 2RC4 (http://peej.github.com/phpdoctor/)">
-<meta name="when" content="Mon, 19 Jul 2010 17:13:58 +0000">
+<meta name="when" content="Sat, 24 Jul 2010 20:46:32 +0000">
 
 <link rel="stylesheet" type="text/css" href="../../stylesheet.css">
 <link rel="start" href="../../overview-summary.html">
@@ -45,7 +45,7 @@
 <a name="line6"></a> *
 <a name="line7"></a> * @package		CodeIgniter
 <a name="line8"></a> * @author		ExpressionEngine Dev Team
-<a name="line9"></a> * @copyright	Copyright (c) 2008 - 2009, EllisLab, Inc.
+<a name="line9"></a> * @copyright	Copyright (c) 2008 - 2010, EllisLab, Inc.
 <a name="line10"></a> * @license		http://codeigniter.com/user_guide/license.html
 <a name="line11"></a> * @link		http://codeigniter.com
 <a name="line12"></a> * @since		Version 1.0
@@ -102,1362 +102,1376 @@
 <a name="line63"></a>	var $result;
 <a name="line64"></a>	var $response			= array();  // Response from remote server
 <a name="line65"></a>
-<a name="line66"></a>
-<a name="line67"></a>	//-------------------------------------
-<a name="line68"></a>	//  VALUES THAT MULTIPLE CLASSES NEED
-<a name="line69"></a>	//-------------------------------------
-<a name="line70"></a>
-<a name="line71"></a>	function CI_Xmlrpc ($config = array())
-<a name="line72"></a>	{
-<a name="line73"></a>		$this->xmlrpcName 		= $this->xmlrpcName;
-<a name="line74"></a>		$this->xmlrpc_backslash = chr(92).chr(92);
-<a name="line75"></a>		
-<a name="line76"></a>		// Types for info sent back and forth
-<a name="line77"></a>		$this->xmlrpcTypes = array(
-<a name="line78"></a>			$this->xmlrpcI4	   => '1',
-<a name="line79"></a>			$this->xmlrpcInt	  => '1',
-<a name="line80"></a>			$this->xmlrpcBoolean  => '1',
-<a name="line81"></a>			$this->xmlrpcString   => '1',
-<a name="line82"></a>			$this->xmlrpcDouble   => '1',
-<a name="line83"></a>			$this->xmlrpcDateTime => '1',
-<a name="line84"></a>			$this->xmlrpcBase64   => '1',
-<a name="line85"></a>			$this->xmlrpcArray	=> '2',
-<a name="line86"></a>			$this->xmlrpcStruct   => '3'
-<a name="line87"></a>			);
-<a name="line88"></a>			
-<a name="line89"></a>		// Array of Valid Parents for Various XML-RPC elements
-<a name="line90"></a>		$this->valid_parents = array('BOOLEAN'			=> array('VALUE'),
-<a name="line91"></a>									 'I4'				=> array('VALUE'),
-<a name="line92"></a>									 'INT'				=> array('VALUE'),
-<a name="line93"></a>									 'STRING'			=> array('VALUE'),
-<a name="line94"></a>									 'DOUBLE'			=> array('VALUE'),
-<a name="line95"></a>									 'DATETIME.ISO8601'	=> array('VALUE'),
-<a name="line96"></a>									 'BASE64'			=> array('VALUE'),
-<a name="line97"></a>									 'ARRAY'			=> array('VALUE'),
-<a name="line98"></a>									 'STRUCT'			=> array('VALUE'),
-<a name="line99"></a>									 'PARAM'			=> array('PARAMS'),
-<a name="line100"></a>									 'METHODNAME'		=> array('METHODCALL'),
-<a name="line101"></a>									 'PARAMS'			=> array('METHODCALL', 'METHODRESPONSE'),
-<a name="line102"></a>									 'MEMBER'			=> array('STRUCT'),
-<a name="line103"></a>									 'NAME'				=> array('MEMBER'),
-<a name="line104"></a>									 'DATA'				=> array('ARRAY'),
-<a name="line105"></a>									 'FAULT'			=> array('METHODRESPONSE'),
-<a name="line106"></a>									 'VALUE'			=> array('MEMBER', 'DATA', 'PARAM', 'FAULT')
-<a name="line107"></a>									 );
-<a name="line108"></a>			
+<a name="line66"></a>	var $xss_clean			= TRUE;
+<a name="line67"></a>
+<a name="line68"></a>	//-------------------------------------
+<a name="line69"></a>	//  VALUES THAT MULTIPLE CLASSES NEED
+<a name="line70"></a>	//-------------------------------------
+<a name="line71"></a>
+<a name="line72"></a>	function CI_Xmlrpc ($config = array())
+<a name="line73"></a>	{
+<a name="line74"></a>		$this->xmlrpcName 		= $this->xmlrpcName;
+<a name="line75"></a>		$this->xmlrpc_backslash = chr(92).chr(92);
+<a name="line76"></a>		
+<a name="line77"></a>		// Types for info sent back and forth
+<a name="line78"></a>		$this->xmlrpcTypes = array(
+<a name="line79"></a>			$this->xmlrpcI4	   => '1',
+<a name="line80"></a>			$this->xmlrpcInt	  => '1',
+<a name="line81"></a>			$this->xmlrpcBoolean  => '1',
+<a name="line82"></a>			$this->xmlrpcString   => '1',
+<a name="line83"></a>			$this->xmlrpcDouble   => '1',
+<a name="line84"></a>			$this->xmlrpcDateTime => '1',
+<a name="line85"></a>			$this->xmlrpcBase64   => '1',
+<a name="line86"></a>			$this->xmlrpcArray	=> '2',
+<a name="line87"></a>			$this->xmlrpcStruct   => '3'
+<a name="line88"></a>			);
+<a name="line89"></a>			
+<a name="line90"></a>		// Array of Valid Parents for Various XML-RPC elements
+<a name="line91"></a>		$this->valid_parents = array('BOOLEAN'			=> array('VALUE'),
+<a name="line92"></a>									 'I4'				=> array('VALUE'),
+<a name="line93"></a>									 'INT'				=> array('VALUE'),
+<a name="line94"></a>									 'STRING'			=> array('VALUE'),
+<a name="line95"></a>									 'DOUBLE'			=> array('VALUE'),
+<a name="line96"></a>									 'DATETIME.ISO8601'	=> array('VALUE'),
+<a name="line97"></a>									 'BASE64'			=> array('VALUE'),
+<a name="line98"></a>									 'ARRAY'			=> array('VALUE'),
+<a name="line99"></a>									 'STRUCT'			=> array('VALUE'),
+<a name="line100"></a>									 'PARAM'			=> array('PARAMS'),
+<a name="line101"></a>									 'METHODNAME'		=> array('METHODCALL'),
+<a name="line102"></a>									 'PARAMS'			=> array('METHODCALL', 'METHODRESPONSE'),
+<a name="line103"></a>									 'MEMBER'			=> array('STRUCT'),
+<a name="line104"></a>									 'NAME'				=> array('MEMBER'),
+<a name="line105"></a>									 'DATA'				=> array('ARRAY'),
+<a name="line106"></a>									 'FAULT'			=> array('METHODRESPONSE'),
+<a name="line107"></a>									 'VALUE'			=> array('MEMBER', 'DATA', 'PARAM', 'FAULT')
+<a name="line108"></a>									 );
 <a name="line109"></a>			
-<a name="line110"></a>		// XML-RPC Responses
-<a name="line111"></a>		$this->xmlrpcerr['unknown_method'] = '1';
-<a name="line112"></a>		$this->xmlrpcstr['unknown_method'] = 'This is not a known method for this XML-RPC Server';
-<a name="line113"></a>		$this->xmlrpcerr['invalid_return'] = '2';
-<a name="line114"></a>		$this->xmlrpcstr['invalid_return'] = 'The XML data receieved was either invalid or not in the correct form for XML-RPC.  Turn on debugging to examine the XML data further.';
-<a name="line115"></a>		$this->xmlrpcerr['incorrect_params'] = '3';
-<a name="line116"></a>		$this->xmlrpcstr['incorrect_params'] = 'Incorrect parameters were passed to method';
-<a name="line117"></a>		$this->xmlrpcerr['introspect_unknown'] = '4';
-<a name="line118"></a>		$this->xmlrpcstr['introspect_unknown'] = "Cannot inspect signature for request: method unknown";
-<a name="line119"></a>		$this->xmlrpcerr['http_error'] = '5';
-<a name="line120"></a>		$this->xmlrpcstr['http_error'] = "Did not receive a '200 OK' response from remote server.";
-<a name="line121"></a>		$this->xmlrpcerr['no_data'] = '6';
-<a name="line122"></a>		$this->xmlrpcstr['no_data'] ='No data received from server.';
-<a name="line123"></a>		
-<a name="line124"></a>		$this->initialize($config);
-<a name="line125"></a>		
-<a name="line126"></a>		log_message('debug', "XML-RPC Class Initialized");
-<a name="line127"></a>	}
-<a name="line128"></a>	
+<a name="line110"></a>			
+<a name="line111"></a>		// XML-RPC Responses
+<a name="line112"></a>		$this->xmlrpcerr['unknown_method'] = '1';
+<a name="line113"></a>		$this->xmlrpcstr['unknown_method'] = 'This is not a known method for this XML-RPC Server';
+<a name="line114"></a>		$this->xmlrpcerr['invalid_return'] = '2';
+<a name="line115"></a>		$this->xmlrpcstr['invalid_return'] = 'The XML data received was either invalid or not in the correct form for XML-RPC.  Turn on debugging to examine the XML data further.';
+<a name="line116"></a>		$this->xmlrpcerr['incorrect_params'] = '3';
+<a name="line117"></a>		$this->xmlrpcstr['incorrect_params'] = 'Incorrect parameters were passed to method';
+<a name="line118"></a>		$this->xmlrpcerr['introspect_unknown'] = '4';
+<a name="line119"></a>		$this->xmlrpcstr['introspect_unknown'] = "Cannot inspect signature for request: method unknown";
+<a name="line120"></a>		$this->xmlrpcerr['http_error'] = '5';
+<a name="line121"></a>		$this->xmlrpcstr['http_error'] = "Did not receive a '200 OK' response from remote server.";
+<a name="line122"></a>		$this->xmlrpcerr['no_data'] = '6';
+<a name="line123"></a>		$this->xmlrpcstr['no_data'] ='No data received from server.';
+<a name="line124"></a>		
+<a name="line125"></a>		$this->initialize($config);
+<a name="line126"></a>		
+<a name="line127"></a>		log_message('debug', "XML-RPC Class Initialized");
+<a name="line128"></a>	}
 <a name="line129"></a>	
-<a name="line130"></a>	//-------------------------------------
-<a name="line131"></a>	//  Initialize Prefs
-<a name="line132"></a>	//-------------------------------------
-<a name="line133"></a>
-<a name="line134"></a>	function initialize($config = array())
-<a name="line135"></a>	{
-<a name="line136"></a>		if (count($config) > 0)
-<a name="line137"></a>		{
-<a name="line138"></a>			foreach ($config as $key => $val)
-<a name="line139"></a>			{
-<a name="line140"></a>				if (isset($this->$key))
-<a name="line141"></a>				{
-<a name="line142"></a>					$this->$key = $val;			
-<a name="line143"></a>				}
-<a name="line144"></a>			}
-<a name="line145"></a>		}
-<a name="line146"></a>	}
-<a name="line147"></a>	// END
-<a name="line148"></a>	
-<a name="line149"></a>	//-------------------------------------
-<a name="line150"></a>	//  Take URL and parse it
-<a name="line151"></a>	//-------------------------------------
-<a name="line152"></a>
-<a name="line153"></a>	function server($url, $port=80)
-<a name="line154"></a>	{
-<a name="line155"></a>		if (substr($url, 0, 4) != "http")
-<a name="line156"></a>		{
-<a name="line157"></a>			$url = "http://".$url;
-<a name="line158"></a>		}
-<a name="line159"></a>		
-<a name="line160"></a>		$parts = parse_url($url);
-<a name="line161"></a>		
-<a name="line162"></a>		$path = ( ! isset($parts['path'])) ? '/' : $parts['path'];
-<a name="line163"></a>		
-<a name="line164"></a>		if (isset($parts['query']) && $parts['query'] != '')
-<a name="line165"></a>		{
-<a name="line166"></a>			$path .= '?'.$parts['query'];
-<a name="line167"></a>		}	
-<a name="line168"></a>		
-<a name="line169"></a>		$this->client = new XML_RPC_Client($path, $parts['host'], $port);
-<a name="line170"></a>	}
-<a name="line171"></a>	// END
-<a name="line172"></a>	
-<a name="line173"></a>	//-------------------------------------
-<a name="line174"></a>	//  Set Timeout
-<a name="line175"></a>	//-------------------------------------
-<a name="line176"></a>
-<a name="line177"></a>	function timeout($seconds=5)
-<a name="line178"></a>	{
-<a name="line179"></a>		if ( ! is_null($this->client) && is_int($seconds))
-<a name="line180"></a>		{
-<a name="line181"></a>			$this->client->timeout = $seconds;
-<a name="line182"></a>		}
-<a name="line183"></a>	}
-<a name="line184"></a>	// END
-<a name="line185"></a>	
-<a name="line186"></a>	//-------------------------------------
-<a name="line187"></a>	//  Set Methods
-<a name="line188"></a>	//-------------------------------------
-<a name="line189"></a>
-<a name="line190"></a>	function method($function)
-<a name="line191"></a>	{
-<a name="line192"></a>		$this->method = $function;
-<a name="line193"></a>	}
-<a name="line194"></a>	// END
-<a name="line195"></a>	
-<a name="line196"></a>	//-------------------------------------
-<a name="line197"></a>	//  Take Array of Data and Create Objects
-<a name="line198"></a>	//-------------------------------------
-<a name="line199"></a>
-<a name="line200"></a>	function request($incoming)
-<a name="line201"></a>	{
-<a name="line202"></a>		if ( ! is_array($incoming))
-<a name="line203"></a>		{
-<a name="line204"></a>			// Send Error
-<a name="line205"></a>		}
-<a name="line206"></a>		
-<a name="line207"></a>		$this->data = array();
-<a name="line208"></a>		
-<a name="line209"></a>		foreach($incoming as $key => $value)
-<a name="line210"></a>		{
-<a name="line211"></a>			$this->data[$key] = $this->values_parsing($value);
-<a name="line212"></a>		}
-<a name="line213"></a>	}
-<a name="line214"></a>	// END
-<a name="line215"></a>	
+<a name="line130"></a>	
+<a name="line131"></a>	//-------------------------------------
+<a name="line132"></a>	//  Initialize Prefs
+<a name="line133"></a>	//-------------------------------------
+<a name="line134"></a>
+<a name="line135"></a>	function initialize($config = array())
+<a name="line136"></a>	{
+<a name="line137"></a>		if (count($config) > 0)
+<a name="line138"></a>		{
+<a name="line139"></a>			foreach ($config as $key => $val)
+<a name="line140"></a>			{
+<a name="line141"></a>				if (isset($this->$key))
+<a name="line142"></a>				{
+<a name="line143"></a>					$this->$key = $val;			
+<a name="line144"></a>				}
+<a name="line145"></a>			}
+<a name="line146"></a>		}
+<a name="line147"></a>	}
+<a name="line148"></a>	// END
+<a name="line149"></a>	
+<a name="line150"></a>	//-------------------------------------
+<a name="line151"></a>	//  Take URL and parse it
+<a name="line152"></a>	//-------------------------------------
+<a name="line153"></a>
+<a name="line154"></a>	function server($url, $port=80)
+<a name="line155"></a>	{
+<a name="line156"></a>		if (substr($url, 0, 4) != "http")
+<a name="line157"></a>		{
+<a name="line158"></a>			$url = "http://".$url;
+<a name="line159"></a>		}
+<a name="line160"></a>		
+<a name="line161"></a>		$parts = parse_url($url);
+<a name="line162"></a>		
+<a name="line163"></a>		$path = ( ! isset($parts['path'])) ? '/' : $parts['path'];
+<a name="line164"></a>		
+<a name="line165"></a>		if (isset($parts['query']) && $parts['query'] != '')
+<a name="line166"></a>		{
+<a name="line167"></a>			$path .= '?'.$parts['query'];
+<a name="line168"></a>		}	
+<a name="line169"></a>		
+<a name="line170"></a>		$this->client = new XML_RPC_Client($path, $parts['host'], $port);
+<a name="line171"></a>	}
+<a name="line172"></a>	// END
+<a name="line173"></a>	
+<a name="line174"></a>	//-------------------------------------
+<a name="line175"></a>	//  Set Timeout
+<a name="line176"></a>	//-------------------------------------
+<a name="line177"></a>
+<a name="line178"></a>	function timeout($seconds=5)
+<a name="line179"></a>	{
+<a name="line180"></a>		if ( ! is_null($this->client) && is_int($seconds))
+<a name="line181"></a>		{
+<a name="line182"></a>			$this->client->timeout = $seconds;
+<a name="line183"></a>		}
+<a name="line184"></a>	}
+<a name="line185"></a>	// END
+<a name="line186"></a>	
+<a name="line187"></a>	//-------------------------------------
+<a name="line188"></a>	//  Set Methods
+<a name="line189"></a>	//-------------------------------------
+<a name="line190"></a>
+<a name="line191"></a>	function method($function)
+<a name="line192"></a>	{
+<a name="line193"></a>		$this->method = $function;
+<a name="line194"></a>	}
+<a name="line195"></a>	// END
+<a name="line196"></a>	
+<a name="line197"></a>	//-------------------------------------
+<a name="line198"></a>	//  Take Array of Data and Create Objects
+<a name="line199"></a>	//-------------------------------------
+<a name="line200"></a>
+<a name="line201"></a>	function request($incoming)
+<a name="line202"></a>	{
+<a name="line203"></a>		if ( ! is_array($incoming))
+<a name="line204"></a>		{
+<a name="line205"></a>			// Send Error
+<a name="line206"></a>		}
+<a name="line207"></a>		
+<a name="line208"></a>		$this->data = array();
+<a name="line209"></a>		
+<a name="line210"></a>		foreach($incoming as $key => $value)
+<a name="line211"></a>		{
+<a name="line212"></a>			$this->data[$key] = $this->values_parsing($value);
+<a name="line213"></a>		}
+<a name="line214"></a>	}
+<a name="line215"></a>	// END
 <a name="line216"></a>	
-<a name="line217"></a>	//-------------------------------------
-<a name="line218"></a>	//  Set Debug
-<a name="line219"></a>	//-------------------------------------
-<a name="line220"></a>
-<a name="line221"></a>	function set_debug($flag = TRUE)
-<a name="line222"></a>	{
-<a name="line223"></a>		$this->debug = ($flag == TRUE) ? TRUE : FALSE;
-<a name="line224"></a>	}
-<a name="line225"></a>	
-<a name="line226"></a>	//-------------------------------------
-<a name="line227"></a>	//  Values Parsing
-<a name="line228"></a>	//-------------------------------------
-<a name="line229"></a>
-<a name="line230"></a>	function values_parsing($value, $return = FALSE)
-<a name="line231"></a>	{
-<a name="line232"></a>		if (is_array($value) && isset($value['0']))
-<a name="line233"></a>		{
-<a name="line234"></a>			if ( ! isset($value['1']) OR (! isset($this->xmlrpcTypes[$value['1']])))
-<a name="line235"></a>			{
-<a name="line236"></a>				if (is_array($value[0]))
-<a name="line237"></a>				{
-<a name="line238"></a>					$temp = new XML_RPC_Values($value['0'], 'array');
-<a name="line239"></a>				}
-<a name="line240"></a>				else
-<a name="line241"></a>				{
-<a name="line242"></a>					$temp = new XML_RPC_Values($value['0'], 'string');
-<a name="line243"></a>				}
-<a name="line244"></a>			}
-<a name="line245"></a>			elseif(is_array($value['0']) && ($value['1'] == 'struct' OR $value['1'] == 'array'))
-<a name="line246"></a>			{
-<a name="line247"></a>				while (list($k) = each($value['0']))
-<a name="line248"></a>				{
-<a name="line249"></a>					$value['0'][$k] = $this->values_parsing($value['0'][$k], TRUE);
-<a name="line250"></a>				}
-<a name="line251"></a>				
-<a name="line252"></a>				$temp = new XML_RPC_Values($value['0'], $value['1']);
-<a name="line253"></a>			}
-<a name="line254"></a>			else
-<a name="line255"></a>			{
-<a name="line256"></a>				$temp = new XML_RPC_Values($value['0'], $value['1']);
-<a name="line257"></a>			}
-<a name="line258"></a>		}
-<a name="line259"></a>		else
-<a name="line260"></a>		{
-<a name="line261"></a>			$temp = new XML_RPC_Values($value, 'string');
-<a name="line262"></a>		}
-<a name="line263"></a>
-<a name="line264"></a>		return $temp;
-<a name="line265"></a>	}
-<a name="line266"></a>	// END
-<a name="line267"></a>
+<a name="line217"></a>	
+<a name="line218"></a>	//-------------------------------------
+<a name="line219"></a>	//  Set Debug
+<a name="line220"></a>	//-------------------------------------
+<a name="line221"></a>
+<a name="line222"></a>	function set_debug($flag = TRUE)
+<a name="line223"></a>	{
+<a name="line224"></a>		$this->debug = ($flag == TRUE) ? TRUE : FALSE;
+<a name="line225"></a>	}
+<a name="line226"></a>	
+<a name="line227"></a>	//-------------------------------------
+<a name="line228"></a>	//  Values Parsing
+<a name="line229"></a>	//-------------------------------------
+<a name="line230"></a>
+<a name="line231"></a>	function values_parsing($value, $return = FALSE)
+<a name="line232"></a>	{
+<a name="line233"></a>		if (is_array($value) && array_key_exists(0, $value))
+<a name="line234"></a>		{
+<a name="line235"></a>			if ( ! isset($value['1']) OR (! isset($this->xmlrpcTypes[$value['1']])))
+<a name="line236"></a>			{
+<a name="line237"></a>				if (is_array($value[0]))
+<a name="line238"></a>				{
+<a name="line239"></a>					$temp = new XML_RPC_Values($value['0'], 'array');
+<a name="line240"></a>				}
+<a name="line241"></a>				else
+<a name="line242"></a>				{
+<a name="line243"></a>					$temp = new XML_RPC_Values($value['0'], 'string');
+<a name="line244"></a>				}
+<a name="line245"></a>			}
+<a name="line246"></a>			elseif(is_array($value['0']) && ($value['1'] == 'struct' OR $value['1'] == 'array'))
+<a name="line247"></a>			{
+<a name="line248"></a>				while (list($k) = each($value['0']))
+<a name="line249"></a>				{
+<a name="line250"></a>					$value['0'][$k] = $this->values_parsing($value['0'][$k], TRUE);
+<a name="line251"></a>				}
+<a name="line252"></a>				
+<a name="line253"></a>				$temp = new XML_RPC_Values($value['0'], $value['1']);
+<a name="line254"></a>			}
+<a name="line255"></a>			else
+<a name="line256"></a>			{
+<a name="line257"></a>				$temp = new XML_RPC_Values($value['0'], $value['1']);
+<a name="line258"></a>			}
+<a name="line259"></a>		}
+<a name="line260"></a>		else
+<a name="line261"></a>		{
+<a name="line262"></a>			$temp = new XML_RPC_Values($value, 'string');
+<a name="line263"></a>		}
+<a name="line264"></a>
+<a name="line265"></a>		return $temp;
+<a name="line266"></a>	}
+<a name="line267"></a>	// END
 <a name="line268"></a>
-<a name="line269"></a>	//-------------------------------------
-<a name="line270"></a>	//  Sends XML-RPC Request
-<a name="line271"></a>	//-------------------------------------
-<a name="line272"></a>
-<a name="line273"></a>	function send_request()
-<a name="line274"></a>	{
-<a name="line275"></a>		$this->message = new XML_RPC_Message($this->method,$this->data);
-<a name="line276"></a>		$this->message->debug = $this->debug;
-<a name="line277"></a>	
-<a name="line278"></a>		if ( ! $this->result = $this->client->send($this->message))
-<a name="line279"></a>		{
-<a name="line280"></a>			$this->error = $this->result->errstr;
-<a name="line281"></a>			return FALSE;
-<a name="line282"></a>		}
-<a name="line283"></a>		elseif( ! is_object($this->result->val))
-<a name="line284"></a>		{
-<a name="line285"></a>			$this->error = $this->result->errstr;
-<a name="line286"></a>			return FALSE;
-<a name="line287"></a>		}
-<a name="line288"></a>		
-<a name="line289"></a>		$this->response = $this->result->decode();
-<a name="line290"></a>		
-<a name="line291"></a>		return TRUE;
-<a name="line292"></a>	}
-<a name="line293"></a>	// END
-<a name="line294"></a>	
-<a name="line295"></a>	//-------------------------------------
-<a name="line296"></a>	//  Returns Error
-<a name="line297"></a>	//-------------------------------------
-<a name="line298"></a>
-<a name="line299"></a>	function display_error()
-<a name="line300"></a>	{
-<a name="line301"></a>		return $this->error;
-<a name="line302"></a>	}
-<a name="line303"></a>	// END
-<a name="line304"></a>	
-<a name="line305"></a>	//-------------------------------------
-<a name="line306"></a>	//  Returns Remote Server Response
-<a name="line307"></a>	//-------------------------------------
-<a name="line308"></a>
-<a name="line309"></a>	function display_response()
-<a name="line310"></a>	{
-<a name="line311"></a>		return $this->response;
-<a name="line312"></a>	}
-<a name="line313"></a>	// END
-<a name="line314"></a>	
-<a name="line315"></a>	//-------------------------------------
-<a name="line316"></a>	//  Sends an Error Message for Server Request
-<a name="line317"></a>	//-------------------------------------
-<a name="line318"></a>	
-<a name="line319"></a>	function send_error_message($number, $message)
-<a name="line320"></a>	{
-<a name="line321"></a>		return new XML_RPC_Response('0',$number, $message);
-<a name="line322"></a>	}
-<a name="line323"></a>	// END
-<a name="line324"></a>	
+<a name="line269"></a>
+<a name="line270"></a>	//-------------------------------------
+<a name="line271"></a>	//  Sends XML-RPC Request
+<a name="line272"></a>	//-------------------------------------
+<a name="line273"></a>
+<a name="line274"></a>	function send_request()
+<a name="line275"></a>	{
+<a name="line276"></a>		$this->message = new XML_RPC_Message($this->method,$this->data);
+<a name="line277"></a>		$this->message->debug = $this->debug;
+<a name="line278"></a>	
+<a name="line279"></a>		if ( ! $this->result = $this->client->send($this->message))
+<a name="line280"></a>		{
+<a name="line281"></a>			$this->error = $this->result->errstr;
+<a name="line282"></a>			return FALSE;
+<a name="line283"></a>		}
+<a name="line284"></a>		elseif( ! is_object($this->result->val))
+<a name="line285"></a>		{
+<a name="line286"></a>			$this->error = $this->result->errstr;
+<a name="line287"></a>			return FALSE;
+<a name="line288"></a>		}
+<a name="line289"></a>		
+<a name="line290"></a>		$this->response = $this->result->decode();
+<a name="line291"></a>		
+<a name="line292"></a>		return TRUE;
+<a name="line293"></a>	}
+<a name="line294"></a>	// END
+<a name="line295"></a>	
+<a name="line296"></a>	//-------------------------------------
+<a name="line297"></a>	//  Returns Error
+<a name="line298"></a>	//-------------------------------------
+<a name="line299"></a>
+<a name="line300"></a>	function display_error()
+<a name="line301"></a>	{
+<a name="line302"></a>		return $this->error;
+<a name="line303"></a>	}
+<a name="line304"></a>	// END
+<a name="line305"></a>	
+<a name="line306"></a>	//-------------------------------------
+<a name="line307"></a>	//  Returns Remote Server Response
+<a name="line308"></a>	//-------------------------------------
+<a name="line309"></a>
+<a name="line310"></a>	function display_response()
+<a name="line311"></a>	{
+<a name="line312"></a>		return $this->response;
+<a name="line313"></a>	}
+<a name="line314"></a>	// END
+<a name="line315"></a>	
+<a name="line316"></a>	//-------------------------------------
+<a name="line317"></a>	//  Sends an Error Message for Server Request
+<a name="line318"></a>	//-------------------------------------
+<a name="line319"></a>	
+<a name="line320"></a>	function send_error_message($number, $message)
+<a name="line321"></a>	{
+<a name="line322"></a>		return new XML_RPC_Response('0',$number, $message);
+<a name="line323"></a>	}
+<a name="line324"></a>	// END
 <a name="line325"></a>	
-<a name="line326"></a>	//-------------------------------------
-<a name="line327"></a>	//  Send Response for Server Request
-<a name="line328"></a>	//-------------------------------------
-<a name="line329"></a>	
-<a name="line330"></a>	function send_response($response)
-<a name="line331"></a>	{
-<a name="line332"></a>		// $response should be array of values, which will be parsed
-<a name="line333"></a>		// based on their data and type into a valid group of XML-RPC values
-<a name="line334"></a>		
-<a name="line335"></a>		$response = $this->values_parsing($response);
-<a name="line336"></a>	
-<a name="line337"></a>		return new XML_RPC_Response($response);
-<a name="line338"></a>	}
-<a name="line339"></a>	// END
-<a name="line340"></a>	
-<a name="line341"></a>} // END XML_RPC Class
-<a name="line342"></a>
-<a name="line343"></a>	
+<a name="line326"></a>	
+<a name="line327"></a>	//-------------------------------------
+<a name="line328"></a>	//  Send Response for Server Request
+<a name="line329"></a>	//-------------------------------------
+<a name="line330"></a>	
+<a name="line331"></a>	function send_response($response)
+<a name="line332"></a>	{
+<a name="line333"></a>		// $response should be array of values, which will be parsed
+<a name="line334"></a>		// based on their data and type into a valid group of XML-RPC values
+<a name="line335"></a>		
+<a name="line336"></a>		$response = $this->values_parsing($response);
+<a name="line337"></a>	
+<a name="line338"></a>		return new XML_RPC_Response($response);
+<a name="line339"></a>	}
+<a name="line340"></a>	// END
+<a name="line341"></a>	
+<a name="line342"></a>} // END XML_RPC Class
+<a name="line343"></a>
 <a name="line344"></a>	
-<a name="line345"></a>/**
-<a name="line346"></a> * XML-RPC Client class
-<a name="line347"></a> *
-<a name="line348"></a> * @category	XML-RPC
-<a name="line349"></a> * @author		ExpressionEngine Dev Team
-<a name="line350"></a> * @link		http://codeigniter.com/user_guide/libraries/xmlrpc.html
-<a name="line351"></a> */
-<a name="line352"></a>class XML_RPC_Client extends CI_Xmlrpc
-<a name="line353"></a>{
-<a name="line354"></a>	var $path			= '';
-<a name="line355"></a>	var $server			= '';
-<a name="line356"></a>	var $port			= 80;
-<a name="line357"></a>	var $errno			= '';
-<a name="line358"></a>	var $errstring		= '';
-<a name="line359"></a>	var $timeout		= 5;
-<a name="line360"></a>	var $no_multicall	= false;
-<a name="line361"></a>
-<a name="line362"></a>	function XML_RPC_Client($path, $server, $port=80)
-<a name="line363"></a>	{
-<a name="line364"></a>		parent::CI_Xmlrpc();
-<a name="line365"></a>		
-<a name="line366"></a>		$this->port = $port;
-<a name="line367"></a>		$this->server = $server;
-<a name="line368"></a>		$this->path = $path;
-<a name="line369"></a>	}
-<a name="line370"></a>	
-<a name="line371"></a>	function send($msg)
-<a name="line372"></a>	{
-<a name="line373"></a>		if (is_array($msg))
-<a name="line374"></a>		{
-<a name="line375"></a>			// Multi-call disabled
-<a name="line376"></a>			$r = new XML_RPC_Response(0, $this->xmlrpcerr['multicall_recursion'],$this->xmlrpcstr['multicall_recursion']);
-<a name="line377"></a>			return $r;
-<a name="line378"></a>		}
-<a name="line379"></a>
-<a name="line380"></a>		return $this->sendPayload($msg);
-<a name="line381"></a>	}
-<a name="line382"></a>
-<a name="line383"></a>	function sendPayload($msg)
-<a name="line384"></a>	{	
-<a name="line385"></a>		$fp = @fsockopen($this->server, $this->port,$this->errno, $this->errstr, $this->timeout);
-<a name="line386"></a>		
-<a name="line387"></a>		if ( ! is_resource($fp))
-<a name="line388"></a>		{
-<a name="line389"></a>			error_log($this->xmlrpcstr['http_error']);
-<a name="line390"></a>			$r = new XML_RPC_Response(0, $this->xmlrpcerr['http_error'],$this->xmlrpcstr['http_error']);
-<a name="line391"></a>			return $r;
-<a name="line392"></a>		}
-<a name="line393"></a>		
-<a name="line394"></a>		if(empty($msg->payload))
-<a name="line395"></a>		{
-<a name="line396"></a>			// $msg = XML_RPC_Messages
-<a name="line397"></a>			$msg->createPayload();
-<a name="line398"></a>		}
-<a name="line399"></a>		
-<a name="line400"></a>		$r = "\r\n";
-<a name="line401"></a>		$op  = "POST {$this->path} HTTP/1.0$r";
-<a name="line402"></a>		$op .= "Host: {$this->server}$r";
-<a name="line403"></a>		$op .= "Content-Type: text/xml$r";
-<a name="line404"></a>		$op .= "User-Agent: {$this->xmlrpcName}$r";
-<a name="line405"></a>		$op .= "Content-Length: ".strlen($msg->payload). "$r$r";
-<a name="line406"></a>		$op .= $msg->payload;
-<a name="line407"></a>		
-<a name="line408"></a>
-<a name="line409"></a>		if ( ! fputs($fp, $op, strlen($op)))
-<a name="line410"></a>		{
-<a name="line411"></a>			error_log($this->xmlrpcstr['http_error']);
-<a name="line412"></a>			$r = new XML_RPC_Response(0, $this->xmlrpcerr['http_error'], $this->xmlrpcstr['http_error']);
-<a name="line413"></a>			return $r;
-<a name="line414"></a>		}
-<a name="line415"></a>		$resp = $msg->parseResponse($fp);
-<a name="line416"></a>		fclose($fp);
-<a name="line417"></a>		return $resp;
-<a name="line418"></a>	}
-<a name="line419"></a>
-<a name="line420"></a>} // end class XML_RPC_Client
-<a name="line421"></a>
+<a name="line345"></a>	
+<a name="line346"></a>/**
+<a name="line347"></a> * XML-RPC Client class
+<a name="line348"></a> *
+<a name="line349"></a> * @category	XML-RPC
+<a name="line350"></a> * @author		ExpressionEngine Dev Team
+<a name="line351"></a> * @link		http://codeigniter.com/user_guide/libraries/xmlrpc.html
+<a name="line352"></a> */
+<a name="line353"></a>class XML_RPC_Client extends CI_Xmlrpc
+<a name="line354"></a>{
+<a name="line355"></a>	var $path			= '';
+<a name="line356"></a>	var $server			= '';
+<a name="line357"></a>	var $port			= 80;
+<a name="line358"></a>	var $errno			= '';
+<a name="line359"></a>	var $errstring		= '';
+<a name="line360"></a>	var $timeout		= 5;
+<a name="line361"></a>	var $no_multicall	= false;
+<a name="line362"></a>
+<a name="line363"></a>	function XML_RPC_Client($path, $server, $port=80)
+<a name="line364"></a>	{
+<a name="line365"></a>		parent::CI_Xmlrpc();
+<a name="line366"></a>		
+<a name="line367"></a>		$this->port = $port;
+<a name="line368"></a>		$this->server = $server;
+<a name="line369"></a>		$this->path = $path;
+<a name="line370"></a>	}
+<a name="line371"></a>	
+<a name="line372"></a>	function send($msg)
+<a name="line373"></a>	{
+<a name="line374"></a>		if (is_array($msg))
+<a name="line375"></a>		{
+<a name="line376"></a>			// Multi-call disabled
+<a name="line377"></a>			$r = new XML_RPC_Response(0, $this->xmlrpcerr['multicall_recursion'],$this->xmlrpcstr['multicall_recursion']);
+<a name="line378"></a>			return $r;
+<a name="line379"></a>		}
+<a name="line380"></a>
+<a name="line381"></a>		return $this->sendPayload($msg);
+<a name="line382"></a>	}
+<a name="line383"></a>
+<a name="line384"></a>	function sendPayload($msg)
+<a name="line385"></a>	{	
+<a name="line386"></a>		$fp = @fsockopen($this->server, $this->port,$this->errno, $this->errstr, $this->timeout);
+<a name="line387"></a>		
+<a name="line388"></a>		if ( ! is_resource($fp))
+<a name="line389"></a>		{
+<a name="line390"></a>			error_log($this->xmlrpcstr['http_error']);
+<a name="line391"></a>			$r = new XML_RPC_Response(0, $this->xmlrpcerr['http_error'],$this->xmlrpcstr['http_error']);
+<a name="line392"></a>			return $r;
+<a name="line393"></a>		}
+<a name="line394"></a>		
+<a name="line395"></a>		if(empty($msg->payload))
+<a name="line396"></a>		{
+<a name="line397"></a>			// $msg = XML_RPC_Messages
+<a name="line398"></a>			$msg->createPayload();
+<a name="line399"></a>		}
+<a name="line400"></a>		
+<a name="line401"></a>		$r = "\r\n";
+<a name="line402"></a>		$op  = "POST {$this->path} HTTP/1.0$r";
+<a name="line403"></a>		$op .= "Host: {$this->server}$r";
+<a name="line404"></a>		$op .= "Content-Type: text/xml$r";
+<a name="line405"></a>		$op .= "User-Agent: {$this->xmlrpcName}$r";
+<a name="line406"></a>		$op .= "Content-Length: ".strlen($msg->payload). "$r$r";
+<a name="line407"></a>		$op .= $msg->payload;
+<a name="line408"></a>		
+<a name="line409"></a>
+<a name="line410"></a>		if ( ! fputs($fp, $op, strlen($op)))
+<a name="line411"></a>		{
+<a name="line412"></a>			error_log($this->xmlrpcstr['http_error']);
+<a name="line413"></a>			$r = new XML_RPC_Response(0, $this->xmlrpcerr['http_error'], $this->xmlrpcstr['http_error']);
+<a name="line414"></a>			return $r;
+<a name="line415"></a>		}
+<a name="line416"></a>		$resp = $msg->parseResponse($fp);
+<a name="line417"></a>		fclose($fp);
+<a name="line418"></a>		return $resp;
+<a name="line419"></a>	}
+<a name="line420"></a>
+<a name="line421"></a>} // end class XML_RPC_Client
 <a name="line422"></a>
-<a name="line423"></a>/**
-<a name="line424"></a> * XML-RPC Response class
-<a name="line425"></a> *
-<a name="line426"></a> * @category	XML-RPC
-<a name="line427"></a> * @author		ExpressionEngine Dev Team
-<a name="line428"></a> * @link		http://codeigniter.com/user_guide/libraries/xmlrpc.html
-<a name="line429"></a> */
-<a name="line430"></a>class XML_RPC_Response
-<a name="line431"></a>{
-<a name="line432"></a>	var $val = 0;
-<a name="line433"></a>	var $errno = 0;
-<a name="line434"></a>	var $errstr = '';
-<a name="line435"></a>	var $headers = array();
-<a name="line436"></a>
-<a name="line437"></a>	function XML_RPC_Response($val, $code = 0, $fstr = '')
-<a name="line438"></a>	{	
-<a name="line439"></a>		if ($code != 0)
-<a name="line440"></a>		{
-<a name="line441"></a>			// error
-<a name="line442"></a>			$this->errno = $code;
-<a name="line443"></a>			$this->errstr = htmlentities($fstr);
-<a name="line444"></a>		}
-<a name="line445"></a>		else if ( ! is_object($val))
-<a name="line446"></a>		{
-<a name="line447"></a>			// programmer error, not an object
-<a name="line448"></a>			error_log("Invalid type '" . gettype($val) . "' (value: $val) passed to XML_RPC_Response.  Defaulting to empty value.");
-<a name="line449"></a>			$this->val = new XML_RPC_Values();
-<a name="line450"></a>		}
-<a name="line451"></a>		else
-<a name="line452"></a>		{
-<a name="line453"></a>			$this->val = $val;
-<a name="line454"></a>		}
-<a name="line455"></a>	}
-<a name="line456"></a>
-<a name="line457"></a>	function faultCode()
-<a name="line458"></a>	{
-<a name="line459"></a>		return $this->errno;
-<a name="line460"></a>	}
-<a name="line461"></a>
-<a name="line462"></a>	function faultString()
-<a name="line463"></a>	{
-<a name="line464"></a>		return $this->errstr;
-<a name="line465"></a>	}
-<a name="line466"></a>
-<a name="line467"></a>	function value()
-<a name="line468"></a>	{
-<a name="line469"></a>		return $this->val;
-<a name="line470"></a>	}
-<a name="line471"></a>	
-<a name="line472"></a>	function prepare_response()
-<a name="line473"></a>	{
-<a name="line474"></a>		$result = "<methodResponse>\n";
-<a name="line475"></a>		if ($this->errno)
-<a name="line476"></a>		{
-<a name="line477"></a>			$result .= '<fault>
-<a name="line478"></a>	<value>
-<a name="line479"></a>		<struct>
-<a name="line480"></a>			<member>
-<a name="line481"></a>				<name>faultCode</name>
-<a name="line482"></a>				<value><int>' . $this->errno . '</int></value>
-<a name="line483"></a>			</member>
-<a name="line484"></a>			<member>
-<a name="line485"></a>				<name>faultString</name>
-<a name="line486"></a>				<value><string>' . $this->errstr . '</string></value>
-<a name="line487"></a>			</member>
-<a name="line488"></a>		</struct>
-<a name="line489"></a>	</value>
-<a name="line490"></a></fault>';
-<a name="line491"></a>		}
-<a name="line492"></a>		else
-<a name="line493"></a>		{
-<a name="line494"></a>			$result .= "<params>\n<param>\n" .
-<a name="line495"></a>					$this->val->serialize_class() .
-<a name="line496"></a>					"</param>\n</params>";
-<a name="line497"></a>		}
-<a name="line498"></a>		$result .= "\n</methodResponse>";
-<a name="line499"></a>		return $result;
-<a name="line500"></a>	}
-<a name="line501"></a>	
-<a name="line502"></a>	function decode($array=FALSE)
-<a name="line503"></a>	{
-<a name="line504"></a>		$CI =& get_instance();
-<a name="line505"></a>
-<a name="line506"></a>		if ($array !== FALSE && is_array($array))
-<a name="line507"></a>		{
-<a name="line508"></a>			while (list($key) = each($array))
-<a name="line509"></a>			{
-<a name="line510"></a>				if (is_array($array[$key]))
-<a name="line511"></a>				{
-<a name="line512"></a>					$array[$key] = $this->decode($array[$key]);
-<a name="line513"></a>				}
-<a name="line514"></a>				else
-<a name="line515"></a>				{
-<a name="line516"></a>					$array[$key] = $CI->input->xss_clean($array[$key]);
-<a name="line517"></a>				}
-<a name="line518"></a>			}
-<a name="line519"></a>			
-<a name="line520"></a>			$result = $array;
-<a name="line521"></a>		}
-<a name="line522"></a>		else
-<a name="line523"></a>		{
-<a name="line524"></a>			$result = $this->xmlrpc_decoder($this->val);
-<a name="line525"></a>			
-<a name="line526"></a>			if (is_array($result))
-<a name="line527"></a>			{
-<a name="line528"></a>				$result = $this->decode($result);
-<a name="line529"></a>			}
-<a name="line530"></a>			else
-<a name="line531"></a>			{
-<a name="line532"></a>				$result = $CI->input->xss_clean($result);
-<a name="line533"></a>			}
-<a name="line534"></a>		}
-<a name="line535"></a>		
-<a name="line536"></a>		return $result;
-<a name="line537"></a>	}
-<a name="line538"></a>
-<a name="line539"></a>	
-<a name="line540"></a>	
-<a name="line541"></a>	//-------------------------------------
-<a name="line542"></a>	//  XML-RPC Object to PHP Types
-<a name="line543"></a>	//-------------------------------------
-<a name="line544"></a>
-<a name="line545"></a>	function xmlrpc_decoder($xmlrpc_val)
-<a name="line546"></a>	{
-<a name="line547"></a>		$kind = $xmlrpc_val->kindOf();
-<a name="line548"></a>
-<a name="line549"></a>		if($kind == 'scalar')
-<a name="line550"></a>		{
-<a name="line551"></a>			return $xmlrpc_val->scalarval();
-<a name="line552"></a>		}
-<a name="line553"></a>		elseif($kind == 'array')
-<a name="line554"></a>		{
-<a name="line555"></a>			reset($xmlrpc_val->me);
-<a name="line556"></a>			list($a,$b) = each($xmlrpc_val->me);
-<a name="line557"></a>			$size = count($b);
-<a name="line558"></a>			
-<a name="line559"></a>			$arr = array();
-<a name="line560"></a>
-<a name="line561"></a>			for($i = 0; $i < $size; $i++)
-<a name="line562"></a>			{
-<a name="line563"></a>				$arr[] = $this->xmlrpc_decoder($xmlrpc_val->me['array'][$i]);
-<a name="line564"></a>			}
-<a name="line565"></a>			return $arr;
-<a name="line566"></a>		}
-<a name="line567"></a>		elseif($kind == 'struct')
-<a name="line568"></a>		{
-<a name="line569"></a>			reset($xmlrpc_val->me['struct']);
-<a name="line570"></a>			$arr = array();
-<a name="line571"></a>
-<a name="line572"></a>			while(list($key,$value) = each($xmlrpc_val->me['struct']))
-<a name="line573"></a>			{
-<a name="line574"></a>				$arr[$key] = $this->xmlrpc_decoder($value);
-<a name="line575"></a>			}
-<a name="line576"></a>			return $arr;
-<a name="line577"></a>		}
-<a name="line578"></a>	}
-<a name="line579"></a>	
-<a name="line580"></a>	
-<a name="line581"></a>	//-------------------------------------
-<a name="line582"></a>	//  ISO-8601 time to server or UTC time
-<a name="line583"></a>	//-------------------------------------
-<a name="line584"></a>
-<a name="line585"></a>	function iso8601_decode($time, $utc=0)
-<a name="line586"></a>	{
-<a name="line587"></a>		// return a timet in the localtime, or UTC
-<a name="line588"></a>		$t = 0;
-<a name="line589"></a>		if (preg_match('/([0-9]{4})([0-9]{2})([0-9]{2})T([0-9]{2}):([0-9]{2}):([0-9]{2})/', $time, $regs))
-<a name="line590"></a>		{
-<a name="line591"></a>			if ($utc == 1)
-<a name="line592"></a>				$t = gmmktime($regs[4], $regs[5], $regs[6], $regs[2], $regs[3], $regs[1]);
-<a name="line593"></a>			else
-<a name="line594"></a>				$t = mktime($regs[4], $regs[5], $regs[6], $regs[2], $regs[3], $regs[1]);
-<a name="line595"></a>		}
-<a name="line596"></a>		return $t;
-<a name="line597"></a>	}
-<a name="line598"></a>	
-<a name="line599"></a>} // End Response Class
-<a name="line600"></a>
-<a name="line601"></a>
-<a name="line602"></a>
-<a name="line603"></a>/**
-<a name="line604"></a> * XML-RPC Message class
-<a name="line605"></a> *
-<a name="line606"></a> * @category	XML-RPC
-<a name="line607"></a> * @author		ExpressionEngine Dev Team
-<a name="line608"></a> * @link		http://codeigniter.com/user_guide/libraries/xmlrpc.html
-<a name="line609"></a> */
-<a name="line610"></a>class XML_RPC_Message extends CI_Xmlrpc
-<a name="line611"></a>{
-<a name="line612"></a>	var $payload;
-<a name="line613"></a>	var $method_name;
-<a name="line614"></a>	var $params			= array();
-<a name="line615"></a>	var $xh 			= array();
-<a name="line616"></a>
-<a name="line617"></a>	function XML_RPC_Message($method, $pars=0)
-<a name="line618"></a>	{
-<a name="line619"></a>		parent::CI_Xmlrpc();
-<a name="line620"></a>		
-<a name="line621"></a>		$this->method_name = $method;
-<a name="line622"></a>		if (is_array($pars) && count($pars) > 0)
-<a name="line623"></a>		{
-<a name="line624"></a>			for($i=0; $i<count($pars); $i++)
-<a name="line625"></a>			{
-<a name="line626"></a>				// $pars[$i] = XML_RPC_Values
-<a name="line627"></a>				$this->params[] = $pars[$i];
-<a name="line628"></a>			}
-<a name="line629"></a>		}
-<a name="line630"></a>	}
-<a name="line631"></a>	
-<a name="line632"></a>	//-------------------------------------
-<a name="line633"></a>	//  Create Payload to Send
-<a name="line634"></a>	//-------------------------------------
-<a name="line635"></a>	
-<a name="line636"></a>	function createPayload()
-<a name="line637"></a>	{
-<a name="line638"></a>		$this->payload = "<?xml version=\"1.0\"?".">\r\n<methodCall>\r\n";
-<a name="line639"></a>		$this->payload .= '<methodName>' . $this->method_name . "</methodName>\r\n";
-<a name="line640"></a>		$this->payload .= "<params>\r\n";
-<a name="line641"></a>		
-<a name="line642"></a>		for($i=0; $i<count($this->params); $i++)
-<a name="line643"></a>		{
-<a name="line644"></a>			// $p = XML_RPC_Values
-<a name="line645"></a>			$p = $this->params[$i];
-<a name="line646"></a>			$this->payload .= "<param>\r\n".$p->serialize_class()."</param>\r\n";
-<a name="line647"></a>		}
+<a name="line423"></a>
+<a name="line424"></a>/**
+<a name="line425"></a> * XML-RPC Response class
+<a name="line426"></a> *
+<a name="line427"></a> * @category	XML-RPC
+<a name="line428"></a> * @author		ExpressionEngine Dev Team
+<a name="line429"></a> * @link		http://codeigniter.com/user_guide/libraries/xmlrpc.html
+<a name="line430"></a> */
+<a name="line431"></a>class XML_RPC_Response
+<a name="line432"></a>{
+<a name="line433"></a>	var $val = 0;
+<a name="line434"></a>	var $errno = 0;
+<a name="line435"></a>	var $errstr = '';
+<a name="line436"></a>	var $headers = array();
+<a name="line437"></a>	var $xss_clean = TRUE;
+<a name="line438"></a>
+<a name="line439"></a>	function XML_RPC_Response($val, $code = 0, $fstr = '')
+<a name="line440"></a>	{	
+<a name="line441"></a>		if ($code != 0)
+<a name="line442"></a>		{
+<a name="line443"></a>			// error
+<a name="line444"></a>			$this->errno = $code;
+<a name="line445"></a>			$this->errstr = htmlentities($fstr);
+<a name="line446"></a>		}
+<a name="line447"></a>		else if ( ! is_object($val))
+<a name="line448"></a>		{
+<a name="line449"></a>			// programmer error, not an object
+<a name="line450"></a>			error_log("Invalid type '" . gettype($val) . "' (value: $val) passed to XML_RPC_Response.  Defaulting to empty value.");
+<a name="line451"></a>			$this->val = new XML_RPC_Values();
+<a name="line452"></a>		}
+<a name="line453"></a>		else
+<a name="line454"></a>		{
+<a name="line455"></a>			$this->val = $val;
+<a name="line456"></a>		}
+<a name="line457"></a>	}
+<a name="line458"></a>
+<a name="line459"></a>	function faultCode()
+<a name="line460"></a>	{
+<a name="line461"></a>		return $this->errno;
+<a name="line462"></a>	}
+<a name="line463"></a>
+<a name="line464"></a>	function faultString()
+<a name="line465"></a>	{
+<a name="line466"></a>		return $this->errstr;
+<a name="line467"></a>	}
+<a name="line468"></a>
+<a name="line469"></a>	function value()
+<a name="line470"></a>	{
+<a name="line471"></a>		return $this->val;
+<a name="line472"></a>	}
+<a name="line473"></a>	
+<a name="line474"></a>	function prepare_response()
+<a name="line475"></a>	{
+<a name="line476"></a>		$result = "<methodResponse>\n";
+<a name="line477"></a>		if ($this->errno)
+<a name="line478"></a>		{
+<a name="line479"></a>			$result .= '<fault>
+<a name="line480"></a>	<value>
+<a name="line481"></a>		<struct>
+<a name="line482"></a>			<member>
+<a name="line483"></a>				<name>faultCode</name>
+<a name="line484"></a>				<value><int>' . $this->errno . '</int></value>
+<a name="line485"></a>			</member>
+<a name="line486"></a>			<member>
+<a name="line487"></a>				<name>faultString</name>
+<a name="line488"></a>				<value><string>' . $this->errstr . '</string></value>
+<a name="line489"></a>			</member>
+<a name="line490"></a>		</struct>
+<a name="line491"></a>	</value>
+<a name="line492"></a></fault>';
+<a name="line493"></a>		}
+<a name="line494"></a>		else
+<a name="line495"></a>		{
+<a name="line496"></a>			$result .= "<params>\n<param>\n" .
+<a name="line497"></a>					$this->val->serialize_class() .
+<a name="line498"></a>					"</param>\n</params>";
+<a name="line499"></a>		}
+<a name="line500"></a>		$result .= "\n</methodResponse>";
+<a name="line501"></a>		return $result;
+<a name="line502"></a>	}
+<a name="line503"></a>	
+<a name="line504"></a>	function decode($array=FALSE)
+<a name="line505"></a>	{
+<a name="line506"></a>		$CI =& get_instance();
+<a name="line507"></a>
+<a name="line508"></a>		if ($this->xss_clean && ! isset($CI->security))
+<a name="line509"></a>		{
+<a name="line510"></a>			$CI->load->library('security');
+<a name="line511"></a>		}
+<a name="line512"></a>
+<a name="line513"></a>		if ($array !== FALSE && is_array($array))
+<a name="line514"></a>		{
+<a name="line515"></a>			while (list($key) = each($array))
+<a name="line516"></a>			{
+<a name="line517"></a>				if (is_array($array[$key]))
+<a name="line518"></a>				{
+<a name="line519"></a>					$array[$key] = $this->decode($array[$key]);
+<a name="line520"></a>				}
+<a name="line521"></a>				else
+<a name="line522"></a>				{
+<a name="line523"></a>					$array[$key] = ($this->xss_clean) ? $CI->security->xss_clean($array[$key]) : $array[$key];
+<a name="line524"></a>				}
+<a name="line525"></a>			}
+<a name="line526"></a>			
+<a name="line527"></a>			$result = $array;
+<a name="line528"></a>		}
+<a name="line529"></a>		else
+<a name="line530"></a>		{
+<a name="line531"></a>			$result = $this->xmlrpc_decoder($this->val);
+<a name="line532"></a>			
+<a name="line533"></a>			if (is_array($result))
+<a name="line534"></a>			{
+<a name="line535"></a>				$result = $this->decode($result);
+<a name="line536"></a>			}
+<a name="line537"></a>			else
+<a name="line538"></a>			{
+<a name="line539"></a>				$result = ($this->xss_clean) ? $CI->security->xss_clean($result) : $result;
+<a name="line540"></a>			}
+<a name="line541"></a>		}
+<a name="line542"></a>		
+<a name="line543"></a>		return $result;
+<a name="line544"></a>	}
+<a name="line545"></a>
+<a name="line546"></a>	
+<a name="line547"></a>	
+<a name="line548"></a>	//-------------------------------------
+<a name="line549"></a>	//  XML-RPC Object to PHP Types
+<a name="line550"></a>	//-------------------------------------
+<a name="line551"></a>
+<a name="line552"></a>	function xmlrpc_decoder($xmlrpc_val)
+<a name="line553"></a>	{
+<a name="line554"></a>		$kind = $xmlrpc_val->kindOf();
+<a name="line555"></a>
+<a name="line556"></a>		if($kind == 'scalar')
+<a name="line557"></a>		{
+<a name="line558"></a>			return $xmlrpc_val->scalarval();
+<a name="line559"></a>		}
+<a name="line560"></a>		elseif($kind == 'array')
+<a name="line561"></a>		{
+<a name="line562"></a>			reset($xmlrpc_val->me);
+<a name="line563"></a>			list($a,$b) = each($xmlrpc_val->me);
+<a name="line564"></a>			$size = count($b);
+<a name="line565"></a>			
+<a name="line566"></a>			$arr = array();
+<a name="line567"></a>
+<a name="line568"></a>			for($i = 0; $i < $size; $i++)
+<a name="line569"></a>			{
+<a name="line570"></a>				$arr[] = $this->xmlrpc_decoder($xmlrpc_val->me['array'][$i]);
+<a name="line571"></a>			}
+<a name="line572"></a>			return $arr;
+<a name="line573"></a>		}
+<a name="line574"></a>		elseif($kind == 'struct')
+<a name="line575"></a>		{
+<a name="line576"></a>			reset($xmlrpc_val->me['struct']);
+<a name="line577"></a>			$arr = array();
+<a name="line578"></a>
+<a name="line579"></a>			while(list($key,$value) = each($xmlrpc_val->me['struct']))
+<a name="line580"></a>			{
+<a name="line581"></a>				$arr[$key] = $this->xmlrpc_decoder($value);
+<a name="line582"></a>			}
+<a name="line583"></a>			return $arr;
+<a name="line584"></a>		}
+<a name="line585"></a>	}
+<a name="line586"></a>	
+<a name="line587"></a>	
+<a name="line588"></a>	//-------------------------------------
+<a name="line589"></a>	//  ISO-8601 time to server or UTC time
+<a name="line590"></a>	//-------------------------------------
+<a name="line591"></a>
+<a name="line592"></a>	function iso8601_decode($time, $utc=0)
+<a name="line593"></a>	{
+<a name="line594"></a>		// return a timet in the localtime, or UTC
+<a name="line595"></a>		$t = 0;
+<a name="line596"></a>		if (preg_match('/([0-9]{4})([0-9]{2})([0-9]{2})T([0-9]{2}):([0-9]{2}):([0-9]{2})/', $time, $regs))
+<a name="line597"></a>		{
+<a name="line598"></a>			if ($utc == 1)
+<a name="line599"></a>				$t = gmmktime($regs[4], $regs[5], $regs[6], $regs[2], $regs[3], $regs[1]);
+<a name="line600"></a>			else
+<a name="line601"></a>				$t = mktime($regs[4], $regs[5], $regs[6], $regs[2], $regs[3], $regs[1]);
+<a name="line602"></a>		}
+<a name="line603"></a>		return $t;
+<a name="line604"></a>	}
+<a name="line605"></a>	
+<a name="line606"></a>} // End Response Class
+<a name="line607"></a>
+<a name="line608"></a>
+<a name="line609"></a>
+<a name="line610"></a>/**
+<a name="line611"></a> * XML-RPC Message class
+<a name="line612"></a> *
+<a name="line613"></a> * @category	XML-RPC
+<a name="line614"></a> * @author		ExpressionEngine Dev Team
+<a name="line615"></a> * @link		http://codeigniter.com/user_guide/libraries/xmlrpc.html
+<a name="line616"></a> */
+<a name="line617"></a>class XML_RPC_Message extends CI_Xmlrpc
+<a name="line618"></a>{
+<a name="line619"></a>	var $payload;
+<a name="line620"></a>	var $method_name;
+<a name="line621"></a>	var $params			= array();
+<a name="line622"></a>	var $xh 			= array();
+<a name="line623"></a>
+<a name="line624"></a>	function XML_RPC_Message($method, $pars=0)
+<a name="line625"></a>	{
+<a name="line626"></a>		parent::CI_Xmlrpc();
+<a name="line627"></a>		
+<a name="line628"></a>		$this->method_name = $method;
+<a name="line629"></a>		if (is_array($pars) && count($pars) > 0)
+<a name="line630"></a>		{
+<a name="line631"></a>			for($i=0; $i<count($pars); $i++)
+<a name="line632"></a>			{
+<a name="line633"></a>				// $pars[$i] = XML_RPC_Values
+<a name="line634"></a>				$this->params[] = $pars[$i];
+<a name="line635"></a>			}
+<a name="line636"></a>		}
+<a name="line637"></a>	}
+<a name="line638"></a>	
+<a name="line639"></a>	//-------------------------------------
+<a name="line640"></a>	//  Create Payload to Send
+<a name="line641"></a>	//-------------------------------------
+<a name="line642"></a>	
+<a name="line643"></a>	function createPayload()
+<a name="line644"></a>	{
+<a name="line645"></a>		$this->payload = "<?xml version=\"1.0\"?".">\r\n<methodCall>\r\n";
+<a name="line646"></a>		$this->payload .= '<methodName>' . $this->method_name . "</methodName>\r\n";
+<a name="line647"></a>		$this->payload .= "<params>\r\n";
 <a name="line648"></a>		
-<a name="line649"></a>		$this->payload .= "</params>\r\n</methodCall>\r\n";
-<a name="line650"></a>	}
-<a name="line651"></a>	
-<a name="line652"></a>	//-------------------------------------
-<a name="line653"></a>	//  Parse External XML-RPC Server's Response
-<a name="line654"></a>	//-------------------------------------
-<a name="line655"></a>	
-<a name="line656"></a>	function parseResponse($fp)
-<a name="line657"></a>	{
-<a name="line658"></a>		$data = '';
-<a name="line659"></a>		
-<a name="line660"></a>		while($datum = fread($fp, 4096))
-<a name="line661"></a>		{
-<a name="line662"></a>			$data .= $datum;
-<a name="line663"></a>		}
-<a name="line664"></a>		
-<a name="line665"></a>		//-------------------------------------
-<a name="line666"></a>		//  DISPLAY HTTP CONTENT for DEBUGGING
-<a name="line667"></a>		//-------------------------------------
-<a name="line668"></a>		
-<a name="line669"></a>		if ($this->debug === TRUE)
-<a name="line670"></a>		{
-<a name="line671"></a>			echo "<pre>";
-<a name="line672"></a>			echo "---DATA---\n" . htmlspecialchars($data) . "\n---END DATA---\n\n";
-<a name="line673"></a>			echo "</pre>";
-<a name="line674"></a>		}
+<a name="line649"></a>		for($i=0; $i<count($this->params); $i++)
+<a name="line650"></a>		{
+<a name="line651"></a>			// $p = XML_RPC_Values
+<a name="line652"></a>			$p = $this->params[$i];
+<a name="line653"></a>			$this->payload .= "<param>\r\n".$p->serialize_class()."</param>\r\n";
+<a name="line654"></a>		}
+<a name="line655"></a>		
+<a name="line656"></a>		$this->payload .= "</params>\r\n</methodCall>\r\n";
+<a name="line657"></a>	}
+<a name="line658"></a>	
+<a name="line659"></a>	//-------------------------------------
+<a name="line660"></a>	//  Parse External XML-RPC Server's Response
+<a name="line661"></a>	//-------------------------------------
+<a name="line662"></a>	
+<a name="line663"></a>	function parseResponse($fp)
+<a name="line664"></a>	{
+<a name="line665"></a>		$data = '';
+<a name="line666"></a>		
+<a name="line667"></a>		while($datum = fread($fp, 4096))
+<a name="line668"></a>		{
+<a name="line669"></a>			$data .= $datum;
+<a name="line670"></a>		}
+<a name="line671"></a>		
+<a name="line672"></a>		//-------------------------------------
+<a name="line673"></a>		//  DISPLAY HTTP CONTENT for DEBUGGING
+<a name="line674"></a>		//-------------------------------------
 <a name="line675"></a>		
-<a name="line676"></a>		//-------------------------------------
-<a name="line677"></a>		//  Check for data
-<a name="line678"></a>		//-------------------------------------
-<a name="line679"></a>
-<a name="line680"></a>		if($data == "")
-<a name="line681"></a>		{
-<a name="line682"></a>			error_log($this->xmlrpcstr['no_data']);
-<a name="line683"></a>			$r = new XML_RPC_Response(0, $this->xmlrpcerr['no_data'], $this->xmlrpcstr['no_data']);
-<a name="line684"></a>			return $r;
-<a name="line685"></a>		}
-<a name="line686"></a>		
-<a name="line687"></a>		
-<a name="line688"></a>		//-------------------------------------
-<a name="line689"></a>		//  Check for HTTP 200 Response
-<a name="line690"></a>		//-------------------------------------
-<a name="line691"></a>		
-<a name="line692"></a>		if (strncmp($data, 'HTTP', 4) == 0 && ! preg_match('/^HTTP\/[0-9\.]+ 200 /', $data))
-<a name="line693"></a>		{
-<a name="line694"></a>			$errstr= substr($data, 0, strpos($data, "\n")-1);
-<a name="line695"></a>			$r = new XML_RPC_Response(0, $this->xmlrpcerr['http_error'], $this->xmlrpcstr['http_error']. ' (' . $errstr . ')');
-<a name="line696"></a>			return $r;
-<a name="line697"></a>		}
+<a name="line676"></a>		if ($this->debug === TRUE)
+<a name="line677"></a>		{
+<a name="line678"></a>			echo "<pre>";
+<a name="line679"></a>			echo "---DATA---\n" . htmlspecialchars($data) . "\n---END DATA---\n\n";
+<a name="line680"></a>			echo "</pre>";
+<a name="line681"></a>		}
+<a name="line682"></a>		
+<a name="line683"></a>		//-------------------------------------
+<a name="line684"></a>		//  Check for data
+<a name="line685"></a>		//-------------------------------------
+<a name="line686"></a>
+<a name="line687"></a>		if($data == "")
+<a name="line688"></a>		{
+<a name="line689"></a>			error_log($this->xmlrpcstr['no_data']);
+<a name="line690"></a>			$r = new XML_RPC_Response(0, $this->xmlrpcerr['no_data'], $this->xmlrpcstr['no_data']);
+<a name="line691"></a>			return $r;
+<a name="line692"></a>		}
+<a name="line693"></a>		
+<a name="line694"></a>		
+<a name="line695"></a>		//-------------------------------------
+<a name="line696"></a>		//  Check for HTTP 200 Response
+<a name="line697"></a>		//-------------------------------------
 <a name="line698"></a>		
-<a name="line699"></a>		//-------------------------------------
-<a name="line700"></a>		//  Create and Set Up XML Parser
-<a name="line701"></a>		//-------------------------------------
-<a name="line702"></a>	
-<a name="line703"></a>		$parser = xml_parser_create($this->xmlrpc_defencoding);
-<a name="line704"></a>
-<a name="line705"></a>		$this->xh[$parser]				 = array();
-<a name="line706"></a>		$this->xh[$parser]['isf']		 = 0;
-<a name="line707"></a>		$this->xh[$parser]['ac']		 = '';
-<a name="line708"></a>		$this->xh[$parser]['headers'] 	 = array();
-<a name="line709"></a>		$this->xh[$parser]['stack']		 = array();
-<a name="line710"></a>		$this->xh[$parser]['valuestack'] = array();
-<a name="line711"></a>		$this->xh[$parser]['isf_reason'] = 0;
-<a name="line712"></a>
-<a name="line713"></a>		xml_set_object($parser, $this);
-<a name="line714"></a>		xml_parser_set_option($parser, XML_OPTION_CASE_FOLDING, true);
-<a name="line715"></a>		xml_set_element_handler($parser, 'open_tag', 'closing_tag');
-<a name="line716"></a>		xml_set_character_data_handler($parser, 'character_data');
-<a name="line717"></a>		//xml_set_default_handler($parser, 'default_handler');
-<a name="line718"></a>
+<a name="line699"></a>		if (strncmp($data, 'HTTP', 4) == 0 && ! preg_match('/^HTTP\/[0-9\.]+ 200 /', $data))
+<a name="line700"></a>		{
+<a name="line701"></a>			$errstr= substr($data, 0, strpos($data, "\n")-1);
+<a name="line702"></a>			$r = new XML_RPC_Response(0, $this->xmlrpcerr['http_error'], $this->xmlrpcstr['http_error']. ' (' . $errstr . ')');
+<a name="line703"></a>			return $r;
+<a name="line704"></a>		}
+<a name="line705"></a>		
+<a name="line706"></a>		//-------------------------------------
+<a name="line707"></a>		//  Create and Set Up XML Parser
+<a name="line708"></a>		//-------------------------------------
+<a name="line709"></a>	
+<a name="line710"></a>		$parser = xml_parser_create($this->xmlrpc_defencoding);
+<a name="line711"></a>
+<a name="line712"></a>		$this->xh[$parser]				 = array();
+<a name="line713"></a>		$this->xh[$parser]['isf']		 = 0;
+<a name="line714"></a>		$this->xh[$parser]['ac']		 = '';
+<a name="line715"></a>		$this->xh[$parser]['headers'] 	 = array();
+<a name="line716"></a>		$this->xh[$parser]['stack']		 = array();
+<a name="line717"></a>		$this->xh[$parser]['valuestack'] = array();
+<a name="line718"></a>		$this->xh[$parser]['isf_reason'] = 0;
 <a name="line719"></a>
-<a name="line720"></a>		//-------------------------------------
-<a name="line721"></a>		//  GET HEADERS
-<a name="line722"></a>		//-------------------------------------
-<a name="line723"></a>		
-<a name="line724"></a>		$lines = explode("\r\n", $data);
-<a name="line725"></a>		while (($line = array_shift($lines)))
-<a name="line726"></a>		{
-<a name="line727"></a>			if (strlen($line) < 1)
-<a name="line728"></a>			{
-<a name="line729"></a>				break;
-<a name="line730"></a>			}
-<a name="line731"></a>			$this->xh[$parser]['headers'][] = $line;
-<a name="line732"></a>		}
-<a name="line733"></a>		$data = implode("\r\n", $lines);
-<a name="line734"></a>		
-<a name="line735"></a>		
-<a name="line736"></a>		//-------------------------------------
-<a name="line737"></a>		//  PARSE XML DATA
-<a name="line738"></a>		//-------------------------------------  	
-<a name="line739"></a>
-<a name="line740"></a>		if ( ! xml_parse($parser, $data, count($data)))
-<a name="line741"></a>		{
-<a name="line742"></a>			$errstr = sprintf('XML error: %s at line %d',
-<a name="line743"></a>					xml_error_string(xml_get_error_code($parser)),
-<a name="line744"></a>					xml_get_current_line_number($parser));
-<a name="line745"></a>			//error_log($errstr);
-<a name="line746"></a>			$r = new XML_RPC_Response(0, $this->xmlrpcerr['invalid_return'], $this->xmlrpcstr['invalid_return']);
-<a name="line747"></a>			xml_parser_free($parser);
-<a name="line748"></a>			return $r;
-<a name="line749"></a>		}
-<a name="line750"></a>		xml_parser_free($parser);
-<a name="line751"></a>		
-<a name="line752"></a>		// ---------------------------------------
-<a name="line753"></a>		//  Got Ourselves Some Badness, It Seems
-<a name="line754"></a>		// ---------------------------------------
-<a name="line755"></a>		
-<a name="line756"></a>		if ($this->xh[$parser]['isf'] > 1)
-<a name="line757"></a>		{
-<a name="line758"></a>			if ($this->debug === TRUE)
-<a name="line759"></a>			{
-<a name="line760"></a>				echo "---Invalid Return---\n";
-<a name="line761"></a>				echo $this->xh[$parser]['isf_reason'];
-<a name="line762"></a>				echo "---Invalid Return---\n\n";
-<a name="line763"></a>			}
-<a name="line764"></a>				
-<a name="line765"></a>			$r = new XML_RPC_Response(0, $this->xmlrpcerr['invalid_return'],$this->xmlrpcstr['invalid_return'].' '.$this->xh[$parser]['isf_reason']);
-<a name="line766"></a>			return $r;
-<a name="line767"></a>		}
-<a name="line768"></a>		elseif ( ! is_object($this->xh[$parser]['value']))
-<a name="line769"></a>		{
-<a name="line770"></a>			$r = new XML_RPC_Response(0, $this->xmlrpcerr['invalid_return'],$this->xmlrpcstr['invalid_return'].' '.$this->xh[$parser]['isf_reason']);
-<a name="line771"></a>			return $r;
-<a name="line772"></a>		}
-<a name="line773"></a>		
-<a name="line774"></a>		//-------------------------------------
-<a name="line775"></a>		//  DISPLAY XML CONTENT for DEBUGGING
-<a name="line776"></a>		//-------------------------------------  	
-<a name="line777"></a>		
-<a name="line778"></a>		if ($this->debug === TRUE)
-<a name="line779"></a>		{
-<a name="line780"></a>			echo "<pre>";
-<a name="line781"></a>			
-<a name="line782"></a>			if (count($this->xh[$parser]['headers'] > 0))
-<a name="line783"></a>			{
-<a name="line784"></a>				echo "---HEADERS---\n";
-<a name="line785"></a>				foreach ($this->xh[$parser]['headers'] as $header)
-<a name="line786"></a>				{
-<a name="line787"></a>					echo "$header\n";
-<a name="line788"></a>				}
-<a name="line789"></a>				echo "---END HEADERS---\n\n";
-<a name="line790"></a>			}
-<a name="line791"></a>			
-<a name="line792"></a>			echo "---DATA---\n" . htmlspecialchars($data) . "\n---END DATA---\n\n";
-<a name="line793"></a>			
-<a name="line794"></a>			echo "---PARSED---\n" ;
-<a name="line795"></a>			var_dump($this->xh[$parser]['value']);
-<a name="line796"></a>			echo "\n---END PARSED---</pre>";
-<a name="line797"></a>		}
-<a name="line798"></a>		
-<a name="line799"></a>		//-------------------------------------
-<a name="line800"></a>		//  SEND RESPONSE
-<a name="line801"></a>		//-------------------------------------
-<a name="line802"></a>		
-<a name="line803"></a>		$v = $this->xh[$parser]['value'];
-<a name="line804"></a>			
-<a name="line805"></a>		if ($this->xh[$parser]['isf'])
-<a name="line806"></a>		{
-<a name="line807"></a>			$errno_v = $v->me['struct']['faultCode'];
-<a name="line808"></a>			$errstr_v = $v->me['struct']['faultString'];
-<a name="line809"></a>			$errno = $errno_v->scalarval();
-<a name="line810"></a>
-<a name="line811"></a>			if ($errno == 0)
-<a name="line812"></a>			{
-<a name="line813"></a>				// FAULT returned, errno needs to reflect that
-<a name="line814"></a>				$errno = -1;
-<a name="line815"></a>			}
-<a name="line816"></a>
-<a name="line817"></a>			$r = new XML_RPC_Response($v, $errno, $errstr_v->scalarval());
-<a name="line818"></a>		}
-<a name="line819"></a>		else
-<a name="line820"></a>		{
-<a name="line821"></a>			$r = new XML_RPC_Response($v);
-<a name="line822"></a>		}
+<a name="line720"></a>		xml_set_object($parser, $this);
+<a name="line721"></a>		xml_parser_set_option($parser, XML_OPTION_CASE_FOLDING, true);
+<a name="line722"></a>		xml_set_element_handler($parser, 'open_tag', 'closing_tag');
+<a name="line723"></a>		xml_set_character_data_handler($parser, 'character_data');
+<a name="line724"></a>		//xml_set_default_handler($parser, 'default_handler');
+<a name="line725"></a>
+<a name="line726"></a>
+<a name="line727"></a>		//-------------------------------------
+<a name="line728"></a>		//  GET HEADERS
+<a name="line729"></a>		//-------------------------------------
+<a name="line730"></a>		
+<a name="line731"></a>		$lines = explode("\r\n", $data);
+<a name="line732"></a>		while (($line = array_shift($lines)))
+<a name="line733"></a>		{
+<a name="line734"></a>			if (strlen($line) < 1)
+<a name="line735"></a>			{
+<a name="line736"></a>				break;
+<a name="line737"></a>			}
+<a name="line738"></a>			$this->xh[$parser]['headers'][] = $line;
+<a name="line739"></a>		}
+<a name="line740"></a>		$data = implode("\r\n", $lines);
+<a name="line741"></a>		
+<a name="line742"></a>		
+<a name="line743"></a>		//-------------------------------------
+<a name="line744"></a>		//  PARSE XML DATA
+<a name="line745"></a>		//-------------------------------------  	
+<a name="line746"></a>
+<a name="line747"></a>		if ( ! xml_parse($parser, $data, count($data)))
+<a name="line748"></a>		{
+<a name="line749"></a>			$errstr = sprintf('XML error: %s at line %d',
+<a name="line750"></a>					xml_error_string(xml_get_error_code($parser)),
+<a name="line751"></a>					xml_get_current_line_number($parser));
+<a name="line752"></a>			//error_log($errstr);
+<a name="line753"></a>			$r = new XML_RPC_Response(0, $this->xmlrpcerr['invalid_return'], $this->xmlrpcstr['invalid_return']);
+<a name="line754"></a>			xml_parser_free($parser);
+<a name="line755"></a>			return $r;
+<a name="line756"></a>		}
+<a name="line757"></a>		xml_parser_free($parser);
+<a name="line758"></a>		
+<a name="line759"></a>		// ---------------------------------------
+<a name="line760"></a>		//  Got Ourselves Some Badness, It Seems
+<a name="line761"></a>		// ---------------------------------------
+<a name="line762"></a>		
+<a name="line763"></a>		if ($this->xh[$parser]['isf'] > 1)
+<a name="line764"></a>		{
+<a name="line765"></a>			if ($this->debug === TRUE)
+<a name="line766"></a>			{
+<a name="line767"></a>				echo "---Invalid Return---\n";
+<a name="line768"></a>				echo $this->xh[$parser]['isf_reason'];
+<a name="line769"></a>				echo "---Invalid Return---\n\n";
+<a name="line770"></a>			}
+<a name="line771"></a>				
+<a name="line772"></a>			$r = new XML_RPC_Response(0, $this->xmlrpcerr['invalid_return'],$this->xmlrpcstr['invalid_return'].' '.$this->xh[$parser]['isf_reason']);
+<a name="line773"></a>			return $r;
+<a name="line774"></a>		}
+<a name="line775"></a>		elseif ( ! is_object($this->xh[$parser]['value']))
+<a name="line776"></a>		{
+<a name="line777"></a>			$r = new XML_RPC_Response(0, $this->xmlrpcerr['invalid_return'],$this->xmlrpcstr['invalid_return'].' '.$this->xh[$parser]['isf_reason']);
+<a name="line778"></a>			return $r;
+<a name="line779"></a>		}
+<a name="line780"></a>		
+<a name="line781"></a>		//-------------------------------------
+<a name="line782"></a>		//  DISPLAY XML CONTENT for DEBUGGING
+<a name="line783"></a>		//-------------------------------------  	
+<a name="line784"></a>		
+<a name="line785"></a>		if ($this->debug === TRUE)
+<a name="line786"></a>		{
+<a name="line787"></a>			echo "<pre>";
+<a name="line788"></a>			
+<a name="line789"></a>			if (count($this->xh[$parser]['headers'] > 0))
+<a name="line790"></a>			{
+<a name="line791"></a>				echo "---HEADERS---\n";
+<a name="line792"></a>				foreach ($this->xh[$parser]['headers'] as $header)
+<a name="line793"></a>				{
+<a name="line794"></a>					echo "$header\n";
+<a name="line795"></a>				}
+<a name="line796"></a>				echo "---END HEADERS---\n\n";
+<a name="line797"></a>			}
+<a name="line798"></a>			
+<a name="line799"></a>			echo "---DATA---\n" . htmlspecialchars($data) . "\n---END DATA---\n\n";
+<a name="line800"></a>			
+<a name="line801"></a>			echo "---PARSED---\n" ;
+<a name="line802"></a>			var_dump($this->xh[$parser]['value']);
+<a name="line803"></a>			echo "\n---END PARSED---</pre>";
+<a name="line804"></a>		}
+<a name="line805"></a>		
+<a name="line806"></a>		//-------------------------------------
+<a name="line807"></a>		//  SEND RESPONSE
+<a name="line808"></a>		//-------------------------------------
+<a name="line809"></a>		
+<a name="line810"></a>		$v = $this->xh[$parser]['value'];
+<a name="line811"></a>			
+<a name="line812"></a>		if ($this->xh[$parser]['isf'])
+<a name="line813"></a>		{
+<a name="line814"></a>			$errno_v = $v->me['struct']['faultCode'];
+<a name="line815"></a>			$errstr_v = $v->me['struct']['faultString'];
+<a name="line816"></a>			$errno = $errno_v->scalarval();
+<a name="line817"></a>
+<a name="line818"></a>			if ($errno == 0)
+<a name="line819"></a>			{
+<a name="line820"></a>				// FAULT returned, errno needs to reflect that
+<a name="line821"></a>				$errno = -1;
+<a name="line822"></a>			}
 <a name="line823"></a>
-<a name="line824"></a>		$r->headers = $this->xh[$parser]['headers'];
-<a name="line825"></a>		return $r;
-<a name="line826"></a>	}
-<a name="line827"></a>	
-<a name="line828"></a>	// ------------------------------------
-<a name="line829"></a>	//  Begin Return Message Parsing section
-<a name="line830"></a>	// ------------------------------------
-<a name="line831"></a>	
-<a name="line832"></a>	// quick explanation of components:
-<a name="line833"></a>	//   ac - used to accumulate values
-<a name="line834"></a>	//   isf - used to indicate a fault
-<a name="line835"></a>	//   lv - used to indicate "looking for a value": implements
-<a name="line836"></a>	//		the logic to allow values with no types to be strings
-<a name="line837"></a>	//   params - used to store parameters in method calls
-<a name="line838"></a>	//   method - used to store method name
-<a name="line839"></a>	//	 stack - array with parent tree of the xml element,
-<a name="line840"></a>	//			 used to validate the nesting of elements
-<a name="line841"></a>
-<a name="line842"></a>	//-------------------------------------
-<a name="line843"></a>	//  Start Element Handler
-<a name="line844"></a>	//-------------------------------------
-<a name="line845"></a>
-<a name="line846"></a>	function open_tag($the_parser, $name, $attrs)
-<a name="line847"></a>	{
-<a name="line848"></a>		// If invalid nesting, then return
-<a name="line849"></a>		if ($this->xh[$the_parser]['isf'] > 1) return;
-<a name="line850"></a>		
-<a name="line851"></a>		// Evaluate and check for correct nesting of XML elements
-<a name="line852"></a>		
-<a name="line853"></a>		if (count($this->xh[$the_parser]['stack']) == 0)
-<a name="line854"></a>		{
-<a name="line855"></a>			if ($name != 'METHODRESPONSE' && $name != 'METHODCALL')
-<a name="line856"></a>			{
-<a name="line857"></a>				$this->xh[$the_parser]['isf'] = 2;
-<a name="line858"></a>				$this->xh[$the_parser]['isf_reason'] = 'Top level XML-RPC element is missing';
-<a name="line859"></a>				return;
-<a name="line860"></a>			}
-<a name="line861"></a>		}
-<a name="line862"></a>		else
-<a name="line863"></a>		{
-<a name="line864"></a>			// not top level element: see if parent is OK
-<a name="line865"></a>			if ( ! in_array($this->xh[$the_parser]['stack'][0], $this->valid_parents[$name], TRUE))
-<a name="line866"></a>			{
-<a name="line867"></a>				$this->xh[$the_parser]['isf'] = 2;
-<a name="line868"></a>				$this->xh[$the_parser]['isf_reason'] = "XML-RPC element $name cannot be child of ".$this->xh[$the_parser]['stack'][0];
-<a name="line869"></a>				return;
-<a name="line870"></a>			}
-<a name="line871"></a>		}
-<a name="line872"></a>		
-<a name="line873"></a>		switch($name)
-<a name="line874"></a>		{
-<a name="line875"></a>			case 'STRUCT':
-<a name="line876"></a>			case 'ARRAY':
-<a name="line877"></a>				// Creates array for child elements
-<a name="line878"></a>				
-<a name="line879"></a>				$cur_val = array('value' => array(),
-<a name="line880"></a>								 'type'	 => $name);
-<a name="line881"></a>								
-<a name="line882"></a>				array_unshift($this->xh[$the_parser]['valuestack'], $cur_val);
-<a name="line883"></a>			break;
-<a name="line884"></a>			case 'METHODNAME':
-<a name="line885"></a>			case 'NAME':
-<a name="line886"></a>				$this->xh[$the_parser]['ac'] = '';
-<a name="line887"></a>			break;
-<a name="line888"></a>			case 'FAULT':
-<a name="line889"></a>				$this->xh[$the_parser]['isf'] = 1;
+<a name="line824"></a>			$r = new XML_RPC_Response($v, $errno, $errstr_v->scalarval());
+<a name="line825"></a>		}
+<a name="line826"></a>		else
+<a name="line827"></a>		{
+<a name="line828"></a>			$r = new XML_RPC_Response($v);
+<a name="line829"></a>		}
+<a name="line830"></a>
+<a name="line831"></a>		$r->headers = $this->xh[$parser]['headers'];
+<a name="line832"></a>		return $r;
+<a name="line833"></a>	}
+<a name="line834"></a>	
+<a name="line835"></a>	// ------------------------------------
+<a name="line836"></a>	//  Begin Return Message Parsing section
+<a name="line837"></a>	// ------------------------------------
+<a name="line838"></a>	
+<a name="line839"></a>	// quick explanation of components:
+<a name="line840"></a>	//   ac - used to accumulate values
+<a name="line841"></a>	//   isf - used to indicate a fault
+<a name="line842"></a>	//   lv - used to indicate "looking for a value": implements
+<a name="line843"></a>	//		the logic to allow values with no types to be strings
+<a name="line844"></a>	//   params - used to store parameters in method calls
+<a name="line845"></a>	//   method - used to store method name
+<a name="line846"></a>	//	 stack - array with parent tree of the xml element,
+<a name="line847"></a>	//			 used to validate the nesting of elements
+<a name="line848"></a>
+<a name="line849"></a>	//-------------------------------------
+<a name="line850"></a>	//  Start Element Handler
+<a name="line851"></a>	//-------------------------------------
+<a name="line852"></a>
+<a name="line853"></a>	function open_tag($the_parser, $name, $attrs)
+<a name="line854"></a>	{
+<a name="line855"></a>		// If invalid nesting, then return
+<a name="line856"></a>		if ($this->xh[$the_parser]['isf'] > 1) return;
+<a name="line857"></a>		
+<a name="line858"></a>		// Evaluate and check for correct nesting of XML elements
+<a name="line859"></a>		
+<a name="line860"></a>		if (count($this->xh[$the_parser]['stack']) == 0)
+<a name="line861"></a>		{
+<a name="line862"></a>			if ($name != 'METHODRESPONSE' && $name != 'METHODCALL')
+<a name="line863"></a>			{
+<a name="line864"></a>				$this->xh[$the_parser]['isf'] = 2;
+<a name="line865"></a>				$this->xh[$the_parser]['isf_reason'] = 'Top level XML-RPC element is missing';
+<a name="line866"></a>				return;
+<a name="line867"></a>			}
+<a name="line868"></a>		}
+<a name="line869"></a>		else
+<a name="line870"></a>		{
+<a name="line871"></a>			// not top level element: see if parent is OK
+<a name="line872"></a>			if ( ! in_array($this->xh[$the_parser]['stack'][0], $this->valid_parents[$name], TRUE))
+<a name="line873"></a>			{
+<a name="line874"></a>				$this->xh[$the_parser]['isf'] = 2;
+<a name="line875"></a>				$this->xh[$the_parser]['isf_reason'] = "XML-RPC element $name cannot be child of ".$this->xh[$the_parser]['stack'][0];
+<a name="line876"></a>				return;
+<a name="line877"></a>			}
+<a name="line878"></a>		}
+<a name="line879"></a>		
+<a name="line880"></a>		switch($name)
+<a name="line881"></a>		{
+<a name="line882"></a>			case 'STRUCT':
+<a name="line883"></a>			case 'ARRAY':
+<a name="line884"></a>				// Creates array for child elements
+<a name="line885"></a>				
+<a name="line886"></a>				$cur_val = array('value' => array(),
+<a name="line887"></a>								 'type'	 => $name);
+<a name="line888"></a>								
+<a name="line889"></a>				array_unshift($this->xh[$the_parser]['valuestack'], $cur_val);
 <a name="line890"></a>			break;
-<a name="line891"></a>			case 'PARAM':
-<a name="line892"></a>				$this->xh[$the_parser]['value'] = null;
-<a name="line893"></a>			break;
-<a name="line894"></a>			case 'VALUE':
-<a name="line895"></a>				$this->xh[$the_parser]['vt'] = 'value';
-<a name="line896"></a>				$this->xh[$the_parser]['ac'] = '';
-<a name="line897"></a>				$this->xh[$the_parser]['lv'] = 1;
-<a name="line898"></a>			break;
-<a name="line899"></a>			case 'I4':
-<a name="line900"></a>			case 'INT':
-<a name="line901"></a>			case 'STRING':
-<a name="line902"></a>			case 'BOOLEAN':
-<a name="line903"></a>			case 'DOUBLE':
-<a name="line904"></a>			case 'DATETIME.ISO8601':
-<a name="line905"></a>			case 'BASE64':
-<a name="line906"></a>				if ($this->xh[$the_parser]['vt'] != 'value')
-<a name="line907"></a>				{
-<a name="line908"></a>					//two data elements inside a value: an error occurred!
-<a name="line909"></a>					$this->xh[$the_parser]['isf'] = 2;
-<a name="line910"></a>					$this->xh[$the_parser]['isf_reason'] = "'Twas a $name element following a ".$this->xh[$the_parser]['vt']." element inside a single value";
-<a name="line911"></a>					return;
-<a name="line912"></a>				}
-<a name="line913"></a>				
-<a name="line914"></a>				$this->xh[$the_parser]['ac'] = '';
-<a name="line915"></a>			break;
-<a name="line916"></a>			case 'MEMBER':
-<a name="line917"></a>				// Set name of <member> to nothing to prevent errors later if no <name> is found
-<a name="line918"></a>				$this->xh[$the_parser]['valuestack'][0]['name'] = '';
-<a name="line919"></a>				
-<a name="line920"></a>				// Set NULL value to check to see if value passed for this param/member
-<a name="line921"></a>				$this->xh[$the_parser]['value'] = null;
+<a name="line891"></a>			case 'METHODNAME':
+<a name="line892"></a>			case 'NAME':
+<a name="line893"></a>				$this->xh[$the_parser]['ac'] = '';
+<a name="line894"></a>			break;
+<a name="line895"></a>			case 'FAULT':
+<a name="line896"></a>				$this->xh[$the_parser]['isf'] = 1;
+<a name="line897"></a>			break;
+<a name="line898"></a>			case 'PARAM':
+<a name="line899"></a>				$this->xh[$the_parser]['value'] = null;
+<a name="line900"></a>			break;
+<a name="line901"></a>			case 'VALUE':
+<a name="line902"></a>				$this->xh[$the_parser]['vt'] = 'value';
+<a name="line903"></a>				$this->xh[$the_parser]['ac'] = '';
+<a name="line904"></a>				$this->xh[$the_parser]['lv'] = 1;
+<a name="line905"></a>			break;
+<a name="line906"></a>			case 'I4':
+<a name="line907"></a>			case 'INT':
+<a name="line908"></a>			case 'STRING':
+<a name="line909"></a>			case 'BOOLEAN':
+<a name="line910"></a>			case 'DOUBLE':
+<a name="line911"></a>			case 'DATETIME.ISO8601':
+<a name="line912"></a>			case 'BASE64':
+<a name="line913"></a>				if ($this->xh[$the_parser]['vt'] != 'value')
+<a name="line914"></a>				{
+<a name="line915"></a>					//two data elements inside a value: an error occurred!
+<a name="line916"></a>					$this->xh[$the_parser]['isf'] = 2;
+<a name="line917"></a>					$this->xh[$the_parser]['isf_reason'] = "'Twas a $name element following a ".$this->xh[$the_parser]['vt']." element inside a single value";
+<a name="line918"></a>					return;
+<a name="line919"></a>				}
+<a name="line920"></a>				
+<a name="line921"></a>				$this->xh[$the_parser]['ac'] = '';
 <a name="line922"></a>			break;
-<a name="line923"></a>			case 'DATA':
-<a name="line924"></a>			case 'METHODCALL':
-<a name="line925"></a>			case 'METHODRESPONSE':
-<a name="line926"></a>			case 'PARAMS':
-<a name="line927"></a>				// valid elements that add little to processing
-<a name="line928"></a>			break;
-<a name="line929"></a>			default:
-<a name="line930"></a>				/// An Invalid Element is Found, so we have trouble
-<a name="line931"></a>				$this->xh[$the_parser]['isf'] = 2;
-<a name="line932"></a>				$this->xh[$the_parser]['isf_reason'] = "Invalid XML-RPC element found: $name";
-<a name="line933"></a>			break;
-<a name="line934"></a>		}
-<a name="line935"></a>		
-<a name="line936"></a>		// Add current element name to stack, to allow validation of nesting
-<a name="line937"></a>		array_unshift($this->xh[$the_parser]['stack'], $name);
-<a name="line938"></a>
-<a name="line939"></a>		if ($name != 'VALUE') $this->xh[$the_parser]['lv'] = 0;
-<a name="line940"></a>	}
-<a name="line941"></a>	// END
-<a name="line942"></a>
-<a name="line943"></a>
-<a name="line944"></a>	//-------------------------------------
-<a name="line945"></a>	//  End Element Handler
-<a name="line946"></a>	//-------------------------------------
-<a name="line947"></a>
-<a name="line948"></a>	function closing_tag($the_parser, $name)
-<a name="line949"></a>	{
-<a name="line950"></a>		if ($this->xh[$the_parser]['isf'] > 1) return;
-<a name="line951"></a>		
-<a name="line952"></a>		// Remove current element from stack and set variable
-<a name="line953"></a>		// NOTE: If the XML validates, then we do not have to worry about
-<a name="line954"></a>		// the opening and closing of elements.  Nesting is checked on the opening
-<a name="line955"></a>		// tag so we be safe there as well.
-<a name="line956"></a>		
-<a name="line957"></a>		$curr_elem = array_shift($this->xh[$the_parser]['stack']);
-<a name="line958"></a>	
-<a name="line959"></a>		switch($name)
-<a name="line960"></a>		{
-<a name="line961"></a>			case 'STRUCT':
-<a name="line962"></a>			case 'ARRAY':
-<a name="line963"></a>				$cur_val = array_shift($this->xh[$the_parser]['valuestack']);
-<a name="line964"></a>				$this->xh[$the_parser]['value'] = ( ! isset($cur_val['values'])) ? array() : $cur_val['values'];
-<a name="line965"></a>				$this->xh[$the_parser]['vt']	= strtolower($name);
-<a name="line966"></a>			break;
-<a name="line967"></a>			case 'NAME':
-<a name="line968"></a>				$this->xh[$the_parser]['valuestack'][0]['name'] = $this->xh[$the_parser]['ac'];
-<a name="line969"></a>			break;
-<a name="line970"></a>			case 'BOOLEAN':
-<a name="line971"></a>			case 'I4':
-<a name="line972"></a>			case 'INT':
-<a name="line973"></a>			case 'STRING':
-<a name="line974"></a>			case 'DOUBLE':
-<a name="line975"></a>			case 'DATETIME.ISO8601':
-<a name="line976"></a>			case 'BASE64':
-<a name="line977"></a>				$this->xh[$the_parser]['vt'] = strtolower($name);
-<a name="line978"></a>				
-<a name="line979"></a>				if ($name == 'STRING')
-<a name="line980"></a>				{
-<a name="line981"></a>					$this->xh[$the_parser]['value'] = $this->xh[$the_parser]['ac'];
-<a name="line982"></a>				}
-<a name="line983"></a>				elseif ($name=='DATETIME.ISO8601')
-<a name="line984"></a>				{
-<a name="line985"></a>					$this->xh[$the_parser]['vt']	= $this->xmlrpcDateTime;
-<a name="line986"></a>					$this->xh[$the_parser]['value'] = $this->xh[$the_parser]['ac'];
-<a name="line987"></a>				}
-<a name="line988"></a>				elseif ($name=='BASE64')
-<a name="line989"></a>				{
-<a name="line990"></a>					$this->xh[$the_parser]['value'] = base64_decode($this->xh[$the_parser]['ac']);
-<a name="line991"></a>				}
-<a name="line992"></a>				elseif ($name=='BOOLEAN')
-<a name="line993"></a>				{
-<a name="line994"></a>					// Translated BOOLEAN values to TRUE AND FALSE
-<a name="line995"></a>					if ($this->xh[$the_parser]['ac'] == '1')
-<a name="line996"></a>					{
-<a name="line997"></a>						$this->xh[$the_parser]['value'] = TRUE;
-<a name="line998"></a>					}
-<a name="line999"></a>					else
-<a name="line1000"></a>					{
-<a name="line1001"></a>						$this->xh[$the_parser]['value'] = FALSE;
-<a name="line1002"></a>					}
-<a name="line1003"></a>				}
-<a name="line1004"></a>				elseif ($name=='DOUBLE')
-<a name="line1005"></a>				{
-<a name="line1006"></a>					// we have a DOUBLE
-<a name="line1007"></a>					// we must check that only 0123456789-.<space> are characters here
-<a name="line1008"></a>					if ( ! preg_match('/^[+-]?[eE0-9\t \.]+$/', $this->xh[$the_parser]['ac']))
-<a name="line1009"></a>					{
-<a name="line1010"></a>						$this->xh[$the_parser]['value'] = 'ERROR_NON_NUMERIC_FOUND';
-<a name="line1011"></a>					}
-<a name="line1012"></a>					else
-<a name="line1013"></a>					{
-<a name="line1014"></a>						$this->xh[$the_parser]['value'] = (double)$this->xh[$the_parser]['ac'];
-<a name="line1015"></a>					}
-<a name="line1016"></a>				}
-<a name="line1017"></a>				else
-<a name="line1018"></a>				{
-<a name="line1019"></a>					// we have an I4/INT
-<a name="line1020"></a>					// we must check that only 0123456789-<space> are characters here
-<a name="line1021"></a>					if ( ! preg_match('/^[+-]?[0-9\t ]+$/', $this->xh[$the_parser]['ac']))
-<a name="line1022"></a>					{
-<a name="line1023"></a>						$this->xh[$the_parser]['value'] = 'ERROR_NON_NUMERIC_FOUND';
-<a name="line1024"></a>					}
-<a name="line1025"></a>					else
-<a name="line1026"></a>					{
-<a name="line1027"></a>						$this->xh[$the_parser]['value'] = (int)$this->xh[$the_parser]['ac'];
-<a name="line1028"></a>					}
-<a name="line1029"></a>				}
-<a name="line1030"></a>				$this->xh[$the_parser]['ac'] = '';
-<a name="line1031"></a>				$this->xh[$the_parser]['lv'] = 3; // indicate we've found a value
-<a name="line1032"></a>			break;
-<a name="line1033"></a>			case 'VALUE':
-<a name="line1034"></a>				// This if() detects if no scalar was inside <VALUE></VALUE>
-<a name="line1035"></a>				if ($this->xh[$the_parser]['vt']=='value')
-<a name="line1036"></a>				{
-<a name="line1037"></a>					$this->xh[$the_parser]['value']	= $this->xh[$the_parser]['ac'];
-<a name="line1038"></a>					$this->xh[$the_parser]['vt']	= $this->xmlrpcString;
-<a name="line1039"></a>				}
-<a name="line1040"></a>				
-<a name="line1041"></a>				// build the XML-RPC value out of the data received, and substitute it
-<a name="line1042"></a>				$temp = new XML_RPC_Values($this->xh[$the_parser]['value'], $this->xh[$the_parser]['vt']);
-<a name="line1043"></a>				
-<a name="line1044"></a>				if (count($this->xh[$the_parser]['valuestack']) && $this->xh[$the_parser]['valuestack'][0]['type'] == 'ARRAY')
-<a name="line1045"></a>				{
-<a name="line1046"></a>					// Array
-<a name="line1047"></a>					$this->xh[$the_parser]['valuestack'][0]['values'][] = $temp;
-<a name="line1048"></a>				}
-<a name="line1049"></a>				else
-<a name="line1050"></a>				{
-<a name="line1051"></a>					// Struct
-<a name="line1052"></a>					$this->xh[$the_parser]['value'] = $temp;
-<a name="line1053"></a>				}
-<a name="line1054"></a>			break;
-<a name="line1055"></a>			case 'MEMBER':
-<a name="line1056"></a>				$this->xh[$the_parser]['ac']='';
-<a name="line1057"></a>				
-<a name="line1058"></a>				// If value add to array in the stack for the last element built
-<a name="line1059"></a>				if ($this->xh[$the_parser]['value'])
-<a name="line1060"></a>				{
-<a name="line1061"></a>					$this->xh[$the_parser]['valuestack'][0]['values'][$this->xh[$the_parser]['valuestack'][0]['name']] = $this->xh[$the_parser]['value'];
-<a name="line1062"></a>				}
-<a name="line1063"></a>			break;
-<a name="line1064"></a>			case 'DATA':
-<a name="line1065"></a>				$this->xh[$the_parser]['ac']='';
-<a name="line1066"></a>			break;
-<a name="line1067"></a>			case 'PARAM':
-<a name="line1068"></a>				if ($this->xh[$the_parser]['value'])
-<a name="line1069"></a>				{
-<a name="line1070"></a>					$this->xh[$the_parser]['params'][] = $this->xh[$the_parser]['value'];
-<a name="line1071"></a>				}
-<a name="line1072"></a>			break;
-<a name="line1073"></a>			case 'METHODNAME':
-<a name="line1074"></a>				$this->xh[$the_parser]['method'] = ltrim($this->xh[$the_parser]['ac']);
-<a name="line1075"></a>			break;
-<a name="line1076"></a>			case 'PARAMS':
-<a name="line1077"></a>			case 'FAULT':
-<a name="line1078"></a>			case 'METHODCALL':
-<a name="line1079"></a>			case 'METHORESPONSE':
-<a name="line1080"></a>				// We're all good kids with nuthin' to do
-<a name="line1081"></a>			break;
-<a name="line1082"></a>			default:
-<a name="line1083"></a>				// End of an Invalid Element.  Taken care of during the opening tag though
-<a name="line1084"></a>			break;
-<a name="line1085"></a>		}
-<a name="line1086"></a>	}
-<a name="line1087"></a>
-<a name="line1088"></a>	//-------------------------------------
-<a name="line1089"></a>	//  Parses Character Data
-<a name="line1090"></a>	//-------------------------------------
-<a name="line1091"></a>
-<a name="line1092"></a>	function character_data($the_parser, $data)
-<a name="line1093"></a>	{
-<a name="line1094"></a>		if ($this->xh[$the_parser]['isf'] > 1) return; // XML Fault found already
-<a name="line1095"></a>		
-<a name="line1096"></a>		// If a value has not been found
-<a name="line1097"></a>		if ($this->xh[$the_parser]['lv'] != 3)
-<a name="line1098"></a>		{
-<a name="line1099"></a>			if ($this->xh[$the_parser]['lv'] == 1)
-<a name="line1100"></a>			{
-<a name="line1101"></a>				$this->xh[$the_parser]['lv'] = 2; // Found a value
-<a name="line1102"></a>			}
-<a name="line1103"></a>				
-<a name="line1104"></a>			if( ! @isset($this->xh[$the_parser]['ac']))
-<a name="line1105"></a>			{
-<a name="line1106"></a>				$this->xh[$the_parser]['ac'] = '';
-<a name="line1107"></a>			}
-<a name="line1108"></a>				
-<a name="line1109"></a>			$this->xh[$the_parser]['ac'] .= $data;
-<a name="line1110"></a>		}
-<a name="line1111"></a>	}
-<a name="line1112"></a>	
-<a name="line1113"></a>	
-<a name="line1114"></a>	function addParam($par) { $this->params[]=$par; }
-<a name="line1115"></a>	
-<a name="line1116"></a>	function output_parameters($array=FALSE)
-<a name="line1117"></a>	{
-<a name="line1118"></a>		$CI =& get_instance();	
-<a name="line1119"></a>
-<a name="line1120"></a>		if ($array !== FALSE && is_array($array))
-<a name="line1121"></a>		{
-<a name="line1122"></a>			while (list($key) = each($array))
-<a name="line1123"></a>			{
-<a name="line1124"></a>				if (is_array($array[$key]))
-<a name="line1125"></a>				{
-<a name="line1126"></a>					$array[$key] = $this->output_parameters($array[$key]);
-<a name="line1127"></a>				}
-<a name="line1128"></a>				else
-<a name="line1129"></a>				{
-<a name="line1130"></a>					$array[$key] = $CI->input->xss_clean($array[$key]);
-<a name="line1131"></a>				}
-<a name="line1132"></a>			}
-<a name="line1133"></a>			
-<a name="line1134"></a>			$parameters = $array;
-<a name="line1135"></a>		}
-<a name="line1136"></a>		else
-<a name="line1137"></a>		{
-<a name="line1138"></a>			$parameters = array();
-<a name="line1139"></a>		
-<a name="line1140"></a>			for ($i = 0; $i < count($this->params); $i++)
-<a name="line1141"></a>			{
-<a name="line1142"></a>				$a_param = $this->decode_message($this->params[$i]);
-<a name="line1143"></a>				
-<a name="line1144"></a>				if (is_array($a_param))
-<a name="line1145"></a>				{
-<a name="line1146"></a>					$parameters[] = $this->output_parameters($a_param);
-<a name="line1147"></a>				}
-<a name="line1148"></a>				else
-<a name="line1149"></a>				{
-<a name="line1150"></a>					$parameters[] = $CI->input->xss_clean($a_param);
-<a name="line1151"></a>				}
-<a name="line1152"></a>			}	
-<a name="line1153"></a>		}
-<a name="line1154"></a>		
-<a name="line1155"></a>		return $parameters;
-<a name="line1156"></a>	}
-<a name="line1157"></a>	
-<a name="line1158"></a>	
-<a name="line1159"></a>	function decode_message($param)
-<a name="line1160"></a>	{
-<a name="line1161"></a>		$kind = $param->kindOf();
-<a name="line1162"></a>
-<a name="line1163"></a>		if($kind == 'scalar')
-<a name="line1164"></a>		{
-<a name="line1165"></a>			return $param->scalarval();
-<a name="line1166"></a>		}
-<a name="line1167"></a>		elseif($kind == 'array')
-<a name="line1168"></a>		{
-<a name="line1169"></a>			reset($param->me);
-<a name="line1170"></a>			list($a,$b) = each($param->me);
-<a name="line1171"></a>			
-<a name="line1172"></a>			$arr = array();
-<a name="line1173"></a>
-<a name="line1174"></a>			for($i = 0; $i < count($b); $i++)
-<a name="line1175"></a>			{
-<a name="line1176"></a>				$arr[] = $this->decode_message($param->me['array'][$i]);
-<a name="line1177"></a>			}
-<a name="line1178"></a>			
-<a name="line1179"></a>			return $arr;
+<a name="line923"></a>			case 'MEMBER':
+<a name="line924"></a>				// Set name of <member> to nothing to prevent errors later if no <name> is found
+<a name="line925"></a>				$this->xh[$the_parser]['valuestack'][0]['name'] = '';
+<a name="line926"></a>				
+<a name="line927"></a>				// Set NULL value to check to see if value passed for this param/member
+<a name="line928"></a>				$this->xh[$the_parser]['value'] = null;
+<a name="line929"></a>			break;
+<a name="line930"></a>			case 'DATA':
+<a name="line931"></a>			case 'METHODCALL':
+<a name="line932"></a>			case 'METHODRESPONSE':
+<a name="line933"></a>			case 'PARAMS':
+<a name="line934"></a>				// valid elements that add little to processing
+<a name="line935"></a>			break;
+<a name="line936"></a>			default:
+<a name="line937"></a>				/// An Invalid Element is Found, so we have trouble
+<a name="line938"></a>				$this->xh[$the_parser]['isf'] = 2;
+<a name="line939"></a>				$this->xh[$the_parser]['isf_reason'] = "Invalid XML-RPC element found: $name";
+<a name="line940"></a>			break;
+<a name="line941"></a>		}
+<a name="line942"></a>		
+<a name="line943"></a>		// Add current element name to stack, to allow validation of nesting
+<a name="line944"></a>		array_unshift($this->xh[$the_parser]['stack'], $name);
+<a name="line945"></a>
+<a name="line946"></a>		if ($name != 'VALUE') $this->xh[$the_parser]['lv'] = 0;
+<a name="line947"></a>	}
+<a name="line948"></a>	// END
+<a name="line949"></a>
+<a name="line950"></a>
+<a name="line951"></a>	//-------------------------------------
+<a name="line952"></a>	//  End Element Handler
+<a name="line953"></a>	//-------------------------------------
+<a name="line954"></a>
+<a name="line955"></a>	function closing_tag($the_parser, $name)
+<a name="line956"></a>	{
+<a name="line957"></a>		if ($this->xh[$the_parser]['isf'] > 1) return;
+<a name="line958"></a>		
+<a name="line959"></a>		// Remove current element from stack and set variable
+<a name="line960"></a>		// NOTE: If the XML validates, then we do not have to worry about
+<a name="line961"></a>		// the opening and closing of elements.  Nesting is checked on the opening
+<a name="line962"></a>		// tag so we be safe there as well.
+<a name="line963"></a>		
+<a name="line964"></a>		$curr_elem = array_shift($this->xh[$the_parser]['stack']);
+<a name="line965"></a>	
+<a name="line966"></a>		switch($name)
+<a name="line967"></a>		{
+<a name="line968"></a>			case 'STRUCT':
+<a name="line969"></a>			case 'ARRAY':
+<a name="line970"></a>				$cur_val = array_shift($this->xh[$the_parser]['valuestack']);
+<a name="line971"></a>				$this->xh[$the_parser]['value'] = ( ! isset($cur_val['values'])) ? array() : $cur_val['values'];
+<a name="line972"></a>				$this->xh[$the_parser]['vt']	= strtolower($name);
+<a name="line973"></a>			break;
+<a name="line974"></a>			case 'NAME':
+<a name="line975"></a>				$this->xh[$the_parser]['valuestack'][0]['name'] = $this->xh[$the_parser]['ac'];
+<a name="line976"></a>			break;
+<a name="line977"></a>			case 'BOOLEAN':
+<a name="line978"></a>			case 'I4':
+<a name="line979"></a>			case 'INT':
+<a name="line980"></a>			case 'STRING':
+<a name="line981"></a>			case 'DOUBLE':
+<a name="line982"></a>			case 'DATETIME.ISO8601':
+<a name="line983"></a>			case 'BASE64':
+<a name="line984"></a>				$this->xh[$the_parser]['vt'] = strtolower($name);
+<a name="line985"></a>				
+<a name="line986"></a>				if ($name == 'STRING')
+<a name="line987"></a>				{
+<a name="line988"></a>					$this->xh[$the_parser]['value'] = $this->xh[$the_parser]['ac'];
+<a name="line989"></a>				}
+<a name="line990"></a>				elseif ($name=='DATETIME.ISO8601')
+<a name="line991"></a>				{
+<a name="line992"></a>					$this->xh[$the_parser]['vt']	= $this->xmlrpcDateTime;
+<a name="line993"></a>					$this->xh[$the_parser]['value'] = $this->xh[$the_parser]['ac'];
+<a name="line994"></a>				}
+<a name="line995"></a>				elseif ($name=='BASE64')
+<a name="line996"></a>				{
+<a name="line997"></a>					$this->xh[$the_parser]['value'] = base64_decode($this->xh[$the_parser]['ac']);
+<a name="line998"></a>				}
+<a name="line999"></a>				elseif ($name=='BOOLEAN')
+<a name="line1000"></a>				{
+<a name="line1001"></a>					// Translated BOOLEAN values to TRUE AND FALSE
+<a name="line1002"></a>					if ($this->xh[$the_parser]['ac'] == '1')
+<a name="line1003"></a>					{
+<a name="line1004"></a>						$this->xh[$the_parser]['value'] = TRUE;
+<a name="line1005"></a>					}
+<a name="line1006"></a>					else
+<a name="line1007"></a>					{
+<a name="line1008"></a>						$this->xh[$the_parser]['value'] = FALSE;
+<a name="line1009"></a>					}
+<a name="line1010"></a>				}
+<a name="line1011"></a>				elseif ($name=='DOUBLE')
+<a name="line1012"></a>				{
+<a name="line1013"></a>					// we have a DOUBLE
+<a name="line1014"></a>					// we must check that only 0123456789-.<space> are characters here
+<a name="line1015"></a>					if ( ! preg_match('/^[+-]?[eE0-9\t \.]+$/', $this->xh[$the_parser]['ac']))
+<a name="line1016"></a>					{
+<a name="line1017"></a>						$this->xh[$the_parser]['value'] = 'ERROR_NON_NUMERIC_FOUND';
+<a name="line1018"></a>					}
+<a name="line1019"></a>					else
+<a name="line1020"></a>					{
+<a name="line1021"></a>						$this->xh[$the_parser]['value'] = (double)$this->xh[$the_parser]['ac'];
+<a name="line1022"></a>					}
+<a name="line1023"></a>				}
+<a name="line1024"></a>				else
+<a name="line1025"></a>				{
+<a name="line1026"></a>					// we have an I4/INT
+<a name="line1027"></a>					// we must check that only 0123456789-<space> are characters here
+<a name="line1028"></a>					if ( ! preg_match('/^[+-]?[0-9\t ]+$/', $this->xh[$the_parser]['ac']))
+<a name="line1029"></a>					{
+<a name="line1030"></a>						$this->xh[$the_parser]['value'] = 'ERROR_NON_NUMERIC_FOUND';
+<a name="line1031"></a>					}
+<a name="line1032"></a>					else
+<a name="line1033"></a>					{
+<a name="line1034"></a>						$this->xh[$the_parser]['value'] = (int)$this->xh[$the_parser]['ac'];
+<a name="line1035"></a>					}
+<a name="line1036"></a>				}
+<a name="line1037"></a>				$this->xh[$the_parser]['ac'] = '';
+<a name="line1038"></a>				$this->xh[$the_parser]['lv'] = 3; // indicate we've found a value
+<a name="line1039"></a>			break;
+<a name="line1040"></a>			case 'VALUE':
+<a name="line1041"></a>				// This if() detects if no scalar was inside <VALUE></VALUE>
+<a name="line1042"></a>				if ($this->xh[$the_parser]['vt']=='value')
+<a name="line1043"></a>				{
+<a name="line1044"></a>					$this->xh[$the_parser]['value']	= $this->xh[$the_parser]['ac'];
+<a name="line1045"></a>					$this->xh[$the_parser]['vt']	= $this->xmlrpcString;
+<a name="line1046"></a>				}
+<a name="line1047"></a>				
+<a name="line1048"></a>				// build the XML-RPC value out of the data received, and substitute it
+<a name="line1049"></a>				$temp = new XML_RPC_Values($this->xh[$the_parser]['value'], $this->xh[$the_parser]['vt']);
+<a name="line1050"></a>				
+<a name="line1051"></a>				if (count($this->xh[$the_parser]['valuestack']) && $this->xh[$the_parser]['valuestack'][0]['type'] == 'ARRAY')
+<a name="line1052"></a>				{
+<a name="line1053"></a>					// Array
+<a name="line1054"></a>					$this->xh[$the_parser]['valuestack'][0]['values'][] = $temp;
+<a name="line1055"></a>				}
+<a name="line1056"></a>				else
+<a name="line1057"></a>				{
+<a name="line1058"></a>					// Struct
+<a name="line1059"></a>					$this->xh[$the_parser]['value'] = $temp;
+<a name="line1060"></a>				}
+<a name="line1061"></a>			break;
+<a name="line1062"></a>			case 'MEMBER':
+<a name="line1063"></a>				$this->xh[$the_parser]['ac']='';
+<a name="line1064"></a>				
+<a name="line1065"></a>				// If value add to array in the stack for the last element built
+<a name="line1066"></a>				if ($this->xh[$the_parser]['value'])
+<a name="line1067"></a>				{
+<a name="line1068"></a>					$this->xh[$the_parser]['valuestack'][0]['values'][$this->xh[$the_parser]['valuestack'][0]['name']] = $this->xh[$the_parser]['value'];
+<a name="line1069"></a>				}
+<a name="line1070"></a>			break;
+<a name="line1071"></a>			case 'DATA':
+<a name="line1072"></a>				$this->xh[$the_parser]['ac']='';
+<a name="line1073"></a>			break;
+<a name="line1074"></a>			case 'PARAM':
+<a name="line1075"></a>				if ($this->xh[$the_parser]['value'])
+<a name="line1076"></a>				{
+<a name="line1077"></a>					$this->xh[$the_parser]['params'][] = $this->xh[$the_parser]['value'];
+<a name="line1078"></a>				}
+<a name="line1079"></a>			break;
+<a name="line1080"></a>			case 'METHODNAME':
+<a name="line1081"></a>				$this->xh[$the_parser]['method'] = ltrim($this->xh[$the_parser]['ac']);
+<a name="line1082"></a>			break;
+<a name="line1083"></a>			case 'PARAMS':
+<a name="line1084"></a>			case 'FAULT':
+<a name="line1085"></a>			case 'METHODCALL':
+<a name="line1086"></a>			case 'METHORESPONSE':
+<a name="line1087"></a>				// We're all good kids with nuthin' to do
+<a name="line1088"></a>			break;
+<a name="line1089"></a>			default:
+<a name="line1090"></a>				// End of an Invalid Element.  Taken care of during the opening tag though
+<a name="line1091"></a>			break;
+<a name="line1092"></a>		}
+<a name="line1093"></a>	}
+<a name="line1094"></a>
+<a name="line1095"></a>	//-------------------------------------
+<a name="line1096"></a>	//  Parses Character Data
+<a name="line1097"></a>	//-------------------------------------
+<a name="line1098"></a>
+<a name="line1099"></a>	function character_data($the_parser, $data)
+<a name="line1100"></a>	{
+<a name="line1101"></a>		if ($this->xh[$the_parser]['isf'] > 1) return; // XML Fault found already
+<a name="line1102"></a>		
+<a name="line1103"></a>		// If a value has not been found
+<a name="line1104"></a>		if ($this->xh[$the_parser]['lv'] != 3)
+<a name="line1105"></a>		{
+<a name="line1106"></a>			if ($this->xh[$the_parser]['lv'] == 1)
+<a name="line1107"></a>			{
+<a name="line1108"></a>				$this->xh[$the_parser]['lv'] = 2; // Found a value
+<a name="line1109"></a>			}
+<a name="line1110"></a>				
+<a name="line1111"></a>			if( ! @isset($this->xh[$the_parser]['ac']))
+<a name="line1112"></a>			{
+<a name="line1113"></a>				$this->xh[$the_parser]['ac'] = '';
+<a name="line1114"></a>			}
+<a name="line1115"></a>				
+<a name="line1116"></a>			$this->xh[$the_parser]['ac'] .= $data;
+<a name="line1117"></a>		}
+<a name="line1118"></a>	}
+<a name="line1119"></a>	
+<a name="line1120"></a>	
+<a name="line1121"></a>	function addParam($par) { $this->params[]=$par; }
+<a name="line1122"></a>	
+<a name="line1123"></a>	function output_parameters($array=FALSE)
+<a name="line1124"></a>	{
+<a name="line1125"></a>		$CI =& get_instance();	
+<a name="line1126"></a>
+<a name="line1127"></a>		if ($this->xss_clean && ! isset($CI->security))
+<a name="line1128"></a>		{
+<a name="line1129"></a>			$CI->load->library('security');
+<a name="line1130"></a>		}
+<a name="line1131"></a>		
+<a name="line1132"></a>		if ($array !== FALSE && is_array($array))
+<a name="line1133"></a>		{
+<a name="line1134"></a>			while (list($key) = each($array))
+<a name="line1135"></a>			{
+<a name="line1136"></a>				if (is_array($array[$key]))
+<a name="line1137"></a>				{
+<a name="line1138"></a>					$array[$key] = $this->output_parameters($array[$key]);
+<a name="line1139"></a>				}
+<a name="line1140"></a>				else
+<a name="line1141"></a>				{
+<a name="line1142"></a>					// 'bits' is for the MetaWeblog API image bits
+<a name="line1143"></a>					// @todo - this needs to be made more general purpose
+<a name="line1144"></a>					$array[$key] = ($key == 'bits' OR $this->xss_clean == FALSE) ? $array[$key] : $CI->security->xss_clean($array[$key]);
+<a name="line1145"></a>				}
+<a name="line1146"></a>			}
+<a name="line1147"></a>			
+<a name="line1148"></a>			$parameters = $array;
+<a name="line1149"></a>		}
+<a name="line1150"></a>		else
+<a name="line1151"></a>		{
+<a name="line1152"></a>			$parameters = array();
+<a name="line1153"></a>		
+<a name="line1154"></a>			for ($i = 0; $i < count($this->params); $i++)
+<a name="line1155"></a>			{
+<a name="line1156"></a>				$a_param = $this->decode_message($this->params[$i]);
+<a name="line1157"></a>				
+<a name="line1158"></a>				if (is_array($a_param))
+<a name="line1159"></a>				{
+<a name="line1160"></a>					$parameters[] = $this->output_parameters($a_param);
+<a name="line1161"></a>				}
+<a name="line1162"></a>				else
+<a name="line1163"></a>				{
+<a name="line1164"></a>					$parameters[] = ($this->xss_clean) ? $CI->security->xss_clean($a_param) : $a_param;
+<a name="line1165"></a>				}
+<a name="line1166"></a>			}	
+<a name="line1167"></a>		}
+<a name="line1168"></a>		
+<a name="line1169"></a>		return $parameters;
+<a name="line1170"></a>	}
+<a name="line1171"></a>	
+<a name="line1172"></a>	
+<a name="line1173"></a>	function decode_message($param)
+<a name="line1174"></a>	{
+<a name="line1175"></a>		$kind = $param->kindOf();
+<a name="line1176"></a>
+<a name="line1177"></a>		if($kind == 'scalar')
+<a name="line1178"></a>		{
+<a name="line1179"></a>			return $param->scalarval();
 <a name="line1180"></a>		}
-<a name="line1181"></a>		elseif($kind == 'struct')
+<a name="line1181"></a>		elseif($kind == 'array')
 <a name="line1182"></a>		{
-<a name="line1183"></a>			reset($param->me['struct']);
-<a name="line1184"></a>			
-<a name="line1185"></a>			$arr = array();
-<a name="line1186"></a>
-<a name="line1187"></a>			while(list($key,$value) = each($param->me['struct']))
-<a name="line1188"></a>			{
-<a name="line1189"></a>				$arr[$key] = $this->decode_message($value);
-<a name="line1190"></a>			}
-<a name="line1191"></a>			
-<a name="line1192"></a>			return $arr;
-<a name="line1193"></a>		}
-<a name="line1194"></a>	}
-<a name="line1195"></a>	
-<a name="line1196"></a>} // End XML_RPC_Messages class
-<a name="line1197"></a>
-<a name="line1198"></a>
-<a name="line1199"></a>
-<a name="line1200"></a>/**
-<a name="line1201"></a> * XML-RPC Values class
-<a name="line1202"></a> *
-<a name="line1203"></a> * @category	XML-RPC
-<a name="line1204"></a> * @author		ExpressionEngine Dev Team
-<a name="line1205"></a> * @link		http://codeigniter.com/user_guide/libraries/xmlrpc.html
-<a name="line1206"></a> */
-<a name="line1207"></a>class XML_RPC_Values extends CI_Xmlrpc
-<a name="line1208"></a>{
-<a name="line1209"></a>	var $me 	= array();
-<a name="line1210"></a>	var $mytype	= 0;
+<a name="line1183"></a>			reset($param->me);
+<a name="line1184"></a>			list($a,$b) = each($param->me);
+<a name="line1185"></a>			
+<a name="line1186"></a>			$arr = array();
+<a name="line1187"></a>
+<a name="line1188"></a>			for($i = 0; $i < count($b); $i++)
+<a name="line1189"></a>			{
+<a name="line1190"></a>				$arr[] = $this->decode_message($param->me['array'][$i]);
+<a name="line1191"></a>			}
+<a name="line1192"></a>			
+<a name="line1193"></a>			return $arr;
+<a name="line1194"></a>		}
+<a name="line1195"></a>		elseif($kind == 'struct')
+<a name="line1196"></a>		{
+<a name="line1197"></a>			reset($param->me['struct']);
+<a name="line1198"></a>			
+<a name="line1199"></a>			$arr = array();
+<a name="line1200"></a>
+<a name="line1201"></a>			while(list($key,$value) = each($param->me['struct']))
+<a name="line1202"></a>			{
+<a name="line1203"></a>				$arr[$key] = $this->decode_message($value);
+<a name="line1204"></a>			}
+<a name="line1205"></a>			
+<a name="line1206"></a>			return $arr;
+<a name="line1207"></a>		}
+<a name="line1208"></a>	}
+<a name="line1209"></a>	
+<a name="line1210"></a>} // End XML_RPC_Messages class
 <a name="line1211"></a>
-<a name="line1212"></a>	function XML_RPC_Values($val=-1, $type='')
-<a name="line1213"></a>	{	
-<a name="line1214"></a>		parent::CI_Xmlrpc();
-<a name="line1215"></a>		
-<a name="line1216"></a>		if ($val != -1 OR $type != '')
-<a name="line1217"></a>		{
-<a name="line1218"></a>			$type = $type == '' ? 'string' : $type;
-<a name="line1219"></a>			
-<a name="line1220"></a>			if ($this->xmlrpcTypes[$type] == 1)
-<a name="line1221"></a>			{
-<a name="line1222"></a>				$this->addScalar($val,$type);
-<a name="line1223"></a>			}
-<a name="line1224"></a>			elseif ($this->xmlrpcTypes[$type] == 2)
-<a name="line1225"></a>			{
-<a name="line1226"></a>				$this->addArray($val);
-<a name="line1227"></a>			}
-<a name="line1228"></a>			elseif ($this->xmlrpcTypes[$type] == 3)
-<a name="line1229"></a>			{
-<a name="line1230"></a>				$this->addStruct($val);
-<a name="line1231"></a>			}
-<a name="line1232"></a>		}
-<a name="line1233"></a>	}
-<a name="line1234"></a>
-<a name="line1235"></a>	function addScalar($val, $type='string')
-<a name="line1236"></a>	{
-<a name="line1237"></a>		$typeof = $this->xmlrpcTypes[$type];
-<a name="line1238"></a>		
-<a name="line1239"></a>		if ($this->mytype==1)
-<a name="line1240"></a>		{
-<a name="line1241"></a>			echo '<strong>XML_RPC_Values</strong>: scalar can have only one value<br />';
-<a name="line1242"></a>			return 0;
-<a name="line1243"></a>		}
-<a name="line1244"></a>		
-<a name="line1245"></a>		if ($typeof != 1)
-<a name="line1246"></a>		{
-<a name="line1247"></a>			echo '<strong>XML_RPC_Values</strong>: not a scalar type (${typeof})<br />';
-<a name="line1248"></a>			return 0;
-<a name="line1249"></a>		}
-<a name="line1250"></a>
-<a name="line1251"></a>		if ($type == $this->xmlrpcBoolean)
-<a name="line1252"></a>		{
-<a name="line1253"></a>			if (strcasecmp($val,'true')==0 OR $val==1 OR ($val==true && strcasecmp($val,'false')))
-<a name="line1254"></a>			{
-<a name="line1255"></a>				$val = 1;
-<a name="line1256"></a>			}
-<a name="line1257"></a>			else
-<a name="line1258"></a>			{
-<a name="line1259"></a>				$val=0;
-<a name="line1260"></a>			}
-<a name="line1261"></a>		}
-<a name="line1262"></a>
-<a name="line1263"></a>		if ($this->mytype == 2)
-<a name="line1264"></a>		{
-<a name="line1265"></a>			// adding to an array here
-<a name="line1266"></a>			$ar = $this->me['array'];
-<a name="line1267"></a>			$ar[] = new XML_RPC_Values($val, $type);
-<a name="line1268"></a>			$this->me['array'] = $ar;
-<a name="line1269"></a>		}
-<a name="line1270"></a>		else
-<a name="line1271"></a>		{
-<a name="line1272"></a>			// a scalar, so set the value and remember we're scalar
-<a name="line1273"></a>			$this->me[$type] = $val;
-<a name="line1274"></a>			$this->mytype = $typeof;
+<a name="line1212"></a>
+<a name="line1213"></a>
+<a name="line1214"></a>/**
+<a name="line1215"></a> * XML-RPC Values class
+<a name="line1216"></a> *
+<a name="line1217"></a> * @category	XML-RPC
+<a name="line1218"></a> * @author		ExpressionEngine Dev Team
+<a name="line1219"></a> * @link		http://codeigniter.com/user_guide/libraries/xmlrpc.html
+<a name="line1220"></a> */
+<a name="line1221"></a>class XML_RPC_Values extends CI_Xmlrpc
+<a name="line1222"></a>{
+<a name="line1223"></a>	var $me 	= array();
+<a name="line1224"></a>	var $mytype	= 0;
+<a name="line1225"></a>
+<a name="line1226"></a>	function XML_RPC_Values($val=-1, $type='')
+<a name="line1227"></a>	{	
+<a name="line1228"></a>		parent::CI_Xmlrpc();
+<a name="line1229"></a>		
+<a name="line1230"></a>		if ($val != -1 OR $type != '')
+<a name="line1231"></a>		{
+<a name="line1232"></a>			$type = $type == '' ? 'string' : $type;
+<a name="line1233"></a>			
+<a name="line1234"></a>			if ($this->xmlrpcTypes[$type] == 1)
+<a name="line1235"></a>			{
+<a name="line1236"></a>				$this->addScalar($val,$type);
+<a name="line1237"></a>			}
+<a name="line1238"></a>			elseif ($this->xmlrpcTypes[$type] == 2)
+<a name="line1239"></a>			{
+<a name="line1240"></a>				$this->addArray($val);
+<a name="line1241"></a>			}
+<a name="line1242"></a>			elseif ($this->xmlrpcTypes[$type] == 3)
+<a name="line1243"></a>			{
+<a name="line1244"></a>				$this->addStruct($val);
+<a name="line1245"></a>			}
+<a name="line1246"></a>		}
+<a name="line1247"></a>	}
+<a name="line1248"></a>
+<a name="line1249"></a>	function addScalar($val, $type='string')
+<a name="line1250"></a>	{
+<a name="line1251"></a>		$typeof = $this->xmlrpcTypes[$type];
+<a name="line1252"></a>		
+<a name="line1253"></a>		if ($this->mytype==1)
+<a name="line1254"></a>		{
+<a name="line1255"></a>			echo '<strong>XML_RPC_Values</strong>: scalar can have only one value<br />';
+<a name="line1256"></a>			return 0;
+<a name="line1257"></a>		}
+<a name="line1258"></a>		
+<a name="line1259"></a>		if ($typeof != 1)
+<a name="line1260"></a>		{
+<a name="line1261"></a>			echo '<strong>XML_RPC_Values</strong>: not a scalar type (${typeof})<br />';
+<a name="line1262"></a>			return 0;
+<a name="line1263"></a>		}
+<a name="line1264"></a>
+<a name="line1265"></a>		if ($type == $this->xmlrpcBoolean)
+<a name="line1266"></a>		{
+<a name="line1267"></a>			if (strcasecmp($val,'true')==0 OR $val==1 OR ($val==true && strcasecmp($val,'false')))
+<a name="line1268"></a>			{
+<a name="line1269"></a>				$val = 1;
+<a name="line1270"></a>			}
+<a name="line1271"></a>			else
+<a name="line1272"></a>			{
+<a name="line1273"></a>				$val=0;
+<a name="line1274"></a>			}
 <a name="line1275"></a>		}
-<a name="line1276"></a>		return 1;
-<a name="line1277"></a>	}
-<a name="line1278"></a>
-<a name="line1279"></a>	function addArray($vals)
-<a name="line1280"></a>	{
-<a name="line1281"></a>		if ($this->mytype != 0)
-<a name="line1282"></a>		{
-<a name="line1283"></a>			echo '<strong>XML_RPC_Values</strong>: already initialized as a [' . $this->kindOf() . ']<br />';
-<a name="line1284"></a>			return 0;
-<a name="line1285"></a>		}
-<a name="line1286"></a>
-<a name="line1287"></a>		$this->mytype = $this->xmlrpcTypes['array'];
-<a name="line1288"></a>		$this->me['array'] = $vals;
-<a name="line1289"></a>		return 1;
-<a name="line1290"></a>	}
-<a name="line1291"></a>
-<a name="line1292"></a>	function addStruct($vals)
-<a name="line1293"></a>	{
-<a name="line1294"></a>		if ($this->mytype != 0)
-<a name="line1295"></a>		{
-<a name="line1296"></a>			echo '<strong>XML_RPC_Values</strong>: already initialized as a [' . $this->kindOf() . ']<br />';
-<a name="line1297"></a>			return 0;
-<a name="line1298"></a>		}
-<a name="line1299"></a>		$this->mytype = $this->xmlrpcTypes['struct'];
-<a name="line1300"></a>		$this->me['struct'] = $vals;
-<a name="line1301"></a>		return 1;
-<a name="line1302"></a>	}
-<a name="line1303"></a>
-<a name="line1304"></a>	function kindOf()
-<a name="line1305"></a>	{
-<a name="line1306"></a>		switch($this->mytype)
-<a name="line1307"></a>		{
-<a name="line1308"></a>			case 3:
-<a name="line1309"></a>				return 'struct';
-<a name="line1310"></a>				break;
-<a name="line1311"></a>			case 2:
-<a name="line1312"></a>				return 'array';
-<a name="line1313"></a>				break;
-<a name="line1314"></a>			case 1:
-<a name="line1315"></a>				return 'scalar';
-<a name="line1316"></a>				break;
-<a name="line1317"></a>			default:
-<a name="line1318"></a>				return 'undef';
-<a name="line1319"></a>		}
-<a name="line1320"></a>	}
-<a name="line1321"></a>
-<a name="line1322"></a>	function serializedata($typ, $val)
-<a name="line1323"></a>	{
-<a name="line1324"></a>		$rs = '';
-<a name="line1325"></a>		
-<a name="line1326"></a>		switch($this->xmlrpcTypes[$typ])
-<a name="line1327"></a>		{
-<a name="line1328"></a>			case 3:
-<a name="line1329"></a>				// struct
-<a name="line1330"></a>				$rs .= "<struct>\n";
-<a name="line1331"></a>				reset($val);
-<a name="line1332"></a>				while(list($key2, $val2) = each($val))
-<a name="line1333"></a>				{
-<a name="line1334"></a>					$rs .= "<member>\n<name>{$key2}</name>\n";
-<a name="line1335"></a>					$rs .= $this->serializeval($val2);
-<a name="line1336"></a>					$rs .= "</member>\n";
-<a name="line1337"></a>				}
-<a name="line1338"></a>				$rs .= '</struct>';
-<a name="line1339"></a>			break;
-<a name="line1340"></a>			case 2:
-<a name="line1341"></a>				// array
-<a name="line1342"></a>				$rs .= "<array>\n<data>\n";
-<a name="line1343"></a>				for($i=0; $i < count($val); $i++)
-<a name="line1344"></a>				{
-<a name="line1345"></a>					$rs .= $this->serializeval($val[$i]);
-<a name="line1346"></a>				}
-<a name="line1347"></a>				$rs.="</data>\n</array>\n";
-<a name="line1348"></a>				break;
-<a name="line1349"></a>			case 1:
-<a name="line1350"></a>				// others
-<a name="line1351"></a>				switch ($typ)
-<a name="line1352"></a>				{
-<a name="line1353"></a>					case $this->xmlrpcBase64:
-<a name="line1354"></a>						$rs .= "<{$typ}>" . base64_encode((string)$val) . "</{$typ}>\n";
-<a name="line1355"></a>					break;
-<a name="line1356"></a>					case $this->xmlrpcBoolean:
-<a name="line1357"></a>						$rs .= "<{$typ}>" . ((bool)$val ? '1' : '0') . "</{$typ}>\n";
-<a name="line1358"></a>					break;
-<a name="line1359"></a>					case $this->xmlrpcString:
-<a name="line1360"></a>						$rs .= "<{$typ}>" . htmlspecialchars((string)$val). "</{$typ}>\n";
-<a name="line1361"></a>					break;
-<a name="line1362"></a>					default:
-<a name="line1363"></a>						$rs .= "<{$typ}>{$val}</{$typ}>\n";
-<a name="line1364"></a>					break;
-<a name="line1365"></a>				}
-<a name="line1366"></a>			default:
-<a name="line1367"></a>			break;
-<a name="line1368"></a>		}
-<a name="line1369"></a>		return $rs;
-<a name="line1370"></a>	}
-<a name="line1371"></a>
-<a name="line1372"></a>	function serialize_class()
-<a name="line1373"></a>	{
-<a name="line1374"></a>		return $this->serializeval($this);
-<a name="line1375"></a>	}
-<a name="line1376"></a>
-<a name="line1377"></a>	function serializeval($o)
-<a name="line1378"></a>	{
-<a name="line1379"></a>		$ar = $o->me;
-<a name="line1380"></a>		reset($ar);
-<a name="line1381"></a>		
-<a name="line1382"></a>		list($typ, $val) = each($ar);
-<a name="line1383"></a>		$rs = "<value>\n".$this->serializedata($typ, $val)."</value>\n";
-<a name="line1384"></a>		return $rs;
-<a name="line1385"></a>	}
-<a name="line1386"></a>	
-<a name="line1387"></a>	function scalarval()
-<a name="line1388"></a>	{
-<a name="line1389"></a>		reset($this->me);
-<a name="line1390"></a>		list($a,$b) = each($this->me);
-<a name="line1391"></a>		return $b;
-<a name="line1392"></a>	}
-<a name="line1393"></a>
-<a name="line1394"></a>
-<a name="line1395"></a>	//-------------------------------------
-<a name="line1396"></a>	// Encode time in ISO-8601 form.
-<a name="line1397"></a>	//-------------------------------------
-<a name="line1398"></a>	
-<a name="line1399"></a>	// Useful for sending time in XML-RPC
-<a name="line1400"></a>
-<a name="line1401"></a>	function iso8601_encode($time, $utc=0)
-<a name="line1402"></a>	{	
-<a name="line1403"></a>		if ($utc == 1)
-<a name="line1404"></a>		{
-<a name="line1405"></a>			$t = strftime("%Y%m%dT%H:%M:%S", $time);
-<a name="line1406"></a>		}
-<a name="line1407"></a>		else
-<a name="line1408"></a>		{
-<a name="line1409"></a>			if (function_exists('gmstrftime'))
-<a name="line1410"></a>				$t = gmstrftime("%Y%m%dT%H:%M:%S", $time);
-<a name="line1411"></a>			else
-<a name="line1412"></a>				$t = strftime("%Y%m%dT%H:%M:%S", $time - date('Z'));
-<a name="line1413"></a>		}
-<a name="line1414"></a>		return $t;
-<a name="line1415"></a>	}
-<a name="line1416"></a>	
-<a name="line1417"></a>}
-<a name="line1418"></a>// END XML_RPC_Values Class
-<a name="line1419"></a>
-<a name="line1420"></a>/* End of file Xmlrpc.php */
-<a name="line1421"></a>/* Location: ./system/libraries/Xmlrpc.php */</pre>
+<a name="line1276"></a>
+<a name="line1277"></a>		if ($this->mytype == 2)
+<a name="line1278"></a>		{
+<a name="line1279"></a>			// adding to an array here
+<a name="line1280"></a>			$ar = $this->me['array'];
+<a name="line1281"></a>			$ar[] = new XML_RPC_Values($val, $type);
+<a name="line1282"></a>			$this->me['array'] = $ar;
+<a name="line1283"></a>		}
+<a name="line1284"></a>		else
+<a name="line1285"></a>		{
+<a name="line1286"></a>			// a scalar, so set the value and remember we're scalar
+<a name="line1287"></a>			$this->me[$type] = $val;
+<a name="line1288"></a>			$this->mytype = $typeof;
+<a name="line1289"></a>		}
+<a name="line1290"></a>		return 1;
+<a name="line1291"></a>	}
+<a name="line1292"></a>
+<a name="line1293"></a>	function addArray($vals)
+<a name="line1294"></a>	{
+<a name="line1295"></a>		if ($this->mytype != 0)
+<a name="line1296"></a>		{
+<a name="line1297"></a>			echo '<strong>XML_RPC_Values</strong>: already initialized as a [' . $this->kindOf() . ']<br />';
+<a name="line1298"></a>			return 0;
+<a name="line1299"></a>		}
+<a name="line1300"></a>
+<a name="line1301"></a>		$this->mytype = $this->xmlrpcTypes['array'];
+<a name="line1302"></a>		$this->me['array'] = $vals;
+<a name="line1303"></a>		return 1;
+<a name="line1304"></a>	}
+<a name="line1305"></a>
+<a name="line1306"></a>	function addStruct($vals)
+<a name="line1307"></a>	{
+<a name="line1308"></a>		if ($this->mytype != 0)
+<a name="line1309"></a>		{
+<a name="line1310"></a>			echo '<strong>XML_RPC_Values</strong>: already initialized as a [' . $this->kindOf() . ']<br />';
+<a name="line1311"></a>			return 0;
+<a name="line1312"></a>		}
+<a name="line1313"></a>		$this->mytype = $this->xmlrpcTypes['struct'];
+<a name="line1314"></a>		$this->me['struct'] = $vals;
+<a name="line1315"></a>		return 1;
+<a name="line1316"></a>	}
+<a name="line1317"></a>
+<a name="line1318"></a>	function kindOf()
+<a name="line1319"></a>	{
+<a name="line1320"></a>		switch($this->mytype)
+<a name="line1321"></a>		{
+<a name="line1322"></a>			case 3:
+<a name="line1323"></a>				return 'struct';
+<a name="line1324"></a>				break;
+<a name="line1325"></a>			case 2:
+<a name="line1326"></a>				return 'array';
+<a name="line1327"></a>				break;
+<a name="line1328"></a>			case 1:
+<a name="line1329"></a>				return 'scalar';
+<a name="line1330"></a>				break;
+<a name="line1331"></a>			default:
+<a name="line1332"></a>				return 'undef';
+<a name="line1333"></a>		}
+<a name="line1334"></a>	}
+<a name="line1335"></a>
+<a name="line1336"></a>	function serializedata($typ, $val)
+<a name="line1337"></a>	{
+<a name="line1338"></a>		$rs = '';
+<a name="line1339"></a>
+<a name="line1340"></a>		switch($this->xmlrpcTypes[$typ])
+<a name="line1341"></a>		{
+<a name="line1342"></a>			case 3:
+<a name="line1343"></a>				// struct
+<a name="line1344"></a>				$rs .= "<struct>\n";
+<a name="line1345"></a>				reset($val);
+<a name="line1346"></a>				while(list($key2, $val2) = each($val))
+<a name="line1347"></a>				{
+<a name="line1348"></a>					$rs .= "<member>\n<name>{$key2}</name>\n";
+<a name="line1349"></a>					$rs .= $this->serializeval($val2);
+<a name="line1350"></a>					$rs .= "</member>\n";
+<a name="line1351"></a>				}
+<a name="line1352"></a>				$rs .= '</struct>';
+<a name="line1353"></a>			break;
+<a name="line1354"></a>			case 2:
+<a name="line1355"></a>				// array
+<a name="line1356"></a>				$rs .= "<array>\n<data>\n";
+<a name="line1357"></a>				for($i=0; $i < count($val); $i++)
+<a name="line1358"></a>				{
+<a name="line1359"></a>					$rs .= $this->serializeval($val[$i]);
+<a name="line1360"></a>				}
+<a name="line1361"></a>				$rs.="</data>\n</array>\n";
+<a name="line1362"></a>				break;
+<a name="line1363"></a>			case 1:
+<a name="line1364"></a>				// others
+<a name="line1365"></a>				switch ($typ)
+<a name="line1366"></a>				{
+<a name="line1367"></a>					case $this->xmlrpcBase64:
+<a name="line1368"></a>						$rs .= "<{$typ}>" . base64_encode((string)$val) . "</{$typ}>\n";
+<a name="line1369"></a>					break;
+<a name="line1370"></a>					case $this->xmlrpcBoolean:
+<a name="line1371"></a>						$rs .= "<{$typ}>" . ((bool)$val ? '1' : '0') . "</{$typ}>\n";
+<a name="line1372"></a>					break;
+<a name="line1373"></a>					case $this->xmlrpcString:
+<a name="line1374"></a>						$rs .= "<{$typ}>" . htmlspecialchars((string)$val). "</{$typ}>\n";
+<a name="line1375"></a>					break;
+<a name="line1376"></a>					default:
+<a name="line1377"></a>						$rs .= "<{$typ}>{$val}</{$typ}>\n";
+<a name="line1378"></a>					break;
+<a name="line1379"></a>				}
+<a name="line1380"></a>			default:
+<a name="line1381"></a>			break;
+<a name="line1382"></a>		}
+<a name="line1383"></a>		return $rs;
+<a name="line1384"></a>	}
+<a name="line1385"></a>
+<a name="line1386"></a>	function serialize_class()
+<a name="line1387"></a>	{
+<a name="line1388"></a>		return $this->serializeval($this);
+<a name="line1389"></a>	}
+<a name="line1390"></a>
+<a name="line1391"></a>	function serializeval($o)
+<a name="line1392"></a>	{
+<a name="line1393"></a>		$ar = $o->me;
+<a name="line1394"></a>		reset($ar);
+<a name="line1395"></a>		
+<a name="line1396"></a>		list($typ, $val) = each($ar);
+<a name="line1397"></a>		$rs = "<value>\n".$this->serializedata($typ, $val)."</value>\n";
+<a name="line1398"></a>		return $rs;
+<a name="line1399"></a>	}
+<a name="line1400"></a>	
+<a name="line1401"></a>	function scalarval()
+<a name="line1402"></a>	{
+<a name="line1403"></a>		reset($this->me);
+<a name="line1404"></a>		list($a,$b) = each($this->me);
+<a name="line1405"></a>		return $b;
+<a name="line1406"></a>	}
+<a name="line1407"></a>
+<a name="line1408"></a>
+<a name="line1409"></a>	//-------------------------------------
+<a name="line1410"></a>	// Encode time in ISO-8601 form.
+<a name="line1411"></a>	//-------------------------------------
+<a name="line1412"></a>	
+<a name="line1413"></a>	// Useful for sending time in XML-RPC
+<a name="line1414"></a>
+<a name="line1415"></a>	function iso8601_encode($time, $utc=0)
+<a name="line1416"></a>	{	
+<a name="line1417"></a>		if ($utc == 1)
+<a name="line1418"></a>		{
+<a name="line1419"></a>			$t = strftime("%Y%m%dT%H:%M:%S", $time);
+<a name="line1420"></a>		}
+<a name="line1421"></a>		else
+<a name="line1422"></a>		{
+<a name="line1423"></a>			if (function_exists('gmstrftime'))
+<a name="line1424"></a>				$t = gmstrftime("%Y%m%dT%H:%M:%S", $time);
+<a name="line1425"></a>			else
+<a name="line1426"></a>				$t = strftime("%Y%m%dT%H:%M:%S", $time - date('Z'));
+<a name="line1427"></a>		}
+<a name="line1428"></a>		return $t;
+<a name="line1429"></a>	}
+<a name="line1430"></a>	
+<a name="line1431"></a>}
+<a name="line1432"></a>// END XML_RPC_Values Class
+<a name="line1433"></a>
+<a name="line1434"></a>/* End of file Xmlrpc.php */
+<a name="line1435"></a>/* Location: ./system/libraries/Xmlrpc.php */</pre>
 <div class="header">
 <h1>GiftFlow API</h1>
 <ul>

@@ -1,0 +1,292 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+
+<html lang="en">
+<head>
+
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
+<meta name="generator" content="PHPDoctor 2RC4 (http://peej.github.com/phpdoctor/)">
+<meta name="when" content="Sat, 24 Jul 2010 20:46:31 +0000">
+
+<link rel="stylesheet" type="text/css" href="../../stylesheet.css">
+<link rel="start" href="../../overview-summary.html">
+
+<title>libraries/Driver.php (GiftFlow API)</title>
+
+</head>
+<body id="file" onload="parent.document.title=document.title;">
+
+<div class="header">
+<h1>GiftFlow API</h1>
+<ul>
+<li><a href="../../overview-summary.html">Overview</a></li>
+<li>Package</li><li>Class</li><li>Tree</li><li><a href="../../overview-files.html">Files</a></li>
+<li><a href="../../deprecated-list.html">Deprecated</a></li>
+<li><a href="../../index-all.html">Index</a></li>
+</ul>
+</div>
+
+<div class="small_links">
+<a href="../../index.html" target="_top">Frames</a>
+<a href="../../source/libraries/driver.php.html" target="_top">No frames</a>
+</div>
+<hr>
+
+<h1>libraries/Driver.php</h1>
+<div class="comment" id="overview_description"><p>CodeIgniter</p><p>An open source application development framework for PHP 4.3.2 or newer</p></div>
+
+<hr>
+
+<a name="line1"></a><pre><?php  if (!defined('BASEPATH')) exit('No direct script access allowed');
+<a name="line2"></a>/**
+<a name="line3"></a> * CodeIgniter
+<a name="line4"></a> *
+<a name="line5"></a> * An open source application development framework for PHP 4.3.2 or newer
+<a name="line6"></a> *
+<a name="line7"></a> * @package		CodeIgniter
+<a name="line8"></a> * @author		EllisLab Dev Team
+<a name="line9"></a> * @copyright	Copyright (c) 2006 - 2010, EllisLab, Inc.
+<a name="line10"></a> * @license		http://codeigniter.com/user_guide/license.html
+<a name="line11"></a> * @link		http://codeigniter.com
+<a name="line12"></a> * @since		Version 1.0
+<a name="line13"></a> * @filesource
+<a name="line14"></a> */
+<a name="line15"></a>
+<a name="line16"></a>// ------------------------------------------------------------------------
+<a name="line17"></a>
+<a name="line18"></a>/**
+<a name="line19"></a> * CodeIgniter Driver Library Class
+<a name="line20"></a> *
+<a name="line21"></a> * This class enables you to create "Driver" libraries that add runtime ability
+<a name="line22"></a> * to extend the capabilities of a class via additional driver objects
+<a name="line23"></a> *
+<a name="line24"></a> * @package		CodeIgniter
+<a name="line25"></a> * @subpackage	Libraries
+<a name="line26"></a> * @category	Libraries
+<a name="line27"></a> * @author		EllisLab Dev Team
+<a name="line28"></a> * @link		
+<a name="line29"></a> */
+<a name="line30"></a>class CI_Driver_Library {
+<a name="line31"></a>
+<a name="line32"></a>	protected $valid_drivers	= array();
+<a name="line33"></a>	protected static $lib_name;
+<a name="line34"></a>	
+<a name="line35"></a>	// The first time a child is used it won't exist, so we instantiate it
+<a name="line36"></a>	// subsequents calls will go straight to the proper child.
+<a name="line37"></a>	function __get($child)
+<a name="line38"></a>	{
+<a name="line39"></a>		if (! isset($this->lib_name))
+<a name="line40"></a>		{
+<a name="line41"></a>			$this->lib_name = get_class($this);				
+<a name="line42"></a>		}
+<a name="line43"></a>
+<a name="line44"></a>		// The class will be prefixed with the parent lib
+<a name="line45"></a>		$child_class = $this->lib_name.'_'.$child;
+<a name="line46"></a>		
+<a name="line47"></a>		if (in_array(strtolower($child_class), array_map('strtolower', $this->valid_drivers)))
+<a name="line48"></a>		{
+<a name="line49"></a>			// check and see if the driver is in a separate file
+<a name="line50"></a>			if ( ! class_exists($child_class))
+<a name="line51"></a>			{
+<a name="line52"></a>				// check application path first
+<a name="line53"></a>				foreach (array(APPPATH, BASEPATH) as $path)
+<a name="line54"></a>				{
+<a name="line55"></a>					// and check for case sensitivity of both the parent and child libs
+<a name="line56"></a>					foreach (array(ucfirst($this->lib_name), strtolower($this->lib_name)) as $lib)
+<a name="line57"></a>					{
+<a name="line58"></a>						// loves me some nesting!
+<a name="line59"></a>						foreach (array(ucfirst($child_class), strtolower($child_class)) as $class)
+<a name="line60"></a>						{
+<a name="line61"></a>							$filepath = $path.'libraries/'.$this->lib_name.'/drivers/'.$child_class.EXT;
+<a name="line62"></a>
+<a name="line63"></a>							if (file_exists($filepath))
+<a name="line64"></a>							{
+<a name="line65"></a>								include_once $filepath;
+<a name="line66"></a>								break;
+<a name="line67"></a>							}							
+<a name="line68"></a>						}
+<a name="line69"></a>					}
+<a name="line70"></a>				}
+<a name="line71"></a>				
+<a name="line72"></a>				// it's a valid driver, but the file simply can't be found
+<a name="line73"></a>				if ( ! class_exists($child_class))
+<a name="line74"></a>				{
+<a name="line75"></a>					log_message('error', "Unable to load the requested driver: ".$child_class);
+<a name="line76"></a>					show_error("Unable to load the requested driver: ".$child_class);
+<a name="line77"></a>				}
+<a name="line78"></a>			}
+<a name="line79"></a>
+<a name="line80"></a>			$obj = new $child_class;
+<a name="line81"></a>			$obj->decorate($this);
+<a name="line82"></a>			$this->$child = $obj;
+<a name="line83"></a>			return $this->$child;
+<a name="line84"></a>		}
+<a name="line85"></a>		
+<a name="line86"></a>		// The requested driver isn't valid!
+<a name="line87"></a>		log_message('error', "Invalid driver requested: ".$child_class);
+<a name="line88"></a>		show_error("Invalid driver requested: ".$child_class);
+<a name="line89"></a>	}
+<a name="line90"></a>	
+<a name="line91"></a>	// --------------------------------------------------------------------
+<a name="line92"></a>	
+<a name="line93"></a>}
+<a name="line94"></a>// END CI_Driver_Library CLASS
+<a name="line95"></a>
+<a name="line96"></a>
+<a name="line97"></a>/**
+<a name="line98"></a> * CodeIgniter Driver Class
+<a name="line99"></a> *
+<a name="line100"></a> * This class enables you to create drivers for a Library based on the Driver Library.
+<a name="line101"></a> * It handles the drivers' access to the parent library
+<a name="line102"></a> *
+<a name="line103"></a> * @package		CodeIgniter
+<a name="line104"></a> * @subpackage	Libraries
+<a name="line105"></a> * @category	Libraries
+<a name="line106"></a> * @author		EllisLab Dev Team
+<a name="line107"></a> * @link		
+<a name="line108"></a> */
+<a name="line109"></a>class CI_Driver {
+<a name="line110"></a>	protected $parent;
+<a name="line111"></a>			
+<a name="line112"></a>	private $methods = array();
+<a name="line113"></a>	private $properties = array();
+<a name="line114"></a>
+<a name="line115"></a>	private static $reflections = array();
+<a name="line116"></a>
+<a name="line117"></a>	/**
+<a name="line118"></a>	 * Decorate
+<a name="line119"></a>	 *
+<a name="line120"></a>	 * Decorates the child with the parent driver lib's methods and properties
+<a name="line121"></a>	 *
+<a name="line122"></a>	 * @access	public
+<a name="line123"></a>	 * @param	object
+<a name="line124"></a>	 * @return	void
+<a name="line125"></a>	 */
+<a name="line126"></a>	function decorate($parent)
+<a name="line127"></a>	{
+<a name="line128"></a>		$this->parent = $parent;
+<a name="line129"></a>		
+<a name="line130"></a>		// Lock down attributes to what is defined in the class
+<a name="line131"></a>		// and speed up references in magic methods
+<a name="line132"></a>		
+<a name="line133"></a>		$class_name = get_class($parent);
+<a name="line134"></a>		
+<a name="line135"></a>		if ( ! isset(self::$reflections[$class_name]))
+<a name="line136"></a>		{
+<a name="line137"></a>			$r = new ReflectionObject($parent);
+<a name="line138"></a>			
+<a name="line139"></a>			foreach ($r->getMethods() as $method)
+<a name="line140"></a>			{
+<a name="line141"></a>				if ($method->isPublic())
+<a name="line142"></a>				{
+<a name="line143"></a>					$this->methods[] = $method->getName();
+<a name="line144"></a>				}
+<a name="line145"></a>			}
+<a name="line146"></a>
+<a name="line147"></a>			foreach($r->getProperties() as $prop)
+<a name="line148"></a>			{
+<a name="line149"></a>				if ($prop->isPublic())
+<a name="line150"></a>				{
+<a name="line151"></a>					$this->properties[] = $prop->getName();
+<a name="line152"></a>				}
+<a name="line153"></a>			}
+<a name="line154"></a>			
+<a name="line155"></a>			self::$reflections[$class_name] = array($this->methods, $this->properties);
+<a name="line156"></a>		}
+<a name="line157"></a>		else
+<a name="line158"></a>		{
+<a name="line159"></a>			list($this->methods, $this->properties) = self::$reflections[$class_name];
+<a name="line160"></a>		}
+<a name="line161"></a>	}
+<a name="line162"></a>	
+<a name="line163"></a>	// --------------------------------------------------------------------
+<a name="line164"></a>	
+<a name="line165"></a>	/**
+<a name="line166"></a>	 * __call magic method
+<a name="line167"></a>	 *
+<a name="line168"></a>	 * Handles access to the parent driver library's methods
+<a name="line169"></a>	 *
+<a name="line170"></a>	 * @access	public
+<a name="line171"></a>	 * @param	string
+<a name="line172"></a>	 * @param	array
+<a name="line173"></a>	 * @return	mixed
+<a name="line174"></a>	 */
+<a name="line175"></a>	public function __call($method, $args = array())
+<a name="line176"></a>	{
+<a name="line177"></a>		if (in_array($method, $this->methods))
+<a name="line178"></a>		{
+<a name="line179"></a>			return call_user_func_array(array($this->parent, $method), $args);
+<a name="line180"></a>		}
+<a name="line181"></a>
+<a name="line182"></a>		$trace = debug_backtrace();
+<a name="line183"></a>		_exception_handler(E_ERROR, "No such method '{$method}'", $trace[1]['file'], $trace[1]['line']);
+<a name="line184"></a>		exit;
+<a name="line185"></a>	}
+<a name="line186"></a>
+<a name="line187"></a>	// --------------------------------------------------------------------
+<a name="line188"></a>	
+<a name="line189"></a>	/**
+<a name="line190"></a>	 * __get magic method
+<a name="line191"></a>	 *
+<a name="line192"></a>	 * Handles reading of the parent driver library's properties
+<a name="line193"></a>	 *
+<a name="line194"></a>	 * @access	public
+<a name="line195"></a>	 * @param	string
+<a name="line196"></a>	 * @return	mixed
+<a name="line197"></a>	 */
+<a name="line198"></a>	function __get($var)
+<a name="line199"></a>	{
+<a name="line200"></a>		if (in_array($var, $this->properties))
+<a name="line201"></a>		{
+<a name="line202"></a>			return $this->parent->$var;
+<a name="line203"></a>		}
+<a name="line204"></a>	}
+<a name="line205"></a>
+<a name="line206"></a>	// --------------------------------------------------------------------
+<a name="line207"></a>	
+<a name="line208"></a>	/**
+<a name="line209"></a>	 * __set magic method
+<a name="line210"></a>	 *
+<a name="line211"></a>	 * Handles writing to the parent driver library's properties
+<a name="line212"></a>	 *
+<a name="line213"></a>	 * @access	public
+<a name="line214"></a>	 * @param	string
+<a name="line215"></a>	 * @param	array
+<a name="line216"></a>	 * @return	mixed
+<a name="line217"></a>	 */
+<a name="line218"></a>	function __set($var, $val)
+<a name="line219"></a>	{
+<a name="line220"></a>		if (in_array($var, $this->properties))
+<a name="line221"></a>		{
+<a name="line222"></a>			$this->parent->$var = $val;
+<a name="line223"></a>		}
+<a name="line224"></a>	}
+<a name="line225"></a>	
+<a name="line226"></a>	// --------------------------------------------------------------------
+<a name="line227"></a>	
+<a name="line228"></a>}
+<a name="line229"></a>// END CI_Driver CLASS
+<a name="line230"></a>
+<a name="line231"></a>/* End of file Driver.php */
+<a name="line232"></a>/* Location: ./system/libraries/Driver.php */</pre>
+<div class="header">
+<h1>GiftFlow API</h1>
+<ul>
+<li><a href="../../overview-summary.html">Overview</a></li>
+<li>Package</li><li>Class</li><li>Tree</li><li><a href="../../overview-files.html">Files</a></li>
+<li><a href="../../deprecated-list.html">Deprecated</a></li>
+<li><a href="../../index-all.html">Index</a></li>
+</ul>
+</div>
+
+<div class="small_links">
+<a href="../../index.html" target="_top">Frames</a>
+<a href="../../source/libraries/driver.php.html" target="_top">No frames</a>
+</div>
+<hr>
+
+<p id="footer">This document was generated by <a href="http://peej.github.com/phpdoctor/">PHPDoctor: The PHP Documentation Creator</a></p>
+
+</body>
+
+</html>

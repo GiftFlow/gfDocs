@@ -6,7 +6,7 @@
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 
 <meta name="generator" content="PHPDoctor 2RC4 (http://peej.github.com/phpdoctor/)">
-<meta name="when" content="Mon, 19 Jul 2010 17:13:56 +0000">
+<meta name="when" content="Sat, 24 Jul 2010 20:46:31 +0000">
 
 <link rel="stylesheet" type="text/css" href="../stylesheet.css">
 <link rel="start" href="../overview-summary.html">
@@ -80,6 +80,10 @@ refactored it and added several additional methods -- Rick Ellis</p></div>
 </tr>
 <tr>
 <td class="type"> mixed</td>
+<td class="description"><p class="name"><a href="#now">$now</a></p></td>
+</tr>
+<tr>
+<td class="type"> mixed</td>
 <td class="description"><p class="name"><a href="#offset">$offset</a></p></td>
 </tr>
 <tr>
@@ -96,11 +100,15 @@ refactored it and added several additional methods -- Rick Ellis</p></div>
 </tr>
 <tr>
 <td class="type">private  void</td>
-<td class="description"><p class="name"><a href="#_add_data()">_add_data</a>(mixed filepath, mixed data)</p><p class="description">Add Data to Zip</p></td>
+<td class="description"><p class="name"><a href="#_add_data()">_add_data</a>(mixed filepath, mixed data, mixed file_mtime, mixed file_mdate)</p><p class="description">Add Data to Zip</p></td>
 </tr>
 <tr>
 <td class="type">private  void</td>
-<td class="description"><p class="name"><a href="#_add_dir()">_add_dir</a>(mixed dir)</p><p class="description">Add Directory</p></td>
+<td class="description"><p class="name"><a href="#_add_dir()">_add_dir</a>(mixed dir, mixed file_mtime, mixed file_mdate)</p><p class="description">Add Directory</p></td>
+</tr>
+<tr>
+<td class="type">private  array</td>
+<td class="description"><p class="name"><a href="#_get_mod_time()">_get_mod_time</a>(mixed dir, string path)</p><p class="description">Get file/directory modification timeIf this is a newly created file/dir, we will set the time to 'now'</p></td>
 </tr>
 <tr>
 <td class="type"> void</td>
@@ -128,7 +136,7 @@ refactored it and added several additional methods -- Rick Ellis</p></div>
 </tr>
 <tr>
 <td class="type"> void</td>
-<td class="description"><p class="name"><a href="#read_dir()">read_dir</a>(mixed path)</p><p class="description">Read a directory and add it to the zip.
+<td class="description"><p class="name"><a href="#read_dir()">read_dir</a>(mixed path, bool preserve_filepath, mixed root_path)</p><p class="description">Read a directory and add it to the zip.
 </p></td>
 </tr>
 <tr>
@@ -165,6 +173,15 @@ refactored it and added several additional methods -- Rick Ellis</p></div>
 
 <hr>
 
+<a href="../source/libraries/zip.php.html#line40" class="location">libraries/Zip.php at line 40</a>
+
+<h3 id="now">now</h3>
+<code class="signature">public  mixed <strong>$now</strong></code>
+<div class="details">
+</div>
+
+<hr>
+
 <a href="../source/libraries/zip.php.html#line39" class="location">libraries/Zip.php at line 39</a>
 
 <h3 id="offset">offset</h3>
@@ -184,7 +201,7 @@ refactored it and added several additional methods -- Rick Ellis</p></div>
 <hr>
 
 <h2 id="detail_method">Method Detail</h2><div class="method_detail">
-<div class='method'><a href="../source/libraries/zip.php.html#line41" class="location">libraries/Zip.php at line 41</a>
+<div class='method'><a href="../source/libraries/zip.php.html#line42" class="location">libraries/Zip.php at line 42</a>
 
 <h3 id="__construct()">__construct</h3>
 <code class="signature">public  void <strong>__construct</strong>()</code>
@@ -193,10 +210,10 @@ refactored it and added several additional methods -- Rick Ellis</p></div>
 
 
 
-<div class='method'><a href="../source/libraries/zip.php.html#line153" class="location">libraries/Zip.php at line 153</a>
+<div class='method'><a href="../source/libraries/zip.php.html#line187" class="location">libraries/Zip.php at line 187</a>
 
 <h3 id="_add_data()">_add_data</h3>
-<code class="signature">private  void <strong>_add_data</strong>(mixed filepath, mixed data)</code>
+<code class="signature">private  void <strong>_add_data</strong>(mixed filepath, mixed data, mixed file_mtime, mixed file_mdate)</code>
 <div class="details">
 <p>Add Data to Zip</p><dl>
 <dt>Access	private.</dt>
@@ -209,10 +226,10 @@ refactored it and added several additional methods -- Rick Ellis</p></div>
 
 
 
-<div class='method'><a href="../source/libraries/zip.php.html#line79" class="location">libraries/Zip.php at line 79</a>
+<div class='method'><a href="../source/libraries/zip.php.html#line105" class="location">libraries/Zip.php at line 105</a>
 
 <h3 id="_add_dir()">_add_dir</h3>
-<code class="signature">private  void <strong>_add_dir</strong>(mixed dir)</code>
+<code class="signature">private  void <strong>_add_dir</strong>(mixed dir, mixed file_mtime, mixed file_mdate)</code>
 <div class="details">
 <p>Add Directory</p><dl>
 <dt>Access	private.</dt>
@@ -224,7 +241,22 @@ refactored it and added several additional methods -- Rick Ellis</p></div>
 
 
 
-<div class='method'><a href="../source/libraries/zip.php.html#line128" class="location">libraries/Zip.php at line 128</a>
+<div class='method'><a href="../source/libraries/zip.php.html#line85" class="location">libraries/Zip.php at line 85</a>
+
+<h3 id="_get_mod_time()">_get_mod_time</h3>
+<code class="signature">private  array <strong>_get_mod_time</strong>(mixed dir, string path)</code>
+<div class="details">
+<p>Get file/directory modification time</p><p>If this is a newly created file/dir, we will set the time to 'now'</p><dl>
+<dt>Parameters:</dt>
+<dd>path - to file</dd>
+<dt>Returns:</dt>
+<dd>filemtime/filemdate</dd>
+</dl>
+</div></div>
+
+
+
+<div class='method'><a href="../source/libraries/zip.php.html#line158" class="location">libraries/Zip.php at line 158</a>
 
 <h3 id="add_data()">add_data</h3>
 <code class="signature">public  void <strong>add_data</strong>(mixed filepath, mixed data)</code>
@@ -241,7 +273,7 @@ sure you use add_dir() first to create the folder.</p><dl>
 
 
 
-<div class='method'><a href="../source/libraries/zip.php.html#line57" class="location">libraries/Zip.php at line 57</a>
+<div class='method'><a href="../source/libraries/zip.php.html#line60" class="location">libraries/Zip.php at line 60</a>
 
 <h3 id="add_dir()">add_dir</h3>
 <code class="signature">public  void <strong>add_dir</strong>(mixed directory)</code>
@@ -256,7 +288,7 @@ sure you use add_dir() first to create the folder.</p><dl>
 
 
 
-<div class='method'><a href="../source/libraries/zip.php.html#line296" class="location">libraries/Zip.php at line 296</a>
+<div class='method'><a href="../source/libraries/zip.php.html#line355" class="location">libraries/Zip.php at line 355</a>
 
 <h3 id="archive()">archive</h3>
 <code class="signature">public  void <strong>archive</strong>(mixed filepath)</code>
@@ -271,7 +303,7 @@ sure you use add_dir() first to create the folder.</p><dl>
 
 
 
-<div class='method'><a href="../source/libraries/zip.php.html#line347" class="location">libraries/Zip.php at line 347</a>
+<div class='method'><a href="../source/libraries/zip.php.html#line408" class="location">libraries/Zip.php at line 408</a>
 
 <h3 id="clear_data()">clear_data</h3>
 <code class="signature">public  void <strong>clear_data</strong>()</code>
@@ -285,7 +317,7 @@ multiple zips with different data.</p><dl>
 
 
 
-<div class='method'><a href="../source/libraries/zip.php.html#line321" class="location">libraries/Zip.php at line 321</a>
+<div class='method'><a href="../source/libraries/zip.php.html#line380" class="location">libraries/Zip.php at line 380</a>
 
 <h3 id="download()">download</h3>
 <code class="signature">public  void <strong>download</strong>(str filename)</code>
@@ -301,7 +333,7 @@ multiple zips with different data.</p><dl>
 
 
 
-<div class='method'><a href="../source/libraries/zip.php.html#line266" class="location">libraries/Zip.php at line 266</a>
+<div class='method'><a href="../source/libraries/zip.php.html#line325" class="location">libraries/Zip.php at line 325</a>
 
 <h3 id="get_zip()">get_zip</h3>
 <code class="signature">public  void <strong>get_zip</strong>()</code>
@@ -315,10 +347,10 @@ multiple zips with different data.</p><dl>
 
 
 
-<div class='method'><a href="../source/libraries/zip.php.html#line236" class="location">libraries/Zip.php at line 236</a>
+<div class='method'><a href="../source/libraries/zip.php.html#line274" class="location">libraries/Zip.php at line 274</a>
 
 <h3 id="read_dir()">read_dir</h3>
-<code class="signature">public  void <strong>read_dir</strong>(mixed path)</code>
+<code class="signature">public  void <strong>read_dir</strong>(mixed path, bool preserve_filepath, mixed root_path)</code>
 <div class="details">
 <p>Read a directory and add it to the zip.</p><p>This function recursively reads a folder and everything it contains (including
 sub-folders) and creates a zip based on it.  Whatever directory structure
@@ -332,7 +364,7 @@ is in the original file path will be recreated in the zip file.</p><dl>
 
 
 
-<div class='method'><a href="../source/libraries/zip.php.html#line201" class="location">libraries/Zip.php at line 201</a>
+<div class='method'><a href="../source/libraries/zip.php.html#line239" class="location">libraries/Zip.php at line 239</a>
 
 <h3 id="read_file()">read_file</h3>
 <code class="signature">public  void <strong>read_file</strong>(mixed path, bool preserve_filepath)</code>

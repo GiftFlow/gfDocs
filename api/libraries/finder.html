@@ -6,7 +6,7 @@
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 
 <meta name="generator" content="PHPDoctor 2RC4 (http://peej.github.com/phpdoctor/)">
-<meta name="when" content="Mon, 19 Jul 2010 17:13:56 +0000">
+<meta name="when" content="Sat, 24 Jul 2010 20:47:44 +0000">
 
 <link rel="stylesheet" type="text/css" href="../stylesheet.css">
 <link rel="start" href="../overview-summary.html">
@@ -40,7 +40,7 @@ Detail: <a href="#detail_field">Field</a> | <a href="#detail_method">Method</a> 
 <hr>
 
 <div class="qualifiedName">Libraries\Finder</div>
-<a href="../source/application/libraries/finder.php.html#line8" class="location">application/libraries/finder.php at line 8</a>
+<a href="../source/libraries/finder.php.html#line8" class="location">libraries/finder.php at line 8</a>
 
 <h1>Class Finder</h1>
 
@@ -85,12 +85,12 @@ Detail: <a href="#detail_field">Field</a> | <a href="#detail_method">Method</a> 
 <td class="description"><p class="name"><a href="#default_order_by_field">$default_order_by_field</a></p><p class="description">Default ORDER BY field</p></td>
 </tr>
 <tr>
-<td class="type"> mixed</td>
-<td class="description"><p class="name"><a href="#format">$format</a></p></td>
+<td class="type"> string</td>
+<td class="description"><p class="name"><a href="#format">$format</a></p><p class="description">Return data format</p></td>
 </tr>
 <tr>
-<td class="type">protected  mixed</td>
-<td class="description"><p class="name"><a href="#friends">$friends</a></p></td>
+<td class="type">protected  object</td>
+<td class="description"><p class="name"><a href="#friends">$friends</a></p><p class="description">CodeIgniter super-object</p></td>
 </tr>
 <tr>
 <td class="type"> float</td>
@@ -110,7 +110,7 @@ Detail: <a href="#detail_field">Field</a> | <a href="#detail_method">Method</a> 
 </tr>
 <tr>
 <td class="type"> string</td>
-<td class="description"><p class="name"><a href="#location_keyword">$location_keyword</a></p><p class="description"></p></td>
+<td class="description"><p class="name"><a href="#location_keyword">$location_keyword</a></p><p class="description">Location keyword. </p></td>
 </tr>
 <tr>
 <td class="type"> float</td>
@@ -140,7 +140,7 @@ The raw database result object from the database query is usually stored here.</
 </tr>
 <tr>
 <td class="type"> string</td>
-<td class="description"><p class="name"><a href="#search_keyword">$search_keyword</a></p><p class="description"></p></td>
+<td class="description"><p class="name"><a href="#search_keyword">$search_keyword</a></p><p class="description">Search keyword. </p></td>
 </tr>
 <tr>
 <td class="type"> array</td>
@@ -177,11 +177,13 @@ The raw database result object from the database query is usually stored here.</
 </tr>
 <tr>
 <td class="type">protected  void</td>
-<td class="description"><p class="name"><a href="#_count_transactions()">_count_transactions</a>()</p><p class="description">Counts the requests for each good, grouped by request status</p></td>
+<td class="description"><p class="name"><a href="#_count_transactions()">_count_transactions</a>()</p><p class="description">Counts the requests for each good, grouped by request status.
+</p></td>
 </tr>
 <tr>
 <td class="type">protected  void</td>
-<td class="description"><p class="name"><a href="#_exclude_logged_in_user()">_exclude_logged_in_user</a>()</p><p class="description">Exclude logged in user</p></td>
+<td class="description"><p class="name"><a href="#_exclude_logged_in_user()">_exclude_logged_in_user</a>()</p><p class="description">Exclude logged in userIf the user is logged in, adds a where clause that filters out rows
+associated with the user.</p></td>
 </tr>
 <tr>
 <td class="type">protected  void</td>
@@ -197,11 +199,13 @@ The raw database result object from the database query is usually stored here.</
 </tr>
 <tr>
 <td class="type">protected  void</td>
-<td class="description"><p class="name"><a href="#_render_output()">_render_output</a>()</p></td>
+<td class="description"><p class="name"><a href="#_render_output()">_render_output</a>()</p><p class="description">Renders the output of the query as either an object or JSON.
+</p></td>
 </tr>
 <tr>
 <td class="type">protected  void</td>
-<td class="description"><p class="name"><a href="#_set_geographic_bounds()">_set_geographic_bounds</a>()</p><p class="description">Adds where clauses that limit results to a specific geographic area</p></td>
+<td class="description"><p class="name"><a href="#_set_geographic_bounds()">_set_geographic_bounds</a>()</p><p class="description">Adds where clauses that limit results to a specific geographic areaCalculates bounds by determining how many degrees of latitude and longitude
+the search radius encompasses. </p></td>
 </tr>
 <tr>
 <td class="type">protected  boolean</td>
@@ -214,8 +218,7 @@ sends its information into Finder's location-related properties.</p></td>
 </tr>
 <tr>
 <td class="type">protected  void</td>
-<td class="description"><p class="name"><a href="#_sort_and_paginate()">_sort_and_paginate</a>()</p><p class="description">Sorts and paginates search results
-First, it checks to see if the user has input any order_by or limit information
+<td class="description"><p class="name"><a href="#_sort_and_paginate()">_sort_and_paginate</a>()</p><p class="description">Sorts and paginates search resultsFirst, it checks to see if the user has input any order_by or limit information
 using the Finder::order_by() or Finder::limit() methods.
 </p></td>
 </tr>
@@ -232,8 +235,9 @@ using the Finder::order_by() or Finder::limit() methods.
 <td class="description"><p class="name"><a href="#_title_query()">_title_query</a>()</p><p class="description">Searches by title</p></td>
 </tr>
 <tr>
-<td class="type"> void</td>
-<td class="description"><p class="name"><a href="#follower_search()">follower_search</a>()</p><p class="description">Follower search</p></td>
+<td class="type"> object</td>
+<td class="description"><p class="name"><a href="#follower_search()">follower_search</a>()</p><p class="description">Searches for the goods from the users the logged in user is following.
+</p></td>
 </tr>
 <tr>
 <td class="type"> JSON</td>
@@ -250,11 +254,11 @@ using the Finder::order_by() or Finder::limit() methods.
 </tr>
 <tr>
 <td class="type"> object</td>
-<td class="description"><p class="name"><a href="#latest_gifts()">latest_gifts</a>()</p><p class="description">Gets the most recently added gifts</p></td>
+<td class="description"><p class="name"><a href="#latest_gifts()">latest_gifts</a>()</p><p class="description">Gets the most recently added giftsHigh-level search function</p></td>
 </tr>
 <tr>
 <td class="type"> void</td>
-<td class="description"><p class="name"><a href="#limit()">limit</a>(int size, int offset)</p><p class="description">Saves LIMIT clause</p></td>
+<td class="description"><p class="name"><a href="#limit()">limit</a>(int size, int offset)</p><p class="description">Sets limit information which is translated into SQL LIMIT clauses later.</p></td>
 </tr>
 <tr>
 <td class="type"> array</td>
@@ -263,13 +267,11 @@ using the Finder::order_by() or Finder::limit() methods.
 </tr>
 <tr>
 <td class="type"> object</td>
-<td class="description"><p class="name"><a href="#nearby_gifts()">nearby_gifts</a>()</p><p class="description">Gets nearby gifts
-High-level search function</p></td>
+<td class="description"><p class="name"><a href="#nearby_gifts()">nearby_gifts</a>()</p><p class="description">Gets nearby giftsHigh-level search function</p></td>
 </tr>
 <tr>
 <td class="type"> void</td>
-<td class="description"><p class="name"><a href="#nearby_users()">nearby_users</a>()</p><p class="description">DEPRECATED
-Gets gifts from nearby users. </p></td>
+<td class="description"><p class="name"><a href="#nearby_users()">nearby_users</a>()</p><p class="description">Returns array of nearby user IDs</p></td>
 </tr>
 <tr>
 <td class="type"> void</td>
@@ -284,21 +286,22 @@ Gets gifts from nearby users. </p></td>
 <td class="description"><p class="name"><a href="#tag_search()">tag_search</a>(string tag)</p><p class="description">Searches gifts based on their tags</p></td>
 </tr>
 <tr>
-<td class="type"> void</td>
-<td class="description"><p class="name"><a href="#user_search()">user_search</a>()</p><p class="description">Performs generic user search based on user_id(s) provided.</p></td>
+<td class="type"> object</td>
+<td class="description"><p class="name"><a href="#user_search()">user_search</a>()</p><p class="description">Searches for the goods from the users provided in $this->users.
+</p></td>
 </tr>
 <tr>
-<td class="type"> void</td>
-<td class="description"><p class="name"><a href="#where()">where</a>(mixed key, mixed val)</p></td>
+<td class="type"> $this</td>
+<td class="description"><p class="name"><a href="#where()">where</a>(string key, string val)</p><p class="description">Adds a where clause</p></td>
 </tr>
 <tr>
-<td class="type"> void</td>
-<td class="description"><p class="name"><a href="#where_type()">where_type</a>(mixed type)</p></td>
+<td class="type"> $this</td>
+<td class="description"><p class="name"><a href="#where_type()">where_type</a>(string type)</p><p class="description">Limits search results by type</p></td>
 </tr>
 </table>
 
 <h2 id="detail_field">Field Detail</h2>
-<a href="../source/application/libraries/finder.php.html#line35" class="location">application/libraries/finder.php at line 35</a>
+<a href="../source/libraries/finder.php.html#line42" class="location">libraries/finder.php at line 42</a>
 
 <h3 id="address">address</h3>
 <code class="signature">public  string <strong>$address</strong></code>
@@ -307,7 +310,7 @@ Gets gifts from nearby users. </p></td>
 
 <hr>
 
-<a href="../source/application/libraries/finder.php.html#line59" class="location">application/libraries/finder.php at line 59</a>
+<a href="../source/libraries/finder.php.html#line66" class="location">libraries/finder.php at line 66</a>
 
 <h3 id="bounds">bounds</h3>
 <code class="signature">public  array <strong>$bounds</strong></code>
@@ -316,7 +319,7 @@ Gets gifts from nearby users. </p></td>
 
 <hr>
 
-<a href="../source/application/libraries/finder.php.html#line109" class="location">application/libraries/finder.php at line 109</a>
+<a href="../source/libraries/finder.php.html#line116" class="location">libraries/finder.php at line 116</a>
 
 <h3 id="default_limit_offset">default_limit_offset</h3>
 <code class="signature">public  int <strong>$default_limit_offset</strong></code>
@@ -325,7 +328,7 @@ Gets gifts from nearby users. </p></td>
 
 <hr>
 
-<a href="../source/application/libraries/finder.php.html#line103" class="location">application/libraries/finder.php at line 103</a>
+<a href="../source/libraries/finder.php.html#line110" class="location">libraries/finder.php at line 110</a>
 
 <h3 id="default_limit_size">default_limit_size</h3>
 <code class="signature">public  int <strong>$default_limit_size</strong> = 10</code>
@@ -334,7 +337,7 @@ Gets gifts from nearby users. </p></td>
 
 <hr>
 
-<a href="../source/application/libraries/finder.php.html#line97" class="location">application/libraries/finder.php at line 97</a>
+<a href="../source/libraries/finder.php.html#line104" class="location">libraries/finder.php at line 104</a>
 
 <h3 id="default_order_by_direction">default_order_by_direction</h3>
 <code class="signature">public  string <strong>$default_order_by_direction</strong> = 'ASC'</code>
@@ -343,7 +346,7 @@ Gets gifts from nearby users. </p></td>
 
 <hr>
 
-<a href="../source/application/libraries/finder.php.html#line91" class="location">application/libraries/finder.php at line 91</a>
+<a href="../source/libraries/finder.php.html#line98" class="location">libraries/finder.php at line 98</a>
 
 <h3 id="default_order_by_field">default_order_by_field</h3>
 <code class="signature">public  string <strong>$default_order_by_field</strong> = 'good_created'</code>
@@ -352,25 +355,25 @@ Gets gifts from nearby users. </p></td>
 
 <hr>
 
-<a href="../source/application/libraries/finder.php.html#line156" class="location">application/libraries/finder.php at line 156</a>
+<a href="../source/libraries/finder.php.html#line167" class="location">libraries/finder.php at line 167</a>
 
 <h3 id="format">format</h3>
-<code class="signature">public  mixed <strong>$format</strong></code>
+<code class="signature">public  string <strong>$format</strong></code>
 <div class="details">
-</div>
+<p>Return data format</p></div>
 
 <hr>
 
-<a href="../source/application/libraries/finder.php.html#line11" class="location">application/libraries/finder.php at line 11</a>
+<a href="../source/libraries/finder.php.html#line15" class="location">libraries/finder.php at line 15</a>
 
 <h3 id="friends">friends</h3>
-<code class="signature">protected  mixed <strong>$friends</strong> = NULL</code>
+<code class="signature">protected  object <strong>$friends</strong> = NULL</code>
 <div class="details">
-</div>
+<p>CodeIgniter super-object</p></div>
 
 <hr>
 
-<a href="../source/application/libraries/finder.php.html#line40" class="location">application/libraries/finder.php at line 40</a>
+<a href="../source/libraries/finder.php.html#line47" class="location">libraries/finder.php at line 47</a>
 
 <h3 id="latitude">latitude</h3>
 <code class="signature">public  float <strong>$latitude</strong></code>
@@ -379,7 +382,7 @@ Gets gifts from nearby users. </p></td>
 
 <hr>
 
-<a href="../source/application/libraries/finder.php.html#line133" class="location">application/libraries/finder.php at line 133</a>
+<a href="../source/libraries/finder.php.html#line140" class="location">libraries/finder.php at line 140</a>
 
 <h3 id="limit_offset">limit_offset</h3>
 <code class="signature">public  int <strong>$limit_offset</strong></code>
@@ -388,7 +391,7 @@ Gets gifts from nearby users. </p></td>
 
 <hr>
 
-<a href="../source/application/libraries/finder.php.html#line127" class="location">application/libraries/finder.php at line 127</a>
+<a href="../source/libraries/finder.php.html#line134" class="location">libraries/finder.php at line 134</a>
 
 <h3 id="limit_size">limit_size</h3>
 <code class="signature">public  int <strong>$limit_size</strong></code>
@@ -397,7 +400,7 @@ Gets gifts from nearby users. </p></td>
 
 <hr>
 
-<a href="../source/application/libraries/finder.php.html#line30" class="location">application/libraries/finder.php at line 30</a>
+<a href="../source/libraries/finder.php.html#line37" class="location">libraries/finder.php at line 37</a>
 
 <h3 id="location">location</h3>
 <code class="signature">public  object <strong>$location</strong></code>
@@ -406,16 +409,16 @@ Gets gifts from nearby users. </p></td>
 
 <hr>
 
-<a href="../source/application/libraries/finder.php.html#line23" class="location">application/libraries/finder.php at line 23</a>
+<a href="../source/libraries/finder.php.html#line30" class="location">libraries/finder.php at line 30</a>
 
 <h3 id="location_keyword">location_keyword</h3>
 <code class="signature">public  string <strong>$location_keyword</strong></code>
 <div class="details">
-<p></p></div>
+<p>Location keyword. The text found in the "where" search box.</p></div>
 
 <hr>
 
-<a href="../source/application/libraries/finder.php.html#line45" class="location">application/libraries/finder.php at line 45</a>
+<a href="../source/libraries/finder.php.html#line52" class="location">libraries/finder.php at line 52</a>
 
 <h3 id="longitude">longitude</h3>
 <code class="signature">public  float <strong>$longitude</strong></code>
@@ -424,7 +427,7 @@ Gets gifts from nearby users. </p></td>
 
 <hr>
 
-<a href="../source/application/libraries/finder.php.html#line153" class="location">application/libraries/finder.php at line 153</a>
+<a href="../source/libraries/finder.php.html#line160" class="location">libraries/finder.php at line 160</a>
 
 <h3 id="object">object</h3>
 <code class="signature">public  object <strong>$object</strong></code>
@@ -435,7 +438,7 @@ converted to an object and then saved here in $this->_object_factory().</p></div
 
 <hr>
 
-<a href="../source/application/libraries/finder.php.html#line121" class="location">application/libraries/finder.php at line 121</a>
+<a href="../source/libraries/finder.php.html#line128" class="location">libraries/finder.php at line 128</a>
 
 <h3 id="order_by_direction">order_by_direction</h3>
 <code class="signature">public  string <strong>$order_by_direction</strong></code>
@@ -444,7 +447,7 @@ converted to an object and then saved here in $this->_object_factory().</p></div
 
 <hr>
 
-<a href="../source/application/libraries/finder.php.html#line115" class="location">application/libraries/finder.php at line 115</a>
+<a href="../source/libraries/finder.php.html#line122" class="location">libraries/finder.php at line 122</a>
 
 <h3 id="order_by_field">order_by_field</h3>
 <code class="signature">public  string <strong>$order_by_field</strong></code>
@@ -453,7 +456,7 @@ converted to an object and then saved here in $this->_object_factory().</p></div
 
 <hr>
 
-<a href="../source/application/libraries/finder.php.html#line53" class="location">application/libraries/finder.php at line 53</a>
+<a href="../source/libraries/finder.php.html#line60" class="location">libraries/finder.php at line 60</a>
 
 <h3 id="radius">radius</h3>
 <code class="signature">public  int <strong>$radius</strong> = 10000</code>
@@ -462,7 +465,7 @@ converted to an object and then saved here in $this->_object_factory().</p></div
 
 <hr>
 
-<a href="../source/application/libraries/finder.php.html#line145" class="location">application/libraries/finder.php at line 145</a>
+<a href="../source/libraries/finder.php.html#line152" class="location">libraries/finder.php at line 152</a>
 
 <h3 id="result">result</h3>
 <code class="signature">public  object <strong>$result</strong></code>
@@ -472,16 +475,16 @@ The raw database result object from the database query is usually stored here.</
 
 <hr>
 
-<a href="../source/application/libraries/finder.php.html#line18" class="location">application/libraries/finder.php at line 18</a>
+<a href="../source/libraries/finder.php.html#line24" class="location">libraries/finder.php at line 24</a>
 
 <h3 id="search_keyword">search_keyword</h3>
 <code class="signature">public  string <strong>$search_keyword</strong></code>
 <div class="details">
-<p></p></div>
+<p>Search keyword. The text found in the "what" search box.</p></div>
 
 <hr>
 
-<a href="../source/application/libraries/finder.php.html#line83" class="location">application/libraries/finder.php at line 83</a>
+<a href="../source/libraries/finder.php.html#line90" class="location">libraries/finder.php at line 90</a>
 
 <h3 id="subquery">subquery</h3>
 <code class="signature">public  array <strong>$subquery</strong></code>
@@ -490,7 +493,7 @@ The raw database result object from the database query is usually stored here.</
 
 <hr>
 
-<a href="../source/application/libraries/finder.php.html#line77" class="location">application/libraries/finder.php at line 77</a>
+<a href="../source/libraries/finder.php.html#line84" class="location">libraries/finder.php at line 84</a>
 
 <h3 id="tag_id">tag_id</h3>
 <code class="signature">public  int <strong>$tag_id</strong></code>
@@ -499,7 +502,7 @@ The raw database result object from the database query is usually stored here.</
 
 <hr>
 
-<a href="../source/application/libraries/finder.php.html#line71" class="location">application/libraries/finder.php at line 71</a>
+<a href="../source/libraries/finder.php.html#line78" class="location">libraries/finder.php at line 78</a>
 
 <h3 id="type">type</h3>
 <code class="signature">public  string <strong>$type</strong> = 'gift'</code>
@@ -508,7 +511,7 @@ The raw database result object from the database query is usually stored here.</
 
 <hr>
 
-<a href="../source/application/libraries/finder.php.html#line65" class="location">application/libraries/finder.php at line 65</a>
+<a href="../source/libraries/finder.php.html#line72" class="location">libraries/finder.php at line 72</a>
 
 <h3 id="users">users</h3>
 <code class="signature">public  array <strong>$users</strong></code>
@@ -517,7 +520,7 @@ The raw database result object from the database query is usually stored here.</
 
 <hr>
 
-<a href="../source/application/libraries/finder.php.html#line138" class="location">application/libraries/finder.php at line 138</a>
+<a href="../source/libraries/finder.php.html#line145" class="location">libraries/finder.php at line 145</a>
 
 <h3 id="where">where</h3>
 <code class="signature">public  array <strong>$where</strong></code>
@@ -527,7 +530,7 @@ The raw database result object from the database query is usually stored here.</
 <hr>
 
 <h2 id="detail_method">Method Detail</h2><div class="method_detail">
-<div class='method'><a href="../source/application/libraries/finder.php.html#line158" class="location">application/libraries/finder.php at line 158</a>
+<div class='method'><a href="../source/libraries/finder.php.html#line169" class="location">libraries/finder.php at line 169</a>
 
 <h3 id="__construct()">__construct</h3>
 <code class="signature">public  void <strong>__construct</strong>()</code>
@@ -536,36 +539,37 @@ The raw database result object from the database query is usually stored here.</
 
 
 
-<div class='method'><a href="../source/application/libraries/finder.php.html#line445" class="location">application/libraries/finder.php at line 445</a>
+<div class='method'><a href="../source/libraries/finder.php.html#line519" class="location">libraries/finder.php at line 519</a>
 
 <h3 id="_basic_query()">_basic_query</h3>
 <code class="signature">protected  void <strong>_basic_query</strong>()</code>
 <div class="details">
-<p>Basic query that is run every time for both subqueries and normal queries.
-There are several subroutines which are run that add to the active record
+<p>Basic query that is run every time for both subqueries and normal queries.</p><p>There are several subroutines which are run that add to the active record
 object's methods.</p></div></div>
 
 
 
-<div class='method'><a href="../source/application/libraries/finder.php.html#line515" class="location">application/libraries/finder.php at line 515</a>
+<div class='method'><a href="../source/libraries/finder.php.html#line595" class="location">libraries/finder.php at line 595</a>
 
 <h3 id="_count_transactions()">_count_transactions</h3>
 <code class="signature">protected  void <strong>_count_transactions</strong>()</code>
 <div class="details">
-<p>Counts the requests for each good, grouped by request status</p></div></div>
+<p>Counts the requests for each good, grouped by request status.</p><p>Use this set of queries only when necessary, because they are resource-
+intensive.</p></div></div>
 
 
 
-<div class='method'><a href="../source/application/libraries/finder.php.html#line696" class="location">application/libraries/finder.php at line 696</a>
+<div class='method'><a href="../source/libraries/finder.php.html#line822" class="location">libraries/finder.php at line 822</a>
 
 <h3 id="_exclude_logged_in_user()">_exclude_logged_in_user</h3>
 <code class="signature">protected  void <strong>_exclude_logged_in_user</strong>()</code>
 <div class="details">
-<p>Exclude logged in user</p></div></div>
+<p>Exclude logged in user</p><p>If the user is logged in, adds a where clause that filters out rows
+associated with the user.</p></div></div>
 
 
 
-<div class='method'><a href="../source/application/libraries/finder.php.html#line747" class="location">application/libraries/finder.php at line 747</a>
+<div class='method'><a href="../source/libraries/finder.php.html#line887" class="location">libraries/finder.php at line 887</a>
 
 <h3 id="_format_result()">_format_result</h3>
 <code class="signature">protected  void <strong>_format_result</strong>()</code>
@@ -574,7 +578,7 @@ object's methods.</p></div></div>
 
 
 
-<div class='method'><a href="../source/application/libraries/finder.php.html#line734" class="location">application/libraries/finder.php at line 734</a>
+<div class='method'><a href="../source/libraries/finder.php.html#line874" class="location">libraries/finder.php at line 874</a>
 
 <h3 id="_geocode()">_geocode</h3>
 <code class="signature">protected  void <strong>_geocode</strong>()</code>
@@ -583,7 +587,7 @@ object's methods.</p></div></div>
 
 
 
-<div class='method'><a href="../source/application/libraries/finder.php.html#line708" class="location">application/libraries/finder.php at line 708</a>
+<div class='method'><a href="../source/libraries/finder.php.html#line834" class="location">libraries/finder.php at line 834</a>
 
 <h3 id="_object_factory()">_object_factory</h3>
 <code class="signature">protected  void <strong>_object_factory</strong>()</code>
@@ -592,25 +596,30 @@ object's methods.</p></div></div>
 
 
 
-<div class='method'><a href="../source/application/libraries/finder.php.html#line775" class="location">application/libraries/finder.php at line 775</a>
+<div class='method'><a href="../source/libraries/finder.php.html#line927" class="location">libraries/finder.php at line 927</a>
 
 <h3 id="_render_output()">_render_output</h3>
 <code class="signature">protected  void <strong>_render_output</strong>()</code>
 <div class="details">
-</div></div>
+<p>Renders the output of the query as either an object or JSON.</p><p>The type of the output depends on the $this->format field. By default,
+this function outputs JSON if the request was made via AJAX and it
+outputs an object if the request was not AJAX.</p></div></div>
 
 
 
-<div class='method'><a href="../source/application/libraries/finder.php.html#line561" class="location">application/libraries/finder.php at line 561</a>
+<div class='method'><a href="../source/libraries/finder.php.html#line653" class="location">libraries/finder.php at line 653</a>
 
 <h3 id="_set_geographic_bounds()">_set_geographic_bounds</h3>
 <code class="signature">protected  void <strong>_set_geographic_bounds</strong>()</code>
 <div class="details">
-<p>Adds where clauses that limit results to a specific geographic area</p></div></div>
+<p>Adds where clauses that limit results to a specific geographic area</p><p>Calculates bounds by determining how many degrees of latitude and longitude
+the search radius encompasses. This is not a complete solution, however, since
+the shape of the bounds is a square, not a circle. Thus to be truly accurate another 
+where clause limiting results by the calculated distance field should be used.</p></div></div>
 
 
 
-<div class='method'><a href="../source/application/libraries/finder.php.html#line534" class="location">application/libraries/finder.php at line 534</a>
+<div class='method'><a href="../source/libraries/finder.php.html#line615" class="location">libraries/finder.php at line 615</a>
 
 <h3 id="_set_logged_in_user_location()">_set_logged_in_user_location</h3>
 <code class="signature">protected  boolean <strong>_set_logged_in_user_location</strong>()</code>
@@ -620,7 +629,7 @@ sends its information into Finder's location-related properties.</p></div></div>
 
 
 
-<div class='method'><a href="../source/application/libraries/finder.php.html#line765" class="location">application/libraries/finder.php at line 765</a>
+<div class='method'><a href="../source/libraries/finder.php.html#line909" class="location">libraries/finder.php at line 909</a>
 
 <h3 id="_set_tag()">_set_tag</h3>
 <code class="signature">protected  void <strong>_set_tag</strong>(string tag)</code>
@@ -633,19 +642,17 @@ sends its information into Finder's location-related properties.</p></div></div>
 
 
 
-<div class='method'><a href="../source/application/libraries/finder.php.html#line605" class="location">application/libraries/finder.php at line 605</a>
+<div class='method'><a href="../source/libraries/finder.php.html#line699" class="location">libraries/finder.php at line 699</a>
 
 <h3 id="_sort_and_paginate()">_sort_and_paginate</h3>
 <code class="signature">protected  void <strong>_sort_and_paginate</strong>()</code>
 <div class="details">
-<p>Sorts and paginates search results
-First, it checks to see if the user has input any order_by or limit information
-using the Finder::order_by() or Finder::limit() methods.
-If not, then reverts to default values specified in the model's properties</p></div></div>
+<p>Sorts and paginates search results</p><p>First, it checks to see if the user has input any order_by or limit information
+using the Finder::order_by() or Finder::limit() methods.</p><p>If not, then reverts to default values specified in the model's properties</p></div></div>
 
 
 
-<div class='method'><a href="../source/application/libraries/finder.php.html#line665" class="location">application/libraries/finder.php at line 665</a>
+<div class='method'><a href="../source/libraries/finder.php.html#line785" class="location">libraries/finder.php at line 785</a>
 
 <h3 id="_subquery_union()">_subquery_union</h3>
 <code class="signature">protected  void <strong>_subquery_union</strong>()</code>
@@ -654,7 +661,7 @@ If not, then reverts to default values specified in the model's properties</p></
 
 
 
-<div class='method'><a href="../source/application/libraries/finder.php.html#line628" class="location">application/libraries/finder.php at line 628</a>
+<div class='method'><a href="../source/libraries/finder.php.html#line722" class="location">libraries/finder.php at line 722</a>
 
 <h3 id="_tag_query()">_tag_query</h3>
 <code class="signature">protected  string <strong>_tag_query</strong>()</code>
@@ -663,7 +670,7 @@ If not, then reverts to default values specified in the model's properties</p></
 
 
 
-<div class='method'><a href="../source/application/libraries/finder.php.html#line652" class="location">application/libraries/finder.php at line 652</a>
+<div class='method'><a href="../source/libraries/finder.php.html#line763" class="location">libraries/finder.php at line 763</a>
 
 <h3 id="_title_query()">_title_query</h3>
 <code class="signature">protected  string <strong>_title_query</strong>()</code>
@@ -672,16 +679,18 @@ If not, then reverts to default values specified in the model's properties</p></
 
 
 
-<div class='method'><a href="../source/application/libraries/finder.php.html#line339" class="location">application/libraries/finder.php at line 339</a>
+<div class='method'><a href="../source/libraries/finder.php.html#line377" class="location">libraries/finder.php at line 377</a>
 
 <h3 id="follower_search()">follower_search</h3>
-<code class="signature">public  void <strong>follower_search</strong>()</code>
+<code class="signature">public  object <strong>follower_search</strong>()</code>
 <div class="details">
-<p>Follower search</p></div></div>
+<p>Searches for the goods from the users the logged in user is following.</p><p>This method generates an array of user IDs and then stores them in 
+$this->users. The actual searching is then handled by the user_search()
+method.</p></div></div>
 
 
 
-<div class='method'><a href="../source/application/libraries/finder.php.html#line300" class="location">application/libraries/finder.php at line 300</a>
+<div class='method'><a href="../source/libraries/finder.php.html#line320" class="location">libraries/finder.php at line 320</a>
 
 <h3 id="geosearch()">geosearch</h3>
 <code class="signature">public  JSON <strong>geosearch</strong>()</code>
@@ -692,7 +701,7 @@ on location, tags and titles.</p></div></div>
 
 
 
-<div class='method'><a href="../source/application/libraries/finder.php.html#line315" class="location">application/libraries/finder.php at line 315</a>
+<div class='method'><a href="../source/libraries/finder.php.html#line341" class="location">libraries/finder.php at line 341</a>
 
 <h3 id="giftflow()">giftflow</h3>
 <code class="signature">public  void <strong>giftflow</strong>()</code>
@@ -701,7 +710,7 @@ on location, tags and titles.</p></div></div>
 
 
 
-<div class='method'><a href="../source/application/libraries/finder.php.html#line379" class="location">application/libraries/finder.php at line 379</a>
+<div class='method'><a href="../source/libraries/finder.php.html#line432" class="location">libraries/finder.php at line 432</a>
 
 <h3 id="keyword_search()">keyword_search</h3>
 <code class="signature">public  void <strong>keyword_search</strong>()</code>
@@ -710,25 +719,25 @@ on location, tags and titles.</p></div></div>
 
 
 
-<div class='method'><a href="../source/application/libraries/finder.php.html#line204" class="location">application/libraries/finder.php at line 204</a>
+<div class='method'><a href="../source/libraries/finder.php.html#line223" class="location">libraries/finder.php at line 223</a>
 
 <h3 id="latest_gifts()">latest_gifts</h3>
 <code class="signature">public  object <strong>latest_gifts</strong>()</code>
 <div class="details">
-<p>Gets the most recently added gifts</p></div></div>
+<p>Gets the most recently added gifts</p><p>High-level search function</p></div></div>
 
 
 
-<div class='method'><a href="../source/application/libraries/finder.php.html#line413" class="location">application/libraries/finder.php at line 413</a>
+<div class='method'><a href="../source/libraries/finder.php.html#line472" class="location">libraries/finder.php at line 472</a>
 
 <h3 id="limit()">limit</h3>
 <code class="signature">public  void <strong>limit</strong>(int size, int offset)</code>
 <div class="details">
-<p>Saves LIMIT clause</p></div></div>
+<p>Sets limit information which is translated into SQL LIMIT clauses later.</p></div></div>
 
 
 
-<div class='method'><a href="../source/application/libraries/finder.php.html#line179" class="location">application/libraries/finder.php at line 179</a>
+<div class='method'><a href="../source/libraries/finder.php.html#line195" class="location">libraries/finder.php at line 195</a>
 
 <h3 id="locate_ip()">locate_ip</h3>
 <code class="signature">public  array <strong>locate_ip</strong>(string ip)</code>
@@ -739,30 +748,25 @@ properties of $this.</p></div></div>
 
 
 
-<div class='method'><a href="../source/application/libraries/finder.php.html#line240" class="location">application/libraries/finder.php at line 240</a>
+<div class='method'><a href="../source/libraries/finder.php.html#line259" class="location">libraries/finder.php at line 259</a>
 
 <h3 id="nearby_gifts()">nearby_gifts</h3>
 <code class="signature">public  object <strong>nearby_gifts</strong>()</code>
 <div class="details">
-<p>Gets nearby gifts
-High-level search function</p></div></div>
+<p>Gets nearby gifts</p><p>High-level search function</p></div></div>
 
 
 
-<div class='method'><a href="../source/application/libraries/finder.php.html#line217" class="location">application/libraries/finder.php at line 217</a>
+<div class='method'><a href="../source/libraries/finder.php.html#line234" class="location">libraries/finder.php at line 234</a>
 
 <h3 id="nearby_users()">nearby_users</h3>
 <code class="signature">public  void <strong>nearby_users</strong>()</code>
 <div class="details">
-<p>DEPRECATED
-Gets gifts from nearby users. Replaced by nearby_gifts().</p><dl>
-<dt>Deprecated.</dt>
-</dl>
-</div></div>
+<p>Returns array of nearby user IDs</p></div></div>
 
 
 
-<div class='method'><a href="../source/application/libraries/finder.php.html#line401" class="location">application/libraries/finder.php at line 401</a>
+<div class='method'><a href="../source/libraries/finder.php.html#line459" class="location">libraries/finder.php at line 459</a>
 
 <h3 id="order_by()">order_by</h3>
 <code class="signature">public  void <strong>order_by</strong>(string field, string direction)</code>
@@ -771,7 +775,7 @@ Gets gifts from nearby users. Replaced by nearby_gifts().</p><dl>
 
 
 
-<div class='method'><a href="../source/application/libraries/finder.php.html#line256" class="location">application/libraries/finder.php at line 256</a>
+<div class='method'><a href="../source/libraries/finder.php.html#line276" class="location">libraries/finder.php at line 276</a>
 
 <h3 id="popular_tags()">popular_tags</h3>
 <code class="signature">public  object <strong>popular_tags</strong>()</code>
@@ -780,7 +784,7 @@ Gets gifts from nearby users. Replaced by nearby_gifts().</p><dl>
 
 
 
-<div class='method'><a href="../source/application/libraries/finder.php.html#line279" class="location">application/libraries/finder.php at line 279</a>
+<div class='method'><a href="../source/libraries/finder.php.html#line299" class="location">libraries/finder.php at line 299</a>
 
 <h3 id="tag_search()">tag_search</h3>
 <code class="signature">public  object/JSON <strong>tag_search</strong>(string tag)</code>
@@ -793,30 +797,31 @@ Gets gifts from nearby users. Replaced by nearby_gifts().</p><dl>
 
 
 
-<div class='method'><a href="../source/application/libraries/finder.php.html#line358" class="location">application/libraries/finder.php at line 358</a>
+<div class='method'><a href="../source/libraries/finder.php.html#line404" class="location">libraries/finder.php at line 404</a>
 
 <h3 id="user_search()">user_search</h3>
-<code class="signature">public  void <strong>user_search</strong>()</code>
+<code class="signature">public  object <strong>user_search</strong>()</code>
 <div class="details">
-<p>Performs generic user search based on user_id(s) provided.</p></div></div>
+<p>Searches for the goods from the users provided in $this->users.
+$this->users may either be an array of multiple user IDs or a single user ID.</p></div></div>
 
 
 
-<div class='method'><a href="../source/application/libraries/finder.php.html#line425" class="location">application/libraries/finder.php at line 425</a>
+<div class='method'><a href="../source/libraries/finder.php.html#line498" class="location">libraries/finder.php at line 498</a>
 
 <h3 id="where()">where</h3>
-<code class="signature">public  void <strong>where</strong>(mixed key, mixed val)</code>
+<code class="signature">public  $this <strong>where</strong>(string key, string val)</code>
 <div class="details">
-</div></div>
+<p>Adds a where clause</p></div></div>
 
 
 
-<div class='method'><a href="../source/application/libraries/finder.php.html#line420" class="location">application/libraries/finder.php at line 420</a>
+<div class='method'><a href="../source/libraries/finder.php.html#line485" class="location">libraries/finder.php at line 485</a>
 
 <h3 id="where_type()">where_type</h3>
-<code class="signature">public  void <strong>where_type</strong>(mixed type)</code>
+<code class="signature">public  $this <strong>where_type</strong>(string type)</code>
 <div class="details">
-</div></div>
+<p>Limits search results by type</p></div></div>
 
 
 

@@ -6,7 +6,7 @@
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 
 <meta name="generator" content="PHPDoctor 2RC4 (http://peej.github.com/phpdoctor/)">
-<meta name="when" content="Mon, 19 Jul 2010 17:13:56 +0000">
+<meta name="when" content="Sat, 24 Jul 2010 20:46:31 +0000">
 
 <link rel="stylesheet" type="text/css" href="../stylesheet.css">
 <link rel="start" href="../overview-summary.html">
@@ -79,6 +79,10 @@ Detail: <a href="#detail_field">Field</a> | <a href="#detail_method">Method</a> 
 </tr>
 <tr>
 <td class="type"> mixed</td>
+<td class="description"><p class="name"><a href="#function">$function</a></p></td>
+</tr>
+<tr>
+<td class="type"> mixed</td>
 <td class="description"><p class="name"><a href="#heading">$heading</a></p></td>
 </tr>
 <tr>
@@ -108,6 +112,10 @@ Detail: <a href="#detail_field">Field</a> | <a href="#detail_method">Method</a> 
 <tr>
 <td class="type">private  void</td>
 <td class="description"><p class="name"><a href="#_default_template()">_default_template</a>()</p><p class="description">Default Template</p></td>
+</tr>
+<tr>
+<td class="type">private  void</td>
+<td class="description"><p class="name"><a href="#_prep_args()">_prep_args</a>(mixed args)</p><p class="description">Prep ArgsEnsures a standard associative array format for all cell data</p></td>
 </tr>
 <tr>
 <td class="type">private  void</td>
@@ -179,6 +187,15 @@ Detail: <a href="#detail_field">Field</a> | <a href="#detail_method">Method</a> 
 
 <hr>
 
+<a href="../source/libraries/table.php.html#line38" class="location">libraries/Table.php at line 38</a>
+
+<h3 id="function">function</h3>
+<code class="signature">public  mixed <strong>$function</strong> = FALSE</code>
+<div class="details">
+</div>
+
+<hr>
+
 <a href="../source/libraries/table.php.html#line32" class="location">libraries/Table.php at line 32</a>
 
 <h3 id="heading">heading</h3>
@@ -225,7 +242,7 @@ Detail: <a href="#detail_field">Field</a> | <a href="#detail_method">Method</a> 
 
 
 
-<div class='method'><a href="../source/libraries/table.php.html#line385" class="location">libraries/Table.php at line 385</a>
+<div class='method'><a href="../source/libraries/table.php.html#line467" class="location">libraries/Table.php at line 467</a>
 
 <h3 id="_compile_template()">_compile_template</h3>
 <code class="signature">private  void <strong>_compile_template</strong>()</code>
@@ -238,7 +255,7 @@ Detail: <a href="#detail_field">Field</a> | <a href="#detail_method">Method</a> 
 
 
 
-<div class='method'><a href="../source/libraries/table.php.html#line411" class="location">libraries/Table.php at line 411</a>
+<div class='method'><a href="../source/libraries/table.php.html#line493" class="location">libraries/Table.php at line 493</a>
 
 <h3 id="_default_template()">_default_template</h3>
 <code class="signature">private  void <strong>_default_template</strong>()</code>
@@ -251,7 +268,21 @@ Detail: <a href="#detail_field">Field</a> | <a href="#detail_method">Method</a> 
 
 
 
-<div class='method'><a href="../source/libraries/table.php.html#line347" class="location">libraries/Table.php at line 347</a>
+<div class='method'><a href="../source/libraries/table.php.html#line173" class="location">libraries/Table.php at line 173</a>
+
+<h3 id="_prep_args()">_prep_args</h3>
+<code class="signature">private  void <strong>_prep_args</strong>(mixed args)</code>
+<div class="details">
+<p>Prep Args</p><p>Ensures a standard associative array format for all cell data</p><dl>
+<dt>Access	public.</dt>
+<dt>Param	type.</dt>
+<dt>Return	type.</dt>
+</dl>
+</div></div>
+
+
+
+<div class='method'><a href="../source/libraries/table.php.html#line435" class="location">libraries/Table.php at line 435</a>
 
 <h3 id="_set_from_array()">_set_from_array</h3>
 <code class="signature">private  void <strong>_set_from_array</strong>(mixed data, bool set_heading)</code>
@@ -265,7 +296,7 @@ Detail: <a href="#detail_field">Field</a> | <a href="#detail_method">Method</a> 
 
 
 
-<div class='method'><a href="../source/libraries/table.php.html#line309" class="location">libraries/Table.php at line 309</a>
+<div class='method'><a href="../source/libraries/table.php.html#line397" class="location">libraries/Table.php at line 397</a>
 
 <h3 id="_set_from_object()">_set_from_object</h3>
 <code class="signature">private  void <strong>_set_from_object</strong>(mixed query)</code>
@@ -293,7 +324,7 @@ Detail: <a href="#detail_field">Field</a> | <a href="#detail_method">Method</a> 
 
 
 
-<div class='method'><a href="../source/libraries/table.php.html#line293" class="location">libraries/Table.php at line 293</a>
+<div class='method'><a href="../source/libraries/table.php.html#line381" class="location">libraries/Table.php at line 381</a>
 
 <h3 id="clear()">clear</h3>
 <code class="signature">public  void <strong>clear</strong>()</code>
@@ -306,7 +337,7 @@ Detail: <a href="#detail_field">Field</a> | <a href="#detail_method">Method</a> 
 
 
 
-<div class='method'><a href="../source/libraries/table.php.html#line185" class="location">libraries/Table.php at line 185</a>
+<div class='method'><a href="../source/libraries/table.php.html#line233" class="location">libraries/Table.php at line 233</a>
 
 <h3 id="generate()">generate</h3>
 <code class="signature">public  void <strong>generate</strong>(mixed table_data)</code>
@@ -338,7 +369,7 @@ displayed in a table that has a fixed column count.</p><dl>
 
 
 
-<div class='method'><a href="../source/libraries/table.php.html#line171" class="location">libraries/Table.php at line 171</a>
+<div class='method'><a href="../source/libraries/table.php.html#line219" class="location">libraries/Table.php at line 219</a>
 
 <h3 id="set_caption()">set_caption</h3>
 <code class="signature">public  void <strong>set_caption</strong>(mixed caption)</code>

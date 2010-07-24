@@ -1,0 +1,321 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+
+<html lang="en">
+<head>
+
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
+<meta name="generator" content="PHPDoctor 2RC4 (http://peej.github.com/phpdoctor/)">
+<meta name="when" content="Sat, 24 Jul 2010 20:47:45 +0000">
+
+<link rel="stylesheet" type="text/css" href="../../../../stylesheet.css">
+<link rel="start" href="../../../../overview-summary.html">
+
+<title>libraries/oauth/store/OAuthStorePDO.php (GiftFlow API)</title>
+
+</head>
+<body id="file" onload="parent.document.title=document.title;">
+
+<div class="header">
+<h1>GiftFlow API</h1>
+<ul>
+<li><a href="../../../../overview-summary.html">Overview</a></li>
+<li>Package</li><li>Class</li><li>Tree</li><li><a href="../../../../overview-files.html">Files</a></li>
+<li><a href="../../../../deprecated-list.html">Deprecated</a></li>
+<li><a href="../../../../index-all.html">Index</a></li>
+</ul>
+</div>
+
+<div class="small_links">
+<a href="../../../../index.html" target="_top">Frames</a>
+<a href="../../../../source/libraries/oauth/store/oauthstorepdo.php.html" target="_top">No frames</a>
+</div>
+<hr>
+
+<h1>libraries/oauth/store/OAuthStorePDO.php</h1>
+<hr>
+
+<a name="line1"></a><pre><?php
+<a name="line2"></a>
+<a name="line3"></a>/**
+<a name="line4"></a> * Storage container for the oauth credentials, both server and consumer side.
+<a name="line5"></a> * Based on MySQL
+<a name="line6"></a> * 
+<a name="line7"></a> * @version $Id: OAuthStorePDO.php 64 2009-08-16 19:37:00Z marcw@pobox.com $
+<a name="line8"></a> * @author Bruno Barberi Gnecco <brunobg@users.sf.net> Based on code by Marc Worrell <marcw@pobox.com>
+<a name="line9"></a> * 
+<a name="line10"></a> * 
+<a name="line11"></a> * The MIT License
+<a name="line12"></a> * 
+<a name="line13"></a> * Copyright (c) 2007-2008 Mediamatic Lab
+<a name="line14"></a> * 
+<a name="line15"></a> * Permission is hereby granted, free of charge, to any person obtaining a copy
+<a name="line16"></a> * of this software and associated documentation files (the "Software"), to deal
+<a name="line17"></a> * in the Software without restriction, including without limitation the rights
+<a name="line18"></a> * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+<a name="line19"></a> * copies of the Software, and to permit persons to whom the Software is
+<a name="line20"></a> * furnished to do so, subject to the following conditions:
+<a name="line21"></a> * 
+<a name="line22"></a> * The above copyright notice and this permission notice shall be included in
+<a name="line23"></a> * all copies or substantial portions of the Software.
+<a name="line24"></a> * 
+<a name="line25"></a> * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+<a name="line26"></a> * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+<a name="line27"></a> * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+<a name="line28"></a> * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+<a name="line29"></a> * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+<a name="line30"></a> * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+<a name="line31"></a> * THE SOFTWARE.
+<a name="line32"></a> */
+<a name="line33"></a>
+<a name="line34"></a>require_once dirname(__FILE__) . '/OAuthStoreSQL.php';
+<a name="line35"></a>
+<a name="line36"></a>
+<a name="line37"></a>class OAuthStorePDO extends OAuthStoreSQL
+<a name="line38"></a>{
+<a name="line39"></a>	private $conn; // PDO connection
+<a name="line40"></a>	private $lastaffectedrows;
+<a name="line41"></a>
+<a name="line42"></a>	/**
+<a name="line43"></a>	 * Construct the OAuthStorePDO.
+<a name="line44"></a>	 * In the options you have to supply either:
+<a name="line45"></a>	 * - dsn, username, password and database (for a new PDO connection)
+<a name="line46"></a>	 * - conn (for the connection to be used)
+<a name="line47"></a>	 * 
+<a name="line48"></a>	 * @param array options
+<a name="line49"></a>	 */
+<a name="line50"></a>	function __construct ( $options = array() )
+<a name="line51"></a>	{
+<a name="line52"></a>		if (isset($options['conn']))
+<a name="line53"></a>		{
+<a name="line54"></a>			$this->conn = $options['conn'];
+<a name="line55"></a>		}
+<a name="line56"></a>		else if (isset($options['dsn']))
+<a name="line57"></a>		{
+<a name="line58"></a>			try 
+<a name="line59"></a>			{
+<a name="line60"></a>				$this->conn = new PDO($options['dsn'], $options['username'], @$options['password']);
+<a name="line61"></a>			}
+<a name="line62"></a>			catch (PDOException $e) 
+<a name="line63"></a>			{
+<a name="line64"></a>				throw new OAuthException2('Could not connect to PDO database: ' . $e->getMessage());
+<a name="line65"></a>			}
+<a name="line66"></a>
+<a name="line67"></a>			$this->query('set character set utf8');
+<a name="line68"></a>		}
+<a name="line69"></a>	}
+<a name="line70"></a>
+<a name="line71"></a>	/**
+<a name="line72"></a>	 * Perform a query, ignore the results
+<a name="line73"></a>	 * 
+<a name="line74"></a>	 * @param string sql
+<a name="line75"></a>	 * @param vararg arguments (for sprintf)
+<a name="line76"></a>	 */
+<a name="line77"></a>	protected function query ( $sql )
+<a name="line78"></a>	{
+<a name="line79"></a>		$sql = $this->sql_printf(func_get_args());
+<a name="line80"></a>		try
+<a name="line81"></a>		{
+<a name="line82"></a>			$this->lastaffectedrows = $this->conn->exec($sql);
+<a name="line83"></a>			if ($this->lastaffectedrows === FALSE) {
+<a name="line84"></a>				$this->sql_errcheck($sql);
+<a name="line85"></a>			}
+<a name="line86"></a>		}
+<a name="line87"></a>		catch (PDOException $e) 
+<a name="line88"></a>		{
+<a name="line89"></a>			$this->sql_errcheck($sql);
+<a name="line90"></a>		}
+<a name="line91"></a>	}
+<a name="line92"></a>	
+<a name="line93"></a>
+<a name="line94"></a>	/**
+<a name="line95"></a>	 * Perform a query, ignore the results
+<a name="line96"></a>	 * 
+<a name="line97"></a>	 * @param string sql
+<a name="line98"></a>	 * @param vararg arguments (for sprintf)
+<a name="line99"></a>	 * @return array
+<a name="line100"></a>	 */
+<a name="line101"></a>	protected function query_all_assoc ( $sql )
+<a name="line102"></a>	{
+<a name="line103"></a>		$sql = $this->sql_printf(func_get_args());
+<a name="line104"></a>		$result = array();
+<a name="line105"></a>
+<a name="line106"></a>		try 
+<a name="line107"></a>		{
+<a name="line108"></a>			$stmt = $this->conn->query($sql);
+<a name="line109"></a>			
+<a name="line110"></a>			$result = $stmt->fetchAll(PDO::FETCH_ASSOC);
+<a name="line111"></a>		}
+<a name="line112"></a>		catch (PDOException $e) 
+<a name="line113"></a>		{
+<a name="line114"></a>			$this->sql_errcheck($sql);
+<a name="line115"></a>		}
+<a name="line116"></a>		return $result;
+<a name="line117"></a>	}
+<a name="line118"></a>	
+<a name="line119"></a>	
+<a name="line120"></a>	/**
+<a name="line121"></a>	 * Perform a query, return the first row
+<a name="line122"></a>	 * 
+<a name="line123"></a>	 * @param string sql
+<a name="line124"></a>	 * @param vararg arguments (for sprintf)
+<a name="line125"></a>	 * @return array
+<a name="line126"></a>	 */
+<a name="line127"></a>	protected function query_row_assoc ( $sql )
+<a name="line128"></a>	{
+<a name="line129"></a>		$sql = $this->sql_printf(func_get_args());
+<a name="line130"></a>		$result = $this->query_all_assoc($sql);
+<a name="line131"></a>		$val = array_pop($result);
+<a name="line132"></a>		return $val;
+<a name="line133"></a>	}
+<a name="line134"></a>
+<a name="line135"></a>	
+<a name="line136"></a>	/**
+<a name="line137"></a>	 * Perform a query, return the first row
+<a name="line138"></a>	 * 
+<a name="line139"></a>	 * @param string sql
+<a name="line140"></a>	 * @param vararg arguments (for sprintf)
+<a name="line141"></a>	 * @return array
+<a name="line142"></a>	 */
+<a name="line143"></a>	protected function query_row ( $sql )
+<a name="line144"></a>	{
+<a name="line145"></a>		$sql = $this->sql_printf(func_get_args());
+<a name="line146"></a>		try 
+<a name="line147"></a>		{
+<a name="line148"></a>			$all = $this->conn->query($sql, PDO::FETCH_NUM);
+<a name="line149"></a>			$row = array();
+<a name="line150"></a>			foreach ($all as $r) {
+<a name="line151"></a>				$row = $r;
+<a name="line152"></a>				break;
+<a name="line153"></a>			}
+<a name="line154"></a>		}
+<a name="line155"></a>		catch (PDOException $e)
+<a name="line156"></a>		{
+<a name="line157"></a>			$this->sql_errcheck($sql);
+<a name="line158"></a>		}
+<a name="line159"></a>		return $row;
+<a name="line160"></a>	}
+<a name="line161"></a>	
+<a name="line162"></a>		
+<a name="line163"></a>	/**
+<a name="line164"></a>	 * Perform a query, return the first column of the first row
+<a name="line165"></a>	 * 
+<a name="line166"></a>	 * @param string sql
+<a name="line167"></a>	 * @param vararg arguments (for sprintf)
+<a name="line168"></a>	 * @return mixed
+<a name="line169"></a>	 */
+<a name="line170"></a>	protected function query_one ( $sql )
+<a name="line171"></a>	{
+<a name="line172"></a>		$sql = $this->sql_printf(func_get_args()); 
+<a name="line173"></a>		$row = $this->query_row($sql); 
+<a name="line174"></a>		$val = array_pop($row);
+<a name="line175"></a>		return $val;
+<a name="line176"></a>	}
+<a name="line177"></a>	
+<a name="line178"></a>	
+<a name="line179"></a>	/**
+<a name="line180"></a>	 * Return the number of rows affected in the last query
+<a name="line181"></a>	 */
+<a name="line182"></a>	protected function query_affected_rows ()
+<a name="line183"></a>	{
+<a name="line184"></a>		return $this->lastaffectedrows;
+<a name="line185"></a>	}
+<a name="line186"></a>
+<a name="line187"></a>
+<a name="line188"></a>	/**
+<a name="line189"></a>	 * Return the id of the last inserted row
+<a name="line190"></a>	 * 
+<a name="line191"></a>	 * @return int
+<a name="line192"></a>	 */
+<a name="line193"></a>	protected function query_insert_id ()
+<a name="line194"></a>	{
+<a name="line195"></a>		return $this->conn->lastInsertId();
+<a name="line196"></a>	}
+<a name="line197"></a>	
+<a name="line198"></a>	
+<a name="line199"></a>	protected function sql_printf ( $args )
+<a name="line200"></a>	{
+<a name="line201"></a>		$sql  = array_shift($args);
+<a name="line202"></a>		if (count($args) == 1 && is_array($args[0]))
+<a name="line203"></a>		{
+<a name="line204"></a>			$args = $args[0];
+<a name="line205"></a>		}
+<a name="line206"></a>		$args = array_map(array($this, 'sql_escape_string'), $args);
+<a name="line207"></a>		return vsprintf($sql, $args);
+<a name="line208"></a>	}
+<a name="line209"></a>	
+<a name="line210"></a>	
+<a name="line211"></a>	protected function sql_escape_string ( $s )
+<a name="line212"></a>	{
+<a name="line213"></a>		if (is_string($s))
+<a name="line214"></a>		{
+<a name="line215"></a>			$s = $this->conn->quote($s);
+<a name="line216"></a>			// kludge. Quote already adds quotes, and this conflicts with OAuthStoreSQL.
+<a name="line217"></a>			// so remove the quotes
+<a name="line218"></a>			$len = mb_strlen($s);
+<a name="line219"></a>			if ($len > 0)
+<a name="line220"></a>				$s = mb_substr($s, 1, $len-1);
+<a name="line221"></a>		}
+<a name="line222"></a>		else if (is_null($s))
+<a name="line223"></a>		{
+<a name="line224"></a>			return NULL;
+<a name="line225"></a>		}
+<a name="line226"></a>		else if (is_bool($s))
+<a name="line227"></a>		{
+<a name="line228"></a>			return intval($s);
+<a name="line229"></a>		}
+<a name="line230"></a>		else if (is_int($s) || is_float($s))
+<a name="line231"></a>		{
+<a name="line232"></a>			return $s;
+<a name="line233"></a>		}
+<a name="line234"></a>		else
+<a name="line235"></a>		{
+<a name="line236"></a>			return $this->conn->quote(strval($s));
+<a name="line237"></a>		}
+<a name="line238"></a>	}
+<a name="line239"></a>	
+<a name="line240"></a>	
+<a name="line241"></a>	protected function sql_errcheck ( $sql )
+<a name="line242"></a>	{
+<a name="line243"></a>		$msg =  "SQL Error in OAuthStoreMySQL: ". print_r($this->conn->errorInfo(), true) ."\n\n" . $sql;
+<a name="line244"></a>		$backtrace = debug_backtrace();
+<a name="line245"></a>		$msg .=  "\n\nAt file " . $backtrace[1]['file'] . ", line "  . $backtrace[1]['line']; 
+<a name="line246"></a>		throw new OAuthException2($msg);
+<a name="line247"></a>	}
+<a name="line248"></a>	
+<a name="line249"></a>	/**
+<a name="line250"></a>	* Initialise the database
+<a name="line251"></a>	*/
+<a name="line252"></a>	public function install ()
+<a name="line253"></a>	{
+<a name="line254"></a>		// TODO: this depends on mysql extension
+<a name="line255"></a>		require_once dirname(__FILE__) . '/mysql/install.php';
+<a name="line256"></a>	}
+<a name="line257"></a>	
+<a name="line258"></a>}
+<a name="line259"></a>
+<a name="line260"></a>
+<a name="line261"></a>/* vi:set ts=4 sts=4 sw=4 binary noeol: */
+<a name="line262"></a>
+<a name="line263"></a>?></pre>
+<div class="header">
+<h1>GiftFlow API</h1>
+<ul>
+<li><a href="../../../../overview-summary.html">Overview</a></li>
+<li>Package</li><li>Class</li><li>Tree</li><li><a href="../../../../overview-files.html">Files</a></li>
+<li><a href="../../../../deprecated-list.html">Deprecated</a></li>
+<li><a href="../../../../index-all.html">Index</a></li>
+</ul>
+</div>
+
+<div class="small_links">
+<a href="../../../../index.html" target="_top">Frames</a>
+<a href="../../../../source/libraries/oauth/store/oauthstorepdo.php.html" target="_top">No frames</a>
+</div>
+<hr>
+
+<p id="footer">This document was generated by <a href="http://peej.github.com/phpdoctor/">PHPDoctor: The PHP Documentation Creator</a></p>
+
+</body>
+
+</html>

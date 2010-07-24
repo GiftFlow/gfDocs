@@ -6,7 +6,7 @@
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 
 <meta name="generator" content="PHPDoctor 2RC4 (http://peej.github.com/phpdoctor/)">
-<meta name="when" content="Mon, 19 Jul 2010 17:13:56 +0000">
+<meta name="when" content="Sat, 24 Jul 2010 20:47:44 +0000">
 
 <link rel="stylesheet" type="text/css" href="../stylesheet.css">
 <link rel="start" href="../overview-summary.html">
@@ -40,7 +40,7 @@ Detail: <a href="#detail_field">Field</a> | <a href="#detail_method">Method</a> 
 <hr>
 
 <div class="qualifiedName">GiftFlow\OAuthRequestVerifier</div>
-<a href="../source/application/libraries/oauth/oauthrequestverifier.php.html#line39" class="location">application/libraries/oauth/OAuthRequestVerifier.php at line 39</a>
+<a href="../source/libraries/oauth/oauthrequestverifier.php.html#line39" class="location">libraries/oauth/OAuthRequestVerifier.php at line 39</a>
 
 <h1>Class OAuthRequestVerifier</h1>
 
@@ -57,7 +57,7 @@ When correct then also figures out on behalf of which user this request is being
 
 <dl>
 <dt>Version:</dt>
-<dd>$Id: OAuthRequestVerifier.php 51 2008-10-15 15:15:47Z marcw@pobox.com $</dd>
+<dd>$Id: OAuthRequestVerifier.php 96 2010-03-05 22:12:23Z brunobg@corollarium.com $</dd>
 <dt>Author:</dt>
 <dd>Marc Worrell <marcw@pobox.com></dd>
 <dt>Date:</dt>
@@ -67,6 +67,10 @@ When correct then also figures out on behalf of which user this request is being
 
 <table id="summary_field">
 <tr><th colspan="2">Field Summary</th></tr>
+<tr>
+<td class="type">private  mixed</td>
+<td class="description"><p class="name"><a href="#accepted_signatures">$accepted_signatures</a></p></td>
+</tr>
 <tr>
 <td class="type">private  mixed</td>
 <td class="description"><p class="name"><a href="#getQueryString">$getQueryString</a></p></td>
@@ -92,6 +96,10 @@ When correct then also figures out on behalf of which user this request is being
 <td class="description"><p class="name"><a href="#requestIsSigned()">requestIsSigned</a>()</p><p class="description">See if the current request is signed with OAuth</p></td>
 </tr>
 <tr>
+<td class="type"> void</td>
+<td class="description"><p class="name"><a href="#setAcceptedSignatureMethods()">setAcceptedSignatureMethods</a>(array accepted)</p><p class="description"></p></td>
+</tr>
+<tr>
 <td class="type"> int</td>
 <td class="description"><p class="name"><a href="#verify()">verify</a>(string token_type)</p><p class="description">Verify the request</p></td>
 </tr>
@@ -100,13 +108,16 @@ When correct then also figures out on behalf of which user this request is being
 <td class="description"><p class="name"><a href="#verifyDataSignature()">verifyDataSignature</a>(string data, string consumer_secret, string token_secret, string signature_method, string signature)</p><p class="description">Verify the signature of a string.</p></td>
 </tr>
 <tr>
+<td class="type"> array</td>
+<td class="description"><p class="name"><a href="#verifyExtended()">verifyExtended</a>(string token_type)</p><p class="description">Verify the request</p></td>
+</tr>
+<tr>
 <td class="type"> boolean</td>
 <td class="description"><p class="name"><a href="#verifyIfSigned()">verifyIfSigned</a>(string token_type)</p><p class="description">Verify the request if it seemed to be signed.</p></td>
 </tr>
 <tr>
 <td class="type"> void</td>
-<td class="description"><p class="name"><a href="#verifySignature()">verifySignature</a>(string consumer_secret, string token_secret, str token_type)</p><p class="description">Verify the signature of the request, using the method in oauth_signature_method.
-</p></td>
+<td class="description"><p class="name"><a href="#verifySignature()">verifySignature</a>(string consumer_secret, string token_secret, str token_type)</p><p class="description">Verify the signature of the request, using the method in oauth_signature_method.</p></td>
 </tr>
 </table>
 
@@ -115,7 +126,16 @@ When correct then also figures out on behalf of which user this request is being
 <tr><td><a href="../giftflow/oauthrequest.html#__construct()">__construct</a>, <a href="../giftflow/oauthrequest.html#calculateDataSignature()">calculateDataSignature</a>, <a href="../giftflow/oauthrequest.html#calculateSignature()">calculateSignature</a>, <a href="../giftflow/oauthrequest.html#checks()">checks</a>, <a href="../giftflow/oauthrequest.html#defaultPortForScheme()">defaultPortForScheme</a>, <a href="../giftflow/oauthrequest.html#getBody()">getBody</a>, <a href="../giftflow/oauthrequest.html#getMethod()">getMethod</a>, <a href="../giftflow/oauthrequest.html#getNormalizedParams()">getNormalizedParams</a>, <a href="../giftflow/oauthrequest.html#getParam()">getParam</a>, <a href="../giftflow/oauthrequest.html#getRequestBody()">getRequestBody</a>, <a href="../giftflow/oauthrequest.html#getRequestContentType()">getRequestContentType</a>, <a href="../giftflow/oauthrequest.html#getRequestUrl()">getRequestUrl</a>, <a href="../giftflow/oauthrequest.html#getSignatureMethod()">getSignatureMethod</a>, <a href="../giftflow/oauthrequest.html#parseHeaders()">parseHeaders</a>, <a href="../giftflow/oauthrequest.html#parseUri()">parseUri</a>, <a href="../giftflow/oauthrequest.html#redirect()">redirect</a>, <a href="../giftflow/oauthrequest.html#selectSignatureMethod()">selectSignatureMethod</a>, <a href="../giftflow/oauthrequest.html#setBody()">setBody</a>, <a href="../giftflow/oauthrequest.html#setParam()">setParam</a>, <a href="../giftflow/oauthrequest.html#signatureBaseString()">signatureBaseString</a>, <a href="../giftflow/oauthrequest.html#transcodeParams()">transcodeParams</a>, <a href="../giftflow/oauthrequest.html#urldecode()">urldecode</a>, <a href="../giftflow/oauthrequest.html#urlencode()">urlencode</a>, <a href="../giftflow/oauthrequest.html#urltranscode()">urltranscode</a></td></tr></table>
 
 <h2 id="detail_field">Field Detail</h2>
-<a href="../source/application/libraries/oauth/oauthrequestverifier.php.html#line41" class="location">application/libraries/oauth/OAuthRequestVerifier.php at line 41</a>
+<a href="../source/libraries/oauth/oauthrequestverifier.php.html#line43" class="location">libraries/oauth/OAuthRequestVerifier.php at line 43</a>
+
+<h3 id="accepted_signatures">accepted_signatures</h3>
+<code class="signature">private  mixed <strong>$accepted_signatures</strong> = null</code>
+<div class="details">
+</div>
+
+<hr>
+
+<a href="../source/libraries/oauth/oauthrequestverifier.php.html#line41" class="location">libraries/oauth/OAuthRequestVerifier.php at line 41</a>
 
 <h3 id="getQueryString">getQueryString</h3>
 <code class="signature">private  mixed <strong>$getQueryString</strong> = true</code>
@@ -124,7 +144,7 @@ When correct then also figures out on behalf of which user this request is being
 
 <hr>
 
-<a href="../source/application/libraries/oauth/oauthrequestverifier.php.html#line42" class="location">application/libraries/oauth/OAuthRequestVerifier.php at line 42</a>
+<a href="../source/libraries/oauth/oauthrequestverifier.php.html#line42" class="location">libraries/oauth/OAuthRequestVerifier.php at line 42</a>
 
 <h3 id="store">store</h3>
 <code class="signature">private  mixed <strong>$store</strong></code>
@@ -134,7 +154,7 @@ When correct then also figures out on behalf of which user this request is being
 <hr>
 
 <h2 id="detail_method">Method Detail</h2><div class="method_detail">
-<div class='method'><a href="../source/application/libraries/oauth/oauthrequestverifier.php.html#line50" class="location">application/libraries/oauth/OAuthRequestVerifier.php at line 50</a>
+<div class='method'><a href="../source/libraries/oauth/oauthrequestverifier.php.html#line51" class="location">libraries/oauth/OAuthRequestVerifier.php at line 51</a>
 
 <h3 id="__construct()">__construct</h3>
 <code class="signature">public  void <strong>__construct</strong>(string uri, string method, string request, string parameters, array headers, string body)</code>
@@ -143,7 +163,7 @@ When correct then also figures out on behalf of which user this request is being
 
 
 
-<div class='method'><a href="../source/application/libraries/oauth/oauthrequestverifier.php.html#line64" class="location">application/libraries/oauth/OAuthRequestVerifier.php at line 64</a>
+<div class='method'><a href="../source/libraries/oauth/oauthrequestverifier.php.html#line65" class="location">libraries/oauth/OAuthRequestVerifier.php at line 65</a>
 
 <h3 id="requestIsSigned()">requestIsSigned</h3>
 <code class="signature">public static  boolean <strong>requestIsSigned</strong>()</code>
@@ -152,7 +172,20 @@ When correct then also figures out on behalf of which user this request is being
 
 
 
-<div class='method'><a href="../source/application/libraries/oauth/oauthrequestverifier.php.html#line117" class="location">application/libraries/oauth/OAuthRequestVerifier.php at line 117</a>
+<div class='method'><a href="../source/libraries/oauth/oauthrequestverifier.php.html#line282" class="location">libraries/oauth/OAuthRequestVerifier.php at line 282</a>
+
+<h3 id="setAcceptedSignatureMethods()">setAcceptedSignatureMethods</h3>
+<code class="signature">public  void <strong>setAcceptedSignatureMethods</strong>(array accepted)</code>
+<div class="details">
+<p></p><dl>
+<dt>Parameters:</dt>
+<dd>accepted - The array of accepted signature methods, or if null is passed all supported methods are accepted and there is no filtering. /</dd>
+</dl>
+</div></div>
+
+
+
+<div class='method'><a href="../source/libraries/oauth/oauthrequestverifier.php.html#line119" class="location">libraries/oauth/OAuthRequestVerifier.php at line 119</a>
 
 <h3 id="verify()">verify</h3>
 <code class="signature">public  int <strong>verify</strong>(string token_type)</code>
@@ -161,7 +194,7 @@ When correct then also figures out on behalf of which user this request is being
 <dt>Parameters:</dt>
 <dd>token_type - the kind of token needed, defaults to 'access' (false, 'access', 'request')</dd>
 <dt>Exception:</dt>
-<dd>OAuthException thrown when the request did not verify</dd>
+<dd>OAuthException2 thrown when the request did not verify</dd>
 <dt>Returns:</dt>
 <dd>user_id associated with token (false when no user associated)</dd>
 </dl>
@@ -169,21 +202,38 @@ When correct then also figures out on behalf of which user this request is being
 
 
 
-<div class='method'><a href="../source/application/libraries/oauth/oauthrequestverifier.php.html#line243" class="location">application/libraries/oauth/OAuthRequestVerifier.php at line 243</a>
+<div class='method'><a href="../source/libraries/oauth/oauthrequestverifier.php.html#line262" class="location">libraries/oauth/OAuthRequestVerifier.php at line 262</a>
 
 <h3 id="verifyDataSignature()">verifyDataSignature</h3>
 <code class="signature">public  void <strong>verifyDataSignature</strong>(string data, string consumer_secret, string token_secret, string signature_method, string signature)</code>
 <div class="details">
 <p>Verify the signature of a string.</p><dl>
 <dt>Exception:</dt>
-<dd>OAuthException thrown when the signature method is unknown</dd>
-<dd>OAuthException when signature does not match</dd>
+<dd>OAuthException2 thrown when the signature method is unknown</dd>
+<dd>OAuthException2 when signature does not match</dd>
 </dl>
 </div></div>
 
 
 
-<div class='method'><a href="../source/application/libraries/oauth/oauthrequestverifier.php.html#line93" class="location">application/libraries/oauth/OAuthRequestVerifier.php at line 93</a>
+<div class='method'><a href="../source/libraries/oauth/oauthrequestverifier.php.html#line135" class="location">libraries/oauth/OAuthRequestVerifier.php at line 135</a>
+
+<h3 id="verifyExtended()">verifyExtended</h3>
+<code class="signature">public  array <strong>verifyExtended</strong>(string token_type)</code>
+<div class="details">
+<p>Verify the request</p><dl>
+<dt>Parameters:</dt>
+<dd>token_type - the kind of token needed, defaults to 'access' (false, 'access', 'request')</dd>
+<dt>Exception:</dt>
+<dd>OAuthException2 thrown when the request did not verify</dd>
+<dt>Returns:</dt>
+<dd>('user_id' => associated with token (false when no user associated), 'consumer_key' => the associated consumer_key) /</dd>
+</dl>
+</div></div>
+
+
+
+<div class='method'><a href="../source/libraries/oauth/oauthrequestverifier.php.html#line94" class="location">libraries/oauth/OAuthRequestVerifier.php at line 94</a>
 
 <h3 id="verifyIfSigned()">verifyIfSigned</h3>
 <code class="signature">public  boolean <strong>verifyIfSigned</strong>(string token_type)</code>
@@ -192,7 +242,7 @@ When correct then also figures out on behalf of which user this request is being
 <dt>Parameters:</dt>
 <dd>token_type - the kind of token needed, defaults to 'access'</dd>
 <dt>Exception:</dt>
-<dd>OAuthException thrown when the request did not verify</dd>
+<dd>OAuthException2 thrown when the request did not verify</dd>
 <dt>Returns:</dt>
 <dd>true when signed, false when not signed</dd>
 </dl>
@@ -200,7 +250,7 @@ When correct then also figures out on behalf of which user this request is being
 
 
 
-<div class='method'><a href="../source/application/libraries/oauth/oauthrequestverifier.php.html#line201" class="location">application/libraries/oauth/OAuthRequestVerifier.php at line 201</a>
+<div class='method'><a href="../source/libraries/oauth/oauthrequestverifier.php.html#line220" class="location">libraries/oauth/OAuthRequestVerifier.php at line 220</a>
 
 <h3 id="verifySignature()">verifySignature</h3>
 <code class="signature">public  void <strong>verifySignature</strong>(string consumer_secret, string token_secret, str token_type)</code>
@@ -209,9 +259,9 @@ When correct then also figures out on behalf of which user this request is being
 The signature is returned encoded in the form as used in the url.  So the base64 and
 urlencoding has been done.</p><dl>
 <dt>Exception:</dt>
-<dd>OAuthException thrown when the signature method is unknown</dd>
-<dd>OAuthException when not all parts available</dd>
-<dd>OAuthException when signature does not match</dd>
+<dd>OAuthException2 thrown when the signature method is unknown</dd>
+<dd>OAuthException2 when not all parts available</dd>
+<dd>OAuthException2 when signature does not match</dd>
 </dl>
 </div></div>
 

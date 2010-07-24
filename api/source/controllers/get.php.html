@@ -6,7 +6,7 @@
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 
 <meta name="generator" content="PHPDoctor 2RC4 (http://peej.github.com/phpdoctor/)">
-<meta name="when" content="Fri, 18 Jun 2010 15:58:03 +0000">
+<meta name="when" content="Sat, 24 Jul 2010 20:47:45 +0000">
 
 <link rel="stylesheet" type="text/css" href="../../stylesheet.css">
 <link rel="start" href="../../overview-summary.html">
@@ -49,16 +49,16 @@
 <a name="line12"></a>		$this->util->config();
 <a name="line13"></a>		$this->data = $this->util->parse_globals();
 <a name="line14"></a>		$this->load->helper('elements');
-<a name="line15"></a>	}
-<a name="line16"></a>
-<a name="line17"></a>	public function index()
-<a name="line18"></a>	{
-<a name="line19"></a>		$this->data['title'] = "Get";
-<a name="line20"></a>		$this->data['active'] = '';
-<a name="line21"></a>		$this->data['pending'] = '';
-<a name="line22"></a>		$this->data['past'] = '';
-<a name="line23"></a>		$this->data['css'][] = "datatables.css";
-<a name="line24"></a>		$this->data['js'][] = 'in-field-label.js';
+<a name="line15"></a>		$this->hooks =& load_class('Hooks');
+<a name="line16"></a>	}
+<a name="line17"></a>
+<a name="line18"></a>	public function index()
+<a name="line19"></a>	{
+<a name="line20"></a>		$this->data['title'] = "Get";
+<a name="line21"></a>		$this->data['active'] = '';
+<a name="line22"></a>		$this->data['pending'] = '';
+<a name="line23"></a>		$this->data['past'] = '';
+<a name="line24"></a>		$this->data['css'][] = "datatables.css";
 <a name="line25"></a>		$this->data['js'][] = "jquery-datatables.php";
 <a name="line26"></a>		if(!empty($this->data['logged_in_user_id']))
 <a name="line27"></a>		{
@@ -108,60 +108,60 @@
 <a name="line71"></a>				foreach ( $tags as $tag )
 <a name="line72"></a>					$this->G->add_tag( trim($tag) );
 <a name="line73"></a>				
-<a name="line74"></a>				// Set flashdata
-<a name="line75"></a>				$this->session->set_flashdata('success','Need saved! Add more information below if you like.');
-<a name="line76"></a>				redirect('need/'.$this->G->id.'/edit');
-<a name="line77"></a>			}
-<a name="line78"></a>			else
-<a name="line79"></a>			{
-<a name="line80"></a>				$this->data['alert_error'] = $this->G->error->all;
-<a name="line81"></a>				$this->_add_form($item);
-<a name="line82"></a>			}
-<a name="line83"></a>		}
-<a name="line84"></a>		else
-<a name="line85"></a>		{
-<a name="line86"></a>			$this->_add_form( $item );
-<a name="line87"></a>		}
-<a name="line88"></a>	}
-<a name="line89"></a>	
-<a name="line90"></a>
-<a name="line91"></a>	
+<a name="line74"></a>				// Hook: 'need_new'
+<a name="line75"></a>				$this->hooks->call('need_new', $this);
+<a name="line76"></a>
+<a name="line77"></a>				// Set flashdata
+<a name="line78"></a>				$this->session->set_flashdata('success','Need saved! Add more information below if you like.');
+<a name="line79"></a>				redirect('need/'.$this->G->id.'/edit');
+<a name="line80"></a>			}
+<a name="line81"></a>			else
+<a name="line82"></a>			{
+<a name="line83"></a>				$this->data['alert_error'] = $this->G->error->all;
+<a name="line84"></a>				$this->_add_form($item);
+<a name="line85"></a>			}
+<a name="line86"></a>		}
+<a name="line87"></a>		else
+<a name="line88"></a>		{
+<a name="line89"></a>			$this->_add_form( $item );
+<a name="line90"></a>		}
+<a name="line91"></a>	}
 <a name="line92"></a>	
-<a name="line93"></a>	public function view( $id = NULL )
-<a name="line94"></a>	{	
-<a name="line95"></a>		// Store URI segments
-<a name="line96"></a>		$good_id = $this->uri->segment(2);
-<a name="line97"></a>		$method = $this->uri->segment(3);
-<a name="line98"></a>		$param = $this->uri->segment(4);
-<a name="line99"></a>		
-<a name="line100"></a>		// Prepare data
-<a name="line101"></a>		$this->N = new Good ( $good_id );
-<a name="line102"></a>		$this->N->location->get();
-<a name="line103"></a>		$this->N->user->get();
-<a name="line104"></a>		$this->N->default_photo->get();
-<a name="line105"></a>		$this->N->photo->get();
-<a name="line106"></a>		$this->N->tag->get();
-<a name="line107"></a>		
-<a name="line108"></a>		
-<a name="line109"></a>		$this->data['N'] = $this->N;
-<a name="line110"></a>
-<a name="line111"></a>		if(!empty($this->data['logged_in_user_id'])&&$this->N->user->id==$this->data['logged_in_user_id'])
-<a name="line112"></a>		{
-<a name="line113"></a>			if($method=='delete')
-<a name="line114"></a>				$this->_delete_need();
-<a name="line115"></a>			elseif($method=="edit")
-<a name="line116"></a>				$this->_edit_need();
-<a name="line117"></a>			else
-<a name="line118"></a>				$this->_need_dashboard();
-<a name="line119"></a>		}
-<a name="line120"></a>		else
-<a name="line121"></a>		{
-<a name="line122"></a>			$this->_view_need();
-<a name="line123"></a>		}
-<a name="line124"></a>	}
-<a name="line125"></a>
-<a name="line126"></a>
-<a name="line127"></a>
+<a name="line93"></a>
+<a name="line94"></a>	
+<a name="line95"></a>	
+<a name="line96"></a>	public function view( $id = NULL )
+<a name="line97"></a>	{	
+<a name="line98"></a>		// Store URI segments
+<a name="line99"></a>		$good_id = $this->uri->segment(2);
+<a name="line100"></a>		$method = $this->uri->segment(3);
+<a name="line101"></a>		$param = $this->uri->segment(4);
+<a name="line102"></a>		
+<a name="line103"></a>		// Prepare data
+<a name="line104"></a>		$this->N = new Good ( $good_id );
+<a name="line105"></a>		$this->N->location->get();
+<a name="line106"></a>		$this->N->user->get();
+<a name="line107"></a>		$this->N->default_photo->get();
+<a name="line108"></a>		$this->N->photo->get();
+<a name="line109"></a>		$this->N->tag->get();
+<a name="line110"></a>		
+<a name="line111"></a>		
+<a name="line112"></a>		$this->data['N'] = $this->N;
+<a name="line113"></a>
+<a name="line114"></a>		if(!empty($this->data['logged_in_user_id'])&&$this->N->user->id==$this->data['logged_in_user_id'])
+<a name="line115"></a>		{
+<a name="line116"></a>			if($method=='delete')
+<a name="line117"></a>				$this->_delete_need();
+<a name="line118"></a>			elseif($method=="edit")
+<a name="line119"></a>				$this->_edit_need();
+<a name="line120"></a>			else
+<a name="line121"></a>				$this->_need_dashboard();
+<a name="line122"></a>		}
+<a name="line123"></a>		else
+<a name="line124"></a>		{
+<a name="line125"></a>			$this->_view_need();
+<a name="line126"></a>		}
+<a name="line127"></a>	}
 <a name="line128"></a>
 <a name="line129"></a>
 <a name="line130"></a>
@@ -175,141 +175,144 @@
 <a name="line138"></a>
 <a name="line139"></a>
 <a name="line140"></a>
-<a name="line141"></a>	function _view_need()
-<a name="line142"></a>	{
-<a name="line143"></a>		$this->data['content'] = array();
-<a name="line144"></a>		if($this->data['logged_in'])
-<a name="line145"></a>		{
-<a name="line146"></a>			$your_requests = $this->G->requests($this->data['logged_in_user_id']);
-<a name="line147"></a>			if(count($your_requests)>0)
-<a name="line148"></a>			{
-<a name="line149"></a>				$requested = TRUE;
-<a name="line150"></a>				$this->data['content']['requests'] = array('title'=>'requests', 'content'=>$this->load->view('gift/includes/requests', array('request'=>$your_requests, "type"=>"view"), true));
-<a name="line151"></a>			}
-<a name="line152"></a>		}
-<a name="line153"></a>		
-<a name="line154"></a>		if(!empty($this->G->description))
-<a name="line155"></a>		{
-<a name="line156"></a>			$this->data['content']['info'] = array('title'=>'info', 'content'=>$G->description);
-<a name="line157"></a>		}
-<a name="line158"></a>		if(count($this->G->tag->all)>0)
-<a name="line159"></a>		{
-<a name="line160"></a>			$this->data['content']['tags'] = array('title'=>'tags', 'content'=>$this->load->view('gift/includes/tags', array('tags'=>$this->G->tag->all), true));
-<a name="line161"></a>		}
-<a name="line162"></a>		
-<a name="line163"></a>		// Prep Buttons
-<a name="line164"></a>		$button_data = array('page'=>"view_gift","G"=>$this->G);
-<a name="line165"></a>		if(!empty($requested)&&$requested) $button_data['requested'] = TRUE;
-<a name="line166"></a>		else $button_data['requested'] = FALSE;
-<a name="line167"></a>		$this->data['buttons'] = $this->load->view('gift/includes/buttons', $button_data, true);
-<a name="line168"></a>		
-<a name="line169"></a>		// Other data
-<a name="line170"></a>		$this->data['title'] = "View Need";
-<a name="line171"></a>		$this->data['G'] = $this->G;
-<a name="line172"></a>		
-<a name="line173"></a>		// Load views
-<a name="line174"></a>		$this->load->view('header', $this->data);
-<a name="line175"></a>		$this->load->view('gift/view', $this->data);
-<a name="line176"></a>		$this->load->view("footer", $this->data);	
-<a name="line177"></a>	}
-<a name="line178"></a>
-<a name="line179"></a>	function _delete_need()
-<a name="line180"></a>	{
-<a name="line181"></a>		if(!empty($this->data['logged_in_user_id'])&&$this->N->user->id==$this->data['logged_in_user_id'])
-<a name="line182"></a>		{
-<a name="line183"></a>			$this->N->delete();
-<a name="line184"></a>			$this->session->set_flashdata('success', 'Need deleted.');
-<a name="line185"></a>			redirect('get');
-<a name="line186"></a>		}
-<a name="line187"></a>		else
-<a name="line188"></a>		{
-<a name="line189"></a>			$this->session->set_flashdata('error', 'Permission denied.');
-<a name="line190"></a>			redirect('get');
-<a name="line191"></a>		}
-<a name="line192"></a>	}
-<a name="line193"></a>	function _edit_need()
-<a name="line194"></a>	{
-<a name="line195"></a>		if(!empty($_POST))
-<a name="line196"></a>		{
-<a name="line197"></a>			$U = new User($this->data['logged_in_user_id']);
-<a name="line198"></a>
-<a name="line199"></a>			$this->N->title = $_POST["title"];
-<a name="line200"></a>			$this->N->description = $_POST["description"];
-<a name="line201"></a>			$this->N->save();
-<a name="line202"></a>			
-<a name="line203"></a>			// Create location object
-<a name="line204"></a>			$L = new Location();
-<a name="line205"></a>			$L->raw = $this->input->post('location');
-<a name="line206"></a>			$L->user_id = $this->data['logged_in_user_id'];
-<a name="line207"></a>			$L->validate();
-<a name="line208"></a>			if(!empty($L->duplicate_id))
-<a name="line209"></a>				$L = new Location($L->duplicate_id);
-<a name="line210"></a>			else
-<a name="line211"></a>				$L->save();
-<a name="line212"></a>			
-<a name="line213"></a>			// Save location object to user and gift
-<a name="line214"></a>			$U->save($L);
-<a name="line215"></a>			$this->N->save($L);
-<a name="line216"></a>			
-<a name="line217"></a>			// Save tags
-<a name="line218"></a>			$tags = explode(",", $_POST['tags']);
-<a name="line219"></a>			foreach ( $tags as $tag )
-<a name="line220"></a>				$this->N->add_tag( trim($tag) );
-<a name="line221"></a>			
-<a name="line222"></a>			$U->save_gift($this->N);
-<a name="line223"></a>			$this->session->set_flashdata('success','Changes saved successfully.');
-<a name="line224"></a>			redirect('need/'.$this->N->id."/edit");
-<a name="line225"></a>		}
-<a name="line226"></a>		else
-<a name="line227"></a>		{
-<a name="line228"></a>			$U = new User($this->data['logged_in_user_id']);
-<a name="line229"></a>			$U->location->get();
-<a name="line230"></a>			$this->data['G'] = $this->N;
-<a name="line231"></a>			$this->data['U'] = $U;
-<a name="line232"></a>			$this->data['backlink'] = TRUE;
-<a name="line233"></a>			$this->data['content']['photos'] = array('title'=>'photos', 'content'=>$this->load->view('gift/includes/edit/photos', array('data'=>$this->data), true));
-<a name="line234"></a>			$this->data['content']['info'] = array('title'=>'info', 'content'=>$this->load->view('gift/includes/edit/info', array("data"=>$this->data), true));
-<a name="line235"></a>			$this->data['content']['tags'] = array('title'=>'tags', 'content'=>$this->load->view('gift/includes/edit/tags', array("data"=>$this->data), true));
-<a name="line236"></a>			$this->data['content']['location'] = array('title'=>'location', 'content'=>$this->load->view('gift/includes/edit/location', array("data"=>$this->data), true));
-<a name="line237"></a>			$this->data['content']['save'] = array('title'=>'save', 'content'=>$this->load->view('gift/includes/edit/save', array("data"=>$this->data), true));
-<a name="line238"></a>			
-<a name="line239"></a>			// Prep Buttons
-<a name="line240"></a>			$button_data = array("G"=>$this->N);
-<a name="line241"></a>			$this->data['buttons'] = $this->load->view('gift/includes/buttons/need_edit', $button_data, true);
-<a name="line242"></a>			
-<a name="line243"></a>			$this->data['title'] = "Edit Gift";
-<a name="line244"></a>			$this->load->view('header', $this->data);
-<a name="line245"></a>			$this->load->view('gift/edit', $this->data);
-<a name="line246"></a>			$this->load->view("footer", $this->data);		
-<a name="line247"></a>		}
-<a name="line248"></a>	}
-<a name="line249"></a>	function _need_dashboard()
-<a name="line250"></a>	{
-<a name="line251"></a>		$this->data['content'] = array();
-<a name="line252"></a>
-<a name="line253"></a>		if(!empty($this->N->description))
-<a name="line254"></a>		{
-<a name="line255"></a>			$this->data['content']['info'] = array('title'=>'info', 'content'=>$this->N->description);
-<a name="line256"></a>		}
-<a name="line257"></a>		if(count($this->N->tag->all)>0)
-<a name="line258"></a>		{
-<a name="line259"></a>			$this->data['content']['tags'] = array('title'=>'tags', 'content'=>$this->load->view('gift/includes/tags', array('tags'=>$this->N->tag->all), true));
-<a name="line260"></a>		}
-<a name="line261"></a>		
-<a name="line262"></a>		// Prep Buttons
-<a name="line263"></a>		$button_data = array('page'=>"gift_dashboard","G"=>$this->N);
-<a name="line264"></a>		$this->data['buttons'] = $this->load->view('gift/includes/buttons/need_dashboard', $button_data, true);
-<a name="line265"></a>		
-<a name="line266"></a>		$this->data['title'] = "Edit Gift";
-<a name="line267"></a>		$this->data['N'] = $this->N;
-<a name="line268"></a>		$this->load->view('header', $this->data);
-<a name="line269"></a>		$this->load->view('gift/view', $this->data);
-<a name="line270"></a>		$this->load->view("footer", $this->data);	
-<a name="line271"></a>	}
-<a name="line272"></a>	
-<a name="line273"></a>	
-<a name="line274"></a>}
-<a name="line275"></a></pre>
+<a name="line141"></a>
+<a name="line142"></a>
+<a name="line143"></a>
+<a name="line144"></a>	function _view_need()
+<a name="line145"></a>	{
+<a name="line146"></a>		$this->data['content'] = array();
+<a name="line147"></a>		if($this->data['logged_in'])
+<a name="line148"></a>		{
+<a name="line149"></a>			$your_requests = $this->G->requests($this->data['logged_in_user_id']);
+<a name="line150"></a>			if(count($your_requests)>0)
+<a name="line151"></a>			{
+<a name="line152"></a>				$requested = TRUE;
+<a name="line153"></a>				$this->data['content']['requests'] = array('title'=>'requests', 'content'=>$this->load->view('gift/includes/requests', array('request'=>$your_requests, "type"=>"view"), true));
+<a name="line154"></a>			}
+<a name="line155"></a>		}
+<a name="line156"></a>		
+<a name="line157"></a>		if(!empty($this->G->description))
+<a name="line158"></a>		{
+<a name="line159"></a>			$this->data['content']['info'] = array('title'=>'info', 'content'=>$G->description);
+<a name="line160"></a>		}
+<a name="line161"></a>		if(count($this->G->tag->all)>0)
+<a name="line162"></a>		{
+<a name="line163"></a>			$this->data['content']['tags'] = array('title'=>'tags', 'content'=>$this->load->view('gift/includes/tags', array('tags'=>$this->G->tag->all), true));
+<a name="line164"></a>		}
+<a name="line165"></a>		
+<a name="line166"></a>		// Prep Buttons
+<a name="line167"></a>		$button_data = array('page'=>"view_gift","G"=>$this->G);
+<a name="line168"></a>		if(!empty($requested)&&$requested) $button_data['requested'] = TRUE;
+<a name="line169"></a>		else $button_data['requested'] = FALSE;
+<a name="line170"></a>		$this->data['buttons'] = $this->load->view('gift/includes/buttons', $button_data, true);
+<a name="line171"></a>		
+<a name="line172"></a>		// Other data
+<a name="line173"></a>		$this->data['title'] = "View Need";
+<a name="line174"></a>		$this->data['G'] = $this->G;
+<a name="line175"></a>		
+<a name="line176"></a>		// Load views
+<a name="line177"></a>		$this->load->view('header', $this->data);
+<a name="line178"></a>		$this->load->view('gift/view', $this->data);
+<a name="line179"></a>		$this->load->view("footer", $this->data);	
+<a name="line180"></a>	}
+<a name="line181"></a>
+<a name="line182"></a>	function _delete_need()
+<a name="line183"></a>	{
+<a name="line184"></a>		if(!empty($this->data['logged_in_user_id'])&&$this->N->user->id==$this->data['logged_in_user_id'])
+<a name="line185"></a>		{
+<a name="line186"></a>			$this->N->delete();
+<a name="line187"></a>			$this->session->set_flashdata('success', 'Need deleted.');
+<a name="line188"></a>			redirect('get');
+<a name="line189"></a>		}
+<a name="line190"></a>		else
+<a name="line191"></a>		{
+<a name="line192"></a>			$this->session->set_flashdata('error', 'Permission denied.');
+<a name="line193"></a>			redirect('get');
+<a name="line194"></a>		}
+<a name="line195"></a>	}
+<a name="line196"></a>	function _edit_need()
+<a name="line197"></a>	{
+<a name="line198"></a>		if(!empty($_POST))
+<a name="line199"></a>		{
+<a name="line200"></a>			$U = new User($this->data['logged_in_user_id']);
+<a name="line201"></a>
+<a name="line202"></a>			$this->N->title = $_POST["title"];
+<a name="line203"></a>			$this->N->description = $_POST["description"];
+<a name="line204"></a>			$this->N->save();
+<a name="line205"></a>			
+<a name="line206"></a>			// Create location object
+<a name="line207"></a>			$L = new Location();
+<a name="line208"></a>			$L->raw = $this->input->post('location');
+<a name="line209"></a>			$L->user_id = $this->data['logged_in_user_id'];
+<a name="line210"></a>			$L->validate();
+<a name="line211"></a>			if(!empty($L->duplicate_id))
+<a name="line212"></a>				$L = new Location($L->duplicate_id);
+<a name="line213"></a>			else
+<a name="line214"></a>				$L->save();
+<a name="line215"></a>			
+<a name="line216"></a>			// Save location object to user and gift
+<a name="line217"></a>			$U->save($L);
+<a name="line218"></a>			$this->N->save($L);
+<a name="line219"></a>			
+<a name="line220"></a>			// Save tags
+<a name="line221"></a>			$tags = explode(",", $_POST['tags']);
+<a name="line222"></a>			foreach ( $tags as $tag )
+<a name="line223"></a>				$this->N->add_tag( trim($tag) );
+<a name="line224"></a>			
+<a name="line225"></a>			$U->save_gift($this->N);
+<a name="line226"></a>			$this->session->set_flashdata('success','Changes saved successfully.');
+<a name="line227"></a>			redirect('need/'.$this->N->id."/edit");
+<a name="line228"></a>		}
+<a name="line229"></a>		else
+<a name="line230"></a>		{
+<a name="line231"></a>			$U = new User($this->data['logged_in_user_id']);
+<a name="line232"></a>			$U->location->get();
+<a name="line233"></a>			$this->data['G'] = $this->N;
+<a name="line234"></a>			$this->data['U'] = $U;
+<a name="line235"></a>			$this->data['backlink'] = TRUE;
+<a name="line236"></a>			$this->data['content']['photos'] = array('title'=>'photos', 'content'=>$this->load->view('gift/includes/edit/photos', array('data'=>$this->data), true));
+<a name="line237"></a>			$this->data['content']['info'] = array('title'=>'info', 'content'=>$this->load->view('gift/includes/edit/info', array("data"=>$this->data), true));
+<a name="line238"></a>			$this->data['content']['tags'] = array('title'=>'tags', 'content'=>$this->load->view('gift/includes/edit/tags', array("data"=>$this->data), true));
+<a name="line239"></a>			$this->data['content']['location'] = array('title'=>'location', 'content'=>$this->load->view('gift/includes/edit/location', array("data"=>$this->data), true));
+<a name="line240"></a>			$this->data['content']['save'] = array('title'=>'save', 'content'=>$this->load->view('gift/includes/edit/save', array("data"=>$this->data), true));
+<a name="line241"></a>			
+<a name="line242"></a>			// Prep Buttons
+<a name="line243"></a>			$button_data = array("G"=>$this->N);
+<a name="line244"></a>			$this->data['buttons'] = $this->load->view('gift/includes/buttons/need_edit', $button_data, true);
+<a name="line245"></a>			
+<a name="line246"></a>			$this->data['title'] = "Edit Gift";
+<a name="line247"></a>			$this->load->view('header', $this->data);
+<a name="line248"></a>			$this->load->view('gift/edit', $this->data);
+<a name="line249"></a>			$this->load->view("footer", $this->data);		
+<a name="line250"></a>		}
+<a name="line251"></a>	}
+<a name="line252"></a>	function _need_dashboard()
+<a name="line253"></a>	{
+<a name="line254"></a>		$this->data['content'] = array();
+<a name="line255"></a>
+<a name="line256"></a>		if(!empty($this->N->description))
+<a name="line257"></a>		{
+<a name="line258"></a>			$this->data['content']['info'] = array('title'=>'info', 'content'=>$this->N->description);
+<a name="line259"></a>		}
+<a name="line260"></a>		if(count($this->N->tag->all)>0)
+<a name="line261"></a>		{
+<a name="line262"></a>			$this->data['content']['tags'] = array('title'=>'tags', 'content'=>$this->load->view('gift/includes/tags', array('tags'=>$this->N->tag->all), true));
+<a name="line263"></a>		}
+<a name="line264"></a>		
+<a name="line265"></a>		// Prep Buttons
+<a name="line266"></a>		$button_data = array('page'=>"gift_dashboard","G"=>$this->N);
+<a name="line267"></a>		$this->data['buttons'] = $this->load->view('gift/includes/buttons/need_dashboard', $button_data, true);
+<a name="line268"></a>		
+<a name="line269"></a>		$this->data['title'] = "Edit Gift";
+<a name="line270"></a>		$this->data['N'] = $this->N;
+<a name="line271"></a>		$this->load->view('header', $this->data);
+<a name="line272"></a>		$this->load->view('gift/view', $this->data);
+<a name="line273"></a>		$this->load->view("footer", $this->data);	
+<a name="line274"></a>	}
+<a name="line275"></a>	
+<a name="line276"></a>	
+<a name="line277"></a>}
+<a name="line278"></a></pre>
 <div class="header">
 <h1>GiftFlow API</h1>
 <ul>

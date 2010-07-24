@@ -6,7 +6,7 @@
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 
 <meta name="generator" content="PHPDoctor 2RC4 (http://peej.github.com/phpdoctor/)">
-<meta name="when" content="Mon, 19 Jul 2010 17:13:58 +0000">
+<meta name="when" content="Sat, 24 Jul 2010 20:46:31 +0000">
 
 <link rel="stylesheet" type="text/css" href="../../../../stylesheet.css">
 <link rel="start" href="../../../../overview-summary.html">
@@ -45,7 +45,7 @@
 <a name="line6"></a> *
 <a name="line7"></a> * @package		CodeIgniter
 <a name="line8"></a> * @author		ExpressionEngine Dev Team
-<a name="line9"></a> * @copyright	Copyright (c) 2008 - 2009, EllisLab, Inc.
+<a name="line9"></a> * @copyright	Copyright (c) 2008 - 2010, EllisLab, Inc.
 <a name="line10"></a> * @license		http://codeigniter.com/user_guide/license.html
 <a name="line11"></a> * @link		http://codeigniter.com
 <a name="line12"></a> * @since		Version 1.0
@@ -447,7 +447,7 @@
 <a name="line408"></a>	 */
 <a name="line409"></a>	function _list_columns($table = '')
 <a name="line410"></a>	{
-<a name="line411"></a>		return "SHOW COLUMNS FROM ".$table;
+<a name="line411"></a>		return "SHOW COLUMNS FROM ".$this->_protect_identifiers($table, TRUE, NULL, FALSE);
 <a name="line412"></a>	}
 <a name="line413"></a>
 <a name="line414"></a>	// --------------------------------------------------------------------
@@ -576,137 +576,229 @@
 <a name="line537"></a>	
 <a name="line538"></a>	// --------------------------------------------------------------------
 <a name="line539"></a>
-<a name="line540"></a>	/**
-<a name="line541"></a>	 * Update statement
-<a name="line542"></a>	 *
-<a name="line543"></a>	 * Generates a platform-specific update string from the supplied data
-<a name="line544"></a>	 *
-<a name="line545"></a>	 * @access	public
-<a name="line546"></a>	 * @param	string	the table name
-<a name="line547"></a>	 * @param	array	the update data
-<a name="line548"></a>	 * @param	array	the where clause
-<a name="line549"></a>	 * @param	array	the orderby clause
-<a name="line550"></a>	 * @param	array	the limit clause
-<a name="line551"></a>	 * @return	string
-<a name="line552"></a>	 */
-<a name="line553"></a>	function _update($table, $values, $where, $orderby = array(), $limit = FALSE)
-<a name="line554"></a>	{
-<a name="line555"></a>		foreach($values as $key => $val)
-<a name="line556"></a>		{
-<a name="line557"></a>			$valstr[] = $key." = ".$val;
-<a name="line558"></a>		}
-<a name="line559"></a>		
-<a name="line560"></a>		$limit = ( ! $limit) ? '' : ' LIMIT '.$limit;
-<a name="line561"></a>		
-<a name="line562"></a>		$orderby = (count($orderby) >= 1)?' ORDER BY '.implode(", ", $orderby):'';
-<a name="line563"></a>	
-<a name="line564"></a>		$sql = "UPDATE ".$table." SET ".implode(', ', $valstr);
-<a name="line565"></a>
-<a name="line566"></a>		$sql .= ($where != '' AND count($where) >=1) ? " WHERE ".implode(" ", $where) : '';
-<a name="line567"></a>
-<a name="line568"></a>		$sql .= $orderby.$limit;
-<a name="line569"></a>		
-<a name="line570"></a>		return $sql;
-<a name="line571"></a>	}
-<a name="line572"></a>
-<a name="line573"></a>	// --------------------------------------------------------------------
-<a name="line574"></a>
-<a name="line575"></a>	/**
-<a name="line576"></a>	 * Truncate statement
-<a name="line577"></a>	 *
-<a name="line578"></a>	 * Generates a platform-specific truncate string from the supplied data
-<a name="line579"></a>	 * If the database does not support the truncate() command
-<a name="line580"></a>	 * This function maps to "DELETE FROM table"
-<a name="line581"></a>	 *
-<a name="line582"></a>	 * @access	public
-<a name="line583"></a>	 * @param	string	the table name
-<a name="line584"></a>	 * @return	string
-<a name="line585"></a>	 */	
-<a name="line586"></a>	function _truncate($table)
-<a name="line587"></a>	{
-<a name="line588"></a>		return "TRUNCATE ".$table;
-<a name="line589"></a>	}
-<a name="line590"></a>	
-<a name="line591"></a>	// --------------------------------------------------------------------
-<a name="line592"></a>
-<a name="line593"></a>	/**
-<a name="line594"></a>	 * Delete statement
-<a name="line595"></a>	 *
-<a name="line596"></a>	 * Generates a platform-specific delete string from the supplied data
-<a name="line597"></a>	 *
-<a name="line598"></a>	 * @access	public
-<a name="line599"></a>	 * @param	string	the table name
-<a name="line600"></a>	 * @param	array	the where clause
-<a name="line601"></a>	 * @param	string	the limit clause
-<a name="line602"></a>	 * @return	string
-<a name="line603"></a>	 */	
-<a name="line604"></a>	function _delete($table, $where = array(), $like = array(), $limit = FALSE)
-<a name="line605"></a>	{
-<a name="line606"></a>		$conditions = '';
-<a name="line607"></a>
-<a name="line608"></a>		if (count($where) > 0 OR count($like) > 0)
-<a name="line609"></a>		{
-<a name="line610"></a>			$conditions = "\nWHERE ";
-<a name="line611"></a>			$conditions .= implode("\n", $this->ar_where);
+<a name="line540"></a>	
+<a name="line541"></a>	/**
+<a name="line542"></a>	 * Replace statement
+<a name="line543"></a>	 *
+<a name="line544"></a>	 * Generates a platform-specific replace string from the supplied data
+<a name="line545"></a>	 *
+<a name="line546"></a>	 * @access	public
+<a name="line547"></a>	 * @param	string	the table name
+<a name="line548"></a>	 * @param	array	the insert keys
+<a name="line549"></a>	 * @param	array	the insert values
+<a name="line550"></a>	 * @return	string
+<a name="line551"></a>	 */
+<a name="line552"></a>	function _replace($table, $keys, $values)
+<a name="line553"></a>	{	
+<a name="line554"></a>		return "REPLACE INTO ".$table." (".implode(', ', $keys).") VALUES (".implode(', ', $values).")";
+<a name="line555"></a>	}
+<a name="line556"></a>	
+<a name="line557"></a>	// --------------------------------------------------------------------
+<a name="line558"></a>
+<a name="line559"></a>	/**
+<a name="line560"></a>	 * Insert_batch statement
+<a name="line561"></a>	 *
+<a name="line562"></a>	 * Generates a platform-specific insert string from the supplied data
+<a name="line563"></a>	 *
+<a name="line564"></a>	 * @access	public
+<a name="line565"></a>	 * @param	string	the table name
+<a name="line566"></a>	 * @param	array	the insert keys
+<a name="line567"></a>	 * @param	array	the insert values
+<a name="line568"></a>	 * @return	string
+<a name="line569"></a>	 */
+<a name="line570"></a>	function _insert_batch($table, $keys, $values)
+<a name="line571"></a>	{	
+<a name="line572"></a>		return "INSERT INTO ".$table." (".implode(', ', $keys).") VALUES ".implode(', ', $values);
+<a name="line573"></a>	}
+<a name="line574"></a>	
+<a name="line575"></a>	// --------------------------------------------------------------------
+<a name="line576"></a>
+<a name="line577"></a>
+<a name="line578"></a>	/**
+<a name="line579"></a>	 * Update statement
+<a name="line580"></a>	 *
+<a name="line581"></a>	 * Generates a platform-specific update string from the supplied data
+<a name="line582"></a>	 *
+<a name="line583"></a>	 * @access	public
+<a name="line584"></a>	 * @param	string	the table name
+<a name="line585"></a>	 * @param	array	the update data
+<a name="line586"></a>	 * @param	array	the where clause
+<a name="line587"></a>	 * @param	array	the orderby clause
+<a name="line588"></a>	 * @param	array	the limit clause
+<a name="line589"></a>	 * @return	string
+<a name="line590"></a>	 */
+<a name="line591"></a>	function _update($table, $values, $where, $orderby = array(), $limit = FALSE)
+<a name="line592"></a>	{
+<a name="line593"></a>		foreach($values as $key => $val)
+<a name="line594"></a>		{
+<a name="line595"></a>			$valstr[] = $key." = ".$val;
+<a name="line596"></a>		}
+<a name="line597"></a>		
+<a name="line598"></a>		$limit = ( ! $limit) ? '' : ' LIMIT '.$limit;
+<a name="line599"></a>		
+<a name="line600"></a>		$orderby = (count($orderby) >= 1)?' ORDER BY '.implode(", ", $orderby):'';
+<a name="line601"></a>	
+<a name="line602"></a>		$sql = "UPDATE ".$table." SET ".implode(', ', $valstr);
+<a name="line603"></a>
+<a name="line604"></a>		$sql .= ($where != '' AND count($where) >=1) ? " WHERE ".implode(" ", $where) : '';
+<a name="line605"></a>
+<a name="line606"></a>		$sql .= $orderby.$limit;
+<a name="line607"></a>		
+<a name="line608"></a>		return $sql;
+<a name="line609"></a>	}
+<a name="line610"></a>
+<a name="line611"></a>	// --------------------------------------------------------------------
 <a name="line612"></a>
-<a name="line613"></a>			if (count($where) > 0 && count($like) > 0)
-<a name="line614"></a>			{
-<a name="line615"></a>				$conditions .= " AND ";
-<a name="line616"></a>			}
-<a name="line617"></a>			$conditions .= implode("\n", $like);
-<a name="line618"></a>		}
-<a name="line619"></a>
-<a name="line620"></a>		$limit = ( ! $limit) ? '' : ' LIMIT '.$limit;
-<a name="line621"></a>	
-<a name="line622"></a>		return "DELETE FROM ".$table.$conditions.$limit;
-<a name="line623"></a>	}
-<a name="line624"></a>
-<a name="line625"></a>	// --------------------------------------------------------------------
-<a name="line626"></a>
-<a name="line627"></a>	/**
-<a name="line628"></a>	 * Limit string
-<a name="line629"></a>	 *
-<a name="line630"></a>	 * Generates a platform-specific LIMIT clause
-<a name="line631"></a>	 *
-<a name="line632"></a>	 * @access	public
-<a name="line633"></a>	 * @param	string	the sql query string
-<a name="line634"></a>	 * @param	integer	the number of rows to limit the query to
-<a name="line635"></a>	 * @param	integer	the offset value
-<a name="line636"></a>	 * @return	string
-<a name="line637"></a>	 */
-<a name="line638"></a>	function _limit($sql, $limit, $offset)
-<a name="line639"></a>	{	
-<a name="line640"></a>		if ($offset == 0)
-<a name="line641"></a>		{
-<a name="line642"></a>			$offset = '';
-<a name="line643"></a>		}
-<a name="line644"></a>		else
-<a name="line645"></a>		{
-<a name="line646"></a>			$offset .= ", ";
-<a name="line647"></a>		}
-<a name="line648"></a>		
-<a name="line649"></a>		return $sql."LIMIT ".$offset.$limit;
-<a name="line650"></a>	}
-<a name="line651"></a>
-<a name="line652"></a>	// --------------------------------------------------------------------
-<a name="line653"></a>
-<a name="line654"></a>	/**
-<a name="line655"></a>	 * Close DB Connection
-<a name="line656"></a>	 *
-<a name="line657"></a>	 * @access	public
-<a name="line658"></a>	 * @param	resource
-<a name="line659"></a>	 * @return	void
-<a name="line660"></a>	 */
-<a name="line661"></a>	function _close($conn_id)
-<a name="line662"></a>	{
-<a name="line663"></a>		@mysql_close($conn_id);
-<a name="line664"></a>	}
-<a name="line665"></a>	
-<a name="line666"></a>}
-<a name="line667"></a>
-<a name="line668"></a>
-<a name="line669"></a>/* End of file mysql_driver.php */
-<a name="line670"></a>/* Location: ./system/database/drivers/mysql/mysql_driver.php */</pre>
+<a name="line613"></a>
+<a name="line614"></a>	/**
+<a name="line615"></a>	 * Update_Batch statement
+<a name="line616"></a>	 *
+<a name="line617"></a>	 * Generates a platform-specific batch update string from the supplied data
+<a name="line618"></a>	 *
+<a name="line619"></a>	 * @access	public
+<a name="line620"></a>	 * @param	string	the table name
+<a name="line621"></a>	 * @param	array	the update data
+<a name="line622"></a>	 * @param	array	the where clause
+<a name="line623"></a>	 * @return	string
+<a name="line624"></a>	 */
+<a name="line625"></a>	function _update_batch($table, $values, $index, $where = NULL)
+<a name="line626"></a>	{
+<a name="line627"></a>		$ids = array();
+<a name="line628"></a>		$where = ($where != '' AND count($where) >=1) ? implode(" ", $where).' AND ' : '';
+<a name="line629"></a>
+<a name="line630"></a>		foreach($values as $key => $val)
+<a name="line631"></a>		{
+<a name="line632"></a>			$ids[] = $val[$index];
+<a name="line633"></a>			
+<a name="line634"></a>			foreach(array_keys($val) as $field)
+<a name="line635"></a>			{	
+<a name="line636"></a>				if ($field != $index)
+<a name="line637"></a>				{
+<a name="line638"></a>					$final[$field][] =  'WHEN '.$index.' = '.$val[$index].' THEN '.$val[$field];
+<a name="line639"></a>				}
+<a name="line640"></a>			}
+<a name="line641"></a>		}
+<a name="line642"></a>		
+<a name="line643"></a>		$sql = "UPDATE ".$table." SET ";
+<a name="line644"></a>		$cases = '';
+<a name="line645"></a>
+<a name="line646"></a>		foreach($final as $k => $v)
+<a name="line647"></a>		{
+<a name="line648"></a>			$cases .= $k.' = CASE '."\n";
+<a name="line649"></a>			foreach ($v as $row)
+<a name="line650"></a>			{
+<a name="line651"></a>				$cases .= $row."\n";
+<a name="line652"></a>			}
+<a name="line653"></a>			
+<a name="line654"></a>			$cases .= 'ELSE '.$k.' END, ';
+<a name="line655"></a>		}
+<a name="line656"></a>		
+<a name="line657"></a>		$sql .= substr($cases, 0, -2);
+<a name="line658"></a>		
+<a name="line659"></a>		$sql .= ' WHERE '.$where.$index.' IN ('.implode(',', $ids).')';
+<a name="line660"></a>		
+<a name="line661"></a>		return $sql;
+<a name="line662"></a>	}
+<a name="line663"></a>
+<a name="line664"></a>	// --------------------------------------------------------------------
+<a name="line665"></a>
+<a name="line666"></a>
+<a name="line667"></a>	/**
+<a name="line668"></a>	 * Truncate statement
+<a name="line669"></a>	 *
+<a name="line670"></a>	 * Generates a platform-specific truncate string from the supplied data
+<a name="line671"></a>	 * If the database does not support the truncate() command
+<a name="line672"></a>	 * This function maps to "DELETE FROM table"
+<a name="line673"></a>	 *
+<a name="line674"></a>	 * @access	public
+<a name="line675"></a>	 * @param	string	the table name
+<a name="line676"></a>	 * @return	string
+<a name="line677"></a>	 */	
+<a name="line678"></a>	function _truncate($table)
+<a name="line679"></a>	{
+<a name="line680"></a>		return "TRUNCATE ".$table;
+<a name="line681"></a>	}
+<a name="line682"></a>	
+<a name="line683"></a>	// --------------------------------------------------------------------
+<a name="line684"></a>
+<a name="line685"></a>	/**
+<a name="line686"></a>	 * Delete statement
+<a name="line687"></a>	 *
+<a name="line688"></a>	 * Generates a platform-specific delete string from the supplied data
+<a name="line689"></a>	 *
+<a name="line690"></a>	 * @access	public
+<a name="line691"></a>	 * @param	string	the table name
+<a name="line692"></a>	 * @param	array	the where clause
+<a name="line693"></a>	 * @param	string	the limit clause
+<a name="line694"></a>	 * @return	string
+<a name="line695"></a>	 */	
+<a name="line696"></a>	function _delete($table, $where = array(), $like = array(), $limit = FALSE)
+<a name="line697"></a>	{
+<a name="line698"></a>		$conditions = '';
+<a name="line699"></a>
+<a name="line700"></a>		if (count($where) > 0 OR count($like) > 0)
+<a name="line701"></a>		{
+<a name="line702"></a>			$conditions = "\nWHERE ";
+<a name="line703"></a>			$conditions .= implode("\n", $this->ar_where);
+<a name="line704"></a>
+<a name="line705"></a>			if (count($where) > 0 && count($like) > 0)
+<a name="line706"></a>			{
+<a name="line707"></a>				$conditions .= " AND ";
+<a name="line708"></a>			}
+<a name="line709"></a>			$conditions .= implode("\n", $like);
+<a name="line710"></a>		}
+<a name="line711"></a>
+<a name="line712"></a>		$limit = ( ! $limit) ? '' : ' LIMIT '.$limit;
+<a name="line713"></a>	
+<a name="line714"></a>		return "DELETE FROM ".$table.$conditions.$limit;
+<a name="line715"></a>	}
+<a name="line716"></a>
+<a name="line717"></a>	// --------------------------------------------------------------------
+<a name="line718"></a>
+<a name="line719"></a>	/**
+<a name="line720"></a>	 * Limit string
+<a name="line721"></a>	 *
+<a name="line722"></a>	 * Generates a platform-specific LIMIT clause
+<a name="line723"></a>	 *
+<a name="line724"></a>	 * @access	public
+<a name="line725"></a>	 * @param	string	the sql query string
+<a name="line726"></a>	 * @param	integer	the number of rows to limit the query to
+<a name="line727"></a>	 * @param	integer	the offset value
+<a name="line728"></a>	 * @return	string
+<a name="line729"></a>	 */
+<a name="line730"></a>	function _limit($sql, $limit, $offset)
+<a name="line731"></a>	{	
+<a name="line732"></a>		if ($offset == 0)
+<a name="line733"></a>		{
+<a name="line734"></a>			$offset = '';
+<a name="line735"></a>		}
+<a name="line736"></a>		else
+<a name="line737"></a>		{
+<a name="line738"></a>			$offset .= ", ";
+<a name="line739"></a>		}
+<a name="line740"></a>		
+<a name="line741"></a>		return $sql."LIMIT ".$offset.$limit;
+<a name="line742"></a>	}
+<a name="line743"></a>
+<a name="line744"></a>	// --------------------------------------------------------------------
+<a name="line745"></a>
+<a name="line746"></a>	/**
+<a name="line747"></a>	 * Close DB Connection
+<a name="line748"></a>	 *
+<a name="line749"></a>	 * @access	public
+<a name="line750"></a>	 * @param	resource
+<a name="line751"></a>	 * @return	void
+<a name="line752"></a>	 */
+<a name="line753"></a>	function _close($conn_id)
+<a name="line754"></a>	{
+<a name="line755"></a>		@mysql_close($conn_id);
+<a name="line756"></a>	}
+<a name="line757"></a>	
+<a name="line758"></a>}
+<a name="line759"></a>
+<a name="line760"></a>
+<a name="line761"></a>/* End of file mysql_driver.php */
+<a name="line762"></a>/* Location: ./system/database/drivers/mysql/mysql_driver.php */</pre>
 <div class="header">
 <h1>GiftFlow API</h1>
 <ul>

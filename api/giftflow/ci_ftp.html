@@ -6,7 +6,7 @@
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 
 <meta name="generator" content="PHPDoctor 2RC4 (http://peej.github.com/phpdoctor/)">
-<meta name="when" content="Mon, 19 Jul 2010 17:13:56 +0000">
+<meta name="when" content="Sat, 24 Jul 2010 20:46:31 +0000">
 
 <link rel="stylesheet" type="text/css" href="../stylesheet.css">
 <link rel="start" href="../overview-summary.html">
@@ -149,6 +149,10 @@ containted within it.</p></td>
 </tr>
 <tr>
 <td class="type"> void</td>
+<td class="description"><p class="name"><a href="#download()">download</a>(mixed rempath, mixed locpath, str mode)</p><p class="description">Download a file from a remote server to the local server</p></td>
+</tr>
+<tr>
+<td class="type"> void</td>
 <td class="description"><p class="name"><a href="#initialize()">initialize</a>(mixed config)</p><p class="description">Initialize preferences</p></td>
 </tr>
 <tr>
@@ -252,7 +256,7 @@ sub-folders) and creates a mirror via FTP based on it. </p></td>
 
 
 
-<div class='method'><a href="../source/libraries/ftp.php.html#line606" class="location">libraries/Ftp.php at line 606</a>
+<div class='method'><a href="../source/libraries/ftp.php.html#line648" class="location">libraries/Ftp.php at line 648</a>
 
 <h3 id="_error()">_error</h3>
 <code class="signature">private  void <strong>_error</strong>(mixed line)</code>
@@ -266,7 +270,7 @@ sub-folders) and creates a mirror via FTP based on it. </p></td>
 
 
 
-<div class='method'><a href="../source/libraries/ftp.php.html#line534" class="location">libraries/Ftp.php at line 534</a>
+<div class='method'><a href="../source/libraries/ftp.php.html#line576" class="location">libraries/Ftp.php at line 576</a>
 
 <h3 id="_getext()">_getext</h3>
 <code class="signature">private  void <strong>_getext</strong>(mixed filename)</code>
@@ -306,7 +310,7 @@ sub-folders) and creates a mirror via FTP based on it. </p></td>
 
 
 
-<div class='method'><a href="../source/libraries/ftp.php.html#line555" class="location">libraries/Ftp.php at line 555</a>
+<div class='method'><a href="../source/libraries/ftp.php.html#line597" class="location">libraries/Ftp.php at line 597</a>
 
 <h3 id="_settype()">_settype</h3>
 <code class="signature">private  void <strong>_settype</strong>(mixed ext)</code>
@@ -339,7 +343,7 @@ Internally, this parameter is only used by the "mirror" function below.</p><dl>
 
 
 
-<div class='method'><a href="../source/libraries/ftp.php.html#line419" class="location">libraries/Ftp.php at line 419</a>
+<div class='method'><a href="../source/libraries/ftp.php.html#line461" class="location">libraries/Ftp.php at line 461</a>
 
 <h3 id="chmod()">chmod</h3>
 <code class="signature">public  void <strong>chmod</strong>(mixed path, mixed perm)</code>
@@ -356,7 +360,7 @@ Internally, this parameter is only used by the "mirror" function below.</p><dl>
 
 
 
-<div class='method'><a href="../source/libraries/ftp.php.html#line587" class="location">libraries/Ftp.php at line 587</a>
+<div class='method'><a href="../source/libraries/ftp.php.html#line629" class="location">libraries/Ftp.php at line 629</a>
 
 <h3 id="close()">close</h3>
 <code class="signature">public  void <strong>close</strong>()</code>
@@ -387,7 +391,7 @@ Internally, this parameter is only used by the "mirror" function below.</p><dl>
 
 
 
-<div class='method'><a href="../source/libraries/ftp.php.html#line370" class="location">libraries/Ftp.php at line 370</a>
+<div class='method'><a href="../source/libraries/ftp.php.html#line412" class="location">libraries/Ftp.php at line 412</a>
 
 <h3 id="delete_dir()">delete_dir</h3>
 <code class="signature">public  void <strong>delete_dir</strong>(mixed filepath)</code>
@@ -402,7 +406,7 @@ containted within it.</p><dl>
 
 
 
-<div class='method'><a href="../source/libraries/ftp.php.html#line339" class="location">libraries/Ftp.php at line 339</a>
+<div class='method'><a href="../source/libraries/ftp.php.html#line381" class="location">libraries/Ftp.php at line 381</a>
 
 <h3 id="delete_file()">delete_file</h3>
 <code class="signature">public  void <strong>delete_file</strong>(mixed filepath)</code>
@@ -410,6 +414,19 @@ containted within it.</p><dl>
 <p>Rename (or move) a file</p><dl>
 <dt>Access	public.</dt>
 <dt>Param	string.</dt>
+<dt>Return	bool.</dt>
+</dl>
+</div></div>
+
+
+
+<div class='method'><a href="../source/libraries/ftp.php.html#line292" class="location">libraries/Ftp.php at line 292</a>
+
+<h3 id="download()">download</h3>
+<code class="signature">public  void <strong>download</strong>(mixed rempath, mixed locpath, str mode)</code>
+<div class="details">
+<p>Download a file from a remote server to the local server</p><dl>
+<dt>Access	public.</dt>
 <dt>Return	bool.</dt>
 </dl>
 </div></div>
@@ -430,7 +447,7 @@ containted within it.</p><dl>
 
 
 
-<div class='method'><a href="../source/libraries/ftp.php.html#line458" class="location">libraries/Ftp.php at line 458</a>
+<div class='method'><a href="../source/libraries/ftp.php.html#line500" class="location">libraries/Ftp.php at line 500</a>
 
 <h3 id="list_files()">list_files</h3>
 <code class="signature">public  void <strong>list_files</strong>(str path)</code>
@@ -443,7 +460,7 @@ containted within it.</p><dl>
 
 
 
-<div class='method'><a href="../source/libraries/ftp.php.html#line482" class="location">libraries/Ftp.php at line 482</a>
+<div class='method'><a href="../source/libraries/ftp.php.html#line524" class="location">libraries/Ftp.php at line 524</a>
 
 <h3 id="mirror()">mirror</h3>
 <code class="signature">public  void <strong>mirror</strong>(mixed locpath, mixed rempath)</code>
@@ -475,7 +492,7 @@ of the original file path will be recreated on the server.</p><dl>
 
 
 
-<div class='method'><a href="../source/libraries/ftp.php.html#line325" class="location">libraries/Ftp.php at line 325</a>
+<div class='method'><a href="../source/libraries/ftp.php.html#line367" class="location">libraries/Ftp.php at line 367</a>
 
 <h3 id="move()">move</h3>
 <code class="signature">public  void <strong>move</strong>(mixed old_file, mixed new_file)</code>
@@ -488,7 +505,7 @@ of the original file path will be recreated on the server.</p><dl>
 
 
 
-<div class='method'><a href="../source/libraries/ftp.php.html#line292" class="location">libraries/Ftp.php at line 292</a>
+<div class='method'><a href="../source/libraries/ftp.php.html#line334" class="location">libraries/Ftp.php at line 334</a>
 
 <h3 id="rename()">rename</h3>
 <code class="signature">public  void <strong>rename</strong>(mixed old_file, mixed new_file, bool move)</code>

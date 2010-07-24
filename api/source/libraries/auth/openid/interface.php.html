@@ -1,0 +1,257 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+
+<html lang="en">
+<head>
+
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
+<meta name="generator" content="PHPDoctor 2RC4 (http://peej.github.com/phpdoctor/)">
+<meta name="when" content="Sat, 24 Jul 2010 20:47:45 +0000">
+
+<link rel="stylesheet" type="text/css" href="../../../../stylesheet.css">
+<link rel="start" href="../../../../overview-summary.html">
+
+<title>libraries/Auth/OpenID/Interface.php (GiftFlow API)</title>
+
+</head>
+<body id="file" onload="parent.document.title=document.title;">
+
+<div class="header">
+<h1>GiftFlow API</h1>
+<ul>
+<li><a href="../../../../overview-summary.html">Overview</a></li>
+<li>Package</li><li>Class</li><li>Tree</li><li><a href="../../../../overview-files.html">Files</a></li>
+<li><a href="../../../../deprecated-list.html">Deprecated</a></li>
+<li><a href="../../../../index-all.html">Index</a></li>
+</ul>
+</div>
+
+<div class="small_links">
+<a href="../../../../index.html" target="_top">Frames</a>
+<a href="../../../../source/libraries/auth/openid/interface.php.html" target="_top">No frames</a>
+</div>
+<hr>
+
+<h1>libraries/Auth/OpenID/Interface.php</h1>
+<div class="comment" id="overview_description"><p>This file specifies the interface for PHP OpenID store implementations.</p><p>PHP versions 4 and 5</p><p>LICENSE: See the COPYING file included in this distribution.</p></div>
+
+<hr>
+
+<a name="line1"></a><pre><?php
+<a name="line2"></a>
+<a name="line3"></a>/**
+<a name="line4"></a> * This file specifies the interface for PHP OpenID store implementations.
+<a name="line5"></a> *
+<a name="line6"></a> * PHP versions 4 and 5
+<a name="line7"></a> *
+<a name="line8"></a> * LICENSE: See the COPYING file included in this distribution.
+<a name="line9"></a> *
+<a name="line10"></a> * @package OpenID
+<a name="line11"></a> * @author JanRain, Inc. <openid@janrain.com>
+<a name="line12"></a> * @copyright 2005-2008 Janrain, Inc.
+<a name="line13"></a> * @license http://www.apache.org/licenses/LICENSE-2.0 Apache
+<a name="line14"></a> */
+<a name="line15"></a>
+<a name="line16"></a>/**
+<a name="line17"></a> * This is the interface for the store objects the OpenID library
+<a name="line18"></a> * uses. It is a single class that provides all of the persistence
+<a name="line19"></a> * mechanisms that the OpenID library needs, for both servers and
+<a name="line20"></a> * consumers.  If you want to create an SQL-driven store, please see
+<a name="line21"></a> * then {@link Auth_OpenID_SQLStore} class.
+<a name="line22"></a> *
+<a name="line23"></a> * Change: Version 2.0 removed the storeNonce, getAuthKey, and isDumb
+<a name="line24"></a> * methods, and changed the behavior of the useNonce method to support
+<a name="line25"></a> * one-way nonces.
+<a name="line26"></a> *
+<a name="line27"></a> * @package OpenID
+<a name="line28"></a> * @author JanRain, Inc. <openid@janrain.com>
+<a name="line29"></a> */
+<a name="line30"></a>class Auth_OpenID_OpenIDStore {
+<a name="line31"></a>    /**
+<a name="line32"></a>     * This method puts an Association object into storage,
+<a name="line33"></a>     * retrievable by server URL and handle.
+<a name="line34"></a>     *
+<a name="line35"></a>     * @param string $server_url The URL of the identity server that
+<a name="line36"></a>     * this association is with. Because of the way the server portion
+<a name="line37"></a>     * of the library uses this interface, don't assume there are any
+<a name="line38"></a>     * limitations on the character set of the input string. In
+<a name="line39"></a>     * particular, expect to see unescaped non-url-safe characters in
+<a name="line40"></a>     * the server_url field.
+<a name="line41"></a>     *
+<a name="line42"></a>     * @param Association $association The Association to store.
+<a name="line43"></a>     */
+<a name="line44"></a>    function storeAssociation($server_url, $association)
+<a name="line45"></a>    {
+<a name="line46"></a>        trigger_error("Auth_OpenID_OpenIDStore::storeAssociation ".
+<a name="line47"></a>                      "not implemented", E_USER_ERROR);
+<a name="line48"></a>    }
+<a name="line49"></a>
+<a name="line50"></a>    /*
+<a name="line51"></a>     * Remove expired nonces from the store.
+<a name="line52"></a>     *
+<a name="line53"></a>     * Discards any nonce from storage that is old enough that its
+<a name="line54"></a>     * timestamp would not pass useNonce().
+<a name="line55"></a>     *
+<a name="line56"></a>     * This method is not called in the normal operation of the
+<a name="line57"></a>     * library.  It provides a way for store admins to keep their
+<a name="line58"></a>     * storage from filling up with expired data.
+<a name="line59"></a>     *
+<a name="line60"></a>     * @return the number of nonces expired
+<a name="line61"></a>     */
+<a name="line62"></a>    function cleanupNonces()
+<a name="line63"></a>    {
+<a name="line64"></a>        trigger_error("Auth_OpenID_OpenIDStore::cleanupNonces ".
+<a name="line65"></a>                      "not implemented", E_USER_ERROR);
+<a name="line66"></a>    }
+<a name="line67"></a>
+<a name="line68"></a>    /*
+<a name="line69"></a>     * Remove expired associations from the store.
+<a name="line70"></a>     *
+<a name="line71"></a>     * This method is not called in the normal operation of the
+<a name="line72"></a>     * library.  It provides a way for store admins to keep their
+<a name="line73"></a>     * storage from filling up with expired data.
+<a name="line74"></a>     *
+<a name="line75"></a>     * @return the number of associations expired.
+<a name="line76"></a>     */
+<a name="line77"></a>    function cleanupAssociations()
+<a name="line78"></a>    {
+<a name="line79"></a>        trigger_error("Auth_OpenID_OpenIDStore::cleanupAssociations ".
+<a name="line80"></a>                      "not implemented", E_USER_ERROR);
+<a name="line81"></a>    }
+<a name="line82"></a>
+<a name="line83"></a>    /*
+<a name="line84"></a>     * Shortcut for cleanupNonces(), cleanupAssociations().
+<a name="line85"></a>     *
+<a name="line86"></a>     * This method is not called in the normal operation of the
+<a name="line87"></a>     * library.  It provides a way for store admins to keep their
+<a name="line88"></a>     * storage from filling up with expired data.
+<a name="line89"></a>     */
+<a name="line90"></a>    function cleanup()
+<a name="line91"></a>    {
+<a name="line92"></a>        return array($this->cleanupNonces(),
+<a name="line93"></a>                     $this->cleanupAssociations());
+<a name="line94"></a>    }
+<a name="line95"></a>
+<a name="line96"></a>    /**
+<a name="line97"></a>     * Report whether this storage supports cleanup
+<a name="line98"></a>     */
+<a name="line99"></a>    function supportsCleanup()
+<a name="line100"></a>    {
+<a name="line101"></a>        return true;
+<a name="line102"></a>    }
+<a name="line103"></a>
+<a name="line104"></a>    /**
+<a name="line105"></a>     * This method returns an Association object from storage that
+<a name="line106"></a>     * matches the server URL and, if specified, handle. It returns
+<a name="line107"></a>     * null if no such association is found or if the matching
+<a name="line108"></a>     * association is expired.
+<a name="line109"></a>     *
+<a name="line110"></a>     * If no handle is specified, the store may return any association
+<a name="line111"></a>     * which matches the server URL. If multiple associations are
+<a name="line112"></a>     * valid, the recommended return value for this method is the one
+<a name="line113"></a>     * most recently issued.
+<a name="line114"></a>     *
+<a name="line115"></a>     * This method is allowed (and encouraged) to garbage collect
+<a name="line116"></a>     * expired associations when found. This method must not return
+<a name="line117"></a>     * expired associations.
+<a name="line118"></a>     *
+<a name="line119"></a>     * @param string $server_url The URL of the identity server to get
+<a name="line120"></a>     * the association for. Because of the way the server portion of
+<a name="line121"></a>     * the library uses this interface, don't assume there are any
+<a name="line122"></a>     * limitations on the character set of the input string.  In
+<a name="line123"></a>     * particular, expect to see unescaped non-url-safe characters in
+<a name="line124"></a>     * the server_url field.
+<a name="line125"></a>     *
+<a name="line126"></a>     * @param mixed $handle This optional parameter is the handle of
+<a name="line127"></a>     * the specific association to get. If no specific handle is
+<a name="line128"></a>     * provided, any valid association matching the server URL is
+<a name="line129"></a>     * returned.
+<a name="line130"></a>     *
+<a name="line131"></a>     * @return Association The Association for the given identity
+<a name="line132"></a>     * server.
+<a name="line133"></a>     */
+<a name="line134"></a>    function getAssociation($server_url, $handle = null)
+<a name="line135"></a>    {
+<a name="line136"></a>        trigger_error("Auth_OpenID_OpenIDStore::getAssociation ".
+<a name="line137"></a>                      "not implemented", E_USER_ERROR);
+<a name="line138"></a>    }
+<a name="line139"></a>
+<a name="line140"></a>    /**
+<a name="line141"></a>     * This method removes the matching association if it's found, and
+<a name="line142"></a>     * returns whether the association was removed or not.
+<a name="line143"></a>     *
+<a name="line144"></a>     * @param string $server_url The URL of the identity server the
+<a name="line145"></a>     * association to remove belongs to. Because of the way the server
+<a name="line146"></a>     * portion of the library uses this interface, don't assume there
+<a name="line147"></a>     * are any limitations on the character set of the input
+<a name="line148"></a>     * string. In particular, expect to see unescaped non-url-safe
+<a name="line149"></a>     * characters in the server_url field.
+<a name="line150"></a>     *
+<a name="line151"></a>     * @param string $handle This is the handle of the association to
+<a name="line152"></a>     * remove. If there isn't an association found that matches both
+<a name="line153"></a>     * the given URL and handle, then there was no matching handle
+<a name="line154"></a>     * found.
+<a name="line155"></a>     *
+<a name="line156"></a>     * @return mixed Returns whether or not the given association existed.
+<a name="line157"></a>     */
+<a name="line158"></a>    function removeAssociation($server_url, $handle)
+<a name="line159"></a>    {
+<a name="line160"></a>        trigger_error("Auth_OpenID_OpenIDStore::removeAssociation ".
+<a name="line161"></a>                      "not implemented", E_USER_ERROR);
+<a name="line162"></a>    }
+<a name="line163"></a>
+<a name="line164"></a>    /**
+<a name="line165"></a>     * Called when using a nonce.
+<a name="line166"></a>     *
+<a name="line167"></a>     * This method should return C{True} if the nonce has not been
+<a name="line168"></a>     * used before, and store it for a while to make sure nobody
+<a name="line169"></a>     * tries to use the same value again.  If the nonce has already
+<a name="line170"></a>     * been used, return C{False}.
+<a name="line171"></a>     *
+<a name="line172"></a>     * Change: In earlier versions, round-trip nonces were used and a
+<a name="line173"></a>     * nonce was only valid if it had been previously stored with
+<a name="line174"></a>     * storeNonce.  Version 2.0 uses one-way nonces, requiring a
+<a name="line175"></a>     * different implementation here that does not depend on a
+<a name="line176"></a>     * storeNonce call.  (storeNonce is no longer part of the
+<a name="line177"></a>     * interface.
+<a name="line178"></a>     *
+<a name="line179"></a>     * @param string $nonce The nonce to use.
+<a name="line180"></a>     *
+<a name="line181"></a>     * @return bool Whether or not the nonce was valid.
+<a name="line182"></a>     */
+<a name="line183"></a>    function useNonce($server_url, $timestamp, $salt)
+<a name="line184"></a>    {
+<a name="line185"></a>        trigger_error("Auth_OpenID_OpenIDStore::useNonce ".
+<a name="line186"></a>                      "not implemented", E_USER_ERROR);
+<a name="line187"></a>    }
+<a name="line188"></a>
+<a name="line189"></a>    /**
+<a name="line190"></a>     * Removes all entries from the store; implementation is optional.
+<a name="line191"></a>     */
+<a name="line192"></a>    function reset()
+<a name="line193"></a>    {
+<a name="line194"></a>    }
+<a name="line195"></a>
+<a name="line196"></a>}
+<a name="line197"></a></pre>
+<div class="header">
+<h1>GiftFlow API</h1>
+<ul>
+<li><a href="../../../../overview-summary.html">Overview</a></li>
+<li>Package</li><li>Class</li><li>Tree</li><li><a href="../../../../overview-files.html">Files</a></li>
+<li><a href="../../../../deprecated-list.html">Deprecated</a></li>
+<li><a href="../../../../index-all.html">Index</a></li>
+</ul>
+</div>
+
+<div class="small_links">
+<a href="../../../../index.html" target="_top">Frames</a>
+<a href="../../../../source/libraries/auth/openid/interface.php.html" target="_top">No frames</a>
+</div>
+<hr>
+
+<p id="footer">This document was generated by <a href="http://peej.github.com/phpdoctor/">PHPDoctor: The PHP Documentation Creator</a></p>
+
+</body>
+
+</html>

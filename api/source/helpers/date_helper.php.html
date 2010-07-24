@@ -6,7 +6,7 @@
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 
 <meta name="generator" content="PHPDoctor 2RC4 (http://peej.github.com/phpdoctor/)">
-<meta name="when" content="Mon, 19 Jul 2010 17:13:58 +0000">
+<meta name="when" content="Sat, 24 Jul 2010 20:46:31 +0000">
 
 <link rel="stylesheet" type="text/css" href="../../stylesheet.css">
 <link rel="start" href="../../overview-summary.html">
@@ -45,7 +45,7 @@
 <a name="line6"></a> *
 <a name="line7"></a> * @package		CodeIgniter
 <a name="line8"></a> * @author		ExpressionEngine Dev Team
-<a name="line9"></a> * @copyright	Copyright (c) 2008 - 2009, EllisLab, Inc.
+<a name="line9"></a> * @copyright	Copyright (c) 2008 - 2010, EllisLab, Inc.
 <a name="line10"></a> * @license		http://codeigniter.com/user_guide/license.html
 <a name="line11"></a> * @link		http://codeigniter.com
 <a name="line12"></a> * @since		Version 1.0
@@ -327,7 +327,7 @@
 <a name="line288"></a>		return $days_in_month[$month - 1];
 <a name="line289"></a>	}
 <a name="line290"></a>}
-<a name="line291"></a>	
+<a name="line291"></a>
 <a name="line292"></a>// ------------------------------------------------------------------------
 <a name="line293"></a>
 <a name="line294"></a>/**
@@ -382,7 +382,7 @@
 <a name="line343"></a>		return $time;
 <a name="line344"></a>	}
 <a name="line345"></a>}
-<a name="line346"></a>	
+<a name="line346"></a>
 <a name="line347"></a>// ------------------------------------------------------------------------
 <a name="line348"></a>
 <a name="line349"></a>/**
@@ -479,14 +479,14 @@
 <a name="line440"></a>		}
 <a name="line441"></a>	
 <a name="line442"></a>		$datestr = trim($datestr);
-<a name="line443"></a>		$datestr = preg_replace("/\040+/", "\040", $datestr);
-<a name="line444"></a>
+<a name="line443"></a>		$datestr = preg_replace("/\040+/", ' ', $datestr);
+<a name="line444"></a>	
 <a name="line445"></a>		if ( ! preg_match('/^[0-9]{2,4}\-[0-9]{1,2}\-[0-9]{1,2}\s[0-9]{1,2}:[0-9]{1,2}(?::[0-9]{1,2})?(?:\s[AP]M)?$/i', $datestr))
 <a name="line446"></a>		{
 <a name="line447"></a>			return FALSE;
 <a name="line448"></a>		}
-<a name="line449"></a>
-<a name="line450"></a>		$split = preg_split("/\040/", $datestr);
+<a name="line449"></a>	
+<a name="line450"></a>		$split = explode(' ', $datestr);
 <a name="line451"></a>
 <a name="line452"></a>		$ex = explode("-", $split['0']);
 <a name="line453"></a>	

@@ -1,0 +1,189 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+
+<html lang="en">
+<head>
+
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
+<meta name="generator" content="PHPDoctor 2RC4 (http://peej.github.com/phpdoctor/)">
+<meta name="when" content="Sat, 24 Jul 2010 20:47:45 +0000">
+
+<link rel="stylesheet" type="text/css" href="../../stylesheet.css">
+<link rel="start" href="../../overview-summary.html">
+
+<title>controllers/oauth.php (GiftFlow API)</title>
+
+</head>
+<body id="file" onload="parent.document.title=document.title;">
+
+<div class="header">
+<h1>GiftFlow API</h1>
+<ul>
+<li><a href="../../overview-summary.html">Overview</a></li>
+<li>Package</li><li>Class</li><li>Tree</li><li><a href="../../overview-files.html">Files</a></li>
+<li><a href="../../deprecated-list.html">Deprecated</a></li>
+<li><a href="../../index-all.html">Index</a></li>
+</ul>
+</div>
+
+<div class="small_links">
+<a href="../../index.html" target="_top">Frames</a>
+<a href="../../source/controllers/oauth.php.html" target="_top">No frames</a>
+</div>
+<hr>
+
+<h1>controllers/oauth.php</h1>
+<hr>
+
+<a name="line1"></a><pre><?php
+<a name="line2"></a>/** 
+<a name="line3"></a> * OAuth controller
+<a name="line4"></a> */ 
+<a name="line5"></a>class Oauth extends Controller 
+<a name="line6"></a>{    
+<a name="line7"></a>    
+<a name="line8"></a>	var $store;
+<a name="line9"></a>	function Oauth() 
+<a name="line10"></a>    {
+<a name="line11"></a>        parent::Controller();
+<a name="line12"></a>		$this->U = new User($this->session->userdata('user_id'));
+<a name="line13"></a>		$this->data = $this->util->parse_globals();
+<a name="line14"></a>		$this->data['U'] = $this->U;
+<a name="line15"></a>		$this->util->config();
+<a name="line16"></a>    }
+<a name="line17"></a>    
+<a name="line18"></a>    function index()
+<a name="line19"></a>    {
+<a name="line20"></a>        // include the OAuth library.        
+<a name="line21"></a>        include_once APPPATH . "libraries/oauth/OAuthStore.php";
+<a name="line22"></a>        include_once APPPATH . "libraries/oauth/OAuthServer.php";
+<a name="line23"></a>        include_once APPPATH . "libraries/oauth/OAuthRequester.php";
+<a name="line24"></a>        
+<a name="line25"></a>        // Get the id of the current user (must be an int)
+<a name="line26"></a>        $user_id = $this->session->userdata('user_id');
+<a name="line27"></a>        
+<a name="line28"></a>        // Initiate the store.
+<a name="line29"></a>        $options = array('server' => $this->db->hostname, 'username' => $this->db->username, 'password' => $this->db->password, 'database' => $this->db->database);
+<a name="line30"></a>	 // 	$DB = $this->load->database('default', TRUE);
+<a name="line31"></a>	//	$this->store = OAuthStore::instance($DB->dbdriver, array('conn' => $DB->conn_id));
+<a name="line32"></a>        $store   = OAuthStore::instance('MySQL', $options);
+<a name="line33"></a>        
+<a name="line34"></a>        // Google
+<a name="line35"></a>        $consumer_key = 'giftflow.org'; // fill with your public key 
+<a name="line36"></a>        $consumer_secret = 'sFc4iZ9NjbbLqAM+44mtnMsw'; // fill with your secret key
+<a name="line37"></a>        $server_uri = "http://google.com"; // fill with the url for the oauth service
+<a name="line38"></a>        $request_uri = "https://www.google.com/accounts/OAuthGetRequestToken";
+<a name="line39"></a>        $authorize_uri = "https://www.google.com/accounts/OAuthAuthorizeToken";
+<a name="line40"></a>        $access_uri = "https://www.google.com/accounts/OAuthGetAccessToken";
+<a name="line41"></a>            
+<a name="line42"></a>        // The server description
+<a name="line43"></a>        $server_data = array(
+<a name="line44"></a>            'consumer_key' => $consumer_key,
+<a name="line45"></a>            'consumer_secret' => $consumer_secret,
+<a name="line46"></a>            'server_uri' => $server_uri,
+<a name="line47"></a>            'signature_methods' => array('HMAC-SHA1', 'PLAINTEXT'),
+<a name="line48"></a>            'request_token_uri' => $request_uri,
+<a name="line49"></a>            'authorize_uri' => $authorize_uri,
+<a name="line50"></a>            'access_token_uri' => $access_uri
+<a name="line51"></a>        );
+<a name="line52"></a>        
+<a name="line53"></a>        // Check if this consumer is on this server.
+<a name="line54"></a>        $servers = $store->listServers($server_uri, $user_id);
+<a name="line55"></a>        
+<a name="line56"></a>        if(empty($servers))
+<a name="line57"></a>        {
+<a name="line58"></a>            // Save the server in the the OAuthStore
+<a name="line59"></a>            $consumer_key = $store->updateServer($server_data, $user_id);
+<a name="line60"></a>        }        
+<a name="line61"></a>        
+<a name="line62"></a>        // Obtain a request token from the server (scope is required)
+<a name="line63"></a>        $token = OAuthRequester::requestRequestToken($consumer_key, $user_id, array('scope' => 'http://www.google.com/m8/feeds/contacts/default/full/'), 'GET' );
+<a name="line64"></a>        
+<a name="line65"></a>        // Callback to our (consumer) site, will be called when the user finished the authorization at the server
+<a name="line66"></a>       // $callback_uri = 'http://localhost/giftflow2/index.php/oauth/callback?consumer_key='.rawurlencode($consumer_key).'&usr_id='.intval($user_id);
+<a name="line67"></a>	   $callback_uri = 'http://localhost/giftflow/assets/callback.php?consumer_key='.rawurlencode($consumer_key).'&usr_id='.intval($user_id);
+<a name="line68"></a>        
+<a name="line69"></a>        // Now redirect to the autorization uri and get us authorized
+<a name="line70"></a>        if (!empty($token['authorize_uri']))
+<a name="line71"></a>        {
+<a name="line72"></a>            // Redirect to the server, add a callback to our server
+<a name="line73"></a>            if (strpos($token['authorize_uri'], '?'))
+<a name="line74"></a>            {
+<a name="line75"></a>                $uri = $token['authorize_uri'] . '&'; 
+<a name="line76"></a>            }
+<a name="line77"></a>            else
+<a name="line78"></a>            {
+<a name="line79"></a>                $uri = $token['authorize_uri'] . '?'; 
+<a name="line80"></a>            }
+<a name="line81"></a>            $uri .= 'oauth_token='.rawurlencode($token['token']).'&oauth_callback='.rawurlencode($callback_uri);
+<a name="line82"></a>           
+<a name="line83"></a>		}
+<a name="line84"></a>        else
+<a name="line85"></a>        {
+<a name="line86"></a>            // No authorization uri, assume we are authorized, exchange request token for access token
+<a name="line87"></a>           $uri = $callback_uri . '&oauth_token='.rawurlencode($token['token']);
+<a name="line88"></a>		  
+<a name="line89"></a>        }
+<a name="line90"></a>        
+<a name="line91"></a>        header('Location: '.$uri);
+<a name="line92"></a>        exit();
+<a name="line93"></a>    }
+<a name="line94"></a>    
+<a name="line95"></a>    function callback($key1 = null, $val1 = null, $key2 = null)
+<a name="line96"></a>    {
+<a name="line97"></a>        // include the OAuth library.        
+<a name="line98"></a>        include_once APPPATH . "libraries/oauth/OAuthStore.php";
+<a name="line99"></a>        include_once APPPATH . "libraries/oauth/OAuthServer.php";
+<a name="line100"></a>        include_once APPPATH . "libraries/oauth/OAuthRequester.php";
+<a name="line101"></a>        
+<a name="line102"></a>        // Initiate the store.
+<a name="line103"></a>        $options = array('server' => $this->db->hostname, 'username' => $this->db->username, 'password' => $this->db->password, 'database' => $this->db->database);
+<a name="line104"></a>        $store   = OAuthStore::instance('MySQL', $options);
+<a name="line105"></a>		
+<a name="line106"></a>		
+<a name="line107"></a>        
+<a name="line108"></a>        // Request parameters are oauth_token, consumer_key and usr_id.
+<a name="line109"></a>         $consumer_key = trim($key1);//$_GET['consumer_key'];
+<a name="line110"></a>        $oauth_token = str_replace("_","/",$key2);// $_GET['oauth_token'];
+<a name="line111"></a>        $user_id = $val1;//$_GET['usr_id'];
+<a name="line112"></a>	  
+<a name="line113"></a>        
+<a name="line114"></a>        try
+<a name="line115"></a>        {
+<a name="line116"></a>            OAuthRequester::requestAccessToken($consumer_key, $oauth_token, $user_id);
+<a name="line117"></a>			redirect("contact/index");
+<a name="line118"></a>        }
+<a name="line119"></a>        catch (OAuthException $e)
+<a name="line120"></a>        {
+<a name="line121"></a>            // Something wrong with the oauth_token.
+<a name="line122"></a>            // Could be:
+<a name="line123"></a>            // 1. Was already ok
+<a name="line124"></a>            // 2. We were not authorized
+<a name="line125"></a>            echo 'catch';
+<a name="line126"></a>        }
+<a name="line127"></a>    }
+<a name="line128"></a>}
+<a name="line129"></a>
+<a name="line130"></a>/* End of file oauth.php */
+<a name="line131"></a>/* Location: ./system/application/controllers/oauth.php */  </pre>
+<div class="header">
+<h1>GiftFlow API</h1>
+<ul>
+<li><a href="../../overview-summary.html">Overview</a></li>
+<li>Package</li><li>Class</li><li>Tree</li><li><a href="../../overview-files.html">Files</a></li>
+<li><a href="../../deprecated-list.html">Deprecated</a></li>
+<li><a href="../../index-all.html">Index</a></li>
+</ul>
+</div>
+
+<div class="small_links">
+<a href="../../index.html" target="_top">Frames</a>
+<a href="../../source/controllers/oauth.php.html" target="_top">No frames</a>
+</div>
+<hr>
+
+<p id="footer">This document was generated by <a href="http://peej.github.com/phpdoctor/">PHPDoctor: The PHP Documentation Creator</a></p>
+
+</body>
+
+</html>

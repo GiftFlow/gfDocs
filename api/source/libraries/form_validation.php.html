@@ -6,7 +6,7 @@
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 
 <meta name="generator" content="PHPDoctor 2RC4 (http://peej.github.com/phpdoctor/)">
-<meta name="when" content="Mon, 19 Jul 2010 17:13:58 +0000">
+<meta name="when" content="Sat, 24 Jul 2010 20:46:31 +0000">
 
 <link rel="stylesheet" type="text/css" href="../../stylesheet.css">
 <link rel="start" href="../../overview-summary.html">
@@ -45,7 +45,7 @@
 <a name="line6"></a> *
 <a name="line7"></a> * @package		CodeIgniter
 <a name="line8"></a> * @author		ExpressionEngine Dev Team
-<a name="line9"></a> * @copyright	Copyright (c) 2008 - 2009, EllisLab, Inc.
+<a name="line9"></a> * @copyright	Copyright (c) 2008 - 2010, EllisLab, Inc.
 <a name="line10"></a> * @license		http://codeigniter.com/user_guide/license.html
 <a name="line11"></a> * @link		http://codeigniter.com
 <a name="line12"></a> * @since		Version 1.0
@@ -697,7 +697,7 @@
 <a name="line658"></a>				// of another field?  If so we need to grab its "field label"
 <a name="line659"></a>				if (isset($this->_field_data[$param]) AND isset($this->_field_data[$param]['label']))
 <a name="line660"></a>				{
-<a name="line661"></a>					$param = $this->_field_data[$param]['label'];
+<a name="line661"></a>					$param = $this->_translate_fieldname($this->_field_data[$param]['label']);
 <a name="line662"></a>				}
 <a name="line663"></a>				
 <a name="line664"></a>				// Build the error message
@@ -1293,28 +1293,33 @@
 <a name="line1254"></a>	 */	
 <a name="line1255"></a>	function xss_clean($str)
 <a name="line1256"></a>	{
-<a name="line1257"></a>		return $this->CI->input->xss_clean($str);
-<a name="line1258"></a>	}
-<a name="line1259"></a>	
-<a name="line1260"></a>	// --------------------------------------------------------------------
-<a name="line1261"></a>	
-<a name="line1262"></a>	/**
-<a name="line1263"></a>	 * Convert PHP tags to entities
-<a name="line1264"></a>	 *
-<a name="line1265"></a>	 * @access	public
-<a name="line1266"></a>	 * @param	string
-<a name="line1267"></a>	 * @return	string
-<a name="line1268"></a>	 */	
-<a name="line1269"></a>	function encode_php_tags($str)
-<a name="line1270"></a>	{
-<a name="line1271"></a>		return str_replace(array('<?php', '<?PHP', '<?', '?>'),  array('&lt;?php', '&lt;?PHP', '&lt;?', '?&gt;'), $str);
-<a name="line1272"></a>	}
-<a name="line1273"></a>
-<a name="line1274"></a>}
-<a name="line1275"></a>// END Form Validation Class
-<a name="line1276"></a>
-<a name="line1277"></a>/* End of file Form_validation.php */
-<a name="line1278"></a>/* Location: ./system/libraries/Form_validation.php */</pre>
+<a name="line1257"></a>		if ( ! isset($this->CI->security))
+<a name="line1258"></a>		{
+<a name="line1259"></a>			$this->CI->load->library('security');
+<a name="line1260"></a>		}
+<a name="line1261"></a>
+<a name="line1262"></a>		return $this->CI->security->xss_clean($str);
+<a name="line1263"></a>	}
+<a name="line1264"></a>	
+<a name="line1265"></a>	// --------------------------------------------------------------------
+<a name="line1266"></a>	
+<a name="line1267"></a>	/**
+<a name="line1268"></a>	 * Convert PHP tags to entities
+<a name="line1269"></a>	 *
+<a name="line1270"></a>	 * @access	public
+<a name="line1271"></a>	 * @param	string
+<a name="line1272"></a>	 * @return	string
+<a name="line1273"></a>	 */	
+<a name="line1274"></a>	function encode_php_tags($str)
+<a name="line1275"></a>	{
+<a name="line1276"></a>		return str_replace(array('<?php', '<?PHP', '<?', '?>'),  array('&lt;?php', '&lt;?PHP', '&lt;?', '?&gt;'), $str);
+<a name="line1277"></a>	}
+<a name="line1278"></a>
+<a name="line1279"></a>}
+<a name="line1280"></a>// END Form Validation Class
+<a name="line1281"></a>
+<a name="line1282"></a>/* End of file Form_validation.php */
+<a name="line1283"></a>/* Location: ./system/libraries/Form_validation.php */</pre>
 <div class="header">
 <h1>GiftFlow API</h1>
 <ul>

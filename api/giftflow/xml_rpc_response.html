@@ -6,7 +6,7 @@
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 
 <meta name="generator" content="PHPDoctor 2RC4 (http://peej.github.com/phpdoctor/)">
-<meta name="when" content="Mon, 19 Jul 2010 17:13:56 +0000">
+<meta name="when" content="Sat, 24 Jul 2010 20:46:31 +0000">
 
 <link rel="stylesheet" type="text/css" href="../stylesheet.css">
 <link rel="start" href="../overview-summary.html">
@@ -40,7 +40,7 @@ Detail: <a href="#detail_field">Field</a> | <a href="#detail_method">Method</a> 
 <hr>
 
 <div class="qualifiedName">GiftFlow\XML_RPC_Response</div>
-<a href="../source/libraries/xmlrpc.php.html#line430" class="location">libraries/Xmlrpc.php at line 430</a>
+<a href="../source/libraries/xmlrpc.php.html#line431" class="location">libraries/Xmlrpc.php at line 431</a>
 
 <h1>Class XML_RPC_Response</h1>
 
@@ -77,6 +77,10 @@ Detail: <a href="#detail_field">Field</a> | <a href="#detail_method">Method</a> 
 <tr>
 <td class="type"> mixed</td>
 <td class="description"><p class="name"><a href="#val">$val</a></p></td>
+</tr>
+<tr>
+<td class="type"> mixed</td>
+<td class="description"><p class="name"><a href="#xss_clean">$xss_clean</a></p></td>
 </tr>
 </table>
 
@@ -117,7 +121,7 @@ Detail: <a href="#detail_field">Field</a> | <a href="#detail_method">Method</a> 
 </table>
 
 <h2 id="detail_field">Field Detail</h2>
-<a href="../source/libraries/xmlrpc.php.html#line433" class="location">libraries/Xmlrpc.php at line 433</a>
+<a href="../source/libraries/xmlrpc.php.html#line434" class="location">libraries/Xmlrpc.php at line 434</a>
 
 <h3 id="errno">errno</h3>
 <code class="signature">public  mixed <strong>$errno</strong></code>
@@ -126,7 +130,7 @@ Detail: <a href="#detail_field">Field</a> | <a href="#detail_method">Method</a> 
 
 <hr>
 
-<a href="../source/libraries/xmlrpc.php.html#line434" class="location">libraries/Xmlrpc.php at line 434</a>
+<a href="../source/libraries/xmlrpc.php.html#line435" class="location">libraries/Xmlrpc.php at line 435</a>
 
 <h3 id="errstr">errstr</h3>
 <code class="signature">public  mixed <strong>$errstr</strong> = ''</code>
@@ -135,7 +139,7 @@ Detail: <a href="#detail_field">Field</a> | <a href="#detail_method">Method</a> 
 
 <hr>
 
-<a href="../source/libraries/xmlrpc.php.html#line435" class="location">libraries/Xmlrpc.php at line 435</a>
+<a href="../source/libraries/xmlrpc.php.html#line436" class="location">libraries/Xmlrpc.php at line 436</a>
 
 <h3 id="headers">headers</h3>
 <code class="signature">public  mixed <strong>$headers</strong> = array()</code>
@@ -144,7 +148,7 @@ Detail: <a href="#detail_field">Field</a> | <a href="#detail_method">Method</a> 
 
 <hr>
 
-<a href="../source/libraries/xmlrpc.php.html#line432" class="location">libraries/Xmlrpc.php at line 432</a>
+<a href="../source/libraries/xmlrpc.php.html#line433" class="location">libraries/Xmlrpc.php at line 433</a>
 
 <h3 id="val">val</h3>
 <code class="signature">public  mixed <strong>$val</strong></code>
@@ -153,8 +157,17 @@ Detail: <a href="#detail_field">Field</a> | <a href="#detail_method">Method</a> 
 
 <hr>
 
+<a href="../source/libraries/xmlrpc.php.html#line437" class="location">libraries/Xmlrpc.php at line 437</a>
+
+<h3 id="xss_clean">xss_clean</h3>
+<code class="signature">public  mixed <strong>$xss_clean</strong> = TRUE</code>
+<div class="details">
+</div>
+
+<hr>
+
 <h2 id="detail_method">Method Detail</h2><div class="method_detail">
-<div class='method'><a href="../source/libraries/xmlrpc.php.html#line437" class="location">libraries/Xmlrpc.php at line 437</a>
+<div class='method'><a href="../source/libraries/xmlrpc.php.html#line439" class="location">libraries/Xmlrpc.php at line 439</a>
 
 <h3 id="__construct()">__construct</h3>
 <code class="signature">public  void <strong>__construct</strong>(mixed val, int code, str fstr)</code>
@@ -163,7 +176,7 @@ Detail: <a href="#detail_field">Field</a> | <a href="#detail_method">Method</a> 
 
 
 
-<div class='method'><a href="../source/libraries/xmlrpc.php.html#line502" class="location">libraries/Xmlrpc.php at line 502</a>
+<div class='method'><a href="../source/libraries/xmlrpc.php.html#line504" class="location">libraries/Xmlrpc.php at line 504</a>
 
 <h3 id="decode()">decode</h3>
 <code class="signature">public  void <strong>decode</strong>(bool array)</code>
@@ -172,7 +185,7 @@ Detail: <a href="#detail_field">Field</a> | <a href="#detail_method">Method</a> 
 
 
 
-<div class='method'><a href="../source/libraries/xmlrpc.php.html#line457" class="location">libraries/Xmlrpc.php at line 457</a>
+<div class='method'><a href="../source/libraries/xmlrpc.php.html#line459" class="location">libraries/Xmlrpc.php at line 459</a>
 
 <h3 id="faultCode()">faultCode</h3>
 <code class="signature">public  void <strong>faultCode</strong>()</code>
@@ -181,7 +194,7 @@ Detail: <a href="#detail_field">Field</a> | <a href="#detail_method">Method</a> 
 
 
 
-<div class='method'><a href="../source/libraries/xmlrpc.php.html#line462" class="location">libraries/Xmlrpc.php at line 462</a>
+<div class='method'><a href="../source/libraries/xmlrpc.php.html#line464" class="location">libraries/Xmlrpc.php at line 464</a>
 
 <h3 id="faultString()">faultString</h3>
 <code class="signature">public  void <strong>faultString</strong>()</code>
@@ -190,7 +203,7 @@ Detail: <a href="#detail_field">Field</a> | <a href="#detail_method">Method</a> 
 
 
 
-<div class='method'><a href="../source/libraries/xmlrpc.php.html#line585" class="location">libraries/Xmlrpc.php at line 585</a>
+<div class='method'><a href="../source/libraries/xmlrpc.php.html#line592" class="location">libraries/Xmlrpc.php at line 592</a>
 
 <h3 id="iso8601_decode()">iso8601_decode</h3>
 <code class="signature">public  void <strong>iso8601_decode</strong>(mixed time, int utc)</code>
@@ -199,7 +212,7 @@ Detail: <a href="#detail_field">Field</a> | <a href="#detail_method">Method</a> 
 
 
 
-<div class='method'><a href="../source/libraries/xmlrpc.php.html#line472" class="location">libraries/Xmlrpc.php at line 472</a>
+<div class='method'><a href="../source/libraries/xmlrpc.php.html#line474" class="location">libraries/Xmlrpc.php at line 474</a>
 
 <h3 id="prepare_response()">prepare_response</h3>
 <code class="signature">public  void <strong>prepare_response</strong>()</code>
@@ -208,7 +221,7 @@ Detail: <a href="#detail_field">Field</a> | <a href="#detail_method">Method</a> 
 
 
 
-<div class='method'><a href="../source/libraries/xmlrpc.php.html#line467" class="location">libraries/Xmlrpc.php at line 467</a>
+<div class='method'><a href="../source/libraries/xmlrpc.php.html#line469" class="location">libraries/Xmlrpc.php at line 469</a>
 
 <h3 id="value()">value</h3>
 <code class="signature">public  void <strong>value</strong>()</code>
@@ -217,7 +230,7 @@ Detail: <a href="#detail_field">Field</a> | <a href="#detail_method">Method</a> 
 
 
 
-<div class='method'><a href="../source/libraries/xmlrpc.php.html#line545" class="location">libraries/Xmlrpc.php at line 545</a>
+<div class='method'><a href="../source/libraries/xmlrpc.php.html#line552" class="location">libraries/Xmlrpc.php at line 552</a>
 
 <h3 id="xmlrpc_decoder()">xmlrpc_decoder</h3>
 <code class="signature">public  void <strong>xmlrpc_decoder</strong>(mixed xmlrpc_val)</code>

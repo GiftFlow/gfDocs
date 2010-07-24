@@ -6,7 +6,7 @@
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 
 <meta name="generator" content="PHPDoctor 2RC4 (http://peej.github.com/phpdoctor/)">
-<meta name="when" content="Mon, 19 Jul 2010 17:13:56 +0000">
+<meta name="when" content="Sat, 24 Jul 2010 20:46:31 +0000">
 
 <link rel="stylesheet" type="text/css" href="../stylesheet.css">
 <link rel="start" href="../overview-summary.html">
@@ -40,7 +40,7 @@ Detail: <a href="#detail_field">Field</a> | <a href="#detail_method">Method</a> 
 <hr>
 
 <div class="qualifiedName">GiftFlow\CI_Input</div>
-<a href="../source/libraries/input.php.html#line29" class="location">libraries/Input.php at line 29</a>
+<a href="../source/core/input.php.html#line29" class="location">core/Input.php at line 29</a>
 
 <h1>Class CI_Input</h1>
 
@@ -65,8 +65,20 @@ Detail: <a href="#detail_field">Field</a> | <a href="#detail_method">Method</a> 
 <table id="summary_field">
 <tr><th colspan="2">Field Summary</th></tr>
 <tr>
-<td class="type"> mixed</td>
-<td class="description"><p class="name"><a href="#allow_get_array">$allow_get_array</a></p></td>
+<td class="type">private  mixed</td>
+<td class="description"><p class="name"><a href="#_allow_get_array">$_allow_get_array</a></p></td>
+</tr>
+<tr>
+<td class="type">private  mixed</td>
+<td class="description"><p class="name"><a href="#_enable_csrf">$_enable_csrf</a></p></td>
+</tr>
+<tr>
+<td class="type">private  mixed</td>
+<td class="description"><p class="name"><a href="#_enable_xss">$_enable_xss</a></p></td>
+</tr>
+<tr>
+<td class="type">private  mixed</td>
+<td class="description"><p class="name"><a href="#_standardize_newlines">$_standardize_newlines</a></p></td>
 </tr>
 <tr>
 <td class="type"> mixed</td>
@@ -74,23 +86,7 @@ Detail: <a href="#detail_field">Field</a> | <a href="#detail_method">Method</a> 
 </tr>
 <tr>
 <td class="type"> mixed</td>
-<td class="description"><p class="name"><a href="#never_allowed_regex">$never_allowed_regex</a></p></td>
-</tr>
-<tr>
-<td class="type"> mixed</td>
-<td class="description"><p class="name"><a href="#never_allowed_str">$never_allowed_str</a></p></td>
-</tr>
-<tr>
-<td class="type"> mixed</td>
-<td class="description"><p class="name"><a href="#use_xss_clean">$use_xss_clean</a></p></td>
-</tr>
-<tr>
-<td class="type"> mixed</td>
 <td class="description"><p class="name"><a href="#user_agent">$user_agent</a></p></td>
-</tr>
-<tr>
-<td class="type"> mixed</td>
-<td class="description"><p class="name"><a href="#xss_hash">$xss_hash</a></p></td>
 </tr>
 </table>
 
@@ -110,66 +106,16 @@ and whether to allow the $_GET array</p></td>
 <td class="description"><p class="name"><a href="#_clean_input_keys()">_clean_input_keys</a>(mixed str)</p><p class="description">Clean KeysThis is a helper function. </p></td>
 </tr>
 <tr>
-<td class="type">private static  void</td>
-<td class="description"><p class="name"><a href="#_compact_exploded_words()">_compact_exploded_words</a>(mixed matches)</p><p class="description">Compact Exploded WordsCallback function for xss_clean() to remove whitespace from
-things like j a v a s c r i p t</p></td>
-</tr>
-<tr>
-<td class="type">private  void</td>
-<td class="description"><p class="name"><a href="#_convert_attribute()">_convert_attribute</a>(mixed match)</p><p class="description">Attribute ConversionUsed as a callback for XSS Clean</p></td>
-</tr>
-<tr>
 <td class="type">private  void</td>
 <td class="description"><p class="name"><a href="#_fetch_from_array()">_fetch_from_array</a>(mixed array, str index, bool xss_clean)</p><p class="description">Fetch from arrayThis is a helper function to retrieve values from global arrays</p></td>
-</tr>
-<tr>
-<td class="type">private  void</td>
-<td class="description"><p class="name"><a href="#_filter_attributes()">_filter_attributes</a>(mixed str)</p><p class="description">Filter AttributesFilters tag attributes for consistency and safety</p></td>
-</tr>
-<tr>
-<td class="type">private  void</td>
-<td class="description"><p class="name"><a href="#_html_entity_decode()">_html_entity_decode</a>(mixed str, str charset)</p><p class="description">HTML Entities DecodeThis function is a replacement for html_entity_decode()In some versions of PHP the native function does not work
-when UTF-8 is the specified character set, so this gives us
-a work-around. </p></td>
-</tr>
-<tr>
-<td class="type">private  void</td>
-<td class="description"><p class="name"><a href="#_html_entity_decode_callback()">_html_entity_decode_callback</a>(mixed match)</p><p class="description">HTML Entity Decode CallbackUsed as a callback for XSS Clean</p></td>
-</tr>
-<tr>
-<td class="type">private  void</td>
-<td class="description"><p class="name"><a href="#_js_img_removal()">_js_img_removal</a>(mixed match)</p><p class="description">JS Image RemovalCallback function for xss_clean() to sanitize image tags
-This limits the PCRE backtracks, making it more performance friendly
-and prevents PREG_BACKTRACK_LIMIT_ERROR from being triggered in
-PHP 5.2+ on image tag heavy strings</p></td>
-</tr>
-<tr>
-<td class="type">private  void</td>
-<td class="description"><p class="name"><a href="#_js_link_removal()">_js_link_removal</a>(mixed match)</p><p class="description">JS Link RemovalCallback function for xss_clean() to sanitize links
-This limits the PCRE backtracks, making it more performance friendly
-and prevents PREG_BACKTRACK_LIMIT_ERROR from being triggered in
-PHP 5.2+ on link-heavy strings</p></td>
-</tr>
-<tr>
-<td class="type">private  void</td>
-<td class="description"><p class="name"><a href="#_remove_invisible_characters()">_remove_invisible_characters</a>(mixed str)</p><p class="description">Remove Invisible CharactersThis prevents sandwiching null characters
-between ascii characters, like Java\0script.</p></td>
 </tr>
 <tr>
 <td class="type">private  void</td>
 <td class="description"><p class="name"><a href="#_sanitize_globals()">_sanitize_globals</a>()</p><p class="description">Sanitize GlobalsThis function does the following:Unsets $_GET data (if query strings are not enabled)Unsets all globals if register_globals is enabledStandardizes newline characters to \n</p></td>
 </tr>
 <tr>
-<td class="type">private  void</td>
-<td class="description"><p class="name"><a href="#_sanitize_naughty_html()">_sanitize_naughty_html</a>(mixed matches)</p><p class="description">Sanitize Naughty HTMLCallback function for xss_clean() to remove naughty HTML elements</p></td>
-</tr>
-<tr>
 <td class="type"> void</td>
 <td class="description"><p class="name"><a href="#cookie()">cookie</a>(str index, bool xss_clean)</p><p class="description">Fetch an item from the COOKIE array</p></td>
-</tr>
-<tr>
-<td class="type"> void</td>
-<td class="description"><p class="name"><a href="#filename_security()">filename_security</a>(mixed str)</p><p class="description">Filename Security</p></td>
 </tr>
 <tr>
 <td class="type"> void</td>
@@ -193,34 +139,57 @@ between ascii characters, like Java\0script.</p></td>
 </tr>
 <tr>
 <td class="type"> void</td>
+<td class="description"><p class="name"><a href="#set_cookie()">set_cookie</a>(str name, str value, str expire, str domain, str path, str prefix)</p><p class="description">Set cookieAccepts six parameter, or you can submit an associative
+array in the first parameter containing all the values.</p></td>
+</tr>
+<tr>
+<td class="type"> void</td>
 <td class="description"><p class="name"><a href="#user_agent()">user_agent</a>()</p><p class="description">User Agent</p></td>
 </tr>
 <tr>
 <td class="type"> void</td>
 <td class="description"><p class="name"><a href="#valid_ip()">valid_ip</a>(mixed ip)</p><p class="description">Validate IP AddressUpdated version suggested by Geert De Deckere</p></td>
 </tr>
-<tr>
-<td class="type"> void</td>
-<td class="description"><p class="name"><a href="#xss_clean()">xss_clean</a>(mixed str, bool is_image)</p><p class="description">XSS CleanSanitizes data so that Cross Site Scripting Hacks can be
-prevented. </p></td>
-</tr>
-<tr>
-<td class="type"> void</td>
-<td class="description"><p class="name"><a href="#xss_hash()">xss_hash</a>()</p><p class="description">Random Hash for protecting URLs</p></td>
-</tr>
 </table>
 
 <h2 id="detail_field">Field Detail</h2>
-<a href="../source/libraries/input.php.html#line34" class="location">libraries/Input.php at line 34</a>
+<a href="../source/core/input.php.html#line33" class="location">core/Input.php at line 33</a>
 
-<h3 id="allow_get_array">allow_get_array</h3>
-<code class="signature">public  mixed <strong>$allow_get_array</strong> = FALSE</code>
+<h3 id="_allow_get_array">_allow_get_array</h3>
+<code class="signature">private  mixed <strong>$_allow_get_array</strong> = FALSE</code>
 <div class="details">
 </div>
 
 <hr>
 
-<a href="../source/libraries/input.php.html#line32" class="location">libraries/Input.php at line 32</a>
+<a href="../source/core/input.php.html#line36" class="location">core/Input.php at line 36</a>
+
+<h3 id="_enable_csrf">_enable_csrf</h3>
+<code class="signature">private  mixed <strong>$_enable_csrf</strong> = FALSE</code>
+<div class="details">
+</div>
+
+<hr>
+
+<a href="../source/core/input.php.html#line35" class="location">core/Input.php at line 35</a>
+
+<h3 id="_enable_xss">_enable_xss</h3>
+<code class="signature">private  mixed <strong>$_enable_xss</strong> = FALSE</code>
+<div class="details">
+</div>
+
+<hr>
+
+<a href="../source/core/input.php.html#line34" class="location">core/Input.php at line 34</a>
+
+<h3 id="_standardize_newlines">_standardize_newlines</h3>
+<code class="signature">private  mixed <strong>$_standardize_newlines</strong> = TRUE</code>
+<div class="details">
+</div>
+
+<hr>
+
+<a href="../source/core/input.php.html#line31" class="location">core/Input.php at line 31</a>
 
 <h3 id="ip_address">ip_address</h3>
 <code class="signature">public  mixed <strong>$ip_address</strong> = FALSE</code>
@@ -229,34 +198,7 @@ prevented. </p></td>
 
 <hr>
 
-<a href="../source/libraries/input.php.html#line39" class="location">libraries/Input.php at line 39</a>
-
-<h3 id="never_allowed_regex">never_allowed_regex</h3>
-<code class="signature">public  mixed <strong>$never_allowed_regex</strong> = array(...)</code>
-<div class="details">
-</div>
-
-<hr>
-
-<a href="../source/libraries/input.php.html#line37" class="location">libraries/Input.php at line 37</a>
-
-<h3 id="never_allowed_str">never_allowed_str</h3>
-<code class="signature">public  mixed <strong>$never_allowed_str</strong> = array(...)</code>
-<div class="details">
-</div>
-
-<hr>
-
-<a href="../source/libraries/input.php.html#line30" class="location">libraries/Input.php at line 30</a>
-
-<h3 id="use_xss_clean">use_xss_clean</h3>
-<code class="signature">public  mixed <strong>$use_xss_clean</strong> = FALSE</code>
-<div class="details">
-</div>
-
-<hr>
-
-<a href="../source/libraries/input.php.html#line33" class="location">libraries/Input.php at line 33</a>
+<a href="../source/core/input.php.html#line32" class="location">core/Input.php at line 32</a>
 
 <h3 id="user_agent">user_agent</h3>
 <code class="signature">public  mixed <strong>$user_agent</strong> = FALSE</code>
@@ -265,17 +207,8 @@ prevented. </p></td>
 
 <hr>
 
-<a href="../source/libraries/input.php.html#line31" class="location">libraries/Input.php at line 31</a>
-
-<h3 id="xss_hash">xss_hash</h3>
-<code class="signature">public  mixed <strong>$xss_hash</strong> = ''</code>
-<div class="details">
-</div>
-
-<hr>
-
 <h2 id="detail_method">Method Detail</h2><div class="method_detail">
-<div class='method'><a href="../source/libraries/input.php.html#line49" class="location">libraries/Input.php at line 49</a>
+<div class='method'><a href="../source/core/input.php.html#line47" class="location">core/Input.php at line 47</a>
 
 <h3 id="__construct()">__construct</h3>
 <code class="signature">public  void <strong>__construct</strong>()</code>
@@ -288,7 +221,7 @@ and whether to allow the $_GET array</p><dl>
 
 
 
-<div class='method'><a href="../source/libraries/input.php.html#line154" class="location">libraries/Input.php at line 154</a>
+<div class='method'><a href="../source/core/input.php.html#line479" class="location">core/Input.php at line 479</a>
 
 <h3 id="_clean_input_data()">_clean_input_data</h3>
 <code class="signature">private  void <strong>_clean_input_data</strong>(mixed str)</code>
@@ -303,7 +236,7 @@ standardizes newline characters to \n</p><dl>
 
 
 
-<div class='method'><a href="../source/libraries/input.php.html#line200" class="location">libraries/Input.php at line 200</a>
+<div class='method'><a href="../source/core/input.php.html#line534" class="location">core/Input.php at line 534</a>
 
 <h3 id="_clean_input_keys()">_clean_input_keys</h3>
 <code class="signature">private  void <strong>_clean_input_keys</strong>(mixed str)</code>
@@ -319,36 +252,7 @@ only named with alpha-numeric text and a few other items.</p><dl>
 
 
 
-<div class='method'><a href="../source/libraries/input.php.html#line864" class="location">libraries/Input.php at line 864</a>
-
-<h3 id="_compact_exploded_words()">_compact_exploded_words</h3>
-<code class="signature">private static  void <strong>_compact_exploded_words</strong>(mixed matches)</code>
-<div class="details">
-<p>Compact Exploded Words</p><p>Callback function for xss_clean() to remove whitespace from
-things like j a v a s c r i p t</p><dl>
-<dt>Access	public.</dt>
-<dt>Param	type.</dt>
-<dt>Return	type.</dt>
-</dl>
-</div></div>
-
-
-
-<div class='method'><a href="../source/libraries/input.php.html#line940" class="location">libraries/Input.php at line 940</a>
-
-<h3 id="_convert_attribute()">_convert_attribute</h3>
-<code class="signature">private  void <strong>_convert_attribute</strong>(mixed match)</code>
-<div class="details">
-<p>Attribute Conversion</p><p>Used as a callback for XSS Clean</p><dl>
-<dt>Access	public.</dt>
-<dt>Param	array.</dt>
-<dt>Return	string.</dt>
-</dl>
-</div></div>
-
-
-
-<div class='method'><a href="../source/libraries/input.php.html#line223" class="location">libraries/Input.php at line 223</a>
+<div class='method'><a href="../source/core/input.php.html#line85" class="location">core/Input.php at line 85</a>
 
 <h3 id="_fetch_from_array()">_fetch_from_array</h3>
 <code class="signature">private  void <strong>_fetch_from_array</strong>(mixed array, str index, bool xss_clean)</code>
@@ -364,100 +268,7 @@ things like j a v a s c r i p t</p><dl>
 
 
 
-<div class='method'><a href="../source/libraries/input.php.html#line1031" class="location">libraries/Input.php at line 1031</a>
-
-<h3 id="_filter_attributes()">_filter_attributes</h3>
-<code class="signature">private  void <strong>_filter_attributes</strong>(mixed str)</code>
-<div class="details">
-<p>Filter Attributes</p><p>Filters tag attributes for consistency and safety</p><dl>
-<dt>Access	public.</dt>
-<dt>Param	string.</dt>
-<dt>Return	string.</dt>
-</dl>
-</div></div>
-
-
-
-<div class='method'><a href="../source/libraries/input.php.html#line990" class="location">libraries/Input.php at line 990</a>
-
-<h3 id="_html_entity_decode()">_html_entity_decode</h3>
-<code class="signature">private  void <strong>_html_entity_decode</strong>(mixed str, str charset)</code>
-<div class="details">
-<p>HTML Entities Decode</p><p>This function is a replacement for html_entity_decode()</p><p>In some versions of PHP the native function does not work
-when UTF-8 is the specified character set, so this gives us
-a work-around.  More info here:
-http://bugs.php.net/bug.php?id=25670</p><dl>
-<dt>Access	private.</dt>
-<dt>Return	string.</dt>
-</dl>
-</div></div>
-
-
-
-<div class='method'><a href="../source/libraries/input.php.html#line956" class="location">libraries/Input.php at line 956</a>
-
-<h3 id="_html_entity_decode_callback()">_html_entity_decode_callback</h3>
-<code class="signature">private  void <strong>_html_entity_decode_callback</strong>(mixed match)</code>
-<div class="details">
-<p>HTML Entity Decode Callback</p><p>Used as a callback for XSS Clean</p><dl>
-<dt>Access	public.</dt>
-<dt>Param	array.</dt>
-<dt>Return	string.</dt>
-</dl>
-</div></div>
-
-
-
-<div class='method'><a href="../source/libraries/input.php.html#line923" class="location">libraries/Input.php at line 923</a>
-
-<h3 id="_js_img_removal()">_js_img_removal</h3>
-<code class="signature">private  void <strong>_js_img_removal</strong>(mixed match)</code>
-<div class="details">
-<p>JS Image Removal</p><p>Callback function for xss_clean() to sanitize image tags
-This limits the PCRE backtracks, making it more performance friendly
-and prevents PREG_BACKTRACK_LIMIT_ERROR from being triggered in
-PHP 5.2+ on image tag heavy strings</p><dl>
-<dt>Access	private.</dt>
-<dt>Param	array.</dt>
-<dt>Return	string.</dt>
-</dl>
-</div></div>
-
-
-
-<div class='method'><a href="../source/libraries/input.php.html#line905" class="location">libraries/Input.php at line 905</a>
-
-<h3 id="_js_link_removal()">_js_link_removal</h3>
-<code class="signature">private  void <strong>_js_link_removal</strong>(mixed match)</code>
-<div class="details">
-<p>JS Link Removal</p><p>Callback function for xss_clean() to sanitize links
-This limits the PCRE backtracks, making it more performance friendly
-and prevents PREG_BACKTRACK_LIMIT_ERROR from being triggered in
-PHP 5.2+ on link-heavy strings</p><dl>
-<dt>Access	private.</dt>
-<dt>Param	array.</dt>
-<dt>Return	string.</dt>
-</dl>
-</div></div>
-
-
-
-<div class='method'><a href="../source/libraries/input.php.html#line826" class="location">libraries/Input.php at line 826</a>
-
-<h3 id="_remove_invisible_characters()">_remove_invisible_characters</h3>
-<code class="signature">private  void <strong>_remove_invisible_characters</strong>(mixed str)</code>
-<div class="details">
-<p>Remove Invisible Characters</p><p>This prevents sandwiching null characters
-between ascii characters, like Java\0script.</p><dl>
-<dt>Access	public.</dt>
-<dt>Param	string.</dt>
-<dt>Return	string.</dt>
-</dl>
-</div></div>
-
-
-
-<div class='method'><a href="../source/libraries/input.php.html#line75" class="location">libraries/Input.php at line 75</a>
+<div class='method'><a href="../source/core/input.php.html#line380" class="location">core/Input.php at line 380</a>
 
 <h3 id="_sanitize_globals()">_sanitize_globals</h3>
 <code class="signature">private  void <strong>_sanitize_globals</strong>()</code>
@@ -470,21 +281,7 @@ between ascii characters, like Java\0script.</p><dl>
 
 
 
-<div class='method'><a href="../source/libraries/input.php.html#line880" class="location">libraries/Input.php at line 880</a>
-
-<h3 id="_sanitize_naughty_html()">_sanitize_naughty_html</h3>
-<code class="signature">private  void <strong>_sanitize_naughty_html</strong>(mixed matches)</code>
-<div class="details">
-<p>Sanitize Naughty HTML</p><p>Callback function for xss_clean() to remove naughty HTML elements</p><dl>
-<dt>Access	private.</dt>
-<dt>Param	array.</dt>
-<dt>Return	string.</dt>
-</dl>
-</div></div>
-
-
-
-<div class='method'><a href="../source/libraries/input.php.html#line300" class="location">libraries/Input.php at line 300</a>
+<div class='method'><a href="../source/core/input.php.html#line164" class="location">core/Input.php at line 164</a>
 
 <h3 id="cookie()">cookie</h3>
 <code class="signature">public  void <strong>cookie</strong>(str index, bool xss_clean)</code>
@@ -499,21 +296,7 @@ between ascii characters, like Java\0script.</p><dl>
 
 
 
-<div class='method'><a href="../source/libraries/input.php.html#line447" class="location">libraries/Input.php at line 447</a>
-
-<h3 id="filename_security()">filename_security</h3>
-<code class="signature">public  void <strong>filename_security</strong>(mixed str)</code>
-<div class="details">
-<p>Filename Security</p><dl>
-<dt>Access	public.</dt>
-<dt>Param	string.</dt>
-<dt>Return	string.</dt>
-</dl>
-</div></div>
-
-
-
-<div class='method'><a href="../source/libraries/input.php.html#line248" class="location">libraries/Input.php at line 248</a>
+<div class='method'><a href="../source/core/input.php.html#line111" class="location">core/Input.php at line 111</a>
 
 <h3 id="get()">get</h3>
 <code class="signature">public  void <strong>get</strong>(str index, bool xss_clean)</code>
@@ -528,7 +311,7 @@ between ascii characters, like Java\0script.</p><dl>
 
 
 
-<div class='method'><a href="../source/libraries/input.php.html#line278" class="location">libraries/Input.php at line 278</a>
+<div class='method'><a href="../source/core/input.php.html#line142" class="location">core/Input.php at line 142</a>
 
 <h3 id="get_post()">get_post</h3>
 <code class="signature">public  void <strong>get_post</strong>(str index, bool xss_clean)</code>
@@ -545,7 +328,7 @@ between ascii characters, like Java\0script.</p><dl>
 
 
 
-<div class='method'><a href="../source/libraries/input.php.html#line328" class="location">libraries/Input.php at line 328</a>
+<div class='method'><a href="../source/core/input.php.html#line254" class="location">core/Input.php at line 254</a>
 
 <h3 id="ip_address()">ip_address</h3>
 <code class="signature">public  void <strong>ip_address</strong>()</code>
@@ -558,7 +341,7 @@ between ascii characters, like Java\0script.</p><dl>
 
 
 
-<div class='method'><a href="../source/libraries/input.php.html#line263" class="location">libraries/Input.php at line 263</a>
+<div class='method'><a href="../source/core/input.php.html#line126" class="location">core/Input.php at line 126</a>
 
 <h3 id="post()">post</h3>
 <code class="signature">public  void <strong>post</strong>(str index, bool xss_clean)</code>
@@ -573,7 +356,7 @@ between ascii characters, like Java\0script.</p><dl>
 
 
 
-<div class='method'><a href="../source/libraries/input.php.html#line315" class="location">libraries/Input.php at line 315</a>
+<div class='method'><a href="../source/core/input.php.html#line241" class="location">core/Input.php at line 241</a>
 
 <h3 id="server()">server</h3>
 <code class="signature">public  void <strong>server</strong>(str index, bool xss_clean)</code>
@@ -588,7 +371,28 @@ between ascii characters, like Java\0script.</p><dl>
 
 
 
-<div class='method'><a href="../source/libraries/input.php.html#line426" class="location">libraries/Input.php at line 426</a>
+<div class='method'><a href="../source/core/input.php.html#line186" class="location">core/Input.php at line 186</a>
+
+<h3 id="set_cookie()">set_cookie</h3>
+<code class="signature">public  void <strong>set_cookie</strong>(str name, str value, str expire, str domain, str path, str prefix)</code>
+<div class="details">
+<p>Set cookie</p><p>Accepts six parameter, or you can submit an associative
+array in the first parameter containing all the values.</p><dl>
+<dt>Access	public.</dt>
+<dt>Param	mixed.</dt>
+<dt>Param	string	the:</dt>
+<dd>value of the cookie</dd>
+<dd>number of seconds until expiration</dd>
+<dd>cookie domain.  Usually:  .yourdomain.com</dd>
+<dd>cookie path</dd>
+<dd>cookie prefix</dd>
+<dt>Return	void.</dt>
+</dl>
+</div></div>
+
+
+
+<div class='method'><a href="../source/core/input.php.html#line352" class="location">core/Input.php at line 352</a>
 
 <h3 id="user_agent()">user_agent</h3>
 <code class="signature">public  void <strong>user_agent</strong>()</code>
@@ -601,7 +405,7 @@ between ascii characters, like Java\0script.</p><dl>
 
 
 
-<div class='method'><a href="../source/libraries/input.php.html#line390" class="location">libraries/Input.php at line 390</a>
+<div class='method'><a href="../source/core/input.php.html#line316" class="location">core/Input.php at line 316</a>
 
 <h3 id="valid_ip()">valid_ip</h3>
 <code class="signature">public  void <strong>valid_ip</strong>(mixed ip)</code>
@@ -609,44 +413,6 @@ between ascii characters, like Java\0script.</p><dl>
 <p>Validate IP Address</p><p>Updated version suggested by Geert De Deckere</p><dl>
 <dt>Access	public.</dt>
 <dt>Param	string.</dt>
-<dt>Return	string.</dt>
-</dl>
-</div></div>
-
-
-
-<div class='method'><a href="../source/libraries/input.php.html#line515" class="location">libraries/Input.php at line 515</a>
-
-<h3 id="xss_clean()">xss_clean</h3>
-<code class="signature">public  void <strong>xss_clean</strong>(mixed str, bool is_image)</code>
-<div class="details">
-<p>XSS Clean</p><p>Sanitizes data so that Cross Site Scripting Hacks can be
-prevented.  This function does a fair amount of work but
-it is extremely thorough, designed to prevent even the
-most obscure XSS attempts.  Nothing is ever 100% foolproof,
-of course, but I haven't been able to get anything passed
-the filter.</p><p>Note: This function should only be used to deal with data
-upon submission.  It's not something that should
-be used for general runtime processing.</p><p>This function was based in part on some code and ideas I
-got from Bitflux: http://blog.bitflux.ch/wiki/XSS_Prevention</p><p>To help develop this script I used this great list of
-vulnerabilities along with a few other hacks I've
-harvested from examining vulnerabilities in other programs:
-http://ha.ckers.org/xss.html</p><dl>
-<dt>Access	public.</dt>
-<dt>Param	string.</dt>
-<dt>Return	string.</dt>
-</dl>
-</div></div>
-
-
-
-<div class='method'><a href="../source/libraries/input.php.html#line799" class="location">libraries/Input.php at line 799</a>
-
-<h3 id="xss_hash()">xss_hash</h3>
-<code class="signature">public  void <strong>xss_hash</strong>()</code>
-<div class="details">
-<p>Random Hash for protecting URLs</p><dl>
-<dt>Access	public.</dt>
 <dt>Return	string.</dt>
 </dl>
 </div></div>

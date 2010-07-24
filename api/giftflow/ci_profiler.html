@@ -6,7 +6,7 @@
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 
 <meta name="generator" content="PHPDoctor 2RC4 (http://peej.github.com/phpdoctor/)">
-<meta name="when" content="Mon, 19 Jul 2010 17:13:56 +0000">
+<meta name="when" content="Sat, 24 Jul 2010 20:46:31 +0000">
 
 <link rel="stylesheet" type="text/css" href="../stylesheet.css">
 <link rel="start" href="../overview-summary.html">
@@ -68,6 +68,10 @@ into a set of template files in order to allow customization.</p></div>
 <tr><th colspan="2">Field Summary</th></tr>
 <tr>
 <td class="type">private  mixed</td>
+<td class="description"><p class="name"><a href="#_available_sections">$_available_sections</a></p></td>
+</tr>
+<tr>
+<td class="type">private  mixed</td>
 <td class="description"><p class="name"><a href="#_match_pair">$_match_pair</a></p></td>
 </tr>
 </table>
@@ -76,7 +80,7 @@ into a set of template files in order to allow customization.</p></div>
 <tr><th colspan="2">Method Summary</th></tr>
 <tr>
 <td class="type"> void</td>
-<td class="description"><p class="name"><a href="#__construct()">__construct</a>()</p></td>
+<td class="description"><p class="name"><a href="#__construct()">__construct</a>(mixed config)</p></td>
 </tr>
 <tr>
 <td class="type">private  void</td>
@@ -86,11 +90,19 @@ and "_end" respectively). </p></td>
 </tr>
 <tr>
 <td class="type">private  void</td>
+<td class="description"><p class="name"><a href="#_compile_config()">_compile_config</a>()</p><p class="description">Compile config informationLists developer config variables</p></td>
+</tr>
+<tr>
+<td class="type">private  void</td>
 <td class="description"><p class="name"><a href="#_compile_controller_info()">_compile_controller_info</a>()</p><p class="description">Show the controller and function that were called</p></td>
 </tr>
 <tr>
 <td class="type">private  void</td>
 <td class="description"><p class="name"><a href="#_compile_get()">_compile_get</a>()</p><p class="description">Compile $_GET Data</p></td>
+</tr>
+<tr>
+<td class="type">private  void</td>
+<td class="description"><p class="name"><a href="#_compile_http_headers()">_compile_http_headers</a>()</p><p class="description">Compile header informationLists HTTP headers</p></td>
 </tr>
 <tr>
 <td class="type">private  void</td>
@@ -112,9 +124,22 @@ and "_end" respectively). </p></td>
 <td class="type"> void</td>
 <td class="description"><p class="name"><a href="#run()">run</a>()</p><p class="description">Run the Profiler</p></td>
 </tr>
+<tr>
+<td class="type"> void</td>
+<td class="description"><p class="name"><a href="#set_sections()">set_sections</a>(mixed config)</p><p class="description">Set SectionsSets the private _compile_* properties to enable/disable Profiler sections</p></td>
+</tr>
 </table>
 
 <h2 id="detail_field">Field Detail</h2>
+<a href="../source/libraries/profiler.php.html#line37" class="location">libraries/Profiler.php at line 37</a>
+
+<h3 id="_available_sections">_available_sections</h3>
+<code class="signature">private  mixed <strong>$_available_sections</strong> = array(...)</code>
+<div class="details">
+</div>
+
+<hr>
+
 <a href="../source/libraries/profiler.php.html#line35" class="location">libraries/Profiler.php at line 35</a>
 
 <h3 id="_match_pair">_match_pair</h3>
@@ -125,16 +150,16 @@ and "_end" respectively). </p></td>
 <hr>
 
 <h2 id="detail_method">Method Detail</h2><div class="method_detail">
-<div class='method'><a href="../source/libraries/profiler.php.html#line37" class="location">libraries/Profiler.php at line 37</a>
+<div class='method'><a href="../source/libraries/profiler.php.html#line39" class="location">libraries/Profiler.php at line 39</a>
 
 <h3 id="__construct()">__construct</h3>
-<code class="signature">public  void <strong>__construct</strong>()</code>
+<code class="signature">public  void <strong>__construct</strong>(mixed config)</code>
 <div class="details">
 </div></div>
 
 
 
-<div class='method'><a href="../source/libraries/profiler.php.html#line56" class="location">libraries/Profiler.php at line 56</a>
+<div class='method'><a href="../source/libraries/profiler.php.html#line91" class="location">libraries/Profiler.php at line 91</a>
 
 <h3 id="_compile_benchmarks()">_compile_benchmarks</h3>
 <code class="signature">private  void <strong>_compile_benchmarks</strong>()</code>
@@ -143,6 +168,8 @@ and "_end" respectively). </p></td>
 matches any two points that are named identically (ending in "_start"
 and "_end" respectively).  It then compiles the execution times for
 all points and returns it as an array</p><dl>
+<dt>PHP4:</dt>
+<dd>- all methods should be declared private</dd>
 <dt>Access	private.</dt>
 <dt>Return	array.</dt>
 </dl>
@@ -150,7 +177,20 @@ all points and returns it as an array</p><dl>
 
 
 
-<div class='method'><a href="../source/libraries/profiler.php.html#line315" class="location">libraries/Profiler.php at line 315</a>
+<div class='method'><a href="../source/libraries/profiler.php.html#line440" class="location">libraries/Profiler.php at line 440</a>
+
+<h3 id="_compile_config()">_compile_config</h3>
+<code class="signature">private  void <strong>_compile_config</strong>()</code>
+<div class="details">
+<p>Compile config information</p><p>Lists developer config variables</p><dl>
+<dt>Access	public.</dt>
+<dt>Return	string.</dt>
+</dl>
+</div></div>
+
+
+
+<div class='method'><a href="../source/libraries/profiler.php.html#line350" class="location">libraries/Profiler.php at line 350</a>
 
 <h3 id="_compile_controller_info()">_compile_controller_info</h3>
 <code class="signature">private  void <strong>_compile_controller_info</strong>()</code>
@@ -163,7 +203,7 @@ all points and returns it as an array</p><dl>
 
 
 
-<div class='method'><a href="../source/libraries/profiler.php.html#line185" class="location">libraries/Profiler.php at line 185</a>
+<div class='method'><a href="../source/libraries/profiler.php.html#line220" class="location">libraries/Profiler.php at line 220</a>
 
 <h3 id="_compile_get()">_compile_get</h3>
 <code class="signature">private  void <strong>_compile_get</strong>()</code>
@@ -176,7 +216,20 @@ all points and returns it as an array</p><dl>
 
 
 
-<div class='method'><a href="../source/libraries/profiler.php.html#line340" class="location">libraries/Profiler.php at line 340</a>
+<div class='method'><a href="../source/libraries/profiler.php.html#line408" class="location">libraries/Profiler.php at line 408</a>
+
+<h3 id="_compile_http_headers()">_compile_http_headers</h3>
+<code class="signature">private  void <strong>_compile_http_headers</strong>()</code>
+<div class="details">
+<p>Compile header information</p><p>Lists HTTP headers</p><dl>
+<dt>Access	public.</dt>
+<dt>Return	string.</dt>
+</dl>
+</div></div>
+
+
+
+<div class='method'><a href="../source/libraries/profiler.php.html#line376" class="location">libraries/Profiler.php at line 376</a>
 
 <h3 id="_compile_memory_usage()">_compile_memory_usage</h3>
 <code class="signature">private  void <strong>_compile_memory_usage</strong>()</code>
@@ -189,7 +242,7 @@ all points and returns it as an array</p><dl>
 
 
 
-<div class='method'><a href="../source/libraries/profiler.php.html#line235" class="location">libraries/Profiler.php at line 235</a>
+<div class='method'><a href="../source/libraries/profiler.php.html#line270" class="location">libraries/Profiler.php at line 270</a>
 
 <h3 id="_compile_post()">_compile_post</h3>
 <code class="signature">private  void <strong>_compile_post</strong>()</code>
@@ -202,7 +255,7 @@ all points and returns it as an array</p><dl>
 
 
 
-<div class='method'><a href="../source/libraries/profiler.php.html#line103" class="location">libraries/Profiler.php at line 103</a>
+<div class='method'><a href="../source/libraries/profiler.php.html#line138" class="location">libraries/Profiler.php at line 138</a>
 
 <h3 id="_compile_queries()">_compile_queries</h3>
 <code class="signature">private  void <strong>_compile_queries</strong>()</code>
@@ -215,7 +268,7 @@ all points and returns it as an array</p><dl>
 
 
 
-<div class='method'><a href="../source/libraries/profiler.php.html#line285" class="location">libraries/Profiler.php at line 285</a>
+<div class='method'><a href="../source/libraries/profiler.php.html#line320" class="location">libraries/Profiler.php at line 320</a>
 
 <h3 id="_compile_uri_string()">_compile_uri_string</h3>
 <code class="signature">private  void <strong>_compile_uri_string</strong>()</code>
@@ -228,7 +281,7 @@ all points and returns it as an array</p><dl>
 
 
 
-<div class='method'><a href="../source/libraries/profiler.php.html#line370" class="location">libraries/Profiler.php at line 370</a>
+<div class='method'><a href="../source/libraries/profiler.php.html#line474" class="location">libraries/Profiler.php at line 474</a>
 
 <h3 id="run()">run</h3>
 <code class="signature">public  void <strong>run</strong>()</code>
@@ -236,6 +289,20 @@ all points and returns it as an array</p><dl>
 <p>Run the Profiler</p><dl>
 <dt>Access	private.</dt>
 <dt>Return	string.</dt>
+</dl>
+</div></div>
+
+
+
+<div class='method'><a href="../source/libraries/profiler.php.html#line67" class="location">libraries/Profiler.php at line 67</a>
+
+<h3 id="set_sections()">set_sections</h3>
+<code class="signature">public  void <strong>set_sections</strong>(mixed config)</code>
+<div class="details">
+<p>Set Sections</p><p>Sets the private _compile_* properties to enable/disable Profiler sections</p><dl>
+<dt>Access	public.</dt>
+<dt>Param	mixed.</dt>
+<dt>Return	void.</dt>
 </dl>
 </div></div>
 

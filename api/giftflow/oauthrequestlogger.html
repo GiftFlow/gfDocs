@@ -6,7 +6,7 @@
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 
 <meta name="generator" content="PHPDoctor 2RC4 (http://peej.github.com/phpdoctor/)">
-<meta name="when" content="Mon, 19 Jul 2010 17:13:56 +0000">
+<meta name="when" content="Sat, 24 Jul 2010 20:47:44 +0000">
 
 <link rel="stylesheet" type="text/css" href="../stylesheet.css">
 <link rel="start" href="../overview-summary.html">
@@ -40,7 +40,7 @@ Detail: <a href="#detail_field">Field</a> | <a href="#detail_method">Method</a> 
 <hr>
 
 <div class="qualifiedName">GiftFlow\OAuthRequestLogger</div>
-<a href="../source/application/libraries/oauth/oauthrequestlogger.php.html#line34" class="location">application/libraries/oauth/OAuthRequestLogger.php at line 34</a>
+<a href="../source/libraries/oauth/oauthrequestlogger.php.html#line34" class="location">libraries/oauth/OAuthRequestLogger.php at line 34</a>
 
 <h1>Class OAuthRequestLogger</h1>
 
@@ -54,7 +54,7 @@ Detail: <a href="#detail_field">Field</a> | <a href="#detail_method">Method</a> 
 
 <dl>
 <dt>Version:</dt>
-<dd>$Id: OAuthRequestLogger.php 55 2009-01-14 15:27:36Z scherpenisse $</dd>
+<dd>$Id: OAuthRequestLogger.php 98 2010-03-08 12:48:59Z brunobg@corollarium.com $</dd>
 <dt>Author:</dt>
 <dd>Marc Worrell <marcw@pobox.com></dd>
 <dt>Date:</dt>
@@ -106,7 +106,7 @@ Detail: <a href="#detail_field">Field</a> | <a href="#detail_method">Method</a> 
 <tr><th colspan="2">Method Summary</th></tr>
 <tr>
 <td class="type">static  void</td>
-<td class="description"><p class="name"><a href="#addNote()">addNote</a>(string note)</p><p class="description">Add a note, used by the OAuthException to log all exceptions.</p></td>
+<td class="description"><p class="name"><a href="#addNote()">addNote</a>(string note)</p><p class="description">Add a note, used by the OAuthException2 to log all exceptions.</p></td>
 </tr>
 <tr>
 <td class="type">static  void</td>
@@ -116,6 +116,11 @@ Detail: <a href="#detail_field">Field</a> | <a href="#detail_method">Method</a> 
 <td class="type">static  void</td>
 <td class="description"><p class="name"><a href="#flush()">flush</a>()</p><p class="description">Logs the request to the database, sends any cached output.
 </p></td>
+</tr>
+<tr>
+<td class="type">static  array</td>
+<td class="description"><p class="name"><a href="#getAllHeaders()">getAllHeaders</a>()</p><p class="description">helper to try to sort out headers for people who aren't running apache,
+or people who are running PHP as FastCGI.</p></td>
 </tr>
 <tr>
 <td class="type">static  array</td>
@@ -144,7 +149,7 @@ Detail: <a href="#detail_field">Field</a> | <a href="#detail_method">Method</a> 
 </table>
 
 <h2 id="detail_field">Field Detail</h2>
-<a href="../source/application/libraries/oauth/oauthrequestlogger.php.html#line37" class="location">application/libraries/oauth/OAuthRequestLogger.php at line 37</a>
+<a href="../source/libraries/oauth/oauthrequestlogger.php.html#line37" class="location">libraries/oauth/OAuthRequestLogger.php at line 37</a>
 
 <h3 id="enable_logging">enable_logging</h3>
 <code class="signature">private static  mixed <strong>$enable_logging</strong> = null</code>
@@ -153,7 +158,7 @@ Detail: <a href="#detail_field">Field</a> | <a href="#detail_method">Method</a> 
 
 <hr>
 
-<a href="../source/application/libraries/oauth/oauthrequestlogger.php.html#line44" class="location">application/libraries/oauth/OAuthRequestLogger.php at line 44</a>
+<a href="../source/libraries/oauth/oauthrequestlogger.php.html#line44" class="location">libraries/oauth/OAuthRequestLogger.php at line 44</a>
 
 <h3 id="log">log</h3>
 <code class="signature">private static  mixed <strong>$log</strong> = array()</code>
@@ -162,7 +167,7 @@ Detail: <a href="#detail_field">Field</a> | <a href="#detail_method">Method</a> 
 
 <hr>
 
-<a href="../source/application/libraries/oauth/oauthrequestlogger.php.html#line36" class="location">application/libraries/oauth/OAuthRequestLogger.php at line 36</a>
+<a href="../source/libraries/oauth/oauthrequestlogger.php.html#line36" class="location">libraries/oauth/OAuthRequestLogger.php at line 36</a>
 
 <h3 id="logging">logging</h3>
 <code class="signature">private static  mixed <strong>$logging</strong></code>
@@ -171,7 +176,7 @@ Detail: <a href="#detail_field">Field</a> | <a href="#detail_method">Method</a> 
 
 <hr>
 
-<a href="../source/application/libraries/oauth/oauthrequestlogger.php.html#line39" class="location">application/libraries/oauth/OAuthRequestLogger.php at line 39</a>
+<a href="../source/libraries/oauth/oauthrequestlogger.php.html#line39" class="location">libraries/oauth/OAuthRequestLogger.php at line 39</a>
 
 <h3 id="note">note</h3>
 <code class="signature">private static  mixed <strong>$note</strong> = ''</code>
@@ -180,7 +185,7 @@ Detail: <a href="#detail_field">Field</a> | <a href="#detail_method">Method</a> 
 
 <hr>
 
-<a href="../source/application/libraries/oauth/oauthrequestlogger.php.html#line43" class="location">application/libraries/oauth/OAuthRequestLogger.php at line 43</a>
+<a href="../source/libraries/oauth/oauthrequestlogger.php.html#line43" class="location">libraries/oauth/OAuthRequestLogger.php at line 43</a>
 
 <h3 id="received">received</h3>
 <code class="signature">private static  mixed <strong>$received</strong> = null</code>
@@ -189,7 +194,7 @@ Detail: <a href="#detail_field">Field</a> | <a href="#detail_method">Method</a> 
 
 <hr>
 
-<a href="../source/application/libraries/oauth/oauthrequestlogger.php.html#line41" class="location">application/libraries/oauth/OAuthRequestLogger.php at line 41</a>
+<a href="../source/libraries/oauth/oauthrequestlogger.php.html#line41" class="location">libraries/oauth/OAuthRequestLogger.php at line 41</a>
 
 <h3 id="request_object">request_object</h3>
 <code class="signature">private static  mixed <strong>$request_object</strong> = null</code>
@@ -198,7 +203,7 @@ Detail: <a href="#detail_field">Field</a> | <a href="#detail_method">Method</a> 
 
 <hr>
 
-<a href="../source/application/libraries/oauth/oauthrequestlogger.php.html#line42" class="location">application/libraries/oauth/OAuthRequestLogger.php at line 42</a>
+<a href="../source/libraries/oauth/oauthrequestlogger.php.html#line42" class="location">libraries/oauth/OAuthRequestLogger.php at line 42</a>
 
 <h3 id="sent">sent</h3>
 <code class="signature">private static  mixed <strong>$sent</strong> = null</code>
@@ -207,7 +212,7 @@ Detail: <a href="#detail_field">Field</a> | <a href="#detail_method">Method</a> 
 
 <hr>
 
-<a href="../source/application/libraries/oauth/oauthrequestlogger.php.html#line38" class="location">application/libraries/oauth/OAuthRequestLogger.php at line 38</a>
+<a href="../source/libraries/oauth/oauthrequestlogger.php.html#line38" class="location">libraries/oauth/OAuthRequestLogger.php at line 38</a>
 
 <h3 id="store_log">store_log</h3>
 <code class="signature">private static  mixed <strong>$store_log</strong> = null</code>
@@ -216,7 +221,7 @@ Detail: <a href="#detail_field">Field</a> | <a href="#detail_method">Method</a> 
 
 <hr>
 
-<a href="../source/application/libraries/oauth/oauthrequestlogger.php.html#line40" class="location">application/libraries/oauth/OAuthRequestLogger.php at line 40</a>
+<a href="../source/libraries/oauth/oauthrequestlogger.php.html#line40" class="location">libraries/oauth/OAuthRequestLogger.php at line 40</a>
 
 <h3 id="user_id">user_id</h3>
 <code class="signature">private static  mixed <strong>$user_id</strong> = null</code>
@@ -226,16 +231,16 @@ Detail: <a href="#detail_field">Field</a> | <a href="#detail_method">Method</a> 
 <hr>
 
 <h2 id="detail_method">Method Detail</h2><div class="method_detail">
-<div class='method'><a href="../source/application/libraries/oauth/oauthrequestlogger.php.html#line213" class="location">application/libraries/oauth/OAuthRequestLogger.php at line 213</a>
+<div class='method'><a href="../source/libraries/oauth/oauthrequestlogger.php.html#line213" class="location">libraries/oauth/OAuthRequestLogger.php at line 213</a>
 
 <h3 id="addNote()">addNote</h3>
 <code class="signature">public static  void <strong>addNote</strong>(string note)</code>
 <div class="details">
-<p>Add a note, used by the OAuthException to log all exceptions.</p></div></div>
+<p>Add a note, used by the OAuthException2 to log all exceptions.</p></div></div>
 
 
 
-<div class='method'><a href="../source/application/libraries/oauth/oauthrequestlogger.php.html#line82" class="location">application/libraries/oauth/OAuthRequestLogger.php at line 82</a>
+<div class='method'><a href="../source/libraries/oauth/oauthrequestlogger.php.html#line82" class="location">libraries/oauth/OAuthRequestLogger.php at line 82</a>
 
 <h3 id="enableLogging()">enableLogging</h3>
 <code class="signature">public static  void <strong>enableLogging</strong>(boolean store_log)</code>
@@ -248,7 +253,7 @@ Detail: <a href="#detail_field">Field</a> | <a href="#detail_method">Method</a> 
 
 
 
-<div class='method'><a href="../source/application/libraries/oauth/oauthrequestlogger.php.html#line96" class="location">application/libraries/oauth/OAuthRequestLogger.php at line 96</a>
+<div class='method'><a href="../source/libraries/oauth/oauthrequestlogger.php.html#line96" class="location">libraries/oauth/OAuthRequestLogger.php at line 96</a>
 
 <h3 id="flush()">flush</h3>
 <code class="signature">public static  void <strong>flush</strong>()</code>
@@ -258,7 +263,21 @@ Also called on shutdown, to make sure we always log the request being handled.</
 
 
 
-<div class='method'><a href="../source/application/libraries/oauth/oauthrequestlogger.php.html#line266" class="location">application/libraries/oauth/OAuthRequestLogger.php at line 266</a>
+<div class='method'><a href="../source/libraries/oauth/oauthrequestlogger.php.html#line278" class="location">libraries/oauth/OAuthRequestLogger.php at line 278</a>
+
+<h3 id="getAllHeaders()">getAllHeaders</h3>
+<code class="signature">public static  array <strong>getAllHeaders</strong>()</code>
+<div class="details">
+<p>helper to try to sort out headers for people who aren't running apache,
+or people who are running PHP as FastCGI.</p><dl>
+<dt>Returns:</dt>
+<dd>of request headers as associative array.</dd>
+</dl>
+</div></div>
+
+
+
+<div class='method'><a href="../source/libraries/oauth/oauthrequestlogger.php.html#line266" class="location">libraries/oauth/OAuthRequestLogger.php at line 266</a>
 
 <h3 id="getLog()">getLog</h3>
 <code class="signature">public static  array <strong>getLog</strong>()</code>
@@ -267,7 +286,7 @@ Also called on shutdown, to make sure we always log the request being handled.</
 
 
 
-<div class='method'><a href="../source/application/libraries/oauth/oauthrequestlogger.php.html#line255" class="location">application/libraries/oauth/OAuthRequestLogger.php at line 255</a>
+<div class='method'><a href="../source/libraries/oauth/oauthrequestlogger.php.html#line255" class="location">libraries/oauth/OAuthRequestLogger.php at line 255</a>
 
 <h3 id="setReceived()">setReceived</h3>
 <code class="signature">public static  void <strong>setReceived</strong>(mixed reply, string request)</code>
@@ -276,7 +295,7 @@ Also called on shutdown, to make sure we always log the request being handled.</
 
 
 
-<div class='method'><a href="../source/application/libraries/oauth/oauthrequestlogger.php.html#line223" class="location">application/libraries/oauth/OAuthRequestLogger.php at line 223</a>
+<div class='method'><a href="../source/libraries/oauth/oauthrequestlogger.php.html#line223" class="location">libraries/oauth/OAuthRequestLogger.php at line 223</a>
 
 <h3 id="setRequestObject()">setRequestObject</h3>
 <code class="signature">public static  void <strong>setRequestObject</strong>(<a href="../giftflow/oauthrequest.html">OAuthRequest</a> request_object)</code>
@@ -285,7 +304,7 @@ Also called on shutdown, to make sure we always log the request being handled.</
 
 
 
-<div class='method'><a href="../source/application/libraries/oauth/oauthrequestlogger.php.html#line245" class="location">application/libraries/oauth/OAuthRequestLogger.php at line 245</a>
+<div class='method'><a href="../source/libraries/oauth/oauthrequestlogger.php.html#line245" class="location">libraries/oauth/OAuthRequestLogger.php at line 245</a>
 
 <h3 id="setSent()">setSent</h3>
 <code class="signature">public static  void <strong>setSent</strong>(string request)</code>
@@ -294,7 +313,7 @@ Also called on shutdown, to make sure we always log the request being handled.</
 
 
 
-<div class='method'><a href="../source/application/libraries/oauth/oauthrequestlogger.php.html#line234" class="location">application/libraries/oauth/OAuthRequestLogger.php at line 234</a>
+<div class='method'><a href="../source/libraries/oauth/oauthrequestlogger.php.html#line234" class="location">libraries/oauth/OAuthRequestLogger.php at line 234</a>
 
 <h3 id="setUser()">setUser</h3>
 <code class="signature">public static  void <strong>setUser</strong>(int user_id)</code>
@@ -303,7 +322,7 @@ Also called on shutdown, to make sure we always log the request being handled.</
 
 
 
-<div class='method'><a href="../source/application/libraries/oauth/oauthrequestlogger.php.html#line51" class="location">application/libraries/oauth/OAuthRequestLogger.php at line 51</a>
+<div class='method'><a href="../source/libraries/oauth/oauthrequestlogger.php.html#line51" class="location">libraries/oauth/OAuthRequestLogger.php at line 51</a>
 
 <h3 id="start()">start</h3>
 <code class="signature">public static  void <strong>start</strong>(<a href="../giftflow/oauthrequest.html">OAuthRequest</a> request_object)</code>

@@ -6,7 +6,7 @@
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 
 <meta name="generator" content="PHPDoctor 2RC4 (http://peej.github.com/phpdoctor/)">
-<meta name="when" content="Fri, 18 Jun 2010 15:58:03 +0000">
+<meta name="when" content="Sat, 24 Jul 2010 20:47:45 +0000">
 
 <link rel="stylesheet" type="text/css" href="../../stylesheet.css">
 <link rel="start" href="../../overview-summary.html">
@@ -58,16 +58,16 @@
 <a name="line21"></a>	{
 <a name="line22"></a>		if(isset($_POST['submit']))
 <a name="line23"></a>		{ 
-<a name="line24"></a>			$m = new Message();
-<a name="line25"></a>			$m->subject = $this->input->post('subject');
-<a name="line26"></a>			$m->body =  $this->input->post('body');
-<a name="line27"></a>			$m->recipients =  explode("&", $this->input->post('recipients'));
-<a name="line28"></a>			$m->author_id =  16; //$this->session->userdata('user_id');
+<a name="line24"></a>			$M = new Message();
+<a name="line25"></a>			$M->subject = $this->input->post('subject');
+<a name="line26"></a>			$M->body =  $this->input->post('body');
+<a name="line27"></a>			$M->recipients =  explode("&", $this->input->post('recipients'));
+<a name="line28"></a>			$M->author_id =  16; //$this->session->userdata('user_id');
 <a name="line29"></a>			//$m->thread_id =  9;//$this->input->post('thread');
-<a name="line30"></a>			$m->compose();
-<a name="line31"></a>			if(count($m->error->all) > 0)
+<a name="line30"></a>			$M->compose();
+<a name="line31"></a>			if(count($M->error->all) > 0)
 <a name="line32"></a>			{
-<a name="line33"></a>				echo $m->error->string;
+<a name="line33"></a>				echo $M->error->string;
 <a name="line34"></a>			}
 <a name="line35"></a>			else
 <a name="line36"></a>			{	
@@ -81,53 +81,31 @@
 <a name="line44"></a>	}
 <a name="line45"></a>	function inbox()
 <a name="line46"></a>	{
-<a name="line47"></a>		//$user_id = $this->uri->segment(3);
-<a name="line48"></a>		$user_id = $this->session->userdata('user_id');
-<a name="line49"></a>		$u = new User($user_id);
-<a name="line50"></a>		$u->message_delivery->get();
-<a name="line51"></a>		$this->data['inbox'] = $u->message_delivery->all;
-<a name="line52"></a>		$this->data['title'] = "Inbox";
-<a name="line53"></a>		$this->load->view('header', $this->data);
-<a name="line54"></a>		$this->load->view('mail/inbox',$this->data);
-<a name="line55"></a>		$this->load->view('footer', $this->data);
-<a name="line56"></a>	}
-<a name="line57"></a>	function message( $id )
-<a name="line58"></a>	{
-<a name="line59"></a>		$t = new Thread( $id );
-<a name="line60"></a>		$t->messages->get();
-<a name="line61"></a>		$this->data['thread'] = $t;
-<a name="line62"></a>		$this->data['messages'] = $t->messages->all;
-<a name="line63"></a>		$this->data['title'] = $t->subject;
-<a name="line64"></a>		
-<a name="line65"></a>		$this->load->view('header', $this->data);
-<a name="line66"></a>		$this->load->view('mail/message',$this->data);
-<a name="line67"></a>		$this->load->view('footer', $this->data);
-<a name="line68"></a>	}
-<a name="line69"></a>	function test()
-<a name="line70"></a>	{
-<a name="line71"></a>	
-<a name="line72"></a>		$this->benchmark->mark("improper_start");
-<a name="line73"></a>		$u = new User(17);
-<a name="line74"></a>		$u->inbox = $u->load_mail();
-<a name="line75"></a>		echo 'inbox';
-<a name="line76"></a>		print_r($u->inbox);
-<a name="line77"></a>		$this->benchmark->mark("improper_end");
-<a name="line78"></a>		/*
-<a name="line79"></a>		$this->benchmark->mark("proper_start");
-<a name="line80"></a>		$u = new User(17);
-<a name="line81"></a>		$u->message_delivery->get();
-<a name="line82"></a>		$this->benchmark->mark("proper_end");
-<a name="line83"></a>		$this->benchmark->elapsed_time("proper_start", "proper_end");
-<a name="line84"></a>		$this->benchmark->elapsed_time("improper_start", "improper_end");
-<a name="line85"></a>		*/
-<a name="line86"></a>		//$u = new User(17);
-<a name="line87"></a>		
-<a name="line88"></a>	}
-<a name="line89"></a>}
-<a name="line90"></a>
-<a name="line91"></a>/* End of file mail.php */
-<a name="line92"></a>/* Location: ./system/application/controllers/mail.php */
-<a name="line93"></a></pre>
+<a name="line47"></a>		$U = new User( $this->data['logged_in_user_id'] );
+<a name="line48"></a>		$U->message_delivery->get();
+<a name="line49"></a>		$this->data['inbox'] = $U->message_delivery->all;
+<a name="line50"></a>		$this->data['title'] = "Inbox";
+<a name="line51"></a>		$this->load->view('header', $this->data);
+<a name="line52"></a>		$this->load->view('mail/inbox',$this->data);
+<a name="line53"></a>		$this->load->view('footer', $this->data);
+<a name="line54"></a>	}
+<a name="line55"></a>	function message( $id )
+<a name="line56"></a>	{
+<a name="line57"></a>		$T = new Thread( $id );
+<a name="line58"></a>		$T->messages->get();
+<a name="line59"></a>		$this->data['thread'] = $T;
+<a name="line60"></a>		$this->data['messages'] = $T->messages->all;
+<a name="line61"></a>		$this->data['title'] = $T->subject;
+<a name="line62"></a>		
+<a name="line63"></a>		$this->load->view('header', $this->data);
+<a name="line64"></a>		$this->load->view('mail/message',$this->data);
+<a name="line65"></a>		$this->load->view('footer', $this->data);
+<a name="line66"></a>	}
+<a name="line67"></a>}
+<a name="line68"></a>
+<a name="line69"></a>/* End of file mail.php */
+<a name="line70"></a>/* Location: ./system/application/controllers/mail.php */
+<a name="line71"></a></pre>
 <div class="header">
 <h1>GiftFlow API</h1>
 <ul>

@@ -6,7 +6,7 @@
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 
 <meta name="generator" content="PHPDoctor 2RC4 (http://peej.github.com/phpdoctor/)">
-<meta name="when" content="Fri, 18 Jun 2010 15:58:03 +0000">
+<meta name="when" content="Sat, 24 Jul 2010 20:47:45 +0000">
 
 <link rel="stylesheet" type="text/css" href="../../../stylesheet.css">
 <link rel="start" href="../../../overview-summary.html">
@@ -47,103 +47,105 @@
 <a name="line10"></a>		<div class='right'>
 <a name="line11"></a>		
 <a name="line12"></a>			<?php echo $right; ?>
-<a name="line13"></a>	
-<a name="line14"></a>			<?php if(!empty($requested)&&$requested) { ?>
-<a name="line15"></a>			<a  id='request_gift_button' class='requested' style='margin: 40px 0px 0px;'></a>
-<a name="line16"></a>			<a href="<?php echo site_url('gift/'.$G->id.'/unrequest'); ?>">Cancel</a>
-<a name="line17"></a>	
-<a name="line18"></a>			<?php } else { ?>
-<a name="line19"></a>			<a href="#" id='request_gift_button' class='open' style='margin: 40px 0px 0px;'></a>
-<a name="line20"></a>			<?php } ?>
-<a name="line21"></a>	
+<a name="line13"></a>			<?php if($is_gift) { ?>
+<a name="line14"></a>				<?php if(!empty($requested)&&$requested) { ?>
+<a name="line15"></a>				<a  id='request_gift_button' class='requested' style='margin: 40px 0px 0px;'></a>
+<a name="line16"></a>				<a href="<?php echo site_url('gift/'.$G->id.'/unrequest'); ?>">Cancel</a>
+<a name="line17"></a>		
+<a name="line18"></a>				<?php } else { ?>
+<a name="line19"></a>				<a href="#" id='request_gift_button' class='open' style='margin: 40px 0px 0px;'></a>
+<a name="line20"></a>				<?php } ?>
+<a name="line21"></a>			<?php } ?>
 <a name="line22"></a>		</div>
 <a name="line23"></a>		<div style='clear: both;'></div>
 <a name="line24"></a>	</div>
 <a name="line25"></a>	
 <a name="line26"></a>	<div class='bottom' style='display: none;'></div>
-<a name="line27"></a>	<div id='request_form' class='ui-widget'>
-<a name="line28"></a>		<h1>Request Gift</h1>
-<a name="line29"></a>		<form method='post' action="<?php echo current_url().'/request'; ?>">
-<a name="line30"></a>		<p>
-<a name="line31"></a>		<label>I need this gift because...</label><br />
-<a name="line32"></a>		<textarea name='reason'></textarea>
-<a name="line33"></a>		</p>
-<a name="line34"></a>		<input type='submit' class='blue' value='Request This Gift' />
-<a name="line35"></a>		</form>
-<a name="line36"></a>	</div>
-<a name="line37"></a>	<div class='alt_bottom'></div>
-<a name="line38"></a></div>
-<a name="line39"></a>
-<a name="line40"></a><?php 
-<a name="line41"></a>$giver_options['title'] = "More About The Giver";
-<a name="line42"></a>$giver_options['id'] = "giver";
-<a name="line43"></a>$giver_options['content'] = "
-<a name="line44"></a>		<img src='".site_url('api/member/'.$G->user->id.'/photo/thumb')."' />
-<a name="line45"></a>		<a href='".site_url('profile/'.$G->user->id)."'>".$G->user->screen_name."</a>
-<a name="line46"></a>		<span class='location'>".$G->location->city.", ".$G->location->state."</span>
-<a name="line47"></a>		<div style='clear: both;'></div>";
-<a name="line48"></a>echo sidebar($giver_options);
-<a name="line49"></a>echo sharing_sidebar(); 
-<a name="line50"></a>?>
-<a name="line51"></a>
-<a name="line52"></a>
-<a name="line53"></a><div id='request_gift' class='jqmWindow'>
-<a name="line54"></a></div>
-<a name="line55"></a><script>
-<a name="line56"></a>var tags = new Array();
-<a name="line57"></a>$(function(){
-<a name="line58"></a>	$("#request_form").hide();
-<a name="line59"></a>	$("#request_gift_button.open").click(function(){
-<a name="line60"></a>		$(this).slideUp();
-<a name="line61"></a>		$(".gift_module .middle").addClass("shadow");
-<a name="line62"></a>		$(".gift_module .bottom").addClass('shadow').slideDown();
-<a name="line63"></a>		$("#request_form").delay(500).slideDown("slow");
-<a name="line64"></a>		return false;
-<a name="line65"></a>	});
-<a name="line66"></a>	$("#request_gift").jqm( { 	ajax: '<?php echo site_url('gift/'.$G->id.'/request/ajax'); ?>', 
-<a name="line67"></a>								trigger: '#request_this_gift',
-<a name="line68"></a>								onLoad: function(){
-<a name="line69"></a>									$(".buttonset").buttonset();
-<a name="line70"></a>									$("#request_gift").jqmAddClose("#cancel_request");
-<a name="line71"></a>								}
-<a name="line72"></a>							});
-<a name="line73"></a>
-<a name="line74"></a>	$("ul#good_buttons li a, .button").button();
-<a name="line75"></a>	$(".buttonset").buttonset();
-<a name="line76"></a>
-<a name="line77"></a>	$(".ignore_request").live('click', function(){ 
-<a name="line78"></a>		var div = $(this).parent().parent().parent();
-<a name="line79"></a>		
-<a name="line80"></a>		$.post("<?php echo site_url('ajax/request'); ?>", { type: 'ignore', 'request_id': $(this).attr('rel') }, function ( data ) {
-<a name="line81"></a>			div.hide().delay(500);
-<a name="line82"></a>			$.notifyBar( { html: data, cls: 'success', delay: 4000, animationSpeed: 'slow'});
-<a name="line83"></a>		}, 'html');
-<a name="line84"></a>		return false;
-<a name="line85"></a>	});
-<a name="line86"></a>	$("a.accept_request").live("click", function(){
-<a name="line87"></a>		var div = $(this).parent();
-<a name="line88"></a>		var divdiv = $(this).parent().parent();
-<a name="line89"></a>		$.post("<?php echo site_url('ajax/request'); ?>", { type: 'accept', 'request_id': $(this).attr('rel') }, function ( data ) {
-<a name="line90"></a>			div.hide();
-<a name="line91"></a>			divdiv.append(data);
-<a name="line92"></a>		}, 'html');
-<a name="line93"></a>		return false;
-<a name="line94"></a>	});
-<a name="line95"></a>	$("a#view_requests").live("click", function(){
-<a name="line96"></a>		var div = $(this).parent().parent();
-<a name="line97"></a>		$.post(	"<?php echo site_url('gift/'.$G->id.'/requests'); ?>", 
-<a name="line98"></a>				{ ajax: 'TRUE' }, 
-<a name="line99"></a>				function( data )
-<a name="line100"></a>				{ 
-<a name="line101"></a>					div.html(data);
-<a name="line102"></a>					$(".button").button();
-<a name="line103"></a>				}, 
-<a name="line104"></a>				'html');
-<a name="line105"></a>		return false;
-<a name="line106"></a>	});
-<a name="line107"></a>	<?php echo notify(); ?>
-<a name="line108"></a>});
-<a name="line109"></a></script></pre>
+<a name="line27"></a>	<?php if($is_gift) { ?>
+<a name="line28"></a>	<div id='request_form' class='ui-widget'>
+<a name="line29"></a>		<h1>Request Gift</h1>
+<a name="line30"></a>		<form method='post' action="<?php echo current_url().'/request'; ?>">
+<a name="line31"></a>		<p>
+<a name="line32"></a>		<label>I need this gift because...</label><br />
+<a name="line33"></a>		<textarea name='reason'></textarea>
+<a name="line34"></a>		</p>
+<a name="line35"></a>		<input type='submit' class='blue' value='Request This Gift' />
+<a name="line36"></a>		</form>
+<a name="line37"></a>	</div>
+<a name="line38"></a>	<?php } ?>
+<a name="line39"></a>	<div class='alt_bottom'></div>
+<a name="line40"></a></div>
+<a name="line41"></a>
+<a name="line42"></a><?php 
+<a name="line43"></a>$giver_options['title'] = "More About This Person";
+<a name="line44"></a>$giver_options['id'] = "giver";
+<a name="line45"></a>$giver_options['content'] = "
+<a name="line46"></a>		<img src='".site_url('api/member/'.$G->user->id.'/photo/thumb')."' />
+<a name="line47"></a>		<a href='".site_url('profile/'.$G->user->id)."'>".$G->user->screen_name."</a>
+<a name="line48"></a>		<span class='location'>".$G->location->city.", ".$G->location->state."</span>
+<a name="line49"></a>		<div style='clear: both;'></div>";
+<a name="line50"></a>echo sidebar($giver_options);
+<a name="line51"></a>echo sharing_sidebar(); 
+<a name="line52"></a>?>
+<a name="line53"></a>
+<a name="line54"></a>
+<a name="line55"></a><div id='request_gift' class='jqmWindow'>
+<a name="line56"></a></div>
+<a name="line57"></a><script>
+<a name="line58"></a>var tags = new Array();
+<a name="line59"></a>$(function(){
+<a name="line60"></a>	$("#request_form").hide();
+<a name="line61"></a>	$("#request_gift_button.open").click(function(){
+<a name="line62"></a>		$(this).slideUp();
+<a name="line63"></a>		$(".gift_module .middle").addClass("shadow");
+<a name="line64"></a>		$(".gift_module .bottom").addClass('shadow').slideDown();
+<a name="line65"></a>		$("#request_form").delay(500).slideDown("slow");
+<a name="line66"></a>		return false;
+<a name="line67"></a>	});
+<a name="line68"></a>	$("#request_gift").jqm( { 	ajax: '<?php echo site_url('gift/'.$G->id.'/request/ajax'); ?>', 
+<a name="line69"></a>								trigger: '#request_this_gift',
+<a name="line70"></a>								onLoad: function(){
+<a name="line71"></a>									$(".buttonset").buttonset();
+<a name="line72"></a>									$("#request_gift").jqmAddClose("#cancel_request");
+<a name="line73"></a>								}
+<a name="line74"></a>							});
+<a name="line75"></a>
+<a name="line76"></a>	$(".button").button();
+<a name="line77"></a>	$(".buttonset").buttonset();
+<a name="line78"></a>
+<a name="line79"></a>	$(".ignore_request").live('click', function(){ 
+<a name="line80"></a>		var div = $(this).parent().parent().parent();
+<a name="line81"></a>		
+<a name="line82"></a>		$.post("<?php echo site_url('ajax/request'); ?>", { type: 'ignore', 'request_id': $(this).attr('rel') }, function ( data ) {
+<a name="line83"></a>			div.hide().delay(500);
+<a name="line84"></a>			$.notifyBar( { html: data, cls: 'success', delay: 4000, animationSpeed: 'slow'});
+<a name="line85"></a>		}, 'html');
+<a name="line86"></a>		return false;
+<a name="line87"></a>	});
+<a name="line88"></a>	$("a.accept_request").live("click", function(){
+<a name="line89"></a>		var div = $(this).parent();
+<a name="line90"></a>		var divdiv = $(this).parent().parent();
+<a name="line91"></a>		$.post("<?php echo site_url('ajax/request'); ?>", { type: 'accept', 'request_id': $(this).attr('rel') }, function ( data ) {
+<a name="line92"></a>			div.hide();
+<a name="line93"></a>			divdiv.append(data);
+<a name="line94"></a>		}, 'html');
+<a name="line95"></a>		return false;
+<a name="line96"></a>	});
+<a name="line97"></a>	$("a#view_requests").live("click", function(){
+<a name="line98"></a>		var div = $(this).parent().parent();
+<a name="line99"></a>		$.post(	"<?php echo site_url('gift/'.$G->id.'/requests'); ?>", 
+<a name="line100"></a>				{ ajax: 'TRUE' }, 
+<a name="line101"></a>				function( data )
+<a name="line102"></a>				{ 
+<a name="line103"></a>					div.html(data);
+<a name="line104"></a>					$(".button").button();
+<a name="line105"></a>				}, 
+<a name="line106"></a>				'html');
+<a name="line107"></a>		return false;
+<a name="line108"></a>	});
+<a name="line109"></a>	<?php echo notify(); ?>
+<a name="line110"></a>});
+<a name="line111"></a></script></pre>
 <div class="header">
 <h1>GiftFlow API</h1>
 <ul>
