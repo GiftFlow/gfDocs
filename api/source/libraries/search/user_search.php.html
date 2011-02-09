@@ -1,0 +1,426 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+
+<html lang="en">
+<head>
+
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
+<meta name="generator" content="PHPDoctor 2RC4 (http://peej.github.com/phpdoctor/)">
+<meta name="when" content="Wed, 09 Feb 2011 20:22:56 +0000">
+
+<link rel="stylesheet" type="text/css" href="../../../stylesheet.css">
+<link rel="start" href="../../../overview-summary.html">
+
+<title>libraries/Search/User_search.php (GiftFlow API)</title>
+
+</head>
+<body id="file" onload="parent.document.title=document.title;">
+
+<div class="header">
+<h1>GiftFlow API</h1>
+<ul>
+<li><a href="../../../overview-summary.html">Overview</a></li>
+<li>Package</li><li>Class</li><li>Tree</li><li><a href="../../../overview-files.html">Files</a></li>
+<li><a href="../../../deprecated-list.html">Deprecated</a></li>
+<li><a href="../../../index-all.html">Index</a></li>
+</ul>
+</div>
+
+<div class="small_links">
+<a href="../../../index.html" target="_top">Frames</a>
+<a href="../../../source/libraries/search/user_search.php.html" target="_top">No frames</a>
+</div>
+<hr>
+
+<h1>libraries/Search/User_search.php</h1>
+<hr>
+
+<a name="line1"></a><pre><?php  if ( ! defined('BASEPATH')) exit('No direct script access allowed');
+<a name="line2"></a>/**
+<a name="line3"></a>*	User model for select operations
+<a name="line4"></a>*	
+<a name="line5"></a>*	@author Brandon Jackson
+<a name="line6"></a>*	@package Search
+<a name="line7"></a>*/
+<a name="line8"></a>
+<a name="line9"></a>class User_search extends Search
+<a name="line10"></a>{
+<a name="line11"></a>
+<a name="line12"></a>	/**
+<a name="line13"></a>	*	CodeIgniter super-object
+<a name="line14"></a>	*	@var object
+<a name="line15"></a>	*/
+<a name="line16"></a>	protected $CI;
+<a name="line17"></a>	
+<a name="line18"></a>	var $user_id;
+<a name="line19"></a>	
+<a name="line20"></a>	/**
+<a name="line21"></a>	*	Constructor
+<a name="line22"></a>	*/
+<a name="line23"></a>	public function __construct( $id = NULL )
+<a name="line24"></a>	{
+<a name="line25"></a>		parent::__construct();
+<a name="line26"></a>		
+<a name="line27"></a>		$this->CI =& get_instance();
+<a name="line28"></a>		
+<a name="line29"></a>		$this->user_id = $id;
+<a name="line30"></a>	}
+<a name="line31"></a>	
+<a name="line32"></a>	/**
+<a name="line33"></a>	*	Returns individual user object
+<a name="line34"></a>	*/
+<a name="line35"></a>	function get()
+<a name="line36"></a>	{
+<a name="line37"></a>		$this->CI->db->select('U.id AS id,
+<a name="line38"></a>			U.email AS email,
+<a name="line39"></a>			U.type AS type,
+<a name="line40"></a>			U.first_name AS first_name,
+<a name="line41"></a>			U.last_name AS last_name,
+<a name="line42"></a>			U.screen_name AS screen_name,
+<a name="line43"></a>			U.bio AS bio,
+<a name="line44"></a>			U.created AS created,
+<a name="line45"></a>			U.occupation AS occupation,
+<a name="line46"></a>			U.photo_source AS photo_source,
+<a name="line47"></a>			U.facebook_id AS facebook_id,
+<a name="line48"></a>			P.id AS photo_id,
+<a name="line49"></a>			P.url AS photo_url,
+<a name="line50"></a>			P.thumb_url AS photo_thumb_url,
+<a name="line51"></a>			P.caption AS photo_caption')
+<a name="line52"></a>			->from('users as U ')
+<a name="line53"></a>			->join('photos AS P ','U.default_photo_id=P.id','left')
+<a name="line54"></a>			->where('U.id',$this->user_id);
+<a name="line55"></a>			
+<a name="line56"></a>		$query = $this->CI->db->get();
+<a name="line57"></a>		
+<a name="line58"></a>		return $query->row();
+<a name="line59"></a>	}
+<a name="line60"></a>	
+<a name="line61"></a>	/**
+<a name="line62"></a>	* 	Returns the user's current goods
+<a name="line63"></a>	*	@param string $type	Type of good e.g. "gift","need"
+<a name="line64"></a>	*	@return array
+<a name="line65"></a>	*/
+<a name="line66"></a>	function goods( $type = "gift" )
+<a name="line67"></a>	{
+<a name="line68"></a>		Console::logSpeed("User_search::goods()");
+<a name="line69"></a>				
+<a name="line70"></a>		// Query database
+<a name="line71"></a>		$query = $this->CI->db
+<a name="line72"></a>			->select('G.*, COUNT(T.id) AS transaction_count')
+<a name="line73"></a>			->from('goods_view AS G')
+<a name="line74"></a>			->join('demands AS D ','G.good_id=D.good_id', 'left')
+<a name="line75"></a>			->join("transactions AS T ","D.transaction_id=T.id AND T.status='pending'", "left")
+<a name="line76"></a>			->where('G.user_id', $this->user_id)
+<a name="line77"></a>			->where('G.good_type',$type)
+<a name="line78"></a>			->group_by('G.good_id')
+<a name="line79"></a>			->order_by('G.good_created')
+<a name="line80"></a>			->get();
+<a name="line81"></a>
+<a name="line82"></a>		// Build and return object from DB results
+<a name="line83"></a>		$result = Factory::good($query->result());
+<a name="line84"></a>		Console::logSpeed("User_search::goods() done.");
+<a name="line85"></a>		return $result;
+<a name="line86"></a>	}
+<a name="line87"></a>	
+<a name="line88"></a>	/**
+<a name="line89"></a>	* 	Returns the user's current gifts
+<a name="line90"></a>	*	@param int user_id
+<a name="line91"></a>	*	@return array
+<a name="line92"></a>	*/
+<a name="line93"></a>	function gifts()
+<a name="line94"></a>	{
+<a name="line95"></a>		Console::logSpeed('User_search::gifts()');
+<a name="line96"></a>		return $this->goods("gift");
+<a name="line97"></a>	}
+<a name="line98"></a>	
+<a name="line99"></a>	/**
+<a name="line100"></a>	* 	Returns the user's current needs
+<a name="line101"></a>	*	@param int user_id
+<a name="line102"></a>	*	@return array
+<a name="line103"></a>	*/
+<a name="line104"></a>	function needs()
+<a name="line105"></a>	{
+<a name="line106"></a>		Console::logSpeed('User_search::needs()');
+<a name="line107"></a>		return $this->goods("need");
+<a name="line108"></a>	}
+<a name="line109"></a>	
+<a name="line110"></a>	function transactions()
+<a name="line111"></a>	{
+<a name="line112"></a>		$this->CI->load->library('Search/Transaction_search');
+<a name="line113"></a>		return $this->CI->transaction_search->find(array(
+<a name="line114"></a>			"user_id"=>$this->user_id
+<a name="line115"></a>		));
+<a name="line116"></a>	}
+<a name="line117"></a>	
+<a name="line118"></a>	function following()
+<a name="line119"></a>	{
+<a name="line120"></a>		Console::logSpeed("User_search::following()");
+<a name="line121"></a>		$this->_basic_query();
+<a name="line122"></a>		$result = $this->CI->db->join('followings_users AS FU ','U.id=FU.following_id')
+<a name="line123"></a>			->where('FU.user_id',$this->user_id)
+<a name="line124"></a>			->get()
+<a name="line125"></a>			->result();
+<a name="line126"></a>
+<a name="line127"></a>		$object = Factory::user($result);
+<a name="line128"></a>		
+<a name="line129"></a>		Console::logSpeed("User_search::following(): done.");
+<a name="line130"></a>		return $object;
+<a name="line131"></a>	}
+<a name="line132"></a>	
+<a name="line133"></a>	/**
+<a name="line134"></a>	*	Perform User Search
+<a name="line135"></a>	*
+<a name="line136"></a>	*	@param array $options					Array of configuration options
+<a name="line137"></a>	*	@param string $options['screen_name'] 	Filter by LIKE screen name
+<a name="line138"></a>	*	@param string $options['first_name'] 	Filter by LIKE first name
+<a name="line139"></a>	*	@param string $options['last_name']		Filter by LIKE last_name
+<a name="line140"></a>	*	@param string $options['bio']			Filter by LIKE bio
+<a name="line141"></a>	*	@param string $options['occupation']	Filter by LIKE occupation
+<a name="line142"></a>	*	@param int $options['user_id']			Filter by User ID
+<a name="line143"></a>	*	@param string $options['email']			Filter by email
+<a name="line144"></a>	*	@param int $options['facebook_id'] 		Filter by Facebook ID
+<a name="line145"></a>	*	@param boolean $options['exclude_logged_in_user'] 	Excludes logged in user
+<a name="line146"></a>	*	@param boolean $options['following_stats']	If true, populates am_following and is_follower fields
+<a name="line147"></a>	*	@param float $options['latitude']		Filter by latitude
+<a name="line148"></a>	*	@param float $options['longitude']		Filter by longitude
+<a name="line149"></a>	*	@param string $options['order_by']		Field name to order by
+<a name="line150"></a>	*	@param string $options['sort']			Sort order
+<a name="line151"></a>	*	@param int $options['offset']			Offset
+<a name="line152"></a>	*	@param int $options['limit']			Number of results to return
+<a name="line153"></a>	*	@return object							Object from Factory::user()
+<a name="line154"></a>	*/
+<a name="line155"></a>	function find($options = array())
+<a name="line156"></a>	{
+<a name="line157"></a>		Console::logSpeed("start User_search::find()");
+<a name="line158"></a>		
+<a name="line159"></a>		// Build $options object using defaults
+<a name="line160"></a>		$default_like_options = array(
+<a name="line161"></a>			"screen_name"=>"", 
+<a name="line162"></a>			"first_name"=>"", 
+<a name="line163"></a>			"last_name"=>"", 
+<a name="line164"></a>			"bio"=>"",
+<a name="line165"></a>			"occupation"=>""
+<a name="line166"></a>		);
+<a name="line167"></a>		$default_options = array(
+<a name="line168"></a>			"user_id"=>NULL,
+<a name="line169"></a>			"email"=>NULL,
+<a name="line170"></a>			"facebook_id"=>NULL,
+<a name="line171"></a>			"exclude_logged_in_user"=>TRUE,
+<a name="line172"></a>			"following_stats"=>TRUE,
+<a name="line173"></a>			"latitude"=>NULL,
+<a name="line174"></a>			"longitude"=>NULL,
+<a name="line175"></a>			"radius"=>NULL,
+<a name="line176"></a>			"order_by"=>"U.created",
+<a name="line177"></a>			"sort"=>"ASC",
+<a name="line178"></a>			"offset"=>0,
+<a name="line179"></a>			"limit"=>20
+<a name="line180"></a>		);
+<a name="line181"></a>		$options = (object) array_merge(
+<a name="line182"></a>			$default_like_options, 
+<a name="line183"></a>			$default_options, 
+<a name="line184"></a>			$options
+<a name="line185"></a>		);	
+<a name="line186"></a>		
+<a name="line187"></a>		// Assemble basic SELECT query
+<a name="line188"></a>		$this->_basic_query();
+<a name="line189"></a>		
+<a name="line190"></a>		// Filter by user_id
+<a name="line191"></a>		if(is_numeric($options->user_id))
+<a name="line192"></a>		{
+<a name="line193"></a>			$this->CI->db->where('user_id',$options->user_id);
+<a name="line194"></a>		}
+<a name="line195"></a>		elseif(is_array($options->user_id))
+<a name="line196"></a>		{
+<a name="line197"></a>			$this->CI->db->where_in('user_id',$options->user_id);
+<a name="line198"></a>		}
+<a name="line199"></a>		
+<a name="line200"></a>		// Filter by email
+<a name="line201"></a>		if(is_string($options->email))
+<a name="line202"></a>		{
+<a name="line203"></a>			$this->CI->db->where('email',$options->email);
+<a name="line204"></a>		}
+<a name="line205"></a>		elseif(is_array($options->email))
+<a name="line206"></a>		{
+<a name="line207"></a>			$this->CI->db->where_in('email',$options->email);
+<a name="line208"></a>		}
+<a name="line209"></a>		
+<a name="line210"></a>		// Filter by facebook_id
+<a name="line211"></a>		if(is_string($options->facebook_id))
+<a name="line212"></a>		{
+<a name="line213"></a>			$this->CI->db->where('facebook_id',$options->facebook_id);
+<a name="line214"></a>		}
+<a name="line215"></a>		elseif(is_array($options->facebook_id))
+<a name="line216"></a>		{
+<a name="line217"></a>			$this->CI->db->where_in('facebook_id',$options->facebook_id);
+<a name="line218"></a>		}		
+<a name="line219"></a>		// Filter text fields by WHERE LIKE
+<a name="line220"></a>		foreach($default_like_options as $key=>$val)
+<a name="line221"></a>		{
+<a name="line222"></a>			if(!empty($options->$key))
+<a name="line223"></a>			{
+<a name="line224"></a>				$this->CI->db->like("U.".$key, $options->$key);
+<a name="line225"></a>			}
+<a name="line226"></a>		}
+<a name="line227"></a>		
+<a name="line228"></a>		// Filter by location if lat/lng or un-geocoded address,
+<a name="line229"></a>		// only returning users who have a location
+<a name="line230"></a>		if(!empty($options->latitude) || !empty($options->longitude) || !empty($options->address))
+<a name="line231"></a>		{
+<a name="line232"></a>			$this->_join_locations("inner");
+<a name="line233"></a>			$this->_geosearch_clauses($options);
+<a name="line234"></a>		}
+<a name="line235"></a>		
+<a name="line236"></a>		// Else simply include location for those who have it
+<a name="line237"></a>		else
+<a name="line238"></a>		{
+<a name="line239"></a>			$this->_join_locations("left");
+<a name="line240"></a>		}
+<a name="line241"></a>		
+<a name="line242"></a>		// Filter out current user
+<a name="line243"></a>		if($options->exclude_logged_in_user)
+<a name="line244"></a>		{
+<a name="line245"></a>			$this->CI->db->where("U.id !=",$this->CI->session->userdata('user_id'));
+<a name="line246"></a>		}
+<a name="line247"></a>		
+<a name="line248"></a>		// Include stats about whether user is following this user
+<a name="line249"></a>		if($options->following_stats && !empty($this->CI->session->userdata['user_id']))
+<a name="line250"></a>		{
+<a name="line251"></a>			$this->CI->db->select("Following.id IS NOT NULL AS user_am_following")
+<a name="line252"></a>				->join("followings_users AS Following","U.id=Following.following_id AND Following.user_id = ".$this->CI->session->userdata['user_id'],"left");
+<a name="line253"></a>			$this->CI->db->select("Follower.id IS NOT NULL AS user_is_follower")
+<a name="line254"></a>				->join("followings_users AS Follower","U.id=Follower.user_id AND Follower.following_id = ". $this->CI->session->userdata['user_id'],"left");
+<a name="line255"></a>		}
+<a name="line256"></a>		
+<a name="line257"></a>		// Set ORDER BY
+<a name="line258"></a>		$this->CI->db->order_by($options->order_by, $options->sort);
+<a name="line259"></a>		
+<a name="line260"></a>		// Set LIMIT and offset
+<a name="line261"></a>		$this->CI->db->limit($options->limit, $options->offset);
+<a name="line262"></a>		
+<a name="line263"></a>		// Return result
+<a name="line264"></a>		$result = $this->CI->db->get()->result();
+<a name="line265"></a>		
+<a name="line266"></a>		// Hydrate & return results
+<a name="line267"></a>		Console::logSpeed("end User_search::find()");
+<a name="line268"></a>		return Factory::user($result);
+<a name="line269"></a>	}
+<a name="line270"></a>	
+<a name="line271"></a>	/**
+<a name="line272"></a>	*	Assembles basic SELECT query. The resulting SQL provides
+<a name="line273"></a>	*	a foundation for more complex queries. Conceptually it's similar
+<a name="line274"></a>	*	to a SQL view.
+<a name="line275"></a>	*/
+<a name="line276"></a>	function _basic_query()
+<a name="line277"></a>	{
+<a name="line278"></a>		$this->CI->db->select("U.id AS user_id,
+<a name="line279"></a>			U.email AS user_email,
+<a name="line280"></a>			U.screen_name AS user_screen_name,
+<a name="line281"></a>			U.first_name AS user_first_name,
+<a name="line282"></a>			U.last_name AS user_last_name,
+<a name="line283"></a>			U.photo_source AS user_photo_source,
+<a name="line284"></a>			U.facebook_id AS user_facebook_id,
+<a name="line285"></a>			
+<a name="line286"></a>			P.id AS photo_id,
+<a name="line287"></a>			P.url AS photo_url,
+<a name="line288"></a>			P.thumb_url AS photo_thumb_url")
+<a name="line289"></a>			->from("users AS U ")
+<a name="line290"></a>			->join("photos AS P ","U.default_photo_id = P.id AND U.photo_source='giftflow'","left");
+<a name="line291"></a>	}
+<a name="line292"></a>	/**
+<a name="line293"></a>	*	Assembles basic SELECT and JOIN clauses related to the location
+<a name="line294"></a>	*	components of a query.
+<a name="line295"></a>	*
+<a name="line296"></a>	*	@param string $type		type of join (left, right, inner, outer)
+<a name="line297"></a>	*/
+<a name="line298"></a>	function _join_locations( $type = NULL )
+<a name="line299"></a>	{
+<a name="line300"></a>		$this->CI->db->select("L.address AS location_address,
+<a name="line301"></a>			L.city AS location_city,
+<a name="line302"></a>			L.state AS location_state,
+<a name="line303"></a>			L.latitude AS location_latitude,
+<a name="line304"></a>			L.longitude AS location_longitude")
+<a name="line305"></a>			->join("locations AS L ","U.default_location_id = L.id",$type);
+<a name="line306"></a>	}
+<a name="line307"></a>
+<a name="line308"></a>	/**
+<a name="line309"></a>	*	Adds where clauses that limit results to a specific geographic area
+<a name="line310"></a>	*
+<a name="line311"></a>	*	Calculates bounds by determining how many degrees of latitude and 
+<a name="line312"></a>	*	longitude the search radius encompasses. This is not a complete 
+<a name="line313"></a>	*	solution, however, since the shape of the bounds is a square, not a 
+<a name="line314"></a>	*	circle. Thus to be truly accurate another where clause limiting results 
+<a name="line315"></a>	*	by the calculated distance field should be used.
+<a name="line316"></a>	*
+<a name="line317"></a>	*	@param object $options				Location object
+<a name="line318"></a>	*	@param float $options->latitude		Latitude
+<a name="line319"></a>	*	@param float $options->longitude	Longitude
+<a name="line320"></a>	*	@param float $options->address		Formatted address
+<a name="line321"></a>	*	@return boolean
+<a name="line322"></a>	*/
+<a name="line323"></a>	protected function _geosearch_clauses($options)
+<a name="line324"></a>	{
+<a name="line325"></a>		$this->CI->load->library('geo');
+<a name="line326"></a>		
+<a name="line327"></a>		// Geocode if needed
+<a name="line328"></a>		if( !empty($options->address) && (empty($options->latitude) || empty($options->longitude)))
+<a name="line329"></a>		{
+<a name="line330"></a>			$options = $this->CI->geo->geocode($options->address,$options);
+<a name="line331"></a>		}
+<a name="line332"></a>		
+<a name="line333"></a>		// Make sure latitude and longitude are present
+<a name="line334"></a>		if( empty($options->latitude) || empty($options->longitude) )
+<a name="line335"></a>		{
+<a name="line336"></a>			return FALSE;
+<a name="line337"></a>		}
+<a name="line338"></a>		
+<a name="line339"></a>		// Get lat/lng bounds
+<a name="line340"></a>		$bounds = $this->CI->geo->get_bounds($options->latitude, $options->longitude);
+<a name="line341"></a>		
+<a name="line342"></a>		// Assemble SQL Clauses
+<a name="line343"></a>		
+<a name="line344"></a>		// Add latitude WHERE BETWEEN clause
+<a name="line345"></a>		$this->CI->db->where("L.latitude BETWEEN ".$bounds['latitude']['min']." AND ".$bounds['latitude']['max']);
+<a name="line346"></a>		
+<a name="line347"></a>		// Add longitude WHERE BETWEEN clause
+<a name="line348"></a>		$this->CI->db->where("L.longitude BETWEEN ".$bounds['longitude']['min']." AND ".$bounds['longitude']['max']);
+<a name="line349"></a>		
+<a name="line350"></a>		// Add default_location_id WHERE clause
+<a name="line351"></a>		$this->CI->db->where("U.default_location_id IS NOT NULL");
+<a name="line352"></a>		
+<a name="line353"></a>		// Add location_distance SELECT clause
+<a name="line354"></a>		$this->CI->db->select("( 3959 * acos( cos( radians( ".$options->latitude." ) ) * cos( radians( L.latitude ) ) * cos( radians( L.longitude ) - radians(".$options->longitude.") ) + sin( radians(".$options->latitude.") ) * sin( radians( L.latitude ) ) ) ) AS location_distance");
+<a name="line355"></a>	}
+<a name="line356"></a>}
+<a name="line357"></a>/*
+<a name="line358"></a>Notes:
+<a name="line359"></a>
+<a name="line360"></a>Mutual contacts SQL Query:
+<a name="line361"></a>
+<a name="line362"></a>SELECT DISTINCT T2.user_id AS MutualContacts
+<a name="line363"></a>FROM transactions_users as T1
+<a name="line364"></a>JOIN transactions_users AS T2 ON T2.transaction_id = T1.transaction_id AND T2.user_id!=10
+<a name="line365"></a>JOIN transactions_users AS T3 ON T3.user_id = T2.user_id AND T3.transaction_id!=T2.transaction_id
+<a name="line366"></a>JOIN transactions_users as T4 ON T4.transaction_id = T3.transaction_id AND T4.user_id!=T3.user_id
+<a name="line367"></a>WHERE T1.user_id=10 AND T4.user_id=77
+<a name="line368"></a>*/</pre>
+<div class="header">
+<h1>GiftFlow API</h1>
+<ul>
+<li><a href="../../../overview-summary.html">Overview</a></li>
+<li>Package</li><li>Class</li><li>Tree</li><li><a href="../../../overview-files.html">Files</a></li>
+<li><a href="../../../deprecated-list.html">Deprecated</a></li>
+<li><a href="../../../index-all.html">Index</a></li>
+</ul>
+</div>
+
+<div class="small_links">
+<a href="../../../index.html" target="_top">Frames</a>
+<a href="../../../source/libraries/search/user_search.php.html" target="_top">No frames</a>
+</div>
+<hr>
+
+<p id="footer">This document was generated by <a href="http://peej.github.com/phpdoctor/">PHPDoctor: The PHP Documentation Creator</a></p>
+
+</body>
+
+</html>

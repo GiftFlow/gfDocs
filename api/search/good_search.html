@@ -1,0 +1,279 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+
+<html lang="en">
+<head>
+
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
+<meta name="generator" content="PHPDoctor 2RC4 (http://peej.github.com/phpdoctor/)">
+<meta name="when" content="Wed, 09 Feb 2011 20:22:55 +0000">
+
+<link rel="stylesheet" type="text/css" href="../stylesheet.css">
+<link rel="start" href="../overview-summary.html">
+
+<title>Good_search (GiftFlow API)</title>
+
+</head>
+<body id="definition" onload="parent.document.title=document.title;">
+
+<div class="header">
+<h1>GiftFlow API</h1>
+<ul>
+<li><a href="../overview-summary.html">Overview</a></li>
+<li><a href="../search/package-summary.html">Package</a></li>
+<li class="active">Class</li>
+<li><a href="../search/package-tree.html">Tree</a></li>
+<li><a href="../overview-files.html">Files</a></li>
+<li><a href="../deprecated-list.html">Deprecated</a></li>
+<li><a href="../index-all.html">Index</a></li>
+</ul>
+</div>
+
+<div class="small_links">
+<a href="../index.html" target="_top">Frames</a>
+<a href="../search/good_search.html" target="_top">No frames</a>
+</div>
+<div class="small_links">
+Summary: <a href="#summary_field">Field</a> | <a href="#summary_method">Method</a> | <a href="#summary_constr">Constr</a>
+Detail: <a href="#detail_field">Field</a> | <a href="#detail_method">Method</a> | <a href="#summary_constr">Constr</a>
+</div>
+<hr>
+
+<div class="qualifiedName">Search\Good_search</div>
+<a href="../source/libraries/search/good_search.php.html#line9" class="location">libraries/Search/Good_search.php at line 9</a>
+
+<h1>Class Good_search</h1>
+
+<pre class="tree"><a href="../search/search.html">Search</a><br>    └─<strong>Good_search</strong><br /></pre>
+
+<hr>
+
+<p class="signature">public  class <strong>Good_search</strong><br>extends <a href="../search/search.html">Search</a>
+
+</p>
+
+<div class="comment" id="overview_description"><p>Good model for select operations</p></div>
+
+<dl>
+<dt>Author:</dt>
+<dd>Brandon Jackson</dd>
+</dl>
+<hr>
+
+<table id="summary_field">
+<tr><th colspan="2">Field Summary</th></tr>
+<tr>
+<td class="type">protected  object</td>
+<td class="description"><p class="name"><a href="#get_conversation">$get_conversation</a></p><p class="description">CodeIgniter super-object</p></td>
+</tr>
+<tr>
+<td class="type"> mixed</td>
+<td class="description"><p class="name"><a href="#good_id">$good_id</a></p></td>
+</tr>
+<tr>
+<td class="type"> mixed</td>
+<td class="description"><p class="name"><a href="#include_tags">$include_tags</a></p></td>
+</tr>
+</table>
+
+<table class="inherit">
+<tr><th colspan="2">Fields inherited from Search\Search</th></tr>
+<tr><td><a href="../search/search.html#_basic_query">_basic_query</a></td></tr></table>
+
+<table id="summary_method">
+<tr><th colspan="2">Method Summary</th></tr>
+<tr>
+<td class="type"> void</td>
+<td class="description"><p class="name"><a href="#__construct()">__construct</a>(mixed id)</p><p class="description">Constructor</p></td>
+</tr>
+<tr>
+<td class="type">protected  void</td>
+<td class="description"><p class="name"><a href="#_basic_query()">_basic_query</a>()</p><p class="description">Assembles basic SELECT query. </p></td>
+</tr>
+<tr>
+<td class="type"> void</td>
+<td class="description"><p class="name"><a href="#active_transactions()">active_transactions</a>(mixed user_id)</p></td>
+</tr>
+<tr>
+<td class="type"> void</td>
+<td class="description"><p class="name"><a href="#cancelled_transactions()">cancelled_transactions</a>(mixed user_id)</p></td>
+</tr>
+<tr>
+<td class="type"> void</td>
+<td class="description"><p class="name"><a href="#completed_transactions()">completed_transactions</a>(mixed user_id)</p></td>
+</tr>
+<tr>
+<td class="type"> void</td>
+<td class="description"><p class="name"><a href="#declined_transactions()">declined_transactions</a>(mixed user_id)</p></td>
+</tr>
+<tr>
+<td class="type"> void</td>
+<td class="description"><p class="name"><a href="#find()">find</a>(mixed options)</p></td>
+</tr>
+<tr>
+<td class="type"> void</td>
+<td class="description"><p class="name"><a href="#get()">get</a>()</p><p class="description">Retrieve single Good object</p></td>
+</tr>
+<tr>
+<td class="type"> void</td>
+<td class="description"><p class="name"><a href="#pending_transactions()">pending_transactions</a>(mixed user_id)</p></td>
+</tr>
+<tr>
+<td class="type"> void</td>
+<td class="description"><p class="name"><a href="#transactions()">transactions</a>(str status)</p></td>
+</tr>
+</table>
+
+<table class="inherit">
+<tr><th colspan="2">Methods inherited from Search\Search</th></tr>
+<tr><td><a href="../search/search.html#__construct()">__construct</a></td></tr></table>
+
+<h2 id="detail_field">Field Detail</h2>
+<a href="../source/libraries/search/good_search.php.html#line16" class="location">libraries/Search/Good_search.php at line 16</a>
+
+<h3 id="get_conversation">get_conversation</h3>
+<code class="signature">protected  object <strong>$get_conversation</strong> = NULL</code>
+<div class="details">
+<p>CodeIgniter super-object</p></div>
+
+<hr>
+
+<a href="../source/libraries/search/good_search.php.html#line18" class="location">libraries/Search/Good_search.php at line 18</a>
+
+<h3 id="good_id">good_id</h3>
+<code class="signature">public  mixed <strong>$good_id</strong></code>
+<div class="details">
+</div>
+
+<hr>
+
+<a href="../source/libraries/search/good_search.php.html#line20" class="location">libraries/Search/Good_search.php at line 20</a>
+
+<h3 id="include_tags">include_tags</h3>
+<code class="signature">public  mixed <strong>$include_tags</strong> = FALSE</code>
+<div class="details">
+</div>
+
+<hr>
+
+<h2 id="detail_method">Method Detail</h2><div class="method_detail">
+<div class='method'><a href="../source/libraries/search/good_search.php.html#line25" class="location">libraries/Search/Good_search.php at line 25</a>
+
+<h3 id="__construct()">__construct</h3>
+<code class="signature">public  void <strong>__construct</strong>(mixed id)</code>
+<div class="details">
+<p>Constructor</p></div></div>
+
+
+
+<div class='method'><a href="../source/libraries/search/good_search.php.html#line170" class="location">libraries/Search/Good_search.php at line 170</a>
+
+<h3 id="_basic_query()">_basic_query</h3>
+<code class="signature">protected  void <strong>_basic_query</strong>()</code>
+<div class="details">
+<p>Assembles basic SELECT query. The resulting SQL provides
+a foundation for more complex queries. Conceptually it's similar
+to a SQL view.</p></div></div>
+
+
+
+<div class='method'><a href="../source/libraries/search/good_search.php.html#line146" class="location">libraries/Search/Good_search.php at line 146</a>
+
+<h3 id="active_transactions()">active_transactions</h3>
+<code class="signature">public  void <strong>active_transactions</strong>(mixed user_id)</code>
+<div class="details">
+</div></div>
+
+
+
+<div class='method'><a href="../source/libraries/search/good_search.php.html#line160" class="location">libraries/Search/Good_search.php at line 160</a>
+
+<h3 id="cancelled_transactions()">cancelled_transactions</h3>
+<code class="signature">public  void <strong>cancelled_transactions</strong>(mixed user_id)</code>
+<div class="details">
+</div></div>
+
+
+
+<div class='method'><a href="../source/libraries/search/good_search.php.html#line156" class="location">libraries/Search/Good_search.php at line 156</a>
+
+<h3 id="completed_transactions()">completed_transactions</h3>
+<code class="signature">public  void <strong>completed_transactions</strong>(mixed user_id)</code>
+<div class="details">
+</div></div>
+
+
+
+<div class='method'><a href="../source/libraries/search/good_search.php.html#line151" class="location">libraries/Search/Good_search.php at line 151</a>
+
+<h3 id="declined_transactions()">declined_transactions</h3>
+<code class="signature">public  void <strong>declined_transactions</strong>(mixed user_id)</code>
+<div class="details">
+</div></div>
+
+
+
+<div class='method'><a href="../source/libraries/search/good_search.php.html#line34" class="location">libraries/Search/Good_search.php at line 34</a>
+
+<h3 id="find()">find</h3>
+<code class="signature">public  void <strong>find</strong>(mixed options)</code>
+<div class="details">
+</div></div>
+
+
+
+<div class='method'><a href="../source/libraries/search/good_search.php.html#line85" class="location">libraries/Search/Good_search.php at line 85</a>
+
+<h3 id="get()">get</h3>
+<code class="signature">public  void <strong>get</strong>()</code>
+<div class="details">
+<p>Retrieve single Good object</p></div></div>
+
+
+
+<div class='method'><a href="../source/libraries/search/good_search.php.html#line141" class="location">libraries/Search/Good_search.php at line 141</a>
+
+<h3 id="pending_transactions()">pending_transactions</h3>
+<code class="signature">public  void <strong>pending_transactions</strong>(mixed user_id)</code>
+<div class="details">
+</div></div>
+
+
+
+<div class='method'><a href="../source/libraries/search/good_search.php.html#line111" class="location">libraries/Search/Good_search.php at line 111</a>
+
+<h3 id="transactions()">transactions</h3>
+<code class="signature">public  void <strong>transactions</strong>(str status)</code>
+<div class="details">
+</div></div>
+
+
+
+</div><div class="header">
+<h1>GiftFlow API</h1>
+<ul>
+<li><a href="../overview-summary.html">Overview</a></li>
+<li><a href="../search/package-summary.html">Package</a></li>
+<li class="active">Class</li>
+<li><a href="../search/package-tree.html">Tree</a></li>
+<li><a href="../overview-files.html">Files</a></li>
+<li><a href="../deprecated-list.html">Deprecated</a></li>
+<li><a href="../index-all.html">Index</a></li>
+</ul>
+</div>
+
+<div class="small_links">
+<a href="../index.html" target="_top">Frames</a>
+<a href="../search/good_search.html" target="_top">No frames</a>
+</div>
+<div class="small_links">
+Summary: <a href="#summary_field">Field</a> | <a href="#summary_method">Method</a> | <a href="#summary_constr">Constr</a>
+Detail: <a href="#detail_field">Field</a> | <a href="#detail_method">Method</a> | <a href="#summary_constr">Constr</a>
+</div>
+<hr>
+
+<p id="footer">This document was generated by <a href="http://peej.github.com/phpdoctor/">PHPDoctor: The PHP Documentation Creator</a></p>
+
+</body>
+
+</html>

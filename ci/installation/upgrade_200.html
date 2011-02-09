@@ -80,16 +80,36 @@ Upgrading from 1.7.2 to 2.0.0
 <h2>Step 3: Convert your Plugins to Helpers</h2>
 
 <p>2.0.0 gets rid of the "Plugin" system as their functionality was identical to Helpers, but non-extensible.  You will need to rename your plugin files from <var>filename_pi.php</var> to <var>filename_helper.php</var>, move them to your <kbd>helpers</kbd> folder, and change all instances of:
-	
+
 	<code>$this->load->plugin('foo');</code>
-	
+
 to
 
 	<code>$this->load->helper('foo');</code>
 
 </p>
 
-<h2>Step 3: Update your user guide</h2>
+<h2>Step 4: Update stored encrypted data</h2>
+
+<p class="important"><strong>Note:</strong> If your application does not use the Encryption library, does not store Encrypted data permanently, or is on an environment that does not support Mcrypt, you may skip this step.</p>
+
+<p>The Encryption library has had a number of improvements, some for encryption strength and some for performance, that has an unavoidable consequence of
+	making it no longer possible to decode encrypted data produced by the original version of this library.  To help with the transition, a new method has
+	been added, <kbd>encode_from_legacy()</kbd> that will decode the data with the original algorithm and return a re-encoded string using the improved methods.
+	This will enable you to easily replace stale encrypted data with fresh in your applications, either on the fly or en masse.</p>
+
+<p>Please read <a href="../libraries/encryption.html#legacy">how to use this method</a> in the Encryption library documentation.</p>
+
+<h2>Step 5: Remove loading calls for the compatibility helper.</h2>
+<p>The compatibility helper has been removed from the CodeIgniter core. All methods in it should be natively available in supported PHP versions.</p>
+
+<h2>Step 6: Update Class extension</h2>
+<p>All core classes are now prefixed with <kbd>CI_</kbd>.  Update Models and Controllers to extend CI_Model and CI_Controller, respectively.</p> 
+
+<h2>Step 7: Update Parent Constructor calls</h2>
+<p>All native CodeIgniter classes now use the PHP 5 <kbd>__construct()</kbd> convention. Please update extended libraries to call <kbd>parent::__construct()</kbd>.</p>
+
+<h2>Step 8: Update your user guide</h2>
 <p>Please replace your local copy of the user guide with the new version, including the image files.</p>
 
 </div>
@@ -104,7 +124,7 @@ Previous Topic:&nbsp;&nbsp;<a href="index.html">Installation Instructions</a>
 <a href="../index.html">User Guide Home</a>&nbsp;&nbsp;&nbsp;&middot;&nbsp;&nbsp;
 Next Topic:&nbsp;&nbsp;<a href="troubleshooting.html">Troubleshooting</a>
 </p>
-<p><a href="http://codeigniter.com">CodeIgniter</a> &nbsp;&middot;&nbsp; Copyright &#169; 2006-2010 &nbsp;&middot;&nbsp; <a href="http://ellislab.com/">EllisLab, Inc.</a></p>
+<p><a href="http://codeigniter.com">CodeIgniter</a> &nbsp;&middot;&nbsp; Copyright &#169; 2006 - 2011 &nbsp;&middot;&nbsp; <a href="http://ellislab.com/">EllisLab, Inc.</a></p>
 </div>
 
 </body>

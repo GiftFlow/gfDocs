@@ -6,7 +6,7 @@
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 
 <meta name="generator" content="PHPDoctor 2RC4 (http://peej.github.com/phpdoctor/)">
-<meta name="when" content="Sat, 24 Jul 2010 20:47:45 +0000">
+<meta name="when" content="Wed, 09 Feb 2011 20:22:56 +0000">
 
 <link rel="stylesheet" type="text/css" href="../../stylesheet.css">
 <link rel="start" href="../../overview-summary.html">
@@ -39,57 +39,57 @@
 <a name="line2"></a>class Message extends DataMapperExtension {
 <a name="line3"></a>	
 <a name="line4"></a>	var $created_field = 'created';
-<a name="line5"></a>	var $updated_field = 'updated';
-<a name="line6"></a>	var $recipients = array();
+<a name="line5"></a>	
+<a name="line6"></a>	var $updated_field = 'updated';
 <a name="line7"></a>	
-<a name="line8"></a>	// --------------------------------------------------------------------
-<a name="line9"></a>	// Relationships
-<a name="line10"></a>	//   Configure your relationships below
-<a name="line11"></a>	// --------------------------------------------------------------------
-<a name="line12"></a>	
-<a name="line13"></a>	var $has_one = array(
-<a name="line14"></a>		'author' => array(
-<a name="line15"></a>			'class' => 'user'
-<a name="line16"></a>			),
+<a name="line8"></a>	var $recipients = array();
+<a name="line9"></a>	
+<a name="line10"></a>	// --------------------------------------------------------------------
+<a name="line11"></a>	// Relationships
+<a name="line12"></a>	//   Configure your relationships below
+<a name="line13"></a>	// --------------------------------------------------------------------
+<a name="line14"></a>	
+<a name="line15"></a>	var $has_one = array(
+<a name="line16"></a>		'user',
 <a name="line17"></a>		'thread',
 <a name="line18"></a>		'good',
 <a name="line19"></a>		'transaction'
 <a name="line20"></a>	);
 <a name="line21"></a>	
-<a name="line22"></a>	var $has_many = array( "message_delivery" );
-<a name="line23"></a>	
-<a name="line24"></a>	// --------------------------------------------------------------------
-<a name="line25"></a>	// Validation
-<a name="line26"></a>	//   Add validation requirements, such as 'required', for your fields.
-<a name="line27"></a>	// --------------------------------------------------------------------
-<a name="line28"></a>	
-<a name="line29"></a>	var $validation = array(
-<a name="line30"></a>		'body' => array(
-<a name="line31"></a>			'rules' => array(
-<a name="line32"></a>				'required'
-<a name="line33"></a>			),
-<a name="line34"></a>			'label' => 'Message'
-<a name="line35"></a>		),
-<a name="line36"></a>		'author_id' => array(
-<a name="line37"></a>			'rules' => array(
-<a name="line38"></a>				'required'
-<a name="line39"></a>			),
-<a name="line40"></a>			'label' => "Author"
-<a name="line41"></a>		),
-<a name="line42"></a>		'recipients' => array(
-<a name="line43"></a>			'rules' => array(
-<a name="line44"></a>				'check_recipients'
-<a name="line45"></a>			),
+<a name="line22"></a>	var $has_many = array(
+<a name="line23"></a>		'message_delivery' 
+<a name="line24"></a>	);
+<a name="line25"></a>	
+<a name="line26"></a>	// --------------------------------------------------------------------
+<a name="line27"></a>	// Validation
+<a name="line28"></a>	//   Add validation requirements, such as 'required', for your fields.
+<a name="line29"></a>	// --------------------------------------------------------------------
+<a name="line30"></a>	
+<a name="line31"></a>	var $validation = array(
+<a name="line32"></a>		'body' => array(
+<a name="line33"></a>			'rules' => array(
+<a name="line34"></a>				'required'
+<a name="line35"></a>			),
+<a name="line36"></a>			'label' => 'Message'
+<a name="line37"></a>		),
+<a name="line38"></a>		'user_id' => array(
+<a name="line39"></a>			'rules' => array(
+<a name="line40"></a>				'required'
+<a name="line41"></a>			),
+<a name="line42"></a>			'label' => "Author"
+<a name="line43"></a>		),
+<a name="line44"></a>		'recipients' => array(
+<a name="line45"></a>			'rules' => array(),
 <a name="line46"></a>			'label' => 'Recipients'
 <a name="line47"></a>		)
 <a name="line48"></a>	);
 <a name="line49"></a>	
-<a name="line50"></a>	var $ci;
+<a name="line50"></a>	var $CI;
 <a name="line51"></a>	
 <a name="line52"></a>    	function __construct( $id = NULL )
 <a name="line53"></a>	{
 <a name="line54"></a>		parent::__construct( $id );
-<a name="line55"></a>		$this->ci =& get_instance();
+<a name="line55"></a>		$this->CI =& get_instance();
 <a name="line56"></a>    	}
 <a name="line57"></a>	
 <a name="line58"></a>	function  compose()
@@ -105,7 +105,7 @@
 <a name="line68"></a>		*/
 <a name="line69"></a>		$this->validate();
 <a name="line70"></a>		
-<a name="line71"></a>		if ( empty($this->thread_id) )
+<a name="line71"></a>		if (empty($this->thread_id))
 <a name="line72"></a>		{
 <a name="line73"></a>			$t = new Thread();
 <a name="line74"></a>			$t->subject = $this->subject;
@@ -113,7 +113,7 @@
 <a name="line76"></a>			foreach($this->recipients as $val)
 <a name="line77"></a>			{
 <a name="line78"></a>				$u = new User($val);
-<a name="line79"></a>				$t->save_recipient($u);
+<a name="line79"></a>				$t->save_user($u);
 <a name="line80"></a>			}
 <a name="line81"></a>			$this->thread_id = $t->id;
 <a name="line82"></a>		}
@@ -124,121 +124,96 @@
 <a name="line87"></a>			
 <a name="line88"></a>			$this->recipients = array();
 <a name="line89"></a>			
-<a name="line90"></a>			foreach($t->recipient->all as $obj)
+<a name="line90"></a>			foreach($t->user->all as $obj)
 <a name="line91"></a>			{
 <a name="line92"></a>				print_r($obj);
 <a name="line93"></a>				$this->recipients[] = $obj->id;
 <a name="line94"></a>			}
 <a name="line95"></a>		}
 <a name="line96"></a>		
-<a name="line97"></a>		if( $this->save() )
-<a name="line98"></a>			echo $this->id;
-<a name="line99"></a>		else
-<a name="line100"></a>			return false;
-<a name="line101"></a>		
-<a name="line102"></a>		/*
-<a name="line103"></a>		*  Deliver the mail to each recipient 
-<a name="line104"></a>		*  (ie insert a new row into message_threading)
-<a name="line105"></a>		*/
-<a name="line106"></a>
-<a name="line107"></a>		foreach ( $this->recipients as $key=>$val )
-<a name="line108"></a>		{
-<a name="line109"></a>			$d = new Message_delivery();
-<a name="line110"></a>			
-<a name="line111"></a>			$d->thread_id = $this->thread_id;
-<a name="line112"></a>			$d->recipient_id = $val;
-<a name="line113"></a>			// Mark sent messages as preopened
-<a name="line114"></a>			if ( $key === "author" )
-<a name="line115"></a>				$d->opened = 1;
-<a name="line116"></a>			// More efficient way to save message_id
-<a name="line117"></a>			$d->message_id = $this->id;
-<a name="line118"></a>			$d->save();
-<a name="line119"></a>			// The appropriate (and less efficient) way to save message_id
-<a name="line120"></a>			//$this->save_message_delivery($d);
-<a name="line121"></a>		}
-<a name="line122"></a>
-<a name="line123"></a>		return true;
-<a name="line124"></a>	}
-<a name="line125"></a>	function transaction_dialogue()
-<a name="line126"></a>	{
-<a name="line127"></a>		/*
-<a name="line128"></a>		* @Parameters
-<a name="line129"></a>		*
-<a name="line130"></a>		* (string) $body 
-<a name="line131"></a>		* (int) $author_id
-<a name="line132"></a>		* (array) $recipients: array(recipient_id_1, recipient_id_2, recipient_id_3);
-<a name="line133"></a>		*/
-<a name="line134"></a>		$this->type = 'transaction';
-<a name="line135"></a>		
-<a name="line136"></a>		$this->validate();
-<a name="line137"></a>		if ( empty($this->transaction_id) )
-<a name="line138"></a>			return false;
-<a name="line139"></a>		if( !$this->save() )
-<a name="line140"></a>			return false;
-<a name="line141"></a>		
-<a name="line142"></a>		/*
-<a name="line143"></a>		*  Deliver the mail to each recipient 
-<a name="line144"></a>		*  (ie insert a new row into message_threading)
-<a name="line145"></a>		*/
-<a name="line146"></a>
-<a name="line147"></a>		foreach ( $this->recipients as $key=>$val )
-<a name="line148"></a>		{
-<a name="line149"></a>			$d = new Message_delivery();
-<a name="line150"></a>			
-<a name="line151"></a>			$d->thread_id = $this->thread_id;
-<a name="line152"></a>			$d->recipient_id = $val;
-<a name="line153"></a>			// Mark sent messages as preopened
-<a name="line154"></a>			if ( $key === "author" )
-<a name="line155"></a>				$d->opened = 1;
-<a name="line156"></a>			// More efficient way to save message_id
-<a name="line157"></a>			$d->message_id = $this->id;
-<a name="line158"></a>			$d->save();
-<a name="line159"></a>			// The appropriate (and less efficient) way to save message_id
-<a name="line160"></a>			//$this->save_message_delivery($d);
-<a name="line161"></a>		}
-<a name="line162"></a>
-<a name="line163"></a>		return true;
-<a name="line164"></a>	}	
-<a name="line165"></a>	
-<a name="line166"></a>	function _check_recipients ( $field )
-<a name="line167"></a>	{
-<a name="line168"></a>		if ( !empty($this->recipients) && empty($this->thread_id) )
-<a name="line169"></a>		{
-<a name="line170"></a>			if(empty($this->recipients['author']))
-<a name="line171"></a>			{
-<a name="line172"></a>				$this->recipients['author'] = $this->author_id;
-<a name="line173"></a>				$key = array_search($this->author_id, $this->recipients);
-<a name="line174"></a>				unset($this->recipients[$key]);
-<a name="line175"></a>			}
-<a name="line176"></a>			return true;
-<a name="line177"></a>		}
-<a name="line178"></a>		elseif ( !empty($this->thread_id) )
-<a name="line179"></a>		{
-<a name="line180"></a>			$this->recipients = array();
-<a name="line181"></a>			$m = new Message();
-<a name="line182"></a>			$m->where('thread_id', $this->thread_id)->get();
-<a name="line183"></a>			if(empty($this->recipients['author']))
-<a name="line184"></a>			{
-<a name="line185"></a>				$this->recipients['author'] = $m->author_id;
-<a name="line186"></a>				$key = array_search($m->author_id, $this->recipients);
-<a name="line187"></a>				unset($this->recipients[$key]);
-<a name="line188"></a>
-<a name="line189"></a>			}
-<a name="line190"></a>			$d = new Message_delivery();
-<a name="line191"></a>			$d->where('message_id', $m->id)->get();
-<a name="line192"></a>			foreach ( $d->all as $obj )
-<a name="line193"></a>			{
-<a name="line194"></a>				$this->recipients[] = $obj->recipient_id;
-<a name="line195"></a>			}
-<a name="line196"></a>			if ( count($this->recipients) > 1 )
-<a name="line197"></a>				return true;
-<a name="line198"></a>		}
-<a name="line199"></a>		return false;
-<a name="line200"></a>	}
-<a name="line201"></a>    
-<a name="line202"></a>}
-<a name="line203"></a>?>
-<a name="line204"></a></pre>
+<a name="line97"></a>		if($this->save())
+<a name="line98"></a>		{
+<a name="line99"></a>			echo $this->id;
+<a name="line100"></a>		}
+<a name="line101"></a>		else
+<a name="line102"></a>		{
+<a name="line103"></a>			return false;
+<a name="line104"></a>		}
+<a name="line105"></a>		
+<a name="line106"></a>		// Deliver the mail to each recipient 
+<a name="line107"></a>		// (ie insert a new row into message_deliveries)
+<a name="line108"></a>		foreach ( $this->recipients as $key=>$val )
+<a name="line109"></a>		{
+<a name="line110"></a>			$d = new Message_delivery();
+<a name="line111"></a>			
+<a name="line112"></a>			$d->thread_id = $this->thread_id;
+<a name="line113"></a>			$d->recipient_id = $val;
+<a name="line114"></a>			// Mark sent messages as preopened
+<a name="line115"></a>			if ( $key === "author" )
+<a name="line116"></a>			{
+<a name="line117"></a>				$d->opened = 1;
+<a name="line118"></a>			}
+<a name="line119"></a>			// More efficient way to save message_id
+<a name="line120"></a>			$d->message_id = $this->id;
+<a name="line121"></a>			$d->save();
+<a name="line122"></a>			// The appropriate (and less efficient) way to save message_id
+<a name="line123"></a>			//$this->save_message_delivery($d);
+<a name="line124"></a>		}
+<a name="line125"></a>
+<a name="line126"></a>		return true;
+<a name="line127"></a>	}
+<a name="line128"></a>	
+<a name="line129"></a>	/**
+<a name="line130"></a>	*	@deprecated
+<a name="line131"></a>	*/
+<a name="line132"></a>	function transaction_dialogue()
+<a name="line133"></a>	{
+<a name="line134"></a>		/*
+<a name="line135"></a>		* @Parameters
+<a name="line136"></a>		*
+<a name="line137"></a>		* (string) $body 
+<a name="line138"></a>		* (int) $author_id
+<a name="line139"></a>		* (array) $recipients: array(recipient_id_1, recipient_id_2, recipient_id_3);
+<a name="line140"></a>		*/
+<a name="line141"></a>		$this->type = 'transaction';
+<a name="line142"></a>		
+<a name="line143"></a>		$this->validate();
+<a name="line144"></a>		
+<a name="line145"></a>		if(empty($this->transaction_id))
+<a name="line146"></a>		{
+<a name="line147"></a>			return FALSE;
+<a name="line148"></a>		}
+<a name="line149"></a>		
+<a name="line150"></a>		if(!$this->save())
+<a name="line151"></a>		{
+<a name="line152"></a>			return FALSE;
+<a name="line153"></a>		}
+<a name="line154"></a>		
+<a name="line155"></a>		// Deliver the mail to each recipient 
+<a name="line156"></a>		// (ie insert a new row into message_deliveries)
+<a name="line157"></a>		foreach ($this->recipients as $key=>$val)
+<a name="line158"></a>		{
+<a name="line159"></a>			$D = new Message_delivery();
+<a name="line160"></a>			
+<a name="line161"></a>			$D->thread_id = $this->thread_id;
+<a name="line162"></a>			$D->recipient_id = $val;
+<a name="line163"></a>			
+<a name="line164"></a>			// Mark sent messages as preopened
+<a name="line165"></a>			if ( $key === "author" )
+<a name="line166"></a>			{
+<a name="line167"></a>				$d->opened = 1;
+<a name="line168"></a>			}
+<a name="line169"></a>			
+<a name="line170"></a>			// More efficient way to save message_id
+<a name="line171"></a>			$D->message_id = $this->id;
+<a name="line172"></a>			$D->save();
+<a name="line173"></a>		}
+<a name="line174"></a>
+<a name="line175"></a>		return TRUE;
+<a name="line176"></a>	}
+<a name="line177"></a>}
+<a name="line178"></a>?>
+<a name="line179"></a></pre>
 <div class="header">
 <h1>GiftFlow API</h1>
 <ul>

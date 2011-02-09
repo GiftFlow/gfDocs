@@ -6,7 +6,7 @@
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 
 <meta name="generator" content="PHPDoctor 2RC4 (http://peej.github.com/phpdoctor/)">
-<meta name="when" content="Sat, 24 Jul 2010 20:47:45 +0000">
+<meta name="when" content="Wed, 09 Feb 2011 20:22:56 +0000">
 
 <link rel="stylesheet" type="text/css" href="../../stylesheet.css">
 <link rel="start" href="../../overview-summary.html">
@@ -59,930 +59,1095 @@
 <a name="line22"></a>	*	@var string
 <a name="line23"></a>	*/
 <a name="line24"></a>	var $search_keyword;
-<a name="line25"></a>	
-<a name="line26"></a>	/**
-<a name="line27"></a>	*	Location keyword. The text found in the "where" search box.
-<a name="line28"></a>	*	@var string
-<a name="line29"></a>	*/
-<a name="line30"></a>	var $location_keyword;
-<a name="line31"></a>	
-<a name="line32"></a>	// Location details
-<a name="line33"></a>	
-<a name="line34"></a>	/**
-<a name="line35"></a>	*	@var object
-<a name="line36"></a>	*/
-<a name="line37"></a>	var $location;
-<a name="line38"></a>	
-<a name="line39"></a>	/**
-<a name="line40"></a>	*	@var string
-<a name="line41"></a>	*/
-<a name="line42"></a>	var $address;
-<a name="line43"></a>	
-<a name="line44"></a>	/**
-<a name="line45"></a>	*	@var float
+<a name="line25"></a>		
+<a name="line26"></a>	// Location details
+<a name="line27"></a>	
+<a name="line28"></a>	/**
+<a name="line29"></a>	*	Stores location information, returned via Geo::geocode()
+<a name="line30"></a>	*	Object properties: latitude, longitude, address, street_address, city, 
+<a name="line31"></a>	*	state, postal_code, country
+<a name="line32"></a>	*
+<a name="line33"></a>	*	@var object
+<a name="line34"></a>	*/
+<a name="line35"></a>	var $location;
+<a name="line36"></a>	
+<a name="line37"></a>	/**
+<a name="line38"></a>	*	LatLng bounds defined using search radius
+<a name="line39"></a>	*	@var array
+<a name="line40"></a>	*/
+<a name="line41"></a>	var $bounds;
+<a name="line42"></a>	
+<a name="line43"></a>	/**
+<a name="line44"></a>	*	List of users to search
+<a name="line45"></a>	*	@var array
 <a name="line46"></a>	*/
-<a name="line47"></a>	var $latitude;
+<a name="line47"></a>	var $users;
 <a name="line48"></a>	
 <a name="line49"></a>	/**
-<a name="line50"></a>	*	@var float
-<a name="line51"></a>	*/
-<a name="line52"></a>	var $longitude;
-<a name="line53"></a>	
-<a name="line54"></a>	// Search radius
-<a name="line55"></a>	
-<a name="line56"></a>	/**
-<a name="line57"></a>	*	Search radius in miles
-<a name="line58"></a>	*	@var int
-<a name="line59"></a>	*/
-<a name="line60"></a>	var $radius = 10000;
-<a name="line61"></a>	
-<a name="line62"></a>	/**
-<a name="line63"></a>	*	LatLng bounds defined using search radius
-<a name="line64"></a>	*	@var array
-<a name="line65"></a>	*/
-<a name="line66"></a>	var $bounds;
-<a name="line67"></a>	
-<a name="line68"></a>	/**
-<a name="line69"></a>	*	List of users to search
-<a name="line70"></a>	*	@var array
-<a name="line71"></a>	*/
-<a name="line72"></a>	var $users;
-<a name="line73"></a>	
-<a name="line74"></a>	/**
-<a name="line75"></a>	*	Type of search
-<a name="line76"></a>	*	@var string
-<a name="line77"></a>	*/
-<a name="line78"></a>	var $type = 'gift';
-<a name="line79"></a>	
-<a name="line80"></a>	/**
-<a name="line81"></a>	*	Tag ID
-<a name="line82"></a>	*	@var int
-<a name="line83"></a>	*/
-<a name="line84"></a>	var $tag_id;
-<a name="line85"></a>	
-<a name="line86"></a>	/**
-<a name="line87"></a>	*	Stores subquery strings which will be merged in a union
-<a name="line88"></a>	*	@var array
-<a name="line89"></a>	*/
-<a name="line90"></a>	var $subquery;
-<a name="line91"></a>
-<a name="line92"></a>	// Sorting & Pagination variables
-<a name="line93"></a>	
-<a name="line94"></a>	/**
-<a name="line95"></a>	*	Default ORDER BY field
-<a name="line96"></a>	*	@var string
-<a name="line97"></a>	*/
-<a name="line98"></a>	var $default_order_by_field = 'good_created';
-<a name="line99"></a>	
-<a name="line100"></a>	/**
-<a name="line101"></a>	*	Default ORDER BY direction
-<a name="line102"></a>	*	@var string
-<a name="line103"></a>	*/
-<a name="line104"></a>	var $default_order_by_direction = 'ASC';
-<a name="line105"></a>	
-<a name="line106"></a>	/**
-<a name="line107"></a>	*	Default LIMIT size
-<a name="line108"></a>	*	@var int
-<a name="line109"></a>	*/
-<a name="line110"></a>	var $default_limit_size = 10;
-<a name="line111"></a>	
-<a name="line112"></a>	/**
-<a name="line113"></a>	*	Default LIMIT offset
-<a name="line114"></a>	*	@var int
-<a name="line115"></a>	*/
-<a name="line116"></a>	var $default_limit_offset = 0;
-<a name="line117"></a>
-<a name="line118"></a>	/**
-<a name="line119"></a>	*	User-specified ORDER BY field
-<a name="line120"></a>	*	@var string
-<a name="line121"></a>	*/
-<a name="line122"></a>	var $order_by_field;
-<a name="line123"></a>	
-<a name="line124"></a>	/**
-<a name="line125"></a>	*	User-specified ORDER BY direction
-<a name="line126"></a>	*	@var string
-<a name="line127"></a>	*/
-<a name="line128"></a>	var $order_by_direction;
-<a name="line129"></a>	
-<a name="line130"></a>	/**
-<a name="line131"></a>	*	User-specified LIMIT size
-<a name="line132"></a>	*	@var int
-<a name="line133"></a>	*/
-<a name="line134"></a>	var $limit_size;
-<a name="line135"></a>	
-<a name="line136"></a>	/**
-<a name="line137"></a>	*	User-specified LIMIT offset
-<a name="line138"></a>	*	@var int
-<a name="line139"></a>	*/
-<a name="line140"></a>	var $limit_offset;
-<a name="line141"></a>	
-<a name="line142"></a>	/**
-<a name="line143"></a>	*	@var array
-<a name="line144"></a>	*/
-<a name="line145"></a>	var $where;
-<a name="line146"></a>
-<a name="line147"></a>	/**
-<a name="line148"></a>	*	Raw database result object
-<a name="line149"></a>	*	The raw database result object from the database query is usually stored here.
-<a name="line150"></a>	*	@var object
-<a name="line151"></a>	*/
-<a name="line152"></a>	var $result;
-<a name="line153"></a>	
-<a name="line154"></a>	/**
-<a name="line155"></a>	*	Formatted search result object
-<a name="line156"></a>	*	This object mimics datamapper's format. $this->result is usually
-<a name="line157"></a>	*	converted to an object and then saved here in $this->_object_factory().
-<a name="line158"></a>	*	@var object
-<a name="line159"></a>	*/
-<a name="line160"></a>	var $object;
-<a name="line161"></a>	
-<a name="line162"></a>	/**
-<a name="line163"></a>	*	Return data format
-<a name="line164"></a>	*
-<a name="line165"></a>	*	@var string
-<a name="line166"></a>	*/
-<a name="line167"></a>	var $format;
-<a name="line168"></a>	
-<a name="line169"></a>	public function __construct()
-<a name="line170"></a>	{
-<a name="line171"></a>		// Load CI super-object
-<a name="line172"></a>		$this->CI =& get_instance();
-<a name="line173"></a>		
-<a name="line174"></a>		// If the request is being made via AJAX, set the output to be in JSON
-<a name="line175"></a>		if( $this->CI->util->is_ajax() )
-<a name="line176"></a>		{
-<a name="line177"></a>			$this->format = "JSON";
-<a name="line178"></a>		}
-<a name="line179"></a>		
-<a name="line180"></a>		// If not in AJAX, return an object
-<a name="line181"></a>		else
-<a name="line182"></a>		{
-<a name="line183"></a>			$this->format = "object";
-<a name="line184"></a>		}
-<a name="line185"></a>	}
-<a name="line186"></a>		
-<a name="line187"></a>	/**
-<a name="line188"></a>	*	Geocodes an IP address using an external IP address API.
-<a name="line189"></a>	*	If the IP is encoded successfully, then it will populate an array and various
-<a name="line190"></a>	*	properties of $this.
-<a name="line191"></a>	*
-<a name="line192"></a>	*	@param string $ip
-<a name="line193"></a>	*	@return array
-<a name="line194"></a>	*/
-<a name="line195"></a>	public function locate_ip( $ip = NULL )
-<a name="line196"></a>	{
-<a name="line197"></a>		if(empty($ip)) $ip = $this->CI->input->ip_address();
-<a name="line198"></a>		$url = "http://ipinfodb.com/ip_query.php?ip=".$ip."&timezone=false";
-<a name="line199"></a>		$xml = simplexml_load_file( $url );
-<a name="line200"></a>		if(!empty($xml->City)&&!empty($xml->RegionName))
-<a name="line201"></a>		{
-<a name="line202"></a>			$data['city'] = $xml->City;
-<a name="line203"></a>			$data['state'] = $xml->RegionName;
-<a name="line204"></a>			$data['latitude'] = $xml->Latitude;
-<a name="line205"></a>			$data['longitude'] = $xml->Longitude;
-<a name="line206"></a>			
-<a name="line207"></a>			$this->address = $data['city'].', '.$data['state'];
-<a name="line208"></a>			$this->latitude = $data['latitude'];
-<a name="line209"></a>			$this->longitude = $data['longitude'];
-<a name="line210"></a>			
-<a name="line211"></a>			return $data;
-<a name="line212"></a>		}
-<a name="line213"></a>		else return false;
-<a name="line214"></a>	}
-<a name="line215"></a>	
-<a name="line216"></a>	/**
-<a name="line217"></a>	*	Gets the most recently added gifts
-<a name="line218"></a>	*
-<a name="line219"></a>	*	High-level search function
-<a name="line220"></a>	*
-<a name="line221"></a>	*	@return object
-<a name="line222"></a>	*/
-<a name="line223"></a>	public function latest_gifts()
-<a name="line224"></a>	{
-<a name="line225"></a>		$this->_basic_query();
-<a name="line226"></a>		$this->result = $this->CI->db->get()->result();
-<a name="line227"></a>		$this->_object_factory();
-<a name="line228"></a>		return $this->object;
-<a name="line229"></a>	}
-<a name="line230"></a>	
-<a name="line231"></a>	/**
-<a name="line232"></a>	*	 Returns array of nearby user IDs
-<a name="line233"></a>	*/
-<a name="line234"></a>	public function nearby_users()
-<a name="line235"></a>	{
-<a name="line236"></a>		$this->_set_logged_in_user_location();
-<a name="line237"></a>		$this->_set_geographic_bounds();
-<a name="line238"></a>				
-<a name="line239"></a>		$query = $this->CI->db->select('U.id AS user_id ')
-<a name="line240"></a>								->from('users AS U ') 
-<a name="line241"></a>								->join('locations AS L ', 'L.id = U.default_location_id')
-<a name="line242"></a>								->where('U.id != ', $this->CI->session->userdata['user_id'])
-<a name="line243"></a>								->order_by('location_distance', 'ASC')
-<a name="line244"></a>								->get();
-<a name="line245"></a>		foreach( $query->result() as $key=>$val )
-<a name="line246"></a>		{
-<a name="line247"></a>			$this->users[] = $val->user_id;
-<a name="line248"></a>		}
-<a name="line249"></a> 		return $this->users;
-<a name="line250"></a>	}
-<a name="line251"></a>	
-<a name="line252"></a>	/**
-<a name="line253"></a>	*	Gets nearby gifts
-<a name="line254"></a>	*
-<a name="line255"></a>	*	High-level search function
-<a name="line256"></a>	*
-<a name="line257"></a>	*	@return object
-<a name="line258"></a>	*/
-<a name="line259"></a>	public function nearby_gifts()
-<a name="line260"></a>	{
-<a name="line261"></a>		$this->radius = 100;
-<a name="line262"></a>		$this->_set_logged_in_user_location();
-<a name="line263"></a>		$this->_set_geographic_bounds();
-<a name="line264"></a>		$this->_exclude_logged_in_user();
-<a name="line265"></a>		$this->_basic_query();
-<a name="line266"></a>		$this->result = $this->CI->db->get()->result();
-<a name="line267"></a>		$this->_object_factory();
-<a name="line268"></a>		return $this->object;
-<a name="line269"></a>	}
-<a name="line270"></a>	
-<a name="line271"></a>	/**
-<a name="line272"></a>	*	Gets the most popular tags for the site
-<a name="line273"></a>	*
-<a name="line274"></a>	*	@return object
-<a name="line275"></a>	*/
-<a name="line276"></a>	public function popular_tags()
-<a name="line277"></a>	{
-<a name="line278"></a>		$tags = array();
-<a name="line279"></a>		$this->_set_geographic_bounds();
-<a name="line280"></a>		$this->CI->db	->select('t.name AS tag, COUNT(g.id) AS count, t.id AS tag_id')
-<a name="line281"></a>					->from('goods_tags AS gt ')
-<a name="line282"></a>					->join('goods AS g ', 'g.id=gt.good_id')
-<a name="line283"></a>					->join('tags AS t ', 't.id = gt.tag_id')
-<a name="line284"></a>					->join('locations AS L ','L.id=g.location_id')
-<a name="line285"></a>					->where('g.winning_transaction_id',0)
-<a name="line286"></a>					->where('g.type','gift')
-<a name="line287"></a>					->group_by('t.name')
-<a name="line288"></a>					->order_by('count', 'desc');
-<a name="line289"></a>		$query = $this->CI->db->get();
-<a name="line290"></a>
-<a name="line291"></a>		return $query->result();
-<a name="line292"></a>	}
-<a name="line293"></a>	
-<a name="line294"></a>	/**
-<a name="line295"></a>	*	Searches gifts based on their tags
-<a name="line296"></a>	*	@param string $tag	 Tag name to search by
-<a name="line297"></a>	*	@return object/JSON
-<a name="line298"></a>	*/
-<a name="line299"></a>	public function tag_search ( $tag = NULL )
-<a name="line300"></a>	{
-<a name="line301"></a>		if(!empty($tag))
-<a name="line302"></a>		{
-<a name="line303"></a>			// Find the tag_id
-<a name="line304"></a>			$tag_query = $this->CI->db->select("id")->like('name', $tag)->get('tags');
-<a name="line305"></a>			if($tag_query->num_rows==0) return false;
-<a name="line306"></a>			$tag = $tag_query->row();
-<a name="line307"></a>			$this->tag_id = $tag->id;
-<a name="line308"></a>		}
-<a name="line309"></a>		$this->result = $this->CI->db->query( $this->_tag_query() );
-<a name="line310"></a>
-<a name="line311"></a>		return $this->_render_output();
-<a name="line312"></a>	}
-<a name="line313"></a>	
-<a name="line314"></a>	/**
-<a name="line315"></a>	*	Generates results for the find page.
-<a name="line316"></a>	*	It uses the search keyword ($this->keyword) to search for gifts based
-<a name="line317"></a>	*	on location, tags and titles.
-<a name="line318"></a>	*	@return JSON
-<a name="line319"></a>	*/
-<a name="line320"></a>	public function geosearch()
-<a name="line321"></a>	{
-<a name="line322"></a>		Console::logSpeed('start Finder::geosearch()');
-<a name="line323"></a>
-<a name="line324"></a>		// Excludes the logged in user from current search
-<a name="line325"></a>		$this->_exclude_logged_in_user();
-<a name="line326"></a>	
-<a name="line327"></a>		// Searches good titles and tags for the provided keyword
-<a name="line328"></a>		$this->keyword_search();
-<a name="line329"></a>		
-<a name="line330"></a>		// Formats result into a datamapper-like object
-<a name="line331"></a>		$this->_object_factory();
-<a name="line332"></a>
-<a name="line333"></a>		// Render output as either JSON or an object
-<a name="line334"></a>		$output = $this->_render_output();
-<a name="line335"></a>		
-<a name="line336"></a>		Console::logSpeed('end Finder::geosearch()');
-<a name="line337"></a>		
-<a name="line338"></a>		return $output;
-<a name="line339"></a>	}
-<a name="line340"></a>	
-<a name="line341"></a>	public function giftflow()
-<a name="line342"></a>	{
-<a name="line343"></a>		Console::logSpeed('start Finder::giftflow()');
+<a name="line50"></a>	*	Type of search
+<a name="line51"></a>	*	@var string
+<a name="line52"></a>	*/
+<a name="line53"></a>	var $type = 'gift';
+<a name="line54"></a>	
+<a name="line55"></a>	/**
+<a name="line56"></a>	*	Tag ID
+<a name="line57"></a>	*	@var int
+<a name="line58"></a>	*/
+<a name="line59"></a>	var $tag_id;
+<a name="line60"></a>	
+<a name="line61"></a>	/**
+<a name="line62"></a>	*	Stores subquery strings which will be merged in a union
+<a name="line63"></a>	*	@var array
+<a name="line64"></a>	*/
+<a name="line65"></a>	var $subquery;
+<a name="line66"></a>
+<a name="line67"></a>	// Sorting & Pagination variables
+<a name="line68"></a>	
+<a name="line69"></a>	/**
+<a name="line70"></a>	*	Default ORDER BY field
+<a name="line71"></a>	*	@var string
+<a name="line72"></a>	*/
+<a name="line73"></a>	var $default_order_by_field = 'good_created';
+<a name="line74"></a>	
+<a name="line75"></a>	/**
+<a name="line76"></a>	*	Default ORDER BY direction
+<a name="line77"></a>	*	@var string
+<a name="line78"></a>	*/
+<a name="line79"></a>	var $default_order_by_direction = 'ASC';
+<a name="line80"></a>	
+<a name="line81"></a>	/**
+<a name="line82"></a>	*	Default LIMIT size
+<a name="line83"></a>	*	@var int
+<a name="line84"></a>	*/
+<a name="line85"></a>	var $default_limit_size = 10;
+<a name="line86"></a>	
+<a name="line87"></a>	/**
+<a name="line88"></a>	*	Default LIMIT offset
+<a name="line89"></a>	*	@var int
+<a name="line90"></a>	*/
+<a name="line91"></a>	var $default_limit_offset = 0;
+<a name="line92"></a>
+<a name="line93"></a>	/**
+<a name="line94"></a>	*	User-specified ORDER BY field
+<a name="line95"></a>	*	@var string
+<a name="line96"></a>	*/
+<a name="line97"></a>	var $order_by_field;
+<a name="line98"></a>	
+<a name="line99"></a>	/**
+<a name="line100"></a>	*	User-specified ORDER BY direction
+<a name="line101"></a>	*	@var string
+<a name="line102"></a>	*/
+<a name="line103"></a>	var $order_by_direction;
+<a name="line104"></a>	
+<a name="line105"></a>	/**
+<a name="line106"></a>	*	User-specified LIMIT size
+<a name="line107"></a>	*	@var int
+<a name="line108"></a>	*/
+<a name="line109"></a>	var $limit_size;
+<a name="line110"></a>	
+<a name="line111"></a>	/**
+<a name="line112"></a>	*	User-specified LIMIT offset
+<a name="line113"></a>	*	@var int
+<a name="line114"></a>	*/
+<a name="line115"></a>	var $limit_offset;
+<a name="line116"></a>	
+<a name="line117"></a>	/**
+<a name="line118"></a>	*	@var array
+<a name="line119"></a>	*/
+<a name="line120"></a>	var $where;
+<a name="line121"></a>
+<a name="line122"></a>	/**
+<a name="line123"></a>	*	Raw database result object
+<a name="line124"></a>	*	The raw database result object from the database query is usually stored here.
+<a name="line125"></a>	*	@var object
+<a name="line126"></a>	*/
+<a name="line127"></a>	var $result;
+<a name="line128"></a>	
+<a name="line129"></a>	/**
+<a name="line130"></a>	*	Formatted search result object
+<a name="line131"></a>	*	This object mimics datamapper's format. $this->result is usually
+<a name="line132"></a>	*	converted to an object and then saved here after Factory::good().
+<a name="line133"></a>	*	@var object
+<a name="line134"></a>	*/
+<a name="line135"></a>	var $object;
+<a name="line136"></a>	
+<a name="line137"></a>	/**
+<a name="line138"></a>	*	Return data format
+<a name="line139"></a>	*
+<a name="line140"></a>	*	@var string
+<a name="line141"></a>	*/
+<a name="line142"></a>	var $format;
+<a name="line143"></a>	
+<a name="line144"></a>	public function __construct()
+<a name="line145"></a>	{
+<a name="line146"></a>		// Load CI super-object
+<a name="line147"></a>		$this->CI =& get_instance();
+<a name="line148"></a>		
+<a name="line149"></a>		// If the request is being made via AJAX, set the output to be in JSON
+<a name="line150"></a>		if( $this->CI->util->is_ajax() )
+<a name="line151"></a>		{
+<a name="line152"></a>			$this->format = "JSON";
+<a name="line153"></a>		}
+<a name="line154"></a>		
+<a name="line155"></a>		// If not in AJAX, return an object
+<a name="line156"></a>		else
+<a name="line157"></a>		{
+<a name="line158"></a>			$this->format = "object";
+<a name="line159"></a>		}
+<a name="line160"></a>		
+<a name="line161"></a>		// Create default location object
+<a name="line162"></a>		$this->location = (object) array(
+<a name="line163"></a>			"latitude"=>NULL,
+<a name="line164"></a>			"longitude"=>NULL,
+<a name="line165"></a>			"address"=>NULL,
+<a name="line166"></a>			"street_address"=>NULL,
+<a name="line167"></a>			"city"=>NULL,
+<a name="line168"></a>			"state"=>NULL,
+<a name="line169"></a>			"postal_code"=>NULL,
+<a name="line170"></a>			"country"=>NULL
+<a name="line171"></a>		);
+<a name="line172"></a>	}
+<a name="line173"></a>	
+<a name="line174"></a>	/**
+<a name="line175"></a>	*	Gets the most recently added gifts
+<a name="line176"></a>	*
+<a name="line177"></a>	*	High-level search function
+<a name="line178"></a>	*
+<a name="line179"></a>	*	@return object
+<a name="line180"></a>	*/
+<a name="line181"></a>	public function query()
+<a name="line182"></a>	{
+<a name="line183"></a>		if( empty( $this->order_by_field ) && empty( $this->order_by_direction ) )
+<a name="line184"></a>		{
+<a name="line185"></a>			$this->order_by("good_created", "DESC");
+<a name="line186"></a>		}
+<a name="line187"></a>		$this->_set_geographic_bounds();
+<a name="line188"></a>		$this->_basic_query();
+<a name="line189"></a>		$this->result = $this->CI->db->get()->result();
+<a name="line190"></a>		$this->object = Factory::good($this->result);
+<a name="line191"></a>		return $this->object;
+<a name="line192"></a>	}
+<a name="line193"></a>	
+<a name="line194"></a>	/**
+<a name="line195"></a>	*	Gets the most recently added gifts
+<a name="line196"></a>	*
+<a name="line197"></a>	*	High-level search function
+<a name="line198"></a>	*
+<a name="line199"></a>	*	@return object
+<a name="line200"></a>	*/
+<a name="line201"></a>	public function latest_gifts()
+<a name="line202"></a>	{
+<a name="line203"></a>		$this->order_by("good_created", "DESC");
+<a name="line204"></a>		$this->_basic_query();
+<a name="line205"></a>		$this->result = $this->CI->db->get()->result();
+<a name="line206"></a>		$this->object = Factory::good($this->result);
+<a name="line207"></a>		return $this->object;
+<a name="line208"></a>	}
+<a name="line209"></a>	
+<a name="line210"></a>	/**
+<a name="line211"></a>	*	Gets the most recently added needs
+<a name="line212"></a>	*
+<a name="line213"></a>	*	High-level search function
+<a name="line214"></a>	*
+<a name="line215"></a>	*	@return object
+<a name="line216"></a>	*/
+<a name="line217"></a>	public function latest_needs()
+<a name="line218"></a>	{
+<a name="line219"></a>		$this->order_by("good_created", "DESC");
+<a name="line220"></a>		$this->type = 'need';
+<a name="line221"></a>		$this->_basic_query();
+<a name="line222"></a>		$this->result = $this->CI->db->get()->result();
+<a name="line223"></a>		$this->object = Factory::good($this->result);
+<a name="line224"></a>		return $this->object;
+<a name="line225"></a>	}
+<a name="line226"></a>	
+<a name="line227"></a>	/**
+<a name="line228"></a>	*	 Returns array of nearby user IDs
+<a name="line229"></a>	*/
+<a name="line230"></a>	public function nearby_users()
+<a name="line231"></a>	{
+<a name="line232"></a>		$this->_set_logged_in_user_location();
+<a name="line233"></a>		$this->_set_geographic_bounds();
+<a name="line234"></a>				
+<a name="line235"></a>		$query = $this->CI->db->select('U.id AS user_id ')
+<a name="line236"></a>			->from('users AS U ') 
+<a name="line237"></a>			->join('locations AS L ', 'L.id = U.default_location_id')
+<a name="line238"></a>			->where('U.id != ', $this->CI->session->userdata['user_id'])
+<a name="line239"></a>			->order_by('location_distance', 'ASC')
+<a name="line240"></a>			->get();
+<a name="line241"></a>		foreach( $query->result() as $key=>$val )
+<a name="line242"></a>		{
+<a name="line243"></a>			$this->users[] = $val->user_id;
+<a name="line244"></a>		}
+<a name="line245"></a> 		return $this->users;
+<a name="line246"></a>	}
+<a name="line247"></a>	
+<a name="line248"></a>	/**
+<a name="line249"></a>	*	Gets nearby gifts
+<a name="line250"></a>	*
+<a name="line251"></a>	*	High-level search function
+<a name="line252"></a>	*
+<a name="line253"></a>	*	@return object
+<a name="line254"></a>	*/
+<a name="line255"></a>	public function nearby_gifts()
+<a name="line256"></a>	{
+<a name="line257"></a>		$this->_set_logged_in_user_location();
+<a name="line258"></a>		$this->_set_geographic_bounds();
+<a name="line259"></a>		$this->_exclude_logged_in_user();
+<a name="line260"></a>		$this->_basic_query();
+<a name="line261"></a>		$this->result = $this->CI->db->get()->result();
+<a name="line262"></a>		$this->object = Factory::good($this->result);
+<a name="line263"></a>		return $this->object;
+<a name="line264"></a>	}
+<a name="line265"></a>	
+<a name="line266"></a>	/**
+<a name="line267"></a>	*	Searches gifts based on their tags
+<a name="line268"></a>	*	@param string $tag	 Tag name to search by
+<a name="line269"></a>	*	@return object/JSON
+<a name="line270"></a>	*/
+<a name="line271"></a>	public function tag_search ( $tag = NULL )
+<a name="line272"></a>	{
+<a name="line273"></a>		if(!empty($tag))
+<a name="line274"></a>		{
+<a name="line275"></a>			// Find the tag_id
+<a name="line276"></a>			$tag_query = $this->CI->db->select("id")->like('name', $tag)->get('tags');
+<a name="line277"></a>			if($tag_query->num_rows==0)
+<a name="line278"></a>			{
+<a name="line279"></a>				return FALSE;
+<a name="line280"></a>			}
+<a name="line281"></a>			$tag = $tag_query->row();
+<a name="line282"></a>			$this->tag_id = $tag->id;
+<a name="line283"></a>		}
+<a name="line284"></a>		$this->result = $this->CI->db->query( $this->_tag_query() );
+<a name="line285"></a>
+<a name="line286"></a>		return $this->_render_output();
+<a name="line287"></a>	}
+<a name="line288"></a>	
+<a name="line289"></a>	/**
+<a name="line290"></a>	*	Generates results for the find page.
+<a name="line291"></a>	*	It uses the search keyword ($this->keyword) to search for gifts based
+<a name="line292"></a>	*	on location, tags and titles.
+<a name="line293"></a>	*	@return JSON
+<a name="line294"></a>	*/
+<a name="line295"></a>	public function geosearch()
+<a name="line296"></a>	{
+<a name="line297"></a>		Console::logSpeed('Finder::geosearch()');
+<a name="line298"></a>
+<a name="line299"></a>		// @todo Exclude the logged in user from current search
+<a name="line300"></a>	
+<a name="line301"></a>		// Searches good titles and tags for the provided keyword
+<a name="line302"></a>		$this->object = $this->keyword_search();
+<a name="line303"></a>
+<a name="line304"></a>		// Render output as either JSON or an object
+<a name="line305"></a>		$output = $this->_render_output();
+<a name="line306"></a>		
+<a name="line307"></a>		Console::logSpeed('end Finder::geosearch()');
+<a name="line308"></a>		
+<a name="line309"></a>		return $output;
+<a name="line310"></a>	}
+<a name="line311"></a>	
+<a name="line312"></a>	public function find_search()
+<a name="line313"></a>	{
+<a name="line314"></a>		$this->object = $this->keyword_search();
+<a name="line315"></a>		$this->_format_result();
+<a name="line316"></a>		return $this->object;
+<a name="line317"></a>	}
+<a name="line318"></a>	
+<a name="line319"></a>	public function giftflow()
+<a name="line320"></a>	{
+<a name="line321"></a>		Console::logSpeed('Finder::giftflow()');
+<a name="line322"></a>		
+<a name="line323"></a>		if(!empty($_REQUEST['source']) )
+<a name="line324"></a>		{
+<a name="line325"></a>			$source = $_REQUEST['source'];
+<a name="line326"></a>		}
+<a name="line327"></a>		else
+<a name="line328"></a>		{
+<a name="line329"></a>			$source = 'following';
+<a name="line330"></a>		}
+<a name="line331"></a>				
+<a name="line332"></a>		if( $source == "following" )
+<a name="line333"></a>		{
+<a name="line334"></a>			$this->follower_search();
+<a name="line335"></a>		}
+<a name="line336"></a>		elseif( $source == "nearby_users" )
+<a name="line337"></a>		{
+<a name="line338"></a>			$this->nearby_gifts();
+<a name="line339"></a>		}
+<a name="line340"></a>		elseif( $source == "nearby_gifts" )
+<a name="line341"></a>		{
+<a name="line342"></a>			$this->nearby_gifts();
+<a name="line343"></a>		}
 <a name="line344"></a>		
-<a name="line345"></a>		if(!empty($_REQUEST['source']) ) $source = $_REQUEST['source'];
-<a name="line346"></a>		else $source = 'following';
-<a name="line347"></a>				
-<a name="line348"></a>		if( $source == "following" )
-<a name="line349"></a>		{
-<a name="line350"></a>			$this->follower_search();
-<a name="line351"></a>		}
-<a name="line352"></a>		elseif( $source == "nearby_users" )
-<a name="line353"></a>		{
-<a name="line354"></a>			$this->nearby_gifts();
-<a name="line355"></a>		}
-<a name="line356"></a>		elseif( $source == "nearby_gifts" )
-<a name="line357"></a>		{
-<a name="line358"></a>			$this->nearby_gifts();
-<a name="line359"></a>		}
-<a name="line360"></a>		
-<a name="line361"></a>		$output = $this->_render_output();
-<a name="line362"></a>		
-<a name="line363"></a>		Console::logSpeed('end Finder::giftflow()');
-<a name="line364"></a>		
-<a name="line365"></a>		return $output;
-<a name="line366"></a>	}
-<a name="line367"></a>	
-<a name="line368"></a>	/**
-<a name="line369"></a>	*	Searches for the goods from the users the logged in user is following.
-<a name="line370"></a>	*
-<a name="line371"></a>	*	This method generates an array of user IDs and then stores them in 
-<a name="line372"></a>	*	$this->users. The actual searching is then handled by the user_search()
-<a name="line373"></a>	*	method.
-<a name="line374"></a>	*
-<a name="line375"></a>	*	@return object
-<a name="line376"></a>	*/
-<a name="line377"></a>	public function follower_search()
-<a name="line378"></a>	{
-<a name="line379"></a>		Console::logSpeed('start Finder::follower_search()');
-<a name="line380"></a>		$user_id = $this->CI->session->userdata['user_id'];
-<a name="line381"></a>		$q =$this->CI->db	->select('U.id AS user_id')
-<a name="line382"></a>							->from("users AS U ")
-<a name="line383"></a>							->join("followings_users AS FU ", "FU.following_id=U.id")
-<a name="line384"></a>							->where("FU.user_id", $user_id)
-<a name="line385"></a>							->get();
-<a name="line386"></a>		if( $q->num_rows > 0 )
-<a name="line387"></a>		{
-<a name="line388"></a>			foreach( $q->result() as $key=>$val )
-<a name="line389"></a>			{
-<a name="line390"></a>				$this->users[] = $val->user_id;
-<a name="line391"></a>			}
-<a name="line392"></a>			$this->CI->db->where('U.id !=', $user_id); 
-<a name="line393"></a>			return $this->user_search();
-<a name="line394"></a>		}
-<a name="line395"></a>		Console::logSpeed('end Finder::follower_search()');
-<a name="line396"></a>	}
-<a name="line397"></a>	
-<a name="line398"></a>	/**
-<a name="line399"></a>	*	Searches for the goods from the users provided in $this->users.
-<a name="line400"></a>	*	$this->users may either be an array of multiple user IDs or a single user ID.
-<a name="line401"></a>	*
-<a name="line402"></a>	*	@return object
-<a name="line403"></a>	*/
-<a name="line404"></a>	function user_search()
-<a name="line405"></a>	{
-<a name="line406"></a>		Console::logSpeed('start Finder::user_search()');
-<a name="line407"></a>
-<a name="line408"></a>		if( is_array( $this->users ) )
-<a name="line409"></a>		{
-<a name="line410"></a>			$this->CI->db->where_in('U.id', $this->users);
-<a name="line411"></a>		}
-<a name="line412"></a>		elseif( is_numeric( $this->users ) )
-<a name="line413"></a>		{
-<a name="line414"></a>			$this->CI->db->where('U.id', $this->users);
-<a name="line415"></a>		}
-<a name="line416"></a>		
-<a name="line417"></a>		$this->_basic_query();
-<a name="line418"></a>		
-<a name="line419"></a>		$this->result = $this->CI->db->get()->result();
-<a name="line420"></a>		
-<a name="line421"></a>		$this->_object_factory();
-<a name="line422"></a>		
-<a name="line423"></a>		Console::logSpeed('end Finder::user_search()');
-<a name="line424"></a>		return $this->object;
-<a name="line425"></a>	}
-<a name="line426"></a>	
-<a name="line427"></a>	/**
-<a name="line428"></a>	*	Searches based on tag and title similarity
-<a name="line429"></a>	*
-<a name="line430"></a>	*	$this->search_keyword is required
-<a name="line431"></a>	*/
-<a name="line432"></a>	public function keyword_search()
-<a name="line433"></a>	{
-<a name="line434"></a>		Console::logSpeed('start Finder::keyword_search()');
-<a name="line435"></a>	
-<a name="line436"></a>		// Search by keyword
-<a name="line437"></a>		$this->subquery[] = $this->_title_query();
-<a name="line438"></a>
-<a name="line439"></a>		// If keyword matches a tag, filter by it
-<a name="line440"></a>		$tag_query = $this->_tag_query();
-<a name="line441"></a>		if( !empty($tag_query) )
-<a name="line442"></a>			 $this->subquery[] = $tag_query;
-<a name="line443"></a>		
-<a name="line444"></a>		// Unite subqueries
-<a name="line445"></a>		$this->_subquery_union();
-<a name="line446"></a>			
-<a name="line447"></a>		// Store result
-<a name="line448"></a>		$this->result = $this->query->result();
-<a name="line449"></a>		
-<a name="line450"></a>		Console::logSpeed('end Finder::keyword_search()');
-<a name="line451"></a>
-<a name="line452"></a>	}
-<a name="line453"></a>	
-<a name="line454"></a>	/**
-<a name="line455"></a>	*	Saves ORDER BY clause
-<a name="line456"></a>	*	@param string $field
-<a name="line457"></a>	*	@param string $direction
-<a name="line458"></a>	*/
-<a name="line459"></a>	public function order_by( $field, $direction = 'ASC' )
-<a name="line460"></a>	{
-<a name="line461"></a>		$this->order_by_field = $field;
-<a name="line462"></a>		$this->order_by_direction = $direction;
-<a name="line463"></a>		return $this;
-<a name="line464"></a>	}
-<a name="line465"></a>	
-<a name="line466"></a>	/**
-<a name="line467"></a>	*	Sets limit information which is translated into SQL LIMIT clauses later.
-<a name="line468"></a>	*
-<a name="line469"></a>	*	@param int $size
-<a name="line470"></a>	*	@param int $offset
-<a name="line471"></a>	*/
-<a name="line472"></a>	public function limit( $size, $offset = 0 )
-<a name="line473"></a>	{
-<a name="line474"></a>		$this->limit_size = $size;
-<a name="line475"></a>		$this->limit_offset = $offset;
-<a name="line476"></a>		return $this;
-<a name="line477"></a>	}
-<a name="line478"></a>	
-<a name="line479"></a>	/**
-<a name="line480"></a>	*	Limits search results by type
-<a name="line481"></a>	*
-<a name="line482"></a>	*	@param string $type
-<a name="line483"></a>	*	@return $this
-<a name="line484"></a>	*/
-<a name="line485"></a>	public function where_type( $type )
-<a name="line486"></a>	{
-<a name="line487"></a>		$this->where('G.type', $type);
-<a name="line488"></a>		return $this;
-<a name="line489"></a>	}
-<a name="line490"></a>	
-<a name="line491"></a>	/**
-<a name="line492"></a>	*	Adds a where clause
-<a name="line493"></a>	*
-<a name="line494"></a>	*	@param string $key
-<a name="line495"></a>	*	@param string $val
-<a name="line496"></a>	*	@return $this
-<a name="line497"></a>	*/
-<a name="line498"></a>	public function where( $key, $val = NULL )
-<a name="line499"></a>	{
-<a name="line500"></a>		$this->CI->db->_reset_select();
-<a name="line501"></a>		if( is_array( $key ) )
-<a name="line502"></a>			$this->CI->db->where($key);
-<a name="line503"></a>		elseif( !empty($val))
-<a name="line504"></a>			$this->CI->db->where($key, $val);
-<a name="line505"></a>		else
-<a name="line506"></a>			return false;
-<a name="line507"></a>		$this->where[] = substr($this->CI->db->_compile_select(),15);
-<a name="line508"></a>		$this->CI->db->_reset_select();
-<a name="line509"></a>
-<a name="line510"></a>		return $this;
-<a name="line511"></a>	}
-<a name="line512"></a>	
-<a name="line513"></a>	/**
-<a name="line514"></a>	*	Basic query that is run every time for both subqueries and normal queries.
-<a name="line515"></a>	*
-<a name="line516"></a>	*	There are several subroutines which are run that add to the active record
-<a name="line517"></a>	*	object's methods.
-<a name="line518"></a>	*/
-<a name="line519"></a>	protected function _basic_query()
-<a name="line520"></a>	{
-<a name="line521"></a>		Console::logSpeed('start Finder::_basic_query()');
-<a name="line522"></a>
-<a name="line523"></a>		// Determine geographic boundaries
-<a name="line524"></a>		$this->_set_geographic_bounds();
-<a name="line525"></a>		
-<a name="line526"></a>		// Find goods
-<a name="line527"></a>		$this->CI->db	->select("G.id AS good_id")
-<a name="line528"></a>						->select("G.type AS good_type")
-<a name="line529"></a>						->select("G.title AS good_title")
-<a name="line530"></a>						->select("G.description AS good_description")
-<a name="line531"></a>						->select("G.created AS good_created")
-<a name="line532"></a>						->select("L.id AS location_id")
-<a name="line533"></a>						->select("L.title AS location_title") // useful?
-<a name="line534"></a>						->select("L.address AS location_address")
-<a name="line535"></a>						->select("L.latitude AS location_latitude")
-<a name="line536"></a>						->select("L.longitude AS location_longitude")
-<a name="line537"></a>						->select("L.street_address AS location_street_address")
-<a name="line538"></a>						->select("L.city AS location_city")
-<a name="line539"></a>						->select("L.state AS location_state")
-<a name="line540"></a>						->select("L.zip AS location_zip")
-<a name="line541"></a>						->select("P.id AS photo_id")
-<a name="line542"></a>						->select("P.url AS photo_url")
-<a name="line543"></a>						->select("P.thumb_url AS photo_thumb_url")
-<a name="line544"></a>						->select("P.caption AS photo_caption") // useful?
-<a name="line545"></a>						->select("U.id AS user_id")
-<a name="line546"></a>						->select("U.username AS user_username") // used?
-<a name="line547"></a>						->select("U.email AS user_email")
-<a name="line548"></a>						->select("U.type AS user_type")
-<a name="line549"></a>						->select("U.first_name AS user_first_name")
-<a name="line550"></a>						->select("U.last_name AS user_last_name")
-<a name="line551"></a>						->select("U.screen_name AS user_screen_name")
-<a name="line552"></a>						->select("U.bio AS user_bio")
-<a name="line553"></a>						->select("U.created AS user_created")
-<a name="line554"></a>						->select("U.occupation AS user_occupation")
-<a name="line555"></a>						->select("U.phone AS user_phone") // add privacy check
-<a name="line556"></a>						->select("U.facebook_id AS user_facebook_id")
-<a name="line557"></a>						->select("UP.id AS user_photo_id")
-<a name="line558"></a>						->select("UP.url AS user_photo_url")
-<a name="line559"></a>						->select("UP.thumb_url AS user_photo_thumb_url")
-<a name="line560"></a>						->select("UP.caption AS user_photo_caption")
-<a name="line561"></a>						->select("C.id AS catgory_id")
-<a name="line562"></a>						->select("C.name AS category_name")
-<a name="line563"></a>						->from("goods AS G ")
-<a name="line564"></a>						->join("users AS U", "G.user_id = U.id")
-<a name="line565"></a>						->join("locations AS L ", "L.id = G.location_id")
-<a name="line566"></a>						->join("photos AS P ", "G.default_photo_id = P.id", "left")
-<a name="line567"></a>						->join("photos AS UP ", "U.default_photo_id = UP.id", "left")
-<a name="line568"></a>						->join("categories AS C", "C.id = G.category_id", "left")
-<a name="line569"></a>						->where('G.type', $this->type);
-<a name="line570"></a>		
-<a name="line571"></a>		// Iterate through defined where conditions
-<a name="line572"></a>		if( !empty( $this->where ) )
-<a name="line573"></a>		{
-<a name="line574"></a>			foreach( $this->where as $val )
-<a name="line575"></a>			{
-<a name="line576"></a>				$this->CI->db->where($val);
-<a name="line577"></a>			}
-<a name="line578"></a>		}
-<a name="line579"></a>
-<a name="line580"></a>		// Count related transactions
-<a name="line581"></a>		$this->_count_transactions();
-<a name="line582"></a>		
-<a name="line583"></a>		// Sort & Paginate
-<a name="line584"></a>		$this->_sort_and_paginate();
-<a name="line585"></a>		
-<a name="line586"></a>		Console::logSpeed('end Finder::_basic_query()');
-<a name="line587"></a>	}
-<a name="line588"></a>	
-<a name="line589"></a>	/**
-<a name="line590"></a>	*	Counts the requests for each good, grouped by request status.
-<a name="line591"></a>	*
-<a name="line592"></a>	*	Use this set of queries only when necessary, because they are resource-
-<a name="line593"></a>	*	intensive.
-<a name="line594"></a>	*/
-<a name="line595"></a>	protected function _count_transactions()
-<a name="line596"></a>    	{
-<a name="line597"></a>    		$this->CI->db	->select("COUNT(T_pending.id) AS good_pending_requests")
-<a name="line598"></a>						->select("COUNT(T_ignored.id) AS good_ignored_requests")
-<a name="line599"></a>						->select("COUNT(T_accepted.id) AS good_accepted_requests")
-<a name="line600"></a>						->select("COUNT(T_completed.id) AS good_completed_requests")
-<a name="line601"></a>						->join("goods_transactions AS GR ", "GR.gift_id = G.id", "left")
-<a name="line602"></a>						->join("transactions AS T_pending ", " T_pending.id = GR.request_id AND T_pending.status='pending'", "left")
-<a name="line603"></a>						->join("transactions AS T_ignored ", " T_ignored.id = GR.request_id AND T_ignored.status = 'ignored'", "left")
-<a name="line604"></a>						->join("transactions AS T_accepted ", " T_accepted.id = GR.request_id AND T_accepted.status = 'accepted'", "left")
-<a name="line605"></a>						->join("transactions AS T_completed ", " T_completed.id = GR.request_id AND T_completed.status = 'completed'", "left")
-<a name="line606"></a>						->group_by("G.id");
-<a name="line607"></a>    	}
-<a name="line608"></a>    	
-<a name="line609"></a>    	/**
-<a name="line610"></a>    	*	If the user is logged in, this function fetches their default location and
-<a name="line611"></a>    	*	sends its information into Finder's location-related properties.
-<a name="line612"></a>    	*
-<a name="line613"></a>    	*	@return boolean
-<a name="line614"></a>    	*/
-<a name="line615"></a>	protected function _set_logged_in_user_location()
-<a name="line616"></a>	{
-<a name="line617"></a>		Console::logSpeed('start Finder::_set_logged_in_user_location()');
-<a name="line618"></a>		if( !empty( $this->CI->session->userdata['user_id'] ))
-<a name="line619"></a>		{
-<a name="line620"></a>			$this->U = new User($this->CI->session->userdata['user_id']);
-<a name="line621"></a>			$this->U->default_location->get();
-<a name="line622"></a>			
-<a name="line623"></a>			// If the user has a default location, use it
-<a name="line624"></a>			if( $this->U->default_location->exists() )
-<a name="line625"></a>			{
-<a name="line626"></a>				$this->latitude = $this->U->default_location->latitude;
-<a name="line627"></a>				$this->longitude = $this->U->default_location->longitude;
-<a name="line628"></a>				$this->address = $this->U->default_location->address;
-<a name="line629"></a>				return TRUE;
-<a name="line630"></a>			}
-<a name="line631"></a>			// If the user doesn't have a default location, try to load the location
-<a name="line632"></a>			// using an IP address
-<a name="line633"></a>			else
-<a name="line634"></a>			{
-<a name="line635"></a>				$ip = $this->locate_ip();
-<a name="line636"></a>				if( !empty( $ip ) ) 
-<a name="line637"></a>					return TRUE;
-<a name="line638"></a>			}
-<a name="line639"></a>		}
-<a name="line640"></a>		return FALSE;
-<a name="line641"></a>		Console::logSpeed('end Finder::_set_logged_in_user_location()');
-<a name="line642"></a>	}
-<a name="line643"></a>
-<a name="line644"></a>
-<a name="line645"></a>	/**
-<a name="line646"></a>	*	Adds where clauses that limit results to a specific geographic area
-<a name="line647"></a>	*
-<a name="line648"></a>	*	Calculates bounds by determining how many degrees of latitude and longitude
-<a name="line649"></a>	*	the search radius encompasses. This is not a complete solution, however, since
-<a name="line650"></a>	*	the shape of the bounds is a square, not a circle. Thus to be truly accurate another 
-<a name="line651"></a>	*	where clause limiting results by the calculated distance field should be used.
-<a name="line652"></a>	*/
-<a name="line653"></a>	protected function _set_geographic_bounds()
-<a name="line654"></a>	{
-<a name="line655"></a>		// Geocode if needed
-<a name="line656"></a>		if(!empty($this->location_keyword)&&(empty($this->latitude)||empty($this->longitude)))
-<a name="line657"></a>		{
-<a name="line658"></a>			$this->_geocode();
-<a name="line659"></a>		}
-<a name="line660"></a>		
-<a name="line661"></a>		// Make sure latitude and longitude are present
-<a name="line662"></a>		if( empty($this->latitude) || empty($this->longitude) )
+<a name="line345"></a>		$output = $this->_render_output();
+<a name="line346"></a>		
+<a name="line347"></a>		Console::logSpeed('end Finder::giftflow()');
+<a name="line348"></a>		
+<a name="line349"></a>		return $output;
+<a name="line350"></a>	}
+<a name="line351"></a>	
+<a name="line352"></a>	/**
+<a name="line353"></a>	*	Searches for the goods from the users the logged in user is following.
+<a name="line354"></a>	*
+<a name="line355"></a>	*	This method generates an array of user IDs and then stores them in 
+<a name="line356"></a>	*	$this->users. The actual searching is then handled by the user_search()
+<a name="line357"></a>	*	method.
+<a name="line358"></a>	*
+<a name="line359"></a>	*	@return object
+<a name="line360"></a>	*/
+<a name="line361"></a>	public function follower_search()
+<a name="line362"></a>	{
+<a name="line363"></a>		Console::logSpeed('Finder::follower_search()');
+<a name="line364"></a>		$user_id = $this->CI->session->userdata['user_id'];
+<a name="line365"></a>		$q =$this->CI->db->select('U.id AS user_id')
+<a name="line366"></a>			->from("users AS U ")
+<a name="line367"></a>			->join("followings_users AS FU ", "FU.following_id=U.id")
+<a name="line368"></a>			->where("FU.user_id", $user_id)
+<a name="line369"></a>			->get();
+<a name="line370"></a>		if( $q->num_rows > 0 )
+<a name="line371"></a>		{
+<a name="line372"></a>			foreach( $q->result() as $key=>$val )
+<a name="line373"></a>			{
+<a name="line374"></a>				$this->users[] = $val->user_id;
+<a name="line375"></a>			}
+<a name="line376"></a>			$this->CI->db->where('U.id !=', $user_id); 
+<a name="line377"></a>			return $this->user_search();
+<a name="line378"></a>		}
+<a name="line379"></a>		Console::logSpeed('end Finder::follower_search()');
+<a name="line380"></a>	}
+<a name="line381"></a>	
+<a name="line382"></a>	/**
+<a name="line383"></a>	*	Searches for the goods from the users provided in $this->users.
+<a name="line384"></a>	*	$this->users may either be an array of multiple user IDs or a single user ID.
+<a name="line385"></a>	*
+<a name="line386"></a>	*	@return object
+<a name="line387"></a>	*/
+<a name="line388"></a>	function user_search()
+<a name="line389"></a>	{
+<a name="line390"></a>		Console::logSpeed('Finder::user_search()');
+<a name="line391"></a>
+<a name="line392"></a>		if( is_array( $this->users ) )
+<a name="line393"></a>		{
+<a name="line394"></a>			$this->CI->db->where_in('U.id', $this->users);
+<a name="line395"></a>		}
+<a name="line396"></a>		elseif( is_numeric( $this->users ) )
+<a name="line397"></a>		{
+<a name="line398"></a>			$this->CI->db->where('U.id', $this->users);
+<a name="line399"></a>		}
+<a name="line400"></a>		
+<a name="line401"></a>		$this->_basic_query();
+<a name="line402"></a>		
+<a name="line403"></a>		$this->result = $this->CI->db->get()->result();
+<a name="line404"></a>		
+<a name="line405"></a>		$this->object = Factory::good($this->result);
+<a name="line406"></a>		
+<a name="line407"></a>		Console::logSpeed('end Finder::user_search()');
+<a name="line408"></a>		return $this->object;
+<a name="line409"></a>	}
+<a name="line410"></a>	
+<a name="line411"></a>	/**
+<a name="line412"></a>	*	Searches based on tag and title similarity
+<a name="line413"></a>	*
+<a name="line414"></a>	*	$this->search_keyword is required
+<a name="line415"></a>	*/
+<a name="line416"></a>	public function keyword_search()
+<a name="line417"></a>	{
+<a name="line418"></a>		Console::logSpeed('Finder::keyword_search()');
+<a name="line419"></a>
+<a name="line420"></a>		// Find matching Tag IDs if search keyword 3 characters long or more
+<a name="line421"></a>		// @todo move to Tag_search library
+<a name="line422"></a>		if(strlen($this->search_keyword)>2)
+<a name="line423"></a>		{
+<a name="line424"></a>			Console::logSpeed('Finder::keyword_search(): tag query...');
+<a name="line425"></a>			
+<a name="line426"></a>			// Load first 25 matches
+<a name="line427"></a>			$tags = $this->CI->db->select("id")
+<a name="line428"></a>				->from("tags")
+<a name="line429"></a>				->like("name",$this->search_keyword)
+<a name="line430"></a>				->limit(25)
+<a name="line431"></a>				->get()
+<a name="line432"></a>				->result_array();
+<a name="line433"></a>				
+<a name="line434"></a>			// Extract tag IDs from result
+<a name="line435"></a>			// @todo move to get_ids() utility function
+<a name="line436"></a>			$tag_ids = array_map( function($tag){ return $tag['id']; }, $tags);
+<a name="line437"></a>			
+<a name="line438"></a>			Console::logSpeed('Finder::keyword_search(): tag query...done.');
+<a name="line439"></a>		}
+<a name="line440"></a>				
+<a name="line441"></a>		// Set geographic bounds, save as $this->bounds
+<a name="line442"></a>		// the FALSE parameter ensures it doesn't update active record
+<a name="line443"></a>		$this->_set_geographic_bounds(FALSE);
+<a name="line444"></a>		
+<a name="line445"></a>		// Location ON statements
+<a name="line446"></a>		if(!empty($this->bounds))
+<a name="line447"></a>		{
+<a name="line448"></a>			$ON = "L.id=G.location_id AND ";
+<a name="line449"></a>			$ON .= "L.latitude BETWEEN ".$this->bounds['latitude']['min']." AND ".$this->bounds['latitude']['max']." AND ";
+<a name="line450"></a>			$ON .= "L.longitude BETWEEN ".$this->bounds['longitude']['min']." AND ".$this->bounds['longitude']['max'];
+<a name="line451"></a>		}
+<a name="line452"></a>		
+<a name="line453"></a>		// Find by keyword search
+<a name="line454"></a>		Console::logSpeed('Finder::keyword_search(): find by keyword query...');
+<a name="line455"></a>		$this->CI->db->select('G.id')
+<a name="line456"></a>			->from('goods AS G ')
+<a name="line457"></a>			->where('G.type',$this->type);
+<a name="line458"></a>		
+<a name="line459"></a>		// If search keyword set, add LIKE clause, ORDER BY G.created
+<a name="line460"></a>		if(!empty($this->search_keyword))
+<a name="line461"></a>		{
+<a name="line462"></a>			if(!empty($this->bounds))
+<a name="line463"></a>			{
+<a name="line464"></a>				$this->CI->db->join('locations AS L ',$ON);
+<a name="line465"></a>			}
+<a name="line466"></a>			$this->CI->db->like("G.title", $this->search_keyword)
+<a name="line467"></a>				->order_by('G.created','asc')
+<a name="line468"></a>				->limit(30);
+<a name="line469"></a>		}
+<a name="line470"></a>		
+<a name="line471"></a>		// If no search parameters, return many IDs but don't sort
+<a name="line472"></a>		// them via SQL. Instead the array will be sorted in PHP since
+<a name="line473"></a>		// IDs have such a strong correlation to date created.
+<a name="line474"></a>		else
+<a name="line475"></a>		{
+<a name="line476"></a>			if(!empty($this->bounds))
+<a name="line477"></a>			{
+<a name="line478"></a>				$this->CI->db->join('locations AS L FORCE INDEX(latlng) ',$ON);
+<a name="line479"></a>			}
+<a name="line480"></a>
+<a name="line481"></a>			$this->CI->db->limit(300);
+<a name="line482"></a>		}
+<a name="line483"></a>		
+<a name="line484"></a>		// Execute Query
+<a name="line485"></a>		$keyword_matches = $this->CI->db->get()->result_array();
+<a name="line486"></a>
+<a name="line487"></a>		// Extract good IDs from result
+<a name="line488"></a>		$good_ids = array_map( function($good){ return $good['id']; }, $keyword_matches);
+<a name="line489"></a>		
+<a name="line490"></a>		// Modify array if no search keyword
+<a name="line491"></a>		if(empty($this->search_keyword))
+<a name="line492"></a>		{
+<a name="line493"></a>			// Sort IDs in descending order
+<a name="line494"></a>			rsort($good_ids);
+<a name="line495"></a>			
+<a name="line496"></a>			// Return only first 30 elements
+<a name="line497"></a>			$good_ids = array_slice($good_ids,0,30);
+<a name="line498"></a>		}
+<a name="line499"></a>		
+<a name="line500"></a>		Console::logSpeed('Finder::keyword_search(): find by keyword query...done.');
+<a name="line501"></a>		
+<a name="line502"></a>		// If matching tags found, find Goods with those tags
+<a name="line503"></a>		if(!empty($tag_ids))
+<a name="line504"></a>		{
+<a name="line505"></a>			Console::logSpeed('Finder::keyword_search(): find by tag query...');
+<a name="line506"></a>			
+<a name="line507"></a>			// Build query
+<a name="line508"></a>			$this->CI->db->select('G.id')
+<a name="line509"></a>				->from('goods AS G ')
+<a name="line510"></a>				->join("goods_tags AS GT ","GT.good_id=G.id","left")
+<a name="line511"></a>				->where('G.type',$this->type)
+<a name="line512"></a>				->where_in("GT.tag_id", $tag_ids)
+<a name="line513"></a>				->order_by('G.created','asc')
+<a name="line514"></a>				->limit(30);
+<a name="line515"></a>			
+<a name="line516"></a>			// Add geographic bounds if set
+<a name="line517"></a>			if(!empty($this->bounds))
+<a name="line518"></a>			{
+<a name="line519"></a>				$this->CI->db->join('locations AS L ',$ON);
+<a name="line520"></a>			}
+<a name="line521"></a>			
+<a name="line522"></a>			// Execute query
+<a name="line523"></a>			$tag_matches = $this->CI->db->get()->result_array();
+<a name="line524"></a>
+<a name="line525"></a>			// Extract good IDs
+<a name="line526"></a>			$good_ids = array_merge($good_ids, array_map( function($good){ return $good['id']; }, $tag_matches));
+<a name="line527"></a>			
+<a name="line528"></a>			Console::logSpeed('Finder::keyword_search(): find by tag query...executing...done.');
+<a name="line529"></a>		}
+<a name="line530"></a>		
+<a name="line531"></a>		// If no goods found, exit
+<a name="line532"></a>		if(empty($good_ids))
+<a name="line533"></a>		{
+<a name="line534"></a>			return FALSE;
+<a name="line535"></a>		}
+<a name="line536"></a>		
+<a name="line537"></a>		// Populate good IDs into full goods
+<a name="line538"></a>		// @todo sort by relevance
+<a name="line539"></a>		$this->CI->load->library('Search/Good_search');
+<a name="line540"></a>		$result = $this->CI->good_search->find(array(
+<a name="line541"></a>			"good_id"=>$good_ids,
+<a name="line542"></a>			"type"=>$this->type
+<a name="line543"></a>		));
+<a name="line544"></a>		Console::logSpeed('Finder::keyword_search(): done.');
+<a name="line545"></a>		return $result;
+<a name="line546"></a>	}
+<a name="line547"></a>
+<a name="line548"></a>	/**
+<a name="line549"></a>	*	Saves ORDER BY clause
+<a name="line550"></a>	*	@param string $field
+<a name="line551"></a>	*	@param string $direction
+<a name="line552"></a>	*/
+<a name="line553"></a>	public function order_by( $field, $direction = 'ASC' )
+<a name="line554"></a>	{
+<a name="line555"></a>		$this->order_by_field = $field;
+<a name="line556"></a>		$this->order_by_direction = $direction;
+<a name="line557"></a>		return $this;
+<a name="line558"></a>	}
+<a name="line559"></a>	
+<a name="line560"></a>	/**
+<a name="line561"></a>	*	Sets limit information which is translated into SQL LIMIT clauses later.
+<a name="line562"></a>	*
+<a name="line563"></a>	*	@param int $size
+<a name="line564"></a>	*	@param int $offset
+<a name="line565"></a>	*/
+<a name="line566"></a>	public function limit( $size, $offset = 0 )
+<a name="line567"></a>	{
+<a name="line568"></a>		$this->limit_size = $size;
+<a name="line569"></a>		$this->limit_offset = $offset;
+<a name="line570"></a>		return $this;
+<a name="line571"></a>	}
+<a name="line572"></a>	
+<a name="line573"></a>	/**
+<a name="line574"></a>	*	Limits search results by type
+<a name="line575"></a>	*
+<a name="line576"></a>	*	@param string $type
+<a name="line577"></a>	*	@return $this
+<a name="line578"></a>	*/
+<a name="line579"></a>	public function where_type( $type )
+<a name="line580"></a>	{
+<a name="line581"></a>		$this->type = $type;
+<a name="line582"></a>		return $this;
+<a name="line583"></a>	}
+<a name="line584"></a>	
+<a name="line585"></a>	/**
+<a name="line586"></a>	*	Adds a where clause
+<a name="line587"></a>	*
+<a name="line588"></a>	*	@param string $key
+<a name="line589"></a>	*	@param string $val
+<a name="line590"></a>	*	@return $this
+<a name="line591"></a>	*/
+<a name="line592"></a>	public function where( $key, $val = NULL )
+<a name="line593"></a>	{
+<a name="line594"></a>		$this->CI->db->_reset_select();
+<a name="line595"></a>		if( is_array( $key ) )
+<a name="line596"></a>		{
+<a name="line597"></a>			$this->CI->db->where($key);
+<a name="line598"></a>		}
+<a name="line599"></a>		elseif( !empty($val))
+<a name="line600"></a>		{
+<a name="line601"></a>			$this->CI->db->where($key, $val);
+<a name="line602"></a>		}
+<a name="line603"></a>		else
+<a name="line604"></a>		{
+<a name="line605"></a>			return FALSE;
+<a name="line606"></a>		}
+<a name="line607"></a>		$this->where[] = substr($this->CI->db->_compile_select(),15);
+<a name="line608"></a>		$this->CI->db->_reset_select();
+<a name="line609"></a>
+<a name="line610"></a>		return $this;
+<a name="line611"></a>	}
+<a name="line612"></a>	
+<a name="line613"></a>	public function photo_url($data, $param = 'thumb' )
+<a name="line614"></a>	{
+<a name="line615"></a>		Console::logSpeed('Finder::photo_url()');
+<a name="line616"></a>		
+<a name="line617"></a>		if( $data->photo_source == "facebook" && !empty( $data->facebook_id ) )
+<a name="line618"></a>		{
+<a name="line619"></a>			if($param=='thumb')
+<a name="line620"></a>			{
+<a name="line621"></a>				$url = "http://graph.facebook.com/".$data->facebook_id."/picture?type=square";
+<a name="line622"></a>			}
+<a name="line623"></a>			else
+<a name="line624"></a>			{	
+<a name="line625"></a>				$url = "http://graph.facebook.com/".$data->facebook_id."/picture?type=large";
+<a name="line626"></a>			}
+<a name="line627"></a>		}
+<a name="line628"></a>		elseif( $data->photo_source == "gravatar" )
+<a name="line629"></a>		{
+<a name="line630"></a>			// @todo implement gravatar support
+<a name="line631"></a>		}
+<a name="line632"></a>		elseif( !empty($data->url) || ( $param=='thumb' && !empty($data->thumb_url) ) )
+<a name="line633"></a>		{
+<a name="line634"></a>			if($param=='thumb')
+<a name="line635"></a>			{
+<a name="line636"></a>				$url = $data->thumb_url;
+<a name="line637"></a>			}
+<a name="line638"></a>			else
+<a name="line639"></a>			{
+<a name="line640"></a>				$url = $data->url;
+<a name="line641"></a>			}
+<a name="line642"></a>			
+<a name="line643"></a>			// Check to see if local file exists
+<a name="line644"></a>			
+<a name="line645"></a>			// first, generate path
+<a name="line646"></a>			$path = $this->CI->config->item('base_path');
+<a name="line647"></a>			if($param == "thumb" )
+<a name="line648"></a>			{
+<a name="line649"></a>				$path  .= "uploads/thumbnails/".basename($url);
+<a name="line650"></a>			}
+<a name="line651"></a>			else
+<a name="line652"></a>			{
+<a name="line653"></a>				$path .= "uploads/".basename($url);
+<a name="line654"></a>			}
+<a name="line655"></a>		 		
+<a name="line656"></a>			// If it doesn't, use default URL
+<a name="line657"></a>			if( !file_exists( $path ) )
+<a name="line658"></a>			{
+<a name="line659"></a>				$url =  base_url()."assets/images/default_user_photo.jpg";
+<a name="line660"></a>			}
+<a name="line661"></a>		}
+<a name="line662"></a>		else
 <a name="line663"></a>		{
-<a name="line664"></a>			return FALSE;
+<a name="line664"></a>			$url =  base_url()."assets/images/default_user_photo.jpg";
 <a name="line665"></a>		}
-<a name="line666"></a>		
-<a name="line667"></a>		// If bounds aren't set, find and set them
-<a name="line668"></a>		if( empty($this->bounds) )
-<a name="line669"></a>		{
-<a name="line670"></a>			// How wide is one degree?
-<a name="line671"></a>			$latitude_degree = 69;
-<a name="line672"></a>			$longitude_degree = ( ( 3.14 * cos(deg2rad($this->latitude)) * 6367449 ) / (180 * 1000 ) ) / 1.609;
-<a name="line673"></a>			
-<a name="line674"></a>			// How wide is the search radius (in degrees)?
-<a name="line675"></a>			$latitude_radius = $this->radius  / $latitude_degree;
-<a name="line676"></a>			$longitude_radius = $this->radius / $latitude_degree;
-<a name="line677"></a>			$this->bounds = array ( "latitude"=>array ( 	"upper"=> ( $this->latitude + $latitude_radius ),
-<a name="line678"></a>											"lower" => ( $this->latitude - $latitude_radius ) ),
-<a name="line679"></a>							"longitude"=>array(	"upper"=> ( $this->longitude + $longitude_radius ),
-<a name="line680"></a>											"lower" => ( $this->longitude - $longitude_radius ) ) );
-<a name="line681"></a>		}
-<a name="line682"></a>		if( !empty( $this->bounds ) )
-<a name="line683"></a>		{
-<a name="line684"></a>			// Add clauses to query string
-<a name="line685"></a>			$this->CI->db->where("L.latitude BETWEEN ".$this->bounds['latitude']['lower']." AND ".$this->bounds['latitude']['upper']);
-<a name="line686"></a>			$this->CI->db->where("L.longitude BETWEEN ".$this->bounds['longitude']['lower']." AND ".$this->bounds['longitude']['upper']);
-<a name="line687"></a>			$this->CI->db->select("( 3959 * acos( cos( radians( ".$this->latitude." ) ) * cos( radians( L.latitude ) ) * cos( radians( L.longitude ) - radians(".$this->longitude.") ) + sin( radians(".$this->latitude.") ) * sin( radians( L.latitude ) ) ) ) AS location_distance");
-<a name="line688"></a>		}
-<a name="line689"></a>	}
-<a name="line690"></a>	
-<a name="line691"></a>	/**
-<a name="line692"></a>	*	Sorts and paginates search results
-<a name="line693"></a>	*
-<a name="line694"></a>	*	First, it checks to see if the user has input any order_by or limit information
-<a name="line695"></a>	*	using the Finder::order_by() or Finder::limit() methods.
-<a name="line696"></a>	*
-<a name="line697"></a>	*	If not, then reverts to default values specified in the model's properties
-<a name="line698"></a>	*/
-<a name="line699"></a>	protected function _sort_and_paginate()
-<a name="line700"></a>	{
-<a name="line701"></a>		if(!empty($this->order_by_field))
-<a name="line702"></a>			$this->CI->db->order_by($this->order_by_field, $this->order_by_direction);
-<a name="line703"></a>		else
-<a name="line704"></a>			$this->CI->db->order_by($this->default_order_by_field, $this->default_order_by_direction);
-<a name="line705"></a>		
-<a name="line706"></a>		if(!empty($this->limit_size))
-<a name="line707"></a>			$this->CI->db->limit($this->limit_size, $this->limit_offset);
-<a name="line708"></a>		else
-<a name="line709"></a>			$this->CI->db->limit($this->default_limit_size, $this->default_limit_offset);
-<a name="line710"></a>	}
-<a name="line711"></a>	
-<a name="line712"></a>	
-<a name="line713"></a>	/*
-<a name="line714"></a>	*	Subqueries
-<a name="line715"></a>	*/
-<a name="line716"></a>	
-<a name="line717"></a>	/**
-<a name="line718"></a>	*	Searches by tag
-<a name="line719"></a>	*
-<a name="line720"></a>	*	@return string
-<a name="line721"></a>	*/
-<a name="line722"></a>	protected function _tag_query()
-<a name="line723"></a>	{
-<a name="line724"></a>		// Only proceed if tag id is already set or if a search finds a match
-<a name="line725"></a>		if( !empty( $this->tag_id ) ||  $this->_set_tag( $this->search_keyword ) )
-<a name="line726"></a>		{
-<a name="line727"></a>			// Start logging
-<a name="line728"></a>			Console::logSpeed('start Finder::_tag_query()');
-<a name="line729"></a>
-<a name="line730"></a>			// reset ActiveRecord
-<a name="line731"></a>			$this->CI->db->_reset_select();
-<a name="line732"></a>			
-<a name="line733"></a>			// Run basic query
-<a name="line734"></a>			$this->_basic_query();
-<a name="line735"></a>			
-<a name="line736"></a>			// Add extra SQL clauses
-<a name="line737"></a>			$this->CI->db->join("goods_tags AS GT ", "GT.good_id=G.id")
-<a name="line738"></a>				->join("tags AS T ", "GT.tag_id=T.id")
-<a name="line739"></a>				->where('T.id = '.$this->tag_id);
-<a name="line740"></a>			
-<a name="line741"></a>			// Generate SQL statement
-<a name="line742"></a>			$subquery = $this->CI->db->_compile_select();
-<a name="line743"></a>			
-<a name="line744"></a>			// re-reset ActiveRecord
-<a name="line745"></a>			$this->CI->db->_reset_select();
-<a name="line746"></a>			
-<a name="line747"></a>			// Stop logging
-<a name="line748"></a>			Console::logSpeed('end Finder::_tag_query()');
-<a name="line749"></a>
-<a name="line750"></a>			return $subquery;
-<a name="line751"></a>		}
-<a name="line752"></a>		else
-<a name="line753"></a>		{
-<a name="line754"></a>			return FALSE;
-<a name="line755"></a>		}
-<a name="line756"></a>	}
-<a name="line757"></a>	
-<a name="line758"></a>	/**
-<a name="line759"></a>	*	Searches by title
-<a name="line760"></a>	*
-<a name="line761"></a>	*	@return string
-<a name="line762"></a>	*/
-<a name="line763"></a>	protected function _title_query()
-<a name="line764"></a>	{
-<a name="line765"></a>		Console::logSpeed('start Finder::_title_query()');
-<a name="line766"></a>
-<a name="line767"></a>		// reset ActiveRecord
-<a name="line768"></a>		$this->CI->db->_reset_select();
-<a name="line769"></a>		
-<a name="line770"></a>		// Run basic query
-<a name="line771"></a>		$this->_basic_query();
-<a name="line772"></a>		
-<a name="line773"></a>		$this->CI->db->like("G.title", $this->search_keyword);
-<a name="line774"></a>		$subquery = $this->CI->db->_compile_select();
-<a name="line775"></a>		$this->CI->db->_reset_select();
-<a name="line776"></a>		
-<a name="line777"></a>		Console::logSpeed('end Finder::_title_query()');
-<a name="line778"></a>		
-<a name="line779"></a>		return $subquery;
-<a name="line780"></a>	}
-<a name="line781"></a>	
-<a name="line782"></a>	/**
-<a name="line783"></a>	*	Performs a union query if there are multiple subqueries.
-<a name="line784"></a>	*/
-<a name="line785"></a>	protected function _subquery_union()
-<a name="line786"></a>	{
-<a name="line787"></a>		Console::logSpeed('start Finder::_subquery_union()');
-<a name="line788"></a>		if(count($this->subquery)==2)
-<a name="line789"></a>		{
-<a name="line790"></a>			// In order to get the proper order_by and limit clauses,
-<a name="line791"></a>			// we have to perform some trickery.
-<a name="line792"></a>			
-<a name="line793"></a>			// $this->_sort_and_paginate() sets the database active record
-<a name="line794"></a>			// object with the proper clauses, but it has SELECT * at the
-<a name="line795"></a>			// beginning which we don't need. So we substring that part out. Done.
-<a name="line796"></a>			$this->CI->db->_reset_select();
-<a name="line797"></a>			$this->_sort_and_paginate();
-<a name="line798"></a>			$sorting = substr($this->CI->db->_compile_select(),9);
-<a name="line799"></a>			$this->CI->db->_reset_select();
-<a name="line800"></a>			$union = "(".$this->subquery[0]." ) UNION ( ".$this->subquery[1].")". $sorting;
-<a name="line801"></a>			$this->query = $this->CI->db->query($union);
-<a name="line802"></a>		}
-<a name="line803"></a>		elseif(count($this->subquery)==1)
-<a name="line804"></a>		{
-<a name="line805"></a>			$this->query = $this->CI->db->query($this->subquery[0]);
-<a name="line806"></a>		}
-<a name="line807"></a>		Console::logSpeed('end Finder::_subquery_union()');
-<a name="line808"></a>
-<a name="line809"></a>		if(!empty($this->query)) return $this->query;
-<a name="line810"></a>	}
-<a name="line811"></a>
-<a name="line812"></a>	/*
-<a name="line813"></a>	*	Utility functions
-<a name="line814"></a>	*/
-<a name="line815"></a>	
-<a name="line816"></a>	/**
-<a name="line817"></a>	*	Exclude logged in user
-<a name="line818"></a>	*
-<a name="line819"></a>	*	If the user is logged in, adds a where clause that filters out rows
-<a name="line820"></a>	*	associated with the user.
-<a name="line821"></a>	*/
-<a name="line822"></a>	protected function _exclude_logged_in_user()
-<a name="line823"></a>	{
-<a name="line824"></a>		if( !empty( $this->CI->session->userdata['user_id'] ) )
-<a name="line825"></a>		{
-<a name="line826"></a>			$this->where('U.id != ', $this->CI->session->userdata['user_id']);
-<a name="line827"></a>		}
-<a name="line828"></a>	}
-<a name="line829"></a>
-<a name="line830"></a>	
-<a name="line831"></a>	/**
-<a name="line832"></a>	*	Turns a DB result object into datamapper object clone
-<a name="line833"></a>	*/
-<a name="line834"></a>	protected function _object_factory()
-<a name="line835"></a>	{
-<a name="line836"></a>		Console::logSpeed('start Finder::_object_factory()');
-<a name="line837"></a>		foreach( $this->result as $row )
-<a name="line838"></a>		{
-<a name="line839"></a>			$item = (object) array(
-<a name="line840"></a>									"user"=>new stdClass(),
-<a name="line841"></a>									"location"=>new stdClass(),
-<a name="line842"></a>									"default_photo"=>new stdClass(),
-<a name="line843"></a>									"category"=>new stdClass()
-<a name="line844"></a>									);
-<a name="line845"></a>			foreach( $row as $key=>$val )
-<a name="line846"></a>			{
-<a name="line847"></a>				$object = substr($key, 0, strpos($key, "_"));
-<a name="line848"></a>				$key = substr(strstr($key, "_"), 1);
-<a name="line849"></a>				if( $object == "good")
-<a name="line850"></a>					$item->$key = $val;
-<a name="line851"></a>				elseif( $object == "photo")
-<a name="line852"></a>				{
-<a name="line853"></a>					if( empty( $item->photo->id ) )
-<a name="line854"></a>					{
-<a name="line855"></a>						$item->photo->thumb_url = base_url()."assets/images/default_".$item->type.".png";
-<a name="line856"></a>						$item->photo->url = base_url()."assets/images/default_".$item->type.".png";
-<a name="line857"></a>					}
-<a name="line858"></a>					else
-<a name="line859"></a>					{
-<a name="line860"></a>						$item->$object->$key = $val;
-<a name="line861"></a>					}
-<a name="line862"></a>				}
-<a name="line863"></a>				else
-<a name="line864"></a>					$item->$object->$key = $val;
-<a name="line865"></a>			}
-<a name="line866"></a>			$this->object[] = $item;
-<a name="line867"></a>		}
-<a name="line868"></a>		Console::logSpeed('end Finder::_object_factory()');
-<a name="line869"></a>	}
-<a name="line870"></a>	
-<a name="line871"></a>	/**
-<a name="line872"></a>	*	Geocodes this->address into a usable location object
-<a name="line873"></a>	*/
-<a name="line874"></a>	protected function _geocode()
-<a name="line875"></a>	{
-<a name="line876"></a>		$L = new Location();
-<a name="line877"></a>		if(!$L->geocode( $this->location_keyword )) return false;
-<a name="line878"></a>		$this->location = $L;
-<a name="line879"></a>		$this->latitude = $L->latitude;
-<a name="line880"></a>		$this->longitude = $L->longitude;
-<a name="line881"></a>		$this->address = $L->address;
-<a name="line882"></a>	}
-<a name="line883"></a>	
-<a name="line884"></a>	/**
-<a name="line885"></a>	*	Formats results into HTML for display on find page
-<a name="line886"></a>	*/
-<a name="line887"></a>	protected function _format_result()
-<a name="line888"></a>	{
-<a name="line889"></a>		Console::logSpeed('start Finder::_format_result()');
-<a name="line890"></a>
-<a name="line891"></a>		if(!empty($this->object))
-<a name="line892"></a>		{
-<a name="line893"></a>			foreach($this->object as $key=>$val)
-<a name="line894"></a>			{
-<a name="line895"></a>				$val->html = result_row($val, array("author", "location"));
-<a name="line896"></a>			}
-<a name="line897"></a>		}
-<a name="line898"></a>		else
-<a name="line899"></a>			return false;
-<a name="line900"></a>		
-<a name="line901"></a>		Console::logSpeed('end Finder::_format_result()');
-<a name="line902"></a>	}
-<a name="line903"></a>	
-<a name="line904"></a>	/**
-<a name="line905"></a>	*	Takes the keyword input and tries to find a matching tag
-<a name="line906"></a>	*
-<a name="line907"></a>	*	@param string $tag 	Name of tag to search for
-<a name="line908"></a>	*/
-<a name="line909"></a>	protected function _set_tag( $tag )
-<a name="line910"></a>	{
-<a name="line911"></a>		// Find the tag_id
-<a name="line912"></a>		$tag_query = $this->CI->db->select("id")->like('name', $tag)->get('tags');
-<a name="line913"></a>		if($tag_query->num_rows==0) return false;
-<a name="line914"></a>		$tag = $tag_query->row();
-<a name="line915"></a>		// Set tag_id
-<a name="line916"></a>		$this->tag_id = $tag->id;
-<a name="line917"></a>		return true;
-<a name="line918"></a>	}
-<a name="line919"></a>	
-<a name="line920"></a>	/**
-<a name="line921"></a>	*	Renders the output of the query as either an object or JSON.
-<a name="line922"></a>	*
-<a name="line923"></a>	*	The type of the output depends on the $this->format field. By default,
-<a name="line924"></a>	*	this function outputs JSON if the request was made via AJAX and it
-<a name="line925"></a>	*	outputs an object if the request was not AJAX.
-<a name="line926"></a>	*/
-<a name="line927"></a>	protected function _render_output()
-<a name="line928"></a>	{
-<a name="line929"></a>		if( $this->format == "JSON" )
-<a name="line930"></a>		{
-<a name="line931"></a>			$this->_format_result();
-<a name="line932"></a>			if( empty($this->latitude) || empty($this->longitude))
-<a name="line933"></a>				$this->_set_logged_in_user_location();
-<a name="line934"></a>			if(!empty($this->latitude)&&!empty($this->longitude)&&!empty($this->address))
-<a name="line935"></a>				$data['center'] = (object) array ( "latitude"=>$this->latitude, "longitude"=> $this->longitude, "address"=>$this->address);
-<a name="line936"></a>			$data['total_results'] = count($this->object);
-<a name="line937"></a>			$data['results'] = $this->object;
-<a name="line938"></a>			return json_encode( $data );
-<a name="line939"></a>		}
-<a name="line940"></a>		else
-<a name="line941"></a>		{
-<a name="line942"></a>			$this->_format_result();
-<a name="line943"></a>			return $this->object;
-<a name="line944"></a>		}
-<a name="line945"></a>	}
-<a name="line946"></a>
-<a name="line947"></a>}
-<a name="line948"></a></pre>
+<a name="line666"></a>		Console::logSpeed('Finder::photo_url(): done.');
+<a name="line667"></a>		return $url;
+<a name="line668"></a>	}
+<a name="line669"></a>	/**
+<a name="line670"></a>	*	Basic query that is run every time for both subqueries and normal queries.
+<a name="line671"></a>	*
+<a name="line672"></a>	*	There are several subroutines which are run that add to the active record
+<a name="line673"></a>	*	object's methods.
+<a name="line674"></a>	*/
+<a name="line675"></a>	protected function _basic_query()
+<a name="line676"></a>	{
+<a name="line677"></a>		Console::logSpeed('Finder::_basic_query()');
+<a name="line678"></a>
+<a name="line679"></a>		// Determine geographic boundaries
+<a name="line680"></a>		$this->_set_geographic_bounds();
+<a name="line681"></a>		
+<a name="line682"></a>		// Find goods
+<a name="line683"></a>		$this->CI->db->select("G.id AS good_id,
+<a name="line684"></a>			G.type AS good_type,
+<a name="line685"></a>			G.title AS good_title,
+<a name="line686"></a>			G.description AS good_description,
+<a name="line687"></a>			G.created AS good_created,
+<a name="line688"></a>			L.id AS location_id,
+<a name="line689"></a>			L.title AS location_title,
+<a name="line690"></a>			L.address AS location_address,
+<a name="line691"></a>			L.latitude AS location_latitude,
+<a name="line692"></a>			L.longitude AS location_longitude,
+<a name="line693"></a>			L.street_address AS location_street_address,
+<a name="line694"></a>			L.city AS location_city,
+<a name="line695"></a>			L.state AS location_state,
+<a name="line696"></a>			L.postal_code AS location_postal_code,
+<a name="line697"></a>			P.id AS photo_id,
+<a name="line698"></a>			P.url AS photo_url,
+<a name="line699"></a>			P.thumb_url AS photo_thumb_url,
+<a name="line700"></a>			P.caption AS photo_caption,
+<a name="line701"></a>			U.id AS user_id,
+<a name="line702"></a>			U.email AS user_email,
+<a name="line703"></a>			U.type AS user_type,
+<a name="line704"></a>			U.first_name AS user_first_name,
+<a name="line705"></a>			U.last_name AS user_last_name,
+<a name="line706"></a>			U.screen_name AS user_screen_name,
+<a name="line707"></a>			U.bio AS user_bio,
+<a name="line708"></a>			U.created AS user_created,
+<a name="line709"></a>			U.occupation AS user_occupation,
+<a name="line710"></a>			U.photo_source AS user_photo_source,
+<a name="line711"></a>			U.facebook_id AS user_facebook_id,
+<a name="line712"></a>			UP.id AS user_photo_id,
+<a name="line713"></a>			UP.url AS user_photo_url,
+<a name="line714"></a>			UP.thumb_url AS user_photo_thumb_url,
+<a name="line715"></a>			UP.caption AS user_photo_caption,
+<a name="line716"></a>			C.id AS category_id,
+<a name="line717"></a>			C.name AS category_name")
+<a name="line718"></a>			->from("goods AS G ")
+<a name="line719"></a>			->join("users AS U", "G.user_id = U.id")
+<a name="line720"></a>			->join("locations AS L ", "L.id = G.location_id")
+<a name="line721"></a>			->join("photos AS P ", "G.default_photo_id = P.id", "left")
+<a name="line722"></a>			->join("photos AS UP ", "U.default_photo_id = UP.id", "left")
+<a name="line723"></a>			->join("categories AS C", "C.id = G.category_id", "left")
+<a name="line724"></a>			->where('G.type', $this->type);
+<a name="line725"></a>			
+<a name="line726"></a>		// Iterate through defined where conditions
+<a name="line727"></a>		if( !empty( $this->where ) )
+<a name="line728"></a>		{
+<a name="line729"></a>			foreach( $this->where as $val )
+<a name="line730"></a>			{
+<a name="line731"></a>				$this->CI->db->where($val);
+<a name="line732"></a>			}
+<a name="line733"></a>		}
+<a name="line734"></a>
+<a name="line735"></a>		// Count related transactions
+<a name="line736"></a>		$this->_count_transactions();
+<a name="line737"></a>		
+<a name="line738"></a>		// Sort & Paginate
+<a name="line739"></a>		$this->_sort_and_paginate();
+<a name="line740"></a>		
+<a name="line741"></a>		Console::logSpeed('Finder::_basic_query(): done.');
+<a name="line742"></a>	}
+<a name="line743"></a>	
+<a name="line744"></a>	/**
+<a name="line745"></a>	*	Counts the requests for each good, grouped by request status.
+<a name="line746"></a>	*
+<a name="line747"></a>	*	Use this set of queries only when necessary, because they are resource-
+<a name="line748"></a>	*	intensive.
+<a name="line749"></a>	*/
+<a name="line750"></a>	protected function _count_transactions()
+<a name="line751"></a>	{
+<a name="line752"></a>		/*$this->CI->db->select("COUNT(T_pending.id) AS good_pending_requests")
+<a name="line753"></a>		->select("COUNT(T_ignored.id) AS good_ignored_requests")
+<a name="line754"></a>		->select("COUNT(T_accepted.id) AS good_accepted_requests")
+<a name="line755"></a>		->select("COUNT(T_completed.id) AS good_completed_requests")
+<a name="line756"></a>		->join("goods_transactions AS GR ", "GR.good_id = G.id", "left")
+<a name="line757"></a>		->join("transactions AS T_pending ", " T_pending.id = GR.transaction_id AND T_pending.status='pending'", "left")
+<a name="line758"></a>		->join("transactions AS T_ignored ", " T_ignored.id = GR.transaction_id AND T_ignored.status = 'ignored'", "left")
+<a name="line759"></a>		->join("transactions AS T_accepted ", " T_accepted.id = GR.transaction_id AND T_accepted.status = 'accepted'", "left")
+<a name="line760"></a>		->join("transactions AS T_completed ", " T_completed.id = GR.transaction_id AND T_completed.status = 'completed'", "left")
+<a name="line761"></a>		->group_by("G.id");*/
+<a name="line762"></a>	}
+<a name="line763"></a>    	
+<a name="line764"></a>	/**
+<a name="line765"></a>	*	If the user is logged in, this function fetches their default location 
+<a name="line766"></a>	*	and sends its information into Finder's location-related properties.
+<a name="line767"></a>	*
+<a name="line768"></a>	*	@return boolean
+<a name="line769"></a>	*/
+<a name="line770"></a>	protected function _set_logged_in_user_location()
+<a name="line771"></a>	{
+<a name="line772"></a>		Console::logSpeed('Finder::_set_logged_in_user_location()');
+<a name="line773"></a>		
+<a name="line774"></a>		if( !empty( $this->CI->session->userdata['user_id'] ))
+<a name="line775"></a>		{
+<a name="line776"></a>			$this->CI->load->library('datamapper');
+<a name="line777"></a>			$this->U = new User($this->CI->session->userdata['user_id']);
+<a name="line778"></a>			$this->U->default_location->get();
+<a name="line779"></a>			
+<a name="line780"></a>			// If the user has a default location, use it
+<a name="line781"></a>			if( $this->U->default_location->exists() )
+<a name="line782"></a>			{
+<a name="line783"></a>				$this->location->latitude = $this->U->default_location->latitude;
+<a name="line784"></a>				$this->location->longitude = $this->U->default_location->longitude;
+<a name="line785"></a>				$this->location->address = $this->U->default_location->address;
+<a name="line786"></a>				return TRUE;
+<a name="line787"></a>			}
+<a name="line788"></a>			// If the user doesn't have a default location, try to load the 
+<a name="line789"></a>			// location via IP address
+<a name="line790"></a>			else
+<a name="line791"></a>			{
+<a name="line792"></a>				$this->CI->load->library('geo');
+<a name="line793"></a>				$ip = $this->CI->geo->geocode_ip();
+<a name="line794"></a>				if(!empty( $ip))
+<a name="line795"></a>				{
+<a name="line796"></a>					$this->location = $ip;
+<a name="line797"></a>					return TRUE;
+<a name="line798"></a>				}
+<a name="line799"></a>			}
+<a name="line800"></a>		}
+<a name="line801"></a>		return FALSE;
+<a name="line802"></a>	}
+<a name="line803"></a>
+<a name="line804"></a>
+<a name="line805"></a>	/**
+<a name="line806"></a>	*	Adds where clauses that limit results to a specific geographic area
+<a name="line807"></a>	*
+<a name="line808"></a>	*	Calculates bounds by determining how many degrees of latitude and 
+<a name="line809"></a>	*	longitude the search radius encompasses. This is not a complete 
+<a name="line810"></a>	*	solution, however, since the shape of the bounds is a square, not a 
+<a name="line811"></a>	*	circle. Thus to be truly accurate another where clause limiting results 
+<a name="line812"></a>	*	by the calculated distance field should be used.
+<a name="line813"></a>	*
+<a name="line814"></a>	*	@param boolean $SQL		Add relevant WHERE clauses to CI Active record?
+<a name="line815"></a>	*	@return boolean
+<a name="line816"></a>	*/
+<a name="line817"></a>	protected function _set_geographic_bounds($SQL = TRUE)
+<a name="line818"></a>	{
+<a name="line819"></a>		Console::logSpeed("Finder::_set_geographic_bounds()");
+<a name="line820"></a>		
+<a name="line821"></a>		// Do we have a valid lat/lng pair?
+<a name="line822"></a>		$has_coords = (!empty($this->location->latitude) && !empty($this->location->longitude));
+<a name="line823"></a>		
+<a name="line824"></a>		// If no lat/lng, try to find them
+<a name="line825"></a>		if(!$has_coords)
+<a name="line826"></a>		{
+<a name="line827"></a>			// Get lat/lng from session userdata
+<a name="line828"></a>			if(empty($this->location->address) && !empty($this->CI->session->userdata['location_latitude']) && !empty($this->CI->session->userdata['location_longitude']))
+<a name="line829"></a>			{
+<a name="line830"></a>				$this->location->latitude = $this->CI->session->userdata['location_latitude'];
+<a name="line831"></a>				$this->location->longitude = $this->CI->session->userdata['location_longitude'];
+<a name="line832"></a>				return $this->_set_geographic_bounds();
+<a name="line833"></a>			}
+<a name="line834"></a>			
+<a name="line835"></a>			// Get lat/lng via geocoding
+<a name="line836"></a>			elseif(!empty($this->location->address))
+<a name="line837"></a>			{
+<a name="line838"></a>				$this->geocode();
+<a name="line839"></a>				return $this->_set_geographic_bounds();
+<a name="line840"></a>			}
+<a name="line841"></a>			
+<a name="line842"></a>			return FALSE;
+<a name="line843"></a>		}
+<a name="line844"></a>		
+<a name="line845"></a>		// If bounds aren't set, find and set them
+<a name="line846"></a>		if( empty($this->bounds) )
+<a name="line847"></a>		{
+<a name="line848"></a>			$this->CI->load->library('geo');
+<a name="line849"></a>			$this->bounds = $this->CI->geo->get_bounds($this->location->latitude, $this->location->longitude);
+<a name="line850"></a>		}
+<a name="line851"></a>		
+<a name="line852"></a>		// If bounds found and $SQL is true, add SQL clauses
+<a name="line853"></a>		if( !empty( $this->bounds ) && $SQL)
+<a name="line854"></a>		{
+<a name="line855"></a>			$this->CI->db->where("L.latitude BETWEEN ".$this->bounds['latitude']['min']." AND ".$this->bounds['latitude']['max']);
+<a name="line856"></a>			$this->CI->db->where("L.longitude BETWEEN ".$this->bounds['longitude']['min']." AND ".$this->bounds['longitude']['max']);
+<a name="line857"></a>			$this->CI->db->where("G.location_id IS NOT NULL");
+<a name="line858"></a>			$this->CI->db->select("( 3959 * acos( cos( radians( ".$this->location->latitude." ) ) * cos( radians( L.latitude ) ) * cos( radians( L.longitude ) - radians(".$this->location->longitude.") ) + sin( radians(".$this->location->latitude.") ) * sin( radians( L.latitude ) ) ) ) AS location_distance");
+<a name="line859"></a>			return TRUE;
+<a name="line860"></a>		}
+<a name="line861"></a>		return FALSE;
+<a name="line862"></a>	}
+<a name="line863"></a>	
+<a name="line864"></a>	/**
+<a name="line865"></a>	*	Sorts and paginates search results
+<a name="line866"></a>	*
+<a name="line867"></a>	*	First, it checks to see if the user has input any order_by or limit
+<a name="line868"></a>	*	information using the Finder::order_by() or Finder::limit() methods.
+<a name="line869"></a>	*
+<a name="line870"></a>	*	If not, then reverts to default values specified in the model's 
+<a name="line871"></a>	*	properties
+<a name="line872"></a>	*/
+<a name="line873"></a>	protected function _sort_and_paginate()
+<a name="line874"></a>	{
+<a name="line875"></a>		if(!empty($this->order_by_field))
+<a name="line876"></a>		{
+<a name="line877"></a>			$this->CI->db->order_by($this->order_by_field, $this->order_by_direction);
+<a name="line878"></a>		}
+<a name="line879"></a>		else
+<a name="line880"></a>		{
+<a name="line881"></a>			$this->CI->db->order_by($this->default_order_by_field, $this->default_order_by_direction);
+<a name="line882"></a>		}
+<a name="line883"></a>		
+<a name="line884"></a>		if(!empty($this->limit_size))
+<a name="line885"></a>		{
+<a name="line886"></a>			$this->CI->db->limit($this->limit_size, $this->limit_offset);
+<a name="line887"></a>		}
+<a name="line888"></a>		else
+<a name="line889"></a>		{
+<a name="line890"></a>			$this->CI->db->limit($this->default_limit_size, $this->default_limit_offset);
+<a name="line891"></a>		}
+<a name="line892"></a>	}
+<a name="line893"></a>	
+<a name="line894"></a>	
+<a name="line895"></a>	/*
+<a name="line896"></a>	*	Subqueries
+<a name="line897"></a>	*/
+<a name="line898"></a>	
+<a name="line899"></a>	/**
+<a name="line900"></a>	*	Searches by tag
+<a name="line901"></a>	*
+<a name="line902"></a>	*	@return string
+<a name="line903"></a>	*/
+<a name="line904"></a>	protected function _tag_query()
+<a name="line905"></a>	{
+<a name="line906"></a>		// Only proceed if tag id is already set or if a search finds a match
+<a name="line907"></a>		if( !empty( $this->tag_id ) ||  $this->_set_tag( $this->search_keyword ) )
+<a name="line908"></a>		{
+<a name="line909"></a>			// Start logging
+<a name="line910"></a>			Console::logSpeed('Finder::_tag_query()');
+<a name="line911"></a>
+<a name="line912"></a>			// reset ActiveRecord
+<a name="line913"></a>			$this->CI->db->_reset_select();
+<a name="line914"></a>			
+<a name="line915"></a>			// Run basic query
+<a name="line916"></a>			$this->_basic_query();
+<a name="line917"></a>			
+<a name="line918"></a>			// Add extra SQL clauses
+<a name="line919"></a>			$this->CI->db->join("goods_tags AS GT ", "GT.good_id=G.id")
+<a name="line920"></a>				->join("tags AS T ", "GT.tag_id=T.id")
+<a name="line921"></a>				->where('T.id = '.$this->tag_id);
+<a name="line922"></a>			
+<a name="line923"></a>			// Generate SQL statement
+<a name="line924"></a>			$subquery = $this->CI->db->_compile_select();
+<a name="line925"></a>			
+<a name="line926"></a>			// re-reset ActiveRecord
+<a name="line927"></a>			$this->CI->db->_reset_select();
+<a name="line928"></a>			
+<a name="line929"></a>			// Stop logging
+<a name="line930"></a>			Console::logSpeed('Finder::_tag_query(): done.');
+<a name="line931"></a>
+<a name="line932"></a>			return $subquery;
+<a name="line933"></a>		}
+<a name="line934"></a>		else
+<a name="line935"></a>		{
+<a name="line936"></a>			return FALSE;
+<a name="line937"></a>		}
+<a name="line938"></a>	}
+<a name="line939"></a>	
+<a name="line940"></a>	/**
+<a name="line941"></a>	*	Searches by title
+<a name="line942"></a>	*
+<a name="line943"></a>	*	@return string	SQL sentence
+<a name="line944"></a>	*/
+<a name="line945"></a>	protected function _title_query()
+<a name="line946"></a>	{
+<a name="line947"></a>		Console::logSpeed('Finder::_title_query()');
+<a name="line948"></a>
+<a name="line949"></a>		// reset ActiveRecord
+<a name="line950"></a>		$this->CI->db->_reset_select();
+<a name="line951"></a>		
+<a name="line952"></a>		// Run basic query
+<a name="line953"></a>		$this->_basic_query();
+<a name="line954"></a>		
+<a name="line955"></a>		$this->CI->db->like("G.title", $this->search_keyword);
+<a name="line956"></a>		$subquery = $this->CI->db->_compile_select();
+<a name="line957"></a>		$this->CI->db->_reset_select();
+<a name="line958"></a>		
+<a name="line959"></a>		Console::logSpeed('Finder::_title_query(): done.');
+<a name="line960"></a>		
+<a name="line961"></a>		return $subquery;
+<a name="line962"></a>	}
+<a name="line963"></a>	
+<a name="line964"></a>	/**
+<a name="line965"></a>	*	Performs a union query if there are multiple subqueries.
+<a name="line966"></a>	*/
+<a name="line967"></a>	protected function _subquery_union()
+<a name="line968"></a>	{
+<a name="line969"></a>		Console::logSpeed('Finder::_subquery_union()');
+<a name="line970"></a>		if(count($this->subquery)==2)
+<a name="line971"></a>		{
+<a name="line972"></a>			// In order to get the proper order_by and limit clauses,
+<a name="line973"></a>			// we have to perform some trickery.
+<a name="line974"></a>			
+<a name="line975"></a>			// $this->_sort_and_paginate() sets the database active record
+<a name="line976"></a>			// object with the proper clauses, but it has SELECT * at the
+<a name="line977"></a>			// beginning which we don't need. So we substring that part out. Done.
+<a name="line978"></a>			$this->CI->db->_reset_select();
+<a name="line979"></a>			$this->_sort_and_paginate();
+<a name="line980"></a>			$sorting = substr($this->CI->db->_compile_select(),9);
+<a name="line981"></a>			$this->CI->db->_reset_select();
+<a name="line982"></a>			$union = "(".$this->subquery[0]." ) UNION ( ".$this->subquery[1].")". $sorting;
+<a name="line983"></a>			$this->query = $this->CI->db->query($union);
+<a name="line984"></a>		}
+<a name="line985"></a>		elseif(count($this->subquery)==1)
+<a name="line986"></a>		{
+<a name="line987"></a>			$this->query = $this->CI->db->query($this->subquery[0]);
+<a name="line988"></a>		}
+<a name="line989"></a>		Console::logSpeed('Finder::_subquery_union(): done.');
+<a name="line990"></a>
+<a name="line991"></a>		if(!empty($this->query))
+<a name="line992"></a>		{
+<a name="line993"></a>			return $this->query;
+<a name="line994"></a>		}
+<a name="line995"></a>	}
+<a name="line996"></a>
+<a name="line997"></a>	/*
+<a name="line998"></a>	*	Utility functions
+<a name="line999"></a>	*/
+<a name="line1000"></a>	
+<a name="line1001"></a>	/**
+<a name="line1002"></a>	*	Exclude logged in user
+<a name="line1003"></a>	*
+<a name="line1004"></a>	*	If the user is logged in, adds a where clause that filters out rows
+<a name="line1005"></a>	*	associated with the user.
+<a name="line1006"></a>	*/
+<a name="line1007"></a>	protected function _exclude_logged_in_user()
+<a name="line1008"></a>	{
+<a name="line1009"></a>		if( !empty( $this->CI->session->userdata['user_id'] ) )
+<a name="line1010"></a>		{
+<a name="line1011"></a>			$this->where('U.id != ', $this->CI->session->userdata['user_id']);
+<a name="line1012"></a>		}
+<a name="line1013"></a>	}
+<a name="line1014"></a>
+<a name="line1015"></a>	/**
+<a name="line1016"></a>	*	Geocodes this->address into a usable location object via Geo::geocode()
+<a name="line1017"></a>	*	@return boolean
+<a name="line1018"></a>	*/
+<a name="line1019"></a>	public function geocode()
+<a name="line1020"></a>	{
+<a name="line1021"></a>		// Get Geocoded Location Data
+<a name="line1022"></a>		$this->CI->load->library('geo');
+<a name="line1023"></a>		$result = $this->CI->geo->geocode($this->location->address);
+<a name="line1024"></a>		
+<a name="line1025"></a>		if(!empty($result))
+<a name="line1026"></a>		{
+<a name="line1027"></a>			$this->location = $result;
+<a name="line1028"></a>			return TRUE;
+<a name="line1029"></a>		}
+<a name="line1030"></a>		return FALSE;
+<a name="line1031"></a>	}
+<a name="line1032"></a>	
+<a name="line1033"></a>	/**
+<a name="line1034"></a>	*	Formats results into HTML for display on find page
+<a name="line1035"></a>	*/
+<a name="line1036"></a>	protected function _format_result()
+<a name="line1037"></a>	{
+<a name="line1038"></a>		Console::logSpeed('Finder::_format_result()');
+<a name="line1039"></a>
+<a name="line1040"></a>		if(!empty($this->object))
+<a name="line1041"></a>		{
+<a name="line1042"></a>			foreach($this->object as $key=>$val)
+<a name="line1043"></a>			{
+<a name="line1044"></a>				$val->html = UI_Results::goods(array(
+<a name="line1045"></a>					"results"=>$val,
+<a name="line1046"></a>					"include"=>array("author","location"),
+<a name="line1047"></a>					"row"=>TRUE
+<a name="line1048"></a>				));
+<a name="line1049"></a>			}
+<a name="line1050"></a>		}
+<a name="line1051"></a>		else
+<a name="line1052"></a>		{
+<a name="line1053"></a>			return false;
+<a name="line1054"></a>		}
+<a name="line1055"></a>		
+<a name="line1056"></a>		Console::logSpeed('Finder::_format_result(): done.');
+<a name="line1057"></a>	}
+<a name="line1058"></a>	
+<a name="line1059"></a>	/**
+<a name="line1060"></a>	*	Takes the keyword input and tries to find a matching tag
+<a name="line1061"></a>	*
+<a name="line1062"></a>	*	@param string $tag 	Name of tag to search for
+<a name="line1063"></a>	*/
+<a name="line1064"></a>	protected function _set_tag( $tag )
+<a name="line1065"></a>	{
+<a name="line1066"></a>		Console::logSpeed("Finder::_set_tag()");
+<a name="line1067"></a>		// Find the tag_id
+<a name="line1068"></a>		$tag_query = $this->CI->db->select("id")->like('name', $tag)->get('tags');
+<a name="line1069"></a>		if($tag_query->num_rows==0)
+<a name="line1070"></a>		{
+<a name="line1071"></a>			return false;
+<a name="line1072"></a>		}
+<a name="line1073"></a>		
+<a name="line1074"></a>		$tag = $tag_query->row();
+<a name="line1075"></a>		// Set tag_id
+<a name="line1076"></a>		$this->tag_id = $tag->id;
+<a name="line1077"></a>		return true;
+<a name="line1078"></a>	}
+<a name="line1079"></a>	
+<a name="line1080"></a>	/**
+<a name="line1081"></a>	*	Renders the output of the query as either an object or JSON.
+<a name="line1082"></a>	*
+<a name="line1083"></a>	*	The type of the output depends on the $this->format field. By default,
+<a name="line1084"></a>	*	this function outputs JSON if the request was made via AJAX and it
+<a name="line1085"></a>	*	outputs an object if the request was not AJAX.
+<a name="line1086"></a>	*/
+<a name="line1087"></a>	protected function _render_output()
+<a name="line1088"></a>	{
+<a name="line1089"></a>		if( $this->format == "JSON" )
+<a name="line1090"></a>		{
+<a name="line1091"></a>			$this->_format_result();
+<a name="line1092"></a>			if( empty($this->location->latitude) || empty($this->location->longitude))
+<a name="line1093"></a>			{
+<a name="line1094"></a>				$this->_set_logged_in_user_location();
+<a name="line1095"></a>			}
+<a name="line1096"></a>			
+<a name="line1097"></a>			if(!empty($this->location))
+<a name="line1098"></a>			{
+<a name="line1099"></a>				$data['center'] = (object) $this->location;
+<a name="line1100"></a>			}
+<a name="line1101"></a>			$data['total_results'] = count($this->object);
+<a name="line1102"></a>			$data['results'] = $this->object;
+<a name="line1103"></a>			return json_encode( $data );
+<a name="line1104"></a>		}
+<a name="line1105"></a>		else
+<a name="line1106"></a>		{
+<a name="line1107"></a>			$this->_format_result();
+<a name="line1108"></a>			return $this->object;
+<a name="line1109"></a>		}
+<a name="line1110"></a>	}
+<a name="line1111"></a>
+<a name="line1112"></a>}
+<a name="line1113"></a></pre>
 <div class="header">
 <h1>GiftFlow API</h1>
 <ul>

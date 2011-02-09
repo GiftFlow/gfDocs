@@ -6,7 +6,7 @@
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 
 <meta name="generator" content="PHPDoctor 2RC4 (http://peej.github.com/phpdoctor/)">
-<meta name="when" content="Fri, 18 Jun 2010 21:26:38 +0000">
+<meta name="when" content="Wed, 09 Feb 2011 20:22:55 +0000">
 
 <link rel="stylesheet" type="text/css" href="../stylesheet.css">
 <link rel="start" href="../overview-summary.html">
@@ -40,23 +40,34 @@ Detail: <a href="#detail_field">Field</a> | <a href="#detail_method">Method</a> 
 <hr>
 
 <div class="qualifiedName">GiftFlow\Welcome</div>
-<a href="../source/application/controllers/welcome.php.html#line3" class="location">application/controllers/welcome.php at line 3</a>
+<a href="../source/controllers/welcome.php.html#line6" class="location">controllers/welcome.php at line 6</a>
 
 <h1>Class Welcome</h1>
 
-<pre class="tree">CI_Base<br> └─<a href="../giftflow/controller.html">Controller</a><br>       └─<strong>Welcome</strong><br /></pre>
+<pre class="tree">CI_Controller<br> └─<strong>Welcome</strong><br /></pre>
 
 <hr>
 
-<p class="signature">public  class <strong>Welcome</strong><br>extends <a href="../giftflow/controller.html">Controller</a>
+<p class="signature">public  class <strong>Welcome</strong><br>extends CI_Controller
 
 </p>
 
+<div class="comment" id="overview_description"><p>Welcome section
+These pages are used when a user first creates their account.</p></div>
+
 <hr>
 
-<table class="inherit">
-<tr><th colspan="2">Fields inherited from GiftFlow\Controller</th></tr>
-<tr><td><a href="../giftflow/controller.html#_ci_scaff_table">_ci_scaff_table</a>, <a href="../giftflow/controller.html#_ci_scaffolding">_ci_scaffolding</a></td></tr></table>
+<table id="summary_field">
+<tr><th colspan="2">Field Summary</th></tr>
+<tr>
+<td class="type"> mixed</td>
+<td class="description"><p class="name"><a href="#U">$U</a></p></td>
+</tr>
+<tr>
+<td class="type">private  mixed</td>
+<td class="description"><p class="name"><a href="#_parse_type">$_parse_type</a></p></td>
+</tr>
+</table>
 
 <table id="summary_method">
 <tr><th colspan="2">Method Summary</th></tr>
@@ -66,24 +77,35 @@ Detail: <a href="#detail_field">Field</a> | <a href="#detail_method">Method</a> 
 </tr>
 <tr>
 <td class="type"> void</td>
-<td class="description"><p class="name"><a href="#geocode()">geocode</a>()</p></td>
+<td class="description"><p class="name"><a href="#facebook()">facebook</a>()</p><p class="description">Loaded after user successfully creates account using Facebook</p></td>
 </tr>
 <tr>
 <td class="type"> void</td>
-<td class="description"><p class="name"><a href="#index()">index</a>()</p></td>
-</tr>
-<tr>
-<td class="type"> void</td>
-<td class="description"><p class="name"><a href="#mapper()">mapper</a>()</p></td>
+<td class="description"><p class="name"><a href="#index()">index</a>()</p><p class="description">Loaded after user first creates GiftFlow account</p></td>
 </tr>
 </table>
 
-<table class="inherit">
-<tr><th colspan="2">Methods inherited from GiftFlow\Controller</th></tr>
-<tr><td><a href="../giftflow/controller.html#__construct()">__construct</a>, <a href="../giftflow/controller.html#_ci_initialize()">_ci_initialize</a>, <a href="../giftflow/controller.html#_ci_scaffolding()">_ci_scaffolding</a></td></tr></table>
+<h2 id="detail_field">Field Detail</h2>
+<a href="../source/controllers/welcome.php.html#line10" class="location">controllers/welcome.php at line 10</a>
+
+<h3 id="U">U</h3>
+<code class="signature">public  mixed <strong>$U</strong></code>
+<div class="details">
+</div>
+
+<hr>
+
+<a href="../source/controllers/welcome.php.html#line8" class="location">controllers/welcome.php at line 8</a>
+
+<h3 id="_parse_type">_parse_type</h3>
+<code class="signature">private  mixed <strong>$_parse_type</strong> = 'gifts'</code>
+<div class="details">
+</div>
+
+<hr>
 
 <h2 id="detail_method">Method Detail</h2><div class="method_detail">
-<div class='method'><a href="../source/application/controllers/welcome.php.html#line5" class="location">application/controllers/welcome.php at line 5</a>
+<div class='method'><a href="../source/controllers/welcome.php.html#line12" class="location">controllers/welcome.php at line 12</a>
 
 <h3 id="__construct()">__construct</h3>
 <code class="signature">public  void <strong>__construct</strong>()</code>
@@ -92,30 +114,21 @@ Detail: <a href="#detail_field">Field</a> | <a href="#detail_method">Method</a> 
 
 
 
-<div class='method'><a href="../source/application/controllers/welcome.php.html#line28" class="location">application/controllers/welcome.php at line 28</a>
+<div class='method'><a href="../source/controllers/welcome.php.html#line31" class="location">controllers/welcome.php at line 31</a>
 
-<h3 id="geocode()">geocode</h3>
-<code class="signature">public  void <strong>geocode</strong>()</code>
+<h3 id="facebook()">facebook</h3>
+<code class="signature">public  void <strong>facebook</strong>()</code>
 <div class="details">
-</div></div>
+<p>Loaded after user successfully creates account using Facebook</p></div></div>
 
 
 
-<div class='method'><a href="../source/application/controllers/welcome.php.html#line11" class="location">application/controllers/welcome.php at line 11</a>
+<div class='method'><a href="../source/controllers/welcome.php.html#line23" class="location">controllers/welcome.php at line 23</a>
 
 <h3 id="index()">index</h3>
 <code class="signature">public  void <strong>index</strong>()</code>
 <div class="details">
-</div></div>
-
-
-
-<div class='method'><a href="../source/application/controllers/welcome.php.html#line15" class="location">application/controllers/welcome.php at line 15</a>
-
-<h3 id="mapper()">mapper</h3>
-<code class="signature">public  void <strong>mapper</strong>()</code>
-<div class="details">
-</div></div>
+<p>Loaded after user first creates GiftFlow account</p></div></div>
 
 
 

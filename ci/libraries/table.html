@@ -4,12 +4,12 @@
 
 <title>CodeIgniter User Guide : HTML Table Class</title>
 
-<link rel='stylesheet' type='text/css' media='all' href='http://codeigniter.com/user_guide/userguide.css' />
+<link rel='stylesheet' type='text/css' media='all' href='../userguide.css' />
 
-<script type="text/javascript" src="http://codeigniter.com/user_guide/nav/nav.js"></script>
-<script type="text/javascript" src="http://codeigniter.com/user_guide/nav/prototype.lite.js"></script>
-<script type="text/javascript" src="http://codeigniter.com/user_guide/nav/moo.fx.js"></script>
-<script type="text/javascript" src="http://codeigniter.com/user_guide/nav/user_guide_menu.js"></script>
+<script type="text/javascript" src="../nav/nav.js"></script>
+<script type="text/javascript" src="../nav/prototype.lite.js"></script>
+<script type="text/javascript" src="../nav/moo.fx.js"></script>
+<script type="text/javascript" src="../nav/user_guide_menu.js"></script>
 
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <meta http-equiv='expires' content='-1' />
@@ -23,7 +23,7 @@
 
 <!-- START NAVIGATION -->
 <div id="nav"><div id="nav_inner"><script type="text/javascript">create_menu('../');</script></div></div>
-<div id="nav2"><a name="top"></a><a href="javascript:void(0);" onclick="myHeight.toggle();"><img src="http://codeigniter.com/user_guide/images/nav_toggle.jpg" width="153" height="44" border="0" title="Toggle Table of Contents" alt="Toggle Table of Contents" /></a></div>
+<div id="nav2"><a name="top"></a><a href="javascript:void(0);" onclick="myHeight.toggle();"><img src="../images/nav_toggle_darker.jpg" width="153" height="44" border="0" title="Toggle Table of Contents" alt="Toggle Table of Contents" /></a></div>
 <div id="masthead">
 <table cellpadding="0" cellspacing="0" border="0" style="width:100%">
 <tr>
@@ -83,7 +83,7 @@ $data = array(<br />
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;array('John', 'Green', 'Medium')	<br />
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;);<br />
 <br />
-echo $this->table->generate($data);		
+echo $this->table->generate($data);
 </code>
 
 <p>Here is an example of a table created from a database query result. The table class will automatically generate the
@@ -95,7 +95,7 @@ $this->load->library('table');<br />
 <br />
 $query = $this->db->query("SELECT * FROM my_table");<br />
 <br />
-echo $this->table->generate($query);		
+echo $this->table->generate($query);
 </code>
 
 
@@ -110,7 +110,7 @@ $this->table->add_row('Fred', 'Blue', 'Small');<br />
 $this->table->add_row('Mary', 'Red', 'Large');<br />
 $this->table->add_row('John', 'Green', 'Medium');<br />
 <br />
-echo $this->table->generate();		
+echo $this->table->generate();
 </code>
 
 <p>Here is the same example, except instead of individual parameters, arrays are used:</p>
@@ -124,7 +124,7 @@ $this->table->add_row(array('Fred', 'Blue', 'Small'));<br />
 $this->table->add_row(array('Mary', 'Red', 'Large'));<br />
 $this->table->add_row(array('John', 'Green', 'Medium'));<br />
 <br />
-echo $this->table->generate();		
+echo $this->table->generate();
 </code>
 
 
@@ -308,7 +308,7 @@ Previous Topic:&nbsp;<a href="ftp.html">&nbsp;FTP Class</a>&nbsp;&nbsp;&nbsp;&mi
 <a href="../index.html">User Guide Home</a>&nbsp;&nbsp;&nbsp;&middot;&nbsp;&nbsp;
 Next Topic:&nbsp;&nbsp;<a href="image_lib.html">Image Manipulation Class</a>
 </p>
-<p><a href="http://codeigniter.com">CodeIgniter</a> &nbsp;&middot;&nbsp; Copyright &#169; 2006-2010 &nbsp;&middot;&nbsp; <a href="http://ellislab.com/">EllisLab, Inc.</a></p>
+<p><a href="http://codeigniter.com">CodeIgniter</a> &nbsp;&middot;&nbsp; Copyright &#169; 2006 - 2011 &nbsp;&middot;&nbsp; <a href="http://ellislab.com/">EllisLab, Inc.</a></p>
 </div>
 
 </body>

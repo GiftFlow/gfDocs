@@ -6,7 +6,7 @@
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 
 <meta name="generator" content="PHPDoctor 2RC4 (http://peej.github.com/phpdoctor/)">
-<meta name="when" content="Sat, 24 Jul 2010 20:47:45 +0000">
+<meta name="when" content="Wed, 09 Feb 2011 20:22:56 +0000">
 
 <link rel="stylesheet" type="text/css" href="../../../stylesheet.css">
 <link rel="start" href="../../../overview-summary.html">
@@ -50,7 +50,7 @@
 <a name="line13"></a><?php foreach($goods as $key=>$val) { ?>
 <a name="line14"></a><tr>
 <a name="line15"></a>	<td><?php echo $val->id; ?></td>
-<a name="line16"></a>	<td><?php echo "<a href=". site_url('gift/'.urlencode($val->id)) .">" . $val->title . "</a>"; ?></td>
+<a name="line16"></a>	<td><?php echo "<a href=". site_url('gifts/'.urlencode($val->id)) .">" . $val->title . "</a>"; ?></td>
 <a name="line17"></a>	<td><?php echo $val->quantity; ?></td>
 <a name="line18"></a>	<td><?php echo $val->location->address; ?></td>
 <a name="line19"></a>	<td><?php echo date("m/d/Y", strtotime($val->created)); ?></td>
@@ -59,7 +59,7 @@
 <a name="line22"></a><?php } ?>
 <a name="line23"></a></tbody>
 <a name="line24"></a></table>
-<a name="line25"></a><script>
+<a name="line25"></a><script type='text/javascript'>
 <a name="line26"></a>$(function(){
 <a name="line27"></a>	$("#goods").dataTable( {
 <a name="line28"></a>		"bJQueryUI": true,

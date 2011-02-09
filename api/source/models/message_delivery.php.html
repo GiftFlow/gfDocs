@@ -6,7 +6,7 @@
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 
 <meta name="generator" content="PHPDoctor 2RC4 (http://peej.github.com/phpdoctor/)">
-<meta name="when" content="Sat, 24 Jul 2010 20:47:45 +0000">
+<meta name="when" content="Wed, 09 Feb 2011 20:22:56 +0000">
 
 <link rel="stylesheet" type="text/css" href="../../stylesheet.css">
 <link rel="start" href="../../overview-summary.html">
@@ -39,46 +39,44 @@
 <a name="line2"></a>class Message_delivery extends DataMapperExtension {
 <a name="line3"></a>	
 <a name="line4"></a>	var $created_field = 'created';
-<a name="line5"></a>	var $updated_field = 'updated';
-<a name="line6"></a>	
-<a name="line7"></a>	// --------------------------------------------------------------------
-<a name="line8"></a>	// Relationships
-<a name="line9"></a>	//   Configure your relationships below
-<a name="line10"></a>	// --------------------------------------------------------------------
-<a name="line11"></a>	
-<a name="line12"></a>	var $has_one = array( 
-<a name="line13"></a>					"recipient" => array(
-<a name="line14"></a>						"class"=>"user"
-<a name="line15"></a>					),
-<a name="line16"></a>					"message" => array(),
-<a name="line17"></a>					'transaction'
-<a name="line18"></a>				);
+<a name="line5"></a>	
+<a name="line6"></a>	var $updated_field = 'updated';
+<a name="line7"></a>	
+<a name="line8"></a>	// --------------------------------------------------------------------
+<a name="line9"></a>	// Relationships
+<a name="line10"></a>	//   Configure your relationships below
+<a name="line11"></a>	// --------------------------------------------------------------------
+<a name="line12"></a>	
+<a name="line13"></a>	var $has_one = array( 
+<a name="line14"></a>		"user",
+<a name="line15"></a>		"message"
+<a name="line16"></a>	);
+<a name="line17"></a>	
+<a name="line18"></a>	var $has_many = array();
 <a name="line19"></a>	
-<a name="line20"></a>	var $has_many = array();
-<a name="line21"></a>	
-<a name="line22"></a>	// --------------------------------------------------------------------
-<a name="line23"></a>	// Validation
-<a name="line24"></a>	//   Add validation requirements, such as 'required', for your fields.
-<a name="line25"></a>	// --------------------------------------------------------------------
-<a name="line26"></a>	
-<a name="line27"></a>	var $validation = array(
-<a name="line28"></a>		'recipient_id' => array(
-<a name="line29"></a>			'rules' => array(
-<a name="line30"></a>				'required'
-<a name="line31"></a>			),
-<a name="line32"></a>			'label' => 'Message ID'
-<a name="line33"></a>		)
-<a name="line34"></a>	);
-<a name="line35"></a>
-<a name="line36"></a>    	function __construct( $id = NULL )
-<a name="line37"></a>	{
-<a name="line38"></a>		parent::__construct( $id );
-<a name="line39"></a>    	}
-<a name="line40"></a>	
-<a name="line41"></a>    
-<a name="line42"></a>}
-<a name="line43"></a>?>
-<a name="line44"></a></pre>
+<a name="line20"></a>	// --------------------------------------------------------------------
+<a name="line21"></a>	// Validation
+<a name="line22"></a>	//   Add validation requirements, such as 'required', for your fields.
+<a name="line23"></a>	// --------------------------------------------------------------------
+<a name="line24"></a>	
+<a name="line25"></a>	var $validation = array(
+<a name="line26"></a>		'user_id' => array(
+<a name="line27"></a>			'rules' => array(
+<a name="line28"></a>				'required'
+<a name="line29"></a>			),
+<a name="line30"></a>			'label' => 'User ID'
+<a name="line31"></a>		)
+<a name="line32"></a>	);
+<a name="line33"></a>
+<a name="line34"></a>    	function __construct( $id = NULL )
+<a name="line35"></a>	{
+<a name="line36"></a>		parent::__construct( $id );
+<a name="line37"></a>    	}
+<a name="line38"></a>	
+<a name="line39"></a>    
+<a name="line40"></a>}
+<a name="line41"></a>?>
+<a name="line42"></a></pre>
 <div class="header">
 <h1>GiftFlow API</h1>
 <ul>

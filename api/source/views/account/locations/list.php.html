@@ -6,7 +6,7 @@
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 
 <meta name="generator" content="PHPDoctor 2RC4 (http://peej.github.com/phpdoctor/)">
-<meta name="when" content="Sat, 24 Jul 2010 20:47:45 +0000">
+<meta name="when" content="Wed, 09 Feb 2011 20:22:56 +0000">
 
 <link rel="stylesheet" type="text/css" href="../../../../stylesheet.css">
 <link rel="start" href="../../../../overview-summary.html">
@@ -63,7 +63,7 @@
 <a name="line26"></a>	display: block;
 <a name="line27"></a>	padding: 5px 10px;
 <a name="line28"></a>	border-bottom: 0px;
-<a name="line29"></a>	font-size: .9em;
+<a name="line29"></a>	font-size: .8em;
 <a name="line30"></a>}
 <a name="line31"></a>ul#locations_list li ul.tooltip_menu li a:hover{
 <a name="line32"></a>	background: #555;
@@ -96,78 +96,110 @@
 <a name="line59"></a>	padding:3px 5px;
 <a name="line60"></a>}
 <a name="line61"></a></style>
-<a name="line62"></a><?php if(!empty($locations)) { ?>
-<a name="line63"></a><ul id='locations_list' class='list'>
-<a name="line64"></a><?php foreach($locations as $key=>$val){ ?>
-<a name="line65"></a>	<li id='<?php echo $val['id']; ?>'>
-<a name="line66"></a>	<div class='list_content'>	
-<a name="line67"></a>	<span id='address'><?php echo $val['title'];?></span>
-<a name="line68"></a>	<?php if($val['default']){ ?><span id='default'>Default</span><?php } ?>
-<a name="line69"></a>	<span id='city_state'><?php echo $val['address'];?></span>
-<a name="line70"></a>	</div>
-<a name="line71"></a>	<div class='list_controls'>
-<a name="line72"></a>	<a href="#" class="button left options secondary" style='height: 2.2em;'></a>
-<a name="line73"></a>	<ul class='tooltip_menu'>
-<a name="line74"></a>		<?php if(!$val['default']) { ?><li><a href="<?php echo site_url('account/locations/'.$val['id'].'/default/'); ?>" ><span class='ui-icon ui-icon-star'></span>Make Default Location</a></li><?php } ?>
-<a name="line75"></a>		<li><a href="<?php echo site_url('account/locations/'.$val['id'].'/edit'); ?>" class='edit'><span class='ui-icon ui-icon-pencil'></span>Rename</a></li>
-<a name="line76"></a>		<li><a href="<?php echo site_url('account/locations/'.$val['id'].'/delete/'); ?>" ><span class='ui-icon ui-icon-trash'></span>Delete</a></li>
-<a name="line77"></a>
-<a name="line78"></a>	</ul>
-<a name="line79"></a>	</div>
-<a name="line80"></a>	<div style='clear: both;'></div>
-<a name="line81"></a>
-<a name="line82"></a></li>
-<a name="line83"></a><?php } ?>
-<a name="line84"></a></ul>
-<a name="line85"></a><img id='locations_map' src='http://maps.google.com/maps/api/staticmap?sensor=false&size=420x420&markers=color:blue<?php foreach($locations as $key=>$val) { echo '|'.$val['latitude'].','.$val['longitude']; } ?>' />
-<a name="line86"></a><div id='edit_location' class='jqmWindow'>
-<a name="line87"></a></div>
-<a name="line88"></a><script>
-<a name="line89"></a>$(function(){
-<a name="line90"></a>
-<a name="line91"></a>	$(".button.options").button({
-<a name="line92"></a>								icons: {
-<a name="line93"></a>										primary: 'ui-icon-gear',
-<a name="line94"></a>               					 			secondary: 'ui-icon-triangle-1-s'
-<a name="line95"></a>										}, 
-<a name="line96"></a>								text:false
-<a name="line97"></a>	}).click(function()
-<a name="line98"></a>	{
-<a name="line99"></a>		close_menu();
-<a name="line100"></a>		$(this).toggleClass('clicked');
-<a name="line101"></a>		$(this).addClass('ui-state-focus');
-<a name="line102"></a>		$(this).siblings(".tooltip_menu").toggle();
-<a name="line103"></a>		$('body').bind('click', function(e) 
-<a name="line104"></a>		{
-<a name="line105"></a>    			if($(e.target).closest('ul.tooltip_menu').length == 0) 
-<a name="line106"></a>    			{
-<a name="line107"></a>    				close_menu();
-<a name="line108"></a>        			// click happened outside of menu, hide any visible menu items
-<a name="line109"></a>    			}
-<a name="line110"></a>		});
-<a name="line111"></a>		return false;
-<a name="line112"></a>	});
-<a name="line113"></a>	
-<a name="line114"></a>	function close_menu()
-<a name="line115"></a>	{
-<a name="line116"></a>		$('ul.tooltip_menu').hide();
-<a name="line117"></a>		$(".button.options").removeClass('clicked');
-<a name="line118"></a>	}
-<a name="line119"></a>	
-<a name="line120"></a>
-<a name="line121"></a>	$("#edit_location").jqm( { 	ajax: '@href', 
-<a name="line122"></a>								trigger: '.edit', 
-<a name="line123"></a>								onLoad: function(){
-<a name="line124"></a>									$('#edit_location').jqmAddClose('#close_this'); 
-<a name="line125"></a>									$("input:submit").button();
-<a name="line126"></a>									$("button").button();
-<a name="line127"></a>								} } );
-<a name="line128"></a>	<?php echo notify(); ?>
-<a name="line129"></a>});
-<a name="line130"></a></script>
-<a name="line131"></a><?php } else { ?>
-<a name="line132"></a><p>You do not yet have any locations.</p>
-<a name="line133"></a><?php } ?></pre>
+<a name="line62"></a>
+<a name="line63"></a><div id='account_profile' class='two_panels'>
+<a name="line64"></a>	
+<a name="line65"></a>	<!-- Sidebar Menu -->
+<a name="line66"></a>	<?php echo $menu; ?>
+<a name="line67"></a>	
+<a name="line68"></a>	<div class='right_content'>
+<a name="line69"></a>
+<a name="line70"></a>		<?php if(!empty($locations)) { ?>
+<a name="line71"></a>			<ul id='locations_list' class='list'>
+<a name="line72"></a>			<?php foreach($locations as $key=>$val){ ?>
+<a name="line73"></a>				<li id='<?php echo $val['id']; ?>' class='clearfix'>
+<a name="line74"></a>					<div class='list_content'>
+<a name="line75"></a>						<span id='address'>
+<a name="line76"></a>							<?php echo $val['title'];?>
+<a name="line77"></a>						</span>
+<a name="line78"></a>						<?php if($val['default']){ ?>
+<a name="line79"></a>							<span id='default'>
+<a name="line80"></a>								Default
+<a name="line81"></a>							</span>
+<a name="line82"></a>						<?php } ?>
+<a name="line83"></a>						<span id='city_state'>
+<a name="line84"></a>							<?php echo $val['address'];?>
+<a name="line85"></a>						</span>
+<a name="line86"></a>					</div>
+<a name="line87"></a>					<div class='list_controls'>
+<a name="line88"></a>						<a href="#" class="button left options secondary" style='height: 2.2em;'></a>
+<a name="line89"></a>						<ul class='tooltip_menu'>
+<a name="line90"></a>							<?php if(!$val['default']) { ?>
+<a name="line91"></a>								<li>
+<a name="line92"></a>									<a href="<?php echo site_url('account/locations/'.$val['id'].'/default/'); ?>" >
+<a name="line93"></a>										<span class='ui-icon ui-icon-star'></span>
+<a name="line94"></a>										Make Default Location
+<a name="line95"></a>									</a>
+<a name="line96"></a>								</li>
+<a name="line97"></a>							<?php } ?>
+<a name="line98"></a>							<li>
+<a name="line99"></a>								<a href="<?php echo site_url('account/locations/'.$val['id'].'/edit'); ?>" class='edit'>
+<a name="line100"></a>									<span class='ui-icon ui-icon-pencil'></span>
+<a name="line101"></a>									Rename
+<a name="line102"></a>								</a>
+<a name="line103"></a>							</li>
+<a name="line104"></a>							<li>
+<a name="line105"></a>								<a href="<?php echo site_url('account/locations/'.$val['id'].'/delete/'); ?>" >
+<a name="line106"></a>									<span class='ui-icon ui-icon-trash'></span>
+<a name="line107"></a>									Delete
+<a name="line108"></a>								</a>
+<a name="line109"></a>							</li>
+<a name="line110"></a>						</ul>
+<a name="line111"></a>					</div>
+<a name="line112"></a>				</li>
+<a name="line113"></a>			<?php } ?>
+<a name="line114"></a>			</ul>
+<a name="line115"></a>			<img id='locations_map' src='http://maps.google.com/maps/api/staticmap?sensor=false&size=230x230&markers=color:blue<?php foreach($locations as $key=>$val) { echo '|'.$val['latitude'].','.$val['longitude']; } ?>' />
+<a name="line116"></a>			<div id='edit_location' class='jqmWindow'>
+<a name="line117"></a>			</div>
+<a name="line118"></a>		<?php } else { ?>
+<a name="line119"></a>			<p>You do not yet have any locations.</p>
+<a name="line120"></a>		<?php } ?>
+<a name="line121"></a>	</div>
+<a name="line122"></a>	<!-- eof div.right_content -->
+<a name="line123"></a>
+<a name="line124"></a></div>
+<a name="line125"></a><!-- eof div.two_panels -->
+<a name="line126"></a>
+<a name="line127"></a><script type='text/javascript'>
+<a name="line128"></a>$(function(){
+<a name="line129"></a>	$(".button.options").button({
+<a name="line130"></a>		icons: {
+<a name="line131"></a>			primary: 'ui-icon-gear',
+<a name="line132"></a>			secondary: 'ui-icon-triangle-1-s'
+<a name="line133"></a>		}, 
+<a name="line134"></a>		text:false
+<a name="line135"></a>	}).click(function(){
+<a name="line136"></a>		close_menu();
+<a name="line137"></a>		$(this).toggleClass('clicked');
+<a name="line138"></a>		$(this).addClass('ui-state-focus');
+<a name="line139"></a>		$(this).siblings(".tooltip_menu").toggle();
+<a name="line140"></a>		$('body').bind('click', function(e){
+<a name="line141"></a>    		if($(e.target).closest('ul.tooltip_menu').length == 0){
+<a name="line142"></a>				// click happened outside of menu, hide any visible menu items
+<a name="line143"></a>				close_menu();
+<a name="line144"></a>    		}
+<a name="line145"></a>		});
+<a name="line146"></a>		return false;
+<a name="line147"></a>	});
+<a name="line148"></a>	
+<a name="line149"></a>	function close_menu(){
+<a name="line150"></a>		$('ul.tooltip_menu').hide();
+<a name="line151"></a>		$(".button.options").removeClass('clicked');
+<a name="line152"></a>	}
+<a name="line153"></a>
+<a name="line154"></a>	$("#edit_location").jqm({ 	
+<a name="line155"></a>		ajax: '@href', 
+<a name="line156"></a>		trigger: '.edit', 
+<a name="line157"></a>		onLoad: function(){
+<a name="line158"></a>			$('#edit_location').jqmAddClose('#close_this'); 
+<a name="line159"></a>			$("input:submit").button();
+<a name="line160"></a>			$("button").button();
+<a name="line161"></a>		} 
+<a name="line162"></a>	});
+<a name="line163"></a>	<?php echo notify(); ?>
+<a name="line164"></a>});
+<a name="line165"></a></script></pre>
 <div class="header">
 <h1>GiftFlow API</h1>
 <ul>

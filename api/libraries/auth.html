@@ -6,7 +6,7 @@
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 
 <meta name="generator" content="PHPDoctor 2RC4 (http://peej.github.com/phpdoctor/)">
-<meta name="when" content="Sat, 24 Jul 2010 20:47:44 +0000">
+<meta name="when" content="Wed, 09 Feb 2011 20:22:55 +0000">
 
 <link rel="stylesheet" type="text/css" href="../stylesheet.css">
 <link rel="start" href="../overview-summary.html">
@@ -83,11 +83,17 @@ to either an access denied page or login page.</p></td>
 </tr>
 <tr>
 <td class="type"> void</td>
-<td class="description"><p class="name"><a href="#facebook()">facebook</a>(mixed data)</p></td>
+<td class="description"><p class="name"><a href="#facebook()">facebook</a>(object data)</p><p class="description">Handles Facebook connect auth requestsOutline
+1: Is the Facebook data valid?
+a: Yes. </p></td>
 </tr>
 <tr>
-<td class="type"> <a href="../models/user.html">User</a></td>
-<td class="description"><p class="name"><a href="#is_signed_in()">is_signed_in</a>()</p><p class="description">Handles logins. </p></td>
+<td class="type"> int</td>
+<td class="description"><p class="name"><a href="#get_access_level()">get_access_level</a>(string role)</p><p class="description">Get access level based on provided $role</p></td>
+</tr>
+<tr>
+<td class="type"> boolean</td>
+<td class="description"><p class="name"><a href="#is_logged_in()">is_logged_in</a>()</p><p class="description">Tests to see if user is logged in</p></td>
 </tr>
 <tr>
 <td class="type"> <a href="../models/user.html">User</a></td>
@@ -99,19 +105,16 @@ to either an access denied page or login page.</p></td>
 </tr>
 <tr>
 <td class="type"> void</td>
-<td class="description"><p class="name"><a href="#manual_login()">manual_login</a>(object U, boolean redirect)</p><p class="description">Logs in users manually</p></td>
+<td class="description"><p class="name"><a href="#manual_login()">manual_login</a>(object U, boolean redirect)</p><p class="description">Logs in users manually, using the User object passed as first parameter</p></td>
 </tr>
 <tr>
 <td class="type">protected  boolean</td>
-<td class="description"><p class="name"><a href="#new_session()">new_session</a>()</p><p class="description">Creates new CodeIgniter session</p></td>
+<td class="description"><p class="name"><a href="#new_session()">new_session</a>()</p><p class="description">Creates new CodeIgniter session for the user defined
+in $this->U</p></td>
 </tr>
 <tr>
 <td class="type"> void</td>
 <td class="description"><p class="name"><a href="#openid_login()">openid_login</a>(mixed U)</p><p class="description">Logs in users authenticated by OpenID</p></td>
-</tr>
-<tr>
-<td class="type"> void</td>
-<td class="description"><p class="name"><a href="#page_lister()">page_lister</a>()</p><p class="description">Lists pages and looks for their permissions. </p></td>
 </tr>
 <tr>
 <td class="type"> <a href="../models/user.html">User</a></td>
@@ -152,7 +155,7 @@ to either an access denied page or login page.</p></td>
 
 
 
-<div class='method'><a href="../source/libraries/auth.php.html#line217" class="location">libraries/auth.php at line 217</a>
+<div class='method'><a href="../source/libraries/auth.php.html#line234" class="location">libraries/auth.php at line 234</a>
 
 <h3 id="bouncer()">bouncer</h3>
 <code class="signature">public  void <strong>bouncer</strong>(int min, string redirect)</code>
@@ -167,25 +170,57 @@ to either an access denied page or login page.</p><dl>
 
 
 
-<div class='method'><a href="../source/libraries/auth.php.html#line240" class="location">libraries/auth.php at line 240</a>
+<div class='method'><a href="../source/libraries/auth.php.html#line277" class="location">libraries/auth.php at line 277</a>
 
 <h3 id="facebook()">facebook</h3>
-<code class="signature">public  void <strong>facebook</strong>(mixed data)</code>
+<code class="signature">public  void <strong>facebook</strong>(object data)</code>
 <div class="details">
+<p>Handles Facebook connect auth requests</p><p>Outline
+1: Is the Facebook data valid?
+a: Yes. Proceed to 2.
+b: No. Return error message.
+2: Is Facebook ID in system?
+a: Yes. Create session for that user.
+b: No. Facebook ID not in system. Proceed to 3.
+3. Is this user already logged in?
+a. Yes. Link Facebook ID with that user. Fill in missing profile fields.
+b. No. Proceed to step 4.
+4: Is email in system?
+a: Yes. Create session for that user. Link Facebook ID with that user. 
+Fill in missing profile fields.
+b: No. Create new User.</p><dl>
+<dt>Parameters:</dt>
+<dd>data - JSON data received from Facebook</dd>
+</dl>
 </div></div>
 
 
 
-<div class='method'><a href="../source/libraries/auth.php.html#line73" class="location">libraries/auth.php at line 73</a>
+<div class='method'><a href="../source/libraries/auth.php.html#line423" class="location">libraries/auth.php at line 423</a>
 
-<h3 id="is_signed_in()">is_signed_in</h3>
-<code class="signature">public  <a href="../models/user.html">User</a> <strong>is_signed_in</strong>()</code>
+<h3 id="get_access_level()">get_access_level</h3>
+<code class="signature">public  int <strong>get_access_level</strong>(string role)</code>
 <div class="details">
-<p>Handles logins. if user is login or not</p></div></div>
+<p>Get access level based on provided $role</p><dl>
+<dt>Parameters:</dt>
+<dd>role - User's role (e.g. "admin" or "user")</dd>
+<dt>Returns:</dt>
+<dd>User's access level</dd>
+</dl>
+</div></div>
 
 
 
-<div class='method'><a href="../source/libraries/auth.php.html#line83" class="location">libraries/auth.php at line 83</a>
+<div class='method'><a href="../source/libraries/auth.php.html#line75" class="location">libraries/auth.php at line 75</a>
+
+<h3 id="is_logged_in()">is_logged_in</h3>
+<code class="signature">public  boolean <strong>is_logged_in</strong>()</code>
+<div class="details">
+<p>Tests to see if user is logged in</p></div></div>
+
+
+
+<div class='method'><a href="../source/libraries/auth.php.html#line86" class="location">libraries/auth.php at line 86</a>
 
 <h3 id="login()">login</h3>
 <code class="signature">public  <a href="../models/user.html">User</a> <strong>login</strong>()</code>
@@ -195,7 +230,7 @@ methods stored in the User model. If successful, creates new session.</p></div><
 
 
 
-<div class='method'><a href="../source/libraries/auth.php.html#line111" class="location">libraries/auth.php at line 111</a>
+<div class='method'><a href="../source/libraries/auth.php.html#line116" class="location">libraries/auth.php at line 116</a>
 
 <h3 id="logout()">logout</h3>
 <code class="signature">public  void <strong>logout</strong>()</code>
@@ -204,47 +239,36 @@ methods stored in the User model. If successful, creates new session.</p></div><
 
 
 
-<div class='method'><a href="../source/libraries/auth.php.html#line347" class="location">libraries/auth.php at line 347</a>
+<div class='method'><a href="../source/libraries/auth.php.html#line394" class="location">libraries/auth.php at line 394</a>
 
 <h3 id="manual_login()">manual_login</h3>
 <code class="signature">public  void <strong>manual_login</strong>(object U, boolean redirect)</code>
 <div class="details">
-<p>Logs in users manually</p><dl>
+<p>Logs in users manually, using the User object passed as first parameter</p><dl>
 <dt>Parameters:</dt>
 <dd>U - User object to log in</dd>
-<dd>redirect - If true, redirect to homepage</dd>
+<dd>redirect - If true, redirect to index</dd>
 </dl>
 </div></div>
 
 
 
-<div class='method'><a href="../source/libraries/auth.php.html#line125" class="location">libraries/auth.php at line 125</a>
+<div class='method'><a href="../source/libraries/auth.php.html#line131" class="location">libraries/auth.php at line 131</a>
 
 <h3 id="new_session()">new_session</h3>
 <code class="signature">protected  boolean <strong>new_session</strong>()</code>
 <div class="details">
-<p>Creates new CodeIgniter session</p></div></div>
+<p>Creates new CodeIgniter session for the user defined
+in $this->U</p></div></div>
 
 
 
-<div class='method'><a href="../source/libraries/auth.php.html#line326" class="location">libraries/auth.php at line 326</a>
+<div class='method'><a href="../source/libraries/auth.php.html#line367" class="location">libraries/auth.php at line 367</a>
 
 <h3 id="openid_login()">openid_login</h3>
 <code class="signature">public  void <strong>openid_login</strong>(mixed U)</code>
 <div class="details">
 <p>Logs in users authenticated by OpenID</p></div></div>
-
-
-
-<div class='method'><a href="../source/libraries/auth.php.html#line371" class="location">libraries/auth.php at line 371</a>
-
-<h3 id="page_lister()">page_lister</h3>
-<code class="signature">public  void <strong>page_lister</strong>()</code>
-<div class="details">
-<p>Lists pages and looks for their permissions. DEPRECATED.</p><dl>
-<dt>Deprecated.</dt>
-</dl>
-</div></div>
 
 
 
@@ -257,7 +281,7 @@ methods stored in the User model. If successful, creates new session.</p></div><
 
 
 
-<div class='method'><a href="../source/libraries/auth.php.html#line185" class="location">libraries/auth.php at line 185</a>
+<div class='method'><a href="../source/libraries/auth.php.html#line198" class="location">libraries/auth.php at line 198</a>
 
 <h3 id="validate()">validate</h3>
 <code class="signature">public  boolean <strong>validate</strong>(int min)</code>

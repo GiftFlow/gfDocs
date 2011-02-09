@@ -6,7 +6,7 @@
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 
 <meta name="generator" content="PHPDoctor 2RC4 (http://peej.github.com/phpdoctor/)">
-<meta name="when" content="Sat, 24 Jul 2010 20:47:45 +0000">
+<meta name="when" content="Wed, 09 Feb 2011 20:22:56 +0000">
 
 <link rel="stylesheet" type="text/css" href="../../../stylesheet.css">
 <link rel="start" href="../../../overview-summary.html">
@@ -35,13 +35,28 @@
 <h1>views/account/profile.php</h1>
 <hr>
 
-<a name="line1"></a><pre><?php echo $this->U->render_form($form_fields); ?>
-<a name="line2"></a><script>
-<a name="line3"></a>$(function(){
-<a name="line4"></a>	$("input:submit").button();
-<a name="line5"></a>	<?php echo notify(); ?>
-<a name="line6"></a>});
-<a name="line7"></a></script></pre>
+<a name="line1"></a><pre><div id='account_profile' class='two_panels'>
+<a name="line2"></a>	
+<a name="line3"></a>	<!-- Sidebar Menu -->
+<a name="line4"></a>	<?php echo $menu; ?>
+<a name="line5"></a>	
+<a name="line6"></a>	<div class='right_content'>
+<a name="line7"></a>
+<a name="line8"></a>		<?php echo $this->U->render_form($form_fields); ?>
+<a name="line9"></a>		
+<a name="line10"></a>	</div>
+<a name="line11"></a>	<!-- eof div.right_content -->
+<a name="line12"></a>
+<a name="line13"></a></div>
+<a name="line14"></a><!-- eof div.two_panels -->
+<a name="line15"></a>
+<a name="line16"></a>
+<a name="line17"></a><script type='text/javascript'>
+<a name="line18"></a>$(function(){
+<a name="line19"></a>	$("input:submit").button();
+<a name="line20"></a>	<?php echo notify(); ?>
+<a name="line21"></a>});
+<a name="line22"></a></script></pre>
 <div class="header">
 <h1>GiftFlow API</h1>
 <ul>

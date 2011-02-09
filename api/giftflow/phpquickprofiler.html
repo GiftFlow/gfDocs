@@ -1,0 +1,261 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+
+<html lang="en">
+<head>
+
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
+<meta name="generator" content="PHPDoctor 2RC4 (http://peej.github.com/phpdoctor/)">
+<meta name="when" content="Wed, 09 Feb 2011 20:22:55 +0000">
+
+<link rel="stylesheet" type="text/css" href="../stylesheet.css">
+<link rel="start" href="../overview-summary.html">
+
+<title>PhpQuickProfiler (GiftFlow API)</title>
+
+</head>
+<body id="definition" onload="parent.document.title=document.title;">
+
+<div class="header">
+<h1>GiftFlow API</h1>
+<ul>
+<li><a href="../overview-summary.html">Overview</a></li>
+<li><a href="../giftflow/package-summary.html">Package</a></li>
+<li class="active">Class</li>
+<li><a href="../giftflow/package-tree.html">Tree</a></li>
+<li><a href="../overview-files.html">Files</a></li>
+<li><a href="../deprecated-list.html">Deprecated</a></li>
+<li><a href="../index-all.html">Index</a></li>
+</ul>
+</div>
+
+<div class="small_links">
+<a href="../index.html" target="_top">Frames</a>
+<a href="../giftflow/phpquickprofiler.html" target="_top">No frames</a>
+</div>
+<div class="small_links">
+Summary: <a href="#summary_field">Field</a> | <a href="#summary_method">Method</a> | <a href="#summary_constr">Constr</a>
+Detail: <a href="#detail_field">Field</a> | <a href="#detail_method">Method</a> | <a href="#summary_constr">Constr</a>
+</div>
+<hr>
+
+<div class="qualifiedName">GiftFlow\PhpQuickProfiler</div>
+<a href="../source/plugins/pqp/classes/phpquickprofiler.php.html#line18" class="location">plugins/pqp/classes/PhpQuickProfiler.php at line 18</a>
+
+<h1>Class PhpQuickProfiler</h1>
+
+<pre class="tree"><strong>PhpQuickProfiler</strong><br /></pre>
+
+<hr>
+
+<p class="signature">public  class <strong>PhpQuickProfiler</strong></p>
+
+<hr>
+
+<table id="summary_field">
+<tr><th colspan="2">Field Summary</th></tr>
+<tr>
+<td class="type"> mixed</td>
+<td class="description"><p class="name"><a href="#config">$config</a></p></td>
+</tr>
+<tr>
+<td class="type"> mixed</td>
+<td class="description"><p class="name"><a href="#output">$output</a></p></td>
+</tr>
+</table>
+
+<table id="summary_method">
+<tr><th colspan="2">Method Summary</th></tr>
+<tr>
+<td class="type"> void</td>
+<td class="description"><p class="name"><a href="#__construct()">__construct</a>(mixed startTime, str config)</p></td>
+</tr>
+<tr>
+<td class="type"> void</td>
+<td class="description"><p class="name"><a href="#attemptToExplainQuery()">attemptToExplainQuery</a>(mixed query)</p></td>
+</tr>
+<tr>
+<td class="type"> void</td>
+<td class="description"><p class="name"><a href="#display()">display</a>(str db, str master_db)</p></td>
+</tr>
+<tr>
+<td class="type"> void</td>
+<td class="description"><p class="name"><a href="#gatherConsoleData()">gatherConsoleData</a>()</p></td>
+</tr>
+<tr>
+<td class="type"> void</td>
+<td class="description"><p class="name"><a href="#gatherFileData()">gatherFileData</a>()</p></td>
+</tr>
+<tr>
+<td class="type"> void</td>
+<td class="description"><p class="name"><a href="#gatherMemoryData()">gatherMemoryData</a>()</p></td>
+</tr>
+<tr>
+<td class="type"> void</td>
+<td class="description"><p class="name"><a href="#gatherQueryData()">gatherQueryData</a>()</p></td>
+</tr>
+<tr>
+<td class="type"> void</td>
+<td class="description"><p class="name"><a href="#gatherSpeedData()">gatherSpeedData</a>()</p></td>
+</tr>
+<tr>
+<td class="type"> void</td>
+<td class="description"><p class="name"><a href="#getMicroTime()">getMicroTime</a>()</p></td>
+</tr>
+<tr>
+<td class="type"> void</td>
+<td class="description"><p class="name"><a href="#getReadableFileSize()">getReadableFileSize</a>(mixed size, mixed retstring)</p></td>
+</tr>
+<tr>
+<td class="type"> void</td>
+<td class="description"><p class="name"><a href="#getReadableTime()">getReadableTime</a>(mixed time)</p></td>
+</tr>
+</table>
+
+<h2 id="detail_field">Field Detail</h2>
+<a href="../source/plugins/pqp/classes/phpquickprofiler.php.html#line21" class="location">plugins/pqp/classes/PhpQuickProfiler.php at line 21</a>
+
+<h3 id="config">config</h3>
+<code class="signature">public  mixed <strong>$config</strong> = ''</code>
+<div class="details">
+</div>
+
+<hr>
+
+<a href="../source/plugins/pqp/classes/phpquickprofiler.php.html#line20" class="location">plugins/pqp/classes/PhpQuickProfiler.php at line 20</a>
+
+<h3 id="output">output</h3>
+<code class="signature">public  mixed <strong>$output</strong> = array()</code>
+<div class="details">
+</div>
+
+<hr>
+
+<h2 id="detail_method">Method Detail</h2><div class="method_detail">
+<div class='method'><a href="../source/plugins/pqp/classes/phpquickprofiler.php.html#line23" class="location">plugins/pqp/classes/PhpQuickProfiler.php at line 23</a>
+
+<h3 id="__construct()">__construct</h3>
+<code class="signature">public  void <strong>__construct</strong>(mixed startTime, str config)</code>
+<div class="details">
+</div></div>
+
+
+
+<div class='method'><a href="../source/plugins/pqp/classes/phpquickprofiler.php.html#line125" class="location">plugins/pqp/classes/PhpQuickProfiler.php at line 125</a>
+
+<h3 id="attemptToExplainQuery()">attemptToExplainQuery</h3>
+<code class="signature">public  void <strong>attemptToExplainQuery</strong>(mixed query)</code>
+<div class="details">
+</div></div>
+
+
+
+<div class='method'><a href="../source/plugins/pqp/classes/phpquickprofiler.php.html#line213" class="location">plugins/pqp/classes/PhpQuickProfiler.php at line 213</a>
+
+<h3 id="display()">display</h3>
+<code class="signature">public  void <strong>display</strong>(str db, str master_db)</code>
+<div class="details">
+</div></div>
+
+
+
+<div class='method'><a href="../source/plugins/pqp/classes/phpquickprofiler.php.html#line34" class="location">plugins/pqp/classes/PhpQuickProfiler.php at line 34</a>
+
+<h3 id="gatherConsoleData()">gatherConsoleData</h3>
+<code class="signature">public  void <strong>gatherConsoleData</strong>()</code>
+<div class="details">
+</div></div>
+
+
+
+<div class='method'><a href="../source/plugins/pqp/classes/phpquickprofiler.php.html#line56" class="location">plugins/pqp/classes/PhpQuickProfiler.php at line 56</a>
+
+<h3 id="gatherFileData()">gatherFileData</h3>
+<code class="signature">public  void <strong>gatherFileData</strong>()</code>
+<div class="details">
+</div></div>
+
+
+
+<div class='method'><a href="../source/plugins/pqp/classes/phpquickprofiler.php.html#line89" class="location">plugins/pqp/classes/PhpQuickProfiler.php at line 89</a>
+
+<h3 id="gatherMemoryData()">gatherMemoryData</h3>
+<code class="signature">public  void <strong>gatherMemoryData</strong>()</code>
+<div class="details">
+</div></div>
+
+
+
+<div class='method'><a href="../source/plugins/pqp/classes/phpquickprofiler.php.html#line100" class="location">plugins/pqp/classes/PhpQuickProfiler.php at line 100</a>
+
+<h3 id="gatherQueryData()">gatherQueryData</h3>
+<code class="signature">public  void <strong>gatherQueryData</strong>()</code>
+<div class="details">
+</div></div>
+
+
+
+<div class='method'><a href="../source/plugins/pqp/classes/phpquickprofiler.php.html#line160" class="location">plugins/pqp/classes/PhpQuickProfiler.php at line 160</a>
+
+<h3 id="gatherSpeedData()">gatherSpeedData</h3>
+<code class="signature">public  void <strong>gatherSpeedData</strong>()</code>
+<div class="details">
+</div></div>
+
+
+
+<div class='method'><a href="../source/plugins/pqp/classes/phpquickprofiler.php.html#line171" class="location">plugins/pqp/classes/PhpQuickProfiler.php at line 171</a>
+
+<h3 id="getMicroTime()">getMicroTime</h3>
+<code class="signature">public  void <strong>getMicroTime</strong>()</code>
+<div class="details">
+</div></div>
+
+
+
+<div class='method'><a href="../source/plugins/pqp/classes/phpquickprofiler.php.html#line177" class="location">plugins/pqp/classes/PhpQuickProfiler.php at line 177</a>
+
+<h3 id="getReadableFileSize()">getReadableFileSize</h3>
+<code class="signature">public  void <strong>getReadableFileSize</strong>(mixed size, mixed retstring)</code>
+<div class="details">
+</div></div>
+
+
+
+<div class='method'><a href="../source/plugins/pqp/classes/phpquickprofiler.php.html#line193" class="location">plugins/pqp/classes/PhpQuickProfiler.php at line 193</a>
+
+<h3 id="getReadableTime()">getReadableTime</h3>
+<code class="signature">public  void <strong>getReadableTime</strong>(mixed time)</code>
+<div class="details">
+</div></div>
+
+
+
+</div><div class="header">
+<h1>GiftFlow API</h1>
+<ul>
+<li><a href="../overview-summary.html">Overview</a></li>
+<li><a href="../giftflow/package-summary.html">Package</a></li>
+<li class="active">Class</li>
+<li><a href="../giftflow/package-tree.html">Tree</a></li>
+<li><a href="../overview-files.html">Files</a></li>
+<li><a href="../deprecated-list.html">Deprecated</a></li>
+<li><a href="../index-all.html">Index</a></li>
+</ul>
+</div>
+
+<div class="small_links">
+<a href="../index.html" target="_top">Frames</a>
+<a href="../giftflow/phpquickprofiler.html" target="_top">No frames</a>
+</div>
+<div class="small_links">
+Summary: <a href="#summary_field">Field</a> | <a href="#summary_method">Method</a> | <a href="#summary_constr">Constr</a>
+Detail: <a href="#detail_field">Field</a> | <a href="#detail_method">Method</a> | <a href="#summary_constr">Constr</a>
+</div>
+<hr>
+
+<p id="footer">This document was generated by <a href="http://peej.github.com/phpdoctor/">PHPDoctor: The PHP Documentation Creator</a></p>
+
+</body>
+
+</html>

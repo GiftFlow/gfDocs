@@ -6,7 +6,7 @@
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 
 <meta name="generator" content="PHPDoctor 2RC4 (http://peej.github.com/phpdoctor/)">
-<meta name="when" content="Sat, 24 Jul 2010 20:47:45 +0000">
+<meta name="when" content="Wed, 09 Feb 2011 20:22:56 +0000">
 
 <link rel="stylesheet" type="text/css" href="../../../stylesheet.css">
 <link rel="start" href="../../../overview-summary.html">
@@ -35,7 +35,7 @@
 <h1>views/dmz_htmlform/row.php</h1>
 <hr>
 
-<a name="line1"></a><pre><?
+<a name="line1"></a><pre><?php
 <a name="line2"></a>	if(!isset($row_id))
 <a name="line3"></a>	{
 <a name="line4"></a>		if( ! empty($id))
@@ -88,15 +88,15 @@
 <a name="line51"></a>	}
 <a name="line52"></a>
 <a name="line53"></a>?>
-<a name="line54"></a>	<tr class="row<?= $row_class ?>"<?= $row_id ?>>
-<a name="line55"></a>		<td class="label"><label<?= $label_for ?>><?= $label ?>:</label></td>
+<a name="line54"></a>	<tr class="row<?php echo  $row_class ?>"<?php echo  $row_id ?>>
+<a name="line55"></a>		<td class="label"><label<?php echo  $label_for ?>><?php echo  $label ?>:</label></td>
 <a name="line56"></a>		<td class="field">
-<a name="line57"></a>			<?= $content ?>
-<a name="line58"></a>			<? /*
+<a name="line57"></a>			<?php echo  $content ?>
+<a name="line58"></a>			<?php /*
 <a name="line59"></a>			// Enable this section to print errors out for each row.
 <a name="line60"></a>			if( ! empty($error)): ?>
-<a name="line61"></a>			<span class="error"><?= $error ?></span>
-<a name="line62"></a>			<? endif; */ ?>
+<a name="line61"></a>			<span class="error"><?php echo  $error ?></span>
+<a name="line62"></a>			<?php endif; */ ?>
 <a name="line63"></a>
 <a name="line64"></a>		</td>
 <a name="line65"></a>	</tr>

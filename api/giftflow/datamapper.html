@@ -6,7 +6,7 @@
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 
 <meta name="generator" content="PHPDoctor 2RC4 (http://peej.github.com/phpdoctor/)">
-<meta name="when" content="Sat, 24 Jul 2010 20:47:43 +0000">
+<meta name="when" content="Wed, 09 Feb 2011 20:22:55 +0000">
 
 <link rel="stylesheet" type="text/css" href="../stylesheet.css">
 <link rel="start" href="../overview-summary.html">
@@ -280,6 +280,11 @@ specified extensions for this model.</p></td>
 then it will be automatically freed after a get.</p></td>
 </tr>
 <tr>
+<td class="type">static  <a href="../dmz/dm_error_object.html">DM_Error_Object</a></td>
+<td class="description"><p class="name"><a href="#get_access_level">$get_access_level</a></p><p class="description">Contains any errors that occur during validation, saving, or other
+database access.</p></td>
+</tr>
+<tr>
 <td class="type"> array</td>
 <td class="description"><p class="name"><a href="#has_many">$has_many</a></p><p class="description">Contains any related objects of which this model is related one or more times.</p></td>
 </tr>
@@ -305,11 +310,6 @@ then it will be automatically freed after a get.</p></td>
 <td class="type"> string</td>
 <td class="description"><p class="name"><a href="#model">$model</a></p><p class="description">The singular name for this model (may be automatically generated from
 the classname).</p></td>
-</tr>
-<tr>
-<td class="type">static  <a href="../dmz/dm_error_object.html">DM_Error_Object</a></td>
-<td class="description"><p class="name"><a href="#page_lister">$page_lister</a></p><p class="description">Contains any errors that occur during validation, saving, or other
-database access.</p></td>
 </tr>
 <tr>
 <td class="type"> array</td>
@@ -1290,6 +1290,16 @@ then it will be automatically freed after a get.</p></div>
 
 <hr>
 
+<a href="../source/libraries/datamapper.php.html#line214" class="location">libraries/datamapper.php at line 214</a>
+
+<h3 id="get_access_level">get_access_level</h3>
+<code class="signature">public static  <a href="../dmz/dm_error_object.html">DM_Error_Object</a> <strong>$get_access_level</strong></code>
+<div class="details">
+<p>Contains any errors that occur during validation, saving, or other
+database access.</p></div>
+
+<hr>
+
 <a href="../source/libraries/datamapper.php.html#line358" class="location">libraries/datamapper.php at line 358</a>
 
 <h3 id="has_many">has_many</h3>
@@ -1347,16 +1357,6 @@ If FALSE (the default), they are stored using UTC</p></div>
 <div class="details">
 <p>The singular name for this model (may be automatically generated from
 the classname).</p></div>
-
-<hr>
-
-<a href="../source/libraries/datamapper.php.html#line214" class="location">libraries/datamapper.php at line 214</a>
-
-<h3 id="page_lister">page_lister</h3>
-<code class="signature">public static  <a href="../dmz/dm_error_object.html">DM_Error_Object</a> <strong>$page_lister</strong></code>
-<div class="details">
-<p>Contains any errors that occur during validation, saving, or other
-database access.</p></div>
 
 <hr>
 

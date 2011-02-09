@@ -1,0 +1,219 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+
+<html lang="en">
+<head>
+
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
+<meta name="generator" content="PHPDoctor 2RC4 (http://peej.github.com/phpdoctor/)">
+<meta name="when" content="Wed, 09 Feb 2011 20:22:56 +0000">
+
+<link rel="stylesheet" type="text/css" href="../../../stylesheet.css">
+<link rel="start" href="../../../overview-summary.html">
+
+<title>libraries/Search/Transaction_search.php (GiftFlow API)</title>
+
+</head>
+<body id="file" onload="parent.document.title=document.title;">
+
+<div class="header">
+<h1>GiftFlow API</h1>
+<ul>
+<li><a href="../../../overview-summary.html">Overview</a></li>
+<li>Package</li><li>Class</li><li>Tree</li><li><a href="../../../overview-files.html">Files</a></li>
+<li><a href="../../../deprecated-list.html">Deprecated</a></li>
+<li><a href="../../../index-all.html">Index</a></li>
+</ul>
+</div>
+
+<div class="small_links">
+<a href="../../../index.html" target="_top">Frames</a>
+<a href="../../../source/libraries/search/transaction_search.php.html" target="_top">No frames</a>
+</div>
+<hr>
+
+<h1>libraries/Search/Transaction_search.php</h1>
+<hr>
+
+<a name="line1"></a><pre><?php  if ( ! defined('BASEPATH')) exit('No direct script access allowed');
+<a name="line2"></a>/**
+<a name="line3"></a>*	Transaction model for select operations
+<a name="line4"></a>*	
+<a name="line5"></a>*	@author Brandon Jackson
+<a name="line6"></a>*	@package Search
+<a name="line7"></a>*/
+<a name="line8"></a>
+<a name="line9"></a>class Transaction_search extends Search
+<a name="line10"></a>{
+<a name="line11"></a>
+<a name="line12"></a>	/**
+<a name="line13"></a>	*	CodeIgniter super-object
+<a name="line14"></a>	*	@var object
+<a name="line15"></a>	*/
+<a name="line16"></a>	protected $CI;
+<a name="line17"></a>	
+<a name="line18"></a>	var $good_id;
+<a name="line19"></a>	
+<a name="line20"></a>	var $user_id;
+<a name="line21"></a>	
+<a name="line22"></a>	var $transaction_id;
+<a name="line23"></a>	
+<a name="line24"></a>	var $demand_id;
+<a name="line25"></a>	
+<a name="line26"></a>	/**
+<a name="line27"></a>	*	Constructor
+<a name="line28"></a>	*/
+<a name="line29"></a>	public function __construct( $id = NULL )
+<a name="line30"></a>	{
+<a name="line31"></a>		parent::__construct();
+<a name="line32"></a>		
+<a name="line33"></a>		$this->CI =& get_instance();
+<a name="line34"></a>		
+<a name="line35"></a>		$this->transaction_id = $id;
+<a name="line36"></a>	}
+<a name="line37"></a>	
+<a name="line38"></a>	/**
+<a name="line39"></a>	*	Retrieve single Transaction object
+<a name="line40"></a>	*/
+<a name="line41"></a>	public function get()
+<a name="line42"></a>	{
+<a name="line43"></a>		Console::logSpeed("Transaction_search::get()");
+<a name="line44"></a>		
+<a name="line45"></a>		// Basic query
+<a name="line46"></a>		$this->_basic_query();
+<a name="line47"></a>		$this->CI->db->where('T.id',$this->transaction_id);
+<a name="line48"></a>		
+<a name="line49"></a>		$query = $this->CI->db->get();
+<a name="line50"></a>		
+<a name="line51"></a>		// Get array of formatted objects
+<a name="line52"></a>		$result = Factory::transaction($query->result());
+<a name="line53"></a>
+<a name="line54"></a>		Console::logSpeed("Good_search::get(): done.");
+<a name="line55"></a>		
+<a name="line56"></a>		// Return only first item in this array
+<a name="line57"></a>		return array_shift($result);
+<a name="line58"></a>	}
+<a name="line59"></a>	
+<a name="line60"></a>	public function find($options = array())
+<a name="line61"></a>	{
+<a name="line62"></a>		$default_options = array(
+<a name="line63"></a>			"good_id"=>$this->good_id,
+<a name="line64"></a>			"user_id"=>NULL,
+<a name="line65"></a>			"transaction_id"=>$this->transaction_id,
+<a name="line66"></a>			"transaction_status"=>array(
+<a name="line67"></a>				"active",
+<a name="line68"></a>				"pending"
+<a name="line69"></a>			)
+<a name="line70"></a>		);
+<a name="line71"></a>		$options = (object) array_merge($default_options,$options);
+<a name="line72"></a>	
+<a name="line73"></a>		$this->_basic_query();
+<a name="line74"></a>		$this->CI->db->where_in('T.status',$options->transaction_status);
+<a name="line75"></a>		
+<a name="line76"></a>		// Add good filter
+<a name="line77"></a>		if(!empty($options->good_id))
+<a name="line78"></a>		{
+<a name="line79"></a>			$this->CI->db->where('G.id',$options->good_id);
+<a name="line80"></a>		}
+<a name="line81"></a>		
+<a name="line82"></a>		// Add user filter
+<a name="line83"></a>		if(!empty($options->user_id))
+<a name="line84"></a>		{
+<a name="line85"></a>			$this->CI->db->where('DU.id',$options->user_id);
+<a name="line86"></a>		}
+<a name="line87"></a>		
+<a name="line88"></a>		$query = $this->CI->db->get();
+<a name="line89"></a>
+<a name="line90"></a>		return Factory::transaction($query->result());
+<a name="line91"></a>	}
+<a name="line92"></a>	
+<a name="line93"></a>	public function pending_transactions($user_id=NULL)
+<a name="line94"></a>	{
+<a name="line95"></a>		return $this->transactions(array("pending"), $user_id);
+<a name="line96"></a>	}
+<a name="line97"></a>	
+<a name="line98"></a>	public function active_transactions($user_id=NULL)
+<a name="line99"></a>	{
+<a name="line100"></a>		return $this->transactions(array("active"), $user_id);
+<a name="line101"></a>	}
+<a name="line102"></a>	
+<a name="line103"></a>	public function declined_transactions($user_id=NULL)
+<a name="line104"></a>	{
+<a name="line105"></a>		return $this->transactions(array("declined"), $user_id);
+<a name="line106"></a>	}
+<a name="line107"></a>	
+<a name="line108"></a>	public function completed_transactions($user_id=NULL)
+<a name="line109"></a>	{
+<a name="line110"></a>		return $this->transactions(array("completed"), $user_id);
+<a name="line111"></a>	}
+<a name="line112"></a>	public function cancelled_transactions($user_id=NULL)
+<a name="line113"></a>	{
+<a name="line114"></a>		return $this->transactions(array("cancelled"), $user_id);
+<a name="line115"></a>	}
+<a name="line116"></a>	
+<a name="line117"></a>	protected function _basic_query()
+<a name="line118"></a>	{
+<a name="line119"></a>		$this->CI->db->select("`D`.`id` AS `demand_id`,
+<a name="line120"></a>			`D`.`type` AS `demand_type`,
+<a name="line121"></a>			`T`.`id` AS `transaction_id`,
+<a name="line122"></a>			`T`.`status` AS `transaction_status`,
+<a name="line123"></a>			`T`.`created` AS `transaction_created`,
+<a name="line124"></a>			`DU`.`id` AS `demander_id`,
+<a name="line125"></a>			`DU`.`screen_name` AS `demander_screen_name`,
+<a name="line126"></a>			`DU`.`email` AS `demander_email`,
+<a name="line127"></a>			`DU`.`photo_source` AS `demander_photo_source`,
+<a name="line128"></a>			`DUP`.`url` AS `demander_photo_url`,
+<a name="line129"></a>			`DUP`.`thumb_url` AS `demander_photo_thumb_url`,
+<a name="line130"></a>			`DU`.`facebook_id` AS `demander_facebook_id`,
+<a name="line131"></a>			`OU`.`id` AS `decider_id`,
+<a name="line132"></a>			`OU`.`screen_name` AS `decider_screen_name`,
+<a name="line133"></a>			`OU`.`email` AS `decider_email`,
+<a name="line134"></a>			`OU`.`photo_source` AS `decider_photo_source`,
+<a name="line135"></a>			`OUP`.`url` AS `decider_photo_url`,
+<a name="line136"></a>			`OUP`.`thumb_url` AS `decider_photo_thumb_url`,
+<a name="line137"></a>			`OU`.`facebook_id` AS `decider_facebook_id`,
+<a name="line138"></a>			`G`.`good_id` AS `good_id`,
+<a name="line139"></a>			`G`.`good_title` AS `good_title`,
+<a name="line140"></a>			`G`.`good_type` AS `good_type`,
+<a name="line141"></a>			`G`.`good_shareable` AS `good_shareable`,
+<a name="line142"></a>			`G`.`good_status` AS `good_status`,
+<a name="line143"></a>			`G`.`category_id` AS `good_category_id`,
+<a name="line144"></a>			`G`.`category_name` AS `good_category`,
+<a name="line145"></a>			`G`.`photo_id` AS `good_photo_id`,
+<a name="line146"></a>			`G`.`photo_url` AS `good_photo_url`,
+<a name="line147"></a>			`G`.`photo_thumb_url` AS `good_photo_thumb_url`,
+<a name="line148"></a>			`G`.`user_id` AS `good_user_id`,
+<a name="line149"></a>			`G`.`user_screen_name` AS `good_user_screen_name`,
+<a name="line150"></a>			`G`.`user_email` AS `good_user_email`")
+<a name="line151"></a>			->from("demands D")
+<a name="line152"></a>			->join("transactions AS T","T.id = D.transaction_id")
+<a name="line153"></a>			->join("transactions_users TU","T.id = TU.transaction_id")
+<a name="line154"></a>			->join("goods_view G","G.good_id = D.good_id")
+<a name="line155"></a>			->join("users DU","D.user_id = DU.id")
+<a name="line156"></a>			->join("users OU","TU.user_id = OU.id AND OU.id != DU.id")
+<a name="line157"></a>			->join("photos DUP","DU.default_photo_id = DUP.id","left")
+<a name="line158"></a>			->join("photos OUP","OU.default_photo_id = OUP.id","left")
+<a name="line159"></a>			->group_by("D.id");
+<a name="line160"></a>	}
+<a name="line161"></a>}</pre>
+<div class="header">
+<h1>GiftFlow API</h1>
+<ul>
+<li><a href="../../../overview-summary.html">Overview</a></li>
+<li>Package</li><li>Class</li><li>Tree</li><li><a href="../../../overview-files.html">Files</a></li>
+<li><a href="../../../deprecated-list.html">Deprecated</a></li>
+<li><a href="../../../index-all.html">Index</a></li>
+</ul>
+</div>
+
+<div class="small_links">
+<a href="../../../index.html" target="_top">Frames</a>
+<a href="../../../source/libraries/search/transaction_search.php.html" target="_top">No frames</a>
+</div>
+<hr>
+
+<p id="footer">This document was generated by <a href="http://peej.github.com/phpdoctor/">PHPDoctor: The PHP Documentation Creator</a></p>
+
+</body>
+
+</html>

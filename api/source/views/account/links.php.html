@@ -6,7 +6,7 @@
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 
 <meta name="generator" content="PHPDoctor 2RC4 (http://peej.github.com/phpdoctor/)">
-<meta name="when" content="Sat, 24 Jul 2010 20:47:45 +0000">
+<meta name="when" content="Wed, 09 Feb 2011 20:22:56 +0000">
 
 <link rel="stylesheet" type="text/css" href="../../../stylesheet.css">
 <link rel="start" href="../../../overview-summary.html">
@@ -35,43 +35,57 @@
 <h1>views/account/links.php</h1>
 <hr>
 
-<a name="line1"></a><pre><ul class='results_list' id='linked_accounts'>
-<a name="line2"></a>	<?php if($links['facebook']['enabled']) { ?>
-<a name="line3"></a>	<li class='active'>
-<a name="line4"></a>		<span>Facebook: Account Linked</span>
-<a name="line5"></a>		<a  class='follow unlink css_right' href='<?php echo site_url('account/unlink/facebook'); ?>'>Unlink</a>
-<a name="line6"></a>	</li>
-<a name="line7"></a>	<?php } else { ?>
-<a name="line8"></a>	<li>
-<a name="line9"></a>		<span>Facebook: Not Linked</span>
-<a name="line10"></a>		<a  class='follow link css_right' href='<?php echo site_url('member/facebook'); ?>'>Link</a>
-<a name="line11"></a>	</li>
-<a name="line12"></a>	
-<a name="line13"></a>	<?php } ?>
-<a name="line14"></a>	<?php if($links['google']['enabled']) { ?>
-<a name="line15"></a>	<li class='active'>
-<a name="line16"></a>		<span>Google: Account Linked</span>
-<a name="line17"></a>		<a  class='follow unlink css_right' href='<?php echo site_url('account/unlink/google'); ?>'>Unlink</a>
-<a name="line18"></a>	</li>
-<a name="line19"></a>	<?php } else { ?>
-<a name="line20"></a>	<li>
-<a name="line21"></a>		<span>Google: Not Linked</span>
-<a name="line22"></a>		<a  class='follow link css_right' href='<?php echo site_url('account/link/google'); ?>'>Link</a>
-<a name="line23"></a>	</li>
-<a name="line24"></a>	<?php } ?>
-<a name="line25"></a>
-<a name="line26"></a>	<li style='color: #ccc; font-style: italic;'>Twitter: Coming Soon</li>
-<a name="line27"></a>	<li style='color: #ccc; font-style: italic;'>OpenID: Coming Soon</li>
-<a name="line28"></a></ul>
-<a name="line29"></a>
-<a name="line30"></a><script>
-<a name="line31"></a>$(function(){
-<a name="line32"></a>
-<a name="line33"></a>	$(".link").button( { icons: { primary: 'ui-icon-link' } });
-<a name="line34"></a>	$(".unlink").button( { icons: { primary: 'ui-icon-circle-close' } } );
-<a name="line35"></a>	<?php echo notify(); ?>
-<a name="line36"></a>});
-<a name="line37"></a></script></pre>
+<a name="line1"></a><pre><div id='account_links' class='two_panels'>
+<a name="line2"></a>	
+<a name="line3"></a>	<!-- Sidebar Menu -->
+<a name="line4"></a>	<?php echo $menu; ?>
+<a name="line5"></a>	
+<a name="line6"></a>	<div class='right_content'>
+<a name="line7"></a>
+<a name="line8"></a>		<ul class='results_list' id='linked_accounts'>
+<a name="line9"></a>			<?php if($links['facebook']['enabled']) { ?>
+<a name="line10"></a>			<li class='active'>
+<a name="line11"></a>				<span>Facebook: Account Linked</span>
+<a name="line12"></a>				<a  class='follow unlink css_right' href='<?php echo site_url('account/unlink/facebook'); ?>'>Unlink</a>
+<a name="line13"></a>			</li>
+<a name="line14"></a>			<?php } else { ?>
+<a name="line15"></a>			<li>
+<a name="line16"></a>				<span>Facebook: Not Linked</span>
+<a name="line17"></a>				<a  class='follow link css_right' href='<?php echo site_url('member/facebook'); ?>'>Link</a>
+<a name="line18"></a>			</li>
+<a name="line19"></a>			
+<a name="line20"></a>			<?php } ?>
+<a name="line21"></a>			<?php if($links['google']['enabled']) { ?>
+<a name="line22"></a>			<li class='active'>
+<a name="line23"></a>				<span>Google: Account Linked</span>
+<a name="line24"></a>				<a  class='follow unlink css_right' href='<?php echo site_url('account/unlink/google'); ?>'>Unlink</a>
+<a name="line25"></a>			</li>
+<a name="line26"></a>			<?php } else { ?>
+<a name="line27"></a>			<li>
+<a name="line28"></a>				<span>Google: Not Linked</span>
+<a name="line29"></a>				<a  class='follow link css_right' href='<?php echo site_url('account/link/google'); ?>'>Link</a>
+<a name="line30"></a>			</li>
+<a name="line31"></a>			<?php } ?>
+<a name="line32"></a>		
+<a name="line33"></a>			<li style='color: #ccc; font-style: italic;'>Twitter: Coming Soon</li>
+<a name="line34"></a>			<li style='color: #ccc; font-style: italic;'>OpenID: Coming Soon</li>
+<a name="line35"></a>		</ul>
+<a name="line36"></a>
+<a name="line37"></a>	</div>
+<a name="line38"></a>	<!-- eof div.right_content -->
+<a name="line39"></a>
+<a name="line40"></a></div>
+<a name="line41"></a><!-- eof div.two_panels -->
+<a name="line42"></a>
+<a name="line43"></a>
+<a name="line44"></a><script type='text/javascript'>
+<a name="line45"></a>$(function(){
+<a name="line46"></a>
+<a name="line47"></a>	$(".link").button( { icons: { primary: 'ui-icon-link' } });
+<a name="line48"></a>	$(".unlink").button( { icons: { primary: 'ui-icon-circle-close' } } );
+<a name="line49"></a>	<?php echo notify(); ?>
+<a name="line50"></a>});
+<a name="line51"></a></script></pre>
 <div class="header">
 <h1>GiftFlow API</h1>
 <ul>

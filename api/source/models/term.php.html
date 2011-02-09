@@ -6,7 +6,7 @@
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 
 <meta name="generator" content="PHPDoctor 2RC4 (http://peej.github.com/phpdoctor/)">
-<meta name="when" content="Sat, 24 Jul 2010 20:47:45 +0000">
+<meta name="when" content="Wed, 09 Feb 2011 20:22:56 +0000">
 
 <link rel="stylesheet" type="text/css" href="../../stylesheet.css">
 <link rel="start" href="../../overview-summary.html">
@@ -38,46 +38,42 @@
 <a name="line1"></a><pre><?php
 <a name="line2"></a>class Term extends DataMapperExtension {
 <a name="line3"></a>	
-<a name="line4"></a>	var $created_field = 'created';
-<a name="line5"></a>	var $updated_field = 'updated';
-<a name="line6"></a>		
+<a name="line4"></a>	// --------------------------------------------------------------------
+<a name="line5"></a>	// Validation
+<a name="line6"></a>	//   Add validation requirements, such as 'required', for your fields.
 <a name="line7"></a>	// --------------------------------------------------------------------
-<a name="line8"></a>	// Validation
-<a name="line9"></a>	//   Add validation requirements, such as 'required', for your fields.
-<a name="line10"></a>	// --------------------------------------------------------------------
-<a name="line11"></a>	
-<a name="line12"></a>	var $validation = array(
-<a name="line13"></a>		'name' => array(
-<a name="line14"></a>			'rules' => array(
-<a name="line15"></a>				'required',
-<a name="line16"></a>			'unique',
-<a name="line17"></a>			'trim'
-<a name="line18"></a>		),
-<a name="line19"></a>		'label' => 'Template Name'
-<a name="line20"></a>		),
-<a name="line21"></a>       'body' => array(
-<a name="line22"></a>         'required'
-<a name="line23"></a>       )
-<a name="line24"></a>
-<a name="line25"></a>	);
-<a name="line26"></a>
-<a name="line27"></a>    function __construct( $id = NULL )
-<a name="line28"></a>	{
-<a name="line29"></a>		parent::__construct( $id );
-<a name="line30"></a>    }
-<a name="line31"></a>
-<a name="line32"></a>	function get_email_template($name, $language = 'english')
-<a name="line33"></a>	{
-<a name="line34"></a>		$T = new Term();
-<a name="line35"></a>		$T->where('type', 'alert_template');
-<a name="line36"></a>		$T->where('language', $language);
-<a name="line37"></a>		$T->where('name', $name);
-<a name="line38"></a>		$T->get();
-<a name="line39"></a>		return $T;
-<a name="line40"></a>	}
-<a name="line41"></a>}
-<a name="line42"></a>?>
-<a name="line43"></a></pre>
+<a name="line8"></a>	
+<a name="line9"></a>	var $validation = array(
+<a name="line10"></a>		'name' => array(
+<a name="line11"></a>			'rules' => array(
+<a name="line12"></a>				'required',
+<a name="line13"></a>				'unique',
+<a name="line14"></a>				'trim'
+<a name="line15"></a>			),
+<a name="line16"></a>			'label' => 'Template Name'
+<a name="line17"></a>		),
+<a name="line18"></a>		'body' => array(
+<a name="line19"></a>			'required'
+<a name="line20"></a>		)
+<a name="line21"></a>	);
+<a name="line22"></a>
+<a name="line23"></a>	function __construct( $id = NULL )
+<a name="line24"></a>	{
+<a name="line25"></a>		parent::__construct( $id );
+<a name="line26"></a>	}
+<a name="line27"></a>
+<a name="line28"></a>	function get_email_template($name, $language = 'english')
+<a name="line29"></a>	{
+<a name="line30"></a>		$T = new Term();
+<a name="line31"></a>		$T->where('type', 'alert_template');
+<a name="line32"></a>		$T->where('language', $language);
+<a name="line33"></a>		$T->where('name', $name);
+<a name="line34"></a>		$T->get();
+<a name="line35"></a>		return $T;
+<a name="line36"></a>	}
+<a name="line37"></a>}
+<a name="line38"></a>?>
+<a name="line39"></a></pre>
 <div class="header">
 <h1>GiftFlow API</h1>
 <ul>

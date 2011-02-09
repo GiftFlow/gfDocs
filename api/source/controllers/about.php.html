@@ -6,7 +6,7 @@
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 
 <meta name="generator" content="PHPDoctor 2RC4 (http://peej.github.com/phpdoctor/)">
-<meta name="when" content="Sat, 24 Jul 2010 20:47:45 +0000">
+<meta name="when" content="Wed, 09 Feb 2011 20:22:56 +0000">
 
 <link rel="stylesheet" type="text/css" href="../../stylesheet.css">
 <link rel="start" href="../../overview-summary.html">
@@ -37,47 +37,65 @@
 
 <a name="line1"></a><pre><?php
 <a name="line2"></a>
-<a name="line3"></a>class About extends Controller {
+<a name="line3"></a>class About extends CI_Controller {
 <a name="line4"></a>
 <a name="line5"></a>	var $data;
 <a name="line6"></a>	
 <a name="line7"></a>	function __construct()
 <a name="line8"></a>	{
-<a name="line9"></a>		parent::Controller();
+<a name="line9"></a>		parent::__construct();
 <a name="line10"></a>		$this->util->config();
 <a name="line11"></a>		$this->data = $this->util->parse_globals();
-<a name="line12"></a>	}
-<a name="line13"></a>
-<a name="line14"></a>	public function index()
-<a name="line15"></a>	{
-<a name="line16"></a>		$this->data['title'] = "About";
-<a name="line17"></a>		$this->load->view('header', $this->data);
-<a name="line18"></a>		$this->load->view('about/index', $this->data);
-<a name="line19"></a>		$this->load->view('footer', $this->data);
-<a name="line20"></a>	}
-<a name="line21"></a>	
-<a name="line22"></a>	public function tour()
-<a name="line23"></a>	{
-<a name="line24"></a>		$this->data['title'] = "The Tour";
-<a name="line25"></a>		$this->load->view('header', $this->data);
-<a name="line26"></a>		$this->load->view('about/tour', $this->data);
-<a name="line27"></a>		$this->load->view('footer', $this->data);
-<a name="line28"></a>	}
-<a name="line29"></a>	public function story()
-<a name="line30"></a>	{
-<a name="line31"></a>		$this->data['title'] = "Our Story";
-<a name="line32"></a>		$this->load->view('header', $this->data);
-<a name="line33"></a>		$this->load->view('about/story', $this->data);
-<a name="line34"></a>		$this->load->view('footer', $this->data);
-<a name="line35"></a>	}
-<a name="line36"></a>	public function press()
-<a name="line37"></a>	{
-<a name="line38"></a>		$this->data['title'] = "In The Press";
-<a name="line39"></a>		$this->load->view('header', $this->data);
-<a name="line40"></a>		$this->load->view('about/press', $this->data);
-<a name="line41"></a>		$this->load->view('footer', $this->data);
-<a name="line42"></a>	}
-<a name="line43"></a>}</pre>
+<a name="line12"></a>		$this->data['menu'] = $this->load->view('about/includes/menu',$this->data, TRUE);
+<a name="line13"></a>	}
+<a name="line14"></a>
+<a name="line15"></a>	public function index()
+<a name="line16"></a>	{
+<a name="line17"></a>		$this->data['title'] = "About";
+<a name="line18"></a>		$this->load->view('header', $this->data);
+<a name="line19"></a>		$this->load->view('about/index', $this->data);
+<a name="line20"></a>		$this->load->view('footer', $this->data);
+<a name="line21"></a>	}
+<a name="line22"></a>	
+<a name="line23"></a>	public function tour()
+<a name="line24"></a>	{
+<a name="line25"></a>		$this->data['title'] = "The Tour";
+<a name="line26"></a>		$this->load->view('header', $this->data);
+<a name="line27"></a>		$this->load->view('about/tour', $this->data);
+<a name="line28"></a>		$this->load->view('footer', $this->data);
+<a name="line29"></a>	}
+<a name="line30"></a>	
+<a name="line31"></a>	public function future()
+<a name="line32"></a>	{
+<a name="line33"></a>		$this->data['title'] = "Future";
+<a name="line34"></a>		$this->load->view('header', $this->data);
+<a name="line35"></a>		$this->load->view('about/future', $this->data);
+<a name="line36"></a>		$this->load->view('footer', $this->data);
+<a name="line37"></a>	}
+<a name="line38"></a>	
+<a name="line39"></a>	public function story()
+<a name="line40"></a>	{
+<a name="line41"></a>		$this->data['title'] = "Our Story";
+<a name="line42"></a>		$this->load->view('header', $this->data);
+<a name="line43"></a>		$this->load->view('about/story', $this->data);
+<a name="line44"></a>		$this->load->view('footer', $this->data);
+<a name="line45"></a>	}
+<a name="line46"></a>	public function press()
+<a name="line47"></a>	{
+<a name="line48"></a>		$this->data['title'] = "In The Press";
+<a name="line49"></a>		$this->load->view('header', $this->data);
+<a name="line50"></a>		$this->load->view('about/press', $this->data);
+<a name="line51"></a>		$this->load->view('footer', $this->data);
+<a name="line52"></a>	}
+<a name="line53"></a>	
+<a name="line54"></a>	public function donate()
+<a name="line55"></a>	{
+<a name="line56"></a>		$this->data['title'] = "Donate";
+<a name="line57"></a>		$this->load->view('header', $this->data);
+<a name="line58"></a>		$this->load->view('about/donate', $this->data);
+<a name="line59"></a>		$this->load->view('footer', $this->data);
+<a name="line60"></a>	}
+<a name="line61"></a>}</pre>
 <div class="header">
 <h1>GiftFlow API</h1>
 <ul>

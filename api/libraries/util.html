@@ -6,7 +6,7 @@
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 
 <meta name="generator" content="PHPDoctor 2RC4 (http://peej.github.com/phpdoctor/)">
-<meta name="when" content="Sat, 24 Jul 2010 20:47:44 +0000">
+<meta name="when" content="Wed, 09 Feb 2011 20:22:55 +0000">
 
 <link rel="stylesheet" type="text/css" href="../stylesheet.css">
 <link rel="start" href="../overview-summary.html">
@@ -62,7 +62,7 @@ Detail: <a href="#detail_field">Field</a> | <a href="#detail_method">Method</a> 
 <tr><th colspan="2">Field Summary</th></tr>
 <tr>
 <td class="type">protected  mixed</td>
-<td class="description"><p class="name"><a href="#get_all_zoneinfos">$get_all_zoneinfos</a></p></td>
+<td class="description"><p class="name"><a href="#_sess_gc">$_sess_gc</a></p></td>
 </tr>
 </table>
 
@@ -82,7 +82,7 @@ Detail: <a href="#detail_field">Field</a> | <a href="#detail_method">Method</a> 
 </tr>
 <tr>
 <td class="type"> array</td>
-<td class="description"><p class="name"><a href="#parse_globals()">parse_globals</a>()</p><p class="description">Parses global variables which are returned in an array and used
+<td class="description"><p class="name"><a href="#parse_globals()">parse_globals</a>(array options, boolean options['geocode_ip'])</p><p class="description">Parses global variables which are returned in an array and used
 to define the $this->data variable in all controllers</p></td>
 </tr>
 <tr>
@@ -96,8 +96,8 @@ a date</p></td>
 <h2 id="detail_field">Field Detail</h2>
 <a href="../source/libraries/util.php.html#line14" class="location">libraries/util.php at line 14</a>
 
-<h3 id="get_all_zoneinfos">get_all_zoneinfos</h3>
-<code class="signature">protected  mixed <strong>$get_all_zoneinfos</strong> = NULL</code>
+<h3 id="_sess_gc">_sess_gc</h3>
+<code class="signature">protected  mixed <strong>$_sess_gc</strong></code>
 <div class="details">
 </div>
 
@@ -122,7 +122,7 @@ a date</p></td>
 
 
 
-<div class='method'><a href="../source/libraries/util.php.html#line265" class="location">libraries/util.php at line 265</a>
+<div class='method'><a href="../source/libraries/util.php.html#line310" class="location">libraries/util.php at line 310</a>
 
 <h3 id="is_ajax()">is_ajax</h3>
 <code class="signature">public  boolean <strong>is_ajax</strong>()</code>
@@ -131,17 +131,17 @@ a date</p></td>
 
 
 
-<div class='method'><a href="../source/libraries/util.php.html#line40" class="location">libraries/util.php at line 40</a>
+<div class='method'><a href="../source/libraries/util.php.html#line44" class="location">libraries/util.php at line 44</a>
 
 <h3 id="parse_globals()">parse_globals</h3>
-<code class="signature">public  array <strong>parse_globals</strong>()</code>
+<code class="signature">public  array <strong>parse_globals</strong>(array options, boolean options['geocode_ip'])</code>
 <div class="details">
 <p>Parses global variables which are returned in an array and used
 to define the $this->data variable in all controllers</p></div></div>
 
 
 
-<div class='method'><a href="../source/libraries/util.php.html#line120" class="location">libraries/util.php at line 120</a>
+<div class='method'><a href="../source/libraries/util.php.html#line159" class="location">libraries/util.php at line 159</a>
 
 <h3 id="time_ago()">time_ago</h3>
 <code class="signature">public  void <strong>time_ago</strong>(timestamp datefrom, timestamp dateto)</code>

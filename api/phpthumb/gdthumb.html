@@ -6,7 +6,7 @@
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 
 <meta name="generator" content="PHPDoctor 2RC4 (http://peej.github.com/phpdoctor/)">
-<meta name="when" content="Sat, 24 Jul 2010 20:47:44 +0000">
+<meta name="when" content="Wed, 09 Feb 2011 20:22:55 +0000">
 
 <link rel="stylesheet" type="text/css" href="../stylesheet.css">
 <link rel="start" href="../overview-summary.html">
@@ -67,6 +67,10 @@ Detail: <a href="#detail_field">Field</a> | <a href="#detail_method">Method</a> 
 <td class="description"><p class="name"><a href="#currentDimensions">$currentDimensions</a></p><p class="description">The current dimensions of the image</p></td>
 </tr>
 <tr>
+<td class="type">protected  resource</td>
+<td class="description"><p class="name"><a href="#goods">$goods</a></p><p class="description">The prior image (before manipulation)</p></td>
+</tr>
+<tr>
 <td class="type">protected  int</td>
 <td class="description"><p class="name"><a href="#maxHeight">$maxHeight</a></p><p class="description">The maximum height an image can be after resizing (in pixels)</p></td>
 </tr>
@@ -77,10 +81,6 @@ Detail: <a href="#detail_field">Field</a> | <a href="#detail_method">Method</a> 
 <tr>
 <td class="type">protected  array</td>
 <td class="description"><p class="name"><a href="#newDimensions">$newDimensions</a></p><p class="description">The new, calculated dimensions of the image</p></td>
-</tr>
-<tr>
-<td class="type">protected  resource</td>
-<td class="description"><p class="name"><a href="#oauth_assert_handler">$oauth_assert_handler</a></p><p class="description">The prior image (before manipulation)</p></td>
 </tr>
 <tr>
 <td class="type">protected  array</td>
@@ -273,6 +273,15 @@ for the format, and then outputting the image data. </p></td>
 
 <hr>
 
+<a href="../source/libraries/thumb/gdthumb.inc.php.html#line40" class="location">libraries/thumb/GdThumb.inc.php at line 40</a>
+
+<h3 id="goods">goods</h3>
+<code class="signature">protected  resource <strong>$goods</strong></code>
+<div class="details">
+<p>The prior image (before manipulation)</p></div>
+
+<hr>
+
 <a href="../source/libraries/thumb/gdthumb.inc.php.html#line80" class="location">libraries/thumb/GdThumb.inc.php at line 80</a>
 
 <h3 id="maxHeight">maxHeight</h3>
@@ -297,15 +306,6 @@ for the format, and then outputting the image data. </p></td>
 <code class="signature">protected  array <strong>$newDimensions</strong></code>
 <div class="details">
 <p>The new, calculated dimensions of the image</p></div>
-
-<hr>
-
-<a href="../source/libraries/thumb/gdthumb.inc.php.html#line40" class="location">libraries/thumb/GdThumb.inc.php at line 40</a>
-
-<h3 id="oauth_assert_handler">oauth_assert_handler</h3>
-<code class="signature">protected  resource <strong>$oauth_assert_handler</strong> = null</code>
-<div class="details">
-<p>The prior image (before manipulation)</p></div>
 
 <hr>
 

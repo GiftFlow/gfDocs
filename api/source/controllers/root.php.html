@@ -6,7 +6,7 @@
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 
 <meta name="generator" content="PHPDoctor 2RC4 (http://peej.github.com/phpdoctor/)">
-<meta name="when" content="Sat, 24 Jul 2010 20:47:45 +0000">
+<meta name="when" content="Wed, 09 Feb 2011 20:22:56 +0000">
 
 <link rel="stylesheet" type="text/css" href="../../stylesheet.css">
 <link rel="start" href="../../overview-summary.html">
@@ -36,84 +36,54 @@
 <hr>
 
 <a name="line1"></a><pre><?php
-<a name="line2"></a>
-<a name="line3"></a>class Root extends Controller {
-<a name="line4"></a>
-<a name="line5"></a>	var $data;
-<a name="line6"></a>	
-<a name="line7"></a>	function Root()
-<a name="line8"></a>	{
-<a name="line9"></a>		parent::Controller();
-<a name="line10"></a>		$this->util->config();
-<a name="line11"></a>		$this->data = $this->util->parse_globals();
-<a name="line12"></a>	}
-<a name="line13"></a>	/**
-<a name="line14"></a>	 * index
-<a name="line15"></a>	 *
-<a name="line16"></a>	 **/
-<a name="line17"></a>	function index()
-<a name="line18"></a>	{
-<a name="line19"></a>		if(!$this->auth->validate(1))
-<a name="line20"></a>			$this->_signup();
-<a name="line21"></a>		else
-<a name="line22"></a>			$this->_dash();
+<a name="line2"></a>class Root extends CI_Controller {
+<a name="line3"></a>
+<a name="line4"></a>	var $data;
+<a name="line5"></a>	
+<a name="line6"></a>	function __construct()
+<a name="line7"></a>	{
+<a name="line8"></a>		parent::__construct();
+<a name="line9"></a>		$this->util->config();
+<a name="line10"></a>		$this->data = $this->util->parse_globals();
+<a name="line11"></a>	}
+<a name="line12"></a>
+<a name="line13"></a>	function index()
+<a name="line14"></a>	{
+<a name="line15"></a>		if(!$this->auth->validate(1))
+<a name="line16"></a>		{
+<a name="line17"></a>			$this->_signup();
+<a name="line18"></a>		}
+<a name="line19"></a>		else
+<a name="line20"></a>		{
+<a name="line21"></a>			redirect('you');
+<a name="line22"></a>		}
 <a name="line23"></a>	}
-<a name="line24"></a>	function _signup()
-<a name="line25"></a>	{
-<a name="line26"></a>		$this->data['title'] = "Welcome";
-<a name="line27"></a>		$this->load->view('header', $this->data);
-<a name="line28"></a>		$this->load->view('index');
-<a name="line29"></a>		$this->load->view('footer', $this->data);
-<a name="line30"></a>	}
-<a name="line31"></a>	function _dash()
-<a name="line32"></a>	{
-<a name="line33"></a>		$this->benchmark->mark('dash_start');
-<a name="line34"></a>		$this->data['title'] = "Your Dashboard";
-<a name="line35"></a>		$this->load->library('finder');
-<a name="line36"></a>		$this->data['googlemaps'] = TRUE;
-<a name="line37"></a>		
-<a name="line38"></a>		$U = new User($this->data['logged_in_user_id']);
-<a name="line39"></a>		$this->finder->format = 'object';
-<a name="line40"></a>		
-<a name="line41"></a>		$this->data['giftflow'] = $this->finder->giftflow();
-<a name="line42"></a>		
-<a name="line43"></a>		$this->data['your_gifts'] = $U->gifts();
-<a name="line44"></a>		$this->data['your_needs'] = $U->needs();
-<a name="line45"></a>		$this->data['your_requests'] = $U->requests;
-<a name="line46"></a>		
-<a name="line47"></a>		$this->load->view('header', $this->data);
-<a name="line48"></a>		$this->load->view('member/index', $this->data);
-<a name="line49"></a>		$this->load->view('footer', $this->data);
-<a name="line50"></a>		$this->benchmark->mark('dash_end');
-<a name="line51"></a>	}
-<a name="line52"></a>
-<a name="line53"></a>	function lost()
-<a name="line54"></a>	{
-<a name="line55"></a>		$this->data['title'] = "Oops! Page cannot be found.";
-<a name="line56"></a>
-<a name="line57"></a>		$this->load->view('header', $this->data);
-<a name="line58"></a>		$this->load->view('404', $this->data);
-<a name="line59"></a>		$this->load->view('footer', $this->data);
-<a name="line60"></a>	}
-<a name="line61"></a>	function restricted()
-<a name="line62"></a>	{
-<a name="line63"></a>		$this->data['title'] = "Restricted area";
-<a name="line64"></a>
-<a name="line65"></a>		$this->load->view('header', $this->data);
-<a name="line66"></a>		$this->load->view('restricted', $this->data);
-<a name="line67"></a>		$this->load->view('footer', $this->data);
-<a name="line68"></a>	}
-<a name="line69"></a>	
-<a name="line70"></a>	function test()
-<a name="line71"></a>	{
-<a name="line72"></a>		$this->load->library('finder');
-<a name="line73"></a>		$this->finder->follower_search();
-<a name="line74"></a>	}
-<a name="line75"></a>}
-<a name="line76"></a>
-<a name="line77"></a>/* End of file member.php */
-<a name="line78"></a>/* Location: ./system/application/controllers/welcome.php */
-<a name="line79"></a></pre>
+<a name="line24"></a>	
+<a name="line25"></a>	function _signup()
+<a name="line26"></a>	{
+<a name="line27"></a>		$this->data['title'] = "Welcome";
+<a name="line28"></a>		$this->load->view('header', $this->data);
+<a name="line29"></a>		$this->load->view('index');
+<a name="line30"></a>		$this->load->view('footer', $this->data);
+<a name="line31"></a>	}
+<a name="line32"></a>	
+<a name="line33"></a>	function lost()
+<a name="line34"></a>	{
+<a name="line35"></a>		$this->data['title'] = "Oops! Page cannot be found.";
+<a name="line36"></a>
+<a name="line37"></a>		$this->load->view('header', $this->data);
+<a name="line38"></a>		$this->load->view('404', $this->data);
+<a name="line39"></a>		$this->load->view('footer', $this->data);
+<a name="line40"></a>	}
+<a name="line41"></a>	function restricted()
+<a name="line42"></a>	{
+<a name="line43"></a>		$this->data['title'] = "Restricted area";
+<a name="line44"></a>
+<a name="line45"></a>		$this->load->view('header', $this->data);
+<a name="line46"></a>		$this->load->view('restricted', $this->data);
+<a name="line47"></a>		$this->load->view('footer', $this->data);
+<a name="line48"></a>	}
+<a name="line49"></a>}</pre>
 <div class="header">
 <h1>GiftFlow API</h1>
 <ul>

@@ -6,7 +6,7 @@
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 
 <meta name="generator" content="PHPDoctor 2RC4 (http://peej.github.com/phpdoctor/)">
-<meta name="when" content="Sat, 24 Jul 2010 20:47:45 +0000">
+<meta name="when" content="Wed, 09 Feb 2011 20:22:56 +0000">
 
 <link rel="stylesheet" type="text/css" href="../../stylesheet.css">
 <link rel="start" href="../../overview-summary.html">
@@ -35,49 +35,63 @@
 <h1>views/footer.php</h1>
 <hr>
 
-<a name="line1"></a><pre><br style='clear: both;' />
+<a name="line1"></a><pre>	</div>
 <a name="line2"></a></div>
-<a name="line3"></a><div class='footer_wrapper'>
-<a name="line4"></a><div class='footer'>
-<a name="line5"></a>		<p>&copy; <?php echo date("Y"); ?> GiftFlow / 
-<a name="line6"></a>		<a href="<?php echo site_url('about'); ?>">About</a> /
-<a name="line7"></a>		 <a href="http://giftflow.uservoice.com">Feedback Forum</a> /
-<a name="line8"></a>		<a href="http://www.twitter.com/giftflow">Twitter</a> /
-<a name="line9"></a>		<a href="http://giftflow.org/blog">Blog</a> /
-<a name="line10"></a>		<a href="<?php echo site_url('about'); ?>">Press</a></p>
-<a name="line11"></a>
-<a name="line12"></a></div>
-<a name="line13"></a></div>
-<a name="line14"></a><script type="text/javascript">
-<a name="line15"></a>var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");
-<a name="line16"></a>document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E"));
-<a name="line17"></a>try {
-<a name="line18"></a>var pageTracker = _gat._getTracker("	UA-16470536-1");
-<a name="line19"></a>pageTracker._trackPageview();
-<a name="line20"></a>} catch(err) {}
-<a name="line21"></a>
-<a name="line22"></a>  var uservoiceOptions = {
-<a name="line23"></a>    key: 'giftflow',
-<a name="line24"></a>    host: 'giftflow.uservoice.com', 
-<a name="line25"></a>    forum: '50431',
-<a name="line26"></a>    alignment: 'left',
-<a name="line27"></a>    background_color:'#65b15b', 
-<a name="line28"></a>    text_color: 'white',
-<a name="line29"></a>    hover_color: '#93ff85',
-<a name="line30"></a>    lang: 'en',
-<a name="line31"></a>    showTab: true
-<a name="line32"></a>  };
-<a name="line33"></a>  function _loadUserVoice() {
-<a name="line34"></a>    var s = document.createElement('script');
-<a name="line35"></a>    s.src = ("https:" == document.location.protocol ? "https://" : "http://") + "uservoice.com/javascripts/widgets/tab.js";
-<a name="line36"></a>    document.getElementsByTagName('head')[0].appendChild(s);
-<a name="line37"></a>  }
-<a name="line38"></a>  _loadSuper = window.onload;
-<a name="line39"></a>  window.onload = (typeof window.onload != 'function') ? _loadUserVoice : function() { _loadSuper(); _loadUserVoice(); };
-<a name="line40"></a></script>
-<a name="line41"></a>
-<a name="line42"></a></body>
-<a name="line43"></a></html></pre>
+<a name="line3"></a><!-- eof Main Wrapper -->
+<a name="line4"></a>
+<a name="line5"></a><!-- Footer -->
+<a name="line6"></a><div id="footer">
+<a name="line7"></a>	<div class="wrapper">
+<a name="line8"></a>		<ul>
+<a name="line9"></a>			<li id="copyright">
+<a name="line10"></a>				&copy; <?php echo date("Y"); ?> GiftFlow
+<a name="line11"></a>			</li>
+<a name="line12"></a>			<li>
+<a name="line13"></a>				<a href="<?php echo site_url('about'); ?>">About</a>
+<a name="line14"></a>			</li>
+<a name="line15"></a>			<li>
+<a name="line16"></a>				<a href="http://giftflow.uservoice.com">Feedback Forum</a>
+<a name="line17"></a>			</li>
+<a name="line18"></a>			<li>
+<a name="line19"></a>				<a href="http://www.twitter.com/giftflow">Twitter</a>
+<a name="line20"></a>			</li>
+<a name="line21"></a>			<li>
+<a name="line22"></a>				<a href="<?php echo site_url('about/press'); ?>">Press</a>
+<a name="line23"></a>			</li>
+<a name="line24"></a>		</ul>
+<a name="line25"></a>	</div>
+<a name="line26"></a></div>
+<a name="line27"></a>
+<a name="line28"></a><script type="text/javascript">
+<a name="line29"></a>var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");
+<a name="line30"></a>document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E"));
+<a name="line31"></a>try {
+<a name="line32"></a>var pageTracker = _gat._getTracker("	UA-16470536-1");
+<a name="line33"></a>pageTracker._trackPageview();
+<a name="line34"></a>} catch(err) {}
+<a name="line35"></a>
+<a name="line36"></a>  var uservoiceOptions = {
+<a name="line37"></a>    key: 'giftflow',
+<a name="line38"></a>    host: 'giftflow.uservoice.com', 
+<a name="line39"></a>    forum: '50431',
+<a name="line40"></a>    alignment: 'left',
+<a name="line41"></a>    background_color:'#65b15b', 
+<a name="line42"></a>    text_color: 'white',
+<a name="line43"></a>    hover_color: '#93ff85',
+<a name="line44"></a>    lang: 'en',
+<a name="line45"></a>    showTab: true
+<a name="line46"></a>  };
+<a name="line47"></a>  function _loadUserVoice() {
+<a name="line48"></a>    var s = document.createElement('script');
+<a name="line49"></a>    s.src = ("https:" == document.location.protocol ? "https://" : "http://") + "uservoice.com/javascripts/widgets/tab.js";
+<a name="line50"></a>    document.getElementsByTagName('head')[0].appendChild(s);
+<a name="line51"></a>  }
+<a name="line52"></a>  _loadSuper = window.onload;
+<a name="line53"></a>  window.onload = (typeof window.onload != 'function') ? _loadUserVoice : function() { _loadSuper(); _loadUserVoice(); };
+<a name="line54"></a></script>
+<a name="line55"></a>
+<a name="line56"></a></body>
+<a name="line57"></a></html></pre>
 <div class="header">
 <h1>GiftFlow API</h1>
 <ul>

@@ -1,0 +1,401 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+
+<html lang="en">
+<head>
+
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
+<meta name="generator" content="PHPDoctor 2RC4 (http://peej.github.com/phpdoctor/)">
+<meta name="when" content="Wed, 09 Feb 2011 20:22:56 +0000">
+
+<link rel="stylesheet" type="text/css" href="../../../stylesheet.css">
+<link rel="start" href="../../../overview-summary.html">
+
+<title>views/you/index.php (GiftFlow API)</title>
+
+</head>
+<body id="file" onload="parent.document.title=document.title;">
+
+<div class="header">
+<h1>GiftFlow API</h1>
+<ul>
+<li><a href="../../../overview-summary.html">Overview</a></li>
+<li>Package</li><li>Class</li><li>Tree</li><li><a href="../../../overview-files.html">Files</a></li>
+<li><a href="../../../deprecated-list.html">Deprecated</a></li>
+<li><a href="../../../index-all.html">Index</a></li>
+</ul>
+</div>
+
+<div class="small_links">
+<a href="../../../index.html" target="_top">Frames</a>
+<a href="../../../source/views/you/index.php.html" target="_top">No frames</a>
+</div>
+<hr>
+
+<h1>views/you/index.php</h1>
+<hr>
+
+<a name="line1"></a><pre><div class='two_panels'>
+<a name="line2"></a>
+<a name="line3"></a>	<!-- Sidebar Menu -->
+<a name="line4"></a>	<?php echo $menu; ?>
+<a name="line5"></a>	
+<a name="line6"></a>	<div class='right_content'>
+<a name="line7"></a>
+<a name="line8"></a>		<!-- GiftFlow module -->
+<a name="line9"></a>		<div class='center'>
+<a name="line10"></a>			<div id='dash_map'>
+<a name="line11"></a>			</div>
+<a name="line12"></a>			<div id='giftflow_results'>
+<a name="line13"></a>				<ul style='margin: 20px 0px;'>
+<a name="line14"></a>					<li>
+<a name="line15"></a>						<a href='#' class='active' id='following'>
+<a name="line16"></a>							Following
+<a name="line17"></a>						</a>
+<a name="line18"></a>					</li>
+<a name="line19"></a>					<li>
+<a name="line20"></a>						<a href='#' id='nearby_gifts'>
+<a name="line21"></a>							Nearby Gifts
+<a name="line22"></a>						</a>
+<a name="line23"></a>					</li>
+<a name="line24"></a>				</ul>
+<a name="line25"></a>				<div>
+<a name="line26"></a>					<?php if( !empty($giftflow)){ ?>
+<a name="line27"></a>					
+<a name="line28"></a>						<?php echo UI_Results::goods(array(
+<a name="line29"></a>							"results"=>$giftflow,
+<a name="line30"></a>							"mini"=>TRUE,
+<a name="line31"></a>							"include"=>array("author","location","created")
+<a name="line32"></a>						));?>
+<a name="line33"></a>						
+<a name="line34"></a>					<?php } else{ ?>
+<a name="line35"></a>						<!-- EMPTY STATE for GIFTFLOW -->
+<a name="line36"></a>						<p>This is your GiftFlow. Everything the people you follow give or need will show up here. 
+<a name="line37"></a>						Unfortunately, however, you don't appear to be following anyone! To start, find your friends on GiftFlow and click the Follow button on their profiles.</p>
+<a name="line38"></a>						
+<a name="line39"></a>						<?php if(!empty($friends)) {  ?>
+<a name="line40"></a>						<ul class='invite_grid' style='display: none;'>
+<a name="line41"></a>							<?php foreach($friends as $val) { ?>
+<a name="line42"></a>							<li>
+<a name="line43"></a>								<img src="https://graph.facebook.com/<?php echo $val->facebook_id; ?>/picture" />
+<a name="line44"></a>								<span class='name'>
+<a name="line45"></a>									<?php echo ucfirst($val->screen_name); ?>
+<a name="line46"></a>								</span>
+<a name="line47"></a>								<span class='ui-icon ui-icon-check'></span>
+<a name="line48"></a>							</li>
+<a name="line49"></a>							<?php } ?>
+<a name="line50"></a>						</ul>
+<a name="line51"></a>						<?php } else { ?>
+<a name="line52"></a>							<p>When you follow someone, all of their gifts and needs will show up here!</p>
+<a name="line53"></a>						<?php } ?>
+<a name="line54"></a>					<?php } ?>
+<a name="line55"></a>				</div>
+<a name="line56"></a>				<div>
+<a name="line57"></a>					<ul class='results_list mini'>
+<a name="line58"></a>						<li><!-- @todo add something here --></li>
+<a name="line59"></a>					</ul>
+<a name="line60"></a>				</div>
+<a name="line61"></a>			</div>
+<a name="line62"></a>		</div>
+<a name="line63"></a>		<!-- eof GiftFlow module -->
+<a name="line64"></a>
+<a name="line65"></a>	</div>
+<a name="line66"></a>	<!-- eof div.right_content -->
+<a name="line67"></a>
+<a name="line68"></a></div>
+<a name="line69"></a><!-- eof div.two_panels -->
+<a name="line70"></a>
+<a name="line71"></a><!--
+<a name="line72"></a><div class='sidebar' id='do_something'>
+<a name="line73"></a>	<div class='top'>
+<a name="line74"></a>		<h2>Do Something</h2>
+<a name="line75"></a>	</div>
+<a name="line76"></a>	<div class='center'>
+<a name="line77"></a>		<p>
+<a name="line78"></a>			<a href='<?php echo site_url('gifts/add'); ?>' class='' style='width: 100%; margin-bottom: 15px;'>Add a Gift</a>
+<a name="line79"></a>		</p>
+<a name="line80"></a>		<p>
+<a name="line81"></a>			<a href='<?php echo site_url('needs/add'); ?>' class='' style='width: 100%'>Add a Need</a>
+<a name="line82"></a>		</p>
+<a name="line83"></a>		<p>
+<a name="line84"></a>			<a href='<?php echo site_url('people'); ?>'>Find Your Friends</a>
+<a name="line85"></a>		</p>
+<a name="line86"></a>	</div>
+<a name="line87"></a>	<div class='bottom'>
+<a name="line88"></a>	</div>
+<a name="line89"></a></div>
+<a name="line90"></a>
+<a name="line91"></a><div class='sidebar' id='your_feed'>
+<a name="line92"></a>	<div class='top'>
+<a name="line93"></a>		<h2>Your Stuff</h2>
+<a name="line94"></a>	</div>
+<a name="line95"></a>	<div class='center'>
+<a name="line96"></a>		<div id='your_stuff_buttons'>
+<a name="line97"></a>			<ul style='margin-bottom: 20px;'>
+<a name="line98"></a>				<li>
+<a name="line99"></a>					<a href='#' rel='your_gifts' class='active'>Gifts</a>
+<a name="line100"></a>				</li>
+<a name="line101"></a>				<li>
+<a name="line102"></a>					<a href='#' rel='your_needs'>Needs</a>
+<a name="line103"></a>				</li>
+<a name="line104"></a>				<li>
+<a name="line105"></a>					<a href='#' rel='your_requests'>Requests</a>
+<a name="line106"></a>				</li>
+<a name="line107"></a>			</ul>
+<a name="line108"></a>			<div id='your_gifts'>
+<a name="line109"></a>				<?php if(!empty($your_gifts )){ ?>
+<a name="line110"></a>				
+<a name="line111"></a>					<?php echo UI_Results::goods(array(
+<a name="line112"></a>						"results"=>$your_gifts,
+<a name="line113"></a>						"mini"=>TRUE,
+<a name="line114"></a>						"include"=>array("created")
+<a name="line115"></a>					)); ?>
+<a name="line116"></a>
+<a name="line117"></a>				<?php } else { ?>
+<a name="line118"></a>					<p>No requests yet... <a href="<?php echo site_url('gifts'); ?>">add one?</a></p>
+<a name="line119"></a>				<?php } ?>
+<a name="line120"></a>			</div>
+<a name="line121"></a>			<div id='your_needs'>
+<a name="line122"></a>				<?php if( !empty($your_needs)){ ?>
+<a name="line123"></a>				
+<a name="line124"></a>					<?php echo UI_Results::goods(array(
+<a name="line125"></a>						"results"=>$your_needs,
+<a name="line126"></a>						"mini"=>TRUE,
+<a name="line127"></a>						"include"=>array("created")
+<a name="line128"></a>					)); ?>
+<a name="line129"></a>
+<a name="line130"></a>				<?php } else { ?>
+<a name="line131"></a>					<p>No needs yet... <a href="<?php echo site_url('needs/add'); ?>">add one?</a></p>
+<a name="line132"></a>				<?php } ?>
+<a name="line133"></a>			</div>
+<a name="line134"></a>			<div id='your_requests'>
+<a name="line135"></a>				
+<a name="line136"></a>			</div>
+<a name="line137"></a>		</div>
+<a name="line138"></a>	</div>
+<a name="line139"></a>	<div class='bottom'>
+<a name="line140"></a>	</div>
+<a name="line141"></a></div>
+<a name="line142"></a>-->
+<a name="line143"></a>
+<a name="line144"></a>
+<a name="line145"></a></div>
+<a name="line146"></a><script type='text/javascript'>
+<a name="line147"></a>$(function(){
+<a name="line148"></a>	$(".tip").tipTip( { delay: 0, fadein: 0, defaultPosition: 'top' } );
+<a name="line149"></a>	$(".button").button();
+<a name="line150"></a>	$("ul.invite_grid li").click(function(){ $(this).toggleClass('selected'); });
+<a name="line151"></a>	$("#giftflow_results").buttonTabs( { onLoad: function() {
+<a name="line152"></a>		var ul = $(this).find(".button_tabs_active ul");
+<a name="line153"></a>		ul.empty();
+<a name="line154"></a>		$.post("<?php echo site_url('ajax/giftflow'); ?>", { source: $(this).find('a.active').attr('id') }, function(data){
+<a name="line155"></a>			$.each(data.results, function( key, val){
+<a name="line156"></a>				ul.append($(val.html));
+<a name="line157"></a>			});
+<a name="line158"></a>			generateCenteredMap( data );
+<a name="line159"></a>		}, 'json');
+<a name="line160"></a>	} });
+<a name="line161"></a>	$("#your_stuff_buttons").buttonTabs();
+<a name="line162"></a>	
+<a name="line163"></a>	
+<a name="line164"></a>	// define map
+<a name="line165"></a>	var map;
+<a name="line166"></a>	
+<a name="line167"></a>	// define the fluster object
+<a name="line168"></a>	var fluster;
+<a name="line169"></a>	
+<a name="line170"></a>	// define location of gift icon
+<a name="line171"></a>	var giftIcon = '<?php echo base_url(); ?>assets/images/icon_gift.png';
+<a name="line172"></a>   		 
+<a name="line173"></a>	// Write preloaded data
+<a name="line174"></a>	// @todo make this reusable by storing in a view; it's used in find/index
+<a name="line175"></a>	var dataset = { 
+<a name="line176"></a>		<?php if(!empty($userdata['location'])) { ?>
+<a name="line177"></a>		center: {
+<a name="line178"></a>			address:"<?php if(!empty($userdata['location']->address)) echo $userdata['location']->address; ?>",
+<a name="line179"></a>			latitude:"<?php if(!empty($userdata['location']->latitude)) echo $userdata['location']->latitude; ?>",
+<a name="line180"></a>			longitude:"<?php if(!empty($userdata['location']->longitude)) echo $userdata['location']->longitude; ?>"
+<a name="line181"></a>		},
+<a name="line182"></a>		<?php } ?>
+<a name="line183"></a>		results: [
+<a name="line184"></a>		<?php if(!empty($giftflow)) { foreach($giftflow as $key=>$val){ ?>
+<a name="line185"></a>			{
+<a name="line186"></a>				location: { 		
+<a name="line187"></a>					latitude:"<?php echo $val->location->latitude; ?>",
+<a name="line188"></a>					longitude:"<?php echo $val->location->longitude;?>"
+<a name="line189"></a>				},
+<a name="line190"></a>				title: "<?php echo $val->title;?>"
+<a name="line191"></a>			}<?php if($key<(count($giftflow))){ echo ","; } ?>
+<a name="line192"></a>		<?php } } ?>
+<a name="line193"></a>		]
+<a name="line194"></a>	};
+<a name="line195"></a>	
+<a name="line196"></a>	// Process preloaded data
+<a name="line197"></a>	if(dataset.results.length>0){
+<a name="line198"></a>		generateCenteredMap(dataset);
+<a name="line199"></a>	}
+<a name="line200"></a>	else {}
+<a name="line201"></a>	
+<a name="line202"></a>	/**
+<a name="line203"></a>	*	Sets the center of the map. There are 3 cases:
+<a name="line204"></a>	*	1. center is defined in the json's center property
+<a name="line205"></a>	*	2. location of first result is used as the center
+<a name="line206"></a>	*	3. location is set to be new haven
+<a name="line207"></a>	*/
+<a name="line208"></a>	function generateCenteredMap(data){
+<a name="line209"></a>		if(data.center != null && ( data.center.latitude != null || data.center.latitude != '' ) && ( data.center.longitude != null && data.center.longitude != '' ) ){
+<a name="line210"></a>			var default_location = new google.maps.LatLng( data.center.latitude, data.center.longitude );
+<a name="line211"></a>		} else if(data.results[0]!=null) {
+<a name="line212"></a>			var default_location = new google.maps.LatLng( data.results[0].location.latitude, data.results[0].location.longitude );
+<a name="line213"></a>		} else {
+<a name="line214"></a>			var default_location = new google.maps.LatLng( 41, -71);
+<a name="line215"></a>		}
+<a name="line216"></a>		
+<a name="line217"></a>		// Options
+<a name="line218"></a>		var mapOptions = {
+<a name="line219"></a>			scrollwheel: false,
+<a name="line220"></a>     			zoom: 12,
+<a name="line221"></a>     			center: default_location,
+<a name="line222"></a>			mapTypeId: google.maps.MapTypeId.ROADMAP,
+<a name="line223"></a>			mapTypeControl: false,
+<a name="line224"></a>			navigationControlOptions:  {
+<a name="line225"></a>				style: google.maps.NavigationControlStyle.SMALL
+<a name="line226"></a> 			}
+<a name="line227"></a>   		 };
+<a name="line228"></a>   		
+<a name="line229"></a>   		// Create new map element
+<a name="line230"></a>		map = new google.maps.Map(document.getElementById("dash_map"), mapOptions);
+<a name="line231"></a>		fluster = new Fluster2(map);
+<a name="line232"></a>		
+<a name="line233"></a>		// Set styles
+<a name="line234"></a>		// These are the same styles as default, assignment is only for demonstration ...
+<a name="line235"></a>		fluster.styles = {
+<a name="line236"></a>			// This style will be used for clusters with more than 0 markers
+<a name="line237"></a>			0: {
+<a name="line238"></a>				image: '<?php echo base_url()."assets/images/cluster_ring_padded_medium.png"; ?>',
+<a name="line239"></a>				textColor: '#45A841',
+<a name="line240"></a>				fontSize: '20px',
+<a name="line241"></a>				fontWeight: 'bold',
+<a name="line242"></a>				width: 90,
+<a name="line243"></a>				height: 90,
+<a name="line244"></a>				size: 'small'
+<a name="line245"></a>			},
+<a name="line246"></a>			// This style will be used for clusters with more than 10 markers
+<a name="line247"></a>			10: {
+<a name="line248"></a>				image: '<?php echo base_url()."assets/images/cluster_ring_padded_medium.png"; ?>',
+<a name="line249"></a>				textColor: '#45A841',
+<a name="line250"></a>				fontSize: '20px',
+<a name="line251"></a>				fontWeight: 'bold',
+<a name="line252"></a>				width: 90,
+<a name="line253"></a>				height: 90,
+<a name="line254"></a>				size: 'medium'
+<a name="line255"></a>			},
+<a name="line256"></a>			20: {
+<a name="line257"></a>				image: '<?php echo base_url()."assets/images/cluster_ring_padded_medium.png"; ?>',
+<a name="line258"></a>				textColor: '#45A841',
+<a name="line259"></a>				fontSize: '20px',
+<a name="line260"></a>				fontWeight: 'bold',
+<a name="line261"></a>				width: 90,
+<a name="line262"></a>				height: 90,
+<a name="line263"></a>				size: 'large'
+<a name="line264"></a>			}
+<a name="line265"></a>		};
+<a name="line266"></a>
+<a name="line267"></a>		
+<a name="line268"></a>		/*
+<a name="line269"></a>		*	important: ensures that the event listener that is about to be created doesn't fire every time
+<a name="line270"></a>		*	the map is reloaded
+<a name="line271"></a>		*/
+<a name="line272"></a>		var init = 0;
+<a name="line273"></a>		
+<a name="line274"></a>		/*
+<a name="line275"></a>		*	When the tiles are finished loading, the markers are added. The getBounds function
+<a name="line276"></a>		*	will not work properly unless this is the case. The if condition makes sure that the 
+<a name="line277"></a>		*	event listener doesn't fire every time the map is moved or zoomed.
+<a name="line278"></a>		*/
+<a name="line279"></a>		google.maps.event.addListener(map, 'tilesloaded', function () {
+<a name="line280"></a>			if(init==0){
+<a name="line281"></a>				init =1
+<a name="line282"></a>				// Add center marker
+<a name="line283"></a>				if(data.center!=null)
+<a name="line284"></a>				//	add_marker( null, null, 'Your Location', null, default_location);
+<a name="line285"></a>
+<a name="line286"></a>				// Add gift markers
+<a name="line287"></a>				$.each(data.results, function(key, val){
+<a name="line288"></a>					add_marker(val.location.latitude, val.location.longitude, val.title, giftIcon);
+<a name="line289"></a>				
+<a name="line290"></a>					fluster.initialize();
+<a name="line291"></a>
+<a name="line292"></a>				});		
+<a name="line293"></a>			}
+<a name="line294"></a>		});
+<a name="line295"></a>	}
+<a name="line296"></a>
+<a name="line297"></a>	function add_marker( latitude, longitude, title, icon, location_obj ){
+<a name="line298"></a>		// If this is the center marker (which we have already defined and therefore
+<a name="line299"></a>		// passed the object as the parameter location_obj), then we don't skip the
+<a name="line300"></a>		// LatLng object creation process
+<a name="line301"></a>		if(location_obj!=null){
+<a name="line302"></a>			location = location_obj;
+<a name="line303"></a>		} else {
+<a name="line304"></a>			// marker location
+<a name="line305"></a>			var location = new google.maps.LatLng( latitude, longitude);
+<a name="line306"></a>		}
+<a name="line307"></a>		
+<a name="line308"></a>		// Zooms out until marker is visible
+<a name="line309"></a>		expander( location );
+<a name="line310"></a>		
+<a name="line311"></a>		// Create marker object
+<a name="line312"></a>		var marker = new google.maps.Marker({
+<a name="line313"></a>			position: location, 
+<a name="line314"></a>			map: map, 
+<a name="line315"></a>			icon: icon,
+<a name="line316"></a>			title: title
+<a name="line317"></a>		});
+<a name="line318"></a>		
+<a name="line319"></a>		// If the marker isn't the center, add it to the marker clustering
+<a name="line320"></a>		// queue.
+<a name="line321"></a>		if( location_obj == null ){
+<a name="line322"></a>			fluster.addMarker(marker);
+<a name="line323"></a>		}
+<a name="line324"></a>	}
+<a name="line325"></a>	/*
+<a name="line326"></a>	*	function recursively expands the bounds to include markers,
+<a name="line327"></a>	*	while ensuring that the map is still centered on the user's location.
+<a name="line328"></a>	*/
+<a name="line329"></a>	function expander( location ){
+<a name="line330"></a>		var boundaries = map.getBounds();
+<a name="line331"></a>		var fits = boundaries.contains( location );
+<a name="line332"></a>		if(fits == false){
+<a name="line333"></a>			var zoom = map.getZoom();
+<a name="line334"></a>			map.setZoom(zoom-1);
+<a name="line335"></a>			expander(location);
+<a name="line336"></a>		} else {
+<a name="line337"></a>			return true;
+<a name="line338"></a>		}
+<a name="line339"></a>	}
+<a name="line340"></a>
+<a name="line341"></a>	<?php echo notify(); ?>
+<a name="line342"></a>});
+<a name="line343"></a></script></pre>
+<div class="header">
+<h1>GiftFlow API</h1>
+<ul>
+<li><a href="../../../overview-summary.html">Overview</a></li>
+<li>Package</li><li>Class</li><li>Tree</li><li><a href="../../../overview-files.html">Files</a></li>
+<li><a href="../../../deprecated-list.html">Deprecated</a></li>
+<li><a href="../../../index-all.html">Index</a></li>
+</ul>
+</div>
+
+<div class="small_links">
+<a href="../../../index.html" target="_top">Frames</a>
+<a href="../../../source/views/you/index.php.html" target="_top">No frames</a>
+</div>
+<hr>
+
+<p id="footer">This document was generated by <a href="http://peej.github.com/phpdoctor/">PHPDoctor: The PHP Documentation Creator</a></p>
+
+</body>
+
+</html>

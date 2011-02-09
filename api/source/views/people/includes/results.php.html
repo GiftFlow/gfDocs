@@ -1,0 +1,124 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+
+<html lang="en">
+<head>
+
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
+<meta name="generator" content="PHPDoctor 2RC4 (http://peej.github.com/phpdoctor/)">
+<meta name="when" content="Wed, 09 Feb 2011 20:22:56 +0000">
+
+<link rel="stylesheet" type="text/css" href="../../../../stylesheet.css">
+<link rel="start" href="../../../../overview-summary.html">
+
+<title>views/people/includes/results.php (GiftFlow API)</title>
+
+</head>
+<body id="file" onload="parent.document.title=document.title;">
+
+<div class="header">
+<h1>GiftFlow API</h1>
+<ul>
+<li><a href="../../../../overview-summary.html">Overview</a></li>
+<li>Package</li><li>Class</li><li>Tree</li><li><a href="../../../../overview-files.html">Files</a></li>
+<li><a href="../../../../deprecated-list.html">Deprecated</a></li>
+<li><a href="../../../../index-all.html">Index</a></li>
+</ul>
+</div>
+
+<div class="small_links">
+<a href="../../../../index.html" target="_top">Frames</a>
+<a href="../../../../source/views/people/includes/results.php.html" target="_top">No frames</a>
+</div>
+<hr>
+
+<h1>views/people/includes/results.php</h1>
+<hr>
+
+<a name="line1"></a><pre><?php if(!empty($results)) { ?>
+<a name="line2"></a>
+<a name="line3"></a>	<?php if(!$row) { ?>
+<a name="line4"></a>		<!-- Results List -->
+<a name="line5"></a>		<ul class='results_list users <?php if($mini){ echo "mini"; } ?>'>
+<a name="line6"></a>	<?php } ?>
+<a name="line7"></a>	
+<a name="line8"></a>		<?php foreach($results as $key=>$val) { ?>
+<a name="line9"></a>		
+<a name="line10"></a>			<!-- Result Row -->
+<a name="line11"></a>			<li class='result_row users clearfix'>
+<a name="line12"></a>			
+<a name="line13"></a>				<!-- Image -->
+<a name="line14"></a>				<a class='result_image' href='<?php echo site_url('people/'.$val->id); ?>'>
+<a name="line15"></a>					<img src='<?php echo $val->default_photo->thumb_url; ?>'>
+<a name="line16"></a>				</a>
+<a name="line17"></a>				
+<a name="line18"></a>				<!-- Metadata -->
+<a name="line19"></a>				<div class='result_meta'>
+<a name="line20"></a>				
+<a name="line21"></a>					<!-- Screen Name -->
+<a name="line22"></a>					<a href='<?php echo site_url('people/'.$val->id); ?>' id='title'>
+<a name="line23"></a>						<?php echo $val->screen_name;?>
+<a name="line24"></a>					</a>
+<a name="line25"></a>					
+<a name="line26"></a>					<?php if(in_array("location",$include) && !empty($val->location->city) && !empty($val->location->state)){ ?>
+<a name="line27"></a>					
+<a name="line28"></a>						<!-- Location -->
+<a name="line29"></a>						<span class='metadata location'>
+<a name="line30"></a>							<em>in</em> <?php echo $val->location->city.",".$val->location->state;?>
+<a name="line31"></a>						</span>
+<a name="line32"></a>						
+<a name="line33"></a>					<?php } ?>
+<a name="line34"></a>					
+<a name="line35"></a>					<?php if(in_array("distance",$include) && !empty($val->location->distance)){ ?>
+<a name="line36"></a>						<!-- Distance -->
+<a name="line37"></a>						<span class='metadata distance'>
+<a name="line38"></a>							<em>located</em>
+<a name="line39"></a>							<?php echo round($val->location->distance);?> miles away
+<a name="line40"></a>						</span>
+<a name="line41"></a>					<?php } ?>
+<a name="line42"></a>				</div>
+<a name="line43"></a>				
+<a name="line44"></a>				<!-- Follow / Following Button -->
+<a name="line45"></a>				<?php if(isset($val->am_following) && $val->am_following){ ?>
+<a name="line46"></a>					<div class="css_right">
+<a name="line47"></a>						<span style='margin-right: 8px; margin-top: 1px;' class='css_left ui-icon ui-icon-check'></span>
+<a name="line48"></a>						<span style='font-size: .9em; color: #666;'>Following</span>
+<a name="line49"></a>					</div>
+<a name="line50"></a>				<?php } else { ?>
+<a name="line51"></a>					<a class='follow css_right button' href='#' rel='<?php echo $val->id; ?>'>
+<a name="line52"></a>						Follow
+<a name="line53"></a>					</a>
+<a name="line54"></a>				<?php } ?>
+<a name="line55"></a>				
+<a name="line56"></a>			</li>
+<a name="line57"></a>			<!-- eof Result Row -->
+<a name="line58"></a>			
+<a name="line59"></a>		<?php } ?>
+<a name="line60"></a>		
+<a name="line61"></a>	<?php if(!$row) { ?>
+<a name="line62"></a>		</ul>
+<a name="line63"></a>		<!-- eof Results List -->
+<a name="line64"></a>	<?php } ?>
+<a name="line65"></a>	
+<a name="line66"></a><?php } ?></pre>
+<div class="header">
+<h1>GiftFlow API</h1>
+<ul>
+<li><a href="../../../../overview-summary.html">Overview</a></li>
+<li>Package</li><li>Class</li><li>Tree</li><li><a href="../../../../overview-files.html">Files</a></li>
+<li><a href="../../../../deprecated-list.html">Deprecated</a></li>
+<li><a href="../../../../index-all.html">Index</a></li>
+</ul>
+</div>
+
+<div class="small_links">
+<a href="../../../../index.html" target="_top">Frames</a>
+<a href="../../../../source/views/people/includes/results.php.html" target="_top">No frames</a>
+</div>
+<hr>
+
+<p id="footer">This document was generated by <a href="http://peej.github.com/phpdoctor/">PHPDoctor: The PHP Documentation Creator</a></p>
+
+</body>
+
+</html>

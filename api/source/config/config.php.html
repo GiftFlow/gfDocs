@@ -6,7 +6,7 @@
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 
 <meta name="generator" content="PHPDoctor 2RC4 (http://peej.github.com/phpdoctor/)">
-<meta name="when" content="Sat, 24 Jul 2010 20:47:45 +0000">
+<meta name="when" content="Wed, 09 Feb 2011 20:22:56 +0000">
 
 <link rel="stylesheet" type="text/css" href="../../stylesheet.css">
 <link rel="start" href="../../overview-summary.html">
@@ -79,7 +79,7 @@
 <a name="line42"></a>| 'ORIG_PATH_INFO'	Uses the ORIG_PATH_INFO
 <a name="line43"></a>|
 <a name="line44"></a>*/
-<a name="line45"></a>$config['uri_protocol']	= "AUTO";
+<a name="line45"></a>$config['uri_protocol']	= "PATH_INFO";
 <a name="line46"></a>
 <a name="line47"></a>/*
 <a name="line48"></a>|--------------------------------------------------------------------------
@@ -161,7 +161,7 @@
 <a name="line124"></a>| DO NOT CHANGE THIS UNLESS YOU FULLY UNDERSTAND THE REPERCUSSIONS!!
 <a name="line125"></a>|
 <a name="line126"></a>*/
-<a name="line127"></a>$config['permitted_uri_chars'] = 'a-z 0-9~%.:_\-+|=';
+<a name="line127"></a>$config['permitted_uri_chars'] = 'a-z 0-9~%.:_\-+|=?&';
 <a name="line128"></a>
 <a name="line129"></a>/*
 <a name="line130"></a>|--------------------------------------------------------------------------
@@ -185,186 +185,187 @@
 <a name="line148"></a>| use segment based URLs.
 <a name="line149"></a>|
 <a name="line150"></a>*/
-<a name="line151"></a>$config['enable_query_strings'] = FALSE;
-<a name="line152"></a>$config['controller_trigger'] 	= 'c';
-<a name="line153"></a>$config['function_trigger'] 	= 'm';
-<a name="line154"></a>$config['directory_trigger'] 	= 'd'; // experimental not currently in use
-<a name="line155"></a>
-<a name="line156"></a>/*
-<a name="line157"></a>|--------------------------------------------------------------------------
-<a name="line158"></a>| Error Logging Threshold
-<a name="line159"></a>|--------------------------------------------------------------------------
-<a name="line160"></a>|
-<a name="line161"></a>| If you have enabled error logging, you can set an error threshold to 
-<a name="line162"></a>| determine what gets logged. Threshold options are:
-<a name="line163"></a>| You can enable error logging by setting a threshold over zero. The
-<a name="line164"></a>| threshold determines what gets logged. Threshold options are:
-<a name="line165"></a>|
-<a name="line166"></a>|	0 = Disables logging, Error logging TURNED OFF
-<a name="line167"></a>|	1 = Error Messages (including PHP errors)
-<a name="line168"></a>|	2 = Debug Messages
-<a name="line169"></a>|	3 = Informational Messages
-<a name="line170"></a>|	4 = All Messages
-<a name="line171"></a>|
-<a name="line172"></a>| For a live site you'll usually only enable Errors (1) to be logged otherwise
-<a name="line173"></a>| your log files will fill up very fast.
-<a name="line174"></a>|
-<a name="line175"></a>*/
-<a name="line176"></a>$config['log_threshold'] = 2;
-<a name="line177"></a>
-<a name="line178"></a>/*
-<a name="line179"></a>|--------------------------------------------------------------------------
-<a name="line180"></a>| Error Logging Directory Path
-<a name="line181"></a>|--------------------------------------------------------------------------
-<a name="line182"></a>|
-<a name="line183"></a>| Leave this BLANK unless you would like to set something other than the default
-<a name="line184"></a>| system/logs/ folder.  Use a full server path with trailing slash.
-<a name="line185"></a>|
-<a name="line186"></a>*/
-<a name="line187"></a>$config['log_path'] = '';
-<a name="line188"></a>
-<a name="line189"></a>/*
-<a name="line190"></a>|--------------------------------------------------------------------------
-<a name="line191"></a>| Date Format for Logs
-<a name="line192"></a>|--------------------------------------------------------------------------
-<a name="line193"></a>|
-<a name="line194"></a>| Each item that is logged has an associated date. You can use PHP date
-<a name="line195"></a>| codes to set your own date formatting
-<a name="line196"></a>|
-<a name="line197"></a>*/
-<a name="line198"></a>$config['log_date_format'] = 'Y-m-d H:i:s';
-<a name="line199"></a>
-<a name="line200"></a>/*
-<a name="line201"></a>|--------------------------------------------------------------------------
-<a name="line202"></a>| Cache Directory Path
-<a name="line203"></a>|--------------------------------------------------------------------------
-<a name="line204"></a>|
-<a name="line205"></a>| Leave this BLANK unless you would like to set something other than the default
-<a name="line206"></a>| system/cache/ folder.  Use a full server path with trailing slash.
-<a name="line207"></a>|
-<a name="line208"></a>*/
-<a name="line209"></a>$config['cache_path'] = '';
-<a name="line210"></a>
-<a name="line211"></a>/*
-<a name="line212"></a>|--------------------------------------------------------------------------
-<a name="line213"></a>| Encryption Key
-<a name="line214"></a>|--------------------------------------------------------------------------
-<a name="line215"></a>|
-<a name="line216"></a>| If you use the Encryption class or the Sessions class with encryption
-<a name="line217"></a>| enabled you MUST set an encryption key.  See the user guide for info.
-<a name="line218"></a>|
-<a name="line219"></a>*/
-<a name="line220"></a>$config['encryption_key'] = "";
-<a name="line221"></a>
-<a name="line222"></a>/*
-<a name="line223"></a>|--------------------------------------------------------------------------
-<a name="line224"></a>| Session Variables
-<a name="line225"></a>|--------------------------------------------------------------------------
-<a name="line226"></a>|
-<a name="line227"></a>| 'session_cookie_name' = the name you want for the cookie
-<a name="line228"></a>| 'encrypt_sess_cookie' = TRUE/FALSE (boolean).  Whether to encrypt the cookie
-<a name="line229"></a>| 'session_expiration'  = the number of SECONDS you want the session to last.
-<a name="line230"></a>|  by default sessions last 7200 seconds (two hours).  Set to zero for no expiration.
-<a name="line231"></a>| 'time_to_update'		= how many seconds between CI refreshing Session Information
-<a name="line232"></a>|
-<a name="line233"></a>*/
-<a name="line234"></a>$config['sess_cookie_name']		= 'ci_session';
-<a name="line235"></a>$config['sess_expiration']		= 7200;
-<a name="line236"></a>$config['sess_encrypt_cookie']	= FALSE;
-<a name="line237"></a>$config['sess_use_database']	= TRUE;
-<a name="line238"></a>$config['sess_table_name']		= 'ci_sessions';
-<a name="line239"></a>$config['sess_match_ip']		= FALSE;
-<a name="line240"></a>$config['sess_match_useragent']	= TRUE;
-<a name="line241"></a>$config['sess_time_to_update'] 	= 300;
-<a name="line242"></a>
-<a name="line243"></a>/*
-<a name="line244"></a>|--------------------------------------------------------------------------
-<a name="line245"></a>| Cookie Related Variables
-<a name="line246"></a>|--------------------------------------------------------------------------
-<a name="line247"></a>|
-<a name="line248"></a>| 'cookie_prefix' = Set a prefix if you need to avoid collisions
-<a name="line249"></a>| 'cookie_domain' = Set to .your-domain.com for site-wide cookies
-<a name="line250"></a>| 'cookie_path'   =  Typically will be a forward slash
-<a name="line251"></a>|
-<a name="line252"></a>*/
-<a name="line253"></a>$config['cookie_prefix']	= "";
-<a name="line254"></a>$config['cookie_domain']	= "";
-<a name="line255"></a>$config['cookie_path']		= "/";
-<a name="line256"></a>
-<a name="line257"></a>/*
-<a name="line258"></a>|--------------------------------------------------------------------------
-<a name="line259"></a>| Global XSS Filtering
-<a name="line260"></a>|--------------------------------------------------------------------------
-<a name="line261"></a>|
-<a name="line262"></a>| Determines whether the XSS filter is always active when GET, POST or
-<a name="line263"></a>| COOKIE data is encountered
-<a name="line264"></a>|
-<a name="line265"></a>*/
-<a name="line266"></a>$config['global_xss_filtering'] = FALSE;
-<a name="line267"></a>
-<a name="line268"></a>/*
-<a name="line269"></a>|--------------------------------------------------------------------------
-<a name="line270"></a>| Output Compression
-<a name="line271"></a>|--------------------------------------------------------------------------
-<a name="line272"></a>|
-<a name="line273"></a>| Enables Gzip output compression for faster page loads.  When enabled,
-<a name="line274"></a>| the output class will test whether your server supports Gzip.
-<a name="line275"></a>| Even if it does, however, not all browsers support compression
-<a name="line276"></a>| so enable only if you are reasonably sure your visitors can handle it.
-<a name="line277"></a>|
-<a name="line278"></a>| VERY IMPORTANT:  If you are getting a blank page when compression is enabled it
-<a name="line279"></a>| means you are prematurely outputting something to your browser. It could
-<a name="line280"></a>| even be a line of whitespace at the end of one of your scripts.  For
-<a name="line281"></a>| compression to work, nothing can be sent before the output buffer is called
-<a name="line282"></a>| by the output class.  Do not "echo" any values with compression enabled.
-<a name="line283"></a>|
-<a name="line284"></a>*/
-<a name="line285"></a>$config['compress_output'] = FALSE;
-<a name="line286"></a>
-<a name="line287"></a>/*
-<a name="line288"></a>|--------------------------------------------------------------------------
-<a name="line289"></a>| Master Time Reference
-<a name="line290"></a>|--------------------------------------------------------------------------
-<a name="line291"></a>|
-<a name="line292"></a>| Options are "local" or "gmt".  This pref tells the system whether to use
-<a name="line293"></a>| your server's local time as the master "now" reference, or convert it to
-<a name="line294"></a>| GMT.  See the "date helper" page of the user guide for information
-<a name="line295"></a>| regarding date handling.
-<a name="line296"></a>|
-<a name="line297"></a>*/
-<a name="line298"></a>$config['time_reference'] = 'local';
-<a name="line299"></a>
+<a name="line151"></a>$config['allow_get_array']		= TRUE;
+<a name="line152"></a>$config['enable_query_strings'] = FALSE;
+<a name="line153"></a>$config['controller_trigger']	= 'c';
+<a name="line154"></a>$config['function_trigger']		= 'm';
+<a name="line155"></a>$config['directory_trigger']	= 'd'; // experimental not currently in use
+<a name="line156"></a>
+<a name="line157"></a>/*
+<a name="line158"></a>|--------------------------------------------------------------------------
+<a name="line159"></a>| Error Logging Threshold
+<a name="line160"></a>|--------------------------------------------------------------------------
+<a name="line161"></a>|
+<a name="line162"></a>| If you have enabled error logging, you can set an error threshold to 
+<a name="line163"></a>| determine what gets logged. Threshold options are:
+<a name="line164"></a>| You can enable error logging by setting a threshold over zero. The
+<a name="line165"></a>| threshold determines what gets logged. Threshold options are:
+<a name="line166"></a>|
+<a name="line167"></a>|	0 = Disables logging, Error logging TURNED OFF
+<a name="line168"></a>|	1 = Error Messages (including PHP errors)
+<a name="line169"></a>|	2 = Debug Messages
+<a name="line170"></a>|	3 = Informational Messages
+<a name="line171"></a>|	4 = All Messages
+<a name="line172"></a>|
+<a name="line173"></a>| For a live site you'll usually only enable Errors (1) to be logged otherwise
+<a name="line174"></a>| your log files will fill up very fast.
+<a name="line175"></a>|
+<a name="line176"></a>*/
+<a name="line177"></a>$config['log_threshold'] = 2;
+<a name="line178"></a>
+<a name="line179"></a>/*
+<a name="line180"></a>|--------------------------------------------------------------------------
+<a name="line181"></a>| Error Logging Directory Path
+<a name="line182"></a>|--------------------------------------------------------------------------
+<a name="line183"></a>|
+<a name="line184"></a>| Leave this BLANK unless you would like to set something other than the default
+<a name="line185"></a>| system/logs/ folder.  Use a full server path with trailing slash.
+<a name="line186"></a>|
+<a name="line187"></a>*/
+<a name="line188"></a>$config['log_path'] = '';
+<a name="line189"></a>
+<a name="line190"></a>/*
+<a name="line191"></a>|--------------------------------------------------------------------------
+<a name="line192"></a>| Date Format for Logs
+<a name="line193"></a>|--------------------------------------------------------------------------
+<a name="line194"></a>|
+<a name="line195"></a>| Each item that is logged has an associated date. You can use PHP date
+<a name="line196"></a>| codes to set your own date formatting
+<a name="line197"></a>|
+<a name="line198"></a>*/
+<a name="line199"></a>$config['log_date_format'] = 'Y-m-d H:i:s';
+<a name="line200"></a>
+<a name="line201"></a>/*
+<a name="line202"></a>|--------------------------------------------------------------------------
+<a name="line203"></a>| Cache Directory Path
+<a name="line204"></a>|--------------------------------------------------------------------------
+<a name="line205"></a>|
+<a name="line206"></a>| Leave this BLANK unless you would like to set something other than the default
+<a name="line207"></a>| system/cache/ folder.  Use a full server path with trailing slash.
+<a name="line208"></a>|
+<a name="line209"></a>*/
+<a name="line210"></a>$config['cache_path'] = '';
+<a name="line211"></a>
+<a name="line212"></a>/*
+<a name="line213"></a>|--------------------------------------------------------------------------
+<a name="line214"></a>| Encryption Key
+<a name="line215"></a>|--------------------------------------------------------------------------
+<a name="line216"></a>|
+<a name="line217"></a>| If you use the Encryption class or the Sessions class with encryption
+<a name="line218"></a>| enabled you MUST set an encryption key.  See the user guide for info.
+<a name="line219"></a>|
+<a name="line220"></a>*/
+<a name="line221"></a>$config['encryption_key'] = "";
+<a name="line222"></a>
+<a name="line223"></a>/*
+<a name="line224"></a>|--------------------------------------------------------------------------
+<a name="line225"></a>| Session Variables
+<a name="line226"></a>|--------------------------------------------------------------------------
+<a name="line227"></a>|
+<a name="line228"></a>| 'session_cookie_name' = the name you want for the cookie
+<a name="line229"></a>| 'encrypt_sess_cookie' = TRUE/FALSE (boolean).  Whether to encrypt the cookie
+<a name="line230"></a>| 'session_expiration'  = the number of SECONDS you want the session to last.
+<a name="line231"></a>|  by default sessions last 7200 seconds (two hours).  Set to zero for no expiration.
+<a name="line232"></a>| 'time_to_update'		= how many seconds between CI refreshing Session Information
+<a name="line233"></a>|
+<a name="line234"></a>*/
+<a name="line235"></a>$config['sess_cookie_name']		= 'ci_session';
+<a name="line236"></a>$config['sess_expiration']		= 7200;
+<a name="line237"></a>$config['sess_encrypt_cookie']	= FALSE;
+<a name="line238"></a>$config['sess_use_database']	= TRUE;
+<a name="line239"></a>$config['sess_table_name']		= 'ci_sessions';
+<a name="line240"></a>$config['sess_match_ip']		= FALSE;
+<a name="line241"></a>$config['sess_match_useragent']	= TRUE;
+<a name="line242"></a>$config['sess_time_to_update'] 	= 300;
+<a name="line243"></a>
+<a name="line244"></a>/*
+<a name="line245"></a>|--------------------------------------------------------------------------
+<a name="line246"></a>| Cookie Related Variables
+<a name="line247"></a>|--------------------------------------------------------------------------
+<a name="line248"></a>|
+<a name="line249"></a>| 'cookie_prefix' = Set a prefix if you need to avoid collisions
+<a name="line250"></a>| 'cookie_domain' = Set to .your-domain.com for site-wide cookies
+<a name="line251"></a>| 'cookie_path'   =  Typically will be a forward slash
+<a name="line252"></a>|
+<a name="line253"></a>*/
+<a name="line254"></a>$config['cookie_prefix']	= "";
+<a name="line255"></a>$config['cookie_domain']	= "";
+<a name="line256"></a>$config['cookie_path']		= "/";
+<a name="line257"></a>
+<a name="line258"></a>/*
+<a name="line259"></a>|--------------------------------------------------------------------------
+<a name="line260"></a>| Global XSS Filtering
+<a name="line261"></a>|--------------------------------------------------------------------------
+<a name="line262"></a>|
+<a name="line263"></a>| Determines whether the XSS filter is always active when GET, POST or
+<a name="line264"></a>| COOKIE data is encountered
+<a name="line265"></a>|
+<a name="line266"></a>*/
+<a name="line267"></a>$config['global_xss_filtering'] = FALSE;
+<a name="line268"></a>
+<a name="line269"></a>/*
+<a name="line270"></a>|--------------------------------------------------------------------------
+<a name="line271"></a>| Output Compression
+<a name="line272"></a>|--------------------------------------------------------------------------
+<a name="line273"></a>|
+<a name="line274"></a>| Enables Gzip output compression for faster page loads.  When enabled,
+<a name="line275"></a>| the output class will test whether your server supports Gzip.
+<a name="line276"></a>| Even if it does, however, not all browsers support compression
+<a name="line277"></a>| so enable only if you are reasonably sure your visitors can handle it.
+<a name="line278"></a>|
+<a name="line279"></a>| VERY IMPORTANT:  If you are getting a blank page when compression is enabled it
+<a name="line280"></a>| means you are prematurely outputting something to your browser. It could
+<a name="line281"></a>| even be a line of whitespace at the end of one of your scripts.  For
+<a name="line282"></a>| compression to work, nothing can be sent before the output buffer is called
+<a name="line283"></a>| by the output class.  Do not "echo" any values with compression enabled.
+<a name="line284"></a>|
+<a name="line285"></a>*/
+<a name="line286"></a>$config['compress_output'] = FALSE;
+<a name="line287"></a>
+<a name="line288"></a>/*
+<a name="line289"></a>|--------------------------------------------------------------------------
+<a name="line290"></a>| Master Time Reference
+<a name="line291"></a>|--------------------------------------------------------------------------
+<a name="line292"></a>|
+<a name="line293"></a>| Options are "local" or "gmt".  This pref tells the system whether to use
+<a name="line294"></a>| your server's local time as the master "now" reference, or convert it to
+<a name="line295"></a>| GMT.  See the "date helper" page of the user guide for information
+<a name="line296"></a>| regarding date handling.
+<a name="line297"></a>|
+<a name="line298"></a>*/
+<a name="line299"></a>$config['time_reference'] = 'local';
 <a name="line300"></a>
-<a name="line301"></a>/*
-<a name="line302"></a>|--------------------------------------------------------------------------
-<a name="line303"></a>| Rewrite PHP Short Tags
-<a name="line304"></a>|--------------------------------------------------------------------------
-<a name="line305"></a>|
-<a name="line306"></a>| If your PHP installation does not have short tag support enabled CI
-<a name="line307"></a>| can rewrite the tags on-the-fly, enabling you to utilize that syntax
-<a name="line308"></a>| in your view files.  Options are TRUE or FALSE (boolean)
-<a name="line309"></a>|
-<a name="line310"></a>*/
-<a name="line311"></a>$config['rewrite_short_tags'] = FALSE;
-<a name="line312"></a>
+<a name="line301"></a>
+<a name="line302"></a>/*
+<a name="line303"></a>|--------------------------------------------------------------------------
+<a name="line304"></a>| Rewrite PHP Short Tags
+<a name="line305"></a>|--------------------------------------------------------------------------
+<a name="line306"></a>|
+<a name="line307"></a>| If your PHP installation does not have short tag support enabled CI
+<a name="line308"></a>| can rewrite the tags on-the-fly, enabling you to utilize that syntax
+<a name="line309"></a>| in your view files.  Options are TRUE or FALSE (boolean)
+<a name="line310"></a>|
+<a name="line311"></a>*/
+<a name="line312"></a>$config['rewrite_short_tags'] = FALSE;
 <a name="line313"></a>
-<a name="line314"></a>/*
-<a name="line315"></a>|--------------------------------------------------------------------------
-<a name="line316"></a>| Reverse Proxy IPs
-<a name="line317"></a>|--------------------------------------------------------------------------
-<a name="line318"></a>|
-<a name="line319"></a>| If your server is behind a reverse proxy, you must whitelist the proxy IP
-<a name="line320"></a>| addresses from which CodeIgniter should trust the HTTP_X_FORWARDED_FOR
-<a name="line321"></a>| header in order to properly identify the visitor's IP address.
-<a name="line322"></a>| Comma-delimited, e.g. '10.0.1.200,10.0.1.201'
-<a name="line323"></a>|
-<a name="line324"></a>*/
-<a name="line325"></a>$config['proxy_ips'] = '';
-<a name="line326"></a>
+<a name="line314"></a>
+<a name="line315"></a>/*
+<a name="line316"></a>|--------------------------------------------------------------------------
+<a name="line317"></a>| Reverse Proxy IPs
+<a name="line318"></a>|--------------------------------------------------------------------------
+<a name="line319"></a>|
+<a name="line320"></a>| If your server is behind a reverse proxy, you must whitelist the proxy IP
+<a name="line321"></a>| addresses from which CodeIgniter should trust the HTTP_X_FORWARDED_FOR
+<a name="line322"></a>| header in order to properly identify the visitor's IP address.
+<a name="line323"></a>| Comma-delimited, e.g. '10.0.1.200,10.0.1.201'
+<a name="line324"></a>|
+<a name="line325"></a>*/
+<a name="line326"></a>$config['proxy_ips'] = '';
 <a name="line327"></a>
-<a name="line328"></a>/* End of file config.php */
-<a name="line329"></a>/* Location: ./system/application/config/config.php */
-<a name="line330"></a></pre>
+<a name="line328"></a>
+<a name="line329"></a>/* End of file config.php */
+<a name="line330"></a>/* Location: ./system/application/config/config.php */
+<a name="line331"></a></pre>
 <div class="header">
 <h1>GiftFlow API</h1>
 <ul>

@@ -6,7 +6,7 @@
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 
 <meta name="generator" content="PHPDoctor 2RC4 (http://peej.github.com/phpdoctor/)">
-<meta name="when" content="Sat, 24 Jul 2010 20:47:45 +0000">
+<meta name="when" content="Wed, 09 Feb 2011 20:22:56 +0000">
 
 <link rel="stylesheet" type="text/css" href="../../stylesheet.css">
 <link rel="start" href="../../overview-summary.html">
@@ -48,86 +48,83 @@
 <a name="line11"></a>	// --------------------------------------------------------------------
 <a name="line12"></a>	
 <a name="line13"></a>	var $has_one = array(
-<a name="line14"></a>		
-<a name="line15"></a>		"user",
-<a name="line16"></a>		
-<a name="line17"></a>		"good", 
-<a name="line18"></a>	
-<a name="line19"></a>		"default_user"=>array(	
-<a name="line20"></a>									'class'=>'user', 
-<a name="line21"></a>									'other_field'=>'default_photo'
-<a name="line22"></a>								)
-<a name="line23"></a>	);
-<a name="line24"></a>	
-<a name="line25"></a>	var $has_many = array();
-<a name="line26"></a>	
+<a name="line14"></a>		"user",
+<a name="line15"></a>		"good",
+<a name="line16"></a>		"default_user"=>array(	
+<a name="line17"></a>			"class"=>"user", 
+<a name="line18"></a>			"other_field"=>"default_photo"
+<a name="line19"></a>		)
+<a name="line20"></a>	);
+<a name="line21"></a>	
+<a name="line22"></a>	var $has_many = array();
+<a name="line23"></a>	
+<a name="line24"></a>	// --------------------------------------------------------------------
+<a name="line25"></a>	// Validation
+<a name="line26"></a>	//   Add validation requirements, such as 'required', for your fields.
 <a name="line27"></a>	// --------------------------------------------------------------------
-<a name="line28"></a>	// Validation
-<a name="line29"></a>	//   Add validation requirements, such as 'required', for your fields.
-<a name="line30"></a>	// --------------------------------------------------------------------
-<a name="line31"></a>	
-<a name="line32"></a>	var $validation = array(
-<a name="line33"></a>		'url' => array(
-<a name="line34"></a>			'rules' => array(
-<a name="line35"></a>				'required',
-<a name="line36"></a>				'local_url',
-<a name="line37"></a>				'is_photo'
-<a name="line38"></a>			),
-<a name="line39"></a>			'label' => 'URL'
-<a name="line40"></a>		)
-<a name="line41"></a>	);
-<a name="line42"></a>
-<a name="line43"></a>    	function __construct( $id = NULL )
-<a name="line44"></a>	{
-<a name="line45"></a>		parent::__construct( $id );
-<a name="line46"></a>    	}
-<a name="line47"></a>	
-<a name="line48"></a>	function _local_url( $field )
-<a name="line49"></a>	{
-<a name="line50"></a>		$url = parse_url($this->{$field}, PHP_URL_HOST);
-<a name="line51"></a>		$base = parse_url($this->config->item('base_url'), PHP_URL_HOST);
-<a name="line52"></a>		if( $url != $base)
-<a name="line53"></a>			return false;
-<a name="line54"></a>		else
-<a name="line55"></a>			return true;
-<a name="line56"></a>	}
-<a name="line57"></a>	function _is_photo( $field )
-<a name="line58"></a>	{
-<a name="line59"></a>		$url = $this->{$field};
-<a name="line60"></a>    		$ext = strtolower(pathinfo($url, PATHINFO_EXTENSION));
-<a name="line61"></a>    		if ( $ext == "jpg" || $ext == "png" || $ext == "gif" )
-<a name="line62"></a>    			return true;
-<a name="line63"></a>    		else
-<a name="line64"></a>    			return false;
-<a name="line65"></a>    	}
-<a name="line66"></a>    	function add()
-<a name="line67"></a>    	{
-<a name="line68"></a>		$this->url = $this->config->item('base_url')."uploads/".$this->data['file_name'];
-<a name="line69"></a>    		$this->save();
-<a name="line70"></a>       	$new_path = $this->data['file_path']."/".$this->id.$this->data['file_ext'];
-<a name="line71"></a>    		rename($this->data['file_path']."/".$this->data['file_name'], $new_path);
-<a name="line72"></a>    		$this->url = $this->config->item('base_url')."uploads/".$this->id.$this->data['file_ext'];
-<a name="line73"></a>    		$this->save();
-<a name="line74"></a>        	$this->thumbnail( 150 );
-<a name="line75"></a>
-<a name="line76"></a>    	}
-<a name="line77"></a>    	function thumbnail( $size = 200 )
-<a name="line78"></a>    	{
-<a name="line79"></a>    		$original = $this->data['file_path']."/".$this->id.$this->data['file_ext'];
-<a name="line80"></a>    		$new = $this->data['file_path']."/thumbnails/".$this->id.".jpg";
-<a name="line81"></a>		
-<a name="line82"></a>		$this->load->library('thumb');
-<a name="line83"></a>		$options = array('resizeUp' => true, 'jpegQuality' => 60);
-<a name="line84"></a>		$thumb = Thumb::create($original, $options);
-<a name="line85"></a>		$thumb->adaptiveResize($size, $size);
-<a name="line86"></a>		$thumb->save($new, 'jpg');
-<a name="line87"></a>
-<a name="line88"></a>		$this->thumb_url = $this->config->item('base_url')."uploads/thumbnails/".$this->id.".jpg";
-<a name="line89"></a>		$this->save();
-<a name="line90"></a>    	}
-<a name="line91"></a>}
-<a name="line92"></a>?>
-<a name="line93"></a></pre>
+<a name="line28"></a>	
+<a name="line29"></a>	var $validation = array(
+<a name="line30"></a>		'url' => array(
+<a name="line31"></a>			'rules' => array(
+<a name="line32"></a>				'required',
+<a name="line33"></a>				'local_url',
+<a name="line34"></a>				'is_photo'
+<a name="line35"></a>			),
+<a name="line36"></a>			'label' => 'URL'
+<a name="line37"></a>		)
+<a name="line38"></a>	);
+<a name="line39"></a>
+<a name="line40"></a>    	function __construct( $id = NULL )
+<a name="line41"></a>	{
+<a name="line42"></a>		parent::__construct( $id );
+<a name="line43"></a>    	}
+<a name="line44"></a>	
+<a name="line45"></a>	function _local_url( $field )
+<a name="line46"></a>	{
+<a name="line47"></a>		$url = parse_url($this->{$field}, PHP_URL_HOST);
+<a name="line48"></a>		$base = parse_url($this->config->item('base_url'), PHP_URL_HOST);
+<a name="line49"></a>		if( $url != $base)
+<a name="line50"></a>			return false;
+<a name="line51"></a>		else
+<a name="line52"></a>			return true;
+<a name="line53"></a>	}
+<a name="line54"></a>	function _is_photo( $field )
+<a name="line55"></a>	{
+<a name="line56"></a>		$url = $this->{$field};
+<a name="line57"></a>    		$ext = strtolower(pathinfo($url, PATHINFO_EXTENSION));
+<a name="line58"></a>    		if ( $ext == "jpg" || $ext == "png" || $ext == "gif" )
+<a name="line59"></a>    			return true;
+<a name="line60"></a>    		else
+<a name="line61"></a>    			return false;
+<a name="line62"></a>    	}
+<a name="line63"></a>    	function add()
+<a name="line64"></a>    	{
+<a name="line65"></a>		$this->url = $this->config->item('base_url')."uploads/".$this->data['file_name'];
+<a name="line66"></a>    		$this->save();
+<a name="line67"></a>       	$new_path = $this->data['file_path']."/".$this->id.$this->data['file_ext'];
+<a name="line68"></a>    		rename($this->data['file_path']."/".$this->data['file_name'], $new_path);
+<a name="line69"></a>    		$this->url = $this->config->item('base_url')."uploads/".$this->id.$this->data['file_ext'];
+<a name="line70"></a>    		$this->save();
+<a name="line71"></a>        	$this->thumbnail( 150 );
+<a name="line72"></a>
+<a name="line73"></a>    	}
+<a name="line74"></a>    	function thumbnail( $size = 200 )
+<a name="line75"></a>    	{
+<a name="line76"></a>    		$original = $this->data['file_path']."/".$this->id.$this->data['file_ext'];
+<a name="line77"></a>    		$new = $this->data['file_path']."/thumbnails/".$this->id.".jpg";
+<a name="line78"></a>		
+<a name="line79"></a>		$this->load->library('thumb');
+<a name="line80"></a>		$options = array('resizeUp' => true, 'jpegQuality' => 60);
+<a name="line81"></a>		$thumb = Thumb::create($original, $options);
+<a name="line82"></a>		$thumb->adaptiveResize($size, $size);
+<a name="line83"></a>		$thumb->save($new, 'jpg');
+<a name="line84"></a>
+<a name="line85"></a>		$this->thumb_url = $this->config->item('base_url')."uploads/thumbnails/".$this->id.".jpg";
+<a name="line86"></a>		$this->save();
+<a name="line87"></a>    	}
+<a name="line88"></a>}
+<a name="line89"></a>?>
+<a name="line90"></a></pre>
 <div class="header">
 <h1>GiftFlow API</h1>
 <ul>

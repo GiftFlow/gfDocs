@@ -6,7 +6,7 @@
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 
 <meta name="generator" content="PHPDoctor 2RC4 (http://peej.github.com/phpdoctor/)">
-<meta name="when" content="Sat, 24 Jul 2010 20:47:44 +0000">
+<meta name="when" content="Wed, 09 Feb 2011 20:22:55 +0000">
 
 <link rel="stylesheet" type="text/css" href="../stylesheet.css">
 <link rel="start" href="../overview-summary.html">
@@ -195,11 +195,11 @@ followed by the object itself.</p></div>
 </tr>
 <tr>
 <td class="type"> mixed</td>
-<td class="description"><p class="name"><a href="#has">$has</a></p></td>
+<td class="description"><p class="name"><a href="#has_many">$has_many</a></p></td>
 </tr>
 <tr>
 <td class="type"> mixed</td>
-<td class="description"><p class="name"><a href="#has_many">$has_many</a></p></td>
+<td class="description"><p class="name"><a href="#has_one">$has_one</a></p></td>
 </tr>
 <tr>
 <td class="type"> mixed</td>
@@ -212,6 +212,10 @@ followed by the object itself.</p></div>
 <tr>
 <td class="type"> void</td>
 <td class="description"><p class="name"><a href="#__construct()">__construct</a>(mixed id)</p><p class="description">ConstructorInitialize DataMapper.</p></td>
+</tr>
+<tr>
+<td class="type"> array</td>
+<td class="description"><p class="name"><a href="#get_users()">get_users</a>()</p><p class="description">Return array of related Users</p></td>
 </tr>
 </table>
 
@@ -233,19 +237,19 @@ followed by the object itself.</p></div>
 
 <hr>
 
-<a href="../source/models/thread.php.html#line14" class="location">models/thread.php at line 14</a>
+<a href="../source/models/thread.php.html#line16" class="location">models/thread.php at line 16</a>
 
-<h3 id="has">has</h3>
-<code class="signature">public  mixed <strong>$has</strong> = array()</code>
+<h3 id="has_many">has_many</h3>
+<code class="signature">public  mixed <strong>$has_many</strong> = array(...)</code>
 <div class="details">
 </div>
 
 <hr>
 
-<a href="../source/models/thread.php.html#line16" class="location">models/thread.php at line 16</a>
+<a href="../source/models/thread.php.html#line14" class="location">models/thread.php at line 14</a>
 
-<h3 id="has_many">has_many</h3>
-<code class="signature">public  mixed <strong>$has_many</strong> = array(...)</code>
+<h3 id="has_one">has_one</h3>
+<code class="signature">public  mixed <strong>$has_one</strong> = array()</code>
 <div class="details">
 </div>
 
@@ -271,6 +275,15 @@ followed by the object itself.</p></div>
 <dd>$id if provided, load in the object specified by that ID.</dd>
 </dl>
 </div></div>
+
+
+
+<div class='method'><a href="../source/models/thread.php.html#line33" class="location">models/thread.php at line 33</a>
+
+<h3 id="get_users()">get_users</h3>
+<code class="signature">public  array <strong>get_users</strong>()</code>
+<div class="details">
+<p>Return array of related Users</p></div></div>
 
 
 

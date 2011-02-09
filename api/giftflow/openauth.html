@@ -6,7 +6,7 @@
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 
 <meta name="generator" content="PHPDoctor 2RC4 (http://peej.github.com/phpdoctor/)">
-<meta name="when" content="Sat, 24 Jul 2010 20:47:44 +0000">
+<meta name="when" content="Wed, 09 Feb 2011 20:22:55 +0000">
 
 <link rel="stylesheet" type="text/css" href="../stylesheet.css">
 <link rel="start" href="../overview-summary.html">
@@ -40,19 +40,89 @@ Detail: <a href="#detail_field">Field</a> | <a href="#detail_method">Method</a> 
 <hr>
 
 <div class="qualifiedName">GiftFlow\Openauth</div>
-<a href="../source/controllers/openauth.php.html#line3" class="location">controllers/openauth.php at line 3</a>
+<a href="../source/libraries/openauth.php.html#line11" class="location">libraries/openauth.php at line 11</a>
 
 <h1>Class Openauth</h1>
 
-<pre class="tree">Controller<br> └─<strong>Openauth</strong><br /></pre>
+<pre class="tree"><strong>Openauth</strong><br /></pre>
 
 <hr>
 
-<p class="signature">public  class <strong>Openauth</strong><br>extends Controller
+<p class="signature">public  class <strong>Openauth</strong></p>
 
-</p>
+<div class="comment" id="overview_description"><p>OpenAuth Library</p><p>Handles OpenID and OAuth requests.</p></div>
 
+<dl>
+<dt>Author:</dt>
+<dd>Brandon Jackson</dd>
+</dl>
 <hr>
+
+<table id="summary_field">
+<tr><th colspan="2">Field Summary</th></tr>
+<tr>
+<td class="type"> object</td>
+<td class="description"><p class="name"><a href="#U">$U</a></p><p class="description">Current Logged-in User</p></td>
+</tr>
+<tr>
+<td class="type"> object</td>
+<td class="description"><p class="name"><a href="#alert_demand_take_new">$alert_demand_take_new</a></p><p class="description">CodeIgniter super object</p></td>
+</tr>
+<tr>
+<td class="type"> string</td>
+<td class="description"><p class="name"><a href="#endpoint">$endpoint</a></p><p class="description">OpenID discovery URL</p></td>
+</tr>
+<tr>
+<td class="type"> object</td>
+<td class="description"><p class="name"><a href="#oauth_access_token">$oauth_access_token</a></p><p class="description">OAuthToken Object</p></td>
+</tr>
+<tr>
+<td class="type"> string</td>
+<td class="description"><p class="name"><a href="#oauth_access_token_key">$oauth_access_token_key</a></p><p class="description"></p></td>
+</tr>
+<tr>
+<td class="type"> string</td>
+<td class="description"><p class="name"><a href="#oauth_access_token_secret">$oauth_access_token_secret</a></p><p class="description"></p></td>
+</tr>
+<tr>
+<td class="type"> object</td>
+<td class="description"><p class="name"><a href="#oauth_consumer">$oauth_consumer</a></p><p class="description">OAuthConsumer Object</p></td>
+</tr>
+<tr>
+<td class="type"> string</td>
+<td class="description"><p class="name"><a href="#oauth_consumer_key">$oauth_consumer_key</a></p><p class="description">Consumer key, ie giftflow.org</p></td>
+</tr>
+<tr>
+<td class="type"> string</td>
+<td class="description"><p class="name"><a href="#oauth_consumer_secret">$oauth_consumer_secret</a></p><p class="description">Consumer secret key</p></td>
+</tr>
+<tr>
+<td class="type"> object</td>
+<td class="description"><p class="name"><a href="#oauth_hmac">$oauth_hmac</a></p><p class="description">OAuthSignatureMethod_HMAC_SHA1</p></td>
+</tr>
+<tr>
+<td class="type"> object</td>
+<td class="description"><p class="name"><a href="#oauth_request_token">$oauth_request_token</a></p><p class="description">OAuthToken Object</p></td>
+</tr>
+<tr>
+<td class="type"> string</td>
+<td class="description"><p class="name"><a href="#openid_request_extension">$openid_request_extension</a></p><p class="description">Query string to attach to OpenID request
+Used to store OAuth+OpenID parameters in google hybrid protocol</p></td>
+</tr>
+<tr>
+<td class="type"> string</td>
+<td class="description"><p class="name"><a href="#request_to">$request_to</a></p><p class="description">URL for OpenID providers to redirect back to</p></td>
+</tr>
+<tr>
+<td class="type"> string</td>
+<td class="description"><p class="name"><a href="#service">$service</a></p><p class="description">OpenID / OAuth Provider name
+ie google</p></td>
+</tr>
+<tr>
+<td class="type"> string</td>
+<td class="description"><p class="name"><a href="#store_path">$store_path</a></p><p class="description">Path to the OpenID tmp files</p></td>
+</tr>
+</table>
 
 <table id="summary_method">
 <tr><th colspan="2">Method Summary</th></tr>
@@ -61,25 +131,196 @@ Detail: <a href="#detail_field">Field</a> | <a href="#detail_method">Method</a> 
 <td class="description"><p class="name"><a href="#__construct()">__construct</a>()</p></td>
 </tr>
 <tr>
-<td class="type">private  void</td>
-<td class="description"><p class="name"><a href="#_set_message()">_set_message</a>(mixed msg, str val, str sub)</p></td>
+<td class="type">protected  boolean</td>
+<td class="description"><p class="name"><a href="#_get_current_user()">_get_current_user</a>()</p><p class="description">Loads the current user into $this->U</p></td>
+</tr>
+<tr>
+<td class="type">protected  void</td>
+<td class="description"><p class="name"><a href="#_load_oauth()">_load_oauth</a>()</p><p class="description">Load OAuth library, create required objects</p></td>
+</tr>
+<tr>
+<td class="type">protected  void</td>
+<td class="description"><p class="name"><a href="#_save_google_access_token()">_save_google_access_token</a>()</p><p class="description">Exchange Google Data request token for an Access Token</p></td>
+</tr>
+<tr>
+<td class="type">protected  string</td>
+<td class="description"><p class="name"><a href="#_send_signed_request()">_send_signed_request</a>(string http_method, string url, string auth_header, array postData, boolean returnResponseHeaders)</p><p class="description">Send signed HTTP request</p></td>
+</tr>
+<tr>
+<td class="type">protected  void</td>
+<td class="description"><p class="name"><a href="#_set_access_token()">_set_access_token</a>()</p></td>
+</tr>
+<tr>
+<td class="type"> string</td>
+<td class="description"><p class="name"><a href="#google_contacts()">google_contacts</a>(array params)</p><p class="description">Loads an XML object containing a user's contacts from the Google 
+Contacts API</p></td>
+</tr>
+<tr>
+<td class="type"> array</td>
+<td class="description"><p class="name"><a href="#google_contacts_emails()">google_contacts_emails</a>()</p><p class="description">Gets a list of user's email contacts</p></td>
 </tr>
 <tr>
 <td class="type"> void</td>
-<td class="description"><p class="name"><a href="#check()">check</a>()</p></td>
+<td class="description"><p class="name"><a href="#google_oauth_prep()">google_oauth_prep</a>()</p><p class="description">Preps for a Google Data API request</p></td>
 </tr>
 <tr>
 <td class="type"> void</td>
-<td class="description"><p class="name"><a href="#index()">index</a>()</p></td>
+<td class="description"><p class="name"><a href="#google_oauth_test()">google_oauth_test</a>()</p></td>
+</tr>
+<tr>
+<td class="type"> SimpleXML</td>
+<td class="description"><p class="name"><a href="#google_request()">google_request</a>(string base_uri, array params, boolean return_xml)</p><p class="description">Send data requests to Google</p></td>
 </tr>
 <tr>
 <td class="type"> void</td>
-<td class="description"><p class="name"><a href="#policy()">policy</a>()</p></td>
+<td class="description"><p class="name"><a href="#start()">start</a>(mixed endpoint)</p></td>
+</tr>
+<tr>
+<td class="type"> void</td>
+<td class="description"><p class="name"><a href="#verify()">verify</a>()</p></td>
 </tr>
 </table>
 
+<h2 id="detail_field">Field Detail</h2>
+<a href="../source/libraries/openauth.php.html#line23" class="location">libraries/openauth.php at line 23</a>
+
+<h3 id="U">U</h3>
+<code class="signature">public  object <strong>$U</strong></code>
+<div class="details">
+<p>Current Logged-in User</p></div>
+
+<hr>
+
+<a href="../source/libraries/openauth.php.html#line17" class="location">libraries/openauth.php at line 17</a>
+
+<h3 id="alert_demand_take_new">alert_demand_take_new</h3>
+<code class="signature">public  object <strong>$alert_demand_take_new</strong> = NULL</code>
+<div class="details">
+<p>CodeIgniter super object</p></div>
+
+<hr>
+
+<a href="../source/libraries/openauth.php.html#line41" class="location">libraries/openauth.php at line 41</a>
+
+<h3 id="endpoint">endpoint</h3>
+<code class="signature">public  string <strong>$endpoint</strong></code>
+<div class="details">
+<p>OpenID discovery URL</p></div>
+
+<hr>
+
+<a href="../source/libraries/openauth.php.html#line84" class="location">libraries/openauth.php at line 84</a>
+
+<h3 id="oauth_access_token">oauth_access_token</h3>
+<code class="signature">public  object <strong>$oauth_access_token</strong></code>
+<div class="details">
+<p>OAuthToken Object</p></div>
+
+<hr>
+
+<a href="../source/libraries/openauth.php.html#line89" class="location">libraries/openauth.php at line 89</a>
+
+<h3 id="oauth_access_token_key">oauth_access_token_key</h3>
+<code class="signature">public  string <strong>$oauth_access_token_key</strong></code>
+<div class="details">
+<p></p></div>
+
+<hr>
+
+<a href="../source/libraries/openauth.php.html#line94" class="location">libraries/openauth.php at line 94</a>
+
+<h3 id="oauth_access_token_secret">oauth_access_token_secret</h3>
+<code class="signature">public  string <strong>$oauth_access_token_secret</strong></code>
+<div class="details">
+<p></p></div>
+
+<hr>
+
+<a href="../source/libraries/openauth.php.html#line60" class="location">libraries/openauth.php at line 60</a>
+
+<h3 id="oauth_consumer">oauth_consumer</h3>
+<code class="signature">public  object <strong>$oauth_consumer</strong></code>
+<div class="details">
+<p>OAuthConsumer Object</p></div>
+
+<hr>
+
+<a href="../source/libraries/openauth.php.html#line66" class="location">libraries/openauth.php at line 66</a>
+
+<h3 id="oauth_consumer_key">oauth_consumer_key</h3>
+<code class="signature">public  string <strong>$oauth_consumer_key</strong></code>
+<div class="details">
+<p>Consumer key, ie giftflow.org</p></div>
+
+<hr>
+
+<a href="../source/libraries/openauth.php.html#line72" class="location">libraries/openauth.php at line 72</a>
+
+<h3 id="oauth_consumer_secret">oauth_consumer_secret</h3>
+<code class="signature">public  string <strong>$oauth_consumer_secret</strong></code>
+<div class="details">
+<p>Consumer secret key</p></div>
+
+<hr>
+
+<a href="../source/libraries/openauth.php.html#line54" class="location">libraries/openauth.php at line 54</a>
+
+<h3 id="oauth_hmac">oauth_hmac</h3>
+<code class="signature">public  object <strong>$oauth_hmac</strong></code>
+<div class="details">
+<p>OAuthSignatureMethod_HMAC_SHA1</p></div>
+
+<hr>
+
+<a href="../source/libraries/openauth.php.html#line78" class="location">libraries/openauth.php at line 78</a>
+
+<h3 id="oauth_request_token">oauth_request_token</h3>
+<code class="signature">public  object <strong>$oauth_request_token</strong></code>
+<div class="details">
+<p>OAuthToken Object</p></div>
+
+<hr>
+
+<a href="../source/libraries/openauth.php.html#line48" class="location">libraries/openauth.php at line 48</a>
+
+<h3 id="openid_request_extension">openid_request_extension</h3>
+<code class="signature">public  string <strong>$openid_request_extension</strong></code>
+<div class="details">
+<p>Query string to attach to OpenID request
+Used to store OAuth+OpenID parameters in google hybrid protocol</p></div>
+
+<hr>
+
+<a href="../source/libraries/openauth.php.html#line35" class="location">libraries/openauth.php at line 35</a>
+
+<h3 id="request_to">request_to</h3>
+<code class="signature">public  string <strong>$request_to</strong></code>
+<div class="details">
+<p>URL for OpenID providers to redirect back to</p></div>
+
+<hr>
+
+<a href="../source/libraries/openauth.php.html#line101" class="location">libraries/openauth.php at line 101</a>
+
+<h3 id="service">service</h3>
+<code class="signature">public  string <strong>$service</strong></code>
+<div class="details">
+<p>OpenID / OAuth Provider name
+ie google</p></div>
+
+<hr>
+
+<a href="../source/libraries/openauth.php.html#line29" class="location">libraries/openauth.php at line 29</a>
+
+<h3 id="store_path">store_path</h3>
+<code class="signature">public  string <strong>$store_path</strong></code>
+<div class="details">
+<p>Path to the OpenID tmp files</p></div>
+
+<hr>
+
 <h2 id="detail_method">Method Detail</h2><div class="method_detail">
-<div class='method'><a href="../source/controllers/openauth.php.html#line5" class="location">controllers/openauth.php at line 5</a>
+<div class='method'><a href="../source/libraries/openauth.php.html#line104" class="location">libraries/openauth.php at line 104</a>
 
 <h3 id="__construct()">__construct</h3>
 <code class="signature">public  void <strong>__construct</strong>()</code>
@@ -88,37 +329,134 @@ Detail: <a href="#detail_field">Field</a> | <a href="#detail_method">Method</a> 
 
 
 
-<div class='method'><a href="../source/controllers/openauth.php.html#line64" class="location">controllers/openauth.php at line 64</a>
+<div class='method'><a href="../source/libraries/openauth.php.html#line566" class="location">libraries/openauth.php at line 566</a>
 
-<h3 id="_set_message()">_set_message</h3>
-<code class="signature">private  void <strong>_set_message</strong>(mixed msg, str val, str sub)</code>
+<h3 id="_get_current_user()">_get_current_user</h3>
+<code class="signature">protected  boolean <strong>_get_current_user</strong>()</code>
+<div class="details">
+<p>Loads the current user into $this->U</p></div></div>
+
+
+
+<div class='method'><a href="../source/libraries/openauth.php.html#line511" class="location">libraries/openauth.php at line 511</a>
+
+<h3 id="_load_oauth()">_load_oauth</h3>
+<code class="signature">protected  void <strong>_load_oauth</strong>()</code>
+<div class="details">
+<p>Load OAuth library, create required objects</p></div></div>
+
+
+
+<div class='method'><a href="../source/libraries/openauth.php.html#line526" class="location">libraries/openauth.php at line 526</a>
+
+<h3 id="_save_google_access_token()">_save_google_access_token</h3>
+<code class="signature">protected  void <strong>_save_google_access_token</strong>()</code>
+<div class="details">
+<p>Exchange Google Data request token for an Access Token</p></div></div>
+
+
+
+<div class='method'><a href="../source/libraries/openauth.php.html#line623" class="location">libraries/openauth.php at line 623</a>
+
+<h3 id="_send_signed_request()">_send_signed_request</h3>
+<code class="signature">protected  string <strong>_send_signed_request</strong>(string http_method, string url, string auth_header, array postData, boolean returnResponseHeaders)</code>
+<div class="details">
+<p>Send signed HTTP request</p><dl>
+<dt>Parameters:</dt>
+<dd>http_method - HTTP method to use (ie GET, POST, etc)</dd>
+<dd>url - URL of request</dd>
+<dd>auth_header - Authorization header</dd>
+<dd>postData - Data to include in the body of a POST request</dd>
+<dd>returnResponseHeaders - If true, returns response headers as string</dd>
+</dl>
+</div></div>
+
+
+
+<div class='method'><a href="../source/libraries/openauth.php.html#line592" class="location">libraries/openauth.php at line 592</a>
+
+<h3 id="_set_access_token()">_set_access_token</h3>
+<code class="signature">protected  void <strong>_set_access_token</strong>()</code>
 <div class="details">
 </div></div>
 
 
 
-<div class='method'><a href="../source/controllers/openauth.php.html#line70" class="location">controllers/openauth.php at line 70</a>
+<div class='method'><a href="../source/libraries/openauth.php.html#line387" class="location">libraries/openauth.php at line 387</a>
 
-<h3 id="check()">check</h3>
-<code class="signature">public  void <strong>check</strong>()</code>
+<h3 id="google_contacts()">google_contacts</h3>
+<code class="signature">public  string <strong>google_contacts</strong>(array params)</code>
+<div class="details">
+<p>Loads an XML object containing a user's contacts from the Google 
+Contacts API</p><dl>
+<dt>Parameters:</dt>
+<dd>params - Parameters</dd>
+<dt>Returns:</dt>
+<dd>$xml XML object</dd>
+</dl>
+</div></div>
+
+
+
+<div class='method'><a href="../source/libraries/openauth.php.html#line401" class="location">libraries/openauth.php at line 401</a>
+
+<h3 id="google_contacts_emails()">google_contacts_emails</h3>
+<code class="signature">public  array <strong>google_contacts_emails</strong>()</code>
+<div class="details">
+<p>Gets a list of user's email contacts</p><dl>
+<dt>Returns:</dt>
+<dd>$list</dd>
+</dl>
+</div></div>
+
+
+
+<div class='method'><a href="../source/libraries/openauth.php.html#line488" class="location">libraries/openauth.php at line 488</a>
+
+<h3 id="google_oauth_prep()">google_oauth_prep</h3>
+<code class="signature">public  void <strong>google_oauth_prep</strong>()</code>
+<div class="details">
+<p>Preps for a Google Data API request</p></div></div>
+
+
+
+<div class='method'><a href="../source/libraries/openauth.php.html#line419" class="location">libraries/openauth.php at line 419</a>
+
+<h3 id="google_oauth_test()">google_oauth_test</h3>
+<code class="signature">public  void <strong>google_oauth_test</strong>()</code>
 <div class="details">
 </div></div>
 
 
 
-<div class='method'><a href="../source/controllers/openauth.php.html#line16" class="location">controllers/openauth.php at line 16</a>
+<div class='method'><a href="../source/libraries/openauth.php.html#line442" class="location">libraries/openauth.php at line 442</a>
 
-<h3 id="index()">index</h3>
-<code class="signature">public  void <strong>index</strong>()</code>
+<h3 id="google_request()">google_request</h3>
+<code class="signature">public  SimpleXML <strong>google_request</strong>(string base_uri, array params, boolean return_xml)</code>
+<div class="details">
+<p>Send data requests to Google</p><dl>
+<dt>Parameters:</dt>
+<dd>base_uri - URL of resource to request</dd>
+<dd>params - Parameters to send to API</dd>
+<dd>return_xml - Return results in XML format?</dd>
+</dl>
+</div></div>
+
+
+
+<div class='method'><a href="../source/libraries/openauth.php.html#line136" class="location">libraries/openauth.php at line 136</a>
+
+<h3 id="start()">start</h3>
+<code class="signature">public  void <strong>start</strong>(mixed endpoint)</code>
 <div class="details">
 </div></div>
 
 
 
-<div class='method'><a href="../source/controllers/openauth.php.html#line58" class="location">controllers/openauth.php at line 58</a>
+<div class='method'><a href="../source/libraries/openauth.php.html#line206" class="location">libraries/openauth.php at line 206</a>
 
-<h3 id="policy()">policy</h3>
-<code class="signature">public  void <strong>policy</strong>()</code>
+<h3 id="verify()">verify</h3>
+<code class="signature">public  void <strong>verify</strong>()</code>
 <div class="details">
 </div></div>
 

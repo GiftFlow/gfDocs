@@ -6,7 +6,7 @@
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 
 <meta name="generator" content="PHPDoctor 2RC4 (http://peej.github.com/phpdoctor/)">
-<meta name="when" content="Sat, 24 Jul 2010 20:47:44 +0000">
+<meta name="when" content="Wed, 09 Feb 2011 20:22:55 +0000">
 
 <link rel="stylesheet" type="text/css" href="../stylesheet.css">
 <link rel="start" href="../overview-summary.html">
@@ -216,10 +216,6 @@ Detail: <a href="#detail_field">Field</a> | <a href="#detail_method">Method</a> 
 <td class="description"><p class="name"><a href="#hooks">$hooks</a></p></td>
 </tr>
 <tr>
-<td class="type">protected  object</td>
-<td class="description"><p class="name"><a href="#ignored">$ignored</a></p><p class="description">CodeIgniter super-object</p></td>
-</tr>
-<tr>
 <td class="type"> mixed</td>
 <td class="description"><p class="name"><a href="#inbox">$inbox</a></p></td>
 </tr>
@@ -230,6 +226,10 @@ Detail: <a href="#detail_field">Field</a> | <a href="#detail_method">Method</a> 
 <tr>
 <td class="type"> mixed</td>
 <td class="description"><p class="name"><a href="#mail_sent">$mail_sent</a></p></td>
+</tr>
+<tr>
+<td class="type">protected  object</td>
+<td class="description"><p class="name"><a href="#messages">$messages</a></p><p class="description">CodeIgniter super-object</p></td>
 </tr>
 <tr>
 <td class="type"> mixed</td>
@@ -286,7 +286,8 @@ salt.</p></td>
 </tr>
 <tr>
 <td class="type"> void</td>
-<td class="description"><p class="name"><a href="#deactivate()">deactivate</a>()</p></td>
+<td class="description"><p class="name"><a href="#deactivate()">deactivate</a>()</p><p class="description">Deactivate user, and generate activation to send
+to user for confirmation via email</p></td>
 </tr>
 <tr>
 <td class="type"> void</td>
@@ -298,8 +299,8 @@ This is used each time a user logs in via Facebook. </p></td>
 <td class="description"><p class="name"><a href="#facebook_unlink()">facebook_unlink</a>()</p><p class="description">Remove all of the user's Facebook information</p></td>
 </tr>
 <tr>
-<td class="type"> array</td>
-<td class="description"><p class="name"><a href="#following()">following</a>()</p><p class="description">Gets data about all of the people this user is following</p></td>
+<td class="type"> String</td>
+<td class="description"><p class="name"><a href="#get_gravatar()">get_gravatar</a>(string s, boole img, array atts)</p><p class="description">Get either a Gravatar URL or complete image tag for a specified email address.</p></td>
 </tr>
 <tr>
 <td class="type"> array</td>
@@ -311,19 +312,11 @@ This is used each time a user logs in via Facebook. </p></td>
 </tr>
 <tr>
 <td class="type"> boolean</td>
-<td class="description"><p class="name"><a href="#is_admin()">is_admin</a>()</p><p class="description">Tests to see if user is an admin</p></td>
-</tr>
-<tr>
-<td class="type"> boolean</td>
 <td class="description"><p class="name"><a href="#is_followed_by()">is_followed_by</a>(int id)</p><p class="description">Boolean test that tells whether this user is being followed by a user with the id $id</p></td>
 </tr>
 <tr>
 <td class="type"> boolean</td>
 <td class="description"><p class="name"><a href="#is_following()">is_following</a>(int id)</p><p class="description">Boolean test that tells whether this user is following a certain $id</p></td>
-</tr>
-<tr>
-<td class="type"> void</td>
-<td class="description"><p class="name"><a href="#load_mail()">load_mail</a>(int limit, int offset, str folder)</p></td>
 </tr>
 <tr>
 <td class="type"> boolean</td>
@@ -333,10 +326,6 @@ database entry</p></td>
 <tr>
 <td class="type"> array</td>
 <td class="description"><p class="name"><a href="#needs()">needs</a>()</p><p class="description">Returns the user's current needs</p></td>
-</tr>
-<tr>
-<td class="type"> void</td>
-<td class="description"><p class="name"><a href="#photo()">photo</a>(int id, string param)</p><p class="description">Returns photo url</p></td>
 </tr>
 <tr>
 <td class="type"> boolean</td>
@@ -350,6 +339,10 @@ opposed to being updated. </p></td>
 <tr>
 <td class="type"> boolean</td>
 <td class="description"><p class="name"><a href="#stats()">stats</a>()</p><p class="description">Compiles stats about the user</p></td>
+</tr>
+<tr>
+<td class="type"> void</td>
+<td class="description"><p class="name"><a href="#test()">test</a>()</p></td>
 </tr>
 </table>
 
@@ -425,15 +418,6 @@ opposed to being updated. </p></td>
 
 <hr>
 
-<a href="../source/models/user.php.html#line14" class="location">models/user.php at line 14</a>
-
-<h3 id="ignored">ignored</h3>
-<code class="signature">protected  object <strong>$ignored</strong> = NULL</code>
-<div class="details">
-<p>CodeIgniter super-object</p></div>
-
-<hr>
-
 <a href="../source/models/user.php.html#line18" class="location">models/user.php at line 18</a>
 
 <h3 id="inbox">inbox</h3>
@@ -458,6 +442,15 @@ opposed to being updated. </p></td>
 <code class="signature">public  mixed <strong>$mail_sent</strong></code>
 <div class="details">
 </div>
+
+<hr>
+
+<a href="../source/models/user.php.html#line14" class="location">models/user.php at line 14</a>
+
+<h3 id="messages">messages</h3>
+<code class="signature">protected  object <strong>$messages</strong> = NULL</code>
+<div class="details">
+<p>CodeIgniter super-object</p></div>
 
 <hr>
 
@@ -539,7 +532,7 @@ your fields.</p></div>
 
 
 
-<div class='method'><a href="../source/models/user.php.html#line611" class="location">models/user.php at line 611</a>
+<div class='method'><a href="../source/models/user.php.html#line613" class="location">models/user.php at line 613</a>
 
 <h3 id="_encrypt()">_encrypt</h3>
 <code class="signature">private  void <strong>_encrypt</strong>(string field)</code>
@@ -549,7 +542,7 @@ salt.</p></div></div>
 
 
 
-<div class='method'><a href="../source/models/user.php.html#line165" class="location">models/user.php at line 165</a>
+<div class='method'><a href="../source/models/user.php.html#line177" class="location">models/user.php at line 177</a>
 
 <h3 id="activate()">activate</h3>
 <code class="signature">public  void <strong>activate</strong>()</code>
@@ -558,7 +551,7 @@ salt.</p></div></div>
 
 
 
-<div class='method'><a href="../source/models/user.php.html#line381" class="location">models/user.php at line 381</a>
+<div class='method'><a href="../source/models/user.php.html#line299" class="location">models/user.php at line 299</a>
 
 <h3 id="completed_gifts()">completed_gifts</h3>
 <code class="signature">public  array <strong>completed_gifts</strong>()</code>
@@ -567,7 +560,7 @@ salt.</p></div></div>
 
 
 
-<div class='method'><a href="../source/models/user.php.html#line397" class="location">models/user.php at line 397</a>
+<div class='method'><a href="../source/models/user.php.html#line313" class="location">models/user.php at line 313</a>
 
 <h3 id="completed_requests()">completed_requests</h3>
 <code class="signature">public  array <strong>completed_requests</strong>()</code>
@@ -576,24 +569,26 @@ salt.</p></div></div>
 
 
 
-<div class='method'><a href="../source/models/user.php.html#line155" class="location">models/user.php at line 155</a>
+<div class='method'><a href="../source/models/user.php.html#line167" class="location">models/user.php at line 167</a>
 
 <h3 id="deactivate()">deactivate</h3>
 <code class="signature">public  void <strong>deactivate</strong>()</code>
 <div class="details">
-</div></div>
+<p>Deactivate user, and generate activation to send
+to user for confirmation via email</p></div></div>
 
 
 
-<div class='method'><a href="../source/models/user.php.html#line479" class="location">models/user.php at line 479</a>
+<div class='method'><a href="../source/models/user.php.html#line400" class="location">models/user.php at line 400</a>
 
 <h3 id="facebook_sync()">facebook_sync</h3>
 <code class="signature">public  void <strong>facebook_sync</strong>(JSON data)</code>
 <div class="details">
 <p>Facebook sync function
-This is used each time a user logs in via Facebook. It checks to see if there are any empty 
-fields in the database which could be populated by Facebook data. If so, it fills them. It does
-not, however, overwrite any database data with Facebook data.</p><dl>
+This is used each time a user logs in via Facebook. It checks to see if 
+there are any empty fields in the database which could be populated by 
+Facebook data. If so, it fills them. It does not, however, overwrite any 
+database data with Facebook data.</p><dl>
 <dt>Parameters:</dt>
 <dd>data - JSON object returned by Facebook</dd>
 </dl>
@@ -601,7 +596,7 @@ not, however, overwrite any database data with Facebook data.</p><dl>
 
 
 
-<div class='method'><a href="../source/models/user.php.html#line567" class="location">models/user.php at line 567</a>
+<div class='method'><a href="../source/models/user.php.html#line535" class="location">models/user.php at line 535</a>
 
 <h3 id="facebook_unlink()">facebook_unlink</h3>
 <code class="signature">public  boolean <strong>facebook_unlink</strong>()</code>
@@ -610,16 +605,26 @@ not, however, overwrite any database data with Facebook data.</p><dl>
 
 
 
-<div class='method'><a href="../source/models/user.php.html#line432" class="location">models/user.php at line 432</a>
+<div class='method'><a href="../source/models/user.php.html#line584" class="location">models/user.php at line 584</a>
 
-<h3 id="following()">following</h3>
-<code class="signature">public  array <strong>following</strong>()</code>
+<h3 id="get_gravatar()">get_gravatar</h3>
+<code class="signature">public  String <strong>get_gravatar</strong>(string s, boole img, array atts)</code>
 <div class="details">
-<p>Gets data about all of the people this user is following</p></div></div>
+<p>Get either a Gravatar URL or complete image tag for a specified email address.</p><dl>
+<dt>Parameters:</dt>
+<dd>s - Size in pixels, defaults to 80px [ 1 - 512 ]</dd>
+<dd>img - True to return a complete IMG tag False for just the URL</dd>
+<dd>atts - Optional, additional key/value attributes to include in the IMG tag</dd>
+<dt>Returns:</dt>
+<dd>containing either just a URL or a complete image tag</dd>
+<dt>Source:</dt>
+<dd>http://gravatar.com/site/implement/images/php/</dd>
+</dl>
+</div></div>
 
 
 
-<div class='method'><a href="../source/models/user.php.html#line288" class="location">models/user.php at line 288</a>
+<div class='method'><a href="../source/models/user.php.html#line189" class="location">models/user.php at line 189</a>
 
 <h3 id="gifts()">gifts</h3>
 <code class="signature">public  array <strong>gifts</strong>()</code>
@@ -628,7 +633,7 @@ not, however, overwrite any database data with Facebook data.</p><dl>
 
 
 
-<div class='method'><a href="../source/models/user.php.html#line591" class="location">models/user.php at line 591</a>
+<div class='method'><a href="../source/models/user.php.html#line561" class="location">models/user.php at line 561</a>
 
 <h3 id="google_unlink()">google_unlink</h3>
 <code class="signature">public  boolean <strong>google_unlink</strong>()</code>
@@ -637,16 +642,7 @@ not, however, overwrite any database data with Facebook data.</p><dl>
 
 
 
-<div class='method'><a href="../source/models/user.php.html#line178" class="location">models/user.php at line 178</a>
-
-<h3 id="is_admin()">is_admin</h3>
-<code class="signature">public  boolean <strong>is_admin</strong>()</code>
-<div class="details">
-<p>Tests to see if user is an admin</p></div></div>
-
-
-
-<div class='method'><a href="../source/models/user.php.html#line460" class="location">models/user.php at line 460</a>
+<div class='method'><a href="../source/models/user.php.html#line374" class="location">models/user.php at line 374</a>
 
 <h3 id="is_followed_by()">is_followed_by</h3>
 <code class="signature">public  boolean <strong>is_followed_by</strong>(int id)</code>
@@ -659,7 +655,7 @@ not, however, overwrite any database data with Facebook data.</p><dl>
 
 
 
-<div class='method'><a href="../source/models/user.php.html#line444" class="location">models/user.php at line 444</a>
+<div class='method'><a href="../source/models/user.php.html#line352" class="location">models/user.php at line 352</a>
 
 <h3 id="is_following()">is_following</h3>
 <code class="signature">public  boolean <strong>is_following</strong>(int id)</code>
@@ -672,16 +668,7 @@ not, however, overwrite any database data with Facebook data.</p><dl>
 
 
 
-<div class='method'><a href="../source/models/user.php.html#line191" class="location">models/user.php at line 191</a>
-
-<h3 id="load_mail()">load_mail</h3>
-<code class="signature">public  void <strong>load_mail</strong>(int limit, int offset, str folder)</code>
-<div class="details">
-</div></div>
-
-
-
-<div class='method'><a href="../source/models/user.php.html#line71" class="location">models/user.php at line 71</a>
+<div class='method'><a href="../source/models/user.php.html#line79" class="location">models/user.php at line 79</a>
 
 <h3 id="login()">login</h3>
 <code class="signature">public  boolean <strong>login</strong>()</code>
@@ -691,7 +678,7 @@ database entry</p></div></div>
 
 
 
-<div class='method'><a href="../source/models/user.php.html#line321" class="location">models/user.php at line 321</a>
+<div class='method'><a href="../source/models/user.php.html#line225" class="location">models/user.php at line 225</a>
 
 <h3 id="needs()">needs</h3>
 <code class="signature">public  array <strong>needs</strong>()</code>
@@ -700,16 +687,7 @@ database entry</p></div></div>
 
 
 
-<div class='method'><a href="../source/models/user.php.html#line225" class="location">models/user.php at line 225</a>
-
-<h3 id="photo()">photo</h3>
-<code class="signature">public  void <strong>photo</strong>(int id, string param)</code>
-<div class="details">
-<p>Returns photo url</p></div></div>
-
-
-
-<div class='method'><a href="../source/models/user.php.html#line122" class="location">models/user.php at line 122</a>
+<div class='method'><a href="../source/models/user.php.html#line130" class="location">models/user.php at line 130</a>
 
 <h3 id="register()">register</h3>
 <code class="signature">public  boolean <strong>register</strong>()</code>
@@ -719,7 +697,7 @@ opposed to being updated. This is so we can call the user_new hook.</p></div></d
 
 
 
-<div class='method'><a href="../source/models/user.php.html#line359" class="location">models/user.php at line 359</a>
+<div class='method'><a href="../source/models/user.php.html#line277" class="location">models/user.php at line 277</a>
 
 <h3 id="requests()">requests</h3>
 <code class="signature">public  array <strong>requests</strong>()</code>
@@ -728,12 +706,21 @@ opposed to being updated. This is so we can call the user_new hook.</p></div></d
 
 
 
-<div class='method'><a href="../source/models/user.php.html#line413" class="location">models/user.php at line 413</a>
+<div class='method'><a href="../source/models/user.php.html#line328" class="location">models/user.php at line 328</a>
 
 <h3 id="stats()">stats</h3>
 <code class="signature">public  boolean <strong>stats</strong>()</code>
 <div class="details">
 <p>Compiles stats about the user</p></div></div>
+
+
+
+<div class='method'><a href="../source/models/user.php.html#line67" class="location">models/user.php at line 67</a>
+
+<h3 id="test()">test</h3>
+<code class="signature">public  void <strong>test</strong>()</code>
+<div class="details">
+</div></div>
 
 
 

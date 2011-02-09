@@ -6,7 +6,7 @@
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 
 <meta name="generator" content="PHPDoctor 2RC4 (http://peej.github.com/phpdoctor/)">
-<meta name="when" content="Sat, 24 Jul 2010 20:47:45 +0000">
+<meta name="when" content="Wed, 09 Feb 2011 20:22:56 +0000">
 
 <link rel="stylesheet" type="text/css" href="../../stylesheet.css">
 <link rel="start" href="../../overview-summary.html">
@@ -37,158 +37,118 @@
 
 <a name="line1"></a><pre><?php
 <a name="line2"></a>
-<a name="line3"></a>class Ajax extends Controller {
+<a name="line3"></a>class Ajax extends CI_Controller {
 <a name="line4"></a>
 <a name="line5"></a>	var $data;
 <a name="line6"></a>	var $G;
 <a name="line7"></a>	
 <a name="line8"></a>	function __construct()
 <a name="line9"></a>	{
-<a name="line10"></a>		parent::Controller();
+<a name="line10"></a>		parent::__construct();
 <a name="line11"></a>		$this->util->config();
 <a name="line12"></a>		$this->data = $this->util->parse_globals();
 <a name="line13"></a>		$this->load->library('finder');
 <a name="line14"></a>	}
 <a name="line15"></a>	
 <a name="line16"></a>	/**
-<a name="line17"></a>	*	Encodes a string into a usable location
-<a name="line18"></a>	*	@param string $address
-<a name="line19"></a>	*	@param boolean $JSON
-<a name="line20"></a>	*/
-<a name="line21"></a>	public function geocode( $address = NULL, $JSON = FALSE )
-<a name="line22"></a>	{
-<a name="line23"></a>		if(empty($address)) $address = $_POST['where'];
-<a name="line24"></a>		$L = new Location();
-<a name="line25"></a>		if(!$L->geocode( $address )) return false;
-<a name="line26"></a>		$coordinates = (object) array ( "latitude"=>$L->latitude, "longitude"=> $L->longitude, "address"=>$L->address);
-<a name="line27"></a>		
-<a name="line28"></a>		if($JSON)
-<a name="line29"></a>		{
-<a name="line30"></a>			echo json_encode($coordinates);
-<a name="line31"></a>		}
-<a name="line32"></a>		else 
-<a name="line33"></a>		{
-<a name="line34"></a>			return $coordinates;
-<a name="line35"></a>		}
-<a name="line36"></a>	}
-<a name="line37"></a>	
-<a name="line38"></a>	
-<a name="line39"></a>	/**
-<a name="line40"></a>	*	Get search results of any type good
-<a name="line41"></a>	*	Used extensively in the find section. Usually the client makes AJAX calls to one of the
-<a name="line42"></a>	*	methods that extend this one, such as gift_search(). The search results are generated
-<a name="line43"></a>	*	using Finder::geosearch().
-<a name="line44"></a>	*
-<a name="line45"></a>	* 	@param string $good_type
-<a name="line46"></a>	*	@return JSON
-<a name="line47"></a>	*/
-<a name="line48"></a>	public function search( $good_type = 'gift' )
-<a name="line49"></a>	{
-<a name="line50"></a>		$this->finder->search_keyword = $_POST['what'];
-<a name="line51"></a>		$this->finder->location_keyword = $_POST['where'];
-<a name="line52"></a>		if(!empty($_POST['address']))
-<a name="line53"></a>			$this->finder->address = $_POST['address'];
-<a name="line54"></a>		$this->finder->latitude = $_POST['latitude'];
-<a name="line55"></a>		$this->finder->longitude = $_POST['longitude'];
-<a name="line56"></a>		$this->finder->format = "JSON";
-<a name="line57"></a>		$this->finder->limit(50);
-<a name="line58"></a>		$this->finder->where_type( $good_type );
-<a name="line59"></a>		echo $this->finder->geosearch();
-<a name="line60"></a>	}
-<a name="line61"></a>	
-<a name="line62"></a>	/**
-<a name="line63"></a>	*	Get search results, limited to gifts
-<a name="line64"></a>	*
-<a name="line65"></a>	*	@return JSON
-<a name="line66"></a>	*/
-<a name="line67"></a>	public function gift_search()
-<a name="line68"></a>	{
-<a name="line69"></a>		$this->search( 'gift' );
-<a name="line70"></a>	}
-<a name="line71"></a>	
-<a name="line72"></a>	/**
-<a name="line73"></a>	*	Get search results, limited to needs
-<a name="line74"></a>	*
-<a name="line75"></a>	*	@return JSON
-<a name="line76"></a>	*/
-<a name="line77"></a>	public function need_search()
-<a name="line78"></a>	{
-<a name="line79"></a>		$this->search( 'need' );
-<a name="line80"></a>	}
-<a name="line81"></a>	
-<a name="line82"></a>
-<a name="line83"></a>	/**
-<a name="line84"></a>	*	Get a GiftFlow based on provided source
-<a name="line85"></a>	*
-<a name="line86"></a>	*	The source variable should be passed along as part of either the POST or GET data.
-<a name="line87"></a>	*	this variable will directly determine which method the Finder library uses to get the 
-<a name="line88"></a>	*	search results. Example values of the source variable are followers (default), nearby_gifts
-<a name="line89"></a>	*	and latest_gifts.
-<a name="line90"></a>	*
-<a name="line91"></a>	*	@return JSON
-<a name="line92"></a>	*/
-<a name="line93"></a>	public function giftflow()
-<a name="line94"></a>	{
-<a name="line95"></a>		$this->load->library('finder');
-<a name="line96"></a>		!empty($_REQUEST['source']) ? $source = $_REQUEST['source'] : $source = 'followers';
-<a name="line97"></a>		!empty($_REQUEST['offset']) ? $offset = $_REQUEST['offset'] : $offset = 0;
-<a name="line98"></a>		!empty($_REQUEST['limit']) ? $limit = $_REQUEST['limit'] : $limit = 10;
-<a name="line99"></a>		echo $this->finder->limit($limit, $offset)->giftflow();
-<a name="line100"></a>	}
-<a name="line101"></a>	
-<a name="line102"></a>	public function tags()
-<a name="line103"></a>	{
-<a name="line104"></a>		$term = $_POST['term'];
-<a name="line105"></a>		$this->db  ->select('Concat(t.name," (",COUNT(g.id), ")") AS label, t.name AS value ', FALSE)
-<a name="line106"></a>					->from('goods_tags AS gt ')
-<a name="line107"></a>					->join('goods AS g ', 'g.id=gt.good_id')
-<a name="line108"></a>					->join('tags AS t ', 't.id = gt.tag_id')
-<a name="line109"></a>					//->where('g.winning_transaction_id',0)
-<a name="line110"></a>					->where('g.type','gift')
-<a name="line111"></a>					->like('t.name',$term)
-<a name="line112"></a>					->group_by('t.name')
-<a name="line113"></a>					->order_by('COUNT(g.id)', 'desc');
-<a name="line114"></a>		//$this->db->select('t.id AS tag_id');
-<a name="line115"></a>		$search = $this->db->get();
-<a name="line116"></a>		echo json_encode($search->result_array());
-<a name="line117"></a>	}
-<a name="line118"></a>	public function upload_photo()
-<a name="line119"></a>	{
-<a name="line120"></a>		// set config details
-<a name="line121"></a>		$config['upload_path'] = './uploads/';
-<a name="line122"></a>		$config['allowed_types'] = 'gif|jpg|png';
-<a name="line123"></a>		$config['max_size']	= '500';
-<a name="line124"></a>		$config['max_width']  = '1024';
-<a name="line125"></a>		$config['max_height']  = '768';
-<a name="line126"></a>		$config['file_name'] = uniqid();
-<a name="line127"></a>		
-<a name="line128"></a>		// load library
-<a name="line129"></a>		$this->load->library('upload', $config);
-<a name="line130"></a>	
-<a name="line131"></a>		if ( ! $this->upload->do_upload())
-<a name="line132"></a>		{
-<a name="line133"></a>			echo $this->upload->display_errors();
-<a name="line134"></a>		}	
-<a name="line135"></a>		else
-<a name="line136"></a>		{
-<a name="line137"></a>			$this->data['upload'] = $this->upload->data();
-<a name="line138"></a>			$G = new Good($_POST['id']);
-<a name="line139"></a>			$P = new Photo();
-<a name="line140"></a>			$P->data = $this->data['upload'];
-<a name="line141"></a>			$P->add();
-<a name="line142"></a>			$G->save_photo($P);
-<a name="line143"></a>			$G->save_default_photo($P);
-<a name="line144"></a>			echo "<li><img src='".$P->thumb_url."' /></li>";
-<a name="line145"></a>		}
-<a name="line146"></a>	}
-<a name="line147"></a>	
-<a name="line148"></a>	public function delete_photo()
-<a name="line149"></a>	{
-<a name="line150"></a>		$P = new Photo($_POST['id']);
-<a name="line151"></a>		$P->delete();
-<a name="line152"></a>		echo json_encode(array("result"=>"true", "id"=>$_POST['id']));
-<a name="line153"></a>	}
-<a name="line154"></a>}</pre>
+<a name="line17"></a>	*	Encodes a string into a usable location, then either returns
+<a name="line18"></a>	*	the object or outputs the result as JSON
+<a name="line19"></a>	*
+<a name="line20"></a>	*	@param string $address
+<a name="line21"></a>	*	@param boolean $JSON
+<a name="line22"></a>	*/
+<a name="line23"></a>	public function geocode( $address = NULL, $JSON = FALSE )
+<a name="line24"></a>	{
+<a name="line25"></a>		if(empty($address))
+<a name="line26"></a>		{
+<a name="line27"></a>			$address = $_POST['where'];
+<a name="line28"></a>		}
+<a name="line29"></a>		
+<a name="line30"></a>		$this->load->library('geo');				
+<a name="line31"></a>		$result = $this->geo->geocode($address);
+<a name="line32"></a>				
+<a name="line33"></a>		if($JSON)
+<a name="line34"></a>		{
+<a name="line35"></a>			echo json_encode($result);
+<a name="line36"></a>		}
+<a name="line37"></a>		else 
+<a name="line38"></a>		{
+<a name="line39"></a>			return $result;
+<a name="line40"></a>		}
+<a name="line41"></a>	}
+<a name="line42"></a>
+<a name="line43"></a>	/**
+<a name="line44"></a>	*	Get a GiftFlow based on provided source
+<a name="line45"></a>	*
+<a name="line46"></a>	*	The source variable should be passed along as part of either the 
+<a name="line47"></a>	*	POST or GET data. this variable will directly determine which method 
+<a name="line48"></a>	*	the Finder library uses to get the search results. Example values of 
+<a name="line49"></a>	*	the source variable are followers (default), nearby_gifts and 
+<a name="line50"></a>	*	latest_gifts.
+<a name="line51"></a>	*
+<a name="line52"></a>	*	@return JSON
+<a name="line53"></a>	*/
+<a name="line54"></a>	public function giftflow()
+<a name="line55"></a>	{
+<a name="line56"></a>		$this->load->library('finder');
+<a name="line57"></a>		!empty($_REQUEST['source']) ? $source = $_REQUEST['source'] : $source = 'followers';
+<a name="line58"></a>		!empty($_REQUEST['offset']) ? $offset = $_REQUEST['offset'] : $offset = 0;
+<a name="line59"></a>		!empty($_REQUEST['limit']) ? $limit = $_REQUEST['limit'] : $limit = 10;
+<a name="line60"></a>		echo $this->finder->limit($limit, $offset)->giftflow();
+<a name="line61"></a>	}
+<a name="line62"></a>	
+<a name="line63"></a>	public function tags()
+<a name="line64"></a>	{
+<a name="line65"></a>		$term = $_POST['term'];
+<a name="line66"></a>		$this->db  ->select('Concat(t.name," (",COUNT(g.id), ")") AS label, t.name AS value ', FALSE)
+<a name="line67"></a>					->from('goods_tags AS gt ')
+<a name="line68"></a>					->join('goods AS g ', 'g.id=gt.good_id')
+<a name="line69"></a>					->join('tags AS t ', 't.id = gt.tag_id')
+<a name="line70"></a>					->where('g.type','gift')
+<a name="line71"></a>					->like('t.name',$term)
+<a name="line72"></a>					->group_by('t.name')
+<a name="line73"></a>					->order_by('COUNT(g.id)', 'desc');
+<a name="line74"></a>		//$this->db->select('t.id AS tag_id');
+<a name="line75"></a>		$search = $this->db->get();
+<a name="line76"></a>		echo json_encode($search->result_array());
+<a name="line77"></a>	}
+<a name="line78"></a>	public function upload_photo()
+<a name="line79"></a>	{
+<a name="line80"></a>		// set config details
+<a name="line81"></a>		$config['upload_path'] = './uploads/';
+<a name="line82"></a>		$config['allowed_types'] = 'gif|jpg|png';
+<a name="line83"></a>		$config['max_size']	= '500';
+<a name="line84"></a>		$config['max_width']  = '1024';
+<a name="line85"></a>		$config['max_height']  = '768';
+<a name="line86"></a>		$config['file_name'] = uniqid();
+<a name="line87"></a>		
+<a name="line88"></a>		// load library
+<a name="line89"></a>		$this->load->library('upload', $config);
+<a name="line90"></a>	
+<a name="line91"></a>		if ( ! $this->upload->do_upload())
+<a name="line92"></a>		{
+<a name="line93"></a>			echo $this->upload->display_errors();
+<a name="line94"></a>		}	
+<a name="line95"></a>		else
+<a name="line96"></a>		{
+<a name="line97"></a>			$this->data['upload'] = $this->upload->data();
+<a name="line98"></a>			$G = new Good($_POST['id']);
+<a name="line99"></a>			$P = new Photo();
+<a name="line100"></a>			$P->data = $this->data['upload'];
+<a name="line101"></a>			$P->add();
+<a name="line102"></a>			$G->save_photo($P);
+<a name="line103"></a>			$G->save_default_photo($P);
+<a name="line104"></a>			echo "<li><img src='".$P->thumb_url."' /></li>";
+<a name="line105"></a>		}
+<a name="line106"></a>	}
+<a name="line107"></a>	
+<a name="line108"></a>	public function delete_photo()
+<a name="line109"></a>	{
+<a name="line110"></a>		$P = new Photo($_POST['id']);
+<a name="line111"></a>		$P->delete();
+<a name="line112"></a>		echo json_encode(array("result"=>"true", "id"=>$_POST['id']));
+<a name="line113"></a>	}
+<a name="line114"></a>}</pre>
 <div class="header">
 <h1>GiftFlow API</h1>
 <ul>

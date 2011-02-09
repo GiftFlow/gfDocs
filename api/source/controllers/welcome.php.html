@@ -6,7 +6,7 @@
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 
 <meta name="generator" content="PHPDoctor 2RC4 (http://peej.github.com/phpdoctor/)">
-<meta name="when" content="Fri, 18 Jun 2010 15:58:03 +0000">
+<meta name="when" content="Wed, 09 Feb 2011 20:22:56 +0000">
 
 <link rel="stylesheet" type="text/css" href="../../stylesheet.css">
 <link rel="start" href="../../overview-summary.html">
@@ -36,90 +36,40 @@
 <hr>
 
 <a name="line1"></a><pre><?php
-<a name="line2"></a>
-<a name="line3"></a>class Welcome extends Controller {
-<a name="line4"></a>
-<a name="line5"></a>	function Welcome()
-<a name="line6"></a>	{
-<a name="line7"></a>		parent::Controller();	
-<a name="line8"></a>		$this->output->enable_profiler(TRUE);
-<a name="line9"></a>	}
-<a name="line10"></a>	
-<a name="line11"></a>	function index()
-<a name="line12"></a>	{
-<a name="line13"></a>		$this->load->view('welcome_message');
-<a name="line14"></a>	}
-<a name="line15"></a>	function mapper()
-<a name="line16"></a>	{
-<a name="line17"></a>		$m = new Location();
-<a name="line18"></a>		$m->address = "6780 Bethesda Arno Rd.";
-<a name="line19"></a>		$m->city = "Thompsons Station";
-<a name="line20"></a>		$m->state = "TN";
-<a name="line21"></a>		$m->user_id = 10;
-<a name="line22"></a>		$m->save();
-<a name="line23"></a>		$u = new User(10);
-<a name="line24"></a>		$u->default_location_id = $m->id;
-<a name="line25"></a>		$u->save();
-<a name="line26"></a>		echo $u->default_location_id;
-<a name="line27"></a>	}
-<a name="line28"></a>	function geocode()
-<a name="line29"></a>	{
-<a name="line30"></a>		
-<a name="line31"></a>		$this->benchmark->mark('maps_start');
-<a name="line32"></a>		$this->load->model('location');
-<a name="line33"></a>		$this->benchmark->mark('maps_end');
-<a name="line34"></a>		$this->benchmark->elapsed_time('maps_start', 'maps_end');
-<a name="line35"></a>		//echo $this->maps->geocode("6780 Bethesda Arno Rd Thompons Station TN");
-<a name="line36"></a>		//echo $this->maps->geocode("493 College St. New Haven CT");
-<a name="line37"></a>		$this->benchmark->mark('distance_start');
-<a name="line38"></a>		for($i=0; $i<1000; $i++)
-<a name="line39"></a>		{
-<a name="line40"></a>			$this->location->distance("35.7747489","-86.7738427","41.3111214","-72.9257758","m");
-<a name="line41"></a>		}
-<a name="line42"></a>		$this->benchmark->mark('distance_end');
-<a name="line43"></a>		$this->benchmark->elapsed_time('distance_start', 'distance_end');
-<a name="line44"></a>		
-<a name="line45"></a>		$this->benchmark->mark('comparison_start');
-<a name="line46"></a>		$one = new Location();
-<a name="line47"></a>		$one->latitude = "35.7747489";
-<a name="line48"></a>		$one->longitude = "-86.7738427";
-<a name="line49"></a>		
-<a name="line50"></a>		for($i=0; $i<1000; $i++)
-<a name="line51"></a>		{
-<a name="line52"></a>			$two = new Location();
-<a name="line53"></a>			$two->latitude = "41.3111214";
-<a name="line54"></a>			$two->longitude = "-72.9257758";
-<a name="line55"></a>			$two->compare($one);
-<a name="line56"></a>			unset($two);
-<a name="line57"></a>		}
-<a name="line58"></a>		
-<a name="line59"></a>		unset($one);
-<a name="line60"></a>		$this->benchmark->mark('comparison_end');
-<a name="line61"></a>		$this->benchmark->elapsed_time('comparison_start', 'comparison_end');
-<a name="line62"></a>		
-<a name="line63"></a>		$this->benchmark->mark('mixed_start');
-<a name="line64"></a>		$one = new Location();
-<a name="line65"></a>		$one->latitude = "35.7747489";
-<a name="line66"></a>		$one->longitude = "-86.7738427";
-<a name="line67"></a>		
-<a name="line68"></a>		for($i=0; $i<1000; $i++)
-<a name="line69"></a>		{
-<a name="line70"></a>			$this->location->distance($one->latitude, $one->longitude,"41.3111214","-72.9257758","m");
-<a name="line71"></a>		}
-<a name="line72"></a>		
-<a name="line73"></a>		
-<a name="line74"></a>		$this->benchmark->mark('mixed_end');
-<a name="line75"></a>		$this->benchmark->elapsed_time('mixed_start', 'mixed_end');
-<a name="line76"></a>	}
-<a name="line77"></a>	//
-<a name="line78"></a>	// 1mil: 66,890.974 / s
-<a name="line79"></a>	// 2mil: 66,270.589 / s
-<a name="line80"></a>	// 500k:  67,346.416 / s
-<a name="line81"></a>}
-<a name="line82"></a>
-<a name="line83"></a>/* End of file welcome.php */
-<a name="line84"></a>/* Location: ./system/application/controllers/welcome.php */
-<a name="line85"></a>?></pre>
+<a name="line2"></a>/**
+<a name="line3"></a>*	Welcome section
+<a name="line4"></a>*	These pages are used when a user first creates their account.
+<a name="line5"></a>*/
+<a name="line6"></a>class Welcome extends CI_Controller {
+<a name="line7"></a>
+<a name="line8"></a>	var $data;
+<a name="line9"></a>	
+<a name="line10"></a>	var $U;
+<a name="line11"></a>	
+<a name="line12"></a>	function __construct()
+<a name="line13"></a>	{
+<a name="line14"></a>		parent::__construct();
+<a name="line15"></a>		$this->util->config();
+<a name="line16"></a>		$this->data = $this->util->parse_globals();
+<a name="line17"></a>		$this->hooks =& load_class('Hooks');
+<a name="line18"></a>	}
+<a name="line19"></a>
+<a name="line20"></a>	/**
+<a name="line21"></a>	*	Loaded after user first creates GiftFlow account
+<a name="line22"></a>	*/
+<a name="line23"></a>	function index()
+<a name="line24"></a>	{
+<a name="line25"></a>		redirect('');
+<a name="line26"></a>	}
+<a name="line27"></a>	
+<a name="line28"></a>	/**
+<a name="line29"></a>	*	Loaded after user successfully creates account using Facebook
+<a name="line30"></a>	*/
+<a name="line31"></a>	function facebook()
+<a name="line32"></a>	{
+<a name="line33"></a>		redirect('');
+<a name="line34"></a>	}
+<a name="line35"></a>}</pre>
 <div class="header">
 <h1>GiftFlow API</h1>
 <ul>

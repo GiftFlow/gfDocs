@@ -6,7 +6,7 @@
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 
 <meta name="generator" content="PHPDoctor 2RC4 (http://peej.github.com/phpdoctor/)">
-<meta name="when" content="Sat, 24 Jul 2010 20:47:45 +0000">
+<meta name="when" content="Wed, 09 Feb 2011 20:22:56 +0000">
 
 <link rel="stylesheet" type="text/css" href="../../stylesheet.css">
 <link rel="start" href="../../overview-summary.html">
@@ -85,17 +85,24 @@
 <a name="line48"></a>$route['login/(:num)'] = 'member/login/$1';
 <a name="line49"></a>$route['register'] = 'member/register';
 <a name="line50"></a>$route['logout'] = 'member/logout';
-<a name="line51"></a>$route['profile/:num'] = 'member/profile';
-<a name="line52"></a>$route['profile'] = 'member/profile';
-<a name="line53"></a>$route['gift/:any'] = "gift/view";
-<a name="line54"></a>$route['need/:any'] = 'gift/view';
-<a name="line55"></a>$route['tag/:any'] = "tags_listing/view";
-<a name="line56"></a>$route['find/:any'] = 'find/search';
-<a name="line57"></a>$route['lost'] = 'root/lost';
-<a name="line58"></a>$route['restricted'] = 'root/restricted';
-<a name="line59"></a>/* End of file routes.php */
-<a name="line60"></a>/* Location: ./system/application/config/routes.php */
-<a name="line61"></a></pre>
+<a name="line51"></a>$route['profile/:num'] = 'people/profile';
+<a name="line52"></a>$route['profile'] = 'people/profile';
+<a name="line53"></a>$route['people/:num'] = 'people/profile';
+<a name="line54"></a>$route['people/:num/:any'] = 'people/profile/$1';
+<a name="line55"></a>$route['you/profile'] = 'people/profile';
+<a name="line56"></a>$route['gifts/:num'] = "goods/view";
+<a name="line57"></a>$route['gifts/:num/:any'] = "goods/view";
+<a name="line58"></a>$route['needs/:num'] = 'goods/view';
+<a name="line59"></a>$route['needs/:num/:any'] = 'goods/view';
+<a name="line60"></a>$route['tag/(:any)'] = "find/index/$1";
+<a name="line61"></a>$route['find/(:any)'] = 'find/index/$1';
+<a name="line62"></a>$route['find/(:any)/(:any)'] = 'find/index/$1/$2';
+<a name="line63"></a>$route['lost'] = 'root/lost';
+<a name="line64"></a>$route['restricted'] = 'root/restricted';
+<a name="line65"></a>$route['donate'] = 'about/donate';
+<a name="line66"></a>/* End of file routes.php */
+<a name="line67"></a>/* Location: ./system/application/config/routes.php */
+<a name="line68"></a></pre>
 <div class="header">
 <h1>GiftFlow API</h1>
 <ul>

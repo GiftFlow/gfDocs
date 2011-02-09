@@ -6,7 +6,7 @@
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 
 <meta name="generator" content="PHPDoctor 2RC4 (http://peej.github.com/phpdoctor/)">
-<meta name="when" content="Sat, 24 Jul 2010 20:47:45 +0000">
+<meta name="when" content="Wed, 09 Feb 2011 20:22:56 +0000">
 
 <link rel="stylesheet" type="text/css" href="../../../stylesheet.css">
 <link rel="start" href="../../../overview-summary.html">
@@ -51,14 +51,14 @@
 <a name="line14"></a><?php foreach($users as $key=>$val) { ?>
 <a name="line15"></a><tr>
 <a name="line16"></a>	<td><?php echo $val->id; ?></td>
-<a name="line17"></a>	<td><?php echo "<a href=". site_url('profile/'.urlencode($val->id)) .">" . $val->screen_name . "</a>"; ?></td>
+<a name="line17"></a>	<td><?php echo "<a href=". site_url('people/'.urlencode($val->id)) .">" . $val->screen_name . "</a>"; ?></td>
 <a name="line18"></a>	<td><?php echo $val->email; ?></td>
 <a name="line19"></a>	<td><?php if(!empty($val->facebook_id)) echo "Yes"; else echo "No"; ?></td>
 <a name="line20"></a>	<td><?php echo date("m/d/Y", strtotime($val->created)); ?></td>
 <a name="line21"></a>	<td><?php echo $val->good_count; ?></td>
 <a name="line22"></a>	<td>
 <a name="line23"></a>		<?php
-<a name="line24"></a>			if (!$val->is_admin()) {
+<a name="line24"></a>			if ($val->role != "admin") {
 <a name="line25"></a>				echo "<a onclick=\"toggleUserDisable( $val->id , '$val->screen_name', '$val->status')\">";
 <a name="line26"></a>				if($val->status == "disabled")
 <a name="line27"></a>					echo "enable";
@@ -73,7 +73,7 @@
 <a name="line36"></a><?php } ?>
 <a name="line37"></a></tbody>
 <a name="line38"></a></table>
-<a name="line39"></a><script>
+<a name="line39"></a><script type='text/javascript'>
 <a name="line40"></a>$(function(){
 <a name="line41"></a>	$("#users").dataTable( {
 <a name="line42"></a>		"bJQueryUI": true,

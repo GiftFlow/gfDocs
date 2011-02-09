@@ -6,7 +6,7 @@
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 
 <meta name="generator" content="PHPDoctor 2RC4 (http://peej.github.com/phpdoctor/)">
-<meta name="when" content="Sat, 24 Jul 2010 20:47:45 +0000">
+<meta name="when" content="Wed, 09 Feb 2011 20:22:56 +0000">
 
 <link rel="stylesheet" type="text/css" href="../../../stylesheet.css">
 <link rel="start" href="../../../overview-summary.html">
@@ -37,67 +37,57 @@
 
 <a name="line1"></a><pre><div id='login'>
 <a name="line2"></a><?php echo heading('login', array('id'=>'login_heading')); ?>
-<a name="line3"></a><?php echo form_open('member/login'); ?>
+<a name="line3"></a>
 <a name="line4"></a><table>
 <a name="line5"></a><tr>
 <a name="line6"></a>	<td><h3>Use Facebook</h3></td>
-<a name="line7"></a>	<td style='padding: 0px 70px; vertical-align: bottom;'><span>or</span></td>
-<a name="line8"></a>	<td><h3>Use Your GiftFlow Account</h3></td>
-<a name="line9"></a></tr>
-<a name="line10"></a><tr>
-<a name="line11"></a>	<td style='vertical-align: top;'>
-<a name="line12"></a>		<p>
-<a name="line13"></a>			<a style='border-bottom: 0px;' href='<?php echo site_url('member/facebook'); ?>'>
-<a name="line14"></a>				<img src='<?php echo base_url(); ?>assets/images/facebook_login.png' style='border: 0;' />
-<a name="line15"></a>			</a>
-<a name="line16"></a>		</p>
-<a name="line17"></a>	</td>
-<a name="line18"></a>	<td></td>
-<a name="line19"></a>	<td style='width: 500px;'>
-<a name="line20"></a>	<!--
-<a name="line21"></a><center><h3>Use Facebook</h3>
-<a name="line22"></a>
-<a name="line23"></a><h3>Use Your Email</h3>
-<a name="line24"></a><p>No account? <a href="<?php echo site_url('register'); ?>">Click here to sign up.</a></p></center>
-<a name="line25"></a><table class='form ui-widget' id='login_table'>
-<a name="line26"></a>    <tbody>
-<a name="line27"></a>        <tr>
-<a name="line28"></a>            <td><label>Email Address</label></td>
-<a name="line29"></a>            <td class='field'><?php echo form_input('email', set_value('email')); ?></td>
-<a name="line30"></a>        </tr>
-<a name="line31"></a>        <tr>
-<a name="line32"></a>            <td><label>Password</label></td>
-<a name="line33"></a>            <td class='field'><?php echo form_password('password'); ?></td>
-<a name="line34"></a>        </tr>
-<a name="line35"></a>    </tbody>
-<a name="line36"></a> </table>
-<a name="line37"></a>
-<a name="line38"></a>
-<a name="line39"></a><input type='hidden' name='redirect' value="<?php if(!empty($redirect)) echo $redirect; ?>" />
-<a name="line40"></a><input type='submit' class='submit' value="Login Now" />
-<a name="line41"></a>
-<a name="line42"></a>-->
-<a name="line43"></a><p style='font-size: .8em;'>No account? <a href="<?php echo site_url('register'); ?>">Click here to sign up.</a></p>
-<a name="line44"></a><p><label>Email Address</label>
-<a name="line45"></a><p><?php echo form_input('email', set_value('email')); ?>
-<a name="line46"></a>           <p><label>Password</label>
-<a name="line47"></a>            <p><?php echo form_password('password'); ?>
-<a name="line48"></a>            <p>
-<a name="line49"></a><input type='hidden' name='redirect' value="<?php if(!empty($redirect)) echo $redirect; ?>" />
-<a name="line50"></a><input type='submit' class='submit' value="Login Now" />
-<a name="line51"></a>
-<a name="line52"></a>
-<a name="line53"></a><?php echo form_close(''); ?>
-<a name="line54"></a></td>
-<a name="line55"></a></tr>
-<a name="line56"></a></table>
-<a name="line57"></a></div>
-<a name="line58"></a><script>
-<a name="line59"></a>$(function(){
-<a name="line60"></a>	$("input:submit").button();
-<a name="line61"></a>	<?php echo notify(); ?>
-<a name="line62"></a>});
-<a name="line63"></a></script></pre>
+<a name="line7"></a>	<td style='padding: 0px 70px; vertical-align: bottom;'>
+<a name="line8"></a>		<span>or</span>
+<a name="line9"></a>	</td>
+<a name="line10"></a>	<td>
+<a name="line11"></a>		<h3>Use Your GiftFlow Account</h3>
+<a name="line12"></a>	</td>
+<a name="line13"></a></tr>
+<a name="line14"></a><tr>
+<a name="line15"></a>	<td style='vertical-align: top;'>
+<a name="line16"></a>		<p>
+<a name="line17"></a>			<a style='border-bottom: 0px;' href='<?php echo site_url('member/facebook'); ?>'>
+<a name="line18"></a>				<img src='<?php echo base_url(); ?>assets/images/facebook_login.png' style='border: 0;' />
+<a name="line19"></a>			</a>
+<a name="line20"></a>		</p>
+<a name="line21"></a>	</td>
+<a name="line22"></a>	<td></td>
+<a name="line23"></a>	<td style='width: 500px;'>
+<a name="line24"></a>		<p style='font-size: .8em;'>No account? <a href="<?php echo site_url('register'); ?>">Click here to sign up.</a></p>
+<a name="line25"></a>		<form action="<?php echo site_url('member/login'); ?>" method="post">
+<a name="line26"></a>			<p>
+<a name="line27"></a>				<label>Email Address</label>
+<a name="line28"></a>			</p>
+<a name="line29"></a>			<p>
+<a name="line30"></a>				<input type="text" name='email' class='required email' id='email' value='' />
+<a name="line31"></a>			</p>
+<a name="line32"></a>			<p>
+<a name="line33"></a>				<label>Password</label>
+<a name="line34"></a>			</p>
+<a name="line35"></a>			<p>
+<a name="line36"></a>				<input type='password' name='password' class='required' id='password' value='' />
+<a name="line37"></a>			</p>
+<a name="line38"></a>			<p>
+<a name="line39"></a>				<input type='hidden' name='redirect' value="<?php if(!empty($redirect)) echo $redirect; ?>" />
+<a name="line40"></a>				<input type='submit' class='submit' value="Login Now" />
+<a name="line41"></a>			</p>
+<a name="line42"></a>		</form>
+<a name="line43"></a>	</td>
+<a name="line44"></a></tr>
+<a name="line45"></a></table>
+<a name="line46"></a></div>
+<a name="line47"></a><script type='text/javascript'>
+<a name="line48"></a>$(function(){
+<a name="line49"></a>	$("input:submit").button();
+<a name="line50"></a>	$("#login form").validate();
+<a name="line51"></a>	<?php echo notify(); ?>
+<a name="line52"></a>});
+<a name="line53"></a></script></pre>
 <div class="header">
 <h1>GiftFlow API</h1>
 <ul>

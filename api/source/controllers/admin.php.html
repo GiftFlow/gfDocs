@@ -6,7 +6,7 @@
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 
 <meta name="generator" content="PHPDoctor 2RC4 (http://peej.github.com/phpdoctor/)">
-<meta name="when" content="Sat, 24 Jul 2010 20:47:45 +0000">
+<meta name="when" content="Wed, 09 Feb 2011 20:22:56 +0000">
 
 <link rel="stylesheet" type="text/css" href="../../stylesheet.css">
 <link rel="start" href="../../overview-summary.html">
@@ -37,241 +37,252 @@
 
 <a name="line1"></a><pre><?php
 <a name="line2"></a>
-<a name="line3"></a>class Admin extends Controller {
+<a name="line3"></a>class Admin extends CI_Controller {
 <a name="line4"></a>
 <a name="line5"></a>	var $data;
 <a name="line6"></a>	var $u;
 <a name="line7"></a>	
-<a name="line8"></a>	function Admin()
+<a name="line8"></a>	function __construct()
 <a name="line9"></a>	{
-<a name="line10"></a>		parent::Controller();
+<a name="line10"></a>		parent::__construct();
 <a name="line11"></a>		$this->util->config();
 <a name="line12"></a>		$this->data = $this->util->parse_globals();
 <a name="line13"></a>		$this->auth->bouncer(100);
-<a name="line14"></a>	}
-<a name="line15"></a>
-<a name="line16"></a>	function index()
-<a name="line17"></a>	{
-<a name="line18"></a>		$this->data['title'] = "Admin | Control Panel";
-<a name="line19"></a>		
-<a name="line20"></a>		if( !empty($this->session->userdata['profiler']) && $this->session->userdata['profiler'] == TRUE )
-<a name="line21"></a>			$this->data['profiler'] = TRUE;
-<a name="line22"></a>		else
-<a name="line23"></a>			$this->data['profiler'] = FALSE;
-<a name="line24"></a>		
-<a name="line25"></a>		$this->load->view('header', $this->data);
-<a name="line26"></a>		$this->load->view('admin/index', $this->data);
-<a name="line27"></a>		$this->load->view('admin/admin_javascript', $this->data);
-<a name="line28"></a>		$this->load->view('footer', $this->data);
-<a name="line29"></a>	}
-<a name="line30"></a>	function users()
-<a name="line31"></a>	{
-<a name="line32"></a>		$this->data['title'] = "Admin | Users";
-<a name="line33"></a>		$U = new User();
-<a name="line34"></a>		$U->include_related_count('good');
-<a name="line35"></a>		$U->order_by('created', 'asc')->get();
-<a name="line36"></a>		$this->data['users'] = $U->all;
-<a name="line37"></a>		$this->data['js'][] = 'jquery-datatables.php';
-<a name="line38"></a>		$this->data['css'][] = 'datatables.css';
-<a name="line39"></a>		$this->data['css'][] = 'impromptu.css';
-<a name="line40"></a>		$this->load->view('header', $this->data);
-<a name="line41"></a>		$this->load->view('admin/index', $this->data);
-<a name="line42"></a>		$this->load->view('admin/users', $this->data);
-<a name="line43"></a>		$this->load->view('admin/admin_javascript', $this->data);
-<a name="line44"></a>		$this->load->view('footer', $this->data);
-<a name="line45"></a>	}
-<a name="line46"></a>	function tags()
-<a name="line47"></a>	{
-<a name="line48"></a>		$this->data['title'] = "Admin | Tags";
-<a name="line49"></a>		$T = new Tag();
-<a name="line50"></a>		$T->include_related_count('good');
-<a name="line51"></a>		$T->order_by('name', 'asc')->get();
-<a name="line52"></a>		$this->data['tags'] = $T->all;
-<a name="line53"></a>		$this->data['js'][] = 'jquery-datatables.php';
-<a name="line54"></a>		$this->data['css'][] = 'datatables.css';
-<a name="line55"></a>		$this->data['css'][] = 'impromptu.css';
-<a name="line56"></a>		$this->load->view('header', $this->data);
-<a name="line57"></a>		$this->load->view('admin/index', $this->data);
-<a name="line58"></a>		$this->load->view('admin/tags', $this->data);
-<a name="line59"></a>		$this->load->view('admin/admin_javascript', $this->data);
-<a name="line60"></a>		$this->load->view('footer', $this->data);
-<a name="line61"></a>	}
-<a name="line62"></a>	function gifts()
-<a name="line63"></a>	{
-<a name="line64"></a>		$this->_goods("Admin | Gifts", "gift");
-<a name="line65"></a>	}
-<a name="line66"></a>	function needs()
-<a name="line67"></a>	{
-<a name="line68"></a>		$this->_goods("Admin | Needs", "need");
-<a name="line69"></a>	}
-<a name="line70"></a>
-<a name="line71"></a>	function _goods($title, $type) {
-<a name="line72"></a>		$this->data['title'] = $title;
-<a name="line73"></a>		$G = new Good();
-<a name="line74"></a>		$G->include_related('location', array('address'), FALSE, TRUE); // resolve the address
-<a name="line75"></a>		$G->include_related_count("tag"); // include the tag count
-<a name="line76"></a>		$G->order_by('type', 'asc')->where('type', $type)->get();
-<a name="line77"></a>		$this->data['goods'] = $G->all;
-<a name="line78"></a>		$this->data['js'][] = 'jquery-datatables.php';
-<a name="line79"></a>		$this->data['css'][] = 'datatables.css';
-<a name="line80"></a>		$this->load->view('header', $this->data);
-<a name="line81"></a>		$this->load->view('admin/index', $this->data);
-<a name="line82"></a>		$this->load->view('admin/goods', $this->data);
-<a name="line83"></a>		$this->load->view('admin/admin_javascript', $this->data);
-<a name="line84"></a>		$this->load->view('footer', $this->data);
-<a name="line85"></a>	}
-<a name="line86"></a>
-<a name="line87"></a>	function alert_templates()
-<a name="line88"></a>	{
-<a name="line89"></a>		$this->data['title'] = "Admin | Alert Templates";
-<a name="line90"></a>		$template = new Term();
-<a name="line91"></a>		$template->where('type','alert_template')->order_by('id', 'asc')->get();
-<a name="line92"></a>		$this->data['tags'] = $template->all;
-<a name="line93"></a>		$this->data['js'][] = 'jquery-datatables.php';
-<a name="line94"></a>		$this->data['css'][] = 'datatables.css';
-<a name="line95"></a>		$this->data['css'][] = 'impromptu.css';
-<a name="line96"></a>		$this->load->view('header', $this->data);
-<a name="line97"></a>		$this->load->view('admin/index', $this->data);
-<a name="line98"></a>		$this->load->view('admin/alert_templates', $this->data);
-<a name="line99"></a>		$this->load->view('admin/admin_javascript', $this->data);
-<a name="line100"></a>		$this->load->view('footer', $this->data);
-<a name="line101"></a>
-<a name="line102"></a>	}
-<a name="line103"></a>	// AJAX functions
-<a name="line104"></a>
-<a name="line105"></a>	function delete_alert_template()
-<a name="line106"></a>	{
-<a name="line107"></a>		// Parse $_POST array
-<a name="line108"></a>		$template_id = $_POST['template_id'];
-<a name="line109"></a>
-<a name="line110"></a>		// Load alert template object
-<a name="line111"></a>		$template = new Term( $template_id );
-<a name="line112"></a>		
-<a name="line113"></a>		// Then delete it
-<a name="line114"></a>		$template->delete();
-<a name="line115"></a>	}
-<a name="line116"></a>
-<a name="line117"></a>    function is_term_unique()
-<a name="line118"></a>    {
-<a name="line119"></a>      $template_id = intval($_POST['template_id']);
-<a name="line120"></a>      $template_name = $_POST['template_name'];
-<a name="line121"></a>      //$template_name = "haloqq";
-<a name="line122"></a>      $template = new Term();
-<a name="line123"></a>      $isset_template = $template->where('name', $template_name)->get();
-<a name="line124"></a>
-<a name="line125"></a>      echo ($isset_template->name == "" ||
-<a name="line126"></a>           ($template_id != 0 && $template_id == $isset_template->id)) ? "true" : "false";
-<a name="line127"></a>
-<a name="line128"></a>    }
-<a name="line129"></a>
-<a name="line130"></a>	function edit_alert_template()
-<a name="line131"></a>	{
-<a name="line132"></a>		// Parse $_POST array
-<a name="line133"></a>		$template_id = $_POST['template_id'];
-<a name="line134"></a>		$template_name = $_POST['template_name'];
-<a name="line135"></a>		$template_subject = $_POST['template_subject'];
-<a name="line136"></a>		$template_body = $_POST['template_body'];
-<a name="line137"></a>		
-<a name="line138"></a>		// New alert template object
-<a name="line139"></a>		$template = new Term($template_id);
-<a name="line140"></a>		$template->where('id', $template_id)->update('name', $template_name);
-<a name="line141"></a>		$template->where('id', $template_id)->update('subject', $template_subject);
-<a name="line142"></a>		$template->where('id', $template_id)->update('body', $template_body);
-<a name="line143"></a>	}
-<a name="line144"></a>
-<a name="line145"></a>	function add_alert_template()
-<a name="line146"></a>	{
-<a name="line147"></a>		// Parse $_POST array
-<a name="line148"></a>		$template_name = $_POST['template_name'];
-<a name="line149"></a>		$template_body = $_POST['template_body'];
-<a name="line150"></a>		$template_subject = $_POST['template_subject'];
-<a name="line151"></a>
-<a name="line152"></a>		// New alert template object
-<a name="line153"></a>		$template = new Term();
-<a name="line154"></a>		$template->name = $template_name;
-<a name="line155"></a>		$template->body = $template_body;
-<a name="line156"></a>		$template->subject = $template_subject;
-<a name="line157"></a>		$template->save();
-<a name="line158"></a>	}
-<a name="line159"></a>
-<a name="line160"></a>	function toggleUserDisable($userId) {
-<a name="line161"></a>		$U = new User();
-<a name="line162"></a>		$U->where('id', $userId)->get();
-<a name="line163"></a>
-<a name="line164"></a>		if ($U->status == "disabled")
-<a name="line165"></a>			$U->where('id', $userId)->update('status', 'active');
-<a name="line166"></a>		else
-<a name="line167"></a>			$U->where('id', $userId)->update('status', 'disabled');
-<a name="line168"></a>	}
+<a name="line14"></a>		$this->load->library('datamapper');
+<a name="line15"></a>		if( !empty($this->session->userdata['profiler']) && $this->session->userdata['profiler'] == TRUE )
+<a name="line16"></a>		{
+<a name="line17"></a>			$this->data['profiler'] = TRUE;
+<a name="line18"></a>		}
+<a name="line19"></a>		else
+<a name="line20"></a>		{
+<a name="line21"></a>			$this->data['profiler'] = FALSE;
+<a name="line22"></a>		}
+<a name="line23"></a>	}
+<a name="line24"></a>
+<a name="line25"></a>	function index()
+<a name="line26"></a>	{
+<a name="line27"></a>		$this->data['title'] = "Admin | Control Panel";		
+<a name="line28"></a>		$this->load->view('header', $this->data);
+<a name="line29"></a>		$this->load->view('admin/index', $this->data);
+<a name="line30"></a>		$this->load->view('admin/admin_javascript', $this->data);
+<a name="line31"></a>		$this->load->view('footer', $this->data);
+<a name="line32"></a>	}
+<a name="line33"></a>	function users()
+<a name="line34"></a>	{
+<a name="line35"></a>		$this->data['title'] = "Admin | Users";
+<a name="line36"></a>		$U = new User();
+<a name="line37"></a>		$U->include_related_count('good');
+<a name="line38"></a>		$U->order_by('created', 'asc')->get();
+<a name="line39"></a>		$this->data['users'] = $U->all;
+<a name="line40"></a>		$this->data['js'][] = 'jquery-datatables.php';
+<a name="line41"></a>		$this->data['css'][] = 'datatables.css';
+<a name="line42"></a>		$this->data['css'][] = 'impromptu.css';
+<a name="line43"></a>		$this->load->view('header', $this->data);
+<a name="line44"></a>		$this->load->view('admin/index', $this->data);
+<a name="line45"></a>		$this->load->view('admin/users', $this->data);
+<a name="line46"></a>		$this->load->view('admin/admin_javascript', $this->data);
+<a name="line47"></a>		$this->load->view('footer', $this->data);
+<a name="line48"></a>	}
+<a name="line49"></a>	function tags()
+<a name="line50"></a>	{
+<a name="line51"></a>		$this->data['title'] = "Admin | Tags";
+<a name="line52"></a>		$T = new Tag();
+<a name="line53"></a>		$T->include_related_count('good');
+<a name="line54"></a>		$T->order_by('name', 'asc')->get();
+<a name="line55"></a>		$this->data['tags'] = $T->all;
+<a name="line56"></a>		$this->data['js'][] = 'jquery-datatables.php';
+<a name="line57"></a>		$this->data['css'][] = 'datatables.css';
+<a name="line58"></a>		$this->data['css'][] = 'impromptu.css';
+<a name="line59"></a>		$this->load->view('header', $this->data);
+<a name="line60"></a>		$this->load->view('admin/index', $this->data);
+<a name="line61"></a>		$this->load->view('admin/tags', $this->data);
+<a name="line62"></a>		$this->load->view('admin/admin_javascript', $this->data);
+<a name="line63"></a>		$this->load->view('footer', $this->data);
+<a name="line64"></a>	}
+<a name="line65"></a>	function gifts()
+<a name="line66"></a>	{
+<a name="line67"></a>		$this->_goods("Admin | Gifts", "gift");
+<a name="line68"></a>	}
+<a name="line69"></a>	function needs()
+<a name="line70"></a>	{
+<a name="line71"></a>		$this->_goods("Admin | Needs", "need");
+<a name="line72"></a>	}
+<a name="line73"></a>
+<a name="line74"></a>	function _goods($title, $type) {
+<a name="line75"></a>		$this->data['title'] = $title;
+<a name="line76"></a>		$G = new Good();
+<a name="line77"></a>		$G->include_related('location', array('address'), FALSE, TRUE); // resolve the address
+<a name="line78"></a>		$G->include_related_count("tag"); // include the tag count
+<a name="line79"></a>		$G->order_by('type', 'asc')
+<a name="line80"></a>		->where('type', $type)
+<a name="line81"></a>		->limit(500)
+<a name="line82"></a>		->get();
+<a name="line83"></a>		$this->data['goods'] = $G->all;
+<a name="line84"></a>		$this->data['js'][] = 'jquery-datatables.php';
+<a name="line85"></a>		$this->data['css'][] = 'datatables.css';
+<a name="line86"></a>		$this->load->view('header', $this->data);
+<a name="line87"></a>		$this->load->view('admin/index', $this->data);
+<a name="line88"></a>		$this->load->view('admin/goods', $this->data);
+<a name="line89"></a>		$this->load->view('admin/admin_javascript', $this->data);
+<a name="line90"></a>		$this->load->view('footer', $this->data);
+<a name="line91"></a>	}
+<a name="line92"></a>
+<a name="line93"></a>	function alert_templates()
+<a name="line94"></a>	{
+<a name="line95"></a>		$this->data['title'] = "Admin | Alert Templates";
+<a name="line96"></a>		$template = new Term();
+<a name="line97"></a>		$template->where('type','alert_template')->order_by('id', 'asc')->get();
+<a name="line98"></a>		$this->data['tags'] = $template->all;
+<a name="line99"></a>		$this->data['js'][] = 'jquery-datatables.php';
+<a name="line100"></a>		$this->data['css'][] = 'datatables.css';
+<a name="line101"></a>		$this->data['css'][] = 'impromptu.css';
+<a name="line102"></a>		$this->load->view('header', $this->data);
+<a name="line103"></a>		$this->load->view('admin/index', $this->data);
+<a name="line104"></a>		$this->load->view('admin/alert_templates', $this->data);
+<a name="line105"></a>		$this->load->view('admin/admin_javascript', $this->data);
+<a name="line106"></a>		$this->load->view('footer', $this->data);
+<a name="line107"></a>
+<a name="line108"></a>	}
+<a name="line109"></a>	// AJAX functions
+<a name="line110"></a>
+<a name="line111"></a>	function delete_alert_template()
+<a name="line112"></a>	{
+<a name="line113"></a>		// Parse $_POST array
+<a name="line114"></a>		$template_id = $_POST['template_id'];
+<a name="line115"></a>
+<a name="line116"></a>		// Load alert template object
+<a name="line117"></a>		$template = new Term( $template_id );
+<a name="line118"></a>		
+<a name="line119"></a>		// Then delete it
+<a name="line120"></a>		$template->delete();
+<a name="line121"></a>	}
+<a name="line122"></a>
+<a name="line123"></a>    function is_term_unique()
+<a name="line124"></a>    {
+<a name="line125"></a>      $template_id = intval($_POST['template_id']);
+<a name="line126"></a>      $template_name = $_POST['template_name'];
+<a name="line127"></a>      //$template_name = "haloqq";
+<a name="line128"></a>      $template = new Term();
+<a name="line129"></a>      $isset_template = $template->where('name', $template_name)->get();
+<a name="line130"></a>
+<a name="line131"></a>      echo ($isset_template->name == "" ||
+<a name="line132"></a>           ($template_id != 0 && $template_id == $isset_template->id)) ? "true" : "false";
+<a name="line133"></a>
+<a name="line134"></a>    }
+<a name="line135"></a>
+<a name="line136"></a>	function edit_alert_template()
+<a name="line137"></a>	{
+<a name="line138"></a>		// Parse $_POST array
+<a name="line139"></a>		$template_id = $_POST['template_id'];
+<a name="line140"></a>		$template_name = $_POST['template_name'];
+<a name="line141"></a>		$template_subject = $_POST['template_subject'];
+<a name="line142"></a>		$template_body = $_POST['template_body'];
+<a name="line143"></a>		
+<a name="line144"></a>		// New alert template object
+<a name="line145"></a>		$template = new Term($template_id);
+<a name="line146"></a>		$template->where('id', $template_id)->update('name', $template_name);
+<a name="line147"></a>		$template->where('id', $template_id)->update('subject', $template_subject);
+<a name="line148"></a>		$template->where('id', $template_id)->update('body', $template_body);
+<a name="line149"></a>	}
+<a name="line150"></a>
+<a name="line151"></a>	function add_alert_template()
+<a name="line152"></a>	{
+<a name="line153"></a>		// Parse $_POST array
+<a name="line154"></a>		$template_name = $_POST['template_name'];
+<a name="line155"></a>		$template_body = $_POST['template_body'];
+<a name="line156"></a>		$template_subject = $_POST['template_subject'];
+<a name="line157"></a>
+<a name="line158"></a>		// New alert template object
+<a name="line159"></a>		$template = new Term();
+<a name="line160"></a>		$template->name = $template_name;
+<a name="line161"></a>		$template->body = $template_body;
+<a name="line162"></a>		$template->subject = $template_subject;
+<a name="line163"></a>		$template->save();
+<a name="line164"></a>	}
+<a name="line165"></a>
+<a name="line166"></a>	function toggleUserDisable($userId) {
+<a name="line167"></a>		$U = new User();
+<a name="line168"></a>		$U->where('id', $userId)->get();
 <a name="line169"></a>
-<a name="line170"></a>	function deleteTag($tagId) {
-<a name="line171"></a>		$T = new Tag($tagId);
-<a name="line172"></a>		$T->delete();
-<a name="line173"></a>		// TODO: check to see if the delete worked and then return a true/false confirmation
+<a name="line170"></a>		if ($U->status == "disabled")
+<a name="line171"></a>			$U->where('id', $userId)->update('status', 'active');
+<a name="line172"></a>		else
+<a name="line173"></a>			$U->where('id', $userId)->update('status', 'disabled');
 <a name="line174"></a>	}
 <a name="line175"></a>
-<a name="line176"></a>	function renameTag($tagId, $renameTo) {
-<a name="line177"></a>		$T = new Tag();
-<a name="line178"></a>		$T->where('id', $tagId)->update('name', $renameTo);
-<a name="line179"></a>	}
-<a name="line180"></a>
-<a name="line181"></a>	function mergeTag($tagId, $mergeToName) {
-<a name="line182"></a>		$Ta = new Tag($tagId);
-<a name="line183"></a>		$Tb = new Tag();
-<a name="line184"></a>		$Tb->where('name', $mergeToName)->get();
-<a name="line185"></a>		if (count($Tb->all) == 0)
-<a name="line186"></a>			return;
-<a name="line187"></a>
-<a name="line188"></a>		// find all goods that use the tag
-<a name="line189"></a>		$G = new Good();
-<a name="line190"></a>		$G->where_related_tag($Ta)->get();
-<a name="line191"></a>		echo count($G->all);
-<a name="line192"></a>
-<a name="line193"></a>		foreach ($G as $good) {
-<a name="line194"></a>			$good->save($Tb);	// add the new tag to the good
-<a name="line195"></a>			$good->delete($Ta);	// remove the old tag from the good
-<a name="line196"></a>		}
-<a name="line197"></a>
-<a name="line198"></a>		// if the old tag is no longer being used, remove the tag from the database
-<a name="line199"></a>		$G = new Good();
-<a name="line200"></a>		$G->where_related_tag($Ta)->get();
-<a name="line201"></a>
-<a name="line202"></a>		// TODO: handle this with foreign keys and cascading deletes
-<a name="line203"></a>		if (count($G->all) == 0)
-<a name="line204"></a>			$Ta->delete();
-<a name="line205"></a>	}
+<a name="line176"></a>	function deleteTag($tagId) {
+<a name="line177"></a>		$T = new Tag($tagId);
+<a name="line178"></a>		$T->delete();
+<a name="line179"></a>		// TODO: check to see if the delete worked and then return a true/false confirmation
+<a name="line180"></a>	}
+<a name="line181"></a>
+<a name="line182"></a>	function renameTag($tagId, $renameTo) {
+<a name="line183"></a>		$T = new Tag();
+<a name="line184"></a>		$T->where('id', $tagId)->update('name', $renameTo);
+<a name="line185"></a>	}
+<a name="line186"></a>
+<a name="line187"></a>	function mergeTag($tagId, $mergeToName) {
+<a name="line188"></a>		$Tag_A = new Tag($tagId);
+<a name="line189"></a>		$Tag_B = new Tag();
+<a name="line190"></a>		$Tag_B->where('name', $mergeToName)->get();
+<a name="line191"></a>		if (count($Tag_B->all) == 0)
+<a name="line192"></a>		{
+<a name="line193"></a>			return;
+<a name="line194"></a>		}
+<a name="line195"></a>
+<a name="line196"></a>		// find all goods that use the tag
+<a name="line197"></a>		$G = new Good();
+<a name="line198"></a>		$G->where_related_tag($Tag_A)->get();
+<a name="line199"></a>		echo count($G->all);
+<a name="line200"></a>
+<a name="line201"></a>		foreach ($G as $good)
+<a name="line202"></a>		{
+<a name="line203"></a>			$good->add_tag($Tag_B);		// add the new tag to the good
+<a name="line204"></a>			$good->remove_tag($Tag_A->name);	// remove the old tag from the good
+<a name="line205"></a>		}
 <a name="line206"></a>
-<a name="line207"></a>	function tagSelectList(){
-<a name="line208"></a>		$T = new Tag();
-<a name="line209"></a>
-<a name="line210"></a>		$T->order_by('name', 'asc')->get();
-<a name="line211"></a>		$tags = $T->all;
-<a name="line212"></a>		$output = "";
-<a name="line213"></a>		foreach($tags as $key=>$val) {
-<a name="line214"></a>			$output .= "<option id=$val->id>$val->name</option>\n";
-<a name="line215"></a>		}
-<a name="line216"></a>		echo $output;
-<a name="line217"></a>	}
-<a name="line218"></a>	
-<a name="line219"></a>	function toggle_profiler()
-<a name="line220"></a>	{
-<a name="line221"></a>		if( !empty($this->session->userdata['profiler']) && $this->session->userdata['profiler'] == TRUE )
-<a name="line222"></a>		{
-<a name="line223"></a>			$this->session->set_flashdata('success', 'Profiler disabled.');
-<a name="line224"></a>		 	$this->session->set_userdata('profiler', FALSE);
-<a name="line225"></a>		 }
-<a name="line226"></a>		 else
-<a name="line227"></a>		 {
-<a name="line228"></a>		 	$this->session->set_flashdata('success', 'Profiler enabled!');
-<a name="line229"></a>		 	$this->session->set_userdata('profiler', TRUE);
-<a name="line230"></a>		}
-<a name="line231"></a>		redirect('admin');
-<a name="line232"></a>	}
-<a name="line233"></a>}
-<a name="line234"></a>
-<a name="line235"></a>/* End of file member.php */
-<a name="line236"></a>/* Location: ./system/application/controllers/member.php */
-<a name="line237"></a></pre>
+<a name="line207"></a>		// If the old tag is no longer being used, remove the tag from the database
+<a name="line208"></a>		$G = new Good();
+<a name="line209"></a>		$G->where_related_tag($Tag_A)->get();
+<a name="line210"></a>
+<a name="line211"></a>		// TODO: handle this with foreign keys and cascading deletes
+<a name="line212"></a>		//if (count($G->all) == 0)
+<a name="line213"></a>		//{
+<a name="line214"></a>		//	$Tag_A->delete();
+<a name="line215"></a>		//}
+<a name="line216"></a>	}
+<a name="line217"></a>
+<a name="line218"></a>	function tagSelectList(){
+<a name="line219"></a>		$T = new Tag();
+<a name="line220"></a>
+<a name="line221"></a>		$T->order_by('name', 'asc')->get();
+<a name="line222"></a>		$tags = $T->all;
+<a name="line223"></a>		$output = "";
+<a name="line224"></a>		foreach($tags as $key=>$val) {
+<a name="line225"></a>			$output .= "<option id=$val->id>$val->name</option>\n";
+<a name="line226"></a>		}
+<a name="line227"></a>		echo $output;
+<a name="line228"></a>	}
+<a name="line229"></a>	
+<a name="line230"></a>	function toggle_profiler()
+<a name="line231"></a>	{
+<a name="line232"></a>		if( !empty($this->session->userdata['profiler']) && $this->session->userdata['profiler'] == TRUE )
+<a name="line233"></a>		{
+<a name="line234"></a>			$this->session->set_flashdata('success', 'Profiler disabled.');
+<a name="line235"></a>		 	$this->session->set_userdata('profiler', FALSE);
+<a name="line236"></a>		 }
+<a name="line237"></a>		 else
+<a name="line238"></a>		 {
+<a name="line239"></a>		 	$this->session->set_flashdata('success', 'Profiler enabled!');
+<a name="line240"></a>		 	$this->session->set_userdata('profiler', TRUE);
+<a name="line241"></a>		}
+<a name="line242"></a>		redirect('admin');
+<a name="line243"></a>	}
+<a name="line244"></a>}
+<a name="line245"></a>
+<a name="line246"></a>/* End of file member.php */
+<a name="line247"></a>/* Location: ./system/application/controllers/member.php */
+<a name="line248"></a></pre>
 <div class="header">
 <h1>GiftFlow API</h1>
 <ul>

@@ -6,7 +6,7 @@
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 
 <meta name="generator" content="PHPDoctor 2RC4 (http://peej.github.com/phpdoctor/)">
-<meta name="when" content="Sat, 24 Jul 2010 20:47:45 +0000">
+<meta name="when" content="Wed, 09 Feb 2011 20:22:56 +0000">
 
 <link rel="stylesheet" type="text/css" href="../../stylesheet.css">
 <link rel="start" href="../../overview-summary.html">
@@ -40,11 +40,11 @@
 <a name="line3"></a> * Contact controller
 <a name="line4"></a> * Connects to Google Analytics.
 <a name="line5"></a> */ 
-<a name="line6"></a>class Contact extends Controller 
+<a name="line6"></a>class Contact extends CI_Controller 
 <a name="line7"></a>{    
 <a name="line8"></a>    function Contact() 
 <a name="line9"></a>    {
-<a name="line10"></a>        parent::Controller();
+<a name="line10"></a>        parent::__construct();
 <a name="line11"></a>		$this->U = new User($this->session->userdata('user_id'));
 <a name="line12"></a>		$this->data = $this->util->parse_globals();
 <a name="line13"></a>		$this->data['U'] = $this->U;

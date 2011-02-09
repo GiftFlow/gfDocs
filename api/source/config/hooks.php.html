@@ -6,7 +6,7 @@
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 
 <meta name="generator" content="PHPDoctor 2RC4 (http://peej.github.com/phpdoctor/)">
-<meta name="when" content="Sat, 24 Jul 2010 20:47:45 +0000">
+<meta name="when" content="Wed, 09 Feb 2011 20:22:56 +0000">
 
 <link rel="stylesheet" type="text/css" href="../../stylesheet.css">
 <link rel="start" href="../../overview-summary.html">
@@ -47,51 +47,51 @@
 <a name="line10"></a>|
 <a name="line11"></a>*/
 <a name="line12"></a>
-<a name="line13"></a>$hook['request_new'][] = array(
-<a name="line14"></a>	'function' => 'alert_request_new',
-<a name="line15"></a>	'filename' => 'notify.php',
-<a name="line16"></a>	'filepath' => 'libraries',
-<a name="line17"></a>	'class'    => 'Notify'
+<a name="line13"></a>$hook['demand_take_new'][] = array(
+<a name="line14"></a>	'class'    => 'Notify',
+<a name="line15"></a>	'function' => 'alert_demand_take_new',
+<a name="line16"></a>	'filename' => 'notify.php',
+<a name="line17"></a>	'filepath' => 'libraries'
 <a name="line18"></a>);
 <a name="line19"></a>
 <a name="line20"></a>$hook['user_registration_manual'][] = array(
-<a name="line21"></a>	'function' => 'alert_user_registration_manual',
-<a name="line22"></a>	'filename' => 'notify.php',
-<a name="line23"></a>	'filepath' => 'libraries',
-<a name="line24"></a>	'class'    => 'Notify'
+<a name="line21"></a>	'class'    => 'Notify',
+<a name="line22"></a>	'function' => 'alert_user_registration_manual',
+<a name="line23"></a>	'filename' => 'notify.php',
+<a name="line24"></a>	'filepath' => 'libraries'
 <a name="line25"></a>);
 <a name="line26"></a>
 <a name="line27"></a>$hook['pre_system'][] = array(
-<a name="line28"></a>                                'class'    => NULL,
-<a name="line29"></a>                                'function' => 'pqp_static',
-<a name="line30"></a>                                'filename' => 'pqp_pi.php',
-<a name="line31"></a>                                'filepath' => 'plugins',
-<a name="line32"></a>                                'params'   => 'load_pqp'
-<a name="line33"></a>                                );
+<a name="line28"></a>	'class'    => NULL,
+<a name="line29"></a>	'function' => 'pqp_static',
+<a name="line30"></a>	'filename' => 'pqp_pi.php',
+<a name="line31"></a>	'filepath' => 'plugins',
+<a name="line32"></a>	'params'   => 'load_pqp'
+<a name="line33"></a>);
 <a name="line34"></a>
 <a name="line35"></a>$hook['pre_controller'][] = array(
-<a name="line36"></a>                                'class'    => NULL,
-<a name="line37"></a>                                'function' => 'pqp_static',
-<a name="line38"></a>                                'filename' => 'pqp_pi.php',
-<a name="line39"></a>                                'filepath' => 'plugins',
-<a name="line40"></a>                                'params'   => 'pqp_pre_controller'
-<a name="line41"></a>                                );
+<a name="line36"></a>	'class'    => NULL,
+<a name="line37"></a>	'function' => 'pqp_static',
+<a name="line38"></a>	'filename' => 'pqp_pi.php',
+<a name="line39"></a>	'filepath' => 'plugins',
+<a name="line40"></a>	'params'   => 'pqp_pre_controller'
+<a name="line41"></a>);
 <a name="line42"></a>
 <a name="line43"></a>$hook['post_controller_constructor'][] = array(
-<a name="line44"></a>                                'class'    => NULL,
-<a name="line45"></a>                                'function' => 'pqp_static',
-<a name="line46"></a>                                'filename' => 'pqp_pi.php',
-<a name="line47"></a>                                'filepath' => 'plugins',
-<a name="line48"></a>                                'params'   => 'pqp_post_controller_constructor'
-<a name="line49"></a>                                );
+<a name="line44"></a>	'class'    => NULL,
+<a name="line45"></a>	'function' => 'pqp_static',
+<a name="line46"></a>	'filename' => 'pqp_pi.php',
+<a name="line47"></a>	'filepath' => 'plugins',
+<a name="line48"></a>	'params'   => 'pqp_post_controller_constructor'
+<a name="line49"></a>);
 <a name="line50"></a>
 <a name="line51"></a>$hook['post_controller'][] = array(
-<a name="line52"></a>                                'class'    => NULL,
-<a name="line53"></a>                                'function' => 'pqp_static',
-<a name="line54"></a>                                'filename' => 'pqp_pi.php',
-<a name="line55"></a>                                'filepath' => 'plugins',
-<a name="line56"></a>                                'params'   => 'pqp_post_controller'
-<a name="line57"></a>                                );
+<a name="line52"></a>	'class'    => NULL,
+<a name="line53"></a>	'function' => 'pqp_static',
+<a name="line54"></a>	'filename' => 'pqp_pi.php',
+<a name="line55"></a>	'filepath' => 'plugins',
+<a name="line56"></a>	'params'   => 'pqp_post_controller'
+<a name="line57"></a>);
 <a name="line58"></a>
 <a name="line59"></a>
 <a name="line60"></a>/* End of file hooks.php */

@@ -6,7 +6,7 @@
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 
 <meta name="generator" content="PHPDoctor 2RC4 (http://peej.github.com/phpdoctor/)">
-<meta name="when" content="Sat, 24 Jul 2010 20:47:44 +0000">
+<meta name="when" content="Wed, 09 Feb 2011 20:22:55 +0000">
 
 <link rel="stylesheet" type="text/css" href="../stylesheet.css">
 <link rel="start" href="../overview-summary.html">
@@ -61,24 +61,24 @@ Detail: <a href="#detail_field">Field</a> | <a href="#detail_method">Method</a> 
 <table id="summary_field">
 <tr><th colspan="2">Field Summary</th></tr>
 <tr>
-<td class="type">protected  mixed</td>
-<td class="description"><p class="name"><a href="#U">$U</a></p></td>
+<td class="type">protected  User Object</td>
+<td class="description"><p class="name"><a href="#U">$U</a></p><p class="description"></p></td>
 </tr>
 <tr>
-<td class="type">protected  mixed</td>
-<td class="description"><p class="name"><a href="#client_id">$client_id</a></p></td>
+<td class="type">protected  string</td>
+<td class="description"><p class="name"><a href="#client_id">$client_id</a></p><p class="description">GiftFlow's client id / API key</p></td>
 </tr>
 <tr>
-<td class="type">protected  mixed</td>
-<td class="description"><p class="name"><a href="#client_secret">$client_secret</a></p></td>
+<td class="type">protected  string</td>
+<td class="description"><p class="name"><a href="#client_secret">$client_secret</a></p><p class="description">Secret key</p></td>
 </tr>
 <tr>
-<td class="type">protected  mixed</td>
-<td class="description"><p class="name"><a href="#friends">$friends</a></p></td>
+<td class="type">protected  array</td>
+<td class="description"><p class="name"><a href="#friends">$friends</a></p><p class="description">Empty friends array</p></td>
 </tr>
 <tr>
-<td class="type">protected  mixed</td>
-<td class="description"><p class="name"><a href="#result_count">$result_count</a></p></td>
+<td class="type">protected  CodeIgniter object</td>
+<td class="description"><p class="name"><a href="#result_count">$result_count</a></p><p class="description"></p></td>
 </tr>
 </table>
 
@@ -86,11 +86,11 @@ Detail: <a href="#detail_field">Field</a> | <a href="#detail_method">Method</a> 
 <tr><th colspan="2">Method Summary</th></tr>
 <tr>
 <td class="type"> void</td>
-<td class="description"><p class="name"><a href="#__construct()">__construct</a>()</p></td>
+<td class="description"><p class="name"><a href="#__construct()">__construct</a>()</p><p class="description">Constructor</p></td>
 </tr>
 <tr>
-<td class="type"> void</td>
-<td class="description"><p class="name"><a href="#friends()">friends</a>(int user_id)</p><p class="description">Load a user's Facebook friends</p></td>
+<td class="type"> array</td>
+<td class="description"><p class="name"><a href="#friend_ids()">friend_ids</a>(int user_id)</p><p class="description">Get the IDs of a user's Facebook friends</p></td>
 </tr>
 <tr>
 <td class="type"> JSON</td>
@@ -99,71 +99,71 @@ Detail: <a href="#detail_field">Field</a> | <a href="#detail_method">Method</a> 
 </table>
 
 <h2 id="detail_field">Field Detail</h2>
-<a href="../source/libraries/facebook.php.html#line21" class="location">libraries/facebook.php at line 21</a>
+<a href="../source/libraries/facebook.php.html#line31" class="location">libraries/facebook.php at line 31</a>
 
 <h3 id="U">U</h3>
-<code class="signature">protected  mixed <strong>$U</strong></code>
+<code class="signature">protected  User Object <strong>$U</strong></code>
 <div class="details">
-</div>
+<p></p></div>
 
 <hr>
 
-<a href="../source/libraries/facebook.php.html#line15" class="location">libraries/facebook.php at line 15</a>
+<a href="../source/libraries/facebook.php.html#line20" class="location">libraries/facebook.php at line 20</a>
 
 <h3 id="client_id">client_id</h3>
-<code class="signature">protected  mixed <strong>$client_id</strong> = &quot;111637438874755&quot;</code>
+<code class="signature">protected  string <strong>$client_id</strong> = &quot;111637438874755&quot;</code>
 <div class="details">
-</div>
+<p>GiftFlow's client id / API key</p></div>
 
 <hr>
 
-<a href="../source/libraries/facebook.php.html#line18" class="location">libraries/facebook.php at line 18</a>
+<a href="../source/libraries/facebook.php.html#line26" class="location">libraries/facebook.php at line 26</a>
 
 <h3 id="client_secret">client_secret</h3>
-<code class="signature">protected  mixed <strong>$client_secret</strong> = &quot;797a827203a1ad62cace9fa429100567&quot;</code>
+<code class="signature">protected  string <strong>$client_secret</strong> = &quot;797a827203a1ad62cace9fa429100567&quot;</code>
 <div class="details">
-</div>
+<p>Secret key</p></div>
 
 <hr>
 
-<a href="../source/libraries/facebook.php.html#line24" class="location">libraries/facebook.php at line 24</a>
+<a href="../source/libraries/facebook.php.html#line37" class="location">libraries/facebook.php at line 37</a>
 
 <h3 id="friends">friends</h3>
-<code class="signature">protected  mixed <strong>$friends</strong> = array()</code>
+<code class="signature">protected  array <strong>$friends</strong> = array()</code>
 <div class="details">
-</div>
+<p>Empty friends array</p></div>
 
 <hr>
 
-<a href="../source/libraries/facebook.php.html#line12" class="location">libraries/facebook.php at line 12</a>
+<a href="../source/libraries/facebook.php.html#line14" class="location">libraries/facebook.php at line 14</a>
 
 <h3 id="result_count">result_count</h3>
-<code class="signature">protected  mixed <strong>$result_count</strong></code>
+<code class="signature">protected  CodeIgniter object <strong>$result_count</strong></code>
 <div class="details">
-</div>
+<p></p></div>
 
 <hr>
 
 <h2 id="detail_method">Method Detail</h2><div class="method_detail">
-<div class='method'><a href="../source/libraries/facebook.php.html#line26" class="location">libraries/facebook.php at line 26</a>
+<div class='method'><a href="../source/libraries/facebook.php.html#line42" class="location">libraries/facebook.php at line 42</a>
 
 <h3 id="__construct()">__construct</h3>
 <code class="signature">public  void <strong>__construct</strong>()</code>
 <div class="details">
-</div></div>
+<p>Constructor</p></div></div>
 
 
 
-<div class='method'><a href="../source/libraries/facebook.php.html#line60" class="location">libraries/facebook.php at line 60</a>
+<div class='method'><a href="../source/libraries/facebook.php.html#line96" class="location">libraries/facebook.php at line 96</a>
 
-<h3 id="friends()">friends</h3>
-<code class="signature">public  void <strong>friends</strong>(int user_id)</code>
+<h3 id="friend_ids()">friend_ids</h3>
+<code class="signature">public  array <strong>friend_ids</strong>(int user_id)</code>
 <div class="details">
-<p>Load a user's Facebook friends</p></div></div>
+<p>Get the IDs of a user's Facebook friends</p></div></div>
 
 
 
-<div class='method'><a href="../source/libraries/facebook.php.html#line39" class="location">libraries/facebook.php at line 39</a>
+<div class='method'><a href="../source/libraries/facebook.php.html#line56" class="location">libraries/facebook.php at line 56</a>
 
 <h3 id="graph()">graph</h3>
 <code class="signature">public  JSON <strong>graph</strong>(int user_id, string field)</code>

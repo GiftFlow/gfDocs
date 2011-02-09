@@ -6,7 +6,7 @@
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 
 <meta name="generator" content="PHPDoctor 2RC4 (http://peej.github.com/phpdoctor/)">
-<meta name="when" content="Sat, 24 Jul 2010 20:47:45 +0000">
+<meta name="when" content="Wed, 09 Feb 2011 20:22:56 +0000">
 
 <link rel="stylesheet" type="text/css" href="../../stylesheet.css">
 <link rel="start" href="../../overview-summary.html">
@@ -40,7 +40,7 @@
 <a name="line3"></a>class Thread extends DataMapperExtension
 <a name="line4"></a>{
 <a name="line5"></a>	
-<a name="line6"></a>	 var $ci;
+<a name="line6"></a>	 var $CI;
 <a name="line7"></a>	
 <a name="line8"></a>	
 <a name="line9"></a>	// --------------------------------------------------------------------
@@ -48,35 +48,45 @@
 <a name="line11"></a>	//   Configure your relationships below
 <a name="line12"></a>	// --------------------------------------------------------------------
 <a name="line13"></a>	
-<a name="line14"></a>	var $has = array();
+<a name="line14"></a>	var $has_one = array();
 <a name="line15"></a>	
 <a name="line16"></a>	var $has_many = array( 
 <a name="line17"></a>		"message_delivery",
-<a name="line18"></a>		"recipient"=>array(
-<a name="line19"></a>			'class'=>"user"
-<a name="line20"></a>			),
-<a name="line21"></a>		"message");
-<a name="line22"></a>	
-<a name="line23"></a>	// --------------------------------------------------------------------
-<a name="line24"></a>	// Validation
-<a name="line25"></a>	//   Add validation requirements, such as 'required', for your fields.
-<a name="line26"></a>	// --------------------------------------------------------------------
-<a name="line27"></a>	
-<a name="line28"></a>	var $validation = array(
-<a name="line29"></a>		'subject' => array(
-<a name="line30"></a>			'rules' => array(
-<a name="line31"></a>				'required'
-<a name="line32"></a>			),
-<a name="line33"></a>			'label' => 'Subject'
-<a name="line34"></a>		)
-<a name="line35"></a>	);
-<a name="line36"></a>	public function __construct(  $id = NULL )
-<a name="line37"></a>	{
-<a name="line38"></a>		parent::__construct( $id );
-<a name="line39"></a>	}
-<a name="line40"></a>
-<a name="line41"></a>}
-<a name="line42"></a></pre>
+<a name="line18"></a>		"user",
+<a name="line19"></a>		"message"
+<a name="line20"></a>	);
+<a name="line21"></a>	
+<a name="line22"></a>	// --------------------------------------------------------------------
+<a name="line23"></a>	// Validation
+<a name="line24"></a>	//   Add validation requirements, such as 'required', for your fields.
+<a name="line25"></a>	// --------------------------------------------------------------------
+<a name="line26"></a>	
+<a name="line27"></a>	var $validation = array(
+<a name="line28"></a>		'subject' => array(
+<a name="line29"></a>			'rules' => array(
+<a name="line30"></a>				'required'
+<a name="line31"></a>			),
+<a name="line32"></a>			'label' => 'Subject'
+<a name="line33"></a>		)
+<a name="line34"></a>	);
+<a name="line35"></a>	public function __construct( $id = NULL )
+<a name="line36"></a>	{
+<a name="line37"></a>		parent::__construct( $id );
+<a name="line38"></a>	}
+<a name="line39"></a>	
+<a name="line40"></a>	/**
+<a name="line41"></a>	*	Return array of related Users
+<a name="line42"></a>	*	@return array
+<a name="line43"></a>	*/
+<a name="line44"></a>	public function get_users()
+<a name="line45"></a>	{
+<a name="line46"></a>		$U = new User();
+<a name="line47"></a>		$U->where_related("thread","id",$this->id);
+<a name="line48"></a>		$U->get();
+<a name="line49"></a>		return $U->all;
+<a name="line50"></a>	}
+<a name="line51"></a>}
+<a name="line52"></a></pre>
 <div class="header">
 <h1>GiftFlow API</h1>
 <ul>

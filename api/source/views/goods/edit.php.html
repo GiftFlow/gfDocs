@@ -1,0 +1,270 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+
+<html lang="en">
+<head>
+
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
+<meta name="generator" content="PHPDoctor 2RC4 (http://peej.github.com/phpdoctor/)">
+<meta name="when" content="Wed, 09 Feb 2011 20:22:56 +0000">
+
+<link rel="stylesheet" type="text/css" href="../../../stylesheet.css">
+<link rel="start" href="../../../overview-summary.html">
+
+<title>views/goods/edit.php (GiftFlow API)</title>
+
+</head>
+<body id="file" onload="parent.document.title=document.title;">
+
+<div class="header">
+<h1>GiftFlow API</h1>
+<ul>
+<li><a href="../../../overview-summary.html">Overview</a></li>
+<li>Package</li><li>Class</li><li>Tree</li><li><a href="../../../overview-files.html">Files</a></li>
+<li><a href="../../../deprecated-list.html">Deprecated</a></li>
+<li><a href="../../../index-all.html">Index</a></li>
+</ul>
+</div>
+
+<div class="small_links">
+<a href="../../../index.html" target="_top">Frames</a>
+<a href="../../../source/views/goods/edit.php.html" target="_top">No frames</a>
+</div>
+<hr>
+
+<h1>views/goods/edit.php</h1>
+<hr>
+
+<a name="line1"></a><pre><!-- Main Module -->
+<a name="line2"></a><form name='edit_good' method='post'>
+<a name="line3"></a><div class="gift_module" id="view_gift">
+<a name="line4"></a>	<div class="top"></div>
+<a name="line5"></a>	<div class="middle">
+<a name="line6"></a>		<div id='edit_gift_form'>
+<a name="line7"></a>			<h1>Editing <?php echo $G->title; ?></h1>			
+<a name="line8"></a>			<div class='main'>
+<a name="line9"></a>
+<a name="line10"></a>				<!-- Edit Info -->
+<a name="line11"></a>				<div id='edit_info'>
+<a name="line12"></a>					<p id='edit_title'>
+<a name="line13"></a>						<label>Title</label>
+<a name="line14"></a>						<input class="big-border" type="text" name="title" value='<?php echo $G->title; ?>' />
+<a name="line15"></a>					</p>
+<a name="line16"></a>					<p id='edit_description'>
+<a name="line17"></a>						<label>Description</label>
+<a name="line18"></a>						<textarea rows="5" class="big-border" name="description"><?php echo $G->description; ?></textarea>
+<a name="line19"></a>					</p>
+<a name="line20"></a>				</div>
+<a name="line21"></a>
+<a name="line22"></a>				<!-- Edit Location -->
+<a name="line23"></a>				<div id='edit_location'>
+<a name="line24"></a>					<label>Location</label>
+<a name="line25"></a>					<input type='text' class="big-border" id="location" name="location" value="<?php echo $G->location->address; ?>" />
+<a name="line26"></a>					
+<a name="line27"></a>					<?php if(!empty($U->location->all)) { ?>
+<a name="line28"></a>						
+<a name="line29"></a>						<!-- Your Locations -->
+<a name="line30"></a>						<div id='your_locations' style='display: none;'>
+<a name="line31"></a>							<ul>
+<a name="line32"></a>							<?php foreach($U->location->all as $key=>$val) { ?>
+<a name="line33"></a>								<li class='ui-menu-item'>
+<a name="line34"></a>									<a href='#' rel="<?php echo $val->address; ?>">
+<a name="line35"></a>										<?php echo $val->title; ?><br />
+<a name="line36"></a>										<span class='location_details' >
+<a name="line37"></a>											<?php echo $val->address;?>
+<a name="line38"></a>										</span>
+<a name="line39"></a>									</a>
+<a name="line40"></a>								</li>
+<a name="line41"></a>							<?php  } ?>
+<a name="line42"></a>							</ul>
+<a name="line43"></a>						</div>
+<a name="line44"></a>					<?php } ?>
+<a name="line45"></a>				</div>
+<a name="line46"></a>			</div>
+<a name="line47"></a>						
+<a name="line48"></a>			<!-- Buttons -->
+<a name="line49"></a>			<div class='clear' style='display: block; padding: 20px 0px;'>
+<a name="line50"></a>				
+<a name="line51"></a>				<input type='submit' value='Save Changes' class='blue' /> 
+<a name="line52"></a>				
+<a name="line53"></a>				<a id="cancel_edit" class='button secondary' href="<?php echo site_url('gifts/'.$G->id); ?>">Cancel</a>
+<a name="line54"></a>				
+<a name="line55"></a>				<a id="delete_gift" class='button css_right' href="<?php echo site_url('gifts/'.$G->id.'/delete'); ?>">Delete</a>
+<a name="line56"></a>			
+<a name="line57"></a>			</div>
+<a name="line58"></a>			<div class='clear'></div>
+<a name="line59"></a>			</form>
+<a name="line60"></a>		</div>		
+<a name="line61"></a>	</div>
+<a name="line62"></a>	
+<a name="line63"></a>	<div class='bottom'></div>
+<a name="line64"></a></div>
+<a name="line65"></a>
+<a name="line66"></a><!-- Tag Editor -->
+<a name="line67"></a><div class="sidebar">		
+<a name="line68"></a>	<div class="top">
+<a name="line69"></a>		<h2>Tags</h2>
+<a name="line70"></a>	</div>
+<a name="line71"></a>	<div class="center">
+<a name="line72"></a>	
+<a name="line73"></a>		<!-- Rich Tag Editor -->
+<a name="line74"></a>		<p id='tag_editor' style='display: none;'>
+<a name="line75"></a>
+<a name="line76"></a>			<input type='text' name='tag_editor_input' class="big-border" id='tag_editor_input' value='' />
+<a name="line77"></a>			
+<a name="line78"></a>			<input type='hidden' id='tag_list' name='tags' value='<?php echo implode($G->tags,","); ?>' />
+<a name="line79"></a>			
+<a name="line80"></a>			<a href="#" id='add_this_tag' class='button'>
+<a name="line81"></a>				<span class='ui-icon ui-icon-circle-plus'></span>
+<a name="line82"></a>			</a>
+<a name="line83"></a>			
+<a name="line84"></a>			<ul class='tag_cloud'>
+<a name="line85"></a>			</ul>
+<a name="line86"></a>		</p>
+<a name="line87"></a>		
+<a name="line88"></a>		<!-- Text-Field Tag Editor (if no javascript) -->
+<a name="line89"></a>		<p id='old_tag_editor'>
+<a name="line90"></a>			<label>Tags</label>
+<a name="line91"></a>			<input type='text' name='tags' id='old_tags' value='<?php echo implode($G->tags,","); ?>' />
+<a name="line92"></a>		</p>
+<a name="line93"></a>	
+<a name="line94"></a>	</div>
+<a name="line95"></a>	<div class="bottom"></div>
+<a name="line96"></a></div>
+<a name="line97"></a></form>
+<a name="line98"></a>
+<a name="line99"></a>
+<a name="line100"></a><script type='text/javascript'>
+<a name="line101"></a>var tags = [];
+<a name="line102"></a>$(function(){
+<a name="line103"></a>	
+<a name="line104"></a>	// Style buttons
+<a name="line105"></a>	$('.button').button();
+<a name="line106"></a>	$(".buttonset").buttonset();
+<a name="line107"></a>	
+<a name="line108"></a>	// Confirm delete
+<a name="line109"></a>	$(".edit_dialog #delete").click(function(){ 
+<a name="line110"></a>		var go = confirm('Are you sure you want to delete this photo?');
+<a name="line111"></a>		if(go){
+<a name="line112"></a>			$.post('<?php echo site_url('ajax/delete_photo'); ?>', { 'id': $(this).parent().parent().attr('id') }, delete_photo, 'json' );
+<a name="line113"></a>		}
+<a name="line114"></a>	});	
+<a name="line115"></a>	
+<a name="line116"></a>	/*
+<a name="line117"></a>	* Edit Tags
+<a name="line118"></a>	*/ 
+<a name="line119"></a>	
+<a name="line120"></a>	editTags();
+<a name="line121"></a>	
+<a name="line122"></a>	function editTags()
+<a name="line123"></a>	{
+<a name="line124"></a>		var selected = false;
+<a name="line125"></a>		$("#old_tag_editor").hide();
+<a name="line126"></a>		$("#old_tags").attr("disabled","disabled");
+<a name="line127"></a>		$("#tag_editor").show();
+<a name="line128"></a>		var existing = $("input#tag_list").val().split(",");
+<a name="line129"></a>		$.each(existing, function(key, val) { 
+<a name="line130"></a>			if(val!="") addTag(val);
+<a name="line131"></a>		});
+<a name="line132"></a>		$("input#tag_editor_input").autocomplete({
+<a name="line133"></a>			source: function(request, response)
+<a name="line134"></a>			{
+<a name="line135"></a>				$.post("<?php echo site_url("ajax/tags"); ?>", { term: request.term }, function(data) { response(data) }, 'json');
+<a name="line136"></a>			},
+<a name="line137"></a>			select: function( event, ui )
+<a name="line138"></a>			{
+<a name="line139"></a>				addTag(ui.item.value);
+<a name="line140"></a>				selected = true;
+<a name="line141"></a>            	},
+<a name="line142"></a>            	change: function( event, ui )
+<a name="line143"></a>            	{
+<a name="line144"></a>            		if(selected)
+<a name="line145"></a>            			$(this).val('');
+<a name="line146"></a>            		selected = false;
+<a name="line147"></a>            	},
+<a name="line148"></a>            	focus: function ( event, ui )
+<a name="line149"></a>            	{
+<a name="line150"></a>            		return false;
+<a name="line151"></a>            	}
+<a name="line152"></a>		});
+<a name="line153"></a>		$("input#tag_editor_input").keydown(function(event){if (event.keyCode == 13){ addTag($(this).val()); return false; }});
+<a name="line154"></a>		$("ul.tag_cloud li a.delete_tag").live('click', function(){ 
+<a name="line155"></a>		 	var tag = $.trim($(this).parent().text());
+<a name="line156"></a>		 	var key = tags.lastIndexOf(tag);
+<a name="line157"></a>			tags.splice(key, 1);
+<a name="line158"></a>		 	$(this).parent().slideUp('fast');
+<a name="line159"></a>		 	$("#tag_list").val(tags);
+<a name="line160"></a>			return false;
+<a name="line161"></a>		});
+<a name="line162"></a>		$("a#add_this_tag").click(function(){
+<a name="line163"></a>			addTag($("input#tag_editor_input").val());
+<a name="line164"></a>			return false;
+<a name="line165"></a>		});
+<a name="line166"></a>	}
+<a name="line167"></a>	function addTag( tag )
+<a name="line168"></a>	{
+<a name="line169"></a>		if(tag=="") return false;
+<a name="line170"></a>		tags.push(tag);	
+<a name="line171"></a>		$("#tag_editor_input").val('');
+<a name="line172"></a>		$("#tag_list").val(tags);
+<a name="line173"></a>		$("ul.tag_cloud").append("<li><a class='tag'>"+tag+"<\/a> <a href='#' class='delete_tag'><\/a><\/li>");
+<a name="line174"></a>		$("ul.tag_cloud li:last a.delete_tag").button({icons:{primary: 'ui-icon-trash'}, text: false});
+<a name="line175"></a>	}
+<a name="line176"></a>	
+<a name="line177"></a>	/*
+<a name="line178"></a>	*  Edit Location
+<a name="line179"></a>	*/
+<a name="line180"></a>	
+<a name="line181"></a>	$("#location").focus(function(){
+<a name="line182"></a>		$("#your_locations").slideDown(); 
+<a name="line183"></a>	});
+<a name="line184"></a>	$("#your_locations_link").click(function(){
+<a name="line185"></a>		$("#your_locations").show();
+<a name="line186"></a>		$(this).hide();
+<a name="line187"></a>		return false;
+<a name="line188"></a>	});
+<a name="line189"></a>	$("#your_locations li a").live('click', function(){
+<a name="line190"></a>		$("#location").val($(this).attr('rel'));
+<a name="line191"></a>		$("#your_locations").hide();
+<a name="line192"></a>		return false;
+<a name="line193"></a>	});
+<a name="line194"></a>	
+<a name="line195"></a>	/*
+<a name="line196"></a>	* Ignore request
+<a name="line197"></a>	*/ 
+<a name="line198"></a>	
+<a name="line199"></a>	$("input:submit").button();
+<a name="line200"></a>	
+<a name="line201"></a>	$("#delete_gift").click(function(){
+<a name="line202"></a>		var answer = confirm('Are you sure you want to delete this gift?');
+<a name="line203"></a>		if(answer) return true;
+<a name="line204"></a>		else return false;
+<a name="line205"></a>	});
+<a name="line206"></a>	
+<a name="line207"></a>	/*
+<a name="line208"></a>	* Notifybar code
+<a name="line209"></a>	*/
+<a name="line210"></a>	<?php echo notify(); ?>
+<a name="line211"></a>});
+<a name="line212"></a></script></pre>
+<div class="header">
+<h1>GiftFlow API</h1>
+<ul>
+<li><a href="../../../overview-summary.html">Overview</a></li>
+<li>Package</li><li>Class</li><li>Tree</li><li><a href="../../../overview-files.html">Files</a></li>
+<li><a href="../../../deprecated-list.html">Deprecated</a></li>
+<li><a href="../../../index-all.html">Index</a></li>
+</ul>
+</div>
+
+<div class="small_links">
+<a href="../../../index.html" target="_top">Frames</a>
+<a href="../../../source/views/goods/edit.php.html" target="_top">No frames</a>
+</div>
+<hr>
+
+<p id="footer">This document was generated by <a href="http://peej.github.com/phpdoctor/">PHPDoctor: The PHP Documentation Creator</a></p>
+
+</body>
+
+</html>

@@ -1,0 +1,272 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+
+<html lang="en">
+<head>
+
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
+<meta name="generator" content="PHPDoctor 2RC4 (http://peej.github.com/phpdoctor/)">
+<meta name="when" content="Wed, 09 Feb 2011 20:22:55 +0000">
+
+<link rel="stylesheet" type="text/css" href="../stylesheet.css">
+<link rel="start" href="../overview-summary.html">
+
+<title>Rss (GiftFlow API)</title>
+
+</head>
+<body id="definition" onload="parent.document.title=document.title;">
+
+<div class="header">
+<h1>GiftFlow API</h1>
+<ul>
+<li><a href="../overview-summary.html">Overview</a></li>
+<li><a href="../giftflow/package-summary.html">Package</a></li>
+<li class="active">Class</li>
+<li><a href="../giftflow/package-tree.html">Tree</a></li>
+<li><a href="../overview-files.html">Files</a></li>
+<li><a href="../deprecated-list.html">Deprecated</a></li>
+<li><a href="../index-all.html">Index</a></li>
+</ul>
+</div>
+
+<div class="small_links">
+<a href="../index.html" target="_top">Frames</a>
+<a href="../giftflow/rss.html" target="_top">No frames</a>
+</div>
+<div class="small_links">
+Summary: <a href="#summary_field">Field</a> | <a href="#summary_method">Method</a> | <a href="#summary_constr">Constr</a>
+Detail: <a href="#detail_field">Field</a> | <a href="#detail_method">Method</a> | <a href="#summary_constr">Constr</a>
+</div>
+<hr>
+
+<div class="qualifiedName">GiftFlow\Rss</div>
+<a href="../source/controllers/rss.php.html#line3" class="location">controllers/rss.php at line 3</a>
+
+<h1>Class Rss</h1>
+
+<pre class="tree">CI_Controller<br> └─<strong>Rss</strong><br /></pre>
+
+<hr>
+
+<p class="signature">public  class <strong>Rss</strong><br>extends CI_Controller
+
+</p>
+
+<hr>
+
+<table id="summary_field">
+<tr><th colspan="2">Field Summary</th></tr>
+<tr>
+<td class="type"> array</td>
+<td class="description"><p class="name"><a href="#legal_params">$legal_params</a></p><p class="description">List of parameters accepted in each method</p></td>
+</tr>
+<tr>
+<td class="type"> mixed</td>
+<td class="description"><p class="name"><a href="#params">$params</a></p></td>
+</tr>
+<tr>
+<td class="type"> array</td>
+<td class="description"><p class="name"><a href="#restricted">$restricted</a></p><p class="description"></p></td>
+</tr>
+<tr>
+<td class="type"> object</td>
+<td class="description"><p class="name"><a href="#result">$result</a></p><p class="description">Result from the finder query</p></td>
+</tr>
+</table>
+
+<table id="summary_method">
+<tr><th colspan="2">Method Summary</th></tr>
+<tr>
+<td class="type"> void</td>
+<td class="description"><p class="name"><a href="#__construct()">__construct</a>()</p><p class="description">Constructor</p></td>
+</tr>
+<tr>
+<td class="type">protected  boolean</td>
+<td class="description"><p class="name"><a href="#_is_parseable()">_is_parseable</a>(string field)</p><p class="description">Determines whether a field should be filtered for a specific method</p></td>
+</tr>
+<tr>
+<td class="type">private  void</td>
+<td class="description"><p class="name"><a href="#_parse_type()">_parse_type</a>(mixed type)</p></td>
+</tr>
+<tr>
+<td class="type">protected  void</td>
+<td class="description"><p class="name"><a href="#_prep_query()">_prep_query</a>()</p><p class="description">Compiles filters, processes $_GET parameters</p></td>
+</tr>
+<tr>
+<td class="type"> void</td>
+<td class="description"><p class="name"><a href="#gifts()">gifts</a>()</p><p class="description">Function gifts returns the ten latest gifts from the 
+universal GiftFlow</p></td>
+</tr>
+<tr>
+<td class="type"> void</td>
+<td class="description"><p class="name"><a href="#index()">index</a>()</p></td>
+</tr>
+<tr>
+<td class="type"> void</td>
+<td class="description"><p class="name"><a href="#needs()">needs</a>()</p><p class="description">function needs returns the latest needs from the 
+universal GiftFlow</p></td>
+</tr>
+<tr>
+<td class="type"> void</td>
+<td class="description"><p class="name"><a href="#universal_feed()">universal_feed</a>(mixed request)</p><p class="description">Returns the latest 10 gifts or needs in the giftflow universe</p></td>
+</tr>
+<tr>
+<td class="type"> void</td>
+<td class="description"><p class="name"><a href="#user()">user</a>(int user_id, string request)</p><p class="description">RSS feed for individual users</p></td>
+</tr>
+</table>
+
+<h2 id="detail_field">Field Detail</h2>
+<a href="../source/controllers/rss.php.html#line14" class="location">controllers/rss.php at line 14</a>
+
+<h3 id="legal_params">legal_params</h3>
+<code class="signature">public  array <strong>$legal_params</strong></code>
+<div class="details">
+<p>List of parameters accepted in each method</p></div>
+
+<hr>
+
+<a href="../source/controllers/rss.php.html#line22" class="location">controllers/rss.php at line 22</a>
+
+<h3 id="params">params</h3>
+<code class="signature">public  mixed <strong>$params</strong></code>
+<div class="details">
+</div>
+
+<hr>
+
+<a href="../source/controllers/rss.php.html#line8" class="location">controllers/rss.php at line 8</a>
+
+<h3 id="restricted">restricted</h3>
+<code class="signature">public  array <strong>$restricted</strong></code>
+<div class="details">
+<p></p></div>
+
+<hr>
+
+<a href="../source/controllers/rss.php.html#line20" class="location">controllers/rss.php at line 20</a>
+
+<h3 id="result">result</h3>
+<code class="signature">public  object <strong>$result</strong></code>
+<div class="details">
+<p>Result from the finder query</p></div>
+
+<hr>
+
+<h2 id="detail_method">Method Detail</h2><div class="method_detail">
+<div class='method'><a href="../source/controllers/rss.php.html#line27" class="location">controllers/rss.php at line 27</a>
+
+<h3 id="__construct()">__construct</h3>
+<code class="signature">public  void <strong>__construct</strong>()</code>
+<div class="details">
+<p>Constructor</p></div></div>
+
+
+
+<div class='method'><a href="../source/controllers/rss.php.html#line241" class="location">controllers/rss.php at line 241</a>
+
+<h3 id="_is_parseable()">_is_parseable</h3>
+<code class="signature">protected  boolean <strong>_is_parseable</strong>(string field)</code>
+<div class="details">
+<p>Determines whether a field should be filtered for a specific method</p></div></div>
+
+
+
+<div class='method'><a href="../source/controllers/rss.php.html#line250" class="location">controllers/rss.php at line 250</a>
+
+<h3 id="_parse_type()">_parse_type</h3>
+<code class="signature">private  void <strong>_parse_type</strong>(mixed type)</code>
+<div class="details">
+</div></div>
+
+
+
+<div class='method'><a href="../source/controllers/rss.php.html#line173" class="location">controllers/rss.php at line 173</a>
+
+<h3 id="_prep_query()">_prep_query</h3>
+<code class="signature">protected  void <strong>_prep_query</strong>()</code>
+<div class="details">
+<p>Compiles filters, processes $_GET parameters</p></div></div>
+
+
+
+<div class='method'><a href="../source/controllers/rss.php.html#line58" class="location">controllers/rss.php at line 58</a>
+
+<h3 id="gifts()">gifts</h3>
+<code class="signature">public  void <strong>gifts</strong>()</code>
+<div class="details">
+<p>Function gifts returns the ten latest gifts from the 
+universal GiftFlow</p></div></div>
+
+
+
+<div class='method'><a href="../source/controllers/rss.php.html#line37" class="location">controllers/rss.php at line 37</a>
+
+<h3 id="index()">index</h3>
+<code class="signature">public  void <strong>index</strong>()</code>
+<div class="details">
+</div></div>
+
+
+
+<div class='method'><a href="../source/controllers/rss.php.html#line85" class="location">controllers/rss.php at line 85</a>
+
+<h3 id="needs()">needs</h3>
+<code class="signature">public  void <strong>needs</strong>()</code>
+<div class="details">
+<p>function needs returns the latest needs from the 
+universal GiftFlow</p></div></div>
+
+
+
+<div class='method'><a href="../source/controllers/rss.php.html#line155" class="location">controllers/rss.php at line 155</a>
+
+<h3 id="universal_feed()">universal_feed</h3>
+<code class="signature">public  void <strong>universal_feed</strong>(mixed request)</code>
+<div class="details">
+<p>Returns the latest 10 gifts or needs in the giftflow universe</p></div></div>
+
+
+
+<div class='method'><a href="../source/controllers/rss.php.html#line116" class="location">controllers/rss.php at line 116</a>
+
+<h3 id="user()">user</h3>
+<code class="signature">public  void <strong>user</strong>(int user_id, string request)</code>
+<div class="details">
+<p>RSS feed for individual users</p><dl>
+<dt>Parameters:</dt>
+<dd>user_id - the ID of the user for whom the feed was requested</dd>
+<dd>request - Type of goods to display (eg gifts or needs)</dd>
+</dl>
+</div></div>
+
+
+
+</div><div class="header">
+<h1>GiftFlow API</h1>
+<ul>
+<li><a href="../overview-summary.html">Overview</a></li>
+<li><a href="../giftflow/package-summary.html">Package</a></li>
+<li class="active">Class</li>
+<li><a href="../giftflow/package-tree.html">Tree</a></li>
+<li><a href="../overview-files.html">Files</a></li>
+<li><a href="../deprecated-list.html">Deprecated</a></li>
+<li><a href="../index-all.html">Index</a></li>
+</ul>
+</div>
+
+<div class="small_links">
+<a href="../index.html" target="_top">Frames</a>
+<a href="../giftflow/rss.html" target="_top">No frames</a>
+</div>
+<div class="small_links">
+Summary: <a href="#summary_field">Field</a> | <a href="#summary_method">Method</a> | <a href="#summary_constr">Constr</a>
+Detail: <a href="#detail_field">Field</a> | <a href="#detail_method">Method</a> | <a href="#summary_constr">Constr</a>
+</div>
+<hr>
+
+<p id="footer">This document was generated by <a href="http://peej.github.com/phpdoctor/">PHPDoctor: The PHP Documentation Creator</a></p>
+
+</body>
+
+</html>

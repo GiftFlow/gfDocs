@@ -6,7 +6,7 @@
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 
 <meta name="generator" content="PHPDoctor 2RC4 (http://peej.github.com/phpdoctor/)">
-<meta name="when" content="Sat, 24 Jul 2010 20:47:44 +0000">
+<meta name="when" content="Wed, 09 Feb 2011 20:22:55 +0000">
 
 <link rel="stylesheet" type="text/css" href="../stylesheet.css">
 <link rel="start" href="../overview-summary.html">
@@ -40,7 +40,7 @@ Detail: <a href="#detail_field">Field</a> | <a href="#detail_method">Method</a> 
 <hr>
 
 <div class="qualifiedName">GiftFlow\OAuthSignatureMethod_RSA_SHA1</div>
-<a href="../source/libraries/oauth/signature_method/oauthsignaturemethod_rsa_sha1.php.html#line33" class="location">libraries/oauth/signature_method/OAuthSignatureMethod_RSA_SHA1.php at line 33</a>
+<a href="../source/libraries/auth/oauth.php.html#line121" class="location">libraries/Auth/OAuth.php at line 121</a>
 
 <h1>Class OAuthSignatureMethod_RSA_SHA1</h1>
 
@@ -52,99 +52,79 @@ Detail: <a href="#detail_field">Field</a> | <a href="#detail_method">Method</a> 
 
 </p>
 
-<div class="comment" id="overview_description"><p>OAuth signature implementation using PLAINTEXT</p></div>
-
-<dl>
-<dt>Version:</dt>
-<dd>$Id$</dd>
-<dt>Author:</dt>
-<dd>Marc Worrell <marcw@pobox.com></dd>
-<dt>Date:</dt>
-<dd>Sep 8, 2008 12:00:14 PM The MIT License Copyright (c) 2007-2008 Mediamatic Lab Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions: The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software. THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.</dd>
-</dl>
 <hr>
 
 <table id="summary_method">
 <tr><th colspan="2">Method Summary</th></tr>
 <tr>
-<td class="type">protected  string</td>
-<td class="description"><p class="name"><a href="#fetch_private_cert()">fetch_private_cert</a>(<a href="../giftflow/oauthrequest.html">OAuthRequest</a> request)</p><p class="description">Fetch the private CERT key for the signature</p></td>
+<td class="type"> void</td>
+<td class="description"><p class="name"><a href="#build_signature()">build_signature</a>(mixed request, mixed consumer, mixed token, mixed privKey)</p></td>
 </tr>
 <tr>
-<td class="type">protected  string</td>
-<td class="description"><p class="name"><a href="#fetch_public_cert()">fetch_public_cert</a>(<a href="../giftflow/oauthrequest.html">OAuthRequest</a> request)</p><p class="description">Fetch the public CERT key for the signature</p></td>
+<td class="type"> void</td>
+<td class="description"><p class="name"><a href="#check_signature()">check_signature</a>(mixed request, mixed consumer, mixed token, mixed signature)</p></td>
 </tr>
 <tr>
-<td class="type"> string</td>
-<td class="description"><p class="name"><a href="#name()">name</a>()</p><p class="description">Return the name of this signature</p></td>
+<td class="type">protected  void</td>
+<td class="description"><p class="name"><a href="#fetch_private_cert()">fetch_private_cert</a>(mixed privKey)</p></td>
 </tr>
 <tr>
-<td class="type"> string</td>
-<td class="description"><p class="name"><a href="#signature()">signature</a>(<a href="../giftflow/oauthrequest.html">OAuthRequest</a> request, string base_string, string consumer_secret, string token_secret)</p><p class="description">Calculate the signature using RSA-SHA1
-This function is copyright Andy Smith, 2008.</p></td>
+<td class="type">protected  void</td>
+<td class="description"><p class="name"><a href="#fetch_public_cert()">fetch_public_cert</a>(mixed request)</p></td>
 </tr>
 <tr>
-<td class="type"> string</td>
-<td class="description"><p class="name"><a href="#verify()">verify</a>(<a href="../giftflow/oauthrequest.html">OAuthRequest</a> request, string base_string, string consumer_secret, string token_secret, string signature)</p><p class="description">Check if the request signature is the same as the one calculated for the request.</p></td>
+<td class="type"> void</td>
+<td class="description"><p class="name"><a href="#get_name()">get_name</a>()</p></td>
 </tr>
 </table>
 
 <table class="inherit">
 <tr><th colspan="2">Methods inherited from GiftFlow\OAuthSignatureMethod</th></tr>
-<tr><td><a href="../giftflow/oauthsignaturemethod.html#name()">name</a>, <a href="../giftflow/oauthsignaturemethod.html#signature()">signature</a>, <a href="../giftflow/oauthsignaturemethod.html#verify()">verify</a></td></tr></table>
+<tr><td><a href="../giftflow/oauthsignaturemethod.html#check_signature()">check_signature</a></td></tr></table>
 
 <h2 id="detail_method">Method Detail</h2><div class="method_detail">
-<div class='method'><a href="../source/libraries/oauth/signature_method/oauthsignaturemethod_rsa_sha1.php.html#line65" class="location">libraries/oauth/signature_method/OAuthSignatureMethod_RSA_SHA1.php at line 65</a>
+<div class='method'><a href="../source/libraries/auth/oauth.php.html#line148" class="location">libraries/Auth/OAuth.php at line 148</a>
+
+<h3 id="build_signature()">build_signature</h3>
+<code class="signature">public  void <strong>build_signature</strong>(mixed request, mixed consumer, mixed token, mixed privKey)</code>
+<div class="details">
+</div></div>
+
+
+
+<div class='method'><a href="../source/libraries/auth/oauth.php.html#line176" class="location">libraries/Auth/OAuth.php at line 176</a>
+
+<h3 id="check_signature()">check_signature</h3>
+<code class="signature">public  void <strong>check_signature</strong>(mixed request, mixed consumer, mixed token, mixed signature)</code>
+<div class="details">
+</div></div>
+
+
+
+<div class='method'><a href="../source/libraries/auth/oauth.php.html#line139" class="location">libraries/Auth/OAuth.php at line 139</a>
 
 <h3 id="fetch_private_cert()">fetch_private_cert</h3>
-<code class="signature">protected  string <strong>fetch_private_cert</strong>(<a href="../giftflow/oauthrequest.html">OAuthRequest</a> request)</code>
+<code class="signature">protected  void <strong>fetch_private_cert</strong>(mixed privKey)</code>
 <div class="details">
-<p>Fetch the private CERT key for the signature</p><dl>
-<dt>Returns:</dt>
-<dd>private key</dd>
-</dl>
 </div></div>
 
 
 
-<div class='method'><a href="../source/libraries/oauth/signature_method/oauthsignaturemethod_rsa_sha1.php.html#line47" class="location">libraries/oauth/signature_method/OAuthSignatureMethod_RSA_SHA1.php at line 47</a>
+<div class='method'><a href="../source/libraries/auth/oauth.php.html#line128" class="location">libraries/Auth/OAuth.php at line 128</a>
 
 <h3 id="fetch_public_cert()">fetch_public_cert</h3>
-<code class="signature">protected  string <strong>fetch_public_cert</strong>(<a href="../giftflow/oauthrequest.html">OAuthRequest</a> request)</code>
+<code class="signature">protected  void <strong>fetch_public_cert</strong>(mixed request)</code>
 <div class="details">
-<p>Fetch the public CERT key for the signature</p><dl>
-<dt>Returns:</dt>
-<dd>public key</dd>
-</dl>
 </div></div>
 
 
 
-<div class='method'><a href="../source/libraries/oauth/signature_method/oauthsignaturemethod_rsa_sha1.php.html#line35" class="location">libraries/oauth/signature_method/OAuthSignatureMethod_RSA_SHA1.php at line 35</a>
+<div class='method'><a href="../source/libraries/auth/oauth.php.html#line123" class="location">libraries/Auth/OAuth.php at line 123</a>
 
-<h3 id="name()">name</h3>
-<code class="signature">public  string <strong>name</strong>()</code>
+<h3 id="get_name()">get_name</h3>
+<code class="signature">public  void <strong>get_name</strong>()</code>
 <div class="details">
-<p>Return the name of this signature</p></div></div>
-
-
-
-<div class='method'><a href="../source/libraries/oauth/signature_method/oauthsignaturemethod_rsa_sha1.php.html#line85" class="location">libraries/oauth/signature_method/OAuthSignatureMethod_RSA_SHA1.php at line 85</a>
-
-<h3 id="signature()">signature</h3>
-<code class="signature">public  string <strong>signature</strong>(<a href="../giftflow/oauthrequest.html">OAuthRequest</a> request, string base_string, string consumer_secret, string token_secret)</code>
-<div class="details">
-<p>Calculate the signature using RSA-SHA1
-This function is copyright Andy Smith, 2008.</p></div></div>
-
-
-
-<div class='method'><a href="../source/libraries/oauth/signature_method/oauthsignaturemethod_rsa_sha1.php.html#line114" class="location">libraries/oauth/signature_method/OAuthSignatureMethod_RSA_SHA1.php at line 114</a>
-
-<h3 id="verify()">verify</h3>
-<code class="signature">public  string <strong>verify</strong>(<a href="../giftflow/oauthrequest.html">OAuthRequest</a> request, string base_string, string consumer_secret, string token_secret, string signature)</code>
-<div class="details">
-<p>Check if the request signature is the same as the one calculated for the request.</p></div></div>
+</div></div>
 
 
 

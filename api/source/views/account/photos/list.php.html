@@ -6,7 +6,7 @@
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 
 <meta name="generator" content="PHPDoctor 2RC4 (http://peej.github.com/phpdoctor/)">
-<meta name="when" content="Sat, 24 Jul 2010 20:47:45 +0000">
+<meta name="when" content="Wed, 09 Feb 2011 20:22:56 +0000">
 
 <link rel="stylesheet" type="text/css" href="../../../../stylesheet.css">
 <link rel="start" href="../../../../overview-summary.html">
@@ -35,51 +35,42 @@
 <h1>views/account/photos/list.php</h1>
 <hr>
 
-<a name="line1"></a><pre><?php
-<a name="line2"></a>/**
-<a name="line3"></a> * Get either a Gravatar URL or complete image tag for a specified email address.
-<a name="line4"></a> *
-<a name="line5"></a> * @param string $email The email address
-<a name="line6"></a> * @param string $s Size in pixels, defaults to 80px [ 1 - 512 ]
-<a name="line7"></a> * @param string $d Default imageset to use [ 404 | mm | identicon | monsterid | wavatar ]
-<a name="line8"></a> * @param string $r Maximum rating (inclusive) [ g | pg | r | x ]
-<a name="line9"></a> * @param boole $img True to return a complete IMG tag False for just the URL
-<a name="line10"></a> * @param array $atts Optional, additional key/value attributes to include in the IMG tag
-<a name="line11"></a> * @return String containing either just a URL or a complete image tag
-<a name="line12"></a> * @source http://gravatar.com/site/implement/images/php/
-<a name="line13"></a> */
-<a name="line14"></a>function get_gravatar( $email, $s = 80, $d = 'mm', $r = 'g', $img = false, $atts = array() ) {
-<a name="line15"></a>	$url = 'http://www.gravatar.com/avatar/';
-<a name="line16"></a>	$url .= md5( strtolower( trim( $email ) ) );
-<a name="line17"></a>	$url .= "?s=$s&d=$d&r=$r";
-<a name="line18"></a>	if ( $img ) {
-<a name="line19"></a>		$url = '<img src="' . $url . '"';
-<a name="line20"></a>		foreach ( $atts as $key => $val )
-<a name="line21"></a>			$url .= ' ' . $key . '="' . $val . '"';
-<a name="line22"></a>		$url .= ' />';
-<a name="line23"></a>	}
-<a name="line24"></a>	return $url;
-<a name="line25"></a>}
-<a name="line26"></a>?>
-<a name="line27"></a><img src='<?php echo get_gravatar('jarus.singh@gmail.com', 100, '404'); ?>' />
+<a name="line1"></a><pre><div id='account_photos' class='two_panels'>
+<a name="line2"></a>	
+<a name="line3"></a>	<!-- Sidebar Menu -->
+<a name="line4"></a>	<?php echo $menu; ?>
+<a name="line5"></a>	
+<a name="line6"></a>	<div class='right_content'>
+<a name="line7"></a>
+<a name="line8"></a>
+<a name="line9"></a>		<?php if(count($photos)==0){ ?>
+<a name="line10"></a>		
+<a name="line11"></a>			<p>
+<a name="line12"></a>				Get started now by <a href='<?php echo site_url('account/photos/add'); ?>'>adding a photo.</a>
+<a name="line13"></a>			</p>
+<a name="line14"></a>		
+<a name="line15"></a>		<?php } else { ?>
+<a name="line16"></a>		
+<a name="line17"></a>			<?php foreach($photos as $val) { ?>
+<a name="line18"></a>				<div class='photo_list'>
+<a name="line19"></a>					<a href="<?php echo site_url("account/photos/".$val->id."/edit"); ?>"><img src='<?php echo $val->url; ?>' class='bordered' /></a>
+<a name="line20"></a>				</div>
+<a name="line21"></a>			<?php } ?>
+<a name="line22"></a>			
+<a name="line23"></a>			<a href="<?php echo site_url('account/photos/add'); ?>" id='add_new_photo' style='clear: both; display: block;float:left;margin-top: 30px;'>Upload New Photo</a>
+<a name="line24"></a>		<?php } ?>
+<a name="line25"></a>	
+<a name="line26"></a>	</div>
+<a name="line27"></a>	<!-- eof div.right_content -->
 <a name="line28"></a>
-<a name="line29"></a><?php if(count($photos)==0){ ?>
-<a name="line30"></a><p>Get started now by <a href='<?php echo site_url('account/photos/add'); ?>'>adding a photo.</a></p>
-<a name="line31"></a><?php } else { 
-<a name="line32"></a>foreach($photos as $val) { ?>
-<a name="line33"></a>	<div class='photo_list'>
-<a name="line34"></a>		<a href="<?php echo site_url("account/photos/".$val->id."/edit"); ?>"><img src='<?php echo $val->url; ?>' class='bordered' /></a>
-<a name="line35"></a>	</div>
-<a name="line36"></a><?php } ?>
-<a name="line37"></a>
-<a name="line38"></a><a href="<?php echo site_url('account/photos/add'); ?>" id='add_new_photo' style='clear: both; display: block;float:left;margin-top: 30px;'>Upload New Photo</a>
-<a name="line39"></a><script>
-<a name="line40"></a>$(function(){
-<a name="line41"></a>	$("#add_new_photo").button();
-<a name="line42"></a>});
-<a name="line43"></a></script>
-<a name="line44"></a>
-<a name="line45"></a><?php } ?></pre>
+<a name="line29"></a></div>
+<a name="line30"></a><!-- eof div.two_panels -->
+<a name="line31"></a>
+<a name="line32"></a><script type='text/javascript'>
+<a name="line33"></a>$(function(){
+<a name="line34"></a>	$("#add_new_photo").button();
+<a name="line35"></a>});
+<a name="line36"></a></script></pre>
 <div class="header">
 <h1>GiftFlow API</h1>
 <ul>

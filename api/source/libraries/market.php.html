@@ -6,7 +6,7 @@
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 
 <meta name="generator" content="PHPDoctor 2RC4 (http://peej.github.com/phpdoctor/)">
-<meta name="when" content="Sat, 24 Jul 2010 20:47:45 +0000">
+<meta name="when" content="Wed, 09 Feb 2011 20:22:56 +0000">
 
 <link rel="stylesheet" type="text/css" href="../../stylesheet.css">
 <link rel="start" href="../../overview-summary.html">
@@ -36,46 +36,358 @@
 <hr>
 
 <a name="line1"></a><pre><?php  if ( ! defined('BASEPATH')) exit('No direct script access allowed');
-<a name="line2"></a>
-<a name="line3"></a>/**
-<a name="line4"></a>*	The Market library
-<a name="line5"></a>*	
-<a name="line6"></a>*	@author Brandon Jackson
-<a name="line7"></a>*	@package Libraries
-<a name="line8"></a>*/
-<a name="line9"></a>
-<a name="line10"></a>
-<a name="line11"></a>class Market
-<a name="line12"></a>{
-<a name="line13"></a>	// CI Object
-<a name="line14"></a>	protected $ci;
-<a name="line15"></a>
-<a name="line16"></a>	public function __construct()
-<a name="line17"></a>	{
-<a name="line18"></a>		$this->ci =& get_instance();
-<a name="line19"></a>	}
-<a name="line20"></a>	
-<a name="line21"></a>	
-<a name="line22"></a>	/**
-<a name="line23"></a>	*	Accepts a request
-<a name="line24"></a>	*	
-<a name="line25"></a>	*	@param int id		transaction_id
-<a name="line26"></a>	*/
-<a name="line27"></a>	public function request_accept( $id )
-<a name="line28"></a>	{
-<a name="line29"></a>		// load transaction
-<a name="line30"></a>		$T = new Transaction();
-<a name="line31"></a>		$T->where('id', $id)->include_related("recipient", "*", NULL, TRUE)->get();
-<a name="line32"></a>		
-<a name="line33"></a>		// change status
-<a name="line34"></a>		$T->accepted();
-<a name="line35"></a>		
-<a name="line36"></a>		// @TODO: send notification
-<a name="line37"></a>	}
-<a name="line38"></a>	
-<a name="line39"></a>	
-<a name="line40"></a>}
-<a name="line41"></a></pre>
+<a name="line2"></a>/**
+<a name="line3"></a>*	The Market library models the transaction process.
+<a name="line4"></a>*	
+<a name="line5"></a>*	@author Brandon Jackson
+<a name="line6"></a>*	@package Search
+<a name="line7"></a>*/
+<a name="line8"></a>
+<a name="line9"></a>class Market
+<a name="line10"></a>{
+<a name="line11"></a>
+<a name="line12"></a>	/**
+<a name="line13"></a>	*	CodeIgniter super-object
+<a name="line14"></a>	*	@var object
+<a name="line15"></a>	*/
+<a name="line16"></a>	protected $CI;
+<a name="line17"></a>		
+<a name="line18"></a>	/**
+<a name="line19"></a>	*	Constructor
+<a name="line20"></a>	*/
+<a name="line21"></a>	public function __construct()
+<a name="line22"></a>	{
+<a name="line23"></a>		// CodeIgniter instance
+<a name="line24"></a>		$this->CI =& get_instance();
+<a name="line25"></a>		
+<a name="line26"></a>		// Load libraries
+<a name="line27"></a>		$this->CI->load->library('datamapper');
+<a name="line28"></a>		$this->CI->load->library('Search/Good_search');
+<a name="line29"></a>	}
+<a name="line30"></a>	
+<a name="line31"></a>	/**
+<a name="line32"></a>	*	New one-way, one-good demand
+<a name="line33"></a>	*
+<a name="line34"></a>	*	@param array $options
+<a name="line35"></a>	*	@arg int user_id		ID of User making demand
+<a name="line36"></a>	*	@arg int recipient_id	ID of User not making demand
+<a name="line37"></a>	*	@arg int good_id		ID of Good being demanded
+<a name="line38"></a>	*	@arg string type		Demand Type (give, take, share, borrow, fulfill)
+<a name="line39"></a>	*	@arg string hook		Hook to use when for success event
+<a name="line40"></a>	*	@arg string message		Reason / initial message
+<a name="line41"></a>	*	@return boolean
+<a name="line42"></a>	*/
+<a name="line43"></a>	public function single_demand($options = array())
+<a name="line44"></a>	{
+<a name="line45"></a>		$default_options = array(
+<a name="line46"></a>			'user_id'=>$this->CI->session->userdata('user_id'),
+<a name="line47"></a>			'good_id'=>NULL,
+<a name="line48"></a>			'type'=>'take',
+<a name="line49"></a>			'message'=>NULL,
+<a name="line50"></a>			'hook'=>'demand_take_new'
+<a name="line51"></a>		);
+<a name="line52"></a>		$options = array_merge($default_options,$options);
+<a name="line53"></a>		
+<a name="line54"></a>		// Good being requested
+<a name="line55"></a>		$Good = new Good_search($options['good_id']);
+<a name="line56"></a>		$Good = $Good->get();
+<a name="line57"></a>		
+<a name="line58"></a>		// Person making demand
+<a name="line59"></a>		$Demander = new User($options['user_id']);
+<a name="line60"></a>		
+<a name="line61"></a>		// Person not demanding Good.
+<a name="line62"></a>		
+<a name="line63"></a>		// "give" and "share" cases: $Other_user found via recipient_id
+<a name="line64"></a>		if(!empty($options['recipient_id']))
+<a name="line65"></a>		{
+<a name="line66"></a>			$Other_user = new User($options['recipient_id']);
+<a name="line67"></a>		}
+<a name="line68"></a>		
+<a name="line69"></a>		// "take" and "borrow" cases: $Other_user is the Good owner. 
+<a name="line70"></a>		else if($options['type']=="take" || $options['type']=="borrow")
+<a name="line71"></a>		{
+<a name="line72"></a>			// Person who owns good
+<a name="line73"></a>			$Other_user = new User($Good->user->id);
+<a name="line74"></a>		}
+<a name="line75"></a>		else
+<a name="line76"></a>		{
+<a name="line77"></a>			// @todo handle no valid $Other_user error
+<a name="line78"></a>			return FALSE;
+<a name="line79"></a>		}
+<a name="line80"></a>		
+<a name="line81"></a>		// Create pending transaction
+<a name="line82"></a>		$Transaction = new Transaction();
+<a name="line83"></a>		$Transaction->status = "pending";
+<a name="line84"></a>		
+<a name="line85"></a>		// Save Transaction
+<a name="line86"></a>		if(!$Transaction->save())
+<a name="line87"></a>		{
+<a name="line88"></a>			// @todo handle transaction saving error
+<a name="line89"></a>			return FALSE;
+<a name="line90"></a>		}
+<a name="line91"></a>		
+<a name="line92"></a>		// Associate the users with this transaction
+<a name="line93"></a>		// Creates 2 rows in transactions_users table
+<a name="line94"></a>		if(!$Transaction->save_user($Demander))
+<a name="line95"></a>		{
+<a name="line96"></a>			// @todo handle user saving error
+<a name="line97"></a>			return FALSE;
+<a name="line98"></a>		}
+<a name="line99"></a>		if(!$Transaction->save_user($Other_user))
+<a name="line100"></a>		{
+<a name="line101"></a>			// @todo handle user saving error
+<a name="line102"></a>			return FALSE;
+<a name="line103"></a>		}
+<a name="line104"></a>		
+<a name="line105"></a>		// Create Demand
+<a name="line106"></a>		$Demand = new Demand();
+<a name="line107"></a>				
+<a name="line108"></a>		// Set demand type
+<a name="line109"></a>		$Demand->type = $options['type'];
+<a name="line110"></a>		
+<a name="line111"></a>		// Associate Demand with other objects
+<a name="line112"></a>		$Demand->user_id = $Demander->id;
+<a name="line113"></a>		$Demand->good_id = $Good->id;
+<a name="line114"></a>		$Demand->transaction_id = $Transaction->id;
+<a name="line115"></a>
+<a name="line116"></a>		// Save Demand
+<a name="line117"></a>		if(!$Demand->save())
+<a name="line118"></a>		{
+<a name="line119"></a>			// @todo handle demand saving error
+<a name="line120"></a>			return FALSE;
+<a name="line121"></a>		}
+<a name="line122"></a>				
+<a name="line123"></a>		// Send initial message
+<a name="line124"></a>		if(!empty($options['message']))
+<a name="line125"></a>		{
+<a name="line126"></a>			$this->CI->load->library('messaging/conversation');
+<a name="line127"></a>			$this->C = new Conversation();
+<a name="line128"></a>			$this->C->type = "transaction";
+<a name="line129"></a>			$this->C->id = $Transaction->id;
+<a name="line130"></a>			$this->C->compose($options['message']);
+<a name="line131"></a>		}
+<a name="line132"></a>		
+<a name="line133"></a>		// Prep hook data
+<a name="line134"></a>		$hook_data = (object) array(
+<a name="line135"></a>			"Transaction"=>$Transaction,
+<a name="line136"></a>			"Good"=>$Good,
+<a name="line137"></a>			"Demander"=>$Demander,
+<a name="line138"></a>			"Other_user"=>$Other_user
+<a name="line139"></a>		);
+<a name="line140"></a>		
+<a name="line141"></a>		// Fire Events. Possible Hooks: 'request_new'
+<a name="line142"></a>		$this->CI->hooks->call($options['hook'], $hook_data);
+<a name="line143"></a>		
+<a name="line144"></a>		return TRUE;
+<a name="line145"></a>	}
+<a name="line146"></a>	
+<a name="line147"></a>	/**
+<a name="line148"></a>	*	User requests to take another user's gift
+<a name="line149"></a>	*	$options array's arguments same as $single_demand
+<a name="line150"></a>	*
+<a name="line151"></a>	*	@param array $options
+<a name="line152"></a>	*	@return boolean
+<a name="line153"></a>	*/
+<a name="line154"></a>	public function take($options)
+<a name="line155"></a>	{
+<a name="line156"></a>		// Set demand type
+<a name="line157"></a>		$options['type'] = 'take';
+<a name="line158"></a>		$options['hook'] = 'demand_take_new';
+<a name="line159"></a>		
+<a name="line160"></a>		return $this->single_demand($options);
+<a name="line161"></a>	}
+<a name="line162"></a>
+<a name="line163"></a>	/**
+<a name="line164"></a>	*	User requests to borrow another user's gift
+<a name="line165"></a>	*	$options array's arguments same as $single_demand
+<a name="line166"></a>	*
+<a name="line167"></a>	*	@param array $options
+<a name="line168"></a>	*	@return boolean
+<a name="line169"></a>	*/
+<a name="line170"></a>	public function borrow($options)
+<a name="line171"></a>	{
+<a name="line172"></a>		// Set demand type
+<a name="line173"></a>		$options['type'] = 'borrow';
+<a name="line174"></a>		$options['hook'] = 'demand_borrow_new';
+<a name="line175"></a>		
+<a name="line176"></a>		return $this->single_demand($options);
+<a name="line177"></a>	}
+<a name="line178"></a>
+<a name="line179"></a>	/**
+<a name="line180"></a>	*	User requests to give his gift to another user
+<a name="line181"></a>	*
+<a name="line182"></a>	*	$options array's arguments same as $single_demand, except for the
+<a name="line183"></a>	*	recipient ID. In the request use cases, the user ID is that of the
+<a name="line184"></a>	*	demander and the user ID of the other transaction participant can
+<a name="line185"></a>	*	be derived from the user ID of the requested good's owner. In
+<a name="line186"></a>	*	the give and request cases, however, the Demander ID and Owner ID are
+<a name="line187"></a>	*	the same. Thus we need to provide the ID of the recipient. It will
+<a name="line188"></a>	*	overwrite the user_id option.
+<a name="line189"></a>	*	
+<a name="line190"></a>	*	@param array $options
+<a name="line191"></a>	*	@arg int recipient_id		ID of recipient
+<a name="line192"></a>	*	@return boolean
+<a name="line193"></a>	*/
+<a name="line194"></a>	public function give($options)
+<a name="line195"></a>	{
+<a name="line196"></a>		// Set demand type
+<a name="line197"></a>		$options['type'] = 'give';
+<a name="line198"></a>		$options['hook'] = 'demand_give_new';
+<a name="line199"></a>				
+<a name="line200"></a>		return $this->single_demand($options);
+<a name="line201"></a>	}
+<a name="line202"></a>	
+<a name="line203"></a>	/**
+<a name="line204"></a>	*	User requests to share his gift with another user
+<a name="line205"></a>	*
+<a name="line206"></a>	*	$options array's arguments same as $single_demand, except for the
+<a name="line207"></a>	*	recipient ID. For explanation, see $this->give()
+<a name="line208"></a>	*	
+<a name="line209"></a>	*	@param array $options
+<a name="line210"></a>	*	@arg int recipient_id		ID of recipient
+<a name="line211"></a>	*	@return boolean
+<a name="line212"></a>	*/
+<a name="line213"></a>	public function share($options)
+<a name="line214"></a>	{
+<a name="line215"></a>		// Set demand type
+<a name="line216"></a>		$options['type'] = 'share';
+<a name="line217"></a>		$options['hook'] = 'demand_share_new';
+<a name="line218"></a>				
+<a name="line219"></a>		return $this->single_demand($options);
+<a name="line220"></a>	}
+<a name="line221"></a>	
+<a name="line222"></a>	/**
+<a name="line223"></a>	*	Cancel transaction at the request of the Demander. Can be passed a
+<a name="line224"></a>	*	transaction_id directly or a good ID and a user ID which can be used
+<a name="line225"></a>	*	to find the relevant transaction ID.
+<a name="line226"></a>	*
+<a name="line227"></a>	*	@param array $options
+<a name="line228"></a>	*	@arg int user_id			ID of demanding User
+<a name="line229"></a>	*	@arg int good_id			ID of Good
+<a name="line230"></a>	*	@arg int transaction_id		ID of transaction
+<a name="line231"></a>	*	@return boolean
+<a name="line232"></a>	*/
+<a name="line233"></a>	public function cancel($options)
+<a name="line234"></a>	{
+<a name="line235"></a>		
+<a name="line236"></a>		// If transaction_id provided, populate object
+<a name="line237"></a>		if(!empty($options['transaction_id']))
+<a name="line238"></a>		{
+<a name="line239"></a>			$Transaction = new Transaction($options['transaction_id']);
+<a name="line240"></a>		}
+<a name="line241"></a>		
+<a name="line242"></a>		// Find Transaction based on Good & User IDs
+<a name="line243"></a>		else
+<a name="line244"></a>		{
+<a name="line245"></a>			$Transaction = new Transaction();
+<a name="line246"></a>			$Transaction->where_in('status',array('pending','active'));
+<a name="line247"></a>			$Transaction->where_related_demand('user_id', $options['user_id']);
+<a name="line248"></a>			$Transaction->where_related_demand('good_id', $options['good_id']);
+<a name="line249"></a>			$Transaction->get();
+<a name="line250"></a>		}
+<a name="line251"></a>		
+<a name="line252"></a>		// Change status to cancelled
+<a name="line253"></a>		$Transaction->status = "cancelled";
+<a name="line254"></a>		
+<a name="line255"></a>		// Save change
+<a name="line256"></a>		if(!$Transaction->save())
+<a name="line257"></a>		{
+<a name="line258"></a>			// @todo handle saving errors
+<a name="line259"></a>			return FALSE;
+<a name="line260"></a>		}
+<a name="line261"></a>		
+<a name="line262"></a>		$hook_data = (object) array(
+<a name="line263"></a>			"Transaction"=>$Transaction
+<a name="line264"></a>		);
+<a name="line265"></a>		
+<a name="line266"></a>		// Hook: 'demand_cancelled'
+<a name="line267"></a>		$this->CI->hooks->call('demand_cancelled', $hook_data);
+<a name="line268"></a>		
+<a name="line269"></a>		return TRUE;
+<a name="line270"></a>	}
+<a name="line271"></a>
+<a name="line272"></a>	/**
+<a name="line273"></a>	*	Decline transaction at the request of the Other user. Can be passed a
+<a name="line274"></a>	*	transaction_id directly or a good ID and a user ID which can be used
+<a name="line275"></a>	*	to find the relevant transaction ID.
+<a name="line276"></a>	*
+<a name="line277"></a>	*	@param array $options
+<a name="line278"></a>	*	@arg int user_id			ID of demanding User
+<a name="line279"></a>	*	@arg int good_id			ID of Good
+<a name="line280"></a>	*	@arg int transaction_id		ID of transaction
+<a name="line281"></a>	*	@return boolean
+<a name="line282"></a>	*/
+<a name="line283"></a>	public function decline($options)
+<a name="line284"></a>	{
+<a name="line285"></a>		$options = (object) $options;
+<a name="line286"></a>		
+<a name="line287"></a>		// If transaction_id provided, populate object
+<a name="line288"></a>		if(!empty($options['transaction_id']))
+<a name="line289"></a>		{
+<a name="line290"></a>			$Transaction = new Transaction($options['transaction_id']);
+<a name="line291"></a>		}
+<a name="line292"></a>		
+<a name="line293"></a>		// Find Transaction based on Good & User IDs
+<a name="line294"></a>		else
+<a name="line295"></a>		{
+<a name="line296"></a>			$Transaction = new Transaction();
+<a name="line297"></a>			$Transaction->where_in('status',array('pending','active'));
+<a name="line298"></a>			$Transaction->where_related_demand('user_id', $options['user_id']);
+<a name="line299"></a>			$Transaction->where_related_demand('good_id', $options['good_id']);
+<a name="line300"></a>			$Transaction->get();
+<a name="line301"></a>		}
+<a name="line302"></a>		
+<a name="line303"></a>		// Change status to cancelled
+<a name="line304"></a>		$Transaction->status = "declined";
+<a name="line305"></a>		
+<a name="line306"></a>		// Save change
+<a name="line307"></a>		if(!$Transaction->save())
+<a name="line308"></a>		{
+<a name="line309"></a>			// @todo handle saving errors
+<a name="line310"></a>			return FALSE;
+<a name="line311"></a>		}
+<a name="line312"></a>		
+<a name="line313"></a>		$hook_data = (object) array(
+<a name="line314"></a>			"Transaction"=>$Transaction
+<a name="line315"></a>		);
+<a name="line316"></a>		
+<a name="line317"></a>		// Hook: 'demand_cancelled'
+<a name="line318"></a>		$this->CI->hooks->call('demand_declined', $hook_data);
+<a name="line319"></a>		
+<a name="line320"></a>		return TRUE;
+<a name="line321"></a>	}
+<a name="line322"></a>	
+<a name="line323"></a>	/**
+<a name="line324"></a>	*	User accepts demands, transaction status changed to active
+<a name="line325"></a>	*	@param array options
+<a name="line326"></a>	*	@arg int transaction_id
+<a name="line327"></a>	*	@return boolean
+<a name="line328"></a>	*/
+<a name="line329"></a>	public function activate($options)
+<a name="line330"></a>	{
+<a name="line331"></a>		// Load transaction
+<a name="line332"></a>		$Transaction = new Transaction($options['transaction_id']);
+<a name="line333"></a>		
+<a name="line334"></a>		// Update status
+<a name="line335"></a>		$Transaction->status = "active";
+<a name="line336"></a>		
+<a name="line337"></a>		// Save change
+<a name="line338"></a>		if(!$Transaction->save())
+<a name="line339"></a>		{
+<a name="line340"></a>			// @todo handle transaction saving error
+<a name="line341"></a>			return FALSE;
+<a name="line342"></a>		}
+<a name="line343"></a>		
+<a name="line344"></a>		$hook_data = (object) array(
+<a name="line345"></a>			"Transaction"=>$Transaction
+<a name="line346"></a>		);
+<a name="line347"></a>		
+<a name="line348"></a>		// Hook: 'demand_activated'
+<a name="line349"></a>		$this->CI->hooks->call("demand_activated",$hook_data);
+<a name="line350"></a>		
+<a name="line351"></a>		return TRUE;
+<a name="line352"></a>	}
+<a name="line353"></a>}</pre>
 <div class="header">
 <h1>GiftFlow API</h1>
 <ul>

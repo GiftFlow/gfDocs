@@ -1,0 +1,278 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+
+<html lang="en">
+<head>
+
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
+<meta name="generator" content="PHPDoctor 2RC4 (http://peej.github.com/phpdoctor/)">
+<meta name="when" content="Wed, 09 Feb 2011 20:22:55 +0000">
+
+<link rel="stylesheet" type="text/css" href="../stylesheet.css">
+<link rel="start" href="../overview-summary.html">
+
+<title>Market (GiftFlow API)</title>
+
+</head>
+<body id="definition" onload="parent.document.title=document.title;">
+
+<div class="header">
+<h1>GiftFlow API</h1>
+<ul>
+<li><a href="../overview-summary.html">Overview</a></li>
+<li><a href="../search/package-summary.html">Package</a></li>
+<li class="active">Class</li>
+<li><a href="../search/package-tree.html">Tree</a></li>
+<li><a href="../overview-files.html">Files</a></li>
+<li><a href="../deprecated-list.html">Deprecated</a></li>
+<li><a href="../index-all.html">Index</a></li>
+</ul>
+</div>
+
+<div class="small_links">
+<a href="../index.html" target="_top">Frames</a>
+<a href="../search/market.html" target="_top">No frames</a>
+</div>
+<div class="small_links">
+Summary: <a href="#summary_field">Field</a> | <a href="#summary_method">Method</a> | <a href="#summary_constr">Constr</a>
+Detail: <a href="#detail_field">Field</a> | <a href="#detail_method">Method</a> | <a href="#summary_constr">Constr</a>
+</div>
+<hr>
+
+<div class="qualifiedName">Search\Market</div>
+<a href="../source/libraries/market.php.html#line9" class="location">libraries/market.php at line 9</a>
+
+<h1>Class Market</h1>
+
+<pre class="tree"><strong>Market</strong><br /></pre>
+
+<hr>
+
+<p class="signature">public  class <strong>Market</strong></p>
+
+<div class="comment" id="overview_description"><p>The Market library models the transaction process.</p></div>
+
+<dl>
+<dt>Author:</dt>
+<dd>Brandon Jackson</dd>
+</dl>
+<hr>
+
+<table id="summary_field">
+<tr><th colspan="2">Field Summary</th></tr>
+<tr>
+<td class="type">protected  object</td>
+<td class="description"><p class="name"><a href="#delete">$delete</a></p><p class="description">CodeIgniter super-object</p></td>
+</tr>
+</table>
+
+<table id="summary_method">
+<tr><th colspan="2">Method Summary</th></tr>
+<tr>
+<td class="type"> void</td>
+<td class="description"><p class="name"><a href="#__construct()">__construct</a>()</p><p class="description">Constructor</p></td>
+</tr>
+<tr>
+<td class="type"> boolean</td>
+<td class="description"><p class="name"><a href="#activate()">activate</a>(array options)</p><p class="description">User accepts demands, transaction status changed to active</p></td>
+</tr>
+<tr>
+<td class="type"> boolean</td>
+<td class="description"><p class="name"><a href="#borrow()">borrow</a>(array options)</p><p class="description">User requests to borrow another user's gift
+$options array's arguments same as $single_demand</p></td>
+</tr>
+<tr>
+<td class="type"> boolean</td>
+<td class="description"><p class="name"><a href="#cancel()">cancel</a>(array options)</p><p class="description">Cancel transaction at the request of the Demander. </p></td>
+</tr>
+<tr>
+<td class="type"> boolean</td>
+<td class="description"><p class="name"><a href="#decline()">decline</a>(array options)</p><p class="description">Decline transaction at the request of the Other user. </p></td>
+</tr>
+<tr>
+<td class="type"> boolean</td>
+<td class="description"><p class="name"><a href="#give()">give</a>(array options)</p><p class="description">User requests to give his gift to another user$options array's arguments same as $single_demand, except for the
+recipient ID. </p></td>
+</tr>
+<tr>
+<td class="type"> boolean</td>
+<td class="description"><p class="name"><a href="#share()">share</a>(array options)</p><p class="description">User requests to share his gift with another user$options array's arguments same as $single_demand, except for the
+recipient ID. </p></td>
+</tr>
+<tr>
+<td class="type"> boolean</td>
+<td class="description"><p class="name"><a href="#single_demand()">single_demand</a>(array options)</p><p class="description">New one-way, one-good demand</p></td>
+</tr>
+<tr>
+<td class="type"> boolean</td>
+<td class="description"><p class="name"><a href="#take()">take</a>(array options)</p><p class="description">User requests to take another user's gift
+$options array's arguments same as $single_demand</p></td>
+</tr>
+</table>
+
+<h2 id="detail_field">Field Detail</h2>
+<a href="../source/libraries/market.php.html#line16" class="location">libraries/market.php at line 16</a>
+
+<h3 id="delete">delete</h3>
+<code class="signature">protected  object <strong>$delete</strong></code>
+<div class="details">
+<p>CodeIgniter super-object</p></div>
+
+<hr>
+
+<h2 id="detail_method">Method Detail</h2><div class="method_detail">
+<div class='method'><a href="../source/libraries/market.php.html#line21" class="location">libraries/market.php at line 21</a>
+
+<h3 id="__construct()">__construct</h3>
+<code class="signature">public  void <strong>__construct</strong>()</code>
+<div class="details">
+<p>Constructor</p></div></div>
+
+
+
+<div class='method'><a href="../source/libraries/market.php.html#line329" class="location">libraries/market.php at line 329</a>
+
+<h3 id="activate()">activate</h3>
+<code class="signature">public  boolean <strong>activate</strong>(array options)</code>
+<div class="details">
+<p>User accepts demands, transaction status changed to active</p><dl>
+<dt>Arg:</dt>
+<dd>int transaction_id</dd>
+</dl>
+</div></div>
+
+
+
+<div class='method'><a href="../source/libraries/market.php.html#line170" class="location">libraries/market.php at line 170</a>
+
+<h3 id="borrow()">borrow</h3>
+<code class="signature">public  boolean <strong>borrow</strong>(array options)</code>
+<div class="details">
+<p>User requests to borrow another user's gift
+$options array's arguments same as $single_demand</p></div></div>
+
+
+
+<div class='method'><a href="../source/libraries/market.php.html#line233" class="location">libraries/market.php at line 233</a>
+
+<h3 id="cancel()">cancel</h3>
+<code class="signature">public  boolean <strong>cancel</strong>(array options)</code>
+<div class="details">
+<p>Cancel transaction at the request of the Demander. Can be passed a
+transaction_id directly or a good ID and a user ID which can be used
+to find the relevant transaction ID.</p><dl>
+<dt>Arg:</dt>
+<dd>int user_id			ID of demanding User</dd>
+<dd>int good_id			ID of Good</dd>
+<dd>int transaction_id		ID of transaction</dd>
+</dl>
+</div></div>
+
+
+
+<div class='method'><a href="../source/libraries/market.php.html#line283" class="location">libraries/market.php at line 283</a>
+
+<h3 id="decline()">decline</h3>
+<code class="signature">public  boolean <strong>decline</strong>(array options)</code>
+<div class="details">
+<p>Decline transaction at the request of the Other user. Can be passed a
+transaction_id directly or a good ID and a user ID which can be used
+to find the relevant transaction ID.</p><dl>
+<dt>Arg:</dt>
+<dd>int user_id			ID of demanding User</dd>
+<dd>int good_id			ID of Good</dd>
+<dd>int transaction_id		ID of transaction</dd>
+</dl>
+</div></div>
+
+
+
+<div class='method'><a href="../source/libraries/market.php.html#line194" class="location">libraries/market.php at line 194</a>
+
+<h3 id="give()">give</h3>
+<code class="signature">public  boolean <strong>give</strong>(array options)</code>
+<div class="details">
+<p>User requests to give his gift to another user</p><p>$options array's arguments same as $single_demand, except for the
+recipient ID. In the request use cases, the user ID is that of the
+demander and the user ID of the other transaction participant can
+be derived from the user ID of the requested good's owner. In
+the give and request cases, however, the Demander ID and Owner ID are
+the same. Thus we need to provide the ID of the recipient. It will
+overwrite the user_id option.</p><dl>
+<dt>Arg:</dt>
+<dd>int recipient_id		ID of recipient</dd>
+</dl>
+</div></div>
+
+
+
+<div class='method'><a href="../source/libraries/market.php.html#line213" class="location">libraries/market.php at line 213</a>
+
+<h3 id="share()">share</h3>
+<code class="signature">public  boolean <strong>share</strong>(array options)</code>
+<div class="details">
+<p>User requests to share his gift with another user</p><p>$options array's arguments same as $single_demand, except for the
+recipient ID. For explanation, see $this->give()</p><dl>
+<dt>Arg:</dt>
+<dd>int recipient_id		ID of recipient</dd>
+</dl>
+</div></div>
+
+
+
+<div class='method'><a href="../source/libraries/market.php.html#line43" class="location">libraries/market.php at line 43</a>
+
+<h3 id="single_demand()">single_demand</h3>
+<code class="signature">public  boolean <strong>single_demand</strong>(array options)</code>
+<div class="details">
+<p>New one-way, one-good demand</p><dl>
+<dt>Arg:</dt>
+<dd>int user_id		ID of User making demand</dd>
+<dd>int recipient_id	ID of User not making demand</dd>
+<dd>int good_id		ID of Good being demanded</dd>
+<dd>string type		Demand Type (give, take, share, borrow, fulfill)</dd>
+<dd>string hook		Hook to use when for success event</dd>
+<dd>string message		Reason / initial message</dd>
+</dl>
+</div></div>
+
+
+
+<div class='method'><a href="../source/libraries/market.php.html#line154" class="location">libraries/market.php at line 154</a>
+
+<h3 id="take()">take</h3>
+<code class="signature">public  boolean <strong>take</strong>(array options)</code>
+<div class="details">
+<p>User requests to take another user's gift
+$options array's arguments same as $single_demand</p></div></div>
+
+
+
+</div><div class="header">
+<h1>GiftFlow API</h1>
+<ul>
+<li><a href="../overview-summary.html">Overview</a></li>
+<li><a href="../search/package-summary.html">Package</a></li>
+<li class="active">Class</li>
+<li><a href="../search/package-tree.html">Tree</a></li>
+<li><a href="../overview-files.html">Files</a></li>
+<li><a href="../deprecated-list.html">Deprecated</a></li>
+<li><a href="../index-all.html">Index</a></li>
+</ul>
+</div>
+
+<div class="small_links">
+<a href="../index.html" target="_top">Frames</a>
+<a href="../search/market.html" target="_top">No frames</a>
+</div>
+<div class="small_links">
+Summary: <a href="#summary_field">Field</a> | <a href="#summary_method">Method</a> | <a href="#summary_constr">Constr</a>
+Detail: <a href="#detail_field">Field</a> | <a href="#detail_method">Method</a> | <a href="#summary_constr">Constr</a>
+</div>
+<hr>
+
+<p id="footer">This document was generated by <a href="http://peej.github.com/phpdoctor/">PHPDoctor: The PHP Documentation Creator</a></p>
+
+</body>
+
+</html>

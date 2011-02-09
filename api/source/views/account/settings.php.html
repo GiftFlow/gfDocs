@@ -6,7 +6,7 @@
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 
 <meta name="generator" content="PHPDoctor 2RC4 (http://peej.github.com/phpdoctor/)">
-<meta name="when" content="Sat, 24 Jul 2010 20:47:45 +0000">
+<meta name="when" content="Wed, 09 Feb 2011 20:22:56 +0000">
 
 <link rel="stylesheet" type="text/css" href="../../../stylesheet.css">
 <link rel="start" href="../../../overview-summary.html">
@@ -35,39 +35,53 @@
 <h1>views/account/settings.php</h1>
 <hr>
 
-<a name="line1"></a><pre><form id='settings' name='settings' method='post'>
-<a name="line2"></a><table class="form">
-<a name="line3"></a>
-<a name="line4"></a>	<tr class="row" id="row_email">
-<a name="line5"></a>		<td class="label"><label for="email">Email:</label></td>
-<a name="line6"></a>		<td class="field">
-<a name="line7"></a>			<input type="text" name="email" id="email" value="<?php echo $U->email;?>" />			
-<a name="line8"></a>		</td>
-<a name="line9"></a>	</tr>
-<a name="line10"></a>	
-<a name="line11"></a>	<tr class="row" id="row_new_password">
-<a name="line12"></a>		<td class="label"><label for="new_password">New Password:</label></td>
-<a name="line13"></a>		<td class="field">
-<a name="line14"></a>			<input type="password" name="new_password" id="new_password" value="" autocomplete='false' />			
-<a name="line15"></a>		</td>
-<a name="line16"></a>	</tr>
-<a name="line17"></a>	<tr class="row" id="row_confirm_new_password">
-<a name="line18"></a>		<td class="label"><label for="confirm_password">Confirm New Password:</label></td>
-<a name="line19"></a>		<td class="field">
-<a name="line20"></a>			<input type="password" name="confirm_new_password" id="confirm_new_password" value="" />			
-<a name="line21"></a>		</td>
-<a name="line22"></a>	</tr>
-<a name="line23"></a></table>
-<a name="line24"></a>
-<a name="line25"></a><input type='submit' value='Update Settings'>
-<a name="line26"></a></form>
-<a name="line27"></a><script>
-<a name="line28"></a>$(function(){
-<a name="line29"></a>	$("input#new_password").val('');
-<a name="line30"></a>	$("input:submit").button();
-<a name="line31"></a>	<?php echo notify(); ?>
-<a name="line32"></a>});
-<a name="line33"></a></script></pre>
+<a name="line1"></a><pre><div id='account_settings' class='two_panels'>
+<a name="line2"></a>	
+<a name="line3"></a>	<!-- Sidebar Menu -->
+<a name="line4"></a>	<?php echo $menu; ?>
+<a name="line5"></a>	
+<a name="line6"></a>	<div class='right_content'>
+<a name="line7"></a>
+<a name="line8"></a>		<form id='settings' name='settings' method='post'>
+<a name="line9"></a>		<table class="form">
+<a name="line10"></a>		
+<a name="line11"></a>			<tr class="row" id="row_email">
+<a name="line12"></a>				<td class="label"><label for="email">Email:</label></td>
+<a name="line13"></a>				<td class="field">
+<a name="line14"></a>					<input type="text" name="email" id="email" value="<?php echo $U->email;?>" />			
+<a name="line15"></a>				</td>
+<a name="line16"></a>			</tr>
+<a name="line17"></a>			
+<a name="line18"></a>			<tr class="row" id="row_new_password">
+<a name="line19"></a>				<td class="label"><label for="new_password">New Password:</label></td>
+<a name="line20"></a>				<td class="field">
+<a name="line21"></a>					<input type="password" name="new_password" id="new_password" value="" autocomplete='false' />			
+<a name="line22"></a>				</td>
+<a name="line23"></a>			</tr>
+<a name="line24"></a>			<tr class="row" id="row_confirm_new_password">
+<a name="line25"></a>				<td class="label"><label for="confirm_password">Confirm New Password:</label></td>
+<a name="line26"></a>				<td class="field">
+<a name="line27"></a>					<input type="password" name="confirm_new_password" id="confirm_new_password" value="" />			
+<a name="line28"></a>				</td>
+<a name="line29"></a>			</tr>
+<a name="line30"></a>		</table>
+<a name="line31"></a>		
+<a name="line32"></a>		<input type='submit' value='Update Settings'>
+<a name="line33"></a>		</form>
+<a name="line34"></a>
+<a name="line35"></a>	</div>
+<a name="line36"></a>	<!-- eof div.right_content -->
+<a name="line37"></a>
+<a name="line38"></a></div>
+<a name="line39"></a><!-- eof div.two_panels -->
+<a name="line40"></a>
+<a name="line41"></a><script type='text/javascript'>
+<a name="line42"></a>$(function(){
+<a name="line43"></a>	$("input#new_password").val('');
+<a name="line44"></a>	$("input:submit").button();
+<a name="line45"></a>	<?php echo notify(); ?>
+<a name="line46"></a>});
+<a name="line47"></a></script></pre>
 <div class="header">
 <h1>GiftFlow API</h1>
 <ul>
