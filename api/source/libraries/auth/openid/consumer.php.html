@@ -1,0 +1,2381 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+
+<html lang="en">
+<head>
+
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
+<meta name="generator" content="PHPDoctor 2RC4 (http://peej.github.com/phpdoctor/)">
+<meta name="when" content="Wed, 09 Feb 2011 20:22:56 +0000">
+
+<link rel="stylesheet" type="text/css" href="../../../../stylesheet.css">
+<link rel="start" href="../../../../overview-summary.html">
+
+<title>libraries/Auth/OpenID/Consumer.php (GiftFlow API)</title>
+
+</head>
+<body id="file" onload="parent.document.title=document.title;">
+
+<div class="header">
+<h1>GiftFlow API</h1>
+<ul>
+<li><a href="../../../../overview-summary.html">Overview</a></li>
+<li>Package</li><li>Class</li><li>Tree</li><li><a href="../../../../overview-files.html">Files</a></li>
+<li><a href="../../../../deprecated-list.html">Deprecated</a></li>
+<li><a href="../../../../index-all.html">Index</a></li>
+</ul>
+</div>
+
+<div class="small_links">
+<a href="../../../../index.html" target="_top">Frames</a>
+<a href="../../../../source/libraries/auth/openid/consumer.php.html" target="_top">No frames</a>
+</div>
+<hr>
+
+<h1>libraries/Auth/OpenID/Consumer.php</h1>
+<div class="comment" id="overview_description"><p>This module documents the main interface with the OpenID consumer
+library.  The only part of the library which has to be used and
+isn't documented in full here is the store required to create an
+Auth_OpenID_Consumer instance.  More on the abstract store type and
+concrete implementations of it that are provided in the
+documentation for the Auth_OpenID_Consumer constructor.</p><p>OVERVIEW</p><p>The OpenID identity verification process most commonly uses the
+following steps, as visible to the user of this library:</p><p>1. The user enters their OpenID into a field on the consumer's
+site, and hits a login button.
+2. The consumer site discovers the user's OpenID server using the
+YADIS protocol.
+3. The consumer site sends the browser a redirect to the identity
+server.  This is the authentication request as described in
+the OpenID specification.
+4. The identity server's site sends the browser a redirect back
+to the consumer site.  This redirect contains the server's
+response to the authentication request.</p><p>The most important part of the flow to note is the consumer's site
+must handle two separate HTTP requests in order to perform the full
+identity check.</p><p>LIBRARY DESIGN</p><p>This consumer library is designed with that flow in mind.  The goal
+is to make it as easy as possible to perform the above steps
+securely.</p><p>At a high level, there are two important parts in the consumer
+library.  The first important part is this module, which contains
+the interface to actually use this library.  The second is the
+Auth_OpenID_Interface class, which describes the interface to use
+if you need to create a custom method for storing the state this
+library needs to maintain between requests.</p><p>In general, the second part is less important for users of the
+library to know about, as several implementations are provided
+which cover a wide variety of situations in which consumers may use
+the library.</p><p>This module contains a class, Auth_OpenID_Consumer, with methods
+corresponding to the actions necessary in each of steps 2, 3, and 4
+described in the overview.  Use of this library should be as easy
+as creating an Auth_OpenID_Consumer instance and calling the
+methods appropriate for the action the site wants to take.</p><p>STORES AND DUMB MODE</p><p>OpenID is a protocol that works best when the consumer site is able
+to store some state.  This is the normal mode of operation for the
+protocol, and is sometimes referred to as smart mode.  There is
+also a fallback mode, known as dumb mode, which is available when
+the consumer site is not able to store state.  This mode should be
+avoided when possible, as it leaves the implementation more
+vulnerable to replay attacks.</p><p>The mode the library works in for normal operation is determined by
+the store that it is given.  The store is an abstraction that
+handles the data that the consumer needs to manage between http
+requests in order to operate efficiently and securely.</p><p>Several store implementation are provided, and the interface is
+fully documented so that custom stores can be used as well.  See
+the documentation for the Auth_OpenID_Consumer class for more
+information on the interface for stores.  The implementations that
+are provided allow the consumer site to store the necessary data in
+several different ways, including several SQL databases and normal
+files on disk.</p><p>There is an additional concrete store provided that puts the system
+in dumb mode.  This is not recommended, as it removes the library's
+ability to stop replay attacks reliably.  It still uses time-based
+checking to make replay attacks only possible within a small
+window, but they remain possible within that window.  This store
+should only be used if the consumer site has no way to retain data
+between requests at all.</p><p>IMMEDIATE MODE</p><p>In the flow described above, the user may need to confirm to the
+lidentity server that it's ok to authorize his or her identity.
+The server may draw pages asking for information from the user
+before it redirects the browser back to the consumer's site.  This
+is generally transparent to the consumer site, so it is typically
+ignored as an implementation detail.</p><p>There can be times, however, where the consumer site wants to get a
+response immediately.  When this is the case, the consumer can put
+the library in immediate mode.  In immediate mode, there is an
+extra response possible from the server, which is essentially the
+server reporting that it doesn't have enough information to answer
+the question yet.</p><p>USING THIS LIBRARY</p><p>Integrating this library into an application is usually a
+relatively straightforward process.  The process should basically
+follow this plan:</p><p>Add an OpenID login field somewhere on your site.  When an OpenID
+is entered in that field and the form is submitted, it should make
+a request to the your site which includes that OpenID URL.</p><p>First, the application should instantiate the Auth_OpenID_Consumer
+class using the store of choice (Auth_OpenID_FileStore or one of
+the SQL-based stores).  If the application has a custom
+session-management implementation, an object implementing the
+<code>Auth_Yadis_PHPSession</code> interface should be passed as the
+second parameter.  Otherwise, the default uses $_SESSION.</p><p>Next, the application should call the Auth_OpenID_Consumer object's
+'begin' method.  This method takes the OpenID URL.  The 'begin'
+method returns an Auth_OpenID_AuthRequest object.</p><p>Next, the application should call the 'redirectURL' method of the
+Auth_OpenID_AuthRequest object.  The 'return_to' URL parameter is
+the URL that the OpenID server will send the user back to after
+attempting to verify his or her identity.  The 'trust_root' is the
+URL (or URL pattern) that identifies your web site to the user when
+he or she is authorizing it.  Send a redirect to the resulting URL
+to the user's browser.</p><p>That's the first half of the authentication process.  The second
+half of the process is done after the user's ID server sends the
+user's browser a redirect back to your site to complete their
+login.</p><p>When that happens, the user will contact your site at the URL given
+as the 'return_to' URL to the Auth_OpenID_AuthRequest::redirectURL
+call made above.  The request will have several query parameters
+added to the URL by the identity server as the information
+necessary to finish the request.</p><p>Lastly, instantiate an Auth_OpenID_Consumer instance as above and
+call its 'complete' method, passing in all the received query
+arguments.</p><p>There are multiple possible return types possible from that
+method. These indicate the whether or not the login was successful,
+and include any additional information appropriate for their type.</p><p>PHP versions 4 and 5</p><p>LICENSE: See the COPYING file included in this distribution.</p></div>
+
+<hr>
+
+<a name="line1"></a><pre><?php
+<a name="line2"></a>
+<a name="line3"></a>/**
+<a name="line4"></a> * This module documents the main interface with the OpenID consumer
+<a name="line5"></a> * library.  The only part of the library which has to be used and
+<a name="line6"></a> * isn't documented in full here is the store required to create an
+<a name="line7"></a> * Auth_OpenID_Consumer instance.  More on the abstract store type and
+<a name="line8"></a> * concrete implementations of it that are provided in the
+<a name="line9"></a> * documentation for the Auth_OpenID_Consumer constructor.
+<a name="line10"></a> *
+<a name="line11"></a> * OVERVIEW
+<a name="line12"></a> *
+<a name="line13"></a> * The OpenID identity verification process most commonly uses the
+<a name="line14"></a> * following steps, as visible to the user of this library:
+<a name="line15"></a> *
+<a name="line16"></a> *   1. The user enters their OpenID into a field on the consumer's
+<a name="line17"></a> *      site, and hits a login button.
+<a name="line18"></a> *   2. The consumer site discovers the user's OpenID server using the
+<a name="line19"></a> *      YADIS protocol.
+<a name="line20"></a> *   3. The consumer site sends the browser a redirect to the identity
+<a name="line21"></a> *      server.  This is the authentication request as described in
+<a name="line22"></a> *      the OpenID specification.
+<a name="line23"></a> *   4. The identity server's site sends the browser a redirect back
+<a name="line24"></a> *      to the consumer site.  This redirect contains the server's
+<a name="line25"></a> *      response to the authentication request.
+<a name="line26"></a> *
+<a name="line27"></a> * The most important part of the flow to note is the consumer's site
+<a name="line28"></a> * must handle two separate HTTP requests in order to perform the full
+<a name="line29"></a> * identity check.
+<a name="line30"></a> *
+<a name="line31"></a> * LIBRARY DESIGN
+<a name="line32"></a> * 
+<a name="line33"></a> * This consumer library is designed with that flow in mind.  The goal
+<a name="line34"></a> * is to make it as easy as possible to perform the above steps
+<a name="line35"></a> * securely.
+<a name="line36"></a> *
+<a name="line37"></a> * At a high level, there are two important parts in the consumer
+<a name="line38"></a> * library.  The first important part is this module, which contains
+<a name="line39"></a> * the interface to actually use this library.  The second is the
+<a name="line40"></a> * Auth_OpenID_Interface class, which describes the interface to use
+<a name="line41"></a> * if you need to create a custom method for storing the state this
+<a name="line42"></a> * library needs to maintain between requests.
+<a name="line43"></a> *
+<a name="line44"></a> * In general, the second part is less important for users of the
+<a name="line45"></a> * library to know about, as several implementations are provided
+<a name="line46"></a> * which cover a wide variety of situations in which consumers may use
+<a name="line47"></a> * the library.
+<a name="line48"></a> *
+<a name="line49"></a> * This module contains a class, Auth_OpenID_Consumer, with methods
+<a name="line50"></a> * corresponding to the actions necessary in each of steps 2, 3, and 4
+<a name="line51"></a> * described in the overview.  Use of this library should be as easy
+<a name="line52"></a> * as creating an Auth_OpenID_Consumer instance and calling the
+<a name="line53"></a> * methods appropriate for the action the site wants to take.
+<a name="line54"></a> *
+<a name="line55"></a> * STORES AND DUMB MODE
+<a name="line56"></a> *
+<a name="line57"></a> * OpenID is a protocol that works best when the consumer site is able
+<a name="line58"></a> * to store some state.  This is the normal mode of operation for the
+<a name="line59"></a> * protocol, and is sometimes referred to as smart mode.  There is
+<a name="line60"></a> * also a fallback mode, known as dumb mode, which is available when
+<a name="line61"></a> * the consumer site is not able to store state.  This mode should be
+<a name="line62"></a> * avoided when possible, as it leaves the implementation more
+<a name="line63"></a> * vulnerable to replay attacks.
+<a name="line64"></a> *
+<a name="line65"></a> * The mode the library works in for normal operation is determined by
+<a name="line66"></a> * the store that it is given.  The store is an abstraction that
+<a name="line67"></a> * handles the data that the consumer needs to manage between http
+<a name="line68"></a> * requests in order to operate efficiently and securely.
+<a name="line69"></a> *
+<a name="line70"></a> * Several store implementation are provided, and the interface is
+<a name="line71"></a> * fully documented so that custom stores can be used as well.  See
+<a name="line72"></a> * the documentation for the Auth_OpenID_Consumer class for more
+<a name="line73"></a> * information on the interface for stores.  The implementations that
+<a name="line74"></a> * are provided allow the consumer site to store the necessary data in
+<a name="line75"></a> * several different ways, including several SQL databases and normal
+<a name="line76"></a> * files on disk.
+<a name="line77"></a> *
+<a name="line78"></a> * There is an additional concrete store provided that puts the system
+<a name="line79"></a> * in dumb mode.  This is not recommended, as it removes the library's
+<a name="line80"></a> * ability to stop replay attacks reliably.  It still uses time-based
+<a name="line81"></a> * checking to make replay attacks only possible within a small
+<a name="line82"></a> * window, but they remain possible within that window.  This store
+<a name="line83"></a> * should only be used if the consumer site has no way to retain data
+<a name="line84"></a> * between requests at all.
+<a name="line85"></a> *
+<a name="line86"></a> * IMMEDIATE MODE
+<a name="line87"></a> *
+<a name="line88"></a> * In the flow described above, the user may need to confirm to the
+<a name="line89"></a> * lidentity server that it's ok to authorize his or her identity.
+<a name="line90"></a> * The server may draw pages asking for information from the user
+<a name="line91"></a> * before it redirects the browser back to the consumer's site.  This
+<a name="line92"></a> * is generally transparent to the consumer site, so it is typically
+<a name="line93"></a> * ignored as an implementation detail.
+<a name="line94"></a> *
+<a name="line95"></a> * There can be times, however, where the consumer site wants to get a
+<a name="line96"></a> * response immediately.  When this is the case, the consumer can put
+<a name="line97"></a> * the library in immediate mode.  In immediate mode, there is an
+<a name="line98"></a> * extra response possible from the server, which is essentially the
+<a name="line99"></a> * server reporting that it doesn't have enough information to answer
+<a name="line100"></a> * the question yet.
+<a name="line101"></a> *
+<a name="line102"></a> * USING THIS LIBRARY
+<a name="line103"></a> *
+<a name="line104"></a> * Integrating this library into an application is usually a
+<a name="line105"></a> * relatively straightforward process.  The process should basically
+<a name="line106"></a> * follow this plan:
+<a name="line107"></a> *
+<a name="line108"></a> * Add an OpenID login field somewhere on your site.  When an OpenID
+<a name="line109"></a> * is entered in that field and the form is submitted, it should make
+<a name="line110"></a> * a request to the your site which includes that OpenID URL.
+<a name="line111"></a> *
+<a name="line112"></a> * First, the application should instantiate the Auth_OpenID_Consumer
+<a name="line113"></a> * class using the store of choice (Auth_OpenID_FileStore or one of
+<a name="line114"></a> * the SQL-based stores).  If the application has a custom
+<a name="line115"></a> * session-management implementation, an object implementing the
+<a name="line116"></a> * {@link Auth_Yadis_PHPSession} interface should be passed as the
+<a name="line117"></a> * second parameter.  Otherwise, the default uses $_SESSION.
+<a name="line118"></a> *
+<a name="line119"></a> * Next, the application should call the Auth_OpenID_Consumer object's
+<a name="line120"></a> * 'begin' method.  This method takes the OpenID URL.  The 'begin'
+<a name="line121"></a> * method returns an Auth_OpenID_AuthRequest object.
+<a name="line122"></a> *
+<a name="line123"></a> * Next, the application should call the 'redirectURL' method of the
+<a name="line124"></a> * Auth_OpenID_AuthRequest object.  The 'return_to' URL parameter is
+<a name="line125"></a> * the URL that the OpenID server will send the user back to after
+<a name="line126"></a> * attempting to verify his or her identity.  The 'trust_root' is the
+<a name="line127"></a> * URL (or URL pattern) that identifies your web site to the user when
+<a name="line128"></a> * he or she is authorizing it.  Send a redirect to the resulting URL
+<a name="line129"></a> * to the user's browser.
+<a name="line130"></a> *
+<a name="line131"></a> * That's the first half of the authentication process.  The second
+<a name="line132"></a> * half of the process is done after the user's ID server sends the
+<a name="line133"></a> * user's browser a redirect back to your site to complete their
+<a name="line134"></a> * login.
+<a name="line135"></a> *
+<a name="line136"></a> * When that happens, the user will contact your site at the URL given
+<a name="line137"></a> * as the 'return_to' URL to the Auth_OpenID_AuthRequest::redirectURL
+<a name="line138"></a> * call made above.  The request will have several query parameters
+<a name="line139"></a> * added to the URL by the identity server as the information
+<a name="line140"></a> * necessary to finish the request.
+<a name="line141"></a> *
+<a name="line142"></a> * Lastly, instantiate an Auth_OpenID_Consumer instance as above and
+<a name="line143"></a> * call its 'complete' method, passing in all the received query
+<a name="line144"></a> * arguments.
+<a name="line145"></a> *
+<a name="line146"></a> * There are multiple possible return types possible from that
+<a name="line147"></a> * method. These indicate the whether or not the login was successful,
+<a name="line148"></a> * and include any additional information appropriate for their type.
+<a name="line149"></a> *
+<a name="line150"></a> * PHP versions 4 and 5
+<a name="line151"></a> *
+<a name="line152"></a> * LICENSE: See the COPYING file included in this distribution.
+<a name="line153"></a> *
+<a name="line154"></a> * @package OpenID
+<a name="line155"></a> * @author JanRain, Inc. <openid@janrain.com>
+<a name="line156"></a> * @copyright 2005-2008 Janrain, Inc.
+<a name="line157"></a> * @license http://www.apache.org/licenses/LICENSE-2.0 Apache
+<a name="line158"></a> */
+<a name="line159"></a>
+<a name="line160"></a>/**
+<a name="line161"></a> * Require utility classes and functions for the consumer.
+<a name="line162"></a> */
+<a name="line163"></a>require_once "Auth/OpenID.php";
+<a name="line164"></a>require_once "Auth/OpenID/Message.php";
+<a name="line165"></a>require_once "Auth/OpenID/HMAC.php";
+<a name="line166"></a>require_once "Auth/OpenID/Association.php";
+<a name="line167"></a>require_once "Auth/OpenID/CryptUtil.php";
+<a name="line168"></a>require_once "Auth/OpenID/DiffieHellman.php";
+<a name="line169"></a>require_once "Auth/OpenID/KVForm.php";
+<a name="line170"></a>require_once "Auth/OpenID/Nonce.php";
+<a name="line171"></a>require_once "Auth/OpenID/Discover.php";
+<a name="line172"></a>require_once "Auth/OpenID/URINorm.php";
+<a name="line173"></a>require_once "Auth/Yadis/Manager.php";
+<a name="line174"></a>require_once "Auth/Yadis/XRI.php";
+<a name="line175"></a>
+<a name="line176"></a>/**
+<a name="line177"></a> * This is the status code returned when the complete method returns
+<a name="line178"></a> * successfully.
+<a name="line179"></a> */
+<a name="line180"></a>define('Auth_OpenID_SUCCESS', 'success');
+<a name="line181"></a>
+<a name="line182"></a>/**
+<a name="line183"></a> * Status to indicate cancellation of OpenID authentication.
+<a name="line184"></a> */
+<a name="line185"></a>define('Auth_OpenID_CANCEL', 'cancel');
+<a name="line186"></a>
+<a name="line187"></a>/**
+<a name="line188"></a> * This is the status code completeAuth returns when the value it
+<a name="line189"></a> * received indicated an invalid login.
+<a name="line190"></a> */
+<a name="line191"></a>define('Auth_OpenID_FAILURE', 'failure');
+<a name="line192"></a>
+<a name="line193"></a>/**
+<a name="line194"></a> * This is the status code completeAuth returns when the
+<a name="line195"></a> * {@link Auth_OpenID_Consumer} instance is in immediate mode, and the
+<a name="line196"></a> * identity server sends back a URL to send the user to to complete his
+<a name="line197"></a> * or her login.
+<a name="line198"></a> */
+<a name="line199"></a>define('Auth_OpenID_SETUP_NEEDED', 'setup needed');
+<a name="line200"></a>
+<a name="line201"></a>/**
+<a name="line202"></a> * This is the status code beginAuth returns when the page fetched
+<a name="line203"></a> * from the entered OpenID URL doesn't contain the necessary link tags
+<a name="line204"></a> * to function as an identity page.
+<a name="line205"></a> */
+<a name="line206"></a>define('Auth_OpenID_PARSE_ERROR', 'parse error');
+<a name="line207"></a>
+<a name="line208"></a>/**
+<a name="line209"></a> * An OpenID consumer implementation that performs discovery and does
+<a name="line210"></a> * session management.  See the Consumer.php file documentation for
+<a name="line211"></a> * more information.
+<a name="line212"></a> *
+<a name="line213"></a> * @package OpenID
+<a name="line214"></a> */
+<a name="line215"></a>class Auth_OpenID_Consumer {
+<a name="line216"></a>
+<a name="line217"></a>    /**
+<a name="line218"></a>     * @access private
+<a name="line219"></a>     */
+<a name="line220"></a>    var $discoverMethod = 'Auth_OpenID_discover';
+<a name="line221"></a>
+<a name="line222"></a>    /**
+<a name="line223"></a>     * @access private
+<a name="line224"></a>     */
+<a name="line225"></a>    var $session_key_prefix = "_openid_consumer_";
+<a name="line226"></a>
+<a name="line227"></a>    /**
+<a name="line228"></a>     * @access private
+<a name="line229"></a>     */
+<a name="line230"></a>    var $_token_suffix = "last_token";
+<a name="line231"></a>
+<a name="line232"></a>    /**
+<a name="line233"></a>     * Initialize a Consumer instance.
+<a name="line234"></a>     *
+<a name="line235"></a>     * You should create a new instance of the Consumer object with
+<a name="line236"></a>     * every HTTP request that handles OpenID transactions.
+<a name="line237"></a>     *
+<a name="line238"></a>     * @param Auth_OpenID_OpenIDStore $store This must be an object
+<a name="line239"></a>     * that implements the interface in {@link
+<a name="line240"></a>     * Auth_OpenID_OpenIDStore}.  Several concrete implementations are
+<a name="line241"></a>     * provided, to cover most common use cases.  For stores backed by
+<a name="line242"></a>     * MySQL, PostgreSQL, or SQLite, see the {@link
+<a name="line243"></a>     * Auth_OpenID_SQLStore} class and its sublcasses.  For a
+<a name="line244"></a>     * filesystem-backed store, see the {@link Auth_OpenID_FileStore}
+<a name="line245"></a>     * module.  As a last resort, if it isn't possible for the server
+<a name="line246"></a>     * to store state at all, an instance of {@link
+<a name="line247"></a>     * Auth_OpenID_DumbStore} can be used.
+<a name="line248"></a>     *
+<a name="line249"></a>     * @param mixed $session An object which implements the interface
+<a name="line250"></a>     * of the {@link Auth_Yadis_PHPSession} class.  Particularly, this
+<a name="line251"></a>     * object is expected to have these methods: get($key), set($key),
+<a name="line252"></a>     * $value), and del($key).  This defaults to a session object
+<a name="line253"></a>     * which wraps PHP's native session machinery.  You should only
+<a name="line254"></a>     * need to pass something here if you have your own sessioning
+<a name="line255"></a>     * implementation.
+<a name="line256"></a>     *
+<a name="line257"></a>     * @param str $consumer_cls The name of the class to instantiate
+<a name="line258"></a>     * when creating the internal consumer object.  This is used for
+<a name="line259"></a>     * testing.
+<a name="line260"></a>     */
+<a name="line261"></a>    function Auth_OpenID_Consumer($store, $session = null,
+<a name="line262"></a>                                  $consumer_cls = null)
+<a name="line263"></a>    {
+<a name="line264"></a>        if ($session === null) {
+<a name="line265"></a>            $session = new Auth_Yadis_PHPSession();
+<a name="line266"></a>        }
+<a name="line267"></a>
+<a name="line268"></a>        $this->session = $session;
+<a name="line269"></a>
+<a name="line270"></a>        if ($consumer_cls !== null) {
+<a name="line271"></a>            $this->consumer = new $consumer_cls($store);
+<a name="line272"></a>        } else {
+<a name="line273"></a>            $this->consumer = new Auth_OpenID_GenericConsumer($store);
+<a name="line274"></a>        }
+<a name="line275"></a>
+<a name="line276"></a>        $this->_token_key = $this->session_key_prefix . $this->_token_suffix;
+<a name="line277"></a>    }
+<a name="line278"></a>
+<a name="line279"></a>    /**
+<a name="line280"></a>     * Used in testing to define the discovery mechanism.
+<a name="line281"></a>     *
+<a name="line282"></a>     * @access private
+<a name="line283"></a>     */
+<a name="line284"></a>    function getDiscoveryObject($session, $openid_url,
+<a name="line285"></a>                                $session_key_prefix)
+<a name="line286"></a>    {
+<a name="line287"></a>        return new Auth_Yadis_Discovery($session, $openid_url,
+<a name="line288"></a>                                        $session_key_prefix);
+<a name="line289"></a>    }
+<a name="line290"></a>
+<a name="line291"></a>    /**
+<a name="line292"></a>     * Start the OpenID authentication process. See steps 1-2 in the
+<a name="line293"></a>     * overview at the top of this file.
+<a name="line294"></a>     *
+<a name="line295"></a>     * @param string $user_url Identity URL given by the user. This
+<a name="line296"></a>     * method performs a textual transformation of the URL to try and
+<a name="line297"></a>     * make sure it is normalized. For example, a user_url of
+<a name="line298"></a>     * example.com will be normalized to http://example.com/
+<a name="line299"></a>     * normalizing and resolving any redirects the server might issue.
+<a name="line300"></a>     *
+<a name="line301"></a>     * @param bool $anonymous True if the OpenID request is to be sent
+<a name="line302"></a>     * to the server without any identifier information.  Use this
+<a name="line303"></a>     * when you want to transport data but don't want to do OpenID
+<a name="line304"></a>     * authentication with identifiers.
+<a name="line305"></a>     *
+<a name="line306"></a>     * @return Auth_OpenID_AuthRequest $auth_request An object
+<a name="line307"></a>     * containing the discovered information will be returned, with a
+<a name="line308"></a>     * method for building a redirect URL to the server, as described
+<a name="line309"></a>     * in step 3 of the overview. This object may also be used to add
+<a name="line310"></a>     * extension arguments to the request, using its 'addExtensionArg'
+<a name="line311"></a>     * method.
+<a name="line312"></a>     */
+<a name="line313"></a>    function begin($user_url, $anonymous=false)
+<a name="line314"></a>    {
+<a name="line315"></a>        $openid_url = $user_url;
+<a name="line316"></a>
+<a name="line317"></a>        $disco = $this->getDiscoveryObject($this->session,
+<a name="line318"></a>                                           $openid_url,
+<a name="line319"></a>                                           $this->session_key_prefix);
+<a name="line320"></a>
+<a name="line321"></a>        // Set the 'stale' attribute of the manager.  If discovery
+<a name="line322"></a>        // fails in a fatal way, the stale flag will cause the manager
+<a name="line323"></a>        // to be cleaned up next time discovery is attempted.
+<a name="line324"></a>
+<a name="line325"></a>        $m = $disco->getManager();
+<a name="line326"></a>        $loader = new Auth_Yadis_ManagerLoader();
+<a name="line327"></a>
+<a name="line328"></a>        if ($m) {
+<a name="line329"></a>            if ($m->stale) {
+<a name="line330"></a>                $disco->destroyManager();
+<a name="line331"></a>            } else {
+<a name="line332"></a>                $m->stale = true;
+<a name="line333"></a>                $disco->session->set($disco->session_key,
+<a name="line334"></a>                                     serialize($loader->toSession($m)));
+<a name="line335"></a>            }
+<a name="line336"></a>        }
+<a name="line337"></a>
+<a name="line338"></a>        $endpoint = $disco->getNextService($this->discoverMethod,
+<a name="line339"></a>                                           $this->consumer->fetcher);
+<a name="line340"></a>
+<a name="line341"></a>        // Reset the 'stale' attribute of the manager.
+<a name="line342"></a>        $m = $disco->getManager();
+<a name="line343"></a>        if ($m) {
+<a name="line344"></a>            $m->stale = false;
+<a name="line345"></a>            $disco->session->set($disco->session_key,
+<a name="line346"></a>                                 serialize($loader->toSession($m)));
+<a name="line347"></a>        }
+<a name="line348"></a>
+<a name="line349"></a>        if ($endpoint === null) {
+<a name="line350"></a>            return null;
+<a name="line351"></a>        } else {
+<a name="line352"></a>            return $this->beginWithoutDiscovery($endpoint,
+<a name="line353"></a>                                                $anonymous);
+<a name="line354"></a>        }
+<a name="line355"></a>    }
+<a name="line356"></a>
+<a name="line357"></a>    /**
+<a name="line358"></a>     * Start OpenID verification without doing OpenID server
+<a name="line359"></a>     * discovery. This method is used internally by Consumer.begin
+<a name="line360"></a>     * after discovery is performed, and exists to provide an
+<a name="line361"></a>     * interface for library users needing to perform their own
+<a name="line362"></a>     * discovery.
+<a name="line363"></a>     *
+<a name="line364"></a>     * @param Auth_OpenID_ServiceEndpoint $endpoint an OpenID service
+<a name="line365"></a>     * endpoint descriptor.
+<a name="line366"></a>     *
+<a name="line367"></a>     * @param bool anonymous Set to true if you want to perform OpenID
+<a name="line368"></a>     * without identifiers.
+<a name="line369"></a>     *
+<a name="line370"></a>     * @return Auth_OpenID_AuthRequest $auth_request An OpenID
+<a name="line371"></a>     * authentication request object.
+<a name="line372"></a>     */
+<a name="line373"></a>    function beginWithoutDiscovery($endpoint, $anonymous=false)
+<a name="line374"></a>    {
+<a name="line375"></a>        $loader = new Auth_OpenID_ServiceEndpointLoader();
+<a name="line376"></a>        $auth_req = $this->consumer->begin($endpoint);
+<a name="line377"></a>        $this->session->set($this->_token_key,
+<a name="line378"></a>              $loader->toSession($auth_req->endpoint));
+<a name="line379"></a>        if (!$auth_req->setAnonymous($anonymous)) {
+<a name="line380"></a>            return new Auth_OpenID_FailureResponse(null,
+<a name="line381"></a>              "OpenID 1 requests MUST include the identifier " .
+<a name="line382"></a>              "in the request.");
+<a name="line383"></a>        }
+<a name="line384"></a>        return $auth_req;
+<a name="line385"></a>    }
+<a name="line386"></a>
+<a name="line387"></a>    /**
+<a name="line388"></a>     * Called to interpret the server's response to an OpenID
+<a name="line389"></a>     * request. It is called in step 4 of the flow described in the
+<a name="line390"></a>     * consumer overview.
+<a name="line391"></a>     *
+<a name="line392"></a>     * @param string $current_url The URL used to invoke the application.
+<a name="line393"></a>     * Extract the URL from your application's web
+<a name="line394"></a>     * request framework and specify it here to have it checked
+<a name="line395"></a>     * against the openid.current_url value in the response.  If
+<a name="line396"></a>     * the current_url URL check fails, the status of the
+<a name="line397"></a>     * completion will be FAILURE.
+<a name="line398"></a>     *
+<a name="line399"></a>     * @param array $query An array of the query parameters (key =>
+<a name="line400"></a>     * value pairs) for this HTTP request.  Defaults to null.  If
+<a name="line401"></a>     * null, the GET or POST data are automatically gotten from the
+<a name="line402"></a>     * PHP environment.  It is only useful to override $query for
+<a name="line403"></a>     * testing.
+<a name="line404"></a>     *
+<a name="line405"></a>     * @return Auth_OpenID_ConsumerResponse $response A instance of an
+<a name="line406"></a>     * Auth_OpenID_ConsumerResponse subclass. The type of response is
+<a name="line407"></a>     * indicated by the status attribute, which will be one of
+<a name="line408"></a>     * SUCCESS, CANCEL, FAILURE, or SETUP_NEEDED.
+<a name="line409"></a>     */
+<a name="line410"></a>    function complete($current_url, $query=null)
+<a name="line411"></a>    {
+<a name="line412"></a>        if ($current_url && !is_string($current_url)) {
+<a name="line413"></a>            // This is ugly, but we need to complain loudly when
+<a name="line414"></a>            // someone uses the API incorrectly.
+<a name="line415"></a>            trigger_error("current_url must be a string; see NEWS file " .
+<a name="line416"></a>                          "for upgrading notes.",
+<a name="line417"></a>                          E_USER_ERROR);
+<a name="line418"></a>        }
+<a name="line419"></a>
+<a name="line420"></a>        if ($query === null) {
+<a name="line421"></a>            $query = Auth_OpenID::getQuery();
+<a name="line422"></a>        }
+<a name="line423"></a>
+<a name="line424"></a>        $loader = new Auth_OpenID_ServiceEndpointLoader();
+<a name="line425"></a>        $endpoint_data = $this->session->get($this->_token_key);
+<a name="line426"></a>        $endpoint =
+<a name="line427"></a>            $loader->fromSession($endpoint_data);
+<a name="line428"></a>
+<a name="line429"></a>        $message = Auth_OpenID_Message::fromPostArgs($query);
+<a name="line430"></a>        $response = $this->consumer->complete($message, $endpoint, 
+<a name="line431"></a>                                              $current_url);
+<a name="line432"></a>        $this->session->del($this->_token_key);
+<a name="line433"></a>
+<a name="line434"></a>        if (in_array($response->status, array(Auth_OpenID_SUCCESS,
+<a name="line435"></a>                                              Auth_OpenID_CANCEL))) {
+<a name="line436"></a>            if ($response->identity_url !== null) {
+<a name="line437"></a>                $disco = $this->getDiscoveryObject($this->session,
+<a name="line438"></a>                                                   $response->identity_url,
+<a name="line439"></a>                                                   $this->session_key_prefix);
+<a name="line440"></a>                $disco->cleanup(true);
+<a name="line441"></a>            }
+<a name="line442"></a>        }
+<a name="line443"></a>
+<a name="line444"></a>        return $response;
+<a name="line445"></a>    }
+<a name="line446"></a>}
+<a name="line447"></a>
+<a name="line448"></a>/**
+<a name="line449"></a> * A class implementing HMAC/DH-SHA1 consumer sessions.
+<a name="line450"></a> *
+<a name="line451"></a> * @package OpenID
+<a name="line452"></a> */
+<a name="line453"></a>class Auth_OpenID_DiffieHellmanSHA1ConsumerSession {
+<a name="line454"></a>    var $session_type = 'DH-SHA1';
+<a name="line455"></a>    var $hash_func = 'Auth_OpenID_SHA1';
+<a name="line456"></a>    var $secret_size = 20;
+<a name="line457"></a>    var $allowed_assoc_types = array('HMAC-SHA1');
+<a name="line458"></a>
+<a name="line459"></a>    function Auth_OpenID_DiffieHellmanSHA1ConsumerSession($dh = null)
+<a name="line460"></a>    {
+<a name="line461"></a>        if ($dh === null) {
+<a name="line462"></a>            $dh = new Auth_OpenID_DiffieHellman();
+<a name="line463"></a>        }
+<a name="line464"></a>
+<a name="line465"></a>        $this->dh = $dh;
+<a name="line466"></a>    }
+<a name="line467"></a>
+<a name="line468"></a>    function getRequest()
+<a name="line469"></a>    {
+<a name="line470"></a>        $math = Auth_OpenID_getMathLib();
+<a name="line471"></a>
+<a name="line472"></a>        $cpub = $math->longToBase64($this->dh->public);
+<a name="line473"></a>
+<a name="line474"></a>        $args = array('dh_consumer_public' => $cpub);
+<a name="line475"></a>
+<a name="line476"></a>        if (!$this->dh->usingDefaultValues()) {
+<a name="line477"></a>            $args = array_merge($args, array(
+<a name="line478"></a>                'dh_modulus' =>
+<a name="line479"></a>                     $math->longToBase64($this->dh->mod),
+<a name="line480"></a>                'dh_gen' =>
+<a name="line481"></a>                     $math->longToBase64($this->dh->gen)));
+<a name="line482"></a>        }
+<a name="line483"></a>
+<a name="line484"></a>        return $args;
+<a name="line485"></a>    }
+<a name="line486"></a>
+<a name="line487"></a>    function extractSecret($response)
+<a name="line488"></a>    {
+<a name="line489"></a>        if (!$response->hasKey(Auth_OpenID_OPENID_NS,
+<a name="line490"></a>                               'dh_server_public')) {
+<a name="line491"></a>            return null;
+<a name="line492"></a>        }
+<a name="line493"></a>
+<a name="line494"></a>        if (!$response->hasKey(Auth_OpenID_OPENID_NS,
+<a name="line495"></a>                               'enc_mac_key')) {
+<a name="line496"></a>            return null;
+<a name="line497"></a>        }
+<a name="line498"></a>
+<a name="line499"></a>        $math = Auth_OpenID_getMathLib();
+<a name="line500"></a>
+<a name="line501"></a>        $spub = $math->base64ToLong($response->getArg(Auth_OpenID_OPENID_NS,
+<a name="line502"></a>                                                      'dh_server_public'));
+<a name="line503"></a>        $enc_mac_key = base64_decode($response->getArg(Auth_OpenID_OPENID_NS,
+<a name="line504"></a>                                                       'enc_mac_key'));
+<a name="line505"></a>
+<a name="line506"></a>        return $this->dh->xorSecret($spub, $enc_mac_key, $this->hash_func);
+<a name="line507"></a>    }
+<a name="line508"></a>}
+<a name="line509"></a>
+<a name="line510"></a>/**
+<a name="line511"></a> * A class implementing HMAC/DH-SHA256 consumer sessions.
+<a name="line512"></a> *
+<a name="line513"></a> * @package OpenID
+<a name="line514"></a> */
+<a name="line515"></a>class Auth_OpenID_DiffieHellmanSHA256ConsumerSession extends
+<a name="line516"></a>      Auth_OpenID_DiffieHellmanSHA1ConsumerSession {
+<a name="line517"></a>    var $session_type = 'DH-SHA256';
+<a name="line518"></a>    var $hash_func = 'Auth_OpenID_SHA256';
+<a name="line519"></a>    var $secret_size = 32;
+<a name="line520"></a>    var $allowed_assoc_types = array('HMAC-SHA256');
+<a name="line521"></a>}
+<a name="line522"></a>
+<a name="line523"></a>/**
+<a name="line524"></a> * A class implementing plaintext consumer sessions.
+<a name="line525"></a> *
+<a name="line526"></a> * @package OpenID
+<a name="line527"></a> */
+<a name="line528"></a>class Auth_OpenID_PlainTextConsumerSession {
+<a name="line529"></a>    var $session_type = 'no-encryption';
+<a name="line530"></a>    var $allowed_assoc_types =  array('HMAC-SHA1', 'HMAC-SHA256');
+<a name="line531"></a>
+<a name="line532"></a>    function getRequest()
+<a name="line533"></a>    {
+<a name="line534"></a>        return array();
+<a name="line535"></a>    }
+<a name="line536"></a>
+<a name="line537"></a>    function extractSecret($response)
+<a name="line538"></a>    {
+<a name="line539"></a>        if (!$response->hasKey(Auth_OpenID_OPENID_NS, 'mac_key')) {
+<a name="line540"></a>            return null;
+<a name="line541"></a>        }
+<a name="line542"></a>
+<a name="line543"></a>        return base64_decode($response->getArg(Auth_OpenID_OPENID_NS,
+<a name="line544"></a>                                               'mac_key'));
+<a name="line545"></a>    }
+<a name="line546"></a>}
+<a name="line547"></a>
+<a name="line548"></a>/**
+<a name="line549"></a> * Returns available session types.
+<a name="line550"></a> */
+<a name="line551"></a>function Auth_OpenID_getAvailableSessionTypes()
+<a name="line552"></a>{
+<a name="line553"></a>    $types = array(
+<a name="line554"></a>      'no-encryption' => 'Auth_OpenID_PlainTextConsumerSession',
+<a name="line555"></a>      'DH-SHA1' => 'Auth_OpenID_DiffieHellmanSHA1ConsumerSession',
+<a name="line556"></a>      'DH-SHA256' => 'Auth_OpenID_DiffieHellmanSHA256ConsumerSession');
+<a name="line557"></a>
+<a name="line558"></a>    return $types;
+<a name="line559"></a>}
+<a name="line560"></a>
+<a name="line561"></a>/**
+<a name="line562"></a> * This class is the interface to the OpenID consumer logic.
+<a name="line563"></a> * Instances of it maintain no per-request state, so they can be
+<a name="line564"></a> * reused (or even used by multiple threads concurrently) as needed.
+<a name="line565"></a> *
+<a name="line566"></a> * @package OpenID
+<a name="line567"></a> */
+<a name="line568"></a>class Auth_OpenID_GenericConsumer {
+<a name="line569"></a>    /**
+<a name="line570"></a>     * @access private
+<a name="line571"></a>     */
+<a name="line572"></a>    var $discoverMethod = 'Auth_OpenID_discover';
+<a name="line573"></a>
+<a name="line574"></a>    /**
+<a name="line575"></a>     * This consumer's store object.
+<a name="line576"></a>     */
+<a name="line577"></a>    var $store;
+<a name="line578"></a>
+<a name="line579"></a>    /**
+<a name="line580"></a>     * @access private
+<a name="line581"></a>     */
+<a name="line582"></a>    var $_use_assocs;
+<a name="line583"></a>
+<a name="line584"></a>    /**
+<a name="line585"></a>     * @access private
+<a name="line586"></a>     */
+<a name="line587"></a>    var $openid1_nonce_query_arg_name = 'janrain_nonce';
+<a name="line588"></a>
+<a name="line589"></a>    /**
+<a name="line590"></a>     * Another query parameter that gets added to the return_to for
+<a name="line591"></a>     * OpenID 1; if the user's session state is lost, use this claimed
+<a name="line592"></a>     * identifier to do discovery when verifying the response.
+<a name="line593"></a>     */
+<a name="line594"></a>    var $openid1_return_to_identifier_name = 'openid1_claimed_id';
+<a name="line595"></a>
+<a name="line596"></a>    /**
+<a name="line597"></a>     * This method initializes a new {@link Auth_OpenID_Consumer}
+<a name="line598"></a>     * instance to access the library.
+<a name="line599"></a>     *
+<a name="line600"></a>     * @param Auth_OpenID_OpenIDStore $store This must be an object
+<a name="line601"></a>     * that implements the interface in {@link Auth_OpenID_OpenIDStore}.
+<a name="line602"></a>     * Several concrete implementations are provided, to cover most common use
+<a name="line603"></a>     * cases.  For stores backed by MySQL, PostgreSQL, or SQLite, see
+<a name="line604"></a>     * the {@link Auth_OpenID_SQLStore} class and its sublcasses.  For a
+<a name="line605"></a>     * filesystem-backed store, see the {@link Auth_OpenID_FileStore} module.
+<a name="line606"></a>     * As a last resort, if it isn't possible for the server to store
+<a name="line607"></a>     * state at all, an instance of {@link Auth_OpenID_DumbStore} can be used.
+<a name="line608"></a>     *
+<a name="line609"></a>     * @param bool $immediate This is an optional boolean value.  It
+<a name="line610"></a>     * controls whether the library uses immediate mode, as explained
+<a name="line611"></a>     * in the module description.  The default value is False, which
+<a name="line612"></a>     * disables immediate mode.
+<a name="line613"></a>     */
+<a name="line614"></a>    function Auth_OpenID_GenericConsumer($store)
+<a name="line615"></a>    {
+<a name="line616"></a>        $this->store = $store;
+<a name="line617"></a>        $this->negotiator = Auth_OpenID_getDefaultNegotiator();
+<a name="line618"></a>        $this->_use_assocs = (is_null($this->store) ? false : true);
+<a name="line619"></a>
+<a name="line620"></a>        $this->fetcher = Auth_Yadis_Yadis::getHTTPFetcher();
+<a name="line621"></a>
+<a name="line622"></a>        $this->session_types = Auth_OpenID_getAvailableSessionTypes();
+<a name="line623"></a>    }
+<a name="line624"></a>
+<a name="line625"></a>    /**
+<a name="line626"></a>     * Called to begin OpenID authentication using the specified
+<a name="line627"></a>     * {@link Auth_OpenID_ServiceEndpoint}.
+<a name="line628"></a>     *
+<a name="line629"></a>     * @access private
+<a name="line630"></a>     */
+<a name="line631"></a>    function begin($service_endpoint)
+<a name="line632"></a>    {
+<a name="line633"></a>        $assoc = $this->_getAssociation($service_endpoint);
+<a name="line634"></a>        $r = new Auth_OpenID_AuthRequest($service_endpoint, $assoc);
+<a name="line635"></a>        $r->return_to_args[$this->openid1_nonce_query_arg_name] =
+<a name="line636"></a>            Auth_OpenID_mkNonce();
+<a name="line637"></a>
+<a name="line638"></a>        if ($r->message->isOpenID1()) {
+<a name="line639"></a>            $r->return_to_args[$this->openid1_return_to_identifier_name] =
+<a name="line640"></a>                $r->endpoint->claimed_id;
+<a name="line641"></a>        }
+<a name="line642"></a>
+<a name="line643"></a>        return $r;
+<a name="line644"></a>    }
+<a name="line645"></a>
+<a name="line646"></a>    /**
+<a name="line647"></a>     * Given an {@link Auth_OpenID_Message}, {@link
+<a name="line648"></a>     * Auth_OpenID_ServiceEndpoint} and optional return_to URL,
+<a name="line649"></a>     * complete OpenID authentication.
+<a name="line650"></a>     *
+<a name="line651"></a>     * @access private
+<a name="line652"></a>     */
+<a name="line653"></a>    function complete($message, $endpoint, $return_to)
+<a name="line654"></a>    {
+<a name="line655"></a>        $mode = $message->getArg(Auth_OpenID_OPENID_NS, 'mode',
+<a name="line656"></a>                                 '<no mode set>');
+<a name="line657"></a>
+<a name="line658"></a>        $mode_methods = array(
+<a name="line659"></a>                              'cancel' => '_complete_cancel',
+<a name="line660"></a>                              'error' => '_complete_error',
+<a name="line661"></a>                              'setup_needed' => '_complete_setup_needed',
+<a name="line662"></a>                              'id_res' => '_complete_id_res',
+<a name="line663"></a>                              );
+<a name="line664"></a>
+<a name="line665"></a>        $method = Auth_OpenID::arrayGet($mode_methods, $mode,
+<a name="line666"></a>                                        '_completeInvalid');
+<a name="line667"></a>
+<a name="line668"></a>        return call_user_func_array(array($this, $method),
+<a name="line669"></a>                                    array($message, &$endpoint, $return_to));
+<a name="line670"></a>    }
+<a name="line671"></a>
+<a name="line672"></a>    /**
+<a name="line673"></a>     * @access private
+<a name="line674"></a>     */
+<a name="line675"></a>    function _completeInvalid($message, $endpoint, $unused)
+<a name="line676"></a>    {
+<a name="line677"></a>        $mode = $message->getArg(Auth_OpenID_OPENID_NS, 'mode',
+<a name="line678"></a>                                 '<No mode set>');
+<a name="line679"></a>
+<a name="line680"></a>        return new Auth_OpenID_FailureResponse($endpoint,
+<a name="line681"></a>                    sprintf("Invalid openid.mode '%s'", $mode));
+<a name="line682"></a>    }
+<a name="line683"></a>
+<a name="line684"></a>    /**
+<a name="line685"></a>     * @access private
+<a name="line686"></a>     */
+<a name="line687"></a>    function _complete_cancel($message, $endpoint, $unused)
+<a name="line688"></a>    {
+<a name="line689"></a>        return new Auth_OpenID_CancelResponse($endpoint);
+<a name="line690"></a>    }
+<a name="line691"></a>
+<a name="line692"></a>    /**
+<a name="line693"></a>     * @access private
+<a name="line694"></a>     */
+<a name="line695"></a>    function _complete_error($message, $endpoint, $unused)
+<a name="line696"></a>    {
+<a name="line697"></a>        $error = $message->getArg(Auth_OpenID_OPENID_NS, 'error');
+<a name="line698"></a>        $contact = $message->getArg(Auth_OpenID_OPENID_NS, 'contact');
+<a name="line699"></a>        $reference = $message->getArg(Auth_OpenID_OPENID_NS, 'reference');
+<a name="line700"></a>
+<a name="line701"></a>        return new Auth_OpenID_FailureResponse($endpoint, $error,
+<a name="line702"></a>                                               $contact, $reference);
+<a name="line703"></a>    }
+<a name="line704"></a>
+<a name="line705"></a>    /**
+<a name="line706"></a>     * @access private
+<a name="line707"></a>     */
+<a name="line708"></a>    function _complete_setup_needed($message, $endpoint, $unused)
+<a name="line709"></a>    {
+<a name="line710"></a>        if (!$message->isOpenID2()) {
+<a name="line711"></a>            return $this->_completeInvalid($message, $endpoint);
+<a name="line712"></a>        }
+<a name="line713"></a>
+<a name="line714"></a>        $user_setup_url = $message->getArg(Auth_OpenID_OPENID2_NS,
+<a name="line715"></a>                                           'user_setup_url');
+<a name="line716"></a>        return new Auth_OpenID_SetupNeededResponse($endpoint, $user_setup_url);
+<a name="line717"></a>    }
+<a name="line718"></a>
+<a name="line719"></a>    /**
+<a name="line720"></a>     * @access private
+<a name="line721"></a>     */
+<a name="line722"></a>    function _complete_id_res($message, $endpoint, $return_to)
+<a name="line723"></a>    {
+<a name="line724"></a>        $user_setup_url = $message->getArg(Auth_OpenID_OPENID1_NS,
+<a name="line725"></a>                                           'user_setup_url');
+<a name="line726"></a>
+<a name="line727"></a>        if ($this->_checkSetupNeeded($message)) {
+<a name="line728"></a>            return new Auth_OpenID_SetupNeededResponse(
+<a name="line729"></a>                $endpoint, $user_setup_url);
+<a name="line730"></a>        } else {
+<a name="line731"></a>            return $this->_doIdRes($message, $endpoint, $return_to);
+<a name="line732"></a>        }
+<a name="line733"></a>    }
+<a name="line734"></a>
+<a name="line735"></a>    /**
+<a name="line736"></a>     * @access private
+<a name="line737"></a>     */
+<a name="line738"></a>    function _checkSetupNeeded($message)
+<a name="line739"></a>    {
+<a name="line740"></a>        // In OpenID 1, we check to see if this is a cancel from
+<a name="line741"></a>        // immediate mode by the presence of the user_setup_url
+<a name="line742"></a>        // parameter.
+<a name="line743"></a>        if ($message->isOpenID1()) {
+<a name="line744"></a>            $user_setup_url = $message->getArg(Auth_OpenID_OPENID1_NS,
+<a name="line745"></a>                                               'user_setup_url');
+<a name="line746"></a>            if ($user_setup_url !== null) {
+<a name="line747"></a>                return true;
+<a name="line748"></a>            }
+<a name="line749"></a>        }
+<a name="line750"></a>
+<a name="line751"></a>        return false;
+<a name="line752"></a>    }
+<a name="line753"></a>
+<a name="line754"></a>    /**
+<a name="line755"></a>     * @access private
+<a name="line756"></a>     */
+<a name="line757"></a>    function _doIdRes($message, $endpoint, $return_to)
+<a name="line758"></a>    {
+<a name="line759"></a>        // Checks for presence of appropriate fields (and checks
+<a name="line760"></a>        // signed list fields)
+<a name="line761"></a>        $result = $this->_idResCheckForFields($message);
+<a name="line762"></a>
+<a name="line763"></a>        if (Auth_OpenID::isFailure($result)) {
+<a name="line764"></a>            return $result;
+<a name="line765"></a>        }
+<a name="line766"></a>
+<a name="line767"></a>        if (!$this->_checkReturnTo($message, $return_to)) {
+<a name="line768"></a>            return new Auth_OpenID_FailureResponse(null,
+<a name="line769"></a>            sprintf("return_to does not match return URL. Expected %s, got %s",
+<a name="line770"></a>                    $return_to,
+<a name="line771"></a>                    $message->getArg(Auth_OpenID_OPENID_NS, 'return_to')));
+<a name="line772"></a>        }
+<a name="line773"></a>
+<a name="line774"></a>        // Verify discovery information:
+<a name="line775"></a>        $result = $this->_verifyDiscoveryResults($message, $endpoint);
+<a name="line776"></a>
+<a name="line777"></a>        if (Auth_OpenID::isFailure($result)) {
+<a name="line778"></a>            return $result;
+<a name="line779"></a>        }
+<a name="line780"></a>
+<a name="line781"></a>        $endpoint = $result;
+<a name="line782"></a>
+<a name="line783"></a>        $result = $this->_idResCheckSignature($message,
+<a name="line784"></a>                                              $endpoint->server_url);
+<a name="line785"></a>
+<a name="line786"></a>        if (Auth_OpenID::isFailure($result)) {
+<a name="line787"></a>            return $result;
+<a name="line788"></a>        }
+<a name="line789"></a>
+<a name="line790"></a>        $result = $this->_idResCheckNonce($message, $endpoint);
+<a name="line791"></a>
+<a name="line792"></a>        if (Auth_OpenID::isFailure($result)) {
+<a name="line793"></a>            return $result;
+<a name="line794"></a>        }
+<a name="line795"></a>
+<a name="line796"></a>        $signed_list_str = $message->getArg(Auth_OpenID_OPENID_NS, 'signed',
+<a name="line797"></a>                                            Auth_OpenID_NO_DEFAULT);
+<a name="line798"></a>        if (Auth_OpenID::isFailure($signed_list_str)) {
+<a name="line799"></a>            return $signed_list_str;
+<a name="line800"></a>        }
+<a name="line801"></a>        $signed_list = explode(',', $signed_list_str);
+<a name="line802"></a>
+<a name="line803"></a>        $signed_fields = Auth_OpenID::addPrefix($signed_list, "openid.");
+<a name="line804"></a>
+<a name="line805"></a>        return new Auth_OpenID_SuccessResponse($endpoint, $message,
+<a name="line806"></a>                                               $signed_fields);
+<a name="line807"></a>
+<a name="line808"></a>    }
+<a name="line809"></a>
+<a name="line810"></a>    /**
+<a name="line811"></a>     * @access private
+<a name="line812"></a>     */
+<a name="line813"></a>    function _checkReturnTo($message, $return_to)
+<a name="line814"></a>    {
+<a name="line815"></a>        // Check an OpenID message and its openid.return_to value
+<a name="line816"></a>        // against a return_to URL from an application.  Return True
+<a name="line817"></a>        // on success, False on failure.
+<a name="line818"></a>
+<a name="line819"></a>        // Check the openid.return_to args against args in the
+<a name="line820"></a>        // original message.
+<a name="line821"></a>        $result = Auth_OpenID_GenericConsumer::_verifyReturnToArgs(
+<a name="line822"></a>                                           $message->toPostArgs());
+<a name="line823"></a>        if (Auth_OpenID::isFailure($result)) {
+<a name="line824"></a>            return false;
+<a name="line825"></a>        }
+<a name="line826"></a>
+<a name="line827"></a>        // Check the return_to base URL against the one in the
+<a name="line828"></a>        // message.
+<a name="line829"></a>        $msg_return_to = $message->getArg(Auth_OpenID_OPENID_NS,
+<a name="line830"></a>                                          'return_to');
+<a name="line831"></a>        if (Auth_OpenID::isFailure($return_to)) {
+<a name="line832"></a>            // XXX log me
+<a name="line833"></a>            return false;
+<a name="line834"></a>        }
+<a name="line835"></a>
+<a name="line836"></a>        $return_to_parts = parse_url(Auth_OpenID_urinorm($return_to));
+<a name="line837"></a>        $msg_return_to_parts = parse_url(Auth_OpenID_urinorm($msg_return_to));
+<a name="line838"></a>
+<a name="line839"></a>        // If port is absent from both, add it so it's equal in the
+<a name="line840"></a>        // check below.
+<a name="line841"></a>        if ((!array_key_exists('port', $return_to_parts)) &&
+<a name="line842"></a>            (!array_key_exists('port', $msg_return_to_parts))) {
+<a name="line843"></a>            $return_to_parts['port'] = null;
+<a name="line844"></a>            $msg_return_to_parts['port'] = null;
+<a name="line845"></a>        }
+<a name="line846"></a>
+<a name="line847"></a>        // If path is absent from both, add it so it's equal in the
+<a name="line848"></a>        // check below.
+<a name="line849"></a>        if ((!array_key_exists('path', $return_to_parts)) &&
+<a name="line850"></a>            (!array_key_exists('path', $msg_return_to_parts))) {
+<a name="line851"></a>            $return_to_parts['path'] = null;
+<a name="line852"></a>            $msg_return_to_parts['path'] = null;
+<a name="line853"></a>        }
+<a name="line854"></a>
+<a name="line855"></a>        // The URL scheme, authority, and path MUST be the same
+<a name="line856"></a>        // between the two URLs.
+<a name="line857"></a>        foreach (array('scheme', 'host', 'port', 'path') as $component) {
+<a name="line858"></a>            // If the url component is absent in either URL, fail.
+<a name="line859"></a>            // There should always be a scheme, host, port, and path.
+<a name="line860"></a>            if (!array_key_exists($component, $return_to_parts)) {
+<a name="line861"></a>                return false;
+<a name="line862"></a>            }
+<a name="line863"></a>
+<a name="line864"></a>            if (!array_key_exists($component, $msg_return_to_parts)) {
+<a name="line865"></a>                return false;
+<a name="line866"></a>            }
+<a name="line867"></a>
+<a name="line868"></a>            if (Auth_OpenID::arrayGet($return_to_parts, $component) !==
+<a name="line869"></a>                Auth_OpenID::arrayGet($msg_return_to_parts, $component)) {
+<a name="line870"></a>                return false;
+<a name="line871"></a>            }
+<a name="line872"></a>        }
+<a name="line873"></a>
+<a name="line874"></a>        return true;
+<a name="line875"></a>    }
+<a name="line876"></a>
+<a name="line877"></a>    /**
+<a name="line878"></a>     * @access private
+<a name="line879"></a>     */
+<a name="line880"></a>    function _verifyReturnToArgs($query)
+<a name="line881"></a>    {
+<a name="line882"></a>        // Verify that the arguments in the return_to URL are present in this
+<a name="line883"></a>        // response.
+<a name="line884"></a>
+<a name="line885"></a>        $message = Auth_OpenID_Message::fromPostArgs($query);
+<a name="line886"></a>        $return_to = $message->getArg(Auth_OpenID_OPENID_NS, 'return_to');
+<a name="line887"></a>
+<a name="line888"></a>        if (Auth_OpenID::isFailure($return_to)) {
+<a name="line889"></a>            return $return_to;
+<a name="line890"></a>        }
+<a name="line891"></a>        // XXX: this should be checked by _idResCheckForFields
+<a name="line892"></a>        if (!$return_to) {
+<a name="line893"></a>            return new Auth_OpenID_FailureResponse(null,
+<a name="line894"></a>                           "Response has no return_to");
+<a name="line895"></a>        }
+<a name="line896"></a>
+<a name="line897"></a>        $parsed_url = parse_url($return_to);
+<a name="line898"></a>
+<a name="line899"></a>        $q = array();
+<a name="line900"></a>        if (array_key_exists('query', $parsed_url)) {
+<a name="line901"></a>            $rt_query = $parsed_url['query'];
+<a name="line902"></a>            $q = Auth_OpenID::parse_str($rt_query);
+<a name="line903"></a>        }
+<a name="line904"></a>
+<a name="line905"></a>        foreach ($q as $rt_key => $rt_value) {
+<a name="line906"></a>            if (!array_key_exists($rt_key, $query)) {
+<a name="line907"></a>                return new Auth_OpenID_FailureResponse(null,
+<a name="line908"></a>                  sprintf("return_to parameter %s absent from query", $rt_key));
+<a name="line909"></a>            } else {
+<a name="line910"></a>                $value = $query[$rt_key];
+<a name="line911"></a>                if ($rt_value != $value) {
+<a name="line912"></a>                    return new Auth_OpenID_FailureResponse(null,
+<a name="line913"></a>                      sprintf("parameter %s value %s does not match " .
+<a name="line914"></a>                              "return_to value %s", $rt_key,
+<a name="line915"></a>                              $value, $rt_value));
+<a name="line916"></a>                }
+<a name="line917"></a>            }
+<a name="line918"></a>        }
+<a name="line919"></a>
+<a name="line920"></a>        // Make sure all non-OpenID arguments in the response are also
+<a name="line921"></a>        // in the signed return_to.
+<a name="line922"></a>        $bare_args = $message->getArgs(Auth_OpenID_BARE_NS);
+<a name="line923"></a>        foreach ($bare_args as $key => $value) {
+<a name="line924"></a>            if (Auth_OpenID::arrayGet($q, $key) != $value) {
+<a name="line925"></a>                return new Auth_OpenID_FailureResponse(null,
+<a name="line926"></a>                  sprintf("Parameter %s = %s not in return_to URL",
+<a name="line927"></a>                          $key, $value));
+<a name="line928"></a>            }
+<a name="line929"></a>        }
+<a name="line930"></a>
+<a name="line931"></a>        return true;
+<a name="line932"></a>    }
+<a name="line933"></a>
+<a name="line934"></a>    /**
+<a name="line935"></a>     * @access private
+<a name="line936"></a>     */
+<a name="line937"></a>    function _idResCheckSignature($message, $server_url)
+<a name="line938"></a>    {
+<a name="line939"></a>        $assoc_handle = $message->getArg(Auth_OpenID_OPENID_NS,
+<a name="line940"></a>                                         'assoc_handle');
+<a name="line941"></a>        if (Auth_OpenID::isFailure($assoc_handle)) {
+<a name="line942"></a>            return $assoc_handle;
+<a name="line943"></a>        }
+<a name="line944"></a>
+<a name="line945"></a>        $assoc = $this->store->getAssociation($server_url, $assoc_handle);
+<a name="line946"></a>
+<a name="line947"></a>        if ($assoc) {
+<a name="line948"></a>            if ($assoc->getExpiresIn() <= 0) {
+<a name="line949"></a>                // XXX: It might be a good idea sometimes to re-start
+<a name="line950"></a>                // the authentication with a new association. Doing it
+<a name="line951"></a>                // automatically opens the possibility for
+<a name="line952"></a>                // denial-of-service by a server that just returns
+<a name="line953"></a>                // expired associations (or really short-lived
+<a name="line954"></a>                // associations)
+<a name="line955"></a>                return new Auth_OpenID_FailureResponse(null,
+<a name="line956"></a>                             'Association with ' . $server_url . ' expired');
+<a name="line957"></a>            }
+<a name="line958"></a>
+<a name="line959"></a>            if (!$assoc->checkMessageSignature($message)) {
+<a name="line960"></a>                return new Auth_OpenID_FailureResponse(null,
+<a name="line961"></a>                                                       "Bad signature");
+<a name="line962"></a>            }
+<a name="line963"></a>        } else {
+<a name="line964"></a>            // It's not an association we know about.  Stateless mode
+<a name="line965"></a>            // is our only possible path for recovery.  XXX - async
+<a name="line966"></a>            // framework will not want to block on this call to
+<a name="line967"></a>            // _checkAuth.
+<a name="line968"></a>            if (!$this->_checkAuth($message, $server_url)) {
+<a name="line969"></a>                return new Auth_OpenID_FailureResponse(null,
+<a name="line970"></a>                             "Server denied check_authentication");
+<a name="line971"></a>            }
+<a name="line972"></a>        }
+<a name="line973"></a>
+<a name="line974"></a>        return null;
+<a name="line975"></a>    }
+<a name="line976"></a>
+<a name="line977"></a>    /**
+<a name="line978"></a>     * @access private
+<a name="line979"></a>     */
+<a name="line980"></a>    function _verifyDiscoveryResults($message, $endpoint=null)
+<a name="line981"></a>    {
+<a name="line982"></a>        if ($message->getOpenIDNamespace() == Auth_OpenID_OPENID2_NS) {
+<a name="line983"></a>            return $this->_verifyDiscoveryResultsOpenID2($message,
+<a name="line984"></a>                                                         $endpoint);
+<a name="line985"></a>        } else {
+<a name="line986"></a>            return $this->_verifyDiscoveryResultsOpenID1($message,
+<a name="line987"></a>                                                         $endpoint);
+<a name="line988"></a>        }
+<a name="line989"></a>    }
+<a name="line990"></a>
+<a name="line991"></a>    /**
+<a name="line992"></a>     * @access private
+<a name="line993"></a>     */
+<a name="line994"></a>    function _verifyDiscoveryResultsOpenID1($message, $endpoint)
+<a name="line995"></a>    {
+<a name="line996"></a>        $claimed_id = $message->getArg(Auth_OpenID_BARE_NS,
+<a name="line997"></a>                                $this->openid1_return_to_identifier_name);
+<a name="line998"></a>
+<a name="line999"></a>        if (($endpoint === null) && ($claimed_id === null)) {
+<a name="line1000"></a>            return new Auth_OpenID_FailureResponse($endpoint,
+<a name="line1001"></a>              'When using OpenID 1, the claimed ID must be supplied, ' .
+<a name="line1002"></a>              'either by passing it through as a return_to parameter ' .
+<a name="line1003"></a>              'or by using a session, and supplied to the GenericConsumer ' .
+<a name="line1004"></a>              'as the argument to complete()');
+<a name="line1005"></a>        } else if (($endpoint !== null) && ($claimed_id === null)) {
+<a name="line1006"></a>            $claimed_id = $endpoint->claimed_id;
+<a name="line1007"></a>        }
+<a name="line1008"></a>
+<a name="line1009"></a>        $to_match = new Auth_OpenID_ServiceEndpoint();
+<a name="line1010"></a>        $to_match->type_uris = array(Auth_OpenID_TYPE_1_1);
+<a name="line1011"></a>        $to_match->local_id = $message->getArg(Auth_OpenID_OPENID1_NS,
+<a name="line1012"></a>                                               'identity');
+<a name="line1013"></a>
+<a name="line1014"></a>        // Restore delegate information from the initiation phase
+<a name="line1015"></a>        $to_match->claimed_id = $claimed_id;
+<a name="line1016"></a>
+<a name="line1017"></a>        if ($to_match->local_id === null) {
+<a name="line1018"></a>            return new Auth_OpenID_FailureResponse($endpoint,
+<a name="line1019"></a>                         "Missing required field openid.identity");
+<a name="line1020"></a>        }
+<a name="line1021"></a>
+<a name="line1022"></a>        $to_match_1_0 = $to_match->copy();
+<a name="line1023"></a>        $to_match_1_0->type_uris = array(Auth_OpenID_TYPE_1_0);
+<a name="line1024"></a>
+<a name="line1025"></a>        if ($endpoint !== null) {
+<a name="line1026"></a>            $result = $this->_verifyDiscoverySingle($endpoint, $to_match);
+<a name="line1027"></a>
+<a name="line1028"></a>            if (is_a($result, 'Auth_OpenID_TypeURIMismatch')) {
+<a name="line1029"></a>                $result = $this->_verifyDiscoverySingle($endpoint,
+<a name="line1030"></a>                                                        $to_match_1_0);
+<a name="line1031"></a>            }
+<a name="line1032"></a>
+<a name="line1033"></a>            if (Auth_OpenID::isFailure($result)) {
+<a name="line1034"></a>                // oidutil.log("Error attempting to use stored
+<a name="line1035"></a>                //             discovery information: " + str(e))
+<a name="line1036"></a>                //             oidutil.log("Attempting discovery to
+<a name="line1037"></a>                //             verify endpoint")
+<a name="line1038"></a>            } else {
+<a name="line1039"></a>                return $endpoint;
+<a name="line1040"></a>            }
+<a name="line1041"></a>        }
+<a name="line1042"></a>
+<a name="line1043"></a>        // Endpoint is either bad (failed verification) or None
+<a name="line1044"></a>        return $this->_discoverAndVerify($to_match->claimed_id,
+<a name="line1045"></a>                                         array($to_match, $to_match_1_0));
+<a name="line1046"></a>    }
+<a name="line1047"></a>
+<a name="line1048"></a>    /**
+<a name="line1049"></a>     * @access private
+<a name="line1050"></a>     */
+<a name="line1051"></a>    function _verifyDiscoverySingle($endpoint, $to_match)
+<a name="line1052"></a>    {
+<a name="line1053"></a>        // Every type URI that's in the to_match endpoint has to be
+<a name="line1054"></a>        // present in the discovered endpoint.
+<a name="line1055"></a>        foreach ($to_match->type_uris as $type_uri) {
+<a name="line1056"></a>            if (!$endpoint->usesExtension($type_uri)) {
+<a name="line1057"></a>                return new Auth_OpenID_TypeURIMismatch($endpoint,
+<a name="line1058"></a>                             "Required type ".$type_uri." not present");
+<a name="line1059"></a>            }
+<a name="line1060"></a>        }
+<a name="line1061"></a>
+<a name="line1062"></a>        // Fragments do not influence discovery, so we can't compare a
+<a name="line1063"></a>        // claimed identifier with a fragment to discovered
+<a name="line1064"></a>        // information.
+<a name="line1065"></a>        list($defragged_claimed_id, $_) =
+<a name="line1066"></a>            Auth_OpenID::urldefrag($to_match->claimed_id);
+<a name="line1067"></a>
+<a name="line1068"></a>        if ($defragged_claimed_id != $endpoint->claimed_id) {
+<a name="line1069"></a>            return new Auth_OpenID_FailureResponse($endpoint,
+<a name="line1070"></a>              sprintf('Claimed ID does not match (different subjects!), ' .
+<a name="line1071"></a>                      'Expected %s, got %s', $defragged_claimed_id,
+<a name="line1072"></a>                      $endpoint->claimed_id));
+<a name="line1073"></a>        }
+<a name="line1074"></a>
+<a name="line1075"></a>        if ($to_match->getLocalID() != $endpoint->getLocalID()) {
+<a name="line1076"></a>            return new Auth_OpenID_FailureResponse($endpoint,
+<a name="line1077"></a>              sprintf('local_id mismatch. Expected %s, got %s',
+<a name="line1078"></a>                      $to_match->getLocalID(), $endpoint->getLocalID()));
+<a name="line1079"></a>        }
+<a name="line1080"></a>
+<a name="line1081"></a>        // If the server URL is None, this must be an OpenID 1
+<a name="line1082"></a>        // response, because op_endpoint is a required parameter in
+<a name="line1083"></a>        // OpenID 2. In that case, we don't actually care what the
+<a name="line1084"></a>        // discovered server_url is, because signature checking or
+<a name="line1085"></a>        // check_auth should take care of that check for us.
+<a name="line1086"></a>        if ($to_match->server_url === null) {
+<a name="line1087"></a>            if ($to_match->preferredNamespace() != Auth_OpenID_OPENID1_NS) {
+<a name="line1088"></a>                return new Auth_OpenID_FailureResponse($endpoint,
+<a name="line1089"></a>                             "Preferred namespace mismatch (bug)");
+<a name="line1090"></a>            }
+<a name="line1091"></a>        } else if ($to_match->server_url != $endpoint->server_url) {
+<a name="line1092"></a>            return new Auth_OpenID_FailureResponse($endpoint,
+<a name="line1093"></a>              sprintf('OP Endpoint mismatch. Expected %s, got %s',
+<a name="line1094"></a>                      $to_match->server_url, $endpoint->server_url));
+<a name="line1095"></a>        }
+<a name="line1096"></a>
+<a name="line1097"></a>        return null;
+<a name="line1098"></a>    }
+<a name="line1099"></a>
+<a name="line1100"></a>    /**
+<a name="line1101"></a>     * @access private
+<a name="line1102"></a>     */
+<a name="line1103"></a>    function _verifyDiscoveryResultsOpenID2($message, $endpoint)
+<a name="line1104"></a>    {
+<a name="line1105"></a>        $to_match = new Auth_OpenID_ServiceEndpoint();
+<a name="line1106"></a>        $to_match->type_uris = array(Auth_OpenID_TYPE_2_0);
+<a name="line1107"></a>        $to_match->claimed_id = $message->getArg(Auth_OpenID_OPENID2_NS,
+<a name="line1108"></a>                                                 'claimed_id');
+<a name="line1109"></a>
+<a name="line1110"></a>        $to_match->local_id = $message->getArg(Auth_OpenID_OPENID2_NS,
+<a name="line1111"></a>                                                'identity');
+<a name="line1112"></a>
+<a name="line1113"></a>        $to_match->server_url = $message->getArg(Auth_OpenID_OPENID2_NS,
+<a name="line1114"></a>                                                 'op_endpoint');
+<a name="line1115"></a>
+<a name="line1116"></a>        if ($to_match->server_url === null) {
+<a name="line1117"></a>            return new Auth_OpenID_FailureResponse($endpoint,
+<a name="line1118"></a>                         "OP Endpoint URL missing");
+<a name="line1119"></a>        }
+<a name="line1120"></a>
+<a name="line1121"></a>        // claimed_id and identifier must both be present or both be
+<a name="line1122"></a>        // absent
+<a name="line1123"></a>        if (($to_match->claimed_id === null) &&
+<a name="line1124"></a>            ($to_match->local_id !== null)) {
+<a name="line1125"></a>            return new Auth_OpenID_FailureResponse($endpoint,
+<a name="line1126"></a>              'openid.identity is present without openid.claimed_id');
+<a name="line1127"></a>        }
+<a name="line1128"></a>
+<a name="line1129"></a>        if (($to_match->claimed_id !== null) &&
+<a name="line1130"></a>            ($to_match->local_id === null)) {
+<a name="line1131"></a>            return new Auth_OpenID_FailureResponse($endpoint,
+<a name="line1132"></a>              'openid.claimed_id is present without openid.identity');
+<a name="line1133"></a>        }
+<a name="line1134"></a>
+<a name="line1135"></a>        if ($to_match->claimed_id === null) {
+<a name="line1136"></a>            // This is a response without identifiers, so there's
+<a name="line1137"></a>            // really no checking that we can do, so return an
+<a name="line1138"></a>            // endpoint that's for the specified `openid.op_endpoint'
+<a name="line1139"></a>            return Auth_OpenID_ServiceEndpoint::fromOPEndpointURL(
+<a name="line1140"></a>                                                $to_match->server_url);
+<a name="line1141"></a>        }
+<a name="line1142"></a>
+<a name="line1143"></a>        if (!$endpoint) {
+<a name="line1144"></a>            // The claimed ID doesn't match, so we have to do
+<a name="line1145"></a>            // discovery again. This covers not using sessions, OP
+<a name="line1146"></a>            // identifier endpoints and responses that didn't match
+<a name="line1147"></a>            // the original request.
+<a name="line1148"></a>            // oidutil.log('No pre-discovered information supplied.')
+<a name="line1149"></a>            return $this->_discoverAndVerify($to_match->claimed_id,
+<a name="line1150"></a>                                             array($to_match));
+<a name="line1151"></a>        } else {
+<a name="line1152"></a>
+<a name="line1153"></a>            // The claimed ID matches, so we use the endpoint that we
+<a name="line1154"></a>            // discovered in initiation. This should be the most
+<a name="line1155"></a>            // common case.
+<a name="line1156"></a>            $result = $this->_verifyDiscoverySingle($endpoint, $to_match);
+<a name="line1157"></a>
+<a name="line1158"></a>            if (Auth_OpenID::isFailure($result)) {
+<a name="line1159"></a>                $endpoint = $this->_discoverAndVerify($to_match->claimed_id,
+<a name="line1160"></a>                                                      array($to_match));
+<a name="line1161"></a>                if (Auth_OpenID::isFailure($endpoint)) {
+<a name="line1162"></a>                    return $endpoint;
+<a name="line1163"></a>                }
+<a name="line1164"></a>            }
+<a name="line1165"></a>        }
+<a name="line1166"></a>
+<a name="line1167"></a>        // The endpoint we return should have the claimed ID from the
+<a name="line1168"></a>        // message we just verified, fragment and all.
+<a name="line1169"></a>        if ($endpoint->claimed_id != $to_match->claimed_id) {
+<a name="line1170"></a>            $endpoint->claimed_id = $to_match->claimed_id;
+<a name="line1171"></a>        }
+<a name="line1172"></a>
+<a name="line1173"></a>        return $endpoint;
+<a name="line1174"></a>    }
+<a name="line1175"></a>
+<a name="line1176"></a>    /**
+<a name="line1177"></a>     * @access private
+<a name="line1178"></a>     */
+<a name="line1179"></a>    function _discoverAndVerify($claimed_id, $to_match_endpoints)
+<a name="line1180"></a>    {
+<a name="line1181"></a>        // oidutil.log('Performing discovery on %s' % (claimed_id,))
+<a name="line1182"></a>        list($unused, $services) = call_user_func($this->discoverMethod,
+<a name="line1183"></a>                                                  $claimed_id,
+<a name="line1184"></a>												  &$this->fetcher);
+<a name="line1185"></a>
+<a name="line1186"></a>        if (!$services) {
+<a name="line1187"></a>            return new Auth_OpenID_FailureResponse(null,
+<a name="line1188"></a>              sprintf("No OpenID information found at %s",
+<a name="line1189"></a>                      $claimed_id));
+<a name="line1190"></a>        }
+<a name="line1191"></a>
+<a name="line1192"></a>        return $this->_verifyDiscoveryServices($claimed_id, $services,
+<a name="line1193"></a>                                               $to_match_endpoints);
+<a name="line1194"></a>    }
+<a name="line1195"></a>
+<a name="line1196"></a>    /**
+<a name="line1197"></a>     * @access private
+<a name="line1198"></a>     */
+<a name="line1199"></a>    function _verifyDiscoveryServices($claimed_id, 
+<a name="line1200"></a>                                      $services, $to_match_endpoints)
+<a name="line1201"></a>    {
+<a name="line1202"></a>        // Search the services resulting from discovery to find one
+<a name="line1203"></a>        // that matches the information from the assertion
+<a name="line1204"></a>
+<a name="line1205"></a>        foreach ($services as $endpoint) {
+<a name="line1206"></a>            foreach ($to_match_endpoints as $to_match_endpoint) {
+<a name="line1207"></a>                $result = $this->_verifyDiscoverySingle($endpoint, 
+<a name="line1208"></a>                                                        $to_match_endpoint);
+<a name="line1209"></a>
+<a name="line1210"></a>                if (!Auth_OpenID::isFailure($result)) {
+<a name="line1211"></a>                    // It matches, so discover verification has
+<a name="line1212"></a>                    // succeeded. Return this endpoint.
+<a name="line1213"></a>                    return $endpoint;
+<a name="line1214"></a>                }
+<a name="line1215"></a>            }
+<a name="line1216"></a>        }
+<a name="line1217"></a>
+<a name="line1218"></a>        return new Auth_OpenID_FailureResponse(null,
+<a name="line1219"></a>          sprintf('No matching endpoint found after discovering %s: %s',
+<a name="line1220"></a>                  $claimed_id, $result->message));
+<a name="line1221"></a>    }
+<a name="line1222"></a>
+<a name="line1223"></a>    /**
+<a name="line1224"></a>     * Extract the nonce from an OpenID 1 response.  Return the nonce
+<a name="line1225"></a>     * from the BARE_NS since we independently check the return_to
+<a name="line1226"></a>     * arguments are the same as those in the response message.
+<a name="line1227"></a>     *
+<a name="line1228"></a>     * See the openid1_nonce_query_arg_name class variable
+<a name="line1229"></a>     *
+<a name="line1230"></a>     * @returns $nonce The nonce as a string or null
+<a name="line1231"></a>     *
+<a name="line1232"></a>     * @access private
+<a name="line1233"></a>     */
+<a name="line1234"></a>    function _idResGetNonceOpenID1($message, $endpoint)
+<a name="line1235"></a>    {
+<a name="line1236"></a>        return $message->getArg(Auth_OpenID_BARE_NS,
+<a name="line1237"></a>                                $this->openid1_nonce_query_arg_name);
+<a name="line1238"></a>    }
+<a name="line1239"></a>
+<a name="line1240"></a>    /**
+<a name="line1241"></a>     * @access private
+<a name="line1242"></a>     */
+<a name="line1243"></a>    function _idResCheckNonce($message, $endpoint)
+<a name="line1244"></a>    {
+<a name="line1245"></a>        if ($message->isOpenID1()) {
+<a name="line1246"></a>            // This indicates that the nonce was generated by the consumer
+<a name="line1247"></a>            $nonce = $this->_idResGetNonceOpenID1($message, $endpoint);
+<a name="line1248"></a>            $server_url = '';
+<a name="line1249"></a>        } else {
+<a name="line1250"></a>            $nonce = $message->getArg(Auth_OpenID_OPENID2_NS,
+<a name="line1251"></a>                                      'response_nonce');
+<a name="line1252"></a>
+<a name="line1253"></a>            $server_url = $endpoint->server_url;
+<a name="line1254"></a>        }
+<a name="line1255"></a>
+<a name="line1256"></a>        if ($nonce === null) {
+<a name="line1257"></a>            return new Auth_OpenID_FailureResponse($endpoint,
+<a name="line1258"></a>                                     "Nonce missing from response");
+<a name="line1259"></a>        }
+<a name="line1260"></a>
+<a name="line1261"></a>        $parts = Auth_OpenID_splitNonce($nonce);
+<a name="line1262"></a>
+<a name="line1263"></a>        if ($parts === null) {
+<a name="line1264"></a>            return new Auth_OpenID_FailureResponse($endpoint,
+<a name="line1265"></a>                                     "Malformed nonce in response");
+<a name="line1266"></a>        }
+<a name="line1267"></a>
+<a name="line1268"></a>        list($timestamp, $salt) = $parts;
+<a name="line1269"></a>
+<a name="line1270"></a>        if (!$this->store->useNonce($server_url, $timestamp, $salt)) {
+<a name="line1271"></a>            return new Auth_OpenID_FailureResponse($endpoint,
+<a name="line1272"></a>                         "Nonce already used or out of range");
+<a name="line1273"></a>        }
+<a name="line1274"></a>
+<a name="line1275"></a>        return null;
+<a name="line1276"></a>    }
+<a name="line1277"></a>
+<a name="line1278"></a>    /**
+<a name="line1279"></a>     * @access private
+<a name="line1280"></a>     */
+<a name="line1281"></a>    function _idResCheckForFields($message)
+<a name="line1282"></a>    {
+<a name="line1283"></a>        $basic_fields = array('return_to', 'assoc_handle', 'sig', 'signed');
+<a name="line1284"></a>        $basic_sig_fields = array('return_to', 'identity');
+<a name="line1285"></a>
+<a name="line1286"></a>        $require_fields = array(
+<a name="line1287"></a>            Auth_OpenID_OPENID2_NS => array_merge($basic_fields,
+<a name="line1288"></a>                                                  array('op_endpoint')),
+<a name="line1289"></a>
+<a name="line1290"></a>            Auth_OpenID_OPENID1_NS => array_merge($basic_fields,
+<a name="line1291"></a>                                                  array('identity'))
+<a name="line1292"></a>            );
+<a name="line1293"></a>
+<a name="line1294"></a>        $require_sigs = array(
+<a name="line1295"></a>            Auth_OpenID_OPENID2_NS => array_merge($basic_sig_fields,
+<a name="line1296"></a>                                                  array('response_nonce',
+<a name="line1297"></a>                                                        'claimed_id',
+<a name="line1298"></a>                                                        'assoc_handle',
+<a name="line1299"></a>                                                        'op_endpoint')),
+<a name="line1300"></a>            Auth_OpenID_OPENID1_NS => array_merge($basic_sig_fields,
+<a name="line1301"></a>                                                  array('nonce'))
+<a name="line1302"></a>            );
+<a name="line1303"></a>
+<a name="line1304"></a>        foreach ($require_fields[$message->getOpenIDNamespace()] as $field) {
+<a name="line1305"></a>            if (!$message->hasKey(Auth_OpenID_OPENID_NS, $field)) {
+<a name="line1306"></a>                return new Auth_OpenID_FailureResponse(null,
+<a name="line1307"></a>                             "Missing required field '".$field."'");
+<a name="line1308"></a>            }
+<a name="line1309"></a>        }
+<a name="line1310"></a>
+<a name="line1311"></a>        $signed_list_str = $message->getArg(Auth_OpenID_OPENID_NS,
+<a name="line1312"></a>                                            'signed',
+<a name="line1313"></a>                                            Auth_OpenID_NO_DEFAULT);
+<a name="line1314"></a>        if (Auth_OpenID::isFailure($signed_list_str)) {
+<a name="line1315"></a>            return $signed_list_str;
+<a name="line1316"></a>        }
+<a name="line1317"></a>        $signed_list = explode(',', $signed_list_str);
+<a name="line1318"></a>
+<a name="line1319"></a>        foreach ($require_sigs[$message->getOpenIDNamespace()] as $field) {
+<a name="line1320"></a>            // Field is present and not in signed list
+<a name="line1321"></a>            if ($message->hasKey(Auth_OpenID_OPENID_NS, $field) &&
+<a name="line1322"></a>                (!in_array($field, $signed_list))) {
+<a name="line1323"></a>                return new Auth_OpenID_FailureResponse(null,
+<a name="line1324"></a>                             "'".$field."' not signed");
+<a name="line1325"></a>            }
+<a name="line1326"></a>        }
+<a name="line1327"></a>
+<a name="line1328"></a>        return null;
+<a name="line1329"></a>    }
+<a name="line1330"></a>
+<a name="line1331"></a>    /**
+<a name="line1332"></a>     * @access private
+<a name="line1333"></a>     */
+<a name="line1334"></a>    function _checkAuth($message, $server_url)
+<a name="line1335"></a>    {
+<a name="line1336"></a>        $request = $this->_createCheckAuthRequest($message);
+<a name="line1337"></a>        if ($request === null) {
+<a name="line1338"></a>            return false;
+<a name="line1339"></a>        }
+<a name="line1340"></a>
+<a name="line1341"></a>        $resp_message = $this->_makeKVPost($request, $server_url);
+<a name="line1342"></a>        if (($resp_message === null) ||
+<a name="line1343"></a>            (is_a($resp_message, 'Auth_OpenID_ServerErrorContainer'))) {
+<a name="line1344"></a>            return false;
+<a name="line1345"></a>        }
+<a name="line1346"></a>
+<a name="line1347"></a>        return $this->_processCheckAuthResponse($resp_message, $server_url);
+<a name="line1348"></a>    }
+<a name="line1349"></a>
+<a name="line1350"></a>    /**
+<a name="line1351"></a>     * @access private
+<a name="line1352"></a>     */
+<a name="line1353"></a>    function _createCheckAuthRequest($message)
+<a name="line1354"></a>    {
+<a name="line1355"></a>        $signed = $message->getArg(Auth_OpenID_OPENID_NS, 'signed');
+<a name="line1356"></a>        if ($signed) {
+<a name="line1357"></a>            foreach (explode(',', $signed) as $k) {
+<a name="line1358"></a>                $value = $message->getAliasedArg($k);
+<a name="line1359"></a>                if ($value === null) {
+<a name="line1360"></a>                    return null;
+<a name="line1361"></a>                }
+<a name="line1362"></a>            }
+<a name="line1363"></a>        }
+<a name="line1364"></a>        $ca_message = $message->copy();
+<a name="line1365"></a>        $ca_message->setArg(Auth_OpenID_OPENID_NS, 'mode', 
+<a name="line1366"></a>                            'check_authentication');
+<a name="line1367"></a>        return $ca_message;
+<a name="line1368"></a>    }
+<a name="line1369"></a>
+<a name="line1370"></a>    /**
+<a name="line1371"></a>     * @access private
+<a name="line1372"></a>     */
+<a name="line1373"></a>    function _processCheckAuthResponse($response, $server_url)
+<a name="line1374"></a>    {
+<a name="line1375"></a>        $is_valid = $response->getArg(Auth_OpenID_OPENID_NS, 'is_valid',
+<a name="line1376"></a>                                      'false');
+<a name="line1377"></a>
+<a name="line1378"></a>        $invalidate_handle = $response->getArg(Auth_OpenID_OPENID_NS,
+<a name="line1379"></a>                                               'invalidate_handle');
+<a name="line1380"></a>
+<a name="line1381"></a>        if ($invalidate_handle !== null) {
+<a name="line1382"></a>            $this->store->removeAssociation($server_url,
+<a name="line1383"></a>                                            $invalidate_handle);
+<a name="line1384"></a>        }
+<a name="line1385"></a>
+<a name="line1386"></a>        if ($is_valid == 'true') {
+<a name="line1387"></a>            return true;
+<a name="line1388"></a>        }
+<a name="line1389"></a>
+<a name="line1390"></a>        return false;
+<a name="line1391"></a>    }
+<a name="line1392"></a>
+<a name="line1393"></a>    /**
+<a name="line1394"></a>     * Adapt a POST response to a Message.
+<a name="line1395"></a>     *
+<a name="line1396"></a>     * @param $response Result of a POST to an OpenID endpoint.
+<a name="line1397"></a>     *
+<a name="line1398"></a>     * @access private
+<a name="line1399"></a>     */
+<a name="line1400"></a>    static function _httpResponseToMessage($response, $server_url)
+<a name="line1401"></a>    {
+<a name="line1402"></a>        // Should this function be named Message.fromHTTPResponse instead?
+<a name="line1403"></a>        $response_message = Auth_OpenID_Message::fromKVForm($response->body);
+<a name="line1404"></a>
+<a name="line1405"></a>        if ($response->status == 400) {
+<a name="line1406"></a>            return Auth_OpenID_ServerErrorContainer::fromMessage(
+<a name="line1407"></a>                        $response_message);
+<a name="line1408"></a>        } else if ($response->status != 200 and $response->status != 206) {
+<a name="line1409"></a>            return null;
+<a name="line1410"></a>        }
+<a name="line1411"></a>
+<a name="line1412"></a>        return $response_message;
+<a name="line1413"></a>    }
+<a name="line1414"></a>
+<a name="line1415"></a>    /**
+<a name="line1416"></a>     * @access private
+<a name="line1417"></a>     */
+<a name="line1418"></a>    function _makeKVPost($message, $server_url)
+<a name="line1419"></a>    {
+<a name="line1420"></a>        $body = $message->toURLEncoded();
+<a name="line1421"></a>        $resp = $this->fetcher->post($server_url, $body);
+<a name="line1422"></a>
+<a name="line1423"></a>        if ($resp === null) {
+<a name="line1424"></a>            return null;
+<a name="line1425"></a>        }
+<a name="line1426"></a>
+<a name="line1427"></a>        return $this->_httpResponseToMessage($resp, $server_url);
+<a name="line1428"></a>    }
+<a name="line1429"></a>
+<a name="line1430"></a>    /**
+<a name="line1431"></a>     * @access private
+<a name="line1432"></a>     */
+<a name="line1433"></a>    function _getAssociation($endpoint)
+<a name="line1434"></a>    {
+<a name="line1435"></a>        if (!$this->_use_assocs) {
+<a name="line1436"></a>            return null;
+<a name="line1437"></a>        }
+<a name="line1438"></a>
+<a name="line1439"></a>        $assoc = $this->store->getAssociation($endpoint->server_url);
+<a name="line1440"></a>
+<a name="line1441"></a>        if (($assoc === null) ||
+<a name="line1442"></a>            ($assoc->getExpiresIn() <= 0)) {
+<a name="line1443"></a>
+<a name="line1444"></a>            $assoc = $this->_negotiateAssociation($endpoint);
+<a name="line1445"></a>
+<a name="line1446"></a>            if ($assoc !== null) {
+<a name="line1447"></a>                $this->store->storeAssociation($endpoint->server_url,
+<a name="line1448"></a>                                               $assoc);
+<a name="line1449"></a>            }
+<a name="line1450"></a>        }
+<a name="line1451"></a>
+<a name="line1452"></a>        return $assoc;
+<a name="line1453"></a>    }
+<a name="line1454"></a>
+<a name="line1455"></a>    /**
+<a name="line1456"></a>     * Handle ServerErrors resulting from association requests.
+<a name="line1457"></a>     *
+<a name="line1458"></a>     * @return $result If server replied with an C{unsupported-type}
+<a name="line1459"></a>     * error, return a tuple of supported C{association_type},
+<a name="line1460"></a>     * C{session_type}.  Otherwise logs the error and returns null.
+<a name="line1461"></a>     *
+<a name="line1462"></a>     * @access private
+<a name="line1463"></a>     */
+<a name="line1464"></a>    function _extractSupportedAssociationType($server_error, $endpoint,
+<a name="line1465"></a>                                              $assoc_type)
+<a name="line1466"></a>    {
+<a name="line1467"></a>        // Any error message whose code is not 'unsupported-type'
+<a name="line1468"></a>        // should be considered a total failure.
+<a name="line1469"></a>        if (($server_error->error_code != 'unsupported-type') ||
+<a name="line1470"></a>            ($server_error->message->isOpenID1())) {
+<a name="line1471"></a>            return null;
+<a name="line1472"></a>        }
+<a name="line1473"></a>
+<a name="line1474"></a>        // The server didn't like the association/session type that we
+<a name="line1475"></a>        // sent, and it sent us back a message that might tell us how
+<a name="line1476"></a>        // to handle it.
+<a name="line1477"></a>
+<a name="line1478"></a>        // Extract the session_type and assoc_type from the error
+<a name="line1479"></a>        // message
+<a name="line1480"></a>        $assoc_type = $server_error->message->getArg(Auth_OpenID_OPENID_NS,
+<a name="line1481"></a>                                                     'assoc_type');
+<a name="line1482"></a>
+<a name="line1483"></a>        $session_type = $server_error->message->getArg(Auth_OpenID_OPENID_NS,
+<a name="line1484"></a>                                                       'session_type');
+<a name="line1485"></a>
+<a name="line1486"></a>        if (($assoc_type === null) || ($session_type === null)) {
+<a name="line1487"></a>            return null;
+<a name="line1488"></a>        } else if (!$this->negotiator->isAllowed($assoc_type,
+<a name="line1489"></a>                                                 $session_type)) {
+<a name="line1490"></a>            return null;
+<a name="line1491"></a>        } else {
+<a name="line1492"></a>          return array($assoc_type, $session_type);
+<a name="line1493"></a>        }
+<a name="line1494"></a>    }
+<a name="line1495"></a>
+<a name="line1496"></a>    /**
+<a name="line1497"></a>     * @access private
+<a name="line1498"></a>     */
+<a name="line1499"></a>    function _negotiateAssociation($endpoint)
+<a name="line1500"></a>    {
+<a name="line1501"></a>        // Get our preferred session/association type from the negotiatior.
+<a name="line1502"></a>        list($assoc_type, $session_type) = $this->negotiator->getAllowedType();
+<a name="line1503"></a>
+<a name="line1504"></a>        $assoc = $this->_requestAssociation(
+<a name="line1505"></a>                           $endpoint, $assoc_type, $session_type);
+<a name="line1506"></a>
+<a name="line1507"></a>        if (Auth_OpenID::isFailure($assoc)) {
+<a name="line1508"></a>            return null;
+<a name="line1509"></a>        }
+<a name="line1510"></a>
+<a name="line1511"></a>        if (is_a($assoc, 'Auth_OpenID_ServerErrorContainer')) {
+<a name="line1512"></a>            $why = $assoc;
+<a name="line1513"></a>
+<a name="line1514"></a>            $supportedTypes = $this->_extractSupportedAssociationType(
+<a name="line1515"></a>                                     $why, $endpoint, $assoc_type);
+<a name="line1516"></a>
+<a name="line1517"></a>            if ($supportedTypes !== null) {
+<a name="line1518"></a>                list($assoc_type, $session_type) = $supportedTypes;
+<a name="line1519"></a>
+<a name="line1520"></a>                // Attempt to create an association from the assoc_type
+<a name="line1521"></a>                // and session_type that the server told us it
+<a name="line1522"></a>                // supported.
+<a name="line1523"></a>                $assoc = $this->_requestAssociation(
+<a name="line1524"></a>                                   $endpoint, $assoc_type, $session_type);
+<a name="line1525"></a>
+<a name="line1526"></a>                if (is_a($assoc, 'Auth_OpenID_ServerErrorContainer')) {
+<a name="line1527"></a>                    // Do not keep trying, since it rejected the
+<a name="line1528"></a>                    // association type that it told us to use.
+<a name="line1529"></a>                    // oidutil.log('Server %s refused its suggested association
+<a name="line1530"></a>                    //             'type: session_type=%s, assoc_type=%s'
+<a name="line1531"></a>                    //             % (endpoint.server_url, session_type,
+<a name="line1532"></a>                    //                assoc_type))
+<a name="line1533"></a>                    return null;
+<a name="line1534"></a>                } else {
+<a name="line1535"></a>                    return $assoc;
+<a name="line1536"></a>                }
+<a name="line1537"></a>            } else {
+<a name="line1538"></a>                return null;
+<a name="line1539"></a>            }
+<a name="line1540"></a>        } else {
+<a name="line1541"></a>            return $assoc;
+<a name="line1542"></a>        }
+<a name="line1543"></a>    }
+<a name="line1544"></a>
+<a name="line1545"></a>    /**
+<a name="line1546"></a>     * @access private
+<a name="line1547"></a>     */
+<a name="line1548"></a>    function _requestAssociation($endpoint, $assoc_type, $session_type)
+<a name="line1549"></a>    {
+<a name="line1550"></a>        list($assoc_session, $args) = $this->_createAssociateRequest(
+<a name="line1551"></a>                                      $endpoint, $assoc_type, $session_type);
+<a name="line1552"></a>
+<a name="line1553"></a>        $response_message = $this->_makeKVPost($args, $endpoint->server_url);
+<a name="line1554"></a>
+<a name="line1555"></a>        if ($response_message === null) {
+<a name="line1556"></a>            // oidutil.log('openid.associate request failed: %s' % (why[0],))
+<a name="line1557"></a>            return null;
+<a name="line1558"></a>        } else if (is_a($response_message,
+<a name="line1559"></a>                        'Auth_OpenID_ServerErrorContainer')) {
+<a name="line1560"></a>            return $response_message;
+<a name="line1561"></a>        }
+<a name="line1562"></a>
+<a name="line1563"></a>        return $this->_extractAssociation($response_message, $assoc_session);
+<a name="line1564"></a>    }
+<a name="line1565"></a>
+<a name="line1566"></a>    /**
+<a name="line1567"></a>     * @access private
+<a name="line1568"></a>     */
+<a name="line1569"></a>    function _extractAssociation($assoc_response, $assoc_session)
+<a name="line1570"></a>    {
+<a name="line1571"></a>        // Extract the common fields from the response, raising an
+<a name="line1572"></a>        // exception if they are not found
+<a name="line1573"></a>        $assoc_type = $assoc_response->getArg(
+<a name="line1574"></a>                         Auth_OpenID_OPENID_NS, 'assoc_type',
+<a name="line1575"></a>                         Auth_OpenID_NO_DEFAULT);
+<a name="line1576"></a>
+<a name="line1577"></a>        if (Auth_OpenID::isFailure($assoc_type)) {
+<a name="line1578"></a>            return $assoc_type;
+<a name="line1579"></a>        }
+<a name="line1580"></a>
+<a name="line1581"></a>        $assoc_handle = $assoc_response->getArg(
+<a name="line1582"></a>                           Auth_OpenID_OPENID_NS, 'assoc_handle',
+<a name="line1583"></a>                           Auth_OpenID_NO_DEFAULT);
+<a name="line1584"></a>
+<a name="line1585"></a>        if (Auth_OpenID::isFailure($assoc_handle)) {
+<a name="line1586"></a>            return $assoc_handle;
+<a name="line1587"></a>        }
+<a name="line1588"></a>
+<a name="line1589"></a>        // expires_in is a base-10 string. The Python parsing will
+<a name="line1590"></a>        // accept literals that have whitespace around them and will
+<a name="line1591"></a>        // accept negative values. Neither of these are really in-spec,
+<a name="line1592"></a>        // but we think it's OK to accept them.
+<a name="line1593"></a>        $expires_in_str = $assoc_response->getArg(
+<a name="line1594"></a>                             Auth_OpenID_OPENID_NS, 'expires_in',
+<a name="line1595"></a>                             Auth_OpenID_NO_DEFAULT);
+<a name="line1596"></a>
+<a name="line1597"></a>        if (Auth_OpenID::isFailure($expires_in_str)) {
+<a name="line1598"></a>            return $expires_in_str;
+<a name="line1599"></a>        }
+<a name="line1600"></a>
+<a name="line1601"></a>        $expires_in = Auth_OpenID::intval($expires_in_str);
+<a name="line1602"></a>        if ($expires_in === false) {
+<a name="line1603"></a>            
+<a name="line1604"></a>            $err = sprintf("Could not parse expires_in from association ".
+<a name="line1605"></a>                           "response %s", print_r($assoc_response, true));
+<a name="line1606"></a>            return new Auth_OpenID_FailureResponse(null, $err);
+<a name="line1607"></a>        }
+<a name="line1608"></a>
+<a name="line1609"></a>        // OpenID 1 has funny association session behaviour.
+<a name="line1610"></a>        if ($assoc_response->isOpenID1()) {
+<a name="line1611"></a>            $session_type = $this->_getOpenID1SessionType($assoc_response);
+<a name="line1612"></a>        } else {
+<a name="line1613"></a>            $session_type = $assoc_response->getArg(
+<a name="line1614"></a>                               Auth_OpenID_OPENID2_NS, 'session_type',
+<a name="line1615"></a>                               Auth_OpenID_NO_DEFAULT);
+<a name="line1616"></a>
+<a name="line1617"></a>            if (Auth_OpenID::isFailure($session_type)) {
+<a name="line1618"></a>                return $session_type;
+<a name="line1619"></a>            }
+<a name="line1620"></a>        }
+<a name="line1621"></a>
+<a name="line1622"></a>        // Session type mismatch
+<a name="line1623"></a>        if ($assoc_session->session_type != $session_type) {
+<a name="line1624"></a>            if ($assoc_response->isOpenID1() &&
+<a name="line1625"></a>                ($session_type == 'no-encryption')) {
+<a name="line1626"></a>                // In OpenID 1, any association request can result in
+<a name="line1627"></a>                // a 'no-encryption' association response. Setting
+<a name="line1628"></a>                // assoc_session to a new no-encryption session should
+<a name="line1629"></a>                // make the rest of this function work properly for
+<a name="line1630"></a>                // that case.
+<a name="line1631"></a>                $assoc_session = new Auth_OpenID_PlainTextConsumerSession();
+<a name="line1632"></a>            } else {
+<a name="line1633"></a>                // Any other mismatch, regardless of protocol version
+<a name="line1634"></a>                // results in the failure of the association session
+<a name="line1635"></a>                // altogether.
+<a name="line1636"></a>                return null;
+<a name="line1637"></a>            }
+<a name="line1638"></a>        }
+<a name="line1639"></a>
+<a name="line1640"></a>        // Make sure assoc_type is valid for session_type
+<a name="line1641"></a>        if (!in_array($assoc_type, $assoc_session->allowed_assoc_types)) {
+<a name="line1642"></a>            return null;
+<a name="line1643"></a>        }
+<a name="line1644"></a>
+<a name="line1645"></a>        // Delegate to the association session to extract the secret
+<a name="line1646"></a>        // from the response, however is appropriate for that session
+<a name="line1647"></a>        // type.
+<a name="line1648"></a>        $secret = $assoc_session->extractSecret($assoc_response);
+<a name="line1649"></a>
+<a name="line1650"></a>        if ($secret === null) {
+<a name="line1651"></a>            return null;
+<a name="line1652"></a>        }
+<a name="line1653"></a>
+<a name="line1654"></a>        return Auth_OpenID_Association::fromExpiresIn(
+<a name="line1655"></a>                 $expires_in, $assoc_handle, $secret, $assoc_type);
+<a name="line1656"></a>    }
+<a name="line1657"></a>
+<a name="line1658"></a>    /**
+<a name="line1659"></a>     * @access private
+<a name="line1660"></a>     */
+<a name="line1661"></a>    function _createAssociateRequest($endpoint, $assoc_type, $session_type)
+<a name="line1662"></a>    {
+<a name="line1663"></a>        if (array_key_exists($session_type, $this->session_types)) {
+<a name="line1664"></a>            $session_type_class = $this->session_types[$session_type];
+<a name="line1665"></a>
+<a name="line1666"></a>            if (is_callable($session_type_class)) {
+<a name="line1667"></a>                $assoc_session = $session_type_class();
+<a name="line1668"></a>            } else {
+<a name="line1669"></a>                $assoc_session = new $session_type_class();
+<a name="line1670"></a>            }
+<a name="line1671"></a>        } else {
+<a name="line1672"></a>            return null;
+<a name="line1673"></a>        }
+<a name="line1674"></a>
+<a name="line1675"></a>        $args = array(
+<a name="line1676"></a>            'mode' => 'associate',
+<a name="line1677"></a>            'assoc_type' => $assoc_type);
+<a name="line1678"></a>
+<a name="line1679"></a>        if (!$endpoint->compatibilityMode()) {
+<a name="line1680"></a>            $args['ns'] = Auth_OpenID_OPENID2_NS;
+<a name="line1681"></a>        }
+<a name="line1682"></a>
+<a name="line1683"></a>        // Leave out the session type if we're in compatibility mode
+<a name="line1684"></a>        // *and* it's no-encryption.
+<a name="line1685"></a>        if ((!$endpoint->compatibilityMode()) ||
+<a name="line1686"></a>            ($assoc_session->session_type != 'no-encryption')) {
+<a name="line1687"></a>            $args['session_type'] = $assoc_session->session_type;
+<a name="line1688"></a>        }
+<a name="line1689"></a>
+<a name="line1690"></a>        $args = array_merge($args, $assoc_session->getRequest());
+<a name="line1691"></a>        $message = Auth_OpenID_Message::fromOpenIDArgs($args);
+<a name="line1692"></a>        return array($assoc_session, $message);
+<a name="line1693"></a>    }
+<a name="line1694"></a>
+<a name="line1695"></a>    /**
+<a name="line1696"></a>     * Given an association response message, extract the OpenID 1.X
+<a name="line1697"></a>     * session type.
+<a name="line1698"></a>     *
+<a name="line1699"></a>     * This function mostly takes care of the 'no-encryption' default
+<a name="line1700"></a>     * behavior in OpenID 1.
+<a name="line1701"></a>     *
+<a name="line1702"></a>     * If the association type is plain-text, this function will
+<a name="line1703"></a>     * return 'no-encryption'
+<a name="line1704"></a>     *
+<a name="line1705"></a>     * @access private
+<a name="line1706"></a>     * @return $typ The association type for this message
+<a name="line1707"></a>     */
+<a name="line1708"></a>    function _getOpenID1SessionType($assoc_response)
+<a name="line1709"></a>    {
+<a name="line1710"></a>        // If it's an OpenID 1 message, allow session_type to default
+<a name="line1711"></a>        // to None (which signifies "no-encryption")
+<a name="line1712"></a>        $session_type = $assoc_response->getArg(Auth_OpenID_OPENID1_NS,
+<a name="line1713"></a>                                                'session_type');
+<a name="line1714"></a>
+<a name="line1715"></a>        // Handle the differences between no-encryption association
+<a name="line1716"></a>        // respones in OpenID 1 and 2:
+<a name="line1717"></a>
+<a name="line1718"></a>        // no-encryption is not really a valid session type for OpenID
+<a name="line1719"></a>        // 1, but we'll accept it anyway, while issuing a warning.
+<a name="line1720"></a>        if ($session_type == 'no-encryption') {
+<a name="line1721"></a>            // oidutil.log('WARNING: OpenID server sent "no-encryption"'
+<a name="line1722"></a>            //             'for OpenID 1.X')
+<a name="line1723"></a>        } else if (($session_type == '') || ($session_type === null)) {
+<a name="line1724"></a>            // Missing or empty session type is the way to flag a
+<a name="line1725"></a>            // 'no-encryption' response. Change the session type to
+<a name="line1726"></a>            // 'no-encryption' so that it can be handled in the same
+<a name="line1727"></a>            // way as OpenID 2 'no-encryption' respones.
+<a name="line1728"></a>            $session_type = 'no-encryption';
+<a name="line1729"></a>        }
+<a name="line1730"></a>
+<a name="line1731"></a>        return $session_type;
+<a name="line1732"></a>    }
+<a name="line1733"></a>}
+<a name="line1734"></a>
+<a name="line1735"></a>/**
+<a name="line1736"></a> * This class represents an authentication request from a consumer to
+<a name="line1737"></a> * an OpenID server.
+<a name="line1738"></a> *
+<a name="line1739"></a> * @package OpenID
+<a name="line1740"></a> */
+<a name="line1741"></a>class Auth_OpenID_AuthRequest {
+<a name="line1742"></a>
+<a name="line1743"></a>    /**
+<a name="line1744"></a>     * Initialize an authentication request with the specified token,
+<a name="line1745"></a>     * association, and endpoint.
+<a name="line1746"></a>     *
+<a name="line1747"></a>     * Users of this library should not create instances of this
+<a name="line1748"></a>     * class.  Instances of this class are created by the library when
+<a name="line1749"></a>     * needed.
+<a name="line1750"></a>     */
+<a name="line1751"></a>    function Auth_OpenID_AuthRequest($endpoint, $assoc)
+<a name="line1752"></a>    {
+<a name="line1753"></a>        $this->assoc = $assoc;
+<a name="line1754"></a>        $this->endpoint = $endpoint;
+<a name="line1755"></a>        $this->return_to_args = array();
+<a name="line1756"></a>        $this->message = new Auth_OpenID_Message(
+<a name="line1757"></a>            $endpoint->preferredNamespace());
+<a name="line1758"></a>        $this->_anonymous = false;
+<a name="line1759"></a>    }
+<a name="line1760"></a>
+<a name="line1761"></a>    /**
+<a name="line1762"></a>     * Add an extension to this checkid request.
+<a name="line1763"></a>     *
+<a name="line1764"></a>     * $extension_request: An object that implements the extension
+<a name="line1765"></a>     * request interface for adding arguments to an OpenID message.
+<a name="line1766"></a>     */
+<a name="line1767"></a>    function addExtension($extension_request)
+<a name="line1768"></a>    {
+<a name="line1769"></a>        $extension_request->toMessage($this->message);
+<a name="line1770"></a>    }
+<a name="line1771"></a>
+<a name="line1772"></a>    /**
+<a name="line1773"></a>     * Add an extension argument to this OpenID authentication
+<a name="line1774"></a>     * request.
+<a name="line1775"></a>     *
+<a name="line1776"></a>     * Use caution when adding arguments, because they will be
+<a name="line1777"></a>     * URL-escaped and appended to the redirect URL, which can easily
+<a name="line1778"></a>     * get quite long.
+<a name="line1779"></a>     *
+<a name="line1780"></a>     * @param string $namespace The namespace for the extension. For
+<a name="line1781"></a>     * example, the simple registration extension uses the namespace
+<a name="line1782"></a>     * 'sreg'.
+<a name="line1783"></a>     *
+<a name="line1784"></a>     * @param string $key The key within the extension namespace. For
+<a name="line1785"></a>     * example, the nickname field in the simple registration
+<a name="line1786"></a>     * extension's key is 'nickname'.
+<a name="line1787"></a>     *
+<a name="line1788"></a>     * @param string $value The value to provide to the server for
+<a name="line1789"></a>     * this argument.
+<a name="line1790"></a>     */
+<a name="line1791"></a>    function addExtensionArg($namespace, $key, $value)
+<a name="line1792"></a>    {
+<a name="line1793"></a>        return $this->message->setArg($namespace, $key, $value);
+<a name="line1794"></a>    }
+<a name="line1795"></a>
+<a name="line1796"></a>    /**
+<a name="line1797"></a>     * Set whether this request should be made anonymously. If a
+<a name="line1798"></a>     * request is anonymous, the identifier will not be sent in the
+<a name="line1799"></a>     * request. This is only useful if you are making another kind of
+<a name="line1800"></a>     * request with an extension in this request.
+<a name="line1801"></a>     *
+<a name="line1802"></a>     * Anonymous requests are not allowed when the request is made
+<a name="line1803"></a>     * with OpenID 1.
+<a name="line1804"></a>     */
+<a name="line1805"></a>    function setAnonymous($is_anonymous)
+<a name="line1806"></a>    {
+<a name="line1807"></a>        if ($is_anonymous && $this->message->isOpenID1()) {
+<a name="line1808"></a>            return false;
+<a name="line1809"></a>        } else {
+<a name="line1810"></a>            $this->_anonymous = $is_anonymous;
+<a name="line1811"></a>            return true;
+<a name="line1812"></a>        }
+<a name="line1813"></a>    }
+<a name="line1814"></a>
+<a name="line1815"></a>    /**
+<a name="line1816"></a>     * Produce a {@link Auth_OpenID_Message} representing this
+<a name="line1817"></a>     * request.
+<a name="line1818"></a>     *
+<a name="line1819"></a>     * @param string $realm The URL (or URL pattern) that identifies
+<a name="line1820"></a>     * your web site to the user when she is authorizing it.
+<a name="line1821"></a>     *
+<a name="line1822"></a>     * @param string $return_to The URL that the OpenID provider will
+<a name="line1823"></a>     * send the user back to after attempting to verify her identity.
+<a name="line1824"></a>     *
+<a name="line1825"></a>     * Not specifying a return_to URL means that the user will not be
+<a name="line1826"></a>     * returned to the site issuing the request upon its completion.
+<a name="line1827"></a>     *
+<a name="line1828"></a>     * @param bool $immediate If true, the OpenID provider is to send
+<a name="line1829"></a>     * back a response immediately, useful for behind-the-scenes
+<a name="line1830"></a>     * authentication attempts.  Otherwise the OpenID provider may
+<a name="line1831"></a>     * engage the user before providing a response.  This is the
+<a name="line1832"></a>     * default case, as the user may need to provide credentials or
+<a name="line1833"></a>     * approve the request before a positive response can be sent.
+<a name="line1834"></a>     */
+<a name="line1835"></a>    function getMessage($realm, $return_to=null, $immediate=false)
+<a name="line1836"></a>    {
+<a name="line1837"></a>        if ($return_to) {
+<a name="line1838"></a>            $return_to = Auth_OpenID::appendArgs($return_to,
+<a name="line1839"></a>                                                 $this->return_to_args);
+<a name="line1840"></a>        } else if ($immediate) {
+<a name="line1841"></a>            // raise ValueError(
+<a name="line1842"></a>            //     '"return_to" is mandatory when
+<a name="line1843"></a>            //using "checkid_immediate"')
+<a name="line1844"></a>            return new Auth_OpenID_FailureResponse(null,
+<a name="line1845"></a>              "'return_to' is mandatory when using checkid_immediate");
+<a name="line1846"></a>        } else if ($this->message->isOpenID1()) {
+<a name="line1847"></a>            // raise ValueError('"return_to" is
+<a name="line1848"></a>            // mandatory for OpenID 1 requests')
+<a name="line1849"></a>            return new Auth_OpenID_FailureResponse(null,
+<a name="line1850"></a>              "'return_to' is mandatory for OpenID 1 requests");
+<a name="line1851"></a>        } else if ($this->return_to_args) {
+<a name="line1852"></a>            // raise ValueError('extra "return_to" arguments
+<a name="line1853"></a>            // were specified, but no return_to was specified')
+<a name="line1854"></a>            return new Auth_OpenID_FailureResponse(null,
+<a name="line1855"></a>              "extra 'return_to' arguments where specified, " .
+<a name="line1856"></a>              "but no return_to was specified");
+<a name="line1857"></a>        }
+<a name="line1858"></a>
+<a name="line1859"></a>        if ($immediate) {
+<a name="line1860"></a>            $mode = 'checkid_immediate';
+<a name="line1861"></a>        } else {
+<a name="line1862"></a>            $mode = 'checkid_setup';
+<a name="line1863"></a>        }
+<a name="line1864"></a>
+<a name="line1865"></a>        $message = $this->message->copy();
+<a name="line1866"></a>        if ($message->isOpenID1()) {
+<a name="line1867"></a>            $realm_key = 'trust_root';
+<a name="line1868"></a>        } else {
+<a name="line1869"></a>            $realm_key = 'realm';
+<a name="line1870"></a>        }
+<a name="line1871"></a>
+<a name="line1872"></a>        $message->updateArgs(Auth_OpenID_OPENID_NS,
+<a name="line1873"></a>                             array(
+<a name="line1874"></a>                                   $realm_key => $realm,
+<a name="line1875"></a>                                   'mode' => $mode,
+<a name="line1876"></a>                                   'return_to' => $return_to));
+<a name="line1877"></a>
+<a name="line1878"></a>        if (!$this->_anonymous) {
+<a name="line1879"></a>            if ($this->endpoint->isOPIdentifier()) {
+<a name="line1880"></a>                // This will never happen when we're in compatibility
+<a name="line1881"></a>                // mode, as long as isOPIdentifier() returns False
+<a name="line1882"></a>                // whenever preferredNamespace() returns OPENID1_NS.
+<a name="line1883"></a>                $claimed_id = $request_identity =
+<a name="line1884"></a>                    Auth_OpenID_IDENTIFIER_SELECT;
+<a name="line1885"></a>            } else {
+<a name="line1886"></a>                $request_identity = $this->endpoint->getLocalID();
+<a name="line1887"></a>                $claimed_id = $this->endpoint->claimed_id;
+<a name="line1888"></a>            }
+<a name="line1889"></a>
+<a name="line1890"></a>            // This is true for both OpenID 1 and 2
+<a name="line1891"></a>            $message->setArg(Auth_OpenID_OPENID_NS, 'identity',
+<a name="line1892"></a>                             $request_identity);
+<a name="line1893"></a>
+<a name="line1894"></a>            if ($message->isOpenID2()) {
+<a name="line1895"></a>                $message->setArg(Auth_OpenID_OPENID2_NS, 'claimed_id',
+<a name="line1896"></a>                                 $claimed_id);
+<a name="line1897"></a>            }
+<a name="line1898"></a>        }
+<a name="line1899"></a>
+<a name="line1900"></a>        if ($this->assoc) {
+<a name="line1901"></a>            $message->setArg(Auth_OpenID_OPENID_NS, 'assoc_handle',
+<a name="line1902"></a>                             $this->assoc->handle);
+<a name="line1903"></a>        }
+<a name="line1904"></a>
+<a name="line1905"></a>        return $message;
+<a name="line1906"></a>    }
+<a name="line1907"></a>
+<a name="line1908"></a>    function redirectURL($realm, $return_to = null,
+<a name="line1909"></a>                         $immediate = false)
+<a name="line1910"></a>    {
+<a name="line1911"></a>        $message = $this->getMessage($realm, $return_to, $immediate);
+<a name="line1912"></a>
+<a name="line1913"></a>        if (Auth_OpenID::isFailure($message)) {
+<a name="line1914"></a>            return $message;
+<a name="line1915"></a>        }
+<a name="line1916"></a>
+<a name="line1917"></a>        return $message->toURL($this->endpoint->server_url);
+<a name="line1918"></a>    }
+<a name="line1919"></a>
+<a name="line1920"></a>    /**
+<a name="line1921"></a>     * Get html for a form to submit this request to the IDP.
+<a name="line1922"></a>     *
+<a name="line1923"></a>     * form_tag_attrs: An array of attributes to be added to the form
+<a name="line1924"></a>     * tag. 'accept-charset' and 'enctype' have defaults that can be
+<a name="line1925"></a>     * overridden. If a value is supplied for 'action' or 'method', it
+<a name="line1926"></a>     * will be replaced.
+<a name="line1927"></a>     */
+<a name="line1928"></a>    function formMarkup($realm, $return_to=null, $immediate=false,
+<a name="line1929"></a>                        $form_tag_attrs=null)
+<a name="line1930"></a>    {
+<a name="line1931"></a>        $message = $this->getMessage($realm, $return_to, $immediate);
+<a name="line1932"></a>
+<a name="line1933"></a>        if (Auth_OpenID::isFailure($message)) {
+<a name="line1934"></a>            return $message;
+<a name="line1935"></a>        }
+<a name="line1936"></a>
+<a name="line1937"></a>        return $message->toFormMarkup($this->endpoint->server_url,
+<a name="line1938"></a>                                      $form_tag_attrs);
+<a name="line1939"></a>    }
+<a name="line1940"></a>
+<a name="line1941"></a>    /**
+<a name="line1942"></a>     * Get a complete html document that will autosubmit the request
+<a name="line1943"></a>     * to the IDP.
+<a name="line1944"></a>     *
+<a name="line1945"></a>     * Wraps formMarkup.  See the documentation for that function.
+<a name="line1946"></a>     */
+<a name="line1947"></a>    function htmlMarkup($realm, $return_to=null, $immediate=false,
+<a name="line1948"></a>                        $form_tag_attrs=null)
+<a name="line1949"></a>    {
+<a name="line1950"></a>        $form = $this->formMarkup($realm, $return_to, $immediate, 
+<a name="line1951"></a>                                  $form_tag_attrs);
+<a name="line1952"></a>
+<a name="line1953"></a>        if (Auth_OpenID::isFailure($form)) {
+<a name="line1954"></a>            return $form;
+<a name="line1955"></a>        }
+<a name="line1956"></a>        return Auth_OpenID::autoSubmitHTML($form);
+<a name="line1957"></a>    }
+<a name="line1958"></a>
+<a name="line1959"></a>    function shouldSendRedirect()
+<a name="line1960"></a>    {
+<a name="line1961"></a>        return $this->endpoint->compatibilityMode();
+<a name="line1962"></a>    }
+<a name="line1963"></a>}
+<a name="line1964"></a>
+<a name="line1965"></a>/**
+<a name="line1966"></a> * The base class for responses from the Auth_OpenID_Consumer.
+<a name="line1967"></a> *
+<a name="line1968"></a> * @package OpenID
+<a name="line1969"></a> */
+<a name="line1970"></a>class Auth_OpenID_ConsumerResponse {
+<a name="line1971"></a>    var $status = null;
+<a name="line1972"></a>
+<a name="line1973"></a>    function setEndpoint($endpoint)
+<a name="line1974"></a>    {
+<a name="line1975"></a>        $this->endpoint = $endpoint;
+<a name="line1976"></a>        if ($endpoint === null) {
+<a name="line1977"></a>            $this->identity_url = null;
+<a name="line1978"></a>        } else {
+<a name="line1979"></a>            $this->identity_url = $endpoint->claimed_id;
+<a name="line1980"></a>        }
+<a name="line1981"></a>    }
+<a name="line1982"></a>
+<a name="line1983"></a>    /**
+<a name="line1984"></a>     * Return the display identifier for this response.
+<a name="line1985"></a>     *
+<a name="line1986"></a>     * The display identifier is related to the Claimed Identifier, but the
+<a name="line1987"></a>     * two are not always identical.  The display identifier is something the
+<a name="line1988"></a>     * user should recognize as what they entered, whereas the response's
+<a name="line1989"></a>     * claimed identifier (in the identity_url attribute) may have extra
+<a name="line1990"></a>     * information for better persistence.
+<a name="line1991"></a>     *
+<a name="line1992"></a>     * URLs will be stripped of their fragments for display.  XRIs will
+<a name="line1993"></a>     * display the human-readable identifier (i-name) instead of the
+<a name="line1994"></a>     * persistent identifier (i-number).
+<a name="line1995"></a>     *
+<a name="line1996"></a>     * Use the display identifier in your user interface.  Use
+<a name="line1997"></a>     * identity_url for querying your database or authorization server.
+<a name="line1998"></a>     *
+<a name="line1999"></a>     */
+<a name="line2000"></a>    function getDisplayIdentifier()
+<a name="line2001"></a>    {
+<a name="line2002"></a>        if ($this->endpoint !== null) {
+<a name="line2003"></a>            return $this->endpoint->getDisplayIdentifier();
+<a name="line2004"></a>        }
+<a name="line2005"></a>        return null;
+<a name="line2006"></a>    }
+<a name="line2007"></a>}
+<a name="line2008"></a>
+<a name="line2009"></a>/**
+<a name="line2010"></a> * A response with a status of Auth_OpenID_SUCCESS. Indicates that
+<a name="line2011"></a> * this request is a successful acknowledgement from the OpenID server
+<a name="line2012"></a> * that the supplied URL is, indeed controlled by the requesting
+<a name="line2013"></a> * agent.  This has three relevant attributes:
+<a name="line2014"></a> *
+<a name="line2015"></a> * claimed_id - The identity URL that has been authenticated
+<a name="line2016"></a> *
+<a name="line2017"></a> * signed_args - The arguments in the server's response that were
+<a name="line2018"></a> * signed and verified.
+<a name="line2019"></a> *
+<a name="line2020"></a> * status - Auth_OpenID_SUCCESS.
+<a name="line2021"></a> *
+<a name="line2022"></a> * @package OpenID
+<a name="line2023"></a> */
+<a name="line2024"></a>class Auth_OpenID_SuccessResponse extends Auth_OpenID_ConsumerResponse {
+<a name="line2025"></a>    var $status = Auth_OpenID_SUCCESS;
+<a name="line2026"></a>
+<a name="line2027"></a>    /**
+<a name="line2028"></a>     * @access private
+<a name="line2029"></a>     */
+<a name="line2030"></a>    function Auth_OpenID_SuccessResponse($endpoint, $message, $signed_args=null)
+<a name="line2031"></a>    {
+<a name="line2032"></a>        $this->endpoint = $endpoint;
+<a name="line2033"></a>        $this->identity_url = $endpoint->claimed_id;
+<a name="line2034"></a>        $this->signed_args = $signed_args;
+<a name="line2035"></a>        $this->message = $message;
+<a name="line2036"></a>
+<a name="line2037"></a>        if ($this->signed_args === null) {
+<a name="line2038"></a>            $this->signed_args = array();
+<a name="line2039"></a>        }
+<a name="line2040"></a>    }
+<a name="line2041"></a>
+<a name="line2042"></a>    /**
+<a name="line2043"></a>     * Extract signed extension data from the server's response.
+<a name="line2044"></a>     *
+<a name="line2045"></a>     * @param string $prefix The extension namespace from which to
+<a name="line2046"></a>     * extract the extension data.
+<a name="line2047"></a>     */
+<a name="line2048"></a>    function extensionResponse($namespace_uri, $require_signed)
+<a name="line2049"></a>    {
+<a name="line2050"></a>        if ($require_signed) {
+<a name="line2051"></a>            return $this->getSignedNS($namespace_uri);
+<a name="line2052"></a>        } else {
+<a name="line2053"></a>            return $this->message->getArgs($namespace_uri);
+<a name="line2054"></a>        }
+<a name="line2055"></a>    }
+<a name="line2056"></a>
+<a name="line2057"></a>    function isOpenID1()
+<a name="line2058"></a>    {
+<a name="line2059"></a>        return $this->message->isOpenID1();
+<a name="line2060"></a>    }
+<a name="line2061"></a>
+<a name="line2062"></a>    function isSigned($ns_uri, $ns_key)
+<a name="line2063"></a>    {
+<a name="line2064"></a>        // Return whether a particular key is signed, regardless of
+<a name="line2065"></a>        // its namespace alias
+<a name="line2066"></a>        return in_array($this->message->getKey($ns_uri, $ns_key),
+<a name="line2067"></a>                        $this->signed_args);
+<a name="line2068"></a>    }
+<a name="line2069"></a>
+<a name="line2070"></a>    function getSigned($ns_uri, $ns_key, $default = null)
+<a name="line2071"></a>    {
+<a name="line2072"></a>        // Return the specified signed field if available, otherwise
+<a name="line2073"></a>        // return default
+<a name="line2074"></a>        if ($this->isSigned($ns_uri, $ns_key)) {
+<a name="line2075"></a>            return $this->message->getArg($ns_uri, $ns_key, $default);
+<a name="line2076"></a>        } else {
+<a name="line2077"></a>            return $default;
+<a name="line2078"></a>        }
+<a name="line2079"></a>    }
+<a name="line2080"></a>
+<a name="line2081"></a>    function getSignedNS($ns_uri)
+<a name="line2082"></a>    {
+<a name="line2083"></a>        $args = array();
+<a name="line2084"></a>
+<a name="line2085"></a>        $msg_args = $this->message->getArgs($ns_uri);
+<a name="line2086"></a>        if (Auth_OpenID::isFailure($msg_args)) {
+<a name="line2087"></a>            return null;
+<a name="line2088"></a>        }
+<a name="line2089"></a>
+<a name="line2090"></a>        foreach ($msg_args as $key => $value) {
+<a name="line2091"></a>            if (!$this->isSigned($ns_uri, $key)) {
+<a name="line2092"></a>                unset($msg_args[$key]);
+<a name="line2093"></a>            }
+<a name="line2094"></a>        }
+<a name="line2095"></a>
+<a name="line2096"></a>        return $msg_args;
+<a name="line2097"></a>    }
+<a name="line2098"></a>
+<a name="line2099"></a>    /**
+<a name="line2100"></a>     * Get the openid.return_to argument from this response.
+<a name="line2101"></a>     *
+<a name="line2102"></a>     * This is useful for verifying that this request was initiated by
+<a name="line2103"></a>     * this consumer.
+<a name="line2104"></a>     *
+<a name="line2105"></a>     * @return string $return_to The return_to URL supplied to the
+<a name="line2106"></a>     * server on the initial request, or null if the response did not
+<a name="line2107"></a>     * contain an 'openid.return_to' argument.
+<a name="line2108"></a>    */
+<a name="line2109"></a>    function getReturnTo()
+<a name="line2110"></a>    {
+<a name="line2111"></a>        return $this->getSigned(Auth_OpenID_OPENID_NS, 'return_to');
+<a name="line2112"></a>    }
+<a name="line2113"></a>}
+<a name="line2114"></a>
+<a name="line2115"></a>/**
+<a name="line2116"></a> * A response with a status of Auth_OpenID_FAILURE. Indicates that the
+<a name="line2117"></a> * OpenID protocol has failed. This could be locally or remotely
+<a name="line2118"></a> * triggered.  This has three relevant attributes:
+<a name="line2119"></a> *
+<a name="line2120"></a> * claimed_id - The identity URL for which authentication was
+<a name="line2121"></a> * attempted, if it can be determined.  Otherwise, null.
+<a name="line2122"></a> *
+<a name="line2123"></a> * message - A message indicating why the request failed, if one is
+<a name="line2124"></a> * supplied.  Otherwise, null.
+<a name="line2125"></a> *
+<a name="line2126"></a> * status - Auth_OpenID_FAILURE.
+<a name="line2127"></a> *
+<a name="line2128"></a> * @package OpenID
+<a name="line2129"></a> */
+<a name="line2130"></a>class Auth_OpenID_FailureResponse extends Auth_OpenID_ConsumerResponse {
+<a name="line2131"></a>    var $status = Auth_OpenID_FAILURE;
+<a name="line2132"></a>
+<a name="line2133"></a>    function Auth_OpenID_FailureResponse($endpoint, $message = null,
+<a name="line2134"></a>                                         $contact = null, $reference = null)
+<a name="line2135"></a>    {
+<a name="line2136"></a>        $this->setEndpoint($endpoint);
+<a name="line2137"></a>        $this->message = $message;
+<a name="line2138"></a>        $this->contact = $contact;
+<a name="line2139"></a>        $this->reference = $reference;
+<a name="line2140"></a>    }
+<a name="line2141"></a>}
+<a name="line2142"></a>
+<a name="line2143"></a>/**
+<a name="line2144"></a> * A specific, internal failure used to detect type URI mismatch.
+<a name="line2145"></a> *
+<a name="line2146"></a> * @package OpenID
+<a name="line2147"></a> */
+<a name="line2148"></a>class Auth_OpenID_TypeURIMismatch extends Auth_OpenID_FailureResponse {
+<a name="line2149"></a>}
+<a name="line2150"></a>
+<a name="line2151"></a>/**
+<a name="line2152"></a> * Exception that is raised when the server returns a 400 response
+<a name="line2153"></a> * code to a direct request.
+<a name="line2154"></a> *
+<a name="line2155"></a> * @package OpenID
+<a name="line2156"></a> */
+<a name="line2157"></a>class Auth_OpenID_ServerErrorContainer {
+<a name="line2158"></a>    function Auth_OpenID_ServerErrorContainer($error_text,
+<a name="line2159"></a>                                              $error_code,
+<a name="line2160"></a>                                              $message)
+<a name="line2161"></a>    {
+<a name="line2162"></a>        $this->error_text = $error_text;
+<a name="line2163"></a>        $this->error_code = $error_code;
+<a name="line2164"></a>        $this->message = $message;
+<a name="line2165"></a>    }
+<a name="line2166"></a>
+<a name="line2167"></a>    /**
+<a name="line2168"></a>     * @access private
+<a name="line2169"></a>     */
+<a name="line2170"></a>    static function fromMessage($message)
+<a name="line2171"></a>    {
+<a name="line2172"></a>        $error_text = $message->getArg(
+<a name="line2173"></a>           Auth_OpenID_OPENID_NS, 'error', '<no error message supplied>');
+<a name="line2174"></a>        $error_code = $message->getArg(Auth_OpenID_OPENID_NS, 'error_code');
+<a name="line2175"></a>        return new Auth_OpenID_ServerErrorContainer($error_text,
+<a name="line2176"></a>                                                    $error_code,
+<a name="line2177"></a>                                                    $message);
+<a name="line2178"></a>    }
+<a name="line2179"></a>}
+<a name="line2180"></a>
+<a name="line2181"></a>/**
+<a name="line2182"></a> * A response with a status of Auth_OpenID_CANCEL. Indicates that the
+<a name="line2183"></a> * user cancelled the OpenID authentication request.  This has two
+<a name="line2184"></a> * relevant attributes:
+<a name="line2185"></a> *
+<a name="line2186"></a> * claimed_id - The identity URL for which authentication was
+<a name="line2187"></a> * attempted, if it can be determined.  Otherwise, null.
+<a name="line2188"></a> *
+<a name="line2189"></a> * status - Auth_OpenID_SUCCESS.
+<a name="line2190"></a> *
+<a name="line2191"></a> * @package OpenID
+<a name="line2192"></a> */
+<a name="line2193"></a>class Auth_OpenID_CancelResponse extends Auth_OpenID_ConsumerResponse {
+<a name="line2194"></a>    var $status = Auth_OpenID_CANCEL;
+<a name="line2195"></a>
+<a name="line2196"></a>    function Auth_OpenID_CancelResponse($endpoint)
+<a name="line2197"></a>    {
+<a name="line2198"></a>        $this->setEndpoint($endpoint);
+<a name="line2199"></a>    }
+<a name="line2200"></a>}
+<a name="line2201"></a>
+<a name="line2202"></a>/**
+<a name="line2203"></a> * A response with a status of Auth_OpenID_SETUP_NEEDED. Indicates
+<a name="line2204"></a> * that the request was in immediate mode, and the server is unable to
+<a name="line2205"></a> * authenticate the user without further interaction.
+<a name="line2206"></a> *
+<a name="line2207"></a> * claimed_id - The identity URL for which authentication was
+<a name="line2208"></a> * attempted.
+<a name="line2209"></a> *
+<a name="line2210"></a> * setup_url - A URL that can be used to send the user to the server
+<a name="line2211"></a> * to set up for authentication. The user should be redirected in to
+<a name="line2212"></a> * the setup_url, either in the current window or in a new browser
+<a name="line2213"></a> * window.  Null in OpenID 2.
+<a name="line2214"></a> *
+<a name="line2215"></a> * status - Auth_OpenID_SETUP_NEEDED.
+<a name="line2216"></a> *
+<a name="line2217"></a> * @package OpenID
+<a name="line2218"></a> */
+<a name="line2219"></a>class Auth_OpenID_SetupNeededResponse extends Auth_OpenID_ConsumerResponse {
+<a name="line2220"></a>    var $status = Auth_OpenID_SETUP_NEEDED;
+<a name="line2221"></a>
+<a name="line2222"></a>    function Auth_OpenID_SetupNeededResponse($endpoint,
+<a name="line2223"></a>                                             $setup_url = null)
+<a name="line2224"></a>    {
+<a name="line2225"></a>        $this->setEndpoint($endpoint);
+<a name="line2226"></a>        $this->setup_url = $setup_url;
+<a name="line2227"></a>    }
+<a name="line2228"></a>}
+<a name="line2229"></a>
+<a name="line2230"></a>
+<a name="line2231"></a></pre>
+<div class="header">
+<h1>GiftFlow API</h1>
+<ul>
+<li><a href="../../../../overview-summary.html">Overview</a></li>
+<li>Package</li><li>Class</li><li>Tree</li><li><a href="../../../../overview-files.html">Files</a></li>
+<li><a href="../../../../deprecated-list.html">Deprecated</a></li>
+<li><a href="../../../../index-all.html">Index</a></li>
+</ul>
+</div>
+
+<div class="small_links">
+<a href="../../../../index.html" target="_top">Frames</a>
+<a href="../../../../source/libraries/auth/openid/consumer.php.html" target="_top">No frames</a>
+</div>
+<hr>
+
+<p id="footer">This document was generated by <a href="http://peej.github.com/phpdoctor/">PHPDoctor: The PHP Documentation Creator</a></p>
+
+</body>
+
+</html>

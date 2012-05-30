@@ -1,0 +1,218 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+
+<html lang="en">
+<head>
+
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
+<meta name="generator" content="PHPDoctor 2RC4 (http://peej.github.com/phpdoctor/)">
+<meta name="when" content="Wed, 09 Feb 2011 20:22:55 +0000">
+
+<link rel="stylesheet" type="text/css" href="../stylesheet.css">
+<link rel="start" href="../overview-summary.html">
+
+<title>Auth_Yadis_HTTPFetcher (GiftFlow API)</title>
+
+</head>
+<body id="definition" onload="parent.document.title=document.title;">
+
+<div class="header">
+<h1>GiftFlow API</h1>
+<ul>
+<li><a href="../overview-summary.html">Overview</a></li>
+<li><a href="../openid/package-summary.html">Package</a></li>
+<li class="active">Class</li>
+<li><a href="../openid/package-tree.html">Tree</a></li>
+<li><a href="../overview-files.html">Files</a></li>
+<li><a href="../deprecated-list.html">Deprecated</a></li>
+<li><a href="../index-all.html">Index</a></li>
+</ul>
+</div>
+
+<div class="small_links">
+<a href="../index.html" target="_top">Frames</a>
+<a href="../openid/auth_yadis_httpfetcher.html" target="_top">No frames</a>
+</div>
+<div class="small_links">
+Summary: <a href="#summary_field">Field</a> | <a href="#summary_method">Method</a> | <a href="#summary_constr">Constr</a>
+Detail: <a href="#detail_field">Field</a> | <a href="#detail_method">Method</a> | <a href="#summary_constr">Constr</a>
+</div>
+<hr>
+
+<div class="qualifiedName">OpenID\Auth_Yadis_HTTPFetcher</div>
+<a href="../source/libraries/auth/yadis/httpfetcher.php.html#line42" class="location">libraries/Auth/Yadis/HTTPFetcher.php at line 42</a>
+
+<h1>Class Auth_Yadis_HTTPFetcher</h1>
+
+<pre class="tree"><strong>Auth_Yadis_HTTPFetcher</strong><br /></pre>
+
+<hr>
+
+<p class="signature">private  class <strong>Auth_Yadis_HTTPFetcher</strong></p>
+
+<div class="comment" id="overview_description"><p>This class is the interface for HTTP fetchers the Yadis library
+uses.  This interface is only important if you need to write a new
+fetcher for some reason.</p></div>
+
+<hr>
+
+<table id="summary_field">
+<tr><th colspan="2">Field Summary</th></tr>
+<tr>
+<td class="type"> mixed</td>
+<td class="description"><p class="name"><a href="#timeout">$timeout</a></p></td>
+</tr>
+</table>
+
+<table id="summary_method">
+<tr><th colspan="2">Method Summary</th></tr>
+<tr>
+<td class="type">private  void</td>
+<td class="description"><p class="name"><a href="#URLHasAllowedScheme()">URLHasAllowedScheme</a>(mixed url)</p><p class="description">Is this an http or https URL?</p></td>
+</tr>
+<tr>
+<td class="type">private  void</td>
+<td class="description"><p class="name"><a href="#_findRedirect()">_findRedirect</a>(mixed headers, mixed url)</p><p class="description"></p></td>
+</tr>
+<tr>
+<td class="type"> void</td>
+<td class="description"><p class="name"><a href="#allowedURL()">allowedURL</a>(mixed url)</p><p class="description">Return whether a URL should be allowed. </p></td>
+</tr>
+<tr>
+<td class="type"> bool</td>
+<td class="description"><p class="name"><a href="#canFetchURL()">canFetchURL</a>(mixed url)</p><p class="description">Return whether a URL can be fetched. </p></td>
+</tr>
+<tr>
+<td class="type"> mixed</td>
+<td class="description"><p class="name"><a href="#get()">get</a>(string url, mixed headers, array extra_headers)</p><p class="description">Fetches the specified URL using optional extra headers and
+returns the server's response.</p></td>
+</tr>
+<tr>
+<td class="type">private  void</td>
+<td class="description"><p class="name"><a href="#isHTTPS()">isHTTPS</a>(mixed url)</p><p class="description">Is this an https URL?</p></td>
+</tr>
+<tr>
+<td class="type"> bool</td>
+<td class="description"><p class="name"><a href="#supportsSSL()">supportsSSL</a>()</p><p class="description">Does this fetcher implementation (and runtime) support fetching
+HTTPS URLs?  May inspect the runtime environment.</p></td>
+</tr>
+</table>
+
+<h2 id="detail_field">Field Detail</h2>
+<a href="../source/libraries/auth/yadis/httpfetcher.php.html#line44" class="location">libraries/Auth/Yadis/HTTPFetcher.php at line 44</a>
+
+<h3 id="timeout">timeout</h3>
+<code class="signature">public  mixed <strong>$timeout</strong> = 20</code>
+<div class="details">
+</div>
+
+<hr>
+
+<h2 id="detail_method">Method Detail</h2><div class="method_detail">
+<div class='method'><a href="../source/libraries/auth/yadis/httpfetcher.php.html#line108" class="location">libraries/Auth/Yadis/HTTPFetcher.php at line 108</a>
+
+<h3 id="URLHasAllowedScheme()">URLHasAllowedScheme</h3>
+<code class="signature">private  void <strong>URLHasAllowedScheme</strong>(mixed url)</code>
+<div class="details">
+<p>Is this an http or https URL?</p></div></div>
+
+
+
+<div class='method'><a href="../source/libraries/auth/yadis/httpfetcher.php.html#line116" class="location">libraries/Auth/Yadis/HTTPFetcher.php at line 116</a>
+
+<h3 id="_findRedirect()">_findRedirect</h3>
+<code class="signature">private  void <strong>_findRedirect</strong>(mixed headers, mixed url)</code>
+<div class="details">
+<p></p></div></div>
+
+
+
+<div class='method'><a href="../source/libraries/auth/yadis/httpfetcher.php.html#line76" class="location">libraries/Auth/Yadis/HTTPFetcher.php at line 76</a>
+
+<h3 id="allowedURL()">allowedURL</h3>
+<code class="signature">public  void <strong>allowedURL</strong>(mixed url)</code>
+<div class="details">
+<p>Return whether a URL should be allowed. Override this method to
+conform to your local policy.</p><p>By default, will attempt to fetch any http or https URL.</p></div></div>
+
+
+
+<div class='method'><a href="../source/libraries/auth/yadis/httpfetcher.php.html#line53" class="location">libraries/Auth/Yadis/HTTPFetcher.php at line 53</a>
+
+<h3 id="canFetchURL()">canFetchURL</h3>
+<code class="signature">public  bool <strong>canFetchURL</strong>(mixed url)</code>
+<div class="details">
+<p>Return whether a URL can be fetched.  Returns false if the URL
+scheme is not allowed or is not supported by this fetcher
+implementation; returns true otherwise.</p></div></div>
+
+
+
+<div class='method'><a href="../source/libraries/auth/yadis/httpfetcher.php.html#line167" class="location">libraries/Auth/Yadis/HTTPFetcher.php at line 167</a>
+
+<h3 id="get()">get</h3>
+<code class="signature">public  mixed <strong>get</strong>(string url, mixed headers, array extra_headers)</code>
+<div class="details">
+<p>Fetches the specified URL using optional extra headers and
+returns the server's response.</p><dl>
+<dt>Parameters:</dt>
+<dd>url - The URL to be fetched.</dd>
+<dd>extra_headers - An array of header strings (e.g. "Accept: text/html").</dd>
+<dt>Returns:</dt>
+<dd>$result An array of ($code, $url, $headers, $body) if the URL could be fetched; null if the URL does not pass the URLHasAllowedScheme check or if the server's response is malformed.</dd>
+</dl>
+</div></div>
+
+
+
+<div class='method'><a href="../source/libraries/auth/yadis/httpfetcher.php.html#line98" class="location">libraries/Auth/Yadis/HTTPFetcher.php at line 98</a>
+
+<h3 id="isHTTPS()">isHTTPS</h3>
+<code class="signature">private  void <strong>isHTTPS</strong>(mixed url)</code>
+<div class="details">
+<p>Is this an https URL?</p></div></div>
+
+
+
+<div class='method'><a href="../source/libraries/auth/yadis/httpfetcher.php.html#line88" class="location">libraries/Auth/Yadis/HTTPFetcher.php at line 88</a>
+
+<h3 id="supportsSSL()">supportsSSL</h3>
+<code class="signature">public  bool <strong>supportsSSL</strong>()</code>
+<div class="details">
+<p>Does this fetcher implementation (and runtime) support fetching
+HTTPS URLs?  May inspect the runtime environment.</p><dl>
+<dt>Returns:</dt>
+<dd>$support True if this fetcher supports HTTPS fetching; false if not.</dd>
+</dl>
+</div></div>
+
+
+
+</div><div class="header">
+<h1>GiftFlow API</h1>
+<ul>
+<li><a href="../overview-summary.html">Overview</a></li>
+<li><a href="../openid/package-summary.html">Package</a></li>
+<li class="active">Class</li>
+<li><a href="../openid/package-tree.html">Tree</a></li>
+<li><a href="../overview-files.html">Files</a></li>
+<li><a href="../deprecated-list.html">Deprecated</a></li>
+<li><a href="../index-all.html">Index</a></li>
+</ul>
+</div>
+
+<div class="small_links">
+<a href="../index.html" target="_top">Frames</a>
+<a href="../openid/auth_yadis_httpfetcher.html" target="_top">No frames</a>
+</div>
+<div class="small_links">
+Summary: <a href="#summary_field">Field</a> | <a href="#summary_method">Method</a> | <a href="#summary_constr">Constr</a>
+Detail: <a href="#detail_field">Field</a> | <a href="#detail_method">Method</a> | <a href="#summary_constr">Constr</a>
+</div>
+<hr>
+
+<p id="footer">This document was generated by <a href="http://peej.github.com/phpdoctor/">PHPDoctor: The PHP Documentation Creator</a></p>
+
+</body>
+
+</html>

@@ -1,0 +1,235 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+
+<html lang="en">
+<head>
+
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
+<meta name="generator" content="PHPDoctor 2RC4 (http://peej.github.com/phpdoctor/)">
+<meta name="when" content="Wed, 09 Feb 2011 20:22:55 +0000">
+
+<link rel="stylesheet" type="text/css" href="../stylesheet.css">
+<link rel="start" href="../overview-summary.html">
+
+<title>Auth_OpenID_PAPE_Request (GiftFlow API)</title>
+
+</head>
+<body id="definition" onload="parent.document.title=document.title;">
+
+<div class="header">
+<h1>GiftFlow API</h1>
+<ul>
+<li><a href="../overview-summary.html">Overview</a></li>
+<li><a href="../giftflow/package-summary.html">Package</a></li>
+<li class="active">Class</li>
+<li><a href="../giftflow/package-tree.html">Tree</a></li>
+<li><a href="../overview-files.html">Files</a></li>
+<li><a href="../deprecated-list.html">Deprecated</a></li>
+<li><a href="../index-all.html">Index</a></li>
+</ul>
+</div>
+
+<div class="small_links">
+<a href="../index.html" target="_top">Frames</a>
+<a href="../giftflow/auth_openid_pape_request.html" target="_top">No frames</a>
+</div>
+<div class="small_links">
+Summary: <a href="#summary_field">Field</a> | <a href="#summary_method">Method</a> | <a href="#summary_constr">Constr</a>
+Detail: <a href="#detail_field">Field</a> | <a href="#detail_method">Method</a> | <a href="#summary_constr">Constr</a>
+</div>
+<hr>
+
+<div class="qualifiedName">GiftFlow\Auth_OpenID_PAPE_Request</div>
+<a href="../source/libraries/auth/openid/pape.php.html#line30" class="location">libraries/Auth/OpenID/PAPE.php at line 30</a>
+
+<h1>Class Auth_OpenID_PAPE_Request</h1>
+
+<pre class="tree"><a href="../openid/auth_openid_extension.html">Auth_OpenID_Extension</a><br>    └─<strong>Auth_OpenID_PAPE_Request</strong><br /></pre>
+
+<hr>
+
+<p class="signature">public  class <strong>Auth_OpenID_PAPE_Request</strong><br>extends <a href="../openid/auth_openid_extension.html">Auth_OpenID_Extension</a>
+
+</p>
+
+<div class="comment" id="overview_description"><p>A Provider Authentication Policy request, sent from a relying party
+to a provider</p><p>preferred_auth_policies: The authentication policies that
+the relying party prefers</p><p>max_auth_age: The maximum time, in seconds, that the relying party
+wants to allow to have elapsed before the user must re-authenticate</p></div>
+
+<hr>
+
+<table id="summary_field">
+<tr><th colspan="2">Field Summary</th></tr>
+<tr>
+<td class="type"> mixed</td>
+<td class="description"><p class="name"><a href="#ns_alias">$ns_alias</a></p></td>
+</tr>
+<tr>
+<td class="type"> mixed</td>
+<td class="description"><p class="name"><a href="#ns_uri">$ns_uri</a></p></td>
+</tr>
+</table>
+
+<table class="inherit">
+<tr><th colspan="2">Fields inherited from OpenID\Auth_OpenID_Extension</th></tr>
+<tr><td><a href="../openid/auth_openid_extension.html#ns_alias">ns_alias</a>, <a href="../openid/auth_openid_extension.html#ns_uri">ns_uri</a></td></tr></table>
+
+<table id="summary_method">
+<tr><th colspan="2">Method Summary</th></tr>
+<tr>
+<td class="type"> void</td>
+<td class="description"><p class="name"><a href="#__construct()">__construct</a>(mixed preferred_auth_policies, mixed max_auth_age)</p></td>
+</tr>
+<tr>
+<td class="type"> void</td>
+<td class="description"><p class="name"><a href="#addPolicyURI()">addPolicyURI</a>(mixed policy_uri)</p><p class="description">Add an acceptable authentication policy URI to this requestThis method is intended to be used by the relying party to add
+acceptable authentication types to the request.
+</p></td>
+</tr>
+<tr>
+<td class="type">static  void</td>
+<td class="description"><p class="name"><a href="#fromOpenIDRequest()">fromOpenIDRequest</a>(mixed request)</p><p class="description">Instantiate a Request object from the arguments in a checkid_*
+OpenID message</p></td>
+</tr>
+<tr>
+<td class="type"> void</td>
+<td class="description"><p class="name"><a href="#getExtensionArgs()">getExtensionArgs</a>()</p><p class="description">Get the string arguments that should be added to an OpenID
+message for this extension.</p></td>
+</tr>
+<tr>
+<td class="type"> void</td>
+<td class="description"><p class="name"><a href="#parseExtensionArgs()">parseExtensionArgs</a>(mixed args, args: The)</p><p class="description">Set the state of this request to be that expressed in these
+PAPE arguments</p></td>
+</tr>
+<tr>
+<td class="type"> array</td>
+<td class="description"><p class="name"><a href="#preferredTypes()">preferredTypes</a>(mixed supported_types, supported_types: A)</p><p class="description">Given a list of authentication policy URIs that a provider
+supports, this method returns the subsequence of those types
+that are preferred by the relying party.</p></td>
+</tr>
+</table>
+
+<table class="inherit">
+<tr><th colspan="2">Methods inherited from OpenID\Auth_OpenID_Extension</th></tr>
+<tr><td><a href="../openid/auth_openid_extension.html#getExtensionArgs()">getExtensionArgs</a>, <a href="../openid/auth_openid_extension.html#toMessage()">toMessage</a></td></tr></table>
+
+<h2 id="detail_field">Field Detail</h2>
+<a href="../source/libraries/auth/openid/pape.php.html#line32" class="location">libraries/Auth/OpenID/PAPE.php at line 32</a>
+
+<h3 id="ns_alias">ns_alias</h3>
+<code class="signature">public  mixed <strong>$ns_alias</strong> = 'pape'</code>
+<div class="details">
+</div>
+
+<hr>
+
+<a href="../source/libraries/auth/openid/pape.php.html#line33" class="location">libraries/Auth/OpenID/PAPE.php at line 33</a>
+
+<h3 id="ns_uri">ns_uri</h3>
+<code class="signature">public  mixed <strong>$ns_uri</strong> = Auth_OpenID_PAPE_NS_URI</code>
+<div class="details">
+</div>
+
+<hr>
+
+<h2 id="detail_method">Method Detail</h2><div class="method_detail">
+<div class='method'><a href="../source/libraries/auth/openid/pape.php.html#line35" class="location">libraries/Auth/OpenID/PAPE.php at line 35</a>
+
+<h3 id="__construct()">__construct</h3>
+<code class="signature">public  void <strong>__construct</strong>(mixed preferred_auth_policies, mixed max_auth_age)</code>
+<div class="details">
+</div></div>
+
+
+
+<div class='method'><a href="../source/libraries/auth/openid/pape.php.html#line54" class="location">libraries/Auth/OpenID/PAPE.php at line 54</a>
+
+<h3 id="addPolicyURI()">addPolicyURI</h3>
+<code class="signature">public  void <strong>addPolicyURI</strong>(mixed policy_uri)</code>
+<div class="details">
+<p>Add an acceptable authentication policy URI to this request</p><p>This method is intended to be used by the relying party to add
+acceptable authentication types to the request.</p><p>policy_uri: The identifier for the preferred type of
+authentication.</p></div></div>
+
+
+
+<div class='method'><a href="../source/libraries/auth/openid/pape.php.html#line79" class="location">libraries/Auth/OpenID/PAPE.php at line 79</a>
+
+<h3 id="fromOpenIDRequest()">fromOpenIDRequest</h3>
+<code class="signature">public static  void <strong>fromOpenIDRequest</strong>(mixed request)</code>
+<div class="details">
+<p>Instantiate a Request object from the arguments in a checkid_*
+OpenID message</p></div></div>
+
+
+
+<div class='method'><a href="../source/libraries/auth/openid/pape.php.html#line61" class="location">libraries/Auth/OpenID/PAPE.php at line 61</a>
+
+<h3 id="getExtensionArgs()">getExtensionArgs</h3>
+<code class="signature">public  void <strong>getExtensionArgs</strong>()</code>
+<div class="details">
+<p>Get the string arguments that should be added to an OpenID
+message for this extension.</p></div></div>
+
+
+
+<div class='method'><a href="../source/libraries/auth/openid/pape.php.html#line98" class="location">libraries/Auth/OpenID/PAPE.php at line 98</a>
+
+<h3 id="parseExtensionArgs()">parseExtensionArgs</h3>
+<code class="signature">public  void <strong>parseExtensionArgs</strong>(mixed args, args: The)</code>
+<div class="details">
+<p>Set the state of this request to be that expressed in these
+PAPE arguments</p><dl>
+<dt>Parameters:</dt>
+<dd>The - PAPE arguments without a namespace</dd>
+</dl>
+</div></div>
+
+
+
+<div class='method'><a href="../source/libraries/auth/openid/pape.php.html#line136" class="location">libraries/Auth/OpenID/PAPE.php at line 136</a>
+
+<h3 id="preferredTypes()">preferredTypes</h3>
+<code class="signature">public  array <strong>preferredTypes</strong>(mixed supported_types, supported_types: A)</code>
+<div class="details">
+<p>Given a list of authentication policy URIs that a provider
+supports, this method returns the subsequence of those types
+that are preferred by the relying party.</p><dl>
+<dt>Parameters:</dt>
+<dd>A - sequence of authentication policy type URIs that are supported by a provider</dd>
+<dt>Returns:</dt>
+<dd>The sub-sequence of the supported types that are preferred by the relying party. This list will be ordered in the order that the types appear in the supported_types sequence, and may be empty if the provider does not prefer any of the supported authentication types.</dd>
+</dl>
+</div></div>
+
+
+
+</div><div class="header">
+<h1>GiftFlow API</h1>
+<ul>
+<li><a href="../overview-summary.html">Overview</a></li>
+<li><a href="../giftflow/package-summary.html">Package</a></li>
+<li class="active">Class</li>
+<li><a href="../giftflow/package-tree.html">Tree</a></li>
+<li><a href="../overview-files.html">Files</a></li>
+<li><a href="../deprecated-list.html">Deprecated</a></li>
+<li><a href="../index-all.html">Index</a></li>
+</ul>
+</div>
+
+<div class="small_links">
+<a href="../index.html" target="_top">Frames</a>
+<a href="../giftflow/auth_openid_pape_request.html" target="_top">No frames</a>
+</div>
+<div class="small_links">
+Summary: <a href="#summary_field">Field</a> | <a href="#summary_method">Method</a> | <a href="#summary_constr">Constr</a>
+Detail: <a href="#detail_field">Field</a> | <a href="#detail_method">Method</a> | <a href="#summary_constr">Constr</a>
+</div>
+<hr>
+
+<p id="footer">This document was generated by <a href="http://peej.github.com/phpdoctor/">PHPDoctor: The PHP Documentation Creator</a></p>
+
+</body>
+
+</html>

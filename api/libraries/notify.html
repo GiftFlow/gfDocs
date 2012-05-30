@@ -1,0 +1,335 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+
+<html lang="en">
+<head>
+
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
+<meta name="generator" content="PHPDoctor 2RC4 (http://peej.github.com/phpdoctor/)">
+<meta name="when" content="Wed, 09 Feb 2011 20:22:55 +0000">
+
+<link rel="stylesheet" type="text/css" href="../stylesheet.css">
+<link rel="start" href="../overview-summary.html">
+
+<title>Notify (GiftFlow API)</title>
+
+</head>
+<body id="definition" onload="parent.document.title=document.title;">
+
+<div class="header">
+<h1>GiftFlow API</h1>
+<ul>
+<li><a href="../overview-summary.html">Overview</a></li>
+<li><a href="../libraries/package-summary.html">Package</a></li>
+<li class="active">Class</li>
+<li><a href="../libraries/package-tree.html">Tree</a></li>
+<li><a href="../overview-files.html">Files</a></li>
+<li><a href="../deprecated-list.html">Deprecated</a></li>
+<li><a href="../index-all.html">Index</a></li>
+</ul>
+</div>
+
+<div class="small_links">
+<a href="../index.html" target="_top">Frames</a>
+<a href="../libraries/notify.html" target="_top">No frames</a>
+</div>
+<div class="small_links">
+Summary: <a href="#summary_field">Field</a> | <a href="#summary_method">Method</a> | <a href="#summary_constr">Constr</a>
+Detail: <a href="#detail_field">Field</a> | <a href="#detail_method">Method</a> | <a href="#summary_constr">Constr</a>
+</div>
+<hr>
+
+<div class="qualifiedName">Libraries\Notify</div>
+<a href="../source/libraries/notify.php.html#line21" class="location">libraries/notify.php at line 21</a>
+
+<h1>Class Notify</h1>
+
+<pre class="tree"><strong>Notify</strong><br /></pre>
+
+<hr>
+
+<p class="signature">public  class <strong>Notify</strong></p>
+
+<div class="comment" id="overview_description"><p>The Notify library handles all notifications and alerts.</p><p>Notifications are very complex and thus this class deals with two
+different kinds of notifications:</p><p>1. Alerts
+These are email alerts which are sent when an event takes place.</p><p>2. Notification feeds
+This is a feed of all the latest events relevant to a user. This is very
+similar to Facebook's notification feed system.</p></div>
+
+<dl>
+<dt>Author:</dt>
+<dd>Brandon Jackson</dd>
+</dl>
+<hr>
+
+<table id="summary_field">
+<tr><th colspan="2">Field Summary</th></tr>
+<tr>
+<td class="type">protected  object</td>
+<td class="description"><p class="name"><a href="#activate">$activate</a></p><p class="description">CodeIgniter super-object</p></td>
+</tr>
+<tr>
+<td class="type"> string</td>
+<td class="description"><p class="name"><a href="#alert_message">$alert_message</a></p><p class="description">Message of the alert email</p></td>
+</tr>
+<tr>
+<td class="type"> array</td>
+<td class="description"><p class="name"><a href="#alert_parseables">$alert_parseables</a></p><p class="description">Array of tags and variables which templates will be parsed for</p></td>
+</tr>
+<tr>
+<td class="type"> string</td>
+<td class="description"><p class="name"><a href="#alert_subject">$alert_subject</a></p><p class="description">Subject of the alert email</p></td>
+</tr>
+<tr>
+<td class="type"> string</td>
+<td class="description"><p class="name"><a href="#alert_subject_prefix">$alert_subject_prefix</a></p><p class="description">Prefix for the alert subject
+For example, by default an email with the subject "nofication" will
+actually be sent as "[GiftFlow] notification"</p></td>
+</tr>
+<tr>
+<td class="type"> string</td>
+<td class="description"><p class="name"><a href="#alert_template_name">$alert_template_name</a></p><p class="description">Name of the template to load. </p></td>
+</tr>
+<tr>
+<td class="type"> string</td>
+<td class="description"><p class="name"><a href="#alert_to">$alert_to</a></p><p class="description">Email address to send the alert to</p></td>
+</tr>
+<tr>
+<td class="type"> string</td>
+<td class="description"><p class="name"><a href="#left_delimiter">$left_delimiter</a></p><p class="description">Left delimiter used for parsing templates
+For example, if the left delimiter is {{, the parser will look for
+tags which begin with "{{", such as "{{user_name}}"</p></td>
+</tr>
+<tr>
+<td class="type"> string</td>
+<td class="description"><p class="name"><a href="#right_delimiter">$right_delimiter</a></p><p class="description">Right delimiter used for parsing templates
+For example, if the right delimiter is }}, the parser will look for 
+tags which end with "}}", such as "{{user_name}}"</p></td>
+</tr>
+</table>
+
+<table id="summary_method">
+<tr><th colspan="2">Method Summary</th></tr>
+<tr>
+<td class="type"> void</td>
+<td class="description"><p class="name"><a href="#__construct()">__construct</a>()</p><p class="description">Constructor function</p></td>
+</tr>
+<tr>
+<td class="type"> void</td>
+<td class="description"><p class="name"><a href="#alert_demand_take_new()">alert_demand_take_new</a>(array params, array data)</p><p class="description">Sends alert when user requests a gift$data contains four relevant objects: $data->Demander: User object of the user who requested the good
+$data->Other_user: User object of the user who owns the good
+$data->Transaction: Transaction object representing the request itself
+$data->Good: Good object of the gift requested</p></td>
+</tr>
+<tr>
+<td class="type"> void</td>
+<td class="description"><p class="name"><a href="#alert_user_registration_manual()">alert_user_registration_manual</a>(array params, array data)</p><p class="description">Sends alert when new users registerNormally, at the beginning of an email alert function we would check 
+to see if user has signed up to receive notifications of this type. </p></td>
+</tr>
+<tr>
+<td class="type"> boolean</td>
+<td class="description"><p class="name"><a href="#email()">email</a>(array config)</p><p class="description">Send EmailLow-level function which sends emails via the CodeIgniter email
+library using the information provided in the config array which it 
+is passed.</p></td>
+</tr>
+<tr>
+<td class="type"> void</td>
+<td class="description"><p class="name"><a href="#send_alert()">send_alert</a>()</p><p class="description">Helper function which prepares and sends email alerts.
+</p></td>
+</tr>
+<tr>
+<td class="type"> $this</td>
+<td class="description"><p class="name"><a href="#template_parser()">template_parser</a>(string template_name, array parseables)</p><p class="description">Parse templates</p></td>
+</tr>
+</table>
+
+<h2 id="detail_field">Field Detail</h2>
+<a href="../source/libraries/notify.php.html#line28" class="location">libraries/notify.php at line 28</a>
+
+<h3 id="activate">activate</h3>
+<code class="signature">protected  object <strong>$activate</strong></code>
+<div class="details">
+<p>CodeIgniter super-object</p></div>
+
+<hr>
+
+<a href="../source/libraries/notify.php.html#line56" class="location">libraries/notify.php at line 56</a>
+
+<h3 id="alert_message">alert_message</h3>
+<code class="signature">public  string <strong>$alert_message</strong></code>
+<div class="details">
+<p>Message of the alert email</p></div>
+
+<hr>
+
+<a href="../source/libraries/notify.php.html#line35" class="location">libraries/notify.php at line 35</a>
+
+<h3 id="alert_parseables">alert_parseables</h3>
+<code class="signature">public  array <strong>$alert_parseables</strong></code>
+<div class="details">
+<p>Array of tags and variables which templates will be parsed for</p></div>
+
+<hr>
+
+<a href="../source/libraries/notify.php.html#line63" class="location">libraries/notify.php at line 63</a>
+
+<h3 id="alert_subject">alert_subject</h3>
+<code class="signature">public  string <strong>$alert_subject</strong></code>
+<div class="details">
+<p>Subject of the alert email</p></div>
+
+<hr>
+
+<a href="../source/libraries/notify.php.html#line72" class="location">libraries/notify.php at line 72</a>
+
+<h3 id="alert_subject_prefix">alert_subject_prefix</h3>
+<code class="signature">public  string <strong>$alert_subject_prefix</strong> = &quot;[GiftFlow] &quot;</code>
+<div class="details">
+<p>Prefix for the alert subject
+For example, by default an email with the subject "nofication" will
+actually be sent as "[GiftFlow] notification"</p></div>
+
+<hr>
+
+<a href="../source/libraries/notify.php.html#line43" class="location">libraries/notify.php at line 43</a>
+
+<h3 id="alert_template_name">alert_template_name</h3>
+<code class="signature">public  string <strong>$alert_template_name</strong></code>
+<div class="details">
+<p>Name of the template to load. 
+This corresponds to the database field "name" in the terms table.</p></div>
+
+<hr>
+
+<a href="../source/libraries/notify.php.html#line49" class="location">libraries/notify.php at line 49</a>
+
+<h3 id="alert_to">alert_to</h3>
+<code class="signature">public  string <strong>$alert_to</strong></code>
+<div class="details">
+<p>Email address to send the alert to</p></div>
+
+<hr>
+
+<a href="../source/libraries/notify.php.html#line81" class="location">libraries/notify.php at line 81</a>
+
+<h3 id="left_delimiter">left_delimiter</h3>
+<code class="signature">public  string <strong>$left_delimiter</strong> = &quot;{{&quot;</code>
+<div class="details">
+<p>Left delimiter used for parsing templates
+For example, if the left delimiter is {{, the parser will look for
+tags which begin with "{{", such as "{{user_name}}"</p></div>
+
+<hr>
+
+<a href="../source/libraries/notify.php.html#line90" class="location">libraries/notify.php at line 90</a>
+
+<h3 id="right_delimiter">right_delimiter</h3>
+<code class="signature">public  string <strong>$right_delimiter</strong> = &quot;}}&quot;</code>
+<div class="details">
+<p>Right delimiter used for parsing templates
+For example, if the right delimiter is }}, the parser will look for 
+tags which end with "}}", such as "{{user_name}}"</p></div>
+
+<hr>
+
+<h2 id="detail_method">Method Detail</h2><div class="method_detail">
+<div class='method'><a href="../source/libraries/notify.php.html#line95" class="location">libraries/notify.php at line 95</a>
+
+<h3 id="__construct()">__construct</h3>
+<code class="signature">public  void <strong>__construct</strong>()</code>
+<div class="details">
+<p>Constructor function</p></div></div>
+
+
+
+<div class='method'><a href="../source/libraries/notify.php.html#line284" class="location">libraries/notify.php at line 284</a>
+
+<h3 id="alert_demand_take_new()">alert_demand_take_new</h3>
+<code class="signature">public  void <strong>alert_demand_take_new</strong>(array params, array data)</code>
+<div class="details">
+<p>Sends alert when user requests a gift</p><p>$data contains four relevant objects: </p><p>$data->Demander: User object of the user who requested the good
+$data->Other_user: User object of the user who owns the good
+$data->Transaction: Transaction object representing the request itself
+$data->Good: Good object of the gift requested</p><dl>
+<dt>Parameters:</dt>
+<dd></dd>
+<dd>data - $this passed from the controller</dd>
+</dl>
+</div></div>
+
+
+
+<div class='method'><a href="../source/libraries/notify.php.html#line253" class="location">libraries/notify.php at line 253</a>
+
+<h3 id="alert_user_registration_manual()">alert_user_registration_manual</h3>
+<code class="signature">public  void <strong>alert_user_registration_manual</strong>(array params, array data)</code>
+<div class="details">
+<p>Sends alert when new users register</p><p>Normally, at the beginning of an email alert function we would check 
+to see if user has signed up to receive notifications of this type. 
+If they have, continue. If not, return false.</p><p>In this case, though, notification emails are mandatory.</p></div></div>
+
+
+
+<div class='method'><a href="../source/libraries/notify.php.html#line115" class="location">libraries/notify.php at line 115</a>
+
+<h3 id="email()">email</h3>
+<code class="signature">public  boolean <strong>email</strong>(array config)</code>
+<div class="details">
+<p>Send Email</p><p>Low-level function which sends emails via the CodeIgniter email
+library using the information provided in the config array which it 
+is passed.</p><dl>
+<dt>Parameters:</dt>
+<dd>config - Configuration array</dd>
+</dl>
+</div></div>
+
+
+
+<div class='method'><a href="../source/libraries/notify.php.html#line177" class="location">libraries/notify.php at line 177</a>
+
+<h3 id="send_alert()">send_alert</h3>
+<code class="signature">public  void <strong>send_alert</strong>()</code>
+<div class="details">
+<p>Helper function which prepares and sends email alerts.</p><p>Before this function is used, $this->alert_template_name and 
+$this->alert_parseables should be set. This function will load the 
+template, parse it, and send the email.</p></div></div>
+
+
+
+<div class='method'><a href="../source/libraries/notify.php.html#line206" class="location">libraries/notify.php at line 206</a>
+
+<h3 id="template_parser()">template_parser</h3>
+<code class="signature">public  $this <strong>template_parser</strong>(string template_name, array parseables)</code>
+<div class="details">
+<p>Parse templates</p></div></div>
+
+
+
+</div><div class="header">
+<h1>GiftFlow API</h1>
+<ul>
+<li><a href="../overview-summary.html">Overview</a></li>
+<li><a href="../libraries/package-summary.html">Package</a></li>
+<li class="active">Class</li>
+<li><a href="../libraries/package-tree.html">Tree</a></li>
+<li><a href="../overview-files.html">Files</a></li>
+<li><a href="../deprecated-list.html">Deprecated</a></li>
+<li><a href="../index-all.html">Index</a></li>
+</ul>
+</div>
+
+<div class="small_links">
+<a href="../index.html" target="_top">Frames</a>
+<a href="../libraries/notify.html" target="_top">No frames</a>
+</div>
+<div class="small_links">
+Summary: <a href="#summary_field">Field</a> | <a href="#summary_method">Method</a> | <a href="#summary_constr">Constr</a>
+Detail: <a href="#detail_field">Field</a> | <a href="#detail_method">Method</a> | <a href="#summary_constr">Constr</a>
+</div>
+<hr>
+
+<p id="footer">This document was generated by <a href="http://peej.github.com/phpdoctor/">PHPDoctor: The PHP Documentation Creator</a></p>
+
+</body>
+
+</html>

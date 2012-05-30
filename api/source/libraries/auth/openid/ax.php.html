@@ -1,0 +1,1084 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+
+<html lang="en">
+<head>
+
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
+<meta name="generator" content="PHPDoctor 2RC4 (http://peej.github.com/phpdoctor/)">
+<meta name="when" content="Wed, 09 Feb 2011 20:22:56 +0000">
+
+<link rel="stylesheet" type="text/css" href="../../../../stylesheet.css">
+<link rel="start" href="../../../../overview-summary.html">
+
+<title>libraries/Auth/OpenID/AX.php (GiftFlow API)</title>
+
+</head>
+<body id="file" onload="parent.document.title=document.title;">
+
+<div class="header">
+<h1>GiftFlow API</h1>
+<ul>
+<li><a href="../../../../overview-summary.html">Overview</a></li>
+<li>Package</li><li>Class</li><li>Tree</li><li><a href="../../../../overview-files.html">Files</a></li>
+<li><a href="../../../../deprecated-list.html">Deprecated</a></li>
+<li><a href="../../../../index-all.html">Index</a></li>
+</ul>
+</div>
+
+<div class="small_links">
+<a href="../../../../index.html" target="_top">Frames</a>
+<a href="../../../../source/libraries/auth/openid/ax.php.html" target="_top">No frames</a>
+</div>
+<hr>
+
+<h1>libraries/Auth/OpenID/AX.php</h1>
+<div class="comment" id="overview_description"><p>Implements the OpenID attribute exchange specification, version 1.0
+as of svn revision 370 from openid.net svn.</p></div>
+
+<hr>
+
+<a name="line1"></a><pre><?php
+<a name="line2"></a>
+<a name="line3"></a>/**
+<a name="line4"></a> * Implements the OpenID attribute exchange specification, version 1.0
+<a name="line5"></a> * as of svn revision 370 from openid.net svn.
+<a name="line6"></a> *
+<a name="line7"></a> * @package OpenID
+<a name="line8"></a> */
+<a name="line9"></a>
+<a name="line10"></a>/**
+<a name="line11"></a> * Require utility classes and functions for the consumer.
+<a name="line12"></a> */
+<a name="line13"></a>require_once "Auth/OpenID/Extension.php";
+<a name="line14"></a>require_once "Auth/OpenID/Message.php";
+<a name="line15"></a>require_once "Auth/OpenID/TrustRoot.php";
+<a name="line16"></a>
+<a name="line17"></a>define('Auth_OpenID_AX_NS_URI',
+<a name="line18"></a>       'http://openid.net/srv/ax/1.0');
+<a name="line19"></a>
+<a name="line20"></a>// Use this as the 'count' value for an attribute in a FetchRequest to
+<a name="line21"></a>// ask for as many values as the OP can provide.
+<a name="line22"></a>define('Auth_OpenID_AX_UNLIMITED_VALUES', 'unlimited');
+<a name="line23"></a>
+<a name="line24"></a>// Minimum supported alias length in characters.  Here for
+<a name="line25"></a>// completeness.
+<a name="line26"></a>define('Auth_OpenID_AX_MINIMUM_SUPPORTED_ALIAS_LENGTH', 32);
+<a name="line27"></a>
+<a name="line28"></a>/**
+<a name="line29"></a> * AX utility class.
+<a name="line30"></a> *
+<a name="line31"></a> * @package OpenID
+<a name="line32"></a> */
+<a name="line33"></a>class Auth_OpenID_AX {
+<a name="line34"></a>    /**
+<a name="line35"></a>     * @param mixed $thing Any object which may be an
+<a name="line36"></a>     * Auth_OpenID_AX_Error object.
+<a name="line37"></a>     *
+<a name="line38"></a>     * @return bool true if $thing is an Auth_OpenID_AX_Error; false
+<a name="line39"></a>     * if not.
+<a name="line40"></a>     */
+<a name="line41"></a>    static function isError($thing)
+<a name="line42"></a>    {
+<a name="line43"></a>        return is_a($thing, 'Auth_OpenID_AX_Error');
+<a name="line44"></a>    }
+<a name="line45"></a>}
+<a name="line46"></a>
+<a name="line47"></a>/**
+<a name="line48"></a> * Check an alias for invalid characters; raise AXError if any are
+<a name="line49"></a> * found.  Return None if the alias is valid.
+<a name="line50"></a> */
+<a name="line51"></a>function Auth_OpenID_AX_checkAlias($alias)
+<a name="line52"></a>{
+<a name="line53"></a>  if (strpos($alias, ',') !== false) {
+<a name="line54"></a>      return new Auth_OpenID_AX_Error(sprintf(
+<a name="line55"></a>                   "Alias %s must not contain comma", $alias));
+<a name="line56"></a>  }
+<a name="line57"></a>  if (strpos($alias, '.') !== false) {
+<a name="line58"></a>      return new Auth_OpenID_AX_Error(sprintf(
+<a name="line59"></a>                   "Alias %s must not contain period", $alias));
+<a name="line60"></a>  }
+<a name="line61"></a>
+<a name="line62"></a>  return true;
+<a name="line63"></a>}
+<a name="line64"></a>
+<a name="line65"></a>/**
+<a name="line66"></a> * Results from data that does not meet the attribute exchange 1.0
+<a name="line67"></a> * specification
+<a name="line68"></a> *
+<a name="line69"></a> * @package OpenID
+<a name="line70"></a> */
+<a name="line71"></a>class Auth_OpenID_AX_Error {
+<a name="line72"></a>    function Auth_OpenID_AX_Error($message=null)
+<a name="line73"></a>    {
+<a name="line74"></a>        $this->message = $message;
+<a name="line75"></a>    }
+<a name="line76"></a>}
+<a name="line77"></a>
+<a name="line78"></a>/**
+<a name="line79"></a> * Abstract class containing common code for attribute exchange
+<a name="line80"></a> * messages.
+<a name="line81"></a> *
+<a name="line82"></a> * @package OpenID
+<a name="line83"></a> */
+<a name="line84"></a>class Auth_OpenID_AX_Message extends Auth_OpenID_Extension {
+<a name="line85"></a>    /**
+<a name="line86"></a>     * ns_alias: The preferred namespace alias for attribute exchange
+<a name="line87"></a>     * messages
+<a name="line88"></a>     */
+<a name="line89"></a>    var $ns_alias = 'ax';
+<a name="line90"></a>
+<a name="line91"></a>    /**
+<a name="line92"></a>     * mode: The type of this attribute exchange message. This must be
+<a name="line93"></a>     * overridden in subclasses.
+<a name="line94"></a>     */
+<a name="line95"></a>    var $mode = null;
+<a name="line96"></a>
+<a name="line97"></a>    var $ns_uri = Auth_OpenID_AX_NS_URI;
+<a name="line98"></a>
+<a name="line99"></a>    /**
+<a name="line100"></a>     * Return Auth_OpenID_AX_Error if the mode in the attribute
+<a name="line101"></a>     * exchange arguments does not match what is expected for this
+<a name="line102"></a>     * class; true otherwise.
+<a name="line103"></a>     *
+<a name="line104"></a>     * @access private
+<a name="line105"></a>     */
+<a name="line106"></a>    function _checkMode($ax_args)
+<a name="line107"></a>    {
+<a name="line108"></a>        $mode = Auth_OpenID::arrayGet($ax_args, 'mode');
+<a name="line109"></a>        if ($mode != $this->mode) {
+<a name="line110"></a>            return new Auth_OpenID_AX_Error(
+<a name="line111"></a>                            sprintf(
+<a name="line112"></a>                                    "Expected mode '%s'; got '%s'",
+<a name="line113"></a>                                    $this->mode, $mode));
+<a name="line114"></a>        }
+<a name="line115"></a>
+<a name="line116"></a>        return true;
+<a name="line117"></a>    }
+<a name="line118"></a>
+<a name="line119"></a>    /**
+<a name="line120"></a>     * Return a set of attribute exchange arguments containing the
+<a name="line121"></a>     * basic information that must be in every attribute exchange
+<a name="line122"></a>     * message.
+<a name="line123"></a>     *
+<a name="line124"></a>     * @access private
+<a name="line125"></a>     */
+<a name="line126"></a>    function _newArgs()
+<a name="line127"></a>    {
+<a name="line128"></a>        return array('mode' => $this->mode);
+<a name="line129"></a>    }
+<a name="line130"></a>}
+<a name="line131"></a>
+<a name="line132"></a>/**
+<a name="line133"></a> * Represents a single attribute in an attribute exchange
+<a name="line134"></a> * request. This should be added to an AXRequest object in order to
+<a name="line135"></a> * request the attribute.
+<a name="line136"></a> *
+<a name="line137"></a> * @package OpenID
+<a name="line138"></a> */
+<a name="line139"></a>class Auth_OpenID_AX_AttrInfo {
+<a name="line140"></a>    /**
+<a name="line141"></a>     * Construct an attribute information object.  Do not call this
+<a name="line142"></a>     * directly; call make(...) instead.
+<a name="line143"></a>     *
+<a name="line144"></a>     * @param string $type_uri The type URI for this attribute.
+<a name="line145"></a>     *
+<a name="line146"></a>     * @param int $count The number of values of this type to request.
+<a name="line147"></a>     *
+<a name="line148"></a>     * @param bool $required Whether the attribute will be marked as
+<a name="line149"></a>     * required in the request.
+<a name="line150"></a>     *
+<a name="line151"></a>     * @param string $alias The name that should be given to this
+<a name="line152"></a>     * attribute in the request.
+<a name="line153"></a>     */
+<a name="line154"></a>    function Auth_OpenID_AX_AttrInfo($type_uri, $count, $required,
+<a name="line155"></a>                                     $alias)
+<a name="line156"></a>    {
+<a name="line157"></a>        /**
+<a name="line158"></a>         * required: Whether the attribute will be marked as required
+<a name="line159"></a>         * when presented to the subject of the attribute exchange
+<a name="line160"></a>         * request.
+<a name="line161"></a>         */
+<a name="line162"></a>        $this->required = $required;
+<a name="line163"></a>
+<a name="line164"></a>        /**
+<a name="line165"></a>         * count: How many values of this type to request from the
+<a name="line166"></a>         * subject. Defaults to one.
+<a name="line167"></a>         */
+<a name="line168"></a>        $this->count = $count;
+<a name="line169"></a>
+<a name="line170"></a>        /**
+<a name="line171"></a>         * type_uri: The identifier that determines what the attribute
+<a name="line172"></a>         * represents and how it is serialized. For example, one type
+<a name="line173"></a>         * URI representing dates could represent a Unix timestamp in
+<a name="line174"></a>         * base 10 and another could represent a human-readable
+<a name="line175"></a>         * string.
+<a name="line176"></a>         */
+<a name="line177"></a>        $this->type_uri = $type_uri;
+<a name="line178"></a>
+<a name="line179"></a>        /**
+<a name="line180"></a>         * alias: The name that should be given to this attribute in
+<a name="line181"></a>         * the request. If it is not supplied, a generic name will be
+<a name="line182"></a>         * assigned. For example, if you want to call a Unix timestamp
+<a name="line183"></a>         * value 'tstamp', set its alias to that value. If two
+<a name="line184"></a>         * attributes in the same message request to use the same
+<a name="line185"></a>         * alias, the request will fail to be generated.
+<a name="line186"></a>         */
+<a name="line187"></a>        $this->alias = $alias;
+<a name="line188"></a>    }
+<a name="line189"></a>
+<a name="line190"></a>    /**
+<a name="line191"></a>     * Construct an attribute information object.  For parameter
+<a name="line192"></a>     * details, see the constructor.
+<a name="line193"></a>     */
+<a name="line194"></a>    static function make($type_uri, $count=1, $required=false,
+<a name="line195"></a>                  $alias=null)
+<a name="line196"></a>    {
+<a name="line197"></a>        if ($alias !== null) {
+<a name="line198"></a>            $result = Auth_OpenID_AX_checkAlias($alias);
+<a name="line199"></a>
+<a name="line200"></a>            if (Auth_OpenID_AX::isError($result)) {
+<a name="line201"></a>                return $result;
+<a name="line202"></a>            }
+<a name="line203"></a>        }
+<a name="line204"></a>
+<a name="line205"></a>        return new Auth_OpenID_AX_AttrInfo($type_uri, $count, $required,
+<a name="line206"></a>                                           $alias);
+<a name="line207"></a>    }
+<a name="line208"></a>
+<a name="line209"></a>    /**
+<a name="line210"></a>     * When processing a request for this attribute, the OP should
+<a name="line211"></a>     * call this method to determine whether all available attribute
+<a name="line212"></a>     * values were requested.  If self.count == UNLIMITED_VALUES, this
+<a name="line213"></a>     * returns True.  Otherwise this returns False, in which case
+<a name="line214"></a>     * self.count is an integer.
+<a name="line215"></a>    */
+<a name="line216"></a>    function wantsUnlimitedValues()
+<a name="line217"></a>    {
+<a name="line218"></a>        return $this->count === Auth_OpenID_AX_UNLIMITED_VALUES;
+<a name="line219"></a>    }
+<a name="line220"></a>}
+<a name="line221"></a>
+<a name="line222"></a>/**
+<a name="line223"></a> * Given a namespace mapping and a string containing a comma-separated
+<a name="line224"></a> * list of namespace aliases, return a list of type URIs that
+<a name="line225"></a> * correspond to those aliases.
+<a name="line226"></a> *
+<a name="line227"></a> * @param $namespace_map The mapping from namespace URI to alias
+<a name="line228"></a> * @param $alias_list_s The string containing the comma-separated
+<a name="line229"></a> * list of aliases. May also be None for convenience.
+<a name="line230"></a> *
+<a name="line231"></a> * @return $seq The list of namespace URIs that corresponds to the
+<a name="line232"></a> * supplied list of aliases. If the string was zero-length or None, an
+<a name="line233"></a> * empty list will be returned.
+<a name="line234"></a> *
+<a name="line235"></a> * return null If an alias is present in the list of aliases but
+<a name="line236"></a> * is not present in the namespace map.
+<a name="line237"></a> */
+<a name="line238"></a>function Auth_OpenID_AX_toTypeURIs($namespace_map, $alias_list_s)
+<a name="line239"></a>{
+<a name="line240"></a>    $uris = array();
+<a name="line241"></a>
+<a name="line242"></a>    if ($alias_list_s) {
+<a name="line243"></a>        foreach (explode(',', $alias_list_s) as $alias) {
+<a name="line244"></a>            $type_uri = $namespace_map->getNamespaceURI($alias);
+<a name="line245"></a>            if ($type_uri === null) {
+<a name="line246"></a>                // raise KeyError(
+<a name="line247"></a>                // 'No type is defined for attribute name %r' % (alias,))
+<a name="line248"></a>                return new Auth_OpenID_AX_Error(
+<a name="line249"></a>                  sprintf('No type is defined for attribute name %s',
+<a name="line250"></a>                          $alias)
+<a name="line251"></a>                  );
+<a name="line252"></a>            } else {
+<a name="line253"></a>                $uris[] = $type_uri;
+<a name="line254"></a>            }
+<a name="line255"></a>        }
+<a name="line256"></a>    }
+<a name="line257"></a>
+<a name="line258"></a>    return $uris;
+<a name="line259"></a>}
+<a name="line260"></a>
+<a name="line261"></a>/**
+<a name="line262"></a> * An attribute exchange 'fetch_request' message. This message is sent
+<a name="line263"></a> * by a relying party when it wishes to obtain attributes about the
+<a name="line264"></a> * subject of an OpenID authentication request.
+<a name="line265"></a> *
+<a name="line266"></a> * @package OpenID
+<a name="line267"></a> */
+<a name="line268"></a>class Auth_OpenID_AX_FetchRequest extends Auth_OpenID_AX_Message {
+<a name="line269"></a>
+<a name="line270"></a>    var $mode = 'fetch_request';
+<a name="line271"></a>
+<a name="line272"></a>    function Auth_OpenID_AX_FetchRequest($update_url=null)
+<a name="line273"></a>    {
+<a name="line274"></a>        /**
+<a name="line275"></a>         * requested_attributes: The attributes that have been
+<a name="line276"></a>         * requested thus far, indexed by the type URI.
+<a name="line277"></a>         */
+<a name="line278"></a>        $this->requested_attributes = array();
+<a name="line279"></a>
+<a name="line280"></a>        /**
+<a name="line281"></a>         * update_url: A URL that will accept responses for this
+<a name="line282"></a>         * attribute exchange request, even in the absence of the user
+<a name="line283"></a>         * who made this request.
+<a name="line284"></a>        */
+<a name="line285"></a>        $this->update_url = $update_url;
+<a name="line286"></a>    }
+<a name="line287"></a>
+<a name="line288"></a>    /**
+<a name="line289"></a>     * Add an attribute to this attribute exchange request.
+<a name="line290"></a>     *
+<a name="line291"></a>     * @param attribute: The attribute that is being requested
+<a name="line292"></a>     * @return true on success, false when the requested attribute is
+<a name="line293"></a>     * already present in this fetch request.
+<a name="line294"></a>     */
+<a name="line295"></a>    function add($attribute)
+<a name="line296"></a>    {
+<a name="line297"></a>        if ($this->contains($attribute->type_uri)) {
+<a name="line298"></a>            return new Auth_OpenID_AX_Error(
+<a name="line299"></a>              sprintf("The attribute %s has already been requested",
+<a name="line300"></a>                      $attribute->type_uri));
+<a name="line301"></a>        }
+<a name="line302"></a>
+<a name="line303"></a>        $this->requested_attributes[$attribute->type_uri] = $attribute;
+<a name="line304"></a>
+<a name="line305"></a>        return true;
+<a name="line306"></a>    }
+<a name="line307"></a>
+<a name="line308"></a>    /**
+<a name="line309"></a>     * Get the serialized form of this attribute fetch request.
+<a name="line310"></a>     *
+<a name="line311"></a>     * @returns Auth_OpenID_AX_FetchRequest The fetch request message parameters
+<a name="line312"></a>     */
+<a name="line313"></a>    function getExtensionArgs()
+<a name="line314"></a>    {
+<a name="line315"></a>        $aliases = new Auth_OpenID_NamespaceMap();
+<a name="line316"></a>
+<a name="line317"></a>        $required = array();
+<a name="line318"></a>        $if_available = array();
+<a name="line319"></a>
+<a name="line320"></a>        $ax_args = $this->_newArgs();
+<a name="line321"></a>
+<a name="line322"></a>        foreach ($this->requested_attributes as $type_uri => $attribute) {
+<a name="line323"></a>            if ($attribute->alias === null) {
+<a name="line324"></a>                $alias = $aliases->add($type_uri);
+<a name="line325"></a>            } else {
+<a name="line326"></a>                $alias = $aliases->addAlias($type_uri, $attribute->alias);
+<a name="line327"></a>
+<a name="line328"></a>                if ($alias === null) {
+<a name="line329"></a>                    return new Auth_OpenID_AX_Error(
+<a name="line330"></a>                      sprintf("Could not add alias %s for URI %s",
+<a name="line331"></a>                              $attribute->alias, $type_uri
+<a name="line332"></a>                      ));
+<a name="line333"></a>                }
+<a name="line334"></a>            }
+<a name="line335"></a>
+<a name="line336"></a>            if ($attribute->required) {
+<a name="line337"></a>                $required[] = $alias;
+<a name="line338"></a>            } else {
+<a name="line339"></a>                $if_available[] = $alias;
+<a name="line340"></a>            }
+<a name="line341"></a>
+<a name="line342"></a>            if ($attribute->count != 1) {
+<a name="line343"></a>                $ax_args['count.' . $alias] = strval($attribute->count);
+<a name="line344"></a>            }
+<a name="line345"></a>
+<a name="line346"></a>            $ax_args['type.' . $alias] = $type_uri;
+<a name="line347"></a>        }
+<a name="line348"></a>
+<a name="line349"></a>        if ($required) {
+<a name="line350"></a>            $ax_args['required'] = implode(',', $required);
+<a name="line351"></a>        }
+<a name="line352"></a>
+<a name="line353"></a>        if ($if_available) {
+<a name="line354"></a>            $ax_args['if_available'] = implode(',', $if_available);
+<a name="line355"></a>        }
+<a name="line356"></a>
+<a name="line357"></a>        return $ax_args;
+<a name="line358"></a>    }
+<a name="line359"></a>
+<a name="line360"></a>    /**
+<a name="line361"></a>     * Get the type URIs for all attributes that have been marked as
+<a name="line362"></a>     * required.
+<a name="line363"></a>     *
+<a name="line364"></a>     * @return A list of the type URIs for attributes that have been
+<a name="line365"></a>     * marked as required.
+<a name="line366"></a>     */
+<a name="line367"></a>    function getRequiredAttrs()
+<a name="line368"></a>    {
+<a name="line369"></a>        $required = array();
+<a name="line370"></a>        foreach ($this->requested_attributes as $type_uri => $attribute) {
+<a name="line371"></a>            if ($attribute->required) {
+<a name="line372"></a>                $required[] = $type_uri;
+<a name="line373"></a>            }
+<a name="line374"></a>        }
+<a name="line375"></a>
+<a name="line376"></a>        return $required;
+<a name="line377"></a>    }
+<a name="line378"></a>
+<a name="line379"></a>    /**
+<a name="line380"></a>     * Extract a FetchRequest from an OpenID message
+<a name="line381"></a>     *
+<a name="line382"></a>     * @param request: The OpenID request containing the attribute
+<a name="line383"></a>     * fetch request
+<a name="line384"></a>     *
+<a name="line385"></a>     * @returns mixed An Auth_OpenID_AX_Error or the
+<a name="line386"></a>     * Auth_OpenID_AX_FetchRequest extracted from the request message if
+<a name="line387"></a>     * successful
+<a name="line388"></a>     */
+<a name="line389"></a>    static function fromOpenIDRequest($request)
+<a name="line390"></a>    {
+<a name="line391"></a>        $m = $request->message;
+<a name="line392"></a>        $obj = new Auth_OpenID_AX_FetchRequest();
+<a name="line393"></a>        $ax_args = $m->getArgs($obj->ns_uri);
+<a name="line394"></a>
+<a name="line395"></a>        $result = $obj->parseExtensionArgs($ax_args);
+<a name="line396"></a>
+<a name="line397"></a>        if (Auth_OpenID_AX::isError($result)) {
+<a name="line398"></a>            return $result;
+<a name="line399"></a>        }
+<a name="line400"></a>
+<a name="line401"></a>        if ($obj->update_url) {
+<a name="line402"></a>            // Update URL must match the openid.realm of the
+<a name="line403"></a>            // underlying OpenID 2 message.
+<a name="line404"></a>            $realm = $m->getArg(Auth_OpenID_OPENID_NS, 'realm',
+<a name="line405"></a>                        $m->getArg(
+<a name="line406"></a>                                  Auth_OpenID_OPENID_NS,
+<a name="line407"></a>                                  'return_to'));
+<a name="line408"></a>
+<a name="line409"></a>            if (!$realm) {
+<a name="line410"></a>                $obj = new Auth_OpenID_AX_Error(
+<a name="line411"></a>                  sprintf("Cannot validate update_url %s " .
+<a name="line412"></a>                          "against absent realm", $obj->update_url));
+<a name="line413"></a>            } else if (!Auth_OpenID_TrustRoot::match($realm,
+<a name="line414"></a>                                                     $obj->update_url)) {
+<a name="line415"></a>                $obj = new Auth_OpenID_AX_Error(
+<a name="line416"></a>                  sprintf("Update URL %s failed validation against realm %s",
+<a name="line417"></a>                          $obj->update_url, $realm));
+<a name="line418"></a>            }
+<a name="line419"></a>        }
+<a name="line420"></a>
+<a name="line421"></a>        return $obj;
+<a name="line422"></a>    }
+<a name="line423"></a>
+<a name="line424"></a>    /**
+<a name="line425"></a>     * Given attribute exchange arguments, populate this FetchRequest.
+<a name="line426"></a>     *
+<a name="line427"></a>     * @return $result Auth_OpenID_AX_Error if the data to be parsed
+<a name="line428"></a>     * does not follow the attribute exchange specification. At least
+<a name="line429"></a>     * when 'if_available' or 'required' is not specified for a
+<a name="line430"></a>     * particular attribute type.  Returns true otherwise.
+<a name="line431"></a>    */
+<a name="line432"></a>    function parseExtensionArgs($ax_args)
+<a name="line433"></a>    {
+<a name="line434"></a>        $result = $this->_checkMode($ax_args);
+<a name="line435"></a>        if (Auth_OpenID_AX::isError($result)) {
+<a name="line436"></a>            return $result;
+<a name="line437"></a>        }
+<a name="line438"></a>
+<a name="line439"></a>        $aliases = new Auth_OpenID_NamespaceMap();
+<a name="line440"></a>
+<a name="line441"></a>        foreach ($ax_args as $key => $value) {
+<a name="line442"></a>            if (strpos($key, 'type.') === 0) {
+<a name="line443"></a>                $alias = substr($key, 5);
+<a name="line444"></a>                $type_uri = $value;
+<a name="line445"></a>
+<a name="line446"></a>                $alias = $aliases->addAlias($type_uri, $alias);
+<a name="line447"></a>
+<a name="line448"></a>                if ($alias === null) {
+<a name="line449"></a>                    return new Auth_OpenID_AX_Error(
+<a name="line450"></a>                      sprintf("Could not add alias %s for URI %s",
+<a name="line451"></a>                              $alias, $type_uri)
+<a name="line452"></a>                      );
+<a name="line453"></a>                }
+<a name="line454"></a>
+<a name="line455"></a>                $count_s = Auth_OpenID::arrayGet($ax_args, 'count.' . $alias);
+<a name="line456"></a>                if ($count_s) {
+<a name="line457"></a>                    $count = Auth_OpenID::intval($count_s);
+<a name="line458"></a>                    if (($count === false) &&
+<a name="line459"></a>                        ($count_s === Auth_OpenID_AX_UNLIMITED_VALUES)) {
+<a name="line460"></a>                        $count = $count_s;
+<a name="line461"></a>                    }
+<a name="line462"></a>                } else {
+<a name="line463"></a>                    $count = 1;
+<a name="line464"></a>                }
+<a name="line465"></a>
+<a name="line466"></a>                if ($count === false) {
+<a name="line467"></a>                    return new Auth_OpenID_AX_Error(
+<a name="line468"></a>                      sprintf("Integer value expected for %s, got %s",
+<a name="line469"></a>                              'count.' . $alias, $count_s));
+<a name="line470"></a>                }
+<a name="line471"></a>
+<a name="line472"></a>                $attrinfo = Auth_OpenID_AX_AttrInfo::make($type_uri, $count,
+<a name="line473"></a>                                                          false, $alias);
+<a name="line474"></a>
+<a name="line475"></a>                if (Auth_OpenID_AX::isError($attrinfo)) {
+<a name="line476"></a>                    return $attrinfo;
+<a name="line477"></a>                }
+<a name="line478"></a>
+<a name="line479"></a>                $this->add($attrinfo);
+<a name="line480"></a>            }
+<a name="line481"></a>        }
+<a name="line482"></a>
+<a name="line483"></a>        $required = Auth_OpenID_AX_toTypeURIs($aliases,
+<a name="line484"></a>                         Auth_OpenID::arrayGet($ax_args, 'required'));
+<a name="line485"></a>
+<a name="line486"></a>        foreach ($required as $type_uri) {
+<a name="line487"></a>            $attrib = $this->requested_attributes[$type_uri];
+<a name="line488"></a>            $attrib->required = true;
+<a name="line489"></a>        }
+<a name="line490"></a>
+<a name="line491"></a>        $if_available = Auth_OpenID_AX_toTypeURIs($aliases,
+<a name="line492"></a>                             Auth_OpenID::arrayGet($ax_args, 'if_available'));
+<a name="line493"></a>
+<a name="line494"></a>        $all_type_uris = array_merge($required, $if_available);
+<a name="line495"></a>
+<a name="line496"></a>        foreach ($aliases->iterNamespaceURIs() as $type_uri) {
+<a name="line497"></a>            if (!in_array($type_uri, $all_type_uris)) {
+<a name="line498"></a>                return new Auth_OpenID_AX_Error(
+<a name="line499"></a>                  sprintf('Type URI %s was in the request but not ' .
+<a name="line500"></a>                          'present in "required" or "if_available"',
+<a name="line501"></a>                          $type_uri));
+<a name="line502"></a>
+<a name="line503"></a>            }
+<a name="line504"></a>        }
+<a name="line505"></a>
+<a name="line506"></a>        $this->update_url = Auth_OpenID::arrayGet($ax_args, 'update_url');
+<a name="line507"></a>
+<a name="line508"></a>        return true;
+<a name="line509"></a>    }
+<a name="line510"></a>
+<a name="line511"></a>    /**
+<a name="line512"></a>     * Iterate over the AttrInfo objects that are contained in this
+<a name="line513"></a>     * fetch_request.
+<a name="line514"></a>     */
+<a name="line515"></a>    function iterAttrs()
+<a name="line516"></a>    {
+<a name="line517"></a>        return array_values($this->requested_attributes);
+<a name="line518"></a>    }
+<a name="line519"></a>
+<a name="line520"></a>    function iterTypes()
+<a name="line521"></a>    {
+<a name="line522"></a>        return array_keys($this->requested_attributes);
+<a name="line523"></a>    }
+<a name="line524"></a>
+<a name="line525"></a>    /**
+<a name="line526"></a>     * Is the given type URI present in this fetch_request?
+<a name="line527"></a>     */
+<a name="line528"></a>    function contains($type_uri)
+<a name="line529"></a>    {
+<a name="line530"></a>        return in_array($type_uri, $this->iterTypes());
+<a name="line531"></a>    }
+<a name="line532"></a>}
+<a name="line533"></a>
+<a name="line534"></a>/**
+<a name="line535"></a> * An abstract class that implements a message that has attribute keys
+<a name="line536"></a> * and values. It contains the common code between fetch_response and
+<a name="line537"></a> * store_request.
+<a name="line538"></a> *
+<a name="line539"></a> * @package OpenID
+<a name="line540"></a> */
+<a name="line541"></a>class Auth_OpenID_AX_KeyValueMessage extends Auth_OpenID_AX_Message {
+<a name="line542"></a>
+<a name="line543"></a>    function Auth_OpenID_AX_KeyValueMessage()
+<a name="line544"></a>    {
+<a name="line545"></a>        $this->data = array();
+<a name="line546"></a>    }
+<a name="line547"></a>
+<a name="line548"></a>    /**
+<a name="line549"></a>     * Add a single value for the given attribute type to the
+<a name="line550"></a>     * message. If there are already values specified for this type,
+<a name="line551"></a>     * this value will be sent in addition to the values already
+<a name="line552"></a>     * specified.
+<a name="line553"></a>     *
+<a name="line554"></a>     * @param type_uri: The URI for the attribute
+<a name="line555"></a>     * @param value: The value to add to the response to the relying
+<a name="line556"></a>     * party for this attribute
+<a name="line557"></a>     * @return null
+<a name="line558"></a>     */
+<a name="line559"></a>    function addValue($type_uri, $value)
+<a name="line560"></a>    {
+<a name="line561"></a>        if (!array_key_exists($type_uri, $this->data)) {
+<a name="line562"></a>            $this->data[$type_uri] = array();
+<a name="line563"></a>        }
+<a name="line564"></a>
+<a name="line565"></a>        $values =& $this->data[$type_uri];
+<a name="line566"></a>        $values[] = $value;
+<a name="line567"></a>    }
+<a name="line568"></a>
+<a name="line569"></a>    /**
+<a name="line570"></a>     * Set the values for the given attribute type. This replaces any
+<a name="line571"></a>     * values that have already been set for this attribute.
+<a name="line572"></a>     *
+<a name="line573"></a>     * @param type_uri: The URI for the attribute
+<a name="line574"></a>     * @param values: A list of values to send for this attribute.
+<a name="line575"></a>     */
+<a name="line576"></a>    function setValues($type_uri, &$values)
+<a name="line577"></a>    {
+<a name="line578"></a>        $this->data[$type_uri] =& $values;
+<a name="line579"></a>    }
+<a name="line580"></a>
+<a name="line581"></a>    /**
+<a name="line582"></a>     * Get the extension arguments for the key/value pairs contained
+<a name="line583"></a>     * in this message.
+<a name="line584"></a>     *
+<a name="line585"></a>     * @param aliases: An alias mapping. Set to None if you don't care
+<a name="line586"></a>     * about the aliases for this request.
+<a name="line587"></a>     *
+<a name="line588"></a>     * @access private
+<a name="line589"></a>     */
+<a name="line590"></a>    function _getExtensionKVArgs($aliases)
+<a name="line591"></a>    {
+<a name="line592"></a>        if ($aliases === null) {
+<a name="line593"></a>            $aliases = new Auth_OpenID_NamespaceMap();
+<a name="line594"></a>        }
+<a name="line595"></a>
+<a name="line596"></a>        $ax_args = array();
+<a name="line597"></a>
+<a name="line598"></a>        foreach ($this->data as $type_uri => $values) {
+<a name="line599"></a>            $alias = $aliases->add($type_uri);
+<a name="line600"></a>
+<a name="line601"></a>            $ax_args['type.' . $alias] = $type_uri;
+<a name="line602"></a>            $ax_args['count.' . $alias] = strval(count($values));
+<a name="line603"></a>
+<a name="line604"></a>            foreach ($values as $i => $value) {
+<a name="line605"></a>              $key = sprintf('value.%s.%d', $alias, $i + 1);
+<a name="line606"></a>              $ax_args[$key] = $value;
+<a name="line607"></a>            }
+<a name="line608"></a>        }
+<a name="line609"></a>
+<a name="line610"></a>        return $ax_args;
+<a name="line611"></a>    }
+<a name="line612"></a>
+<a name="line613"></a>    /**
+<a name="line614"></a>     * Parse attribute exchange key/value arguments into this object.
+<a name="line615"></a>     *
+<a name="line616"></a>     * @param ax_args: The attribute exchange fetch_response
+<a name="line617"></a>     * arguments, with namespacing removed.
+<a name="line618"></a>     *
+<a name="line619"></a>     * @return Auth_OpenID_AX_Error or true
+<a name="line620"></a>     */
+<a name="line621"></a>    function parseExtensionArgs($ax_args)
+<a name="line622"></a>    {
+<a name="line623"></a>        $result = $this->_checkMode($ax_args);
+<a name="line624"></a>        if (Auth_OpenID_AX::isError($result)) {
+<a name="line625"></a>            return $result;
+<a name="line626"></a>        }
+<a name="line627"></a>
+<a name="line628"></a>        $aliases = new Auth_OpenID_NamespaceMap();
+<a name="line629"></a>
+<a name="line630"></a>        foreach ($ax_args as $key => $value) {
+<a name="line631"></a>            if (strpos($key, 'type.') === 0) {
+<a name="line632"></a>                $type_uri = $value;
+<a name="line633"></a>                $alias = substr($key, 5);
+<a name="line634"></a>
+<a name="line635"></a>                $result = Auth_OpenID_AX_checkAlias($alias);
+<a name="line636"></a>
+<a name="line637"></a>                if (Auth_OpenID_AX::isError($result)) {
+<a name="line638"></a>                    return $result;
+<a name="line639"></a>                }
+<a name="line640"></a>
+<a name="line641"></a>                $alias = $aliases->addAlias($type_uri, $alias);
+<a name="line642"></a>
+<a name="line643"></a>                if ($alias === null) {
+<a name="line644"></a>                    return new Auth_OpenID_AX_Error(
+<a name="line645"></a>                      sprintf("Could not add alias %s for URI %s",
+<a name="line646"></a>                              $alias, $type_uri)
+<a name="line647"></a>                      );
+<a name="line648"></a>                }
+<a name="line649"></a>            }
+<a name="line650"></a>        }
+<a name="line651"></a>
+<a name="line652"></a>        foreach ($aliases->iteritems() as $pair) {
+<a name="line653"></a>            list($type_uri, $alias) = $pair;
+<a name="line654"></a>
+<a name="line655"></a>            if (array_key_exists('count.' . $alias, $ax_args) && ($ax_args['count.' . $alias] !== Auth_OpenID_AX_UNLIMITED_VALUES)) {
+<a name="line656"></a>
+<a name="line657"></a>                $count_key = 'count.' . $alias;
+<a name="line658"></a>                $count_s = $ax_args[$count_key];
+<a name="line659"></a>
+<a name="line660"></a>                $count = Auth_OpenID::intval($count_s);
+<a name="line661"></a>
+<a name="line662"></a>                if ($count === false) {
+<a name="line663"></a>                    return new Auth_OpenID_AX_Error(
+<a name="line664"></a>                      sprintf("Integer value expected for %s, got %s",
+<a name="line665"></a>                              'count. %s' . $alias, $count_s,
+<a name="line666"></a>                              Auth_OpenID_AX_UNLIMITED_VALUES)
+<a name="line667"></a>                                                    );
+<a name="line668"></a>                }
+<a name="line669"></a>
+<a name="line670"></a>                $values = array();
+<a name="line671"></a>                for ($i = 1; $i < $count + 1; $i++) {
+<a name="line672"></a>                    $value_key = sprintf('value.%s.%d', $alias, $i);
+<a name="line673"></a>
+<a name="line674"></a>                    if (!array_key_exists($value_key, $ax_args)) {
+<a name="line675"></a>                      return new Auth_OpenID_AX_Error(
+<a name="line676"></a>                        sprintf(
+<a name="line677"></a>                                "No value found for key %s",
+<a name="line678"></a>                                $value_key));
+<a name="line679"></a>                    }
+<a name="line680"></a>
+<a name="line681"></a>                    $value = $ax_args[$value_key];
+<a name="line682"></a>                    $values[] = $value;
+<a name="line683"></a>                }
+<a name="line684"></a>            } else {
+<a name="line685"></a>                $key = 'value.' . $alias;
+<a name="line686"></a>
+<a name="line687"></a>                if (!array_key_exists($key, $ax_args)) {
+<a name="line688"></a>                  return new Auth_OpenID_AX_Error(
+<a name="line689"></a>                    sprintf(
+<a name="line690"></a>                            "No value found for key %s",
+<a name="line691"></a>                            $key));
+<a name="line692"></a>                }
+<a name="line693"></a>
+<a name="line694"></a>                $value = $ax_args['value.' . $alias];
+<a name="line695"></a>
+<a name="line696"></a>                if ($value == '') {
+<a name="line697"></a>                    $values = array();
+<a name="line698"></a>                } else {
+<a name="line699"></a>                    $values = array($value);
+<a name="line700"></a>                }
+<a name="line701"></a>            }
+<a name="line702"></a>
+<a name="line703"></a>            $this->data[$type_uri] = $values;
+<a name="line704"></a>        }
+<a name="line705"></a>
+<a name="line706"></a>        return true;
+<a name="line707"></a>    }
+<a name="line708"></a>
+<a name="line709"></a>    /**
+<a name="line710"></a>     * Get a single value for an attribute. If no value was sent for
+<a name="line711"></a>     * this attribute, use the supplied default. If there is more than
+<a name="line712"></a>     * one value for this attribute, this method will fail.
+<a name="line713"></a>     *
+<a name="line714"></a>     * @param type_uri: The URI for the attribute
+<a name="line715"></a>     * @param default: The value to return if the attribute was not
+<a name="line716"></a>     * sent in the fetch_response.
+<a name="line717"></a>     *
+<a name="line718"></a>     * @return $value Auth_OpenID_AX_Error on failure or the value of
+<a name="line719"></a>     * the attribute in the fetch_response message, or the default
+<a name="line720"></a>     * supplied
+<a name="line721"></a>     */
+<a name="line722"></a>    function getSingle($type_uri, $default=null)
+<a name="line723"></a>    {
+<a name="line724"></a>        $values = Auth_OpenID::arrayGet($this->data, $type_uri);
+<a name="line725"></a>        if (!$values) {
+<a name="line726"></a>            return $default;
+<a name="line727"></a>        } else if (count($values) == 1) {
+<a name="line728"></a>            return $values[0];
+<a name="line729"></a>        } else {
+<a name="line730"></a>            return new Auth_OpenID_AX_Error(
+<a name="line731"></a>              sprintf('More than one value present for %s',
+<a name="line732"></a>                      $type_uri)
+<a name="line733"></a>              );
+<a name="line734"></a>        }
+<a name="line735"></a>    }
+<a name="line736"></a>
+<a name="line737"></a>    /**
+<a name="line738"></a>     * Get the list of values for this attribute in the
+<a name="line739"></a>     * fetch_response.
+<a name="line740"></a>     *
+<a name="line741"></a>     * XXX: what to do if the values are not present? default
+<a name="line742"></a>     * parameter? this is funny because it's always supposed to return
+<a name="line743"></a>     * a list, so the default may break that, though it's provided by
+<a name="line744"></a>     * the user's code, so it might be okay. If no default is
+<a name="line745"></a>     * supplied, should the return be None or []?
+<a name="line746"></a>     *
+<a name="line747"></a>     * @param type_uri: The URI of the attribute
+<a name="line748"></a>     *
+<a name="line749"></a>     * @return $values The list of values for this attribute in the
+<a name="line750"></a>     * response. May be an empty list.  If the attribute was not sent
+<a name="line751"></a>     * in the response, returns Auth_OpenID_AX_Error.
+<a name="line752"></a>     */
+<a name="line753"></a>    function get($type_uri)
+<a name="line754"></a>    {
+<a name="line755"></a>        if (array_key_exists($type_uri, $this->data)) {
+<a name="line756"></a>            return $this->data[$type_uri];
+<a name="line757"></a>        } else {
+<a name="line758"></a>            return new Auth_OpenID_AX_Error(
+<a name="line759"></a>              sprintf("Type URI %s not found in response",
+<a name="line760"></a>                      $type_uri)
+<a name="line761"></a>              );
+<a name="line762"></a>        }
+<a name="line763"></a>    }
+<a name="line764"></a>
+<a name="line765"></a>    /**
+<a name="line766"></a>     * Get the number of responses for a particular attribute in this
+<a name="line767"></a>     * fetch_response message.
+<a name="line768"></a>     *
+<a name="line769"></a>     * @param type_uri: The URI of the attribute
+<a name="line770"></a>     *
+<a name="line771"></a>     * @returns int The number of values sent for this attribute.  If
+<a name="line772"></a>     * the attribute was not sent in the response, returns
+<a name="line773"></a>     * Auth_OpenID_AX_Error.
+<a name="line774"></a>     */
+<a name="line775"></a>    function count($type_uri)
+<a name="line776"></a>    {
+<a name="line777"></a>        if (array_key_exists($type_uri, $this->data)) {
+<a name="line778"></a>            return count($this->get($type_uri));
+<a name="line779"></a>        } else {
+<a name="line780"></a>            return new Auth_OpenID_AX_Error(
+<a name="line781"></a>              sprintf("Type URI %s not found in response",
+<a name="line782"></a>                      $type_uri)
+<a name="line783"></a>              );
+<a name="line784"></a>        }
+<a name="line785"></a>    }
+<a name="line786"></a>}
+<a name="line787"></a>
+<a name="line788"></a>/**
+<a name="line789"></a> * A fetch_response attribute exchange message.
+<a name="line790"></a> *
+<a name="line791"></a> * @package OpenID
+<a name="line792"></a> */
+<a name="line793"></a>class Auth_OpenID_AX_FetchResponse extends Auth_OpenID_AX_KeyValueMessage {
+<a name="line794"></a>    var $mode = 'fetch_response';
+<a name="line795"></a>
+<a name="line796"></a>    function Auth_OpenID_AX_FetchResponse($update_url=null)
+<a name="line797"></a>    {
+<a name="line798"></a>        $this->Auth_OpenID_AX_KeyValueMessage();
+<a name="line799"></a>        $this->update_url = $update_url;
+<a name="line800"></a>    }
+<a name="line801"></a>
+<a name="line802"></a>    /**
+<a name="line803"></a>     * Serialize this object into arguments in the attribute exchange
+<a name="line804"></a>     * namespace
+<a name="line805"></a>     *
+<a name="line806"></a>     * @return $args The dictionary of unqualified attribute exchange
+<a name="line807"></a>     * arguments that represent this fetch_response, or
+<a name="line808"></a>     * Auth_OpenID_AX_Error on error.
+<a name="line809"></a>     */
+<a name="line810"></a>    function getExtensionArgs($request=null)
+<a name="line811"></a>    {
+<a name="line812"></a>        $aliases = new Auth_OpenID_NamespaceMap();
+<a name="line813"></a>
+<a name="line814"></a>        $zero_value_types = array();
+<a name="line815"></a>
+<a name="line816"></a>        if ($request !== null) {
+<a name="line817"></a>            // Validate the data in the context of the request (the
+<a name="line818"></a>            // same attributes should be present in each, and the
+<a name="line819"></a>            // counts in the response must be no more than the counts
+<a name="line820"></a>            // in the request)
+<a name="line821"></a>
+<a name="line822"></a>            foreach ($this->data as $type_uri => $unused) {
+<a name="line823"></a>                if (!$request->contains($type_uri)) {
+<a name="line824"></a>                    return new Auth_OpenID_AX_Error(
+<a name="line825"></a>                      sprintf("Response attribute not present in request: %s",
+<a name="line826"></a>                              $type_uri)
+<a name="line827"></a>                      );
+<a name="line828"></a>                }
+<a name="line829"></a>            }
+<a name="line830"></a>
+<a name="line831"></a>            foreach ($request->iterAttrs() as $attr_info) {
+<a name="line832"></a>                // Copy the aliases from the request so that reading
+<a name="line833"></a>                // the response in light of the request is easier
+<a name="line834"></a>                if ($attr_info->alias === null) {
+<a name="line835"></a>                    $aliases->add($attr_info->type_uri);
+<a name="line836"></a>                } else {
+<a name="line837"></a>                    $alias = $aliases->addAlias($attr_info->type_uri,
+<a name="line838"></a>                                                $attr_info->alias);
+<a name="line839"></a>
+<a name="line840"></a>                    if ($alias === null) {
+<a name="line841"></a>                        return new Auth_OpenID_AX_Error(
+<a name="line842"></a>                          sprintf("Could not add alias %s for URI %s",
+<a name="line843"></a>                                  $attr_info->alias, $attr_info->type_uri)
+<a name="line844"></a>                          );
+<a name="line845"></a>                    }
+<a name="line846"></a>                }
+<a name="line847"></a>
+<a name="line848"></a>                if (array_key_exists($attr_info->type_uri, $this->data)) {
+<a name="line849"></a>                    $values = $this->data[$attr_info->type_uri];
+<a name="line850"></a>                } else {
+<a name="line851"></a>                    $values = array();
+<a name="line852"></a>                    $zero_value_types[] = $attr_info;
+<a name="line853"></a>                }
+<a name="line854"></a>
+<a name="line855"></a>                if (($attr_info->count != Auth_OpenID_AX_UNLIMITED_VALUES) &&
+<a name="line856"></a>                    ($attr_info->count < count($values))) {
+<a name="line857"></a>                    return new Auth_OpenID_AX_Error(
+<a name="line858"></a>                      sprintf("More than the number of requested values " .
+<a name="line859"></a>                              "were specified for %s",
+<a name="line860"></a>                              $attr_info->type_uri)
+<a name="line861"></a>                      );
+<a name="line862"></a>                }
+<a name="line863"></a>            }
+<a name="line864"></a>        }
+<a name="line865"></a>
+<a name="line866"></a>        $kv_args = $this->_getExtensionKVArgs($aliases);
+<a name="line867"></a>
+<a name="line868"></a>        // Add the KV args into the response with the args that are
+<a name="line869"></a>        // unique to the fetch_response
+<a name="line870"></a>        $ax_args = $this->_newArgs();
+<a name="line871"></a>
+<a name="line872"></a>        // For each requested attribute, put its type/alias and count
+<a name="line873"></a>        // into the response even if no data were returned.
+<a name="line874"></a>        foreach ($zero_value_types as $attr_info) {
+<a name="line875"></a>            $alias = $aliases->getAlias($attr_info->type_uri);
+<a name="line876"></a>            $kv_args['type.' . $alias] = $attr_info->type_uri;
+<a name="line877"></a>            $kv_args['count.' . $alias] = '0';
+<a name="line878"></a>        }
+<a name="line879"></a>
+<a name="line880"></a>        $update_url = null;
+<a name="line881"></a>        if ($request) {
+<a name="line882"></a>            $update_url = $request->update_url;
+<a name="line883"></a>        } else {
+<a name="line884"></a>            $update_url = $this->update_url;
+<a name="line885"></a>        }
+<a name="line886"></a>
+<a name="line887"></a>        if ($update_url) {
+<a name="line888"></a>            $ax_args['update_url'] = $update_url;
+<a name="line889"></a>        }
+<a name="line890"></a>
+<a name="line891"></a>        Auth_OpenID::update($ax_args, $kv_args);
+<a name="line892"></a>
+<a name="line893"></a>        return $ax_args;
+<a name="line894"></a>    }
+<a name="line895"></a>
+<a name="line896"></a>    /**
+<a name="line897"></a>     * @return $result Auth_OpenID_AX_Error on failure or true on
+<a name="line898"></a>     * success.
+<a name="line899"></a>     */
+<a name="line900"></a>    function parseExtensionArgs($ax_args)
+<a name="line901"></a>    {
+<a name="line902"></a>        $result = parent::parseExtensionArgs($ax_args);
+<a name="line903"></a>
+<a name="line904"></a>        if (Auth_OpenID_AX::isError($result)) {
+<a name="line905"></a>            return $result;
+<a name="line906"></a>        }
+<a name="line907"></a>
+<a name="line908"></a>        $this->update_url = Auth_OpenID::arrayGet($ax_args, 'update_url');
+<a name="line909"></a>
+<a name="line910"></a>        return true;
+<a name="line911"></a>    }
+<a name="line912"></a>
+<a name="line913"></a>    /**
+<a name="line914"></a>     * Construct a FetchResponse object from an OpenID library
+<a name="line915"></a>     * SuccessResponse object.
+<a name="line916"></a>     *
+<a name="line917"></a>     * @param success_response: A successful id_res response object
+<a name="line918"></a>     *
+<a name="line919"></a>     * @param signed: Whether non-signed args should be processsed. If
+<a name="line920"></a>     * True (the default), only signed arguments will be processsed.
+<a name="line921"></a>     *
+<a name="line922"></a>     * @return $response A FetchResponse containing the data from the
+<a name="line923"></a>     * OpenID message
+<a name="line924"></a>     */
+<a name="line925"></a>    static function fromSuccessResponse($success_response, $signed=true)
+<a name="line926"></a>    {
+<a name="line927"></a>        $obj = new Auth_OpenID_AX_FetchResponse();
+<a name="line928"></a>        if ($signed) {
+<a name="line929"></a>            $ax_args = $success_response->getSignedNS($obj->ns_uri);
+<a name="line930"></a>        } else {
+<a name="line931"></a>            $ax_args = $success_response->message->getArgs($obj->ns_uri);
+<a name="line932"></a>        }
+<a name="line933"></a>        if ($ax_args === null || Auth_OpenID::isFailure($ax_args) ||
+<a name="line934"></a>              sizeof($ax_args) == 0) {
+<a name="line935"></a>            return null;
+<a name="line936"></a>        }
+<a name="line937"></a>
+<a name="line938"></a>        $result = $obj->parseExtensionArgs($ax_args);
+<a name="line939"></a>        if (Auth_OpenID_AX::isError($result)) {
+<a name="line940"></a>            #XXX log me
+<a name="line941"></a>            return null;
+<a name="line942"></a>        }
+<a name="line943"></a>        return $obj;
+<a name="line944"></a>    }
+<a name="line945"></a>}
+<a name="line946"></a>
+<a name="line947"></a>/**
+<a name="line948"></a> * A store request attribute exchange message representation.
+<a name="line949"></a> *
+<a name="line950"></a> * @package OpenID
+<a name="line951"></a> */
+<a name="line952"></a>class Auth_OpenID_AX_StoreRequest extends Auth_OpenID_AX_KeyValueMessage {
+<a name="line953"></a>    var $mode = 'store_request';
+<a name="line954"></a>
+<a name="line955"></a>    /**
+<a name="line956"></a>     * @param array $aliases The namespace aliases to use when making
+<a name="line957"></a>     * this store response. Leave as None to use defaults.
+<a name="line958"></a>     */
+<a name="line959"></a>    function getExtensionArgs($aliases=null)
+<a name="line960"></a>    {
+<a name="line961"></a>        $ax_args = $this->_newArgs();
+<a name="line962"></a>        $kv_args = $this->_getExtensionKVArgs($aliases);
+<a name="line963"></a>        Auth_OpenID::update($ax_args, $kv_args);
+<a name="line964"></a>        return $ax_args;
+<a name="line965"></a>    }
+<a name="line966"></a>}
+<a name="line967"></a>
+<a name="line968"></a>/**
+<a name="line969"></a> * An indication that the store request was processed along with this
+<a name="line970"></a> * OpenID transaction.  Use make(), NOT the constructor, to create
+<a name="line971"></a> * response objects.
+<a name="line972"></a> *
+<a name="line973"></a> * @package OpenID
+<a name="line974"></a> */
+<a name="line975"></a>class Auth_OpenID_AX_StoreResponse extends Auth_OpenID_AX_Message {
+<a name="line976"></a>    var $SUCCESS_MODE = 'store_response_success';
+<a name="line977"></a>    var $FAILURE_MODE = 'store_response_failure';
+<a name="line978"></a>
+<a name="line979"></a>    /**
+<a name="line980"></a>     * Returns Auth_OpenID_AX_Error on error or an
+<a name="line981"></a>     * Auth_OpenID_AX_StoreResponse object on success.
+<a name="line982"></a>     */
+<a name="line983"></a>    function make($succeeded=true, $error_message=null)
+<a name="line984"></a>    {
+<a name="line985"></a>        if (($succeeded) && ($error_message !== null)) {
+<a name="line986"></a>            return new Auth_OpenID_AX_Error('An error message may only be '.
+<a name="line987"></a>                                    'included in a failing fetch response');
+<a name="line988"></a>        }
+<a name="line989"></a>
+<a name="line990"></a>        return new Auth_OpenID_AX_StoreResponse($succeeded, $error_message);
+<a name="line991"></a>    }
+<a name="line992"></a>
+<a name="line993"></a>    function Auth_OpenID_AX_StoreResponse($succeeded=true, $error_message=null)
+<a name="line994"></a>    {
+<a name="line995"></a>        if ($succeeded) {
+<a name="line996"></a>            $this->mode = $this->SUCCESS_MODE;
+<a name="line997"></a>        } else {
+<a name="line998"></a>            $this->mode = $this->FAILURE_MODE;
+<a name="line999"></a>        }
+<a name="line1000"></a>
+<a name="line1001"></a>        $this->error_message = $error_message;
+<a name="line1002"></a>    }
+<a name="line1003"></a>
+<a name="line1004"></a>    /**
+<a name="line1005"></a>     * Was this response a success response?
+<a name="line1006"></a>     */
+<a name="line1007"></a>    function succeeded()
+<a name="line1008"></a>    {
+<a name="line1009"></a>        return $this->mode == $this->SUCCESS_MODE;
+<a name="line1010"></a>    }
+<a name="line1011"></a>
+<a name="line1012"></a>    function getExtensionArgs()
+<a name="line1013"></a>    {
+<a name="line1014"></a>        $ax_args = $this->_newArgs();
+<a name="line1015"></a>        if ((!$this->succeeded()) && $this->error_message) {
+<a name="line1016"></a>            $ax_args['error'] = $this->error_message;
+<a name="line1017"></a>        }
+<a name="line1018"></a>
+<a name="line1019"></a>        return $ax_args;
+<a name="line1020"></a>    }
+<a name="line1021"></a>}
+<a name="line1022"></a>
+<a name="line1023"></a></pre>
+<div class="header">
+<h1>GiftFlow API</h1>
+<ul>
+<li><a href="../../../../overview-summary.html">Overview</a></li>
+<li>Package</li><li>Class</li><li>Tree</li><li><a href="../../../../overview-files.html">Files</a></li>
+<li><a href="../../../../deprecated-list.html">Deprecated</a></li>
+<li><a href="../../../../index-all.html">Index</a></li>
+</ul>
+</div>
+
+<div class="small_links">
+<a href="../../../../index.html" target="_top">Frames</a>
+<a href="../../../../source/libraries/auth/openid/ax.php.html" target="_top">No frames</a>
+</div>
+<hr>
+
+<p id="footer">This document was generated by <a href="http://peej.github.com/phpdoctor/">PHPDoctor: The PHP Documentation Creator</a></p>
+
+</body>
+
+</html>

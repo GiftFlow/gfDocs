@@ -1,0 +1,238 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+
+<html lang="en">
+<head>
+
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
+<meta name="generator" content="PHPDoctor 2RC4 (http://peej.github.com/phpdoctor/)">
+<meta name="when" content="Wed, 09 Feb 2011 20:22:55 +0000">
+
+<link rel="stylesheet" type="text/css" href="../stylesheet.css">
+<link rel="start" href="../overview-summary.html">
+
+<title>Auth_Yadis_Discovery (GiftFlow API)</title>
+
+</head>
+<body id="definition" onload="parent.document.title=document.title;">
+
+<div class="header">
+<h1>GiftFlow API</h1>
+<ul>
+<li><a href="../overview-summary.html">Overview</a></li>
+<li><a href="../openid/package-summary.html">Package</a></li>
+<li class="active">Class</li>
+<li><a href="../openid/package-tree.html">Tree</a></li>
+<li><a href="../overview-files.html">Files</a></li>
+<li><a href="../deprecated-list.html">Deprecated</a></li>
+<li><a href="../index-all.html">Index</a></li>
+</ul>
+</div>
+
+<div class="small_links">
+<a href="../index.html" target="_top">Frames</a>
+<a href="../openid/auth_yadis_discovery.html" target="_top">No frames</a>
+</div>
+<div class="small_links">
+Summary: <a href="#summary_field">Field</a> | <a href="#summary_method">Method</a> | <a href="#summary_constr">Constr</a>
+Detail: <a href="#detail_field">Field</a> | <a href="#detail_method">Method</a> | <a href="#summary_constr">Constr</a>
+</div>
+<hr>
+
+<div class="qualifiedName">OpenID\Auth_Yadis_Discovery</div>
+<a href="../source/libraries/auth/yadis/manager.php.html#line368" class="location">libraries/Auth/Yadis/Manager.php at line 368</a>
+
+<h1>Class Auth_Yadis_Discovery</h1>
+
+<pre class="tree"><strong>Auth_Yadis_Discovery</strong><br /></pre>
+
+<hr>
+
+<p class="signature">public  class <strong>Auth_Yadis_Discovery</strong></p>
+
+<div class="comment" id="overview_description"><p>State management for discovery.</p><p>High-level usage pattern is to call .getNextService(discover) in
+order to find the next available service for this user for this
+session. Once a request completes, call .cleanup() to clean up the
+session state.</p></div>
+
+<hr>
+
+<table id="summary_field">
+<tr><th colspan="2">Field Summary</th></tr>
+<tr>
+<td class="type">private  mixed</td>
+<td class="description"><p class="name"><a href="#DEFAULT_SUFFIX">$DEFAULT_SUFFIX</a></p><p class="description"></p></td>
+</tr>
+<tr>
+<td class="type">private  mixed</td>
+<td class="description"><p class="name"><a href="#PREFIX">$PREFIX</a></p><p class="description"></p></td>
+</tr>
+</table>
+
+<table id="summary_method">
+<tr><th colspan="2">Method Summary</th></tr>
+<tr>
+<td class="type"> void</td>
+<td class="description"><p class="name"><a href="#__construct()">__construct</a>(<a href="../openid/auth_yadis_phpsession.html">Auth_Yadis_PHPSession</a> session, string url, string session_key_suffix)</p><p class="description">Initialize a discovery object.</p></td>
+</tr>
+<tr>
+<td class="type"> void</td>
+<td class="description"><p class="name"><a href="#cleanup()">cleanup</a>(bool force, $force True)</p><p class="description">Clean up Yadis-related services in the session and return the
+most-recently-attempted service from the manager, if one
+exists.</p></td>
+</tr>
+<tr>
+<td class="type">private  void</td>
+<td class="description"><p class="name"><a href="#createManager()">createManager</a>(mixed services, mixed yadis_url)</p><p class="description"></p></td>
+</tr>
+<tr>
+<td class="type">private  void</td>
+<td class="description"><p class="name"><a href="#destroyManager()">destroyManager</a>(bool force, $force True)</p><p class="description"></p></td>
+</tr>
+<tr>
+<td class="type">private  void</td>
+<td class="description"><p class="name"><a href="#getManager()">getManager</a>(bool force, $force True)</p><p class="description"></p></td>
+</tr>
+<tr>
+<td class="type"> void</td>
+<td class="description"><p class="name"><a href="#getNextService()">getNextService</a>(mixed discover_cb, mixed fetcher)</p><p class="description">Return the next authentication service for the pair of
+user_input and session. </p></td>
+</tr>
+<tr>
+<td class="type">private  void</td>
+<td class="description"><p class="name"><a href="#getSessionKey()">getSessionKey</a>()</p><p class="description"></p></td>
+</tr>
+</table>
+
+<h2 id="detail_field">Field Detail</h2>
+<a href="../source/libraries/auth/yadis/manager.php.html#line373" class="location">libraries/Auth/Yadis/Manager.php at line 373</a>
+
+<h3 id="DEFAULT_SUFFIX">DEFAULT_SUFFIX</h3>
+<code class="signature">private  mixed <strong>$DEFAULT_SUFFIX</strong> = 'auth'</code>
+<div class="details">
+<p></p></div>
+
+<hr>
+
+<a href="../source/libraries/auth/yadis/manager.php.html#line378" class="location">libraries/Auth/Yadis/Manager.php at line 378</a>
+
+<h3 id="PREFIX">PREFIX</h3>
+<code class="signature">private  mixed <strong>$PREFIX</strong> = '_yadis_services_'</code>
+<div class="details">
+<p></p></div>
+
+<hr>
+
+<h2 id="detail_method">Method Detail</h2><div class="method_detail">
+<div class='method'><a href="../source/libraries/auth/yadis/manager.php.html#line389" class="location">libraries/Auth/Yadis/Manager.php at line 389</a>
+
+<h3 id="__construct()">__construct</h3>
+<code class="signature">public  void <strong>__construct</strong>(<a href="../openid/auth_yadis_phpsession.html">Auth_Yadis_PHPSession</a> session, string url, string session_key_suffix)</code>
+<div class="details">
+<p>Initialize a discovery object.</p><dl>
+<dt>Parameters:</dt>
+<dd>session - An object which implements the Auth_Yadis_PHPSession API.</dd>
+<dd>url - The URL on which to attempt discovery.</dd>
+<dd>session_key_suffix - The optional session key suffix override.</dd>
+</dl>
+</div></div>
+
+
+
+<div class='method'><a href="../source/libraries/auth/yadis/manager.php.html#line439" class="location">libraries/Auth/Yadis/Manager.php at line 439</a>
+
+<h3 id="cleanup()">cleanup</h3>
+<code class="signature">public  void <strong>cleanup</strong>(bool force, $force True)</code>
+<div class="details">
+<p>Clean up Yadis-related services in the session and return the
+most-recently-attempted service from the manager, if one
+exists.</p><dl>
+<dt>Parameters:</dt>
+<dd>True - if the manager should be deleted regardless of whether it's a manager for $this->url.</dd>
+</dl>
+</div></div>
+
+
+
+<div class='method'><a href="../source/libraries/auth/yadis/manager.php.html#line488" class="location">libraries/Auth/Yadis/Manager.php at line 488</a>
+
+<h3 id="createManager()">createManager</h3>
+<code class="signature">private  void <strong>createManager</strong>(mixed services, mixed yadis_url)</code>
+<div class="details">
+<p></p></div></div>
+
+
+
+<div class='method'><a href="../source/libraries/auth/yadis/manager.php.html#line511" class="location">libraries/Auth/Yadis/Manager.php at line 511</a>
+
+<h3 id="destroyManager()">destroyManager</h3>
+<code class="signature">private  void <strong>destroyManager</strong>(bool force, $force True)</code>
+<div class="details">
+<p></p><dl>
+<dt>Parameters:</dt>
+<dd>True - if the manager should be deleted regardless of whether it's a manager for $this->url.</dd>
+</dl>
+</div></div>
+
+
+
+<div class='method'><a href="../source/libraries/auth/yadis/manager.php.html#line467" class="location">libraries/Auth/Yadis/Manager.php at line 467</a>
+
+<h3 id="getManager()">getManager</h3>
+<code class="signature">private  void <strong>getManager</strong>(bool force, $force True)</code>
+<div class="details">
+<p></p><dl>
+<dt>Parameters:</dt>
+<dd>True - if the manager should be returned regardless of whether it's a manager for $this->url.</dd>
+</dl>
+</div></div>
+
+
+
+<div class='method'><a href="../source/libraries/auth/yadis/manager.php.html#line406" class="location">libraries/Auth/Yadis/Manager.php at line 406</a>
+
+<h3 id="getNextService()">getNextService</h3>
+<code class="signature">public  void <strong>getNextService</strong>(mixed discover_cb, mixed fetcher)</code>
+<div class="details">
+<p>Return the next authentication service for the pair of
+user_input and session. This function handles fallback.</p></div></div>
+
+
+
+<div class='method'><a href="../source/libraries/auth/yadis/manager.php.html#line455" class="location">libraries/Auth/Yadis/Manager.php at line 455</a>
+
+<h3 id="getSessionKey()">getSessionKey</h3>
+<code class="signature">private  void <strong>getSessionKey</strong>()</code>
+<div class="details">
+<p></p></div></div>
+
+
+
+</div><div class="header">
+<h1>GiftFlow API</h1>
+<ul>
+<li><a href="../overview-summary.html">Overview</a></li>
+<li><a href="../openid/package-summary.html">Package</a></li>
+<li class="active">Class</li>
+<li><a href="../openid/package-tree.html">Tree</a></li>
+<li><a href="../overview-files.html">Files</a></li>
+<li><a href="../deprecated-list.html">Deprecated</a></li>
+<li><a href="../index-all.html">Index</a></li>
+</ul>
+</div>
+
+<div class="small_links">
+<a href="../index.html" target="_top">Frames</a>
+<a href="../openid/auth_yadis_discovery.html" target="_top">No frames</a>
+</div>
+<div class="small_links">
+Summary: <a href="#summary_field">Field</a> | <a href="#summary_method">Method</a> | <a href="#summary_constr">Constr</a>
+Detail: <a href="#detail_field">Field</a> | <a href="#detail_method">Method</a> | <a href="#summary_constr">Constr</a>
+</div>
+<hr>
+
+<p id="footer">This document was generated by <a href="http://peej.github.com/phpdoctor/">PHPDoctor: The PHP Documentation Creator</a></p>
+
+</body>
+
+</html>

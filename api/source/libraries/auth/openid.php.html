@@ -1,0 +1,626 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+
+<html lang="en">
+<head>
+
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
+<meta name="generator" content="PHPDoctor 2RC4 (http://peej.github.com/phpdoctor/)">
+<meta name="when" content="Wed, 09 Feb 2011 20:22:56 +0000">
+
+<link rel="stylesheet" type="text/css" href="../../../stylesheet.css">
+<link rel="start" href="../../../overview-summary.html">
+
+<title>libraries/Auth/OpenID.php (GiftFlow API)</title>
+
+</head>
+<body id="file" onload="parent.document.title=document.title;">
+
+<div class="header">
+<h1>GiftFlow API</h1>
+<ul>
+<li><a href="../../../overview-summary.html">Overview</a></li>
+<li>Package</li><li>Class</li><li>Tree</li><li><a href="../../../overview-files.html">Files</a></li>
+<li><a href="../../../deprecated-list.html">Deprecated</a></li>
+<li><a href="../../../index-all.html">Index</a></li>
+</ul>
+</div>
+
+<div class="small_links">
+<a href="../../../index.html" target="_top">Frames</a>
+<a href="../../../source/libraries/auth/openid.php.html" target="_top">No frames</a>
+</div>
+<hr>
+
+<h1>libraries/Auth/OpenID.php</h1>
+<div class="comment" id="overview_description"><p>This is the PHP OpenID library by JanRain, Inc.</p><p>This module contains core utility functionality used by the
+library.  See Consumer.php and Server.php for the consumer and
+server implementations.</p><p>PHP versions 4 and 5</p><p>LICENSE: See the COPYING file included in this distribution.</p></div>
+
+<hr>
+
+<a name="line1"></a><pre><?php
+<a name="line2"></a>
+<a name="line3"></a>/**
+<a name="line4"></a> * This is the PHP OpenID library by JanRain, Inc.
+<a name="line5"></a> *
+<a name="line6"></a> * This module contains core utility functionality used by the
+<a name="line7"></a> * library.  See Consumer.php and Server.php for the consumer and
+<a name="line8"></a> * server implementations.
+<a name="line9"></a> *
+<a name="line10"></a> * PHP versions 4 and 5
+<a name="line11"></a> *
+<a name="line12"></a> * LICENSE: See the COPYING file included in this distribution.
+<a name="line13"></a> *
+<a name="line14"></a> * @package OpenID
+<a name="line15"></a> * @author JanRain, Inc. <openid@janrain.com>
+<a name="line16"></a> * @copyright 2005-2008 Janrain, Inc.
+<a name="line17"></a> * @license http://www.apache.org/licenses/LICENSE-2.0 Apache
+<a name="line18"></a> */
+<a name="line19"></a>
+<a name="line20"></a>/**
+<a name="line21"></a> * The library version string
+<a name="line22"></a> */
+<a name="line23"></a>define('Auth_OpenID_VERSION', '2.2.2');
+<a name="line24"></a>
+<a name="line25"></a>/**
+<a name="line26"></a> * Require the fetcher code.
+<a name="line27"></a> */
+<a name="line28"></a>require_once "Auth/Yadis/PlainHTTPFetcher.php";
+<a name="line29"></a>require_once "Auth/Yadis/ParanoidHTTPFetcher.php";
+<a name="line30"></a>require_once "Auth/OpenID/BigMath.php";
+<a name="line31"></a>require_once "Auth/OpenID/URINorm.php";
+<a name="line32"></a>
+<a name="line33"></a>/**
+<a name="line34"></a> * Status code returned by the server when the only option is to show
+<a name="line35"></a> * an error page, since we do not have enough information to redirect
+<a name="line36"></a> * back to the consumer. The associated value is an error message that
+<a name="line37"></a> * should be displayed on an HTML error page.
+<a name="line38"></a> *
+<a name="line39"></a> * @see Auth_OpenID_Server
+<a name="line40"></a> */
+<a name="line41"></a>define('Auth_OpenID_LOCAL_ERROR', 'local_error');
+<a name="line42"></a>
+<a name="line43"></a>/**
+<a name="line44"></a> * Status code returned when there is an error to return in key-value
+<a name="line45"></a> * form to the consumer. The caller should return a 400 Bad Request
+<a name="line46"></a> * response with content-type text/plain and the value as the body.
+<a name="line47"></a> *
+<a name="line48"></a> * @see Auth_OpenID_Server
+<a name="line49"></a> */
+<a name="line50"></a>define('Auth_OpenID_REMOTE_ERROR', 'remote_error');
+<a name="line51"></a>
+<a name="line52"></a>/**
+<a name="line53"></a> * Status code returned when there is a key-value form OK response to
+<a name="line54"></a> * the consumer. The value associated with this code is the
+<a name="line55"></a> * response. The caller should return a 200 OK response with
+<a name="line56"></a> * content-type text/plain and the value as the body.
+<a name="line57"></a> *
+<a name="line58"></a> * @see Auth_OpenID_Server
+<a name="line59"></a> */
+<a name="line60"></a>define('Auth_OpenID_REMOTE_OK', 'remote_ok');
+<a name="line61"></a>
+<a name="line62"></a>/**
+<a name="line63"></a> * Status code returned when there is a redirect back to the
+<a name="line64"></a> * consumer. The value is the URL to redirect back to. The caller
+<a name="line65"></a> * should return a 302 Found redirect with a Location: header
+<a name="line66"></a> * containing the URL.
+<a name="line67"></a> *
+<a name="line68"></a> * @see Auth_OpenID_Server
+<a name="line69"></a> */
+<a name="line70"></a>define('Auth_OpenID_REDIRECT', 'redirect');
+<a name="line71"></a>
+<a name="line72"></a>/**
+<a name="line73"></a> * Status code returned when the caller needs to authenticate the
+<a name="line74"></a> * user. The associated value is a {@link Auth_OpenID_ServerRequest}
+<a name="line75"></a> * object that can be used to complete the authentication. If the user
+<a name="line76"></a> * has taken some authentication action, use the retry() method of the
+<a name="line77"></a> * {@link Auth_OpenID_ServerRequest} object to complete the request.
+<a name="line78"></a> *
+<a name="line79"></a> * @see Auth_OpenID_Server
+<a name="line80"></a> */
+<a name="line81"></a>define('Auth_OpenID_DO_AUTH', 'do_auth');
+<a name="line82"></a>
+<a name="line83"></a>/**
+<a name="line84"></a> * Status code returned when there were no OpenID arguments
+<a name="line85"></a> * passed. This code indicates that the caller should return a 200 OK
+<a name="line86"></a> * response and display an HTML page that says that this is an OpenID
+<a name="line87"></a> * server endpoint.
+<a name="line88"></a> *
+<a name="line89"></a> * @see Auth_OpenID_Server
+<a name="line90"></a> */
+<a name="line91"></a>define('Auth_OpenID_DO_ABOUT', 'do_about');
+<a name="line92"></a>
+<a name="line93"></a>/**
+<a name="line94"></a> * Defines for regexes and format checking.
+<a name="line95"></a> */
+<a name="line96"></a>define('Auth_OpenID_letters',
+<a name="line97"></a>       "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ");
+<a name="line98"></a>
+<a name="line99"></a>define('Auth_OpenID_digits',
+<a name="line100"></a>       "0123456789");
+<a name="line101"></a>
+<a name="line102"></a>define('Auth_OpenID_punct',
+<a name="line103"></a>       "!\"#$%&'()*+,-./:;<=>?@[\\]^_`{|}~");
+<a name="line104"></a>
+<a name="line105"></a>Auth_OpenID_include_init();
+<a name="line106"></a>
+<a name="line107"></a>/**
+<a name="line108"></a> * The OpenID utility function class.
+<a name="line109"></a> *
+<a name="line110"></a> * @package OpenID
+<a name="line111"></a> * @access private
+<a name="line112"></a> */
+<a name="line113"></a>class Auth_OpenID {
+<a name="line114"></a>
+<a name="line115"></a>    /**
+<a name="line116"></a>     * Return true if $thing is an Auth_OpenID_FailureResponse object;
+<a name="line117"></a>     * false if not.
+<a name="line118"></a>     *
+<a name="line119"></a>     * @access private
+<a name="line120"></a>     */
+<a name="line121"></a>    static function isFailure($thing)
+<a name="line122"></a>    {
+<a name="line123"></a>        return is_a($thing, 'Auth_OpenID_FailureResponse');
+<a name="line124"></a>    }
+<a name="line125"></a>
+<a name="line126"></a>    /**
+<a name="line127"></a>     * Gets the query data from the server environment based on the
+<a name="line128"></a>     * request method used.  If GET was used, this looks at
+<a name="line129"></a>     * $_SERVER['QUERY_STRING'] directly.  If POST was used, this
+<a name="line130"></a>     * fetches data from the special php://input file stream.
+<a name="line131"></a>     *
+<a name="line132"></a>     * Returns an associative array of the query arguments.
+<a name="line133"></a>     *
+<a name="line134"></a>     * Skips invalid key/value pairs (i.e. keys with no '=value'
+<a name="line135"></a>     * portion).
+<a name="line136"></a>     *
+<a name="line137"></a>     * Returns an empty array if neither GET nor POST was used, or if
+<a name="line138"></a>     * POST was used but php://input cannot be opened.
+<a name="line139"></a>     *
+<a name="line140"></a>     * See background:
+<a name="line141"></a>     * http://lists.openidenabled.com/pipermail/dev/2007-March/000395.html
+<a name="line142"></a>     *
+<a name="line143"></a>     * @access private
+<a name="line144"></a>     */
+<a name="line145"></a>    static function getQuery($query_str=null)
+<a name="line146"></a>    {
+<a name="line147"></a>        $data = array();
+<a name="line148"></a>
+<a name="line149"></a>        if ($query_str !== null) {
+<a name="line150"></a>            $data = Auth_OpenID::params_from_string($query_str);
+<a name="line151"></a>        } else if (!array_key_exists('REQUEST_METHOD', $_SERVER)) {
+<a name="line152"></a>            // Do nothing.
+<a name="line153"></a>        } else {
+<a name="line154"></a>          // XXX HACK FIXME HORRIBLE.
+<a name="line155"></a>          //
+<a name="line156"></a>          // POSTing to a URL with query parameters is acceptable, but
+<a name="line157"></a>          // we don't have a clean way to distinguish those parameters
+<a name="line158"></a>          // when we need to do things like return_to verification
+<a name="line159"></a>          // which only want to look at one kind of parameter.  We're
+<a name="line160"></a>          // going to emulate the behavior of some other environments
+<a name="line161"></a>          // by defaulting to GET and overwriting with POST if POST
+<a name="line162"></a>          // data is available.
+<a name="line163"></a>          $data = Auth_OpenID::params_from_string($_SERVER['QUERY_STRING']);
+<a name="line164"></a>
+<a name="line165"></a>          if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+<a name="line166"></a>            $str = file_get_contents('php://input');
+<a name="line167"></a>
+<a name="line168"></a>            if ($str === false) {
+<a name="line169"></a>              $post = array();
+<a name="line170"></a>            } else {
+<a name="line171"></a>              $post = Auth_OpenID::params_from_string($str);
+<a name="line172"></a>            }
+<a name="line173"></a>
+<a name="line174"></a>            $data = array_merge($data, $post);
+<a name="line175"></a>          }
+<a name="line176"></a>        }
+<a name="line177"></a>
+<a name="line178"></a>        return $data;
+<a name="line179"></a>    }
+<a name="line180"></a>
+<a name="line181"></a>    static function params_from_string($str)
+<a name="line182"></a>    {
+<a name="line183"></a>        $chunks = explode("&", $str);
+<a name="line184"></a>
+<a name="line185"></a>        $data = array();
+<a name="line186"></a>        foreach ($chunks as $chunk) {
+<a name="line187"></a>            $parts = explode("=", $chunk, 2);
+<a name="line188"></a>
+<a name="line189"></a>            if (count($parts) != 2) {
+<a name="line190"></a>                continue;
+<a name="line191"></a>            }
+<a name="line192"></a>
+<a name="line193"></a>            list($k, $v) = $parts;
+<a name="line194"></a>            $data[urldecode($k)] = urldecode($v);
+<a name="line195"></a>        }
+<a name="line196"></a>
+<a name="line197"></a>        return $data;
+<a name="line198"></a>    }
+<a name="line199"></a>
+<a name="line200"></a>    /**
+<a name="line201"></a>     * Create dir_name as a directory if it does not exist. If it
+<a name="line202"></a>     * exists, make sure that it is, in fact, a directory.  Returns
+<a name="line203"></a>     * true if the operation succeeded; false if not.
+<a name="line204"></a>     *
+<a name="line205"></a>     * @access private
+<a name="line206"></a>     */
+<a name="line207"></a>    static function ensureDir($dir_name)
+<a name="line208"></a>    {
+<a name="line209"></a>        if (is_dir($dir_name) || @mkdir($dir_name)) {
+<a name="line210"></a>            return true;
+<a name="line211"></a>        } else {
+<a name="line212"></a>            $parent_dir = dirname($dir_name);
+<a name="line213"></a>
+<a name="line214"></a>            // Terminal case; there is no parent directory to create.
+<a name="line215"></a>            if ($parent_dir == $dir_name) {
+<a name="line216"></a>                return true;
+<a name="line217"></a>            }
+<a name="line218"></a>
+<a name="line219"></a>            return (Auth_OpenID::ensureDir($parent_dir) && @mkdir($dir_name));
+<a name="line220"></a>        }
+<a name="line221"></a>    }
+<a name="line222"></a>
+<a name="line223"></a>    /**
+<a name="line224"></a>     * Adds a string prefix to all values of an array.  Returns a new
+<a name="line225"></a>     * array containing the prefixed values.
+<a name="line226"></a>     *
+<a name="line227"></a>     * @access private
+<a name="line228"></a>     */
+<a name="line229"></a>    static function addPrefix($values, $prefix)
+<a name="line230"></a>    {
+<a name="line231"></a>        $new_values = array();
+<a name="line232"></a>        foreach ($values as $s) {
+<a name="line233"></a>            $new_values[] = $prefix . $s;
+<a name="line234"></a>        }
+<a name="line235"></a>        return $new_values;
+<a name="line236"></a>    }
+<a name="line237"></a>
+<a name="line238"></a>    /**
+<a name="line239"></a>     * Convenience function for getting array values.  Given an array
+<a name="line240"></a>     * $arr and a key $key, get the corresponding value from the array
+<a name="line241"></a>     * or return $default if the key is absent.
+<a name="line242"></a>     *
+<a name="line243"></a>     * @access private
+<a name="line244"></a>     */
+<a name="line245"></a>    static function arrayGet($arr, $key, $fallback = null)
+<a name="line246"></a>    {
+<a name="line247"></a>        if (is_array($arr)) {
+<a name="line248"></a>            if (array_key_exists($key, $arr)) {
+<a name="line249"></a>                return $arr[$key];
+<a name="line250"></a>            } else {
+<a name="line251"></a>                return $fallback;
+<a name="line252"></a>            }
+<a name="line253"></a>        } else {
+<a name="line254"></a>            trigger_error("Auth_OpenID::arrayGet (key = ".$key.") expected " .
+<a name="line255"></a>                          "array as first parameter, got " .
+<a name="line256"></a>                          gettype($arr), E_USER_WARNING);
+<a name="line257"></a>
+<a name="line258"></a>            return false;
+<a name="line259"></a>        }
+<a name="line260"></a>    }
+<a name="line261"></a>
+<a name="line262"></a>    /**
+<a name="line263"></a>     * Replacement for PHP's broken parse_str.
+<a name="line264"></a>     */
+<a name="line265"></a>    static function parse_str($query)
+<a name="line266"></a>    {
+<a name="line267"></a>        if ($query === null) {
+<a name="line268"></a>            return null;
+<a name="line269"></a>        }
+<a name="line270"></a>
+<a name="line271"></a>        $parts = explode('&', $query);
+<a name="line272"></a>
+<a name="line273"></a>        $new_parts = array();
+<a name="line274"></a>        for ($i = 0; $i < count($parts); $i++) {
+<a name="line275"></a>            $pair = explode('=', $parts[$i]);
+<a name="line276"></a>
+<a name="line277"></a>            if (count($pair) != 2) {
+<a name="line278"></a>                continue;
+<a name="line279"></a>            }
+<a name="line280"></a>
+<a name="line281"></a>            list($key, $value) = $pair;
+<a name="line282"></a>            $new_parts[urldecode($key)] = urldecode($value);
+<a name="line283"></a>        }
+<a name="line284"></a>
+<a name="line285"></a>        return $new_parts;
+<a name="line286"></a>    }
+<a name="line287"></a>
+<a name="line288"></a>    /**
+<a name="line289"></a>     * Implements the PHP 5 'http_build_query' functionality.
+<a name="line290"></a>     *
+<a name="line291"></a>     * @access private
+<a name="line292"></a>     * @param array $data Either an array key/value pairs or an array
+<a name="line293"></a>     * of arrays, each of which holding two values: a key and a value,
+<a name="line294"></a>     * sequentially.
+<a name="line295"></a>     * @return string $result The result of url-encoding the key/value
+<a name="line296"></a>     * pairs from $data into a URL query string
+<a name="line297"></a>     * (e.g. "username=bob&id=56").
+<a name="line298"></a>     */
+<a name="line299"></a>    static function httpBuildQuery($data)
+<a name="line300"></a>    {
+<a name="line301"></a>        $pairs = array();
+<a name="line302"></a>        foreach ($data as $key => $value) {
+<a name="line303"></a>            if (is_array($value)) {
+<a name="line304"></a>                $pairs[] = urlencode($value[0])."=".urlencode($value[1]);
+<a name="line305"></a>            } else {
+<a name="line306"></a>                $pairs[] = urlencode($key)."=".urlencode($value);
+<a name="line307"></a>            }
+<a name="line308"></a>        }
+<a name="line309"></a>        return implode("&", $pairs);
+<a name="line310"></a>    }
+<a name="line311"></a>
+<a name="line312"></a>    /**
+<a name="line313"></a>     * "Appends" query arguments onto a URL.  The URL may or may not
+<a name="line314"></a>     * already have arguments (following a question mark).
+<a name="line315"></a>     *
+<a name="line316"></a>     * @access private
+<a name="line317"></a>     * @param string $url A URL, which may or may not already have
+<a name="line318"></a>     * arguments.
+<a name="line319"></a>     * @param array $args Either an array key/value pairs or an array of
+<a name="line320"></a>     * arrays, each of which holding two values: a key and a value,
+<a name="line321"></a>     * sequentially.  If $args is an ordinary key/value array, the
+<a name="line322"></a>     * parameters will be added to the URL in sorted alphabetical order;
+<a name="line323"></a>     * if $args is an array of arrays, their order will be preserved.
+<a name="line324"></a>     * @return string $url The original URL with the new parameters added.
+<a name="line325"></a>     *
+<a name="line326"></a>     */
+<a name="line327"></a>    static function appendArgs($url, $args)
+<a name="line328"></a>    {
+<a name="line329"></a>        if (count($args) == 0) {
+<a name="line330"></a>            return $url;
+<a name="line331"></a>        }
+<a name="line332"></a>
+<a name="line333"></a>        // Non-empty array; if it is an array of arrays, use
+<a name="line334"></a>        // multisort; otherwise use sort.
+<a name="line335"></a>        if (array_key_exists(0, $args) &&
+<a name="line336"></a>            is_array($args[0])) {
+<a name="line337"></a>            // Do nothing here.
+<a name="line338"></a>        } else {
+<a name="line339"></a>            $keys = array_keys($args);
+<a name="line340"></a>            sort($keys);
+<a name="line341"></a>            $new_args = array();
+<a name="line342"></a>            foreach ($keys as $key) {
+<a name="line343"></a>                $new_args[] = array($key, $args[$key]);
+<a name="line344"></a>            }
+<a name="line345"></a>            $args = $new_args;
+<a name="line346"></a>        }
+<a name="line347"></a>
+<a name="line348"></a>        $sep = '?';
+<a name="line349"></a>        if (strpos($url, '?') !== false) {
+<a name="line350"></a>            $sep = '&';
+<a name="line351"></a>        }
+<a name="line352"></a>
+<a name="line353"></a>        return $url . $sep . Auth_OpenID::httpBuildQuery($args);
+<a name="line354"></a>    }
+<a name="line355"></a>
+<a name="line356"></a>    /**
+<a name="line357"></a>     * Implements python's urlunparse, which is not available in PHP.
+<a name="line358"></a>     * Given the specified components of a URL, this function rebuilds
+<a name="line359"></a>     * and returns the URL.
+<a name="line360"></a>     *
+<a name="line361"></a>     * @access private
+<a name="line362"></a>     * @param string $scheme The scheme (e.g. 'http').  Defaults to 'http'.
+<a name="line363"></a>     * @param string $host The host.  Required.
+<a name="line364"></a>     * @param string $port The port.
+<a name="line365"></a>     * @param string $path The path.
+<a name="line366"></a>     * @param string $query The query.
+<a name="line367"></a>     * @param string $fragment The fragment.
+<a name="line368"></a>     * @return string $url The URL resulting from assembling the
+<a name="line369"></a>     * specified components.
+<a name="line370"></a>     */
+<a name="line371"></a>    static function urlunparse($scheme, $host, $port = null, $path = '/',
+<a name="line372"></a>                        $query = '', $fragment = '')
+<a name="line373"></a>    {
+<a name="line374"></a>
+<a name="line375"></a>        if (!$scheme) {
+<a name="line376"></a>            $scheme = 'http';
+<a name="line377"></a>        }
+<a name="line378"></a>
+<a name="line379"></a>        if (!$host) {
+<a name="line380"></a>            return false;
+<a name="line381"></a>        }
+<a name="line382"></a>
+<a name="line383"></a>        if (!$path) {
+<a name="line384"></a>            $path = '';
+<a name="line385"></a>        }
+<a name="line386"></a>
+<a name="line387"></a>        $result = $scheme . "://" . $host;
+<a name="line388"></a>
+<a name="line389"></a>        if ($port) {
+<a name="line390"></a>            $result .= ":" . $port;
+<a name="line391"></a>        }
+<a name="line392"></a>
+<a name="line393"></a>        $result .= $path;
+<a name="line394"></a>
+<a name="line395"></a>        if ($query) {
+<a name="line396"></a>            $result .= "?" . $query;
+<a name="line397"></a>        }
+<a name="line398"></a>
+<a name="line399"></a>        if ($fragment) {
+<a name="line400"></a>            $result .= "#" . $fragment;
+<a name="line401"></a>        }
+<a name="line402"></a>
+<a name="line403"></a>        return $result;
+<a name="line404"></a>    }
+<a name="line405"></a>
+<a name="line406"></a>    /**
+<a name="line407"></a>     * Given a URL, this "normalizes" it by adding a trailing slash
+<a name="line408"></a>     * and / or a leading http:// scheme where necessary.  Returns
+<a name="line409"></a>     * null if the original URL is malformed and cannot be normalized.
+<a name="line410"></a>     *
+<a name="line411"></a>     * @access private
+<a name="line412"></a>     * @param string $url The URL to be normalized.
+<a name="line413"></a>     * @return mixed $new_url The URL after normalization, or null if
+<a name="line414"></a>     * $url was malformed.
+<a name="line415"></a>     */
+<a name="line416"></a>    static function normalizeUrl($url)
+<a name="line417"></a>    {
+<a name="line418"></a>        @$parsed = parse_url($url);
+<a name="line419"></a>
+<a name="line420"></a>        if (!$parsed) {
+<a name="line421"></a>            return null;
+<a name="line422"></a>        }
+<a name="line423"></a>
+<a name="line424"></a>        if (isset($parsed['scheme']) &&
+<a name="line425"></a>            isset($parsed['host'])) {
+<a name="line426"></a>            $scheme = strtolower($parsed['scheme']);
+<a name="line427"></a>            if (!in_array($scheme, array('http', 'https'))) {
+<a name="line428"></a>                return null;
+<a name="line429"></a>            }
+<a name="line430"></a>        } else {
+<a name="line431"></a>            $url = 'http://' . $url;
+<a name="line432"></a>        }
+<a name="line433"></a>
+<a name="line434"></a>        $normalized = Auth_OpenID_urinorm($url);
+<a name="line435"></a>        if ($normalized === null) {
+<a name="line436"></a>            return null;
+<a name="line437"></a>        }
+<a name="line438"></a>        list($defragged, $frag) = Auth_OpenID::urldefrag($normalized);
+<a name="line439"></a>        return $defragged;
+<a name="line440"></a>    }
+<a name="line441"></a>
+<a name="line442"></a>    /**
+<a name="line443"></a>     * Replacement (wrapper) for PHP's intval() because it's broken.
+<a name="line444"></a>     *
+<a name="line445"></a>     * @access private
+<a name="line446"></a>     */
+<a name="line447"></a>    static function intval($value)
+<a name="line448"></a>    {
+<a name="line449"></a>        $re = "/^\\d+$/";
+<a name="line450"></a>
+<a name="line451"></a>        if (!preg_match($re, $value)) {
+<a name="line452"></a>            return false;
+<a name="line453"></a>        }
+<a name="line454"></a>
+<a name="line455"></a>        return intval($value);
+<a name="line456"></a>    }
+<a name="line457"></a>
+<a name="line458"></a>    /**
+<a name="line459"></a>     * Count the number of bytes in a string independently of
+<a name="line460"></a>     * multibyte support conditions.
+<a name="line461"></a>     *
+<a name="line462"></a>     * @param string $str The string of bytes to count.
+<a name="line463"></a>     * @return int The number of bytes in $str.
+<a name="line464"></a>     */
+<a name="line465"></a>    static function bytes($str)
+<a name="line466"></a>    {
+<a name="line467"></a>        return strlen(bin2hex($str)) / 2;
+<a name="line468"></a>    }
+<a name="line469"></a>
+<a name="line470"></a>    /**
+<a name="line471"></a>     * Get the bytes in a string independently of multibyte support
+<a name="line472"></a>     * conditions.
+<a name="line473"></a>     */
+<a name="line474"></a>    static function toBytes($str)
+<a name="line475"></a>    {
+<a name="line476"></a>        $hex = bin2hex($str);
+<a name="line477"></a>
+<a name="line478"></a>        if (!$hex) {
+<a name="line479"></a>            return array();
+<a name="line480"></a>        }
+<a name="line481"></a>
+<a name="line482"></a>        $b = array();
+<a name="line483"></a>        for ($i = 0; $i < strlen($hex); $i += 2) {
+<a name="line484"></a>            $b[] = chr(base_convert(substr($hex, $i, 2), 16, 10));
+<a name="line485"></a>        }
+<a name="line486"></a>
+<a name="line487"></a>        return $b;
+<a name="line488"></a>    }
+<a name="line489"></a>
+<a name="line490"></a>    static function urldefrag($url)
+<a name="line491"></a>    {
+<a name="line492"></a>        $parts = explode("#", $url, 2);
+<a name="line493"></a>
+<a name="line494"></a>        if (count($parts) == 1) {
+<a name="line495"></a>            return array($parts[0], "");
+<a name="line496"></a>        } else {
+<a name="line497"></a>            return $parts;
+<a name="line498"></a>        }
+<a name="line499"></a>    }
+<a name="line500"></a>
+<a name="line501"></a>    static function filter($callback, &$sequence)
+<a name="line502"></a>    {
+<a name="line503"></a>        $result = array();
+<a name="line504"></a>
+<a name="line505"></a>        foreach ($sequence as $item) {
+<a name="line506"></a>            if (call_user_func_array($callback, array($item))) {
+<a name="line507"></a>                $result[] = $item;
+<a name="line508"></a>            }
+<a name="line509"></a>        }
+<a name="line510"></a>
+<a name="line511"></a>        return $result;
+<a name="line512"></a>    }
+<a name="line513"></a>
+<a name="line514"></a>    static function update(&$dest, &$src)
+<a name="line515"></a>    {
+<a name="line516"></a>        foreach ($src as $k => $v) {
+<a name="line517"></a>            $dest[$k] = $v;
+<a name="line518"></a>        }
+<a name="line519"></a>    }
+<a name="line520"></a>
+<a name="line521"></a>    /**
+<a name="line522"></a>     * Wrap PHP's standard error_log functionality.  Use this to
+<a name="line523"></a>     * perform all logging. It will interpolate any additional
+<a name="line524"></a>     * arguments into the format string before logging.
+<a name="line525"></a>     *
+<a name="line526"></a>     * @param string $format_string The sprintf format for the message
+<a name="line527"></a>     */
+<a name="line528"></a>    static function log($format_string)
+<a name="line529"></a>    {
+<a name="line530"></a>        $args = func_get_args();
+<a name="line531"></a>        $message = call_user_func_array('sprintf', $args);
+<a name="line532"></a>        error_log($message);
+<a name="line533"></a>    }
+<a name="line534"></a>
+<a name="line535"></a>    static function autoSubmitHTML($form, $title="OpenId transaction in progress")
+<a name="line536"></a>    {
+<a name="line537"></a>        return("<html>".
+<a name="line538"></a>               "<head><title>".
+<a name="line539"></a>               $title .
+<a name="line540"></a>               "</title></head>".
+<a name="line541"></a>               "<body onload='document.forms[0].submit();'>".
+<a name="line542"></a>               $form .
+<a name="line543"></a>               "<script>".
+<a name="line544"></a>               "var elements = document.forms[0].elements;".
+<a name="line545"></a>               "for (var i = 0; i < elements.length; i++) {".
+<a name="line546"></a>               "  elements[i].style.display = \"none\";".
+<a name="line547"></a>               "}".
+<a name="line548"></a>               "</script>".
+<a name="line549"></a>               "</body>".
+<a name="line550"></a>               "</html>");
+<a name="line551"></a>    }
+<a name="line552"></a>}
+<a name="line553"></a>
+<a name="line554"></a>/*
+<a name="line555"></a> * Function to run when this file is included.
+<a name="line556"></a> * Abstracted to a function to make life easier
+<a name="line557"></a> * for some PHP optimizers.
+<a name="line558"></a> */
+<a name="line559"></a>function Auth_OpenID_include_init() {
+<a name="line560"></a>  if (Auth_OpenID_getMathLib() === null) {
+<a name="line561"></a>    Auth_OpenID_setNoMathSupport();
+<a name="line562"></a>  }
+<a name="line563"></a>}
+<a name="line564"></a></pre>
+<div class="header">
+<h1>GiftFlow API</h1>
+<ul>
+<li><a href="../../../overview-summary.html">Overview</a></li>
+<li>Package</li><li>Class</li><li>Tree</li><li><a href="../../../overview-files.html">Files</a></li>
+<li><a href="../../../deprecated-list.html">Deprecated</a></li>
+<li><a href="../../../index-all.html">Index</a></li>
+</ul>
+</div>
+
+<div class="small_links">
+<a href="../../../index.html" target="_top">Frames</a>
+<a href="../../../source/libraries/auth/openid.php.html" target="_top">No frames</a>
+</div>
+<hr>
+
+<p id="footer">This document was generated by <a href="http://peej.github.com/phpdoctor/">PHPDoctor: The PHP Documentation Creator</a></p>
+
+</body>
+
+</html>

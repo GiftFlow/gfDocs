@@ -1,0 +1,323 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+
+<html lang="en">
+<head>
+
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
+<meta name="generator" content="PHPDoctor 2RC4 (http://peej.github.com/phpdoctor/)">
+<meta name="when" content="Wed, 09 Feb 2011 20:22:55 +0000">
+
+<link rel="stylesheet" type="text/css" href="../stylesheet.css">
+<link rel="start" href="../overview-summary.html">
+
+<title>User_search (GiftFlow API)</title>
+
+</head>
+<body id="definition" onload="parent.document.title=document.title;">
+
+<div class="header">
+<h1>GiftFlow API</h1>
+<ul>
+<li><a href="../overview-summary.html">Overview</a></li>
+<li><a href="../search/package-summary.html">Package</a></li>
+<li class="active">Class</li>
+<li><a href="../search/package-tree.html">Tree</a></li>
+<li><a href="../overview-files.html">Files</a></li>
+<li><a href="../deprecated-list.html">Deprecated</a></li>
+<li><a href="../index-all.html">Index</a></li>
+</ul>
+</div>
+
+<div class="small_links">
+<a href="../index.html" target="_top">Frames</a>
+<a href="../search/user_search.html" target="_top">No frames</a>
+</div>
+<div class="small_links">
+Summary: <a href="#summary_field">Field</a> | <a href="#summary_method">Method</a> | <a href="#summary_constr">Constr</a>
+Detail: <a href="#detail_field">Field</a> | <a href="#detail_method">Method</a> | <a href="#summary_constr">Constr</a>
+</div>
+<hr>
+
+<div class="qualifiedName">Search\User_search</div>
+<a href="../source/libraries/search/user_search.php.html#line9" class="location">libraries/Search/User_search.php at line 9</a>
+
+<h1>Class User_search</h1>
+
+<pre class="tree"><a href="../search/search.html">Search</a><br>    └─<strong>User_search</strong><br /></pre>
+
+<hr>
+
+<p class="signature">public  class <strong>User_search</strong><br>extends <a href="../search/search.html">Search</a>
+
+</p>
+
+<div class="comment" id="overview_description"><p>User model for select operations</p></div>
+
+<dl>
+<dt>Author:</dt>
+<dd>Brandon Jackson</dd>
+</dl>
+<hr>
+
+<table id="summary_field">
+<tr><th colspan="2">Field Summary</th></tr>
+<tr>
+<td class="type">protected  object</td>
+<td class="description"><p class="name"><a href="#_basic_query">$_basic_query</a></p><p class="description">CodeIgniter super-object</p></td>
+</tr>
+<tr>
+<td class="type"> mixed</td>
+<td class="description"><p class="name"><a href="#user_id">$user_id</a></p></td>
+</tr>
+</table>
+
+<table class="inherit">
+<tr><th colspan="2">Fields inherited from Search\Search</th></tr>
+<tr><td><a href="../search/search.html#_basic_query">_basic_query</a></td></tr></table>
+
+<table id="summary_method">
+<tr><th colspan="2">Method Summary</th></tr>
+<tr>
+<td class="type"> void</td>
+<td class="description"><p class="name"><a href="#__construct()">__construct</a>(mixed id)</p><p class="description">Constructor</p></td>
+</tr>
+<tr>
+<td class="type">private  void</td>
+<td class="description"><p class="name"><a href="#_basic_query()">_basic_query</a>()</p><p class="description">Assembles basic SELECT query. </p></td>
+</tr>
+<tr>
+<td class="type">protected  boolean</td>
+<td class="description"><p class="name"><a href="#_geosearch_clauses()">_geosearch_clauses</a>(object options, float options->latitude, float options->longitude, float options->address)</p><p class="description">Adds where clauses that limit results to a specific geographic areaCalculates bounds by determining how many degrees of latitude and 
+longitude the search radius encompasses. </p></td>
+</tr>
+<tr>
+<td class="type">private  void</td>
+<td class="description"><p class="name"><a href="#_join_locations()">_join_locations</a>(string type)</p><p class="description">Assembles basic SELECT and JOIN clauses related to the location
+components of a query.</p></td>
+</tr>
+<tr>
+<td class="type"> object</td>
+<td class="description"><p class="name"><a href="#find()">find</a>(array options, string options['screen_name'], string options['first_name'], string options['last_name'], string options['bio'], string options['occupation'], int options['user_id'], string options['email'], int options['facebook_id'], boolean options['exclude_logged_in_user'], boolean options['following_stats'], float options['latitude'], float options['longitude'], string options['order_by'], string options['sort'], int options['offset'], int options['limit'])</p><p class="description">Perform User Search</p></td>
+</tr>
+<tr>
+<td class="type"> void</td>
+<td class="description"><p class="name"><a href="#following()">following</a>()</p></td>
+</tr>
+<tr>
+<td class="type"> void</td>
+<td class="description"><p class="name"><a href="#get()">get</a>()</p><p class="description">Returns individual user object</p></td>
+</tr>
+<tr>
+<td class="type"> array</td>
+<td class="description"><p class="name"><a href="#gifts()">gifts</a>(int user_id)</p><p class="description">Returns the user's current gifts</p></td>
+</tr>
+<tr>
+<td class="type"> array</td>
+<td class="description"><p class="name"><a href="#goods()">goods</a>(string type)</p><p class="description">Returns the user's current goods</p></td>
+</tr>
+<tr>
+<td class="type"> array</td>
+<td class="description"><p class="name"><a href="#needs()">needs</a>(int user_id)</p><p class="description">Returns the user's current needs</p></td>
+</tr>
+<tr>
+<td class="type"> void</td>
+<td class="description"><p class="name"><a href="#transactions()">transactions</a>()</p></td>
+</tr>
+</table>
+
+<table class="inherit">
+<tr><th colspan="2">Methods inherited from Search\Search</th></tr>
+<tr><td><a href="../search/search.html#__construct()">__construct</a></td></tr></table>
+
+<h2 id="detail_field">Field Detail</h2>
+<a href="../source/libraries/search/user_search.php.html#line16" class="location">libraries/Search/User_search.php at line 16</a>
+
+<h3 id="_basic_query">_basic_query</h3>
+<code class="signature">protected  object <strong>$_basic_query</strong> = NULL</code>
+<div class="details">
+<p>CodeIgniter super-object</p></div>
+
+<hr>
+
+<a href="../source/libraries/search/user_search.php.html#line18" class="location">libraries/Search/User_search.php at line 18</a>
+
+<h3 id="user_id">user_id</h3>
+<code class="signature">public  mixed <strong>$user_id</strong></code>
+<div class="details">
+</div>
+
+<hr>
+
+<h2 id="detail_method">Method Detail</h2><div class="method_detail">
+<div class='method'><a href="../source/libraries/search/user_search.php.html#line23" class="location">libraries/Search/User_search.php at line 23</a>
+
+<h3 id="__construct()">__construct</h3>
+<code class="signature">public  void <strong>__construct</strong>(mixed id)</code>
+<div class="details">
+<p>Constructor</p></div></div>
+
+
+
+<div class='method'><a href="../source/libraries/search/user_search.php.html#line276" class="location">libraries/Search/User_search.php at line 276</a>
+
+<h3 id="_basic_query()">_basic_query</h3>
+<code class="signature">private  void <strong>_basic_query</strong>()</code>
+<div class="details">
+<p>Assembles basic SELECT query. The resulting SQL provides
+a foundation for more complex queries. Conceptually it's similar
+to a SQL view.</p></div></div>
+
+
+
+<div class='method'><a href="../source/libraries/search/user_search.php.html#line323" class="location">libraries/Search/User_search.php at line 323</a>
+
+<h3 id="_geosearch_clauses()">_geosearch_clauses</h3>
+<code class="signature">protected  boolean <strong>_geosearch_clauses</strong>(object options, float options->latitude, float options->longitude, float options->address)</code>
+<div class="details">
+<p>Adds where clauses that limit results to a specific geographic area</p><p>Calculates bounds by determining how many degrees of latitude and 
+longitude the search radius encompasses. This is not a complete 
+solution, however, since the shape of the bounds is a square, not a 
+circle. Thus to be truly accurate another where clause limiting results 
+by the calculated distance field should be used.</p><dl>
+<dt>Parameters:</dt>
+<dd>options - Location object</dd>
+<dd>options->latitude - Latitude</dd>
+<dd>options->longitude - Longitude</dd>
+<dd>options->address - Formatted address</dd>
+</dl>
+</div></div>
+
+
+
+<div class='method'><a href="../source/libraries/search/user_search.php.html#line298" class="location">libraries/Search/User_search.php at line 298</a>
+
+<h3 id="_join_locations()">_join_locations</h3>
+<code class="signature">private  void <strong>_join_locations</strong>(string type)</code>
+<div class="details">
+<p>Assembles basic SELECT and JOIN clauses related to the location
+components of a query.</p><dl>
+<dt>Parameters:</dt>
+<dd>type - type of join (left, right, inner, outer)</dd>
+</dl>
+</div></div>
+
+
+
+<div class='method'><a href="../source/libraries/search/user_search.php.html#line155" class="location">libraries/Search/User_search.php at line 155</a>
+
+<h3 id="find()">find</h3>
+<code class="signature">public  object <strong>find</strong>(array options, string options['screen_name'], string options['first_name'], string options['last_name'], string options['bio'], string options['occupation'], int options['user_id'], string options['email'], int options['facebook_id'], boolean options['exclude_logged_in_user'], boolean options['following_stats'], float options['latitude'], float options['longitude'], string options['order_by'], string options['sort'], int options['offset'], int options['limit'])</code>
+<div class="details">
+<p>Perform User Search</p><dl>
+<dt>Parameters:</dt>
+<dd>options - Array of configuration options</dd>
+<dd>options['screen_name'] - Filter by LIKE screen name</dd>
+<dd>options['first_name'] - Filter by LIKE first name</dd>
+<dd>options['last_name'] - Filter by LIKE last_name</dd>
+<dd>options['bio'] - Filter by LIKE bio</dd>
+<dd>options['occupation'] - Filter by LIKE occupation</dd>
+<dd>options['user_id'] - Filter by User ID</dd>
+<dd>options['email'] - Filter by email</dd>
+<dd>options['facebook_id'] - Filter by Facebook ID</dd>
+<dd>options['exclude_logged_in_user'] - Excludes logged in user</dd>
+<dd>options['following_stats'] - If true, populates am_following and is_follower fields</dd>
+<dd>options['latitude'] - Filter by latitude</dd>
+<dd>options['longitude'] - Filter by longitude</dd>
+<dd>options['order_by'] - Field name to order by</dd>
+<dd>options['sort'] - Sort order</dd>
+<dd>options['offset'] - Offset</dd>
+<dd>options['limit'] - Number of results to return</dd>
+<dt>Returns:</dt>
+<dd>Object from Factory::user()</dd>
+</dl>
+</div></div>
+
+
+
+<div class='method'><a href="../source/libraries/search/user_search.php.html#line118" class="location">libraries/Search/User_search.php at line 118</a>
+
+<h3 id="following()">following</h3>
+<code class="signature">public  void <strong>following</strong>()</code>
+<div class="details">
+</div></div>
+
+
+
+<div class='method'><a href="../source/libraries/search/user_search.php.html#line35" class="location">libraries/Search/User_search.php at line 35</a>
+
+<h3 id="get()">get</h3>
+<code class="signature">public  void <strong>get</strong>()</code>
+<div class="details">
+<p>Returns individual user object</p></div></div>
+
+
+
+<div class='method'><a href="../source/libraries/search/user_search.php.html#line93" class="location">libraries/Search/User_search.php at line 93</a>
+
+<h3 id="gifts()">gifts</h3>
+<code class="signature">public  array <strong>gifts</strong>(int user_id)</code>
+<div class="details">
+<p>Returns the user's current gifts</p></div></div>
+
+
+
+<div class='method'><a href="../source/libraries/search/user_search.php.html#line66" class="location">libraries/Search/User_search.php at line 66</a>
+
+<h3 id="goods()">goods</h3>
+<code class="signature">public  array <strong>goods</strong>(string type)</code>
+<div class="details">
+<p>Returns the user's current goods</p><dl>
+<dt>Parameters:</dt>
+<dd>type - Type of good e.g. "gift","need"</dd>
+</dl>
+</div></div>
+
+
+
+<div class='method'><a href="../source/libraries/search/user_search.php.html#line104" class="location">libraries/Search/User_search.php at line 104</a>
+
+<h3 id="needs()">needs</h3>
+<code class="signature">public  array <strong>needs</strong>(int user_id)</code>
+<div class="details">
+<p>Returns the user's current needs</p></div></div>
+
+
+
+<div class='method'><a href="../source/libraries/search/user_search.php.html#line110" class="location">libraries/Search/User_search.php at line 110</a>
+
+<h3 id="transactions()">transactions</h3>
+<code class="signature">public  void <strong>transactions</strong>()</code>
+<div class="details">
+</div></div>
+
+
+
+</div><div class="header">
+<h1>GiftFlow API</h1>
+<ul>
+<li><a href="../overview-summary.html">Overview</a></li>
+<li><a href="../search/package-summary.html">Package</a></li>
+<li class="active">Class</li>
+<li><a href="../search/package-tree.html">Tree</a></li>
+<li><a href="../overview-files.html">Files</a></li>
+<li><a href="../deprecated-list.html">Deprecated</a></li>
+<li><a href="../index-all.html">Index</a></li>
+</ul>
+</div>
+
+<div class="small_links">
+<a href="../index.html" target="_top">Frames</a>
+<a href="../search/user_search.html" target="_top">No frames</a>
+</div>
+<div class="small_links">
+Summary: <a href="#summary_field">Field</a> | <a href="#summary_method">Method</a> | <a href="#summary_constr">Constr</a>
+Detail: <a href="#detail_field">Field</a> | <a href="#detail_method">Method</a> | <a href="#summary_constr">Constr</a>
+</div>
+<hr>
+
+<p id="footer">This document was generated by <a href="http://peej.github.com/phpdoctor/">PHPDoctor: The PHP Documentation Creator</a></p>
+
+</body>
+
+</html>

@@ -1,0 +1,418 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+
+<html lang="en">
+<head>
+
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
+<meta name="generator" content="PHPDoctor 2RC4 (http://peej.github.com/phpdoctor/)">
+<meta name="when" content="Wed, 09 Feb 2011 20:22:56 +0000">
+
+<link rel="stylesheet" type="text/css" href="../../../stylesheet.css">
+<link rel="start" href="../../../overview-summary.html">
+
+<title>plugins/pqp/display.php (GiftFlow API)</title>
+
+</head>
+<body id="file" onload="parent.document.title=document.title;">
+
+<div class="header">
+<h1>GiftFlow API</h1>
+<ul>
+<li><a href="../../../overview-summary.html">Overview</a></li>
+<li>Package</li><li>Class</li><li>Tree</li><li><a href="../../../overview-files.html">Files</a></li>
+<li><a href="../../../deprecated-list.html">Deprecated</a></li>
+<li><a href="../../../index-all.html">Index</a></li>
+</ul>
+</div>
+
+<div class="small_links">
+<a href="../../../index.html" target="_top">Frames</a>
+<a href="../../../source/plugins/pqp/display.php.html" target="_top">No frames</a>
+</div>
+<hr>
+
+<h1>plugins/pqp/display.php</h1>
+<hr>
+
+<a name="line1"></a><pre><?php
+<a name="line2"></a>
+<a name="line3"></a>/* - - - - - - - - - - - - - - - - - - - - - - - - - - - 
+<a name="line4"></a>
+<a name="line5"></a> Title : HTML Output for Php Quick Profiler
+<a name="line6"></a> Author : Created by Ryan Campbell
+<a name="line7"></a> URL : http://particletree.com/features/php-quick-profiler/
+<a name="line8"></a>
+<a name="line9"></a> Last Updated : April 22, 2009
+<a name="line10"></a>
+<a name="line11"></a> Description : This is a horribly ugly function used to output
+<a name="line12"></a> the PQP HTML. This is great because it will just work in your project,
+<a name="line13"></a> but it is hard to maintain and read. See the README file for how to use
+<a name="line14"></a> the Smarty file we provided with PQP.
+<a name="line15"></a>
+<a name="line16"></a>- - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
+<a name="line17"></a>
+<a name="line18"></a>function displayPqp($output, $config) {
+<a name="line19"></a>	
+<a name="line20"></a>$cssUrl = $config.'css/pQp.css';
+<a name="line21"></a>
+<a name="line22"></a>echo '<style type="text/css" media="screen">' . 
+<a name="line23"></a>        file_get_contents(dirname(__FILE__) . '/css/pQp.css') . '</style>';
+<a name="line24"></a>		
+<a name="line25"></a>echo <<<JAVASCRIPT
+<a name="line26"></a><!-- JavaScript -->
+<a name="line27"></a><script type="text/javascript">
+<a name="line28"></a>	var PQP_DETAILS = false;
+<a name="line29"></a>	var PQP_HEIGHT = "short";
+<a name="line30"></a>	
+<a name="line31"></a>	addEvent(window, 'load', loadCSS);
+<a name="line32"></a>
+<a name="line33"></a>	function changeTab(tab) {
+<a name="line34"></a>		if ( ! PQP_DETAILS) {
+<a name="line35"></a>		    toggleDetails();
+<a name="line36"></a>	    }
+<a name="line37"></a>		
+<a name="line38"></a>		var pQp = document.getElementById('pQp');
+<a name="line39"></a>		hideAllTabs();
+<a name="line40"></a>		addClassName(pQp, tab, true);
+<a name="line41"></a>	}
+<a name="line42"></a>	
+<a name="line43"></a>	function hideAllTabs() {
+<a name="line44"></a>		var pQp = document.getElementById('pQp');
+<a name="line45"></a>		removeClassName(pQp, 'console');
+<a name="line46"></a>		removeClassName(pQp, 'speed');
+<a name="line47"></a>		removeClassName(pQp, 'queries');
+<a name="line48"></a>		removeClassName(pQp, 'memory');
+<a name="line49"></a>		removeClassName(pQp, 'files');
+<a name="line50"></a>	}
+<a name="line51"></a>	
+<a name="line52"></a>	function toggleDetails(){
+<a name="line53"></a>		var container = document.getElementById('pqp-container');
+<a name="line54"></a>		
+<a name="line55"></a>		if(PQP_DETAILS){
+<a name="line56"></a>			addClassName(container, 'hideDetails', true);
+<a name="line57"></a>			PQP_DETAILS = false;
+<a name="line58"></a>		} 
+<a name="line59"></a>		else
+<a name="line60"></a>		{
+<a name="line61"></a>			removeClassName(container, 'hideDetails');
+<a name="line62"></a>			PQP_DETAILS = true;
+<a name="line63"></a>		}
+<a name="line64"></a>	}
+<a name="line65"></a>	function toggleHeight(){
+<a name="line66"></a>		var container = document.getElementById('pqp-container');
+<a name="line67"></a>		
+<a name="line68"></a>		if(PQP_HEIGHT == "short"){
+<a name="line69"></a>			addClassName(container, 'tallDetails', true);
+<a name="line70"></a>			PQP_HEIGHT = "tall";
+<a name="line71"></a>		}
+<a name="line72"></a>		else{
+<a name="line73"></a>			removeClassName(container, 'tallDetails');
+<a name="line74"></a>			PQP_HEIGHT = "short";
+<a name="line75"></a>		}
+<a name="line76"></a>	}
+<a name="line77"></a>	
+<a name="line78"></a>	function loadCSS() {
+<a name="line79"></a>		/*
+<a name="line80"></a>		var sheet = document.createElement("link");
+<a name="line81"></a>		sheet.setAttribute("rel", "stylesheet");
+<a name="line82"></a>		sheet.setAttribute("type", "text/css");
+<a name="line83"></a>		sheet.setAttribute("href", "$cssUrl");
+<a name="line84"></a>		document.getElementsByTagName("head")[0].appendChild(sheet);
+<a name="line85"></a>		*/
+<a name="line86"></a>		setTimeout(function(){document.getElementById("pqp-container").style.display = "block"}, 10);
+<a name="line87"></a>	}
+<a name="line88"></a>	
+<a name="line89"></a>	
+<a name="line90"></a>	//http://www.bigbold.com/snippets/posts/show/2630
+<a name="line91"></a>	function addClassName(objElement, strClass, blnMayAlreadyExist){
+<a name="line92"></a>	   if ( objElement.className ){
+<a name="line93"></a>	      var arrList = objElement.className.split(' ');
+<a name="line94"></a>	      if ( blnMayAlreadyExist ){
+<a name="line95"></a>	         var strClassUpper = strClass.toUpperCase();
+<a name="line96"></a>	         for ( var i = 0; i < arrList.length; i++ ){
+<a name="line97"></a>	            if ( arrList[i].toUpperCase() == strClassUpper ){
+<a name="line98"></a>	               arrList.splice(i, 1);
+<a name="line99"></a>	               i--;
+<a name="line100"></a>	             }
+<a name="line101"></a>	           }
+<a name="line102"></a>	      }
+<a name="line103"></a>	      arrList[arrList.length] = strClass;
+<a name="line104"></a>	      objElement.className = arrList.join(' ');
+<a name="line105"></a>	   }
+<a name="line106"></a>	   else{  
+<a name="line107"></a>	      objElement.className = strClass;
+<a name="line108"></a>	      }
+<a name="line109"></a>	}
+<a name="line110"></a>
+<a name="line111"></a>	//http://www.bigbold.com/snippets/posts/show/2630
+<a name="line112"></a>	function removeClassName(objElement, strClass){
+<a name="line113"></a>	   if ( objElement.className ){
+<a name="line114"></a>	      var arrList = objElement.className.split(' ');
+<a name="line115"></a>	      var strClassUpper = strClass.toUpperCase();
+<a name="line116"></a>	      for ( var i = 0; i < arrList.length; i++ ){
+<a name="line117"></a>	         if ( arrList[i].toUpperCase() == strClassUpper ){
+<a name="line118"></a>	            arrList.splice(i, 1);
+<a name="line119"></a>	            i--;
+<a name="line120"></a>	         }
+<a name="line121"></a>	      }
+<a name="line122"></a>	      objElement.className = arrList.join(' ');
+<a name="line123"></a>	   }
+<a name="line124"></a>	}
+<a name="line125"></a>
+<a name="line126"></a>	//http://ejohn.org/projects/flexible-javascript-events/
+<a name="line127"></a>	function addEvent( obj, type, fn ) {
+<a name="line128"></a>	  if ( obj.attachEvent ) {
+<a name="line129"></a>	    obj["e"+type+fn] = fn;
+<a name="line130"></a>	    obj[type+fn] = function() { obj["e"+type+fn]( window.event ) };
+<a name="line131"></a>	    obj.attachEvent( "on"+type, obj[type+fn] );
+<a name="line132"></a>	  } 
+<a name="line133"></a>	  else{
+<a name="line134"></a>	    obj.addEventListener( type, fn, false );	
+<a name="line135"></a>	  }
+<a name="line136"></a>	}
+<a name="line137"></a></script>
+<a name="line138"></a>JAVASCRIPT;
+<a name="line139"></a>
+<a name="line140"></a>echo '<div id="pqp-container" class="pQp hideDetails" style="display:none">';
+<a name="line141"></a>
+<a name="line142"></a>$logCount = isset($output['logs']['console']) ? count($output['logs']['console']) : 0;
+<a name="line143"></a>$fileCount = count($output['files']);
+<a name="line144"></a>$memoryUsed = $output['memoryTotals']['used'];
+<a name="line145"></a>$queryCount = $output['queryTotals']['count'];
+<a name="line146"></a>$speedTotal = $output['speedTotals']['total'];
+<a name="line147"></a>
+<a name="line148"></a>echo <<<PQPTABS
+<a name="line149"></a><div id="pQp" class="console">
+<a name="line150"></a><table id="pqp-metrics" cellspacing="0">
+<a name="line151"></a><tr>
+<a name="line152"></a>	<td class="green" onclick="changeTab('console');">
+<a name="line153"></a>		<var>$logCount</var>
+<a name="line154"></a>		<h4>Console</h4>
+<a name="line155"></a>	</td>
+<a name="line156"></a>	<td class="blue" onclick="changeTab('speed');">
+<a name="line157"></a>		<var>$speedTotal</var>
+<a name="line158"></a>		<h4>Load Time</h4>
+<a name="line159"></a>	</td>
+<a name="line160"></a>	<td class="purple" onclick="changeTab('queries');">
+<a name="line161"></a>		<var>$queryCount Queries</var>
+<a name="line162"></a>		<h4>Database</h4>
+<a name="line163"></a>	</td>
+<a name="line164"></a>	<td class="orange" onclick="changeTab('memory');">
+<a name="line165"></a>		<var>$memoryUsed</var>
+<a name="line166"></a>		<h4>Memory Used</h4>
+<a name="line167"></a>	</td>
+<a name="line168"></a>	<td class="red" onclick="changeTab('files');">
+<a name="line169"></a>		<var>{$fileCount} Files</var>
+<a name="line170"></a>		<h4>Included</h4>
+<a name="line171"></a>	</td>
+<a name="line172"></a></tr>
+<a name="line173"></a></table>
+<a name="line174"></a>PQPTABS;
+<a name="line175"></a>
+<a name="line176"></a>echo '<div id="pqp-console" class="pqp-box">';
+<a name="line177"></a>
+<a name="line178"></a>if($logCount ==  0) {
+<a name="line179"></a>	echo '<h3>This panel has no log items.</h3>';
+<a name="line180"></a>}
+<a name="line181"></a>else {
+<a name="line182"></a>	echo '<table class="side" cellspacing="0">
+<a name="line183"></a>		<tr>
+<a name="line184"></a>			<td class="alt1"><var>'.$output['logs']['logCount'].'</var><h4>Logs</h4></td>
+<a name="line185"></a>			<td class="alt2"><var>'.$output['logs']['errorCount'].'</var> <h4>Errors</h4></td>
+<a name="line186"></a>		</tr>
+<a name="line187"></a>		<tr>
+<a name="line188"></a>			<td class="alt3"><var>'.$output['logs']['memoryCount'].'</var> <h4>Memory</h4></td>
+<a name="line189"></a>			<td class="alt4"><var>'.$output['logs']['speedCount'].'</var> <h4>Speed</h4></td>
+<a name="line190"></a>		</tr>
+<a name="line191"></a>		</table>
+<a name="line192"></a>		<table class="main" cellspacing="0">';
+<a name="line193"></a>		
+<a name="line194"></a>		$class = '';
+<a name="line195"></a>		foreach($output['logs']['console'] as $log) {
+<a name="line196"></a>			echo '<tr class="log-'.$log['type'].'">
+<a name="line197"></a>				<td class="type">'.$log['type'].'</td>
+<a name="line198"></a>				<td class="'.$class.'">';
+<a name="line199"></a>			if($log['type'] == 'log') {
+<a name="line200"></a>				echo '<div><pre>'.$log['data'].'</pre></div>';
+<a name="line201"></a>			}
+<a name="line202"></a>			elseif($log['type'] == 'memory') {
+<a name="line203"></a>				echo '<div><pre>'.$log['data'].'</pre> <em>'.$log['dataType'].'</em>: '.$log['name'].' </div>';
+<a name="line204"></a>			}
+<a name="line205"></a>			elseif($log['type'] == 'speed') {
+<a name="line206"></a>				echo '<div><pre>'.$log['data'].'</pre> <em>'.$log['name'].'</em></div>';
+<a name="line207"></a>			}
+<a name="line208"></a>			elseif($log['type'] == 'error') {
+<a name="line209"></a>				echo '<div><em>Line '.$log['line'].'</em> : '.$log['data'].' <pre>'.$log['file'].'</pre></div>';
+<a name="line210"></a>			}
+<a name="line211"></a>		
+<a name="line212"></a>			echo '</td></tr>';
+<a name="line213"></a>			if($class == '') $class = 'alt';
+<a name="line214"></a>			else $class = '';
+<a name="line215"></a>		}
+<a name="line216"></a>			
+<a name="line217"></a>		echo '</table>';
+<a name="line218"></a>}
+<a name="line219"></a>
+<a name="line220"></a>echo '</div>';
+<a name="line221"></a>
+<a name="line222"></a>echo '<div id="pqp-speed" class="pqp-box">';
+<a name="line223"></a>
+<a name="line224"></a>if($output['logs']['speedCount'] ==  0) {
+<a name="line225"></a>	echo '<h3>This panel has no log items.</h3>';
+<a name="line226"></a>}
+<a name="line227"></a>else {
+<a name="line228"></a>	echo '<table class="side" cellspacing="0">
+<a name="line229"></a>		  <tr><td><var>'.$output['speedTotals']['total'].'</var><h4>Load Time</h4></td></tr>
+<a name="line230"></a>		  <tr><td class="alt"><var>'.$output['speedTotals']['allowed'].'</var> <h4>Max Execution Time</h4></td></tr>
+<a name="line231"></a>		 </table>
+<a name="line232"></a>		<table class="main" cellspacing="0">';
+<a name="line233"></a>		
+<a name="line234"></a>		$class = '';
+<a name="line235"></a>		foreach($output['logs']['console'] as $log) {
+<a name="line236"></a>			if($log['type'] == 'speed') {
+<a name="line237"></a>				echo '<tr class="log-'.$log['type'].'">
+<a name="line238"></a>				<td class="'.$class.'">';
+<a name="line239"></a>				echo '<div><pre>'.$log['data'].'</pre> <em>'.$log['name'].'</em></div>';
+<a name="line240"></a>				echo '</td></tr>';
+<a name="line241"></a>				if($class == '') $class = 'alt';
+<a name="line242"></a>				else $class = '';
+<a name="line243"></a>			}
+<a name="line244"></a>		}
+<a name="line245"></a>			
+<a name="line246"></a>		echo '</table>';
+<a name="line247"></a>}
+<a name="line248"></a>
+<a name="line249"></a>echo '</div>';
+<a name="line250"></a>
+<a name="line251"></a>echo '<div id="pqp-queries" class="pqp-box">';
+<a name="line252"></a>
+<a name="line253"></a>if($output['queryTotals']['count'] ==  0) {
+<a name="line254"></a>	echo '<h3>This panel has no log items.</h3>';
+<a name="line255"></a>}
+<a name="line256"></a>else {
+<a name="line257"></a>	echo '<table class="side" cellspacing="0">
+<a name="line258"></a>		  <tr><td><var>'.$output['queryTotals']['count'].'</var><h4>Total Queries</h4></td></tr>
+<a name="line259"></a>		  <tr><td class="alt"><var>'.$output['queryTotals']['time'].'</var> <h4>Total Time</h4></td></tr>
+<a name="line260"></a>		  <tr><td><var>0</var> <h4>Duplicates</h4></td></tr>
+<a name="line261"></a>		 </table>
+<a name="line262"></a>		<table class="main" cellspacing="0">';
+<a name="line263"></a>		
+<a name="line264"></a>		$class = '';
+<a name="line265"></a>		foreach($output['queries'] as $query) {
+<a name="line266"></a>			echo '<tr>
+<a name="line267"></a>				<td class="'.$class.'">'.$query['sql'];
+<a name="line268"></a>			if(isset($query['explain'])) {
+<a name="line269"></a>					echo '<em>
+<a name="line270"></a>						Possible keys: <b>'.$query['explain']['possible_keys'].'</b> &middot; 
+<a name="line271"></a>						Key Used: <b>'.$query['explain']['key'].'</b> &middot; 
+<a name="line272"></a>						Type: <b>'.$query['explain']['type'].'</b> &middot; 
+<a name="line273"></a>						Rows: <b>'.$query['explain']['rows'].'</b> &middot; 
+<a name="line274"></a>						Speed: <b>'.$query['time'].'</b>
+<a name="line275"></a>					</em>';
+<a name="line276"></a>			}
+<a name="line277"></a>			echo '</td></tr>';
+<a name="line278"></a>			if($class == '') $class = 'alt';
+<a name="line279"></a>			else $class = '';
+<a name="line280"></a>		}
+<a name="line281"></a>			
+<a name="line282"></a>		echo '</table>';
+<a name="line283"></a>}
+<a name="line284"></a>
+<a name="line285"></a>echo '</div>';
+<a name="line286"></a>
+<a name="line287"></a>echo '<div id="pqp-memory" class="pqp-box">';
+<a name="line288"></a>
+<a name="line289"></a>if($output['logs']['memoryCount'] ==  0) {
+<a name="line290"></a>	echo '<h3>This panel has no log items.</h3>';
+<a name="line291"></a>}
+<a name="line292"></a>else {
+<a name="line293"></a>	echo '<table class="side" cellspacing="0">
+<a name="line294"></a>		  <tr><td><var>'.$output['memoryTotals']['used'].'</var><h4>Used Memory</h4></td></tr>
+<a name="line295"></a>		  <tr><td class="alt"><var>'.$output['memoryTotals']['total'].'</var> <h4>Total Available</h4></td></tr>
+<a name="line296"></a>		 </table>
+<a name="line297"></a>		<table class="main" cellspacing="0">';
+<a name="line298"></a>		
+<a name="line299"></a>		$class = '';
+<a name="line300"></a>		foreach($output['logs']['console'] as $log) {
+<a name="line301"></a>			if($log['type'] == 'memory') {
+<a name="line302"></a>				echo '<tr class="log-'.$log['type'].'">';
+<a name="line303"></a>				echo '<td class="'.$class.'"><b>'.$log['data'].'</b> <em>'.$log['dataType'].'</em>: '.$log['name'].'</td>';
+<a name="line304"></a>				echo '</tr>';
+<a name="line305"></a>				if($class == '') $class = 'alt';
+<a name="line306"></a>				else $class = '';
+<a name="line307"></a>			}
+<a name="line308"></a>		}
+<a name="line309"></a>			
+<a name="line310"></a>		echo '</table>';
+<a name="line311"></a>}
+<a name="line312"></a>
+<a name="line313"></a>echo '</div>';
+<a name="line314"></a>
+<a name="line315"></a>echo '<div id="pqp-files" class="pqp-box">';
+<a name="line316"></a>
+<a name="line317"></a>if($output['fileTotals']['count'] ==  0) {
+<a name="line318"></a>	echo '<h3>This panel has no log items.</h3>';
+<a name="line319"></a>}
+<a name="line320"></a>else {
+<a name="line321"></a>	echo '<table class="side" cellspacing="0">
+<a name="line322"></a>		  	<tr><td><var>'.$output['fileTotals']['count'].'</var><h4>Total Files</h4></td></tr>
+<a name="line323"></a>			<tr><td class="alt"><var>'.$output['fileTotals']['size'].'</var> <h4>Total Size</h4></td></tr>
+<a name="line324"></a>			<tr><td><var>'.$output['fileTotals']['largest'].'</var> <h4>Largest</h4></td></tr>
+<a name="line325"></a>		 </table>
+<a name="line326"></a>		<table class="main" cellspacing="0">';
+<a name="line327"></a>		
+<a name="line328"></a>		$class ='';
+<a name="line329"></a>		foreach($output['files'] as $file) {
+<a name="line330"></a>			echo '<tr><td class="'.$class.'"><b>'.$file['size'].'</b> '.$file['name'].'</td></tr>';
+<a name="line331"></a>			if($class == '') $class = 'alt';
+<a name="line332"></a>			else $class = '';
+<a name="line333"></a>		}
+<a name="line334"></a>			
+<a name="line335"></a>		echo '</table>';
+<a name="line336"></a>}
+<a name="line337"></a>
+<a name="line338"></a>echo '</div>';
+<a name="line339"></a>
+<a name="line340"></a>echo <<<FOOTER
+<a name="line341"></a>	<table id="pqp-footer" cellspacing="0">
+<a name="line342"></a>		<tr>
+<a name="line343"></a>			<td class="credit">
+<a name="line344"></a>				<a href="http://particletree.com" target="_blank">
+<a name="line345"></a>				<strong>PHP</strong> 
+<a name="line346"></a>				<b class="green">Q</b><b class="blue">u</b><b class="purple">i</b><b class="orange">c</b><b class="red">k</b>
+<a name="line347"></a>				Profiler</a></td>
+<a name="line348"></a>			<td class="actions">
+<a name="line349"></a>				<a href="#" onclick="toggleDetails();return false">Details</a>
+<a name="line350"></a>				<a class="heightToggle" href="#" onclick="toggleHeight();return false">Height</a>
+<a name="line351"></a>			</td>
+<a name="line352"></a>		</tr>
+<a name="line353"></a>	</table>
+<a name="line354"></a>FOOTER;
+<a name="line355"></a>		
+<a name="line356"></a>echo '</div></div>';
+<a name="line357"></a>
+<a name="line358"></a>}
+<a name="line359"></a>
+<a name="line360"></a>?></pre>
+<div class="header">
+<h1>GiftFlow API</h1>
+<ul>
+<li><a href="../../../overview-summary.html">Overview</a></li>
+<li>Package</li><li>Class</li><li>Tree</li><li><a href="../../../overview-files.html">Files</a></li>
+<li><a href="../../../deprecated-list.html">Deprecated</a></li>
+<li><a href="../../../index-all.html">Index</a></li>
+</ul>
+</div>
+
+<div class="small_links">
+<a href="../../../index.html" target="_top">Frames</a>
+<a href="../../../source/plugins/pqp/display.php.html" target="_top">No frames</a>
+</div>
+<hr>
+
+<p id="footer">This document was generated by <a href="http://peej.github.com/phpdoctor/">PHPDoctor: The PHP Documentation Creator</a></p>
+
+</body>
+
+</html>

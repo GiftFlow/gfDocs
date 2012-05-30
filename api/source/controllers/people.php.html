@@ -1,0 +1,405 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+
+<html lang="en">
+<head>
+
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
+<meta name="generator" content="PHPDoctor 2RC4 (http://peej.github.com/phpdoctor/)">
+<meta name="when" content="Wed, 09 Feb 2011 20:22:56 +0000">
+
+<link rel="stylesheet" type="text/css" href="../../stylesheet.css">
+<link rel="start" href="../../overview-summary.html">
+
+<title>controllers/people.php (GiftFlow API)</title>
+
+</head>
+<body id="file" onload="parent.document.title=document.title;">
+
+<div class="header">
+<h1>GiftFlow API</h1>
+<ul>
+<li><a href="../../overview-summary.html">Overview</a></li>
+<li>Package</li><li>Class</li><li>Tree</li><li><a href="../../overview-files.html">Files</a></li>
+<li><a href="../../deprecated-list.html">Deprecated</a></li>
+<li><a href="../../index-all.html">Index</a></li>
+</ul>
+</div>
+
+<div class="small_links">
+<a href="../../index.html" target="_top">Frames</a>
+<a href="../../source/controllers/people.php.html" target="_top">No frames</a>
+</div>
+<hr>
+
+<h1>controllers/people.php</h1>
+<hr>
+
+<a name="line1"></a><pre><?php
+<a name="line2"></a>/**
+<a name="line3"></a>*	Community central will help link people to other people.
+<a name="line4"></a>*
+<a name="line5"></a>*	@author Brandon Jackson
+<a name="line6"></a>*	@package Controllers
+<a name="line7"></a>*/
+<a name="line8"></a>class People extends CI_Controller {
+<a name="line9"></a>
+<a name="line10"></a>	var $data;
+<a name="line11"></a>	var $G;
+<a name="line12"></a>	var $U;
+<a name="line13"></a>	
+<a name="line14"></a>	function __construct()
+<a name="line15"></a>	{
+<a name="line16"></a>		parent::__construct();
+<a name="line17"></a>		$this->util->config();
+<a name="line18"></a>		$this->data = $this->util->parse_globals(array(
+<a name="line19"></a>			"geocode_ip"=>TRUE
+<a name="line20"></a>		));
+<a name="line21"></a>		$this->load->library('finder');
+<a name="line22"></a>		$this->load->library('datamapper');
+<a name="line23"></a>		$this->load->library('Search/User_search');
+<a name="line24"></a>		$this->load->library('Search/Good_search');
+<a name="line25"></a>		
+<a name="line26"></a>		if(!empty($this->data['logged_in_user_id']))
+<a name="line27"></a>		{
+<a name="line28"></a>			$this->U = new User($this->data['logged_in_user_id']);
+<a name="line29"></a>		}
+<a name="line30"></a>	}
+<a name="line31"></a>	
+<a name="line32"></a>	public function index()
+<a name="line33"></a>	{
+<a name="line34"></a>		$this->data['title'] = "People";
+<a name="line35"></a>		
+<a name="line36"></a>		if(!empty($this->data['logged_in_user_id']))
+<a name="line37"></a>		{
+<a name="line38"></a>			$nearby_search = new User_search();
+<a name="line39"></a>			$nearby_options = array(
+<a name="line40"></a>				"latitude"=>$this->data['userdata']['location']->latitude,
+<a name="line41"></a>				"longitude"=>$this->data['userdata']['location']->longitude,
+<a name="line42"></a>				"order_by"=>"location_distance",
+<a name="line43"></a>				"sort"=>"ASC",
+<a name="line44"></a>				"exclude_logged_in_user"=>TRUE
+<a name="line45"></a>			);
+<a name="line46"></a>			$this->data['nearby_users'] = $nearby_search->find($nearby_options);
+<a name="line47"></a>		}
+<a name="line48"></a>		$this->load->view('header', $this->data);
+<a name="line49"></a>		$this->data['menu'] = $this->load->view('people/includes/menu',$this->data, TRUE);
+<a name="line50"></a>
+<a name="line51"></a>		$this->load->view('people/index', $this->data);
+<a name="line52"></a>		$this->load->view('footer', $this->data);
+<a name="line53"></a>	}
+<a name="line54"></a>
+<a name="line55"></a>	public function friends()
+<a name="line56"></a>	{
+<a name="line57"></a>		// Page Title
+<a name="line58"></a>		$this->data['title'] = "People | Find Your Friends on GiftFlow";		
+<a name="line59"></a>		
+<a name="line60"></a>		if( $this->auth->is_logged_in() )
+<a name="line61"></a>		{
+<a name="line62"></a>			$this->U = new User($this->session->userdata['user_id']);
+<a name="line63"></a>			
+<a name="line64"></a>			// Search for Facebook friends
+<a name="line65"></a>			if(!empty($this->U->facebook_id))
+<a name="line66"></a>			{
+<a name="line67"></a>				// Load list of friends' IDs from Facebook API
+<a name="line68"></a>				$this->load->library('facebook');
+<a name="line69"></a>				$friend_ids = $this->facebook->friend_ids($this->U->id);
+<a name="line70"></a>				
+<a name="line71"></a>				// Search for matching users
+<a name="line72"></a>				$this->load->library('Search/User_search');
+<a name="line73"></a>				$this->data['friends']['facebook'] = $this->user_search->find(array(
+<a name="line74"></a>					"facebook_id"=>$friend_ids,
+<a name="line75"></a>					"following_stats"=>TRUE,
+<a name="line76"></a>					"limit"=>null
+<a name="line77"></a>				));
+<a name="line78"></a>			}
+<a name="line79"></a>			
+<a name="line80"></a>			// Search for Google Contacts / Gmail Friends
+<a name="line81"></a>			if(!empty($this->U->google_token) && !empty( $this->U->google_token_secret ) )
+<a name="line82"></a>			{
+<a name="line83"></a>				// Query Google Contacts API, returning array of email addresses
+<a name="line84"></a>				$this->load->library('openauth');
+<a name="line85"></a>				$email_list = $this->openauth->google_contacts_emails();
+<a name="line86"></a>				
+<a name="line87"></a>				// Search for matching users
+<a name="line88"></a>				$this->load->library('Search/User_search');
+<a name="line89"></a>				$this->data['friends']['google'] = $this->user_search->find(array(
+<a name="line90"></a>					"email"=>$email_list,
+<a name="line91"></a>					"following_stats"=>TRUE,
+<a name="line92"></a>					"limit"=>null
+<a name="line93"></a>				));
+<a name="line94"></a>			}
+<a name="line95"></a>			
+<a name="line96"></a>		}				
+<a name="line97"></a>		
+<a name="line98"></a>		$this->load->view('header', $this->data);
+<a name="line99"></a>		$this->data['menu'] = $this->load->view('people/includes/menu',$this->data, TRUE);
+<a name="line100"></a>		$this->load->view('people/friends', $this->data);
+<a name="line101"></a>		$this->load->view('footer', $this->data);
+<a name="line102"></a>	}	
+<a name="line103"></a>
+<a name="line104"></a>	/**
+<a name="line105"></a>	*	Displays user profile
+<a name="line106"></a>	*/
+<a name="line107"></a>	function profile()
+<a name="line108"></a>	{
+<a name="line109"></a>		// Default behavior:
+<a name="line110"></a>		// Segment one == "profile" and  segment two == user id and segment three == method
+<a name="line111"></a>		
+<a name="line112"></a>		// Route method (if present)
+<a name="line113"></a>		if(is_numeric($this->data['segment'][2]) && !empty($this->data['segment'][3]))
+<a name="line114"></a>		{
+<a name="line115"></a>			if( method_exists( __CLASS__, $this->data['segment'][3] ) )
+<a name="line116"></a>			{
+<a name="line117"></a>				return $this->{$this->data['segment'][3]}($this->data['segment'][2]);
+<a name="line118"></a>			}
+<a name="line119"></a>		}
+<a name="line120"></a>		
+<a name="line121"></a>		// Handle special cases
+<a name="line122"></a>		
+<a name="line123"></a>		// If segment 2 is empty
+<a name="line124"></a>		if ( !$user_id = $this->uri->segment(2) )
+<a name="line125"></a>		{
+<a name="line126"></a>			// if the user isn't logged in, redirect to people page
+<a name="line127"></a>			if(empty($this->data['userdata']['user_id']))
+<a name="line128"></a>			{
+<a name="line129"></a>				redirect('people');
+<a name="line130"></a>			}
+<a name="line131"></a>			
+<a name="line132"></a>			// if user is logged in, display his profile
+<a name="line133"></a>			else
+<a name="line134"></a>			{
+<a name="line135"></a>				$user_id = $this->session->userdata('user_id');
+<a name="line136"></a>			}
+<a name="line137"></a>		}
+<a name="line138"></a>		
+<a name="line139"></a>		
+<a name="line140"></a>		// If URI segment one is people and two is profile,
+<a name="line141"></a>		// redirect to get rid of the word member so that the
+<a name="line142"></a>		// uri segment variables used to load the proper user work
+<a name="line143"></a>		
+<a name="line144"></a>		elseif( $this->data['segment'][2] == "profile" )
+<a name="line145"></a>		{
+<a name="line146"></a>			if(!empty($this->data['segment'][3]))
+<a name="line147"></a>			{
+<a name="line148"></a>				redirect('people/'.$this->data['segment'][3]);
+<a name="line149"></a>			}
+<a name="line150"></a>			$user_id = $this->session->userdata('user_id');
+<a name="line151"></a>		}
+<a name="line152"></a>		
+<a name="line153"></a>		// End routing
+<a name="line154"></a>		
+<a name="line155"></a>		// Begin loading user information
+<a name="line156"></a>		
+<a name="line157"></a>		// Construct user object
+<a name="line158"></a>		$U = new User();
+<a name="line159"></a>		
+<a name="line160"></a>		// Fetch proper user
+<a name="line161"></a>		$U	->where('id',$user_id)
+<a name="line162"></a>			->include_related('default_location', '*', NULL, TRUE)
+<a name="line163"></a>			->include_related('default_photo', '*', NULL, TRUE)
+<a name="line164"></a>			->get();
+<a name="line165"></a>		
+<a name="line166"></a>		// New User_search object
+<a name="line167"></a>		$Search = new User_search($U->id);
+<a name="line168"></a>		
+<a name="line169"></a>		// Load user's gift
+<a name="line170"></a>		$U->gift = $Search->gifts();
+<a name="line171"></a>		
+<a name="line172"></a>		// Load user's needs
+<a name="line173"></a>		$U->need = $Search->needs();
+<a name="line174"></a>		
+<a name="line175"></a>		// Generate stats about the user
+<a name="line176"></a>		$U->stats();
+<a name="line177"></a>		
+<a name="line178"></a>		// Get list of people this user is following
+<a name="line179"></a>		$this->data['following'] = $Search->following();
+<a name="line180"></a>		
+<a name="line181"></a>		// If logged in, check to see if visitor is following this user
+<a name="line182"></a>		if(!empty($this->data['logged_in_user_id']))
+<a name="line183"></a>		{
+<a name="line184"></a>			$this->data['is_following'] = $U->is_followed_by($this->data['logged_in_user_id']);
+<a name="line185"></a>		}
+<a name="line186"></a>		
+<a name="line187"></a>		// Send User object to the view
+<a name="line188"></a>		$this->data['u'] = $U;
+<a name="line189"></a>		$this->data['completed_gifts'] = $U->completed_gifts();
+<a name="line190"></a>		$this->data['completed_requests'] = $U->completed_requests();
+<a name="line191"></a>		$this->data['title'] = $U->screen_name." | Profile";
+<a name="line192"></a>		$this->data['rss'] = '<link rel="alternate" type="application/rss+xml" title="'.$U->screen_name.'\'s Latest Gifts" href="'.site_url('rss/user/'.$user_id).'">
+<a name="line193"></a>		<link rel="alternate" type="application/rss+xml" title="'.$U->screen_name.'\'s Latest Needs" href="'.site_url('rss/user/'.$user_id.'/needs').'">';
+<a name="line194"></a>		
+<a name="line195"></a>		// Load views
+<a name="line196"></a>		$this->load->view('header', $this->data);
+<a name="line197"></a>		$this->load->view('people/profile', $this->data);
+<a name="line198"></a>		$this->load->view('footer', $this->data);
+<a name="line199"></a>	}
+<a name="line200"></a>	
+<a name="line201"></a>	function follow( $id )
+<a name="line202"></a>	{
+<a name="line203"></a>		$U = new User($this->data['logged_in_user_id']);
+<a name="line204"></a>		$F = new User( $id );
+<a name="line205"></a>		$U->save_following($F);
+<a name="line206"></a>
+<a name="line207"></a>		// Hook: 'follower_new'
+<a name="line208"></a>		$this->hooks->call('follower_new', $this);
+<a name="line209"></a>
+<a name="line210"></a>		if( $this->data['is_ajax'] )
+<a name="line211"></a>		{
+<a name="line212"></a>			echo "Now following ".$F->screen_name;
+<a name="line213"></a>		}
+<a name="line214"></a>		else
+<a name="line215"></a>		{
+<a name="line216"></a>			$this->session->set_flashdata('success', 'Now following '.$F->screen_name.'.');
+<a name="line217"></a>			redirect('people/'.$id);
+<a name="line218"></a>		}
+<a name="line219"></a>	}
+<a name="line220"></a>	
+<a name="line221"></a>	function unfollow( $id )
+<a name="line222"></a>	{
+<a name="line223"></a>		$U = new User($this->data['logged_in_user_id']);
+<a name="line224"></a>		$F = new User( $id );
+<a name="line225"></a>		$U->delete_following($F);
+<a name="line226"></a>		
+<a name="line227"></a>		// Hook: 'follower_deleted'
+<a name="line228"></a>		$this->hooks->call('follower_deleted', $this);
+<a name="line229"></a>
+<a name="line230"></a>		
+<a name="line231"></a>		$this->session->set_flashdata('success', 'No longer following '.$F->screen_name.'.');
+<a name="line232"></a>		
+<a name="line233"></a>		redirect('people/'.$id);
+<a name="line234"></a>	}
+<a name="line235"></a>
+<a name="line236"></a>	public function facebook()
+<a name="line237"></a>	{
+<a name="line238"></a>		if(!empty($this->U->facebook_id))
+<a name="line239"></a>		{
+<a name="line240"></a>			// Load list of friends' IDs from Facebook API
+<a name="line241"></a>			$this->load->library('facebook');
+<a name="line242"></a>			$friend_ids = $this->facebook->friend_ids($this->U->id);
+<a name="line243"></a>			
+<a name="line244"></a>			// Search for matching users
+<a name="line245"></a>			$this->load->library('Search/User_search');
+<a name="line246"></a>			$this->data['friends'] = $this->user_search->find(array(
+<a name="line247"></a>				"facebook_id"=>$friend_ids,
+<a name="line248"></a>				"following_stats"=>TRUE,
+<a name="line249"></a>				"limit"=>null
+<a name="line250"></a>			));
+<a name="line251"></a>		}
+<a name="line252"></a>
+<a name="line253"></a>		// Page Title
+<a name="line254"></a>		$this->data['title'] = "People | Find Your Friends on Facebook";
+<a name="line255"></a>		
+<a name="line256"></a>		// Includes the needed Google Maps references in the header
+<a name="line257"></a>		$this->data['googlemaps'] = TRUE;
+<a name="line258"></a>		
+<a name="line259"></a>		$this->data['active_link'] = 'facebook';
+<a name="line260"></a>		
+<a name="line261"></a>		$this->load->view('header', $this->data);
+<a name="line262"></a>		$this->load->view('people/menu', $this->data);
+<a name="line263"></a>		$this->data['menu'] = $this->load->view('people/includes/menu',$this->data, TRUE);
+<a name="line264"></a>		$this->load->view('people/facebook', $this->data);
+<a name="line265"></a>		$this->load->view('footer', $this->data);
+<a name="line266"></a>	}
+<a name="line267"></a>	
+<a name="line268"></a>	public function gmail()
+<a name="line269"></a>	{
+<a name="line270"></a>		// Page Title
+<a name="line271"></a>		$this->data['title'] = "People | Find Your Friends on Gmail";
+<a name="line272"></a>		
+<a name="line273"></a>		// Includes the needed Google Maps references in the header
+<a name="line274"></a>		$this->data['googlemaps'] = TRUE;
+<a name="line275"></a>		
+<a name="line276"></a>		$this->data['active_link'] = 'gmail';
+<a name="line277"></a>		
+<a name="line278"></a>		if( $this->auth->is_logged_in() )
+<a name="line279"></a>		{
+<a name="line280"></a>			$this->U = new User($this->session->userdata['user_id']);
+<a name="line281"></a>			
+<a name="line282"></a>			if(!empty($this->U->google_token) && !empty( $this->U->google_token_secret ) )
+<a name="line283"></a>			{
+<a name="line284"></a>				// Query Google Contacts API, returning array of email addresses
+<a name="line285"></a>				$this->load->library('openauth');
+<a name="line286"></a>				$email_list = $this->openauth->google_contacts_emails();
+<a name="line287"></a>				
+<a name="line288"></a>				// Search for matching users
+<a name="line289"></a>				$this->load->library('Search/User_search');
+<a name="line290"></a>				$this->data['friends']['google'] = $this->user_search->find(array(
+<a name="line291"></a>					"email"=>$email_list,
+<a name="line292"></a>					"following_stats"=>TRUE,
+<a name="line293"></a>					"limit"=>null
+<a name="line294"></a>				));
+<a name="line295"></a>			}
+<a name="line296"></a>		}				
+<a name="line297"></a>		
+<a name="line298"></a>		$this->load->view('header', $this->data);
+<a name="line299"></a>		$this->load->view('people/menu', $this->data);
+<a name="line300"></a>		$this->data['menu'] = $this->load->view('people/includes/menu',$this->data, TRUE);
+<a name="line301"></a>		$this->load->view('people/gmail', $this->data);
+<a name="line302"></a>		$this->load->view('footer', $this->data);
+<a name="line303"></a>	}
+<a name="line304"></a>	
+<a name="line305"></a>	function search()
+<a name="line306"></a>	{
+<a name="line307"></a>		if(!empty($_GET))
+<a name="line308"></a>		{
+<a name="line309"></a>			$options = array(
+<a name="line310"></a>				//"address"=>"New Haven, CT",
+<a name="line311"></a>				//"order_by"=>"location_distance"
+<a name="line312"></a>				"screen_name"=> $this->input->get('name'),
+<a name="line313"></a>				"following_stats"=>TRUE
+<a name="line314"></a>			);
+<a name="line315"></a>			$this->data['results'] = $this->user_search->find($options);
+<a name="line316"></a>		}
+<a name="line317"></a>		
+<a name="line318"></a>		$this->data['keyword'] = !empty($_GET['name']) ? $_GET['name'] : "";
+<a name="line319"></a>
+<a name="line320"></a>		$this->data['title'] = "Search";
+<a name="line321"></a>		$this->load->view('header', $this->data);
+<a name="line322"></a>		$this->data['menu'] = $this->load->view('people/includes/menu',$this->data, TRUE);
+<a name="line323"></a>		$this->load->view('people/search', $this->data);
+<a name="line324"></a>		$this->load->view('footer', $this->data);
+<a name="line325"></a>
+<a name="line326"></a>	}	
+<a name="line327"></a>	function results()
+<a name="line328"></a>	{
+<a name="line329"></a>		$this->load->library("search/user_search");
+<a name="line330"></a>		if(!empty($_GET))
+<a name="line331"></a>		{
+<a name="line332"></a>			$options = array(
+<a name="line333"></a>				//"address"=>"New Haven, CT",
+<a name="line334"></a>				//"order_by"=>"location_distance"
+<a name="line335"></a>				"screen_name"=> $this->input->get('name')
+<a name="line336"></a>			);
+<a name="line337"></a>			$this->data['results'] = $this->user_search->find($options);
+<a name="line338"></a>		}
+<a name="line339"></a>		
+<a name="line340"></a>		$this->data['title'] = "Search Results";
+<a name="line341"></a>		$this->load->view('header', $this->data);
+<a name="line342"></a>		$this->data['menu'] = $this->load->view('people/includes/menu',$this->data, TRUE);
+<a name="line343"></a>		$this->load->view('people/results', $this->data);
+<a name="line344"></a>		$this->load->view('footer', $this->data);
+<a name="line345"></a>	}
+<a name="line346"></a>
+<a name="line347"></a>}</pre>
+<div class="header">
+<h1>GiftFlow API</h1>
+<ul>
+<li><a href="../../overview-summary.html">Overview</a></li>
+<li>Package</li><li>Class</li><li>Tree</li><li><a href="../../overview-files.html">Files</a></li>
+<li><a href="../../deprecated-list.html">Deprecated</a></li>
+<li><a href="../../index-all.html">Index</a></li>
+</ul>
+</div>
+
+<div class="small_links">
+<a href="../../index.html" target="_top">Frames</a>
+<a href="../../source/controllers/people.php.html" target="_top">No frames</a>
+</div>
+<hr>
+
+<p id="footer">This document was generated by <a href="http://peej.github.com/phpdoctor/">PHPDoctor: The PHP Documentation Creator</a></p>
+
+</body>
+
+</html>

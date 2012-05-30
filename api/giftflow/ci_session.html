@@ -1,0 +1,507 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+
+<html lang="en">
+<head>
+
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
+<meta name="generator" content="PHPDoctor 2RC4 (http://peej.github.com/phpdoctor/)">
+<meta name="when" content="Wed, 09 Feb 2011 20:22:55 +0000">
+
+<link rel="stylesheet" type="text/css" href="../stylesheet.css">
+<link rel="start" href="../overview-summary.html">
+
+<title>CI_Session (GiftFlow API)</title>
+
+</head>
+<body id="definition" onload="parent.document.title=document.title;">
+
+<div class="header">
+<h1>GiftFlow API</h1>
+<ul>
+<li><a href="../overview-summary.html">Overview</a></li>
+<li><a href="../giftflow/package-summary.html">Package</a></li>
+<li class="active">Class</li>
+<li><a href="../giftflow/package-tree.html">Tree</a></li>
+<li><a href="../overview-files.html">Files</a></li>
+<li><a href="../deprecated-list.html">Deprecated</a></li>
+<li><a href="../index-all.html">Index</a></li>
+</ul>
+</div>
+
+<div class="small_links">
+<a href="../index.html" target="_top">Frames</a>
+<a href="../giftflow/ci_session.html" target="_top">No frames</a>
+</div>
+<div class="small_links">
+Summary: <a href="#summary_field">Field</a> | <a href="#summary_method">Method</a> | <a href="#summary_constr">Constr</a>
+Detail: <a href="#detail_field">Field</a> | <a href="#detail_method">Method</a> | <a href="#summary_constr">Constr</a>
+</div>
+<hr>
+
+<div class="qualifiedName">GiftFlow\CI_Session</div>
+<a href="../source/libraries/session.php.html#line11" class="location">libraries/session.php at line 11</a>
+
+<h1>Class CI_Session</h1>
+
+<pre class="tree"><strong>CI_Session</strong><br /></pre>
+
+<hr>
+
+<p class="signature">public  class <strong>CI_Session</strong></p>
+
+<hr>
+
+<table id="summary_field">
+<tr><th colspan="2">Field Summary</th></tr>
+<tr>
+<td class="type"> mixed</td>
+<td class="description"><p class="name"><a href="#CI">$CI</a></p></td>
+</tr>
+<tr>
+<td class="type"> mixed</td>
+<td class="description"><p class="name"><a href="#encryption_key">$encryption_key</a></p></td>
+</tr>
+<tr>
+<td class="type"> mixed</td>
+<td class="description"><p class="name"><a href="#flashdata_key">$flashdata_key</a></p></td>
+</tr>
+<tr>
+<td class="type"> mixed</td>
+<td class="description"><p class="name"><a href="#gc_probability">$gc_probability</a></p></td>
+</tr>
+<tr>
+<td class="type"> mixed</td>
+<td class="description"><p class="name"><a href="#now">$now</a></p></td>
+</tr>
+<tr>
+<td class="type"> mixed</td>
+<td class="description"><p class="name"><a href="#sess_expiration">$sess_expiration</a></p></td>
+</tr>
+<tr>
+<td class="type"> mixed</td>
+<td class="description"><p class="name"><a href="#sess_match_ip">$sess_match_ip</a></p></td>
+</tr>
+<tr>
+<td class="type"> mixed</td>
+<td class="description"><p class="name"><a href="#sess_match_useragent">$sess_match_useragent</a></p></td>
+</tr>
+<tr>
+<td class="type"> mixed</td>
+<td class="description"><p class="name"><a href="#sess_table_name">$sess_table_name</a></p></td>
+</tr>
+<tr>
+<td class="type"> mixed</td>
+<td class="description"><p class="name"><a href="#sess_time_to_update">$sess_time_to_update</a></p></td>
+</tr>
+<tr>
+<td class="type"> mixed</td>
+<td class="description"><p class="name"><a href="#time_reference">$time_reference</a></p></td>
+</tr>
+<tr>
+<td class="type"> mixed</td>
+<td class="description"><p class="name"><a href="#userdata">$userdata</a></p></td>
+</tr>
+</table>
+
+<table id="summary_method">
+<tr><th colspan="2">Method Summary</th></tr>
+<tr>
+<td class="type"> void</td>
+<td class="description"><p class="name"><a href="#__construct()">__construct</a>(mixed params)</p><p class="description">Session ConstructorThe constructor runs the session routines automatically
+whenever the class is instantiated.</p></td>
+</tr>
+<tr>
+<td class="type">private  void</td>
+<td class="description"><p class="name"><a href="#_flashdata_mark()">_flashdata_mark</a>()</p><p class="description">Identifies flashdata as 'old' for removal
+when _flashdata_sweep() runs.</p></td>
+</tr>
+<tr>
+<td class="type">private  void</td>
+<td class="description"><p class="name"><a href="#_flashdata_sweep()">_flashdata_sweep</a>()</p><p class="description">Removes all flashdata marked as 'old'</p></td>
+</tr>
+<tr>
+<td class="type">private  string</td>
+<td class="description"><p class="name"><a href="#_get_time()">_get_time</a>()</p><p class="description">Get the "now" time</p></td>
+</tr>
+<tr>
+<td class="type">private  string</td>
+<td class="description"><p class="name"><a href="#_serialize()">_serialize</a>(mixed data, array )</p><p class="description">Serialize an arrayThis function first converts any slashes found in the array to a temporary
+marker, so when it gets unserialized the slashes will be preserved</p></td>
+</tr>
+<tr>
+<td class="type"> void</td>
+<td class="description"><p class="name"><a href="#_sess_gc()">_sess_gc</a>()</p><p class="description">Garbage collectionThis deletes expired session rows from database
+if the probability percentage is met</p></td>
+</tr>
+<tr>
+<td class="type">private  string</td>
+<td class="description"><p class="name"><a href="#_unserialize()">_unserialize</a>(mixed data, array )</p><p class="description">UnserializeThis function unserializes a data string, then converts any
+temporary slash markers back to actual slashes</p></td>
+</tr>
+<tr>
+<td class="type"> mixed</td>
+<td class="description"><p class="name"><a href="#all_userdata()">all_userdata</a>()</p><p class="description">Fetch all session data</p></td>
+</tr>
+<tr>
+<td class="type"> string</td>
+<td class="description"><p class="name"><a href="#flashdata()">flashdata</a>(mixed key, string )</p><p class="description">Fetch a specific flashdata item from the session array</p></td>
+</tr>
+<tr>
+<td class="type"> void</td>
+<td class="description"><p class="name"><a href="#keep_flashdata()">keep_flashdata</a>(mixed key, string )</p><p class="description">Keeps existing flashdata available to next request.</p></td>
+</tr>
+<tr>
+<td class="type"> void</td>
+<td class="description"><p class="name"><a href="#sess_create()">sess_create</a>()</p><p class="description">Create a new session</p></td>
+</tr>
+<tr>
+<td class="type"> void</td>
+<td class="description"><p class="name"><a href="#sess_destroy()">sess_destroy</a>()</p><p class="description">Destroy the current session</p></td>
+</tr>
+<tr>
+<td class="type"> bool</td>
+<td class="description"><p class="name"><a href="#sess_read()">sess_read</a>()</p><p class="description">Fetch the current session data if it exists</p></td>
+</tr>
+<tr>
+<td class="type"> void</td>
+<td class="description"><p class="name"><a href="#sess_update()">sess_update</a>()</p><p class="description">Update an existing session</p></td>
+</tr>
+<tr>
+<td class="type"> void</td>
+<td class="description"><p class="name"><a href="#sess_write()">sess_write</a>()</p><p class="description">Write the session data</p></td>
+</tr>
+<tr>
+<td class="type"> void</td>
+<td class="description"><p class="name"><a href="#set_flashdata()">set_flashdata</a>(mixed newdata, string )</p><p class="description">Add or change flashdata, only available
+until the next request</p></td>
+</tr>
+<tr>
+<td class="type"> void</td>
+<td class="description"><p class="name"><a href="#set_userdata()">set_userdata</a>(mixed newdata, string )</p><p class="description">Add or change data in the "userdata" array</p></td>
+</tr>
+<tr>
+<td class="type">array  void</td>
+<td class="description"><p class="name"><a href="#unset_userdata()">unset_userdata</a>(mixed newdata)</p><p class="description">Delete a session variable from the "userdata" array</p></td>
+</tr>
+<tr>
+<td class="type"> string</td>
+<td class="description"><p class="name"><a href="#userdata()">userdata</a>(mixed item, string )</p><p class="description">Fetch a specific item from the session array</p></td>
+</tr>
+</table>
+
+<h2 id="detail_field">Field Detail</h2>
+<a href="../source/libraries/session.php.html#line23" class="location">libraries/session.php at line 23</a>
+
+<h3 id="CI">CI</h3>
+<code class="signature">public  mixed <strong>$CI</strong></code>
+<div class="details">
+</div>
+
+<hr>
+
+<a href="../source/libraries/session.php.html#line18" class="location">libraries/session.php at line 18</a>
+
+<h3 id="encryption_key">encryption_key</h3>
+<code class="signature">public  mixed <strong>$encryption_key</strong> = ''</code>
+<div class="details">
+</div>
+
+<hr>
+
+<a href="../source/libraries/session.php.html#line19" class="location">libraries/session.php at line 19</a>
+
+<h3 id="flashdata_key">flashdata_key</h3>
+<code class="signature">public  mixed <strong>$flashdata_key</strong> = 'flash'</code>
+<div class="details">
+</div>
+
+<hr>
+
+<a href="../source/libraries/session.php.html#line21" class="location">libraries/session.php at line 21</a>
+
+<h3 id="gc_probability">gc_probability</h3>
+<code class="signature">public  mixed <strong>$gc_probability</strong> = 5</code>
+<div class="details">
+</div>
+
+<hr>
+
+<a href="../source/libraries/session.php.html#line24" class="location">libraries/session.php at line 24</a>
+
+<h3 id="now">now</h3>
+<code class="signature">public  mixed <strong>$now</strong></code>
+<div class="details">
+</div>
+
+<hr>
+
+<a href="../source/libraries/session.php.html#line14" class="location">libraries/session.php at line 14</a>
+
+<h3 id="sess_expiration">sess_expiration</h3>
+<code class="signature">public  mixed <strong>$sess_expiration</strong> = 7200</code>
+<div class="details">
+</div>
+
+<hr>
+
+<a href="../source/libraries/session.php.html#line15" class="location">libraries/session.php at line 15</a>
+
+<h3 id="sess_match_ip">sess_match_ip</h3>
+<code class="signature">public  mixed <strong>$sess_match_ip</strong> = FALSE</code>
+<div class="details">
+</div>
+
+<hr>
+
+<a href="../source/libraries/session.php.html#line16" class="location">libraries/session.php at line 16</a>
+
+<h3 id="sess_match_useragent">sess_match_useragent</h3>
+<code class="signature">public  mixed <strong>$sess_match_useragent</strong> = TRUE</code>
+<div class="details">
+</div>
+
+<hr>
+
+<a href="../source/libraries/session.php.html#line13" class="location">libraries/session.php at line 13</a>
+
+<h3 id="sess_table_name">sess_table_name</h3>
+<code class="signature">public  mixed <strong>$sess_table_name</strong> = ''</code>
+<div class="details">
+</div>
+
+<hr>
+
+<a href="../source/libraries/session.php.html#line17" class="location">libraries/session.php at line 17</a>
+
+<h3 id="sess_time_to_update">sess_time_to_update</h3>
+<code class="signature">public  mixed <strong>$sess_time_to_update</strong> = 300</code>
+<div class="details">
+</div>
+
+<hr>
+
+<a href="../source/libraries/session.php.html#line20" class="location">libraries/session.php at line 20</a>
+
+<h3 id="time_reference">time_reference</h3>
+<code class="signature">public  mixed <strong>$time_reference</strong> = 'time'</code>
+<div class="details">
+</div>
+
+<hr>
+
+<a href="../source/libraries/session.php.html#line22" class="location">libraries/session.php at line 22</a>
+
+<h3 id="userdata">userdata</h3>
+<code class="signature">public  mixed <strong>$userdata</strong> = array()</code>
+<div class="details">
+</div>
+
+<hr>
+
+<h2 id="detail_method">Method Detail</h2><div class="method_detail">
+<div class='method'><a href="../source/libraries/session.php.html#line32" class="location">libraries/session.php at line 32</a>
+
+<h3 id="__construct()">__construct</h3>
+<code class="signature">public  void <strong>__construct</strong>(mixed params)</code>
+<div class="details">
+<p>Session Constructor</p><p>The constructor runs the session routines automatically
+whenever the class is instantiated.</p></div></div>
+
+
+
+<div class='method'><a href="../source/libraries/session.php.html#line465" class="location">libraries/session.php at line 465</a>
+
+<h3 id="_flashdata_mark()">_flashdata_mark</h3>
+<code class="signature">private  void <strong>_flashdata_mark</strong>()</code>
+<div class="details">
+<p>Identifies flashdata as 'old' for removal
+when _flashdata_sweep() runs.</p></div></div>
+
+
+
+<div class='method'><a href="../source/libraries/session.php.html#line489" class="location">libraries/session.php at line 489</a>
+
+<h3 id="_flashdata_sweep()">_flashdata_sweep</h3>
+<code class="signature">private  void <strong>_flashdata_sweep</strong>()</code>
+<div class="details">
+<p>Removes all flashdata marked as 'old'</p></div></div>
+
+
+
+<div class='method'><a href="../source/libraries/session.php.html#line510" class="location">libraries/session.php at line 510</a>
+
+<h3 id="_get_time()">_get_time</h3>
+<code class="signature">private  string <strong>_get_time</strong>()</code>
+<div class="details">
+<p>Get the "now" time</p></div></div>
+
+
+
+<div class='method'><a href="../source/libraries/session.php.html#line538" class="location">libraries/session.php at line 538</a>
+
+<h3 id="_serialize()">_serialize</h3>
+<code class="signature">private  string <strong>_serialize</strong>(mixed data, array )</code>
+<div class="details">
+<p>Serialize an array</p><p>This function first converts any slashes found in the array to a temporary
+marker, so when it gets unserialized the slashes will be preserved</p></div></div>
+
+
+
+<div class='method'><a href="../source/libraries/session.php.html#line595" class="location">libraries/session.php at line 595</a>
+
+<h3 id="_sess_gc()">_sess_gc</h3>
+<code class="signature">public  void <strong>_sess_gc</strong>()</code>
+<div class="details">
+<p>Garbage collection</p><p>This deletes expired session rows from database
+if the probability percentage is met</p></div></div>
+
+
+
+<div class='method'><a href="../source/libraries/session.php.html#line567" class="location">libraries/session.php at line 567</a>
+
+<h3 id="_unserialize()">_unserialize</h3>
+<code class="signature">private  string <strong>_unserialize</strong>(mixed data, array )</code>
+<div class="details">
+<p>Unserialize</p><p>This function unserializes a data string, then converts any
+temporary slash markers back to actual slashes</p></div></div>
+
+
+
+<div class='method'><a href="../source/libraries/session.php.html#line332" class="location">libraries/session.php at line 332</a>
+
+<h3 id="all_userdata()">all_userdata</h3>
+<code class="signature">public  mixed <strong>all_userdata</strong>()</code>
+<div class="details">
+<p>Fetch all session data</p></div></div>
+
+
+
+<div class='method'><a href="../source/libraries/session.php.html#line450" class="location">libraries/session.php at line 450</a>
+
+<h3 id="flashdata()">flashdata</h3>
+<code class="signature">public  string <strong>flashdata</strong>(mixed key, string )</code>
+<div class="details">
+<p>Fetch a specific flashdata item from the session array</p></div></div>
+
+
+
+<div class='method'><a href="../source/libraries/session.php.html#line428" class="location">libraries/session.php at line 428</a>
+
+<h3 id="keep_flashdata()">keep_flashdata</h3>
+<code class="signature">public  void <strong>keep_flashdata</strong>(mixed key, string )</code>
+<div class="details">
+<p>Keeps existing flashdata available to next request.</p></div></div>
+
+
+
+<div class='method'><a href="../source/libraries/session.php.html#line228" class="location">libraries/session.php at line 228</a>
+
+<h3 id="sess_create()">sess_create</h3>
+<code class="signature">public  void <strong>sess_create</strong>()</code>
+<div class="details">
+<p>Create a new session</p></div></div>
+
+
+
+<div class='method'><a href="../source/libraries/session.php.html#line300" class="location">libraries/session.php at line 300</a>
+
+<h3 id="sess_destroy()">sess_destroy</h3>
+<code class="signature">public  void <strong>sess_destroy</strong>()</code>
+<div class="details">
+<p>Destroy the current session</p></div></div>
+
+
+
+<div class='method'><a href="../source/libraries/session.php.html#line102" class="location">libraries/session.php at line 102</a>
+
+<h3 id="sess_read()">sess_read</h3>
+<code class="signature">public  bool <strong>sess_read</strong>()</code>
+<div class="details">
+<p>Fetch the current session data if it exists</p></div></div>
+
+
+
+<div class='method'><a href="../source/libraries/session.php.html#line262" class="location">libraries/session.php at line 262</a>
+
+<h3 id="sess_update()">sess_update</h3>
+<code class="signature">public  void <strong>sess_update</strong>()</code>
+<div class="details">
+<p>Update an existing session</p></div></div>
+
+
+
+<div class='method'><a href="../source/libraries/session.php.html#line190" class="location">libraries/session.php at line 190</a>
+
+<h3 id="sess_write()">sess_write</h3>
+<code class="signature">public  void <strong>sess_write</strong>()</code>
+<div class="details">
+<p>Write the session data</p></div></div>
+
+
+
+<div class='method'><a href="../source/libraries/session.php.html#line402" class="location">libraries/session.php at line 402</a>
+
+<h3 id="set_flashdata()">set_flashdata</h3>
+<code class="signature">public  void <strong>set_flashdata</strong>(mixed newdata, string )</code>
+<div class="details">
+<p>Add or change flashdata, only available
+until the next request</p></div></div>
+
+
+
+<div class='method'><a href="../source/libraries/session.php.html#line347" class="location">libraries/session.php at line 347</a>
+
+<h3 id="set_userdata()">set_userdata</h3>
+<code class="signature">public  void <strong>set_userdata</strong>(mixed newdata, string )</code>
+<div class="details">
+<p>Add or change data in the "userdata" array</p></div></div>
+
+
+
+<div class='method'><a href="../source/libraries/session.php.html#line373" class="location">libraries/session.php at line 373</a>
+
+<h3 id="unset_userdata()">unset_userdata</h3>
+<code class="signature">array  void <strong>unset_userdata</strong>(mixed newdata)</code>
+<div class="details">
+<p>Delete a session variable from the "userdata" array</p></div></div>
+
+
+
+<div class='method'><a href="../source/libraries/session.php.html#line319" class="location">libraries/session.php at line 319</a>
+
+<h3 id="userdata()">userdata</h3>
+<code class="signature">public  string <strong>userdata</strong>(mixed item, string )</code>
+<div class="details">
+<p>Fetch a specific item from the session array</p></div></div>
+
+
+
+</div><div class="header">
+<h1>GiftFlow API</h1>
+<ul>
+<li><a href="../overview-summary.html">Overview</a></li>
+<li><a href="../giftflow/package-summary.html">Package</a></li>
+<li class="active">Class</li>
+<li><a href="../giftflow/package-tree.html">Tree</a></li>
+<li><a href="../overview-files.html">Files</a></li>
+<li><a href="../deprecated-list.html">Deprecated</a></li>
+<li><a href="../index-all.html">Index</a></li>
+</ul>
+</div>
+
+<div class="small_links">
+<a href="../index.html" target="_top">Frames</a>
+<a href="../giftflow/ci_session.html" target="_top">No frames</a>
+</div>
+<div class="small_links">
+Summary: <a href="#summary_field">Field</a> | <a href="#summary_method">Method</a> | <a href="#summary_constr">Constr</a>
+Detail: <a href="#detail_field">Field</a> | <a href="#detail_method">Method</a> | <a href="#summary_constr">Constr</a>
+</div>
+<hr>
+
+<p id="footer">This document was generated by <a href="http://peej.github.com/phpdoctor/">PHPDoctor: The PHP Documentation Creator</a></p>
+
+</body>
+
+</html>

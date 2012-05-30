@@ -1,0 +1,310 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+
+<html lang="en">
+<head>
+
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
+<meta name="generator" content="PHPDoctor 2RC4 (http://peej.github.com/phpdoctor/)">
+<meta name="when" content="Wed, 09 Feb 2011 20:22:56 +0000">
+
+<link rel="stylesheet" type="text/css" href="../../../../stylesheet.css">
+<link rel="start" href="../../../../overview-summary.html">
+
+<title>libraries/Auth/Yadis/PlainHTTPFetcher.php (GiftFlow API)</title>
+
+</head>
+<body id="file" onload="parent.document.title=document.title;">
+
+<div class="header">
+<h1>GiftFlow API</h1>
+<ul>
+<li><a href="../../../../overview-summary.html">Overview</a></li>
+<li>Package</li><li>Class</li><li>Tree</li><li><a href="../../../../overview-files.html">Files</a></li>
+<li><a href="../../../../deprecated-list.html">Deprecated</a></li>
+<li><a href="../../../../index-all.html">Index</a></li>
+</ul>
+</div>
+
+<div class="small_links">
+<a href="../../../../index.html" target="_top">Frames</a>
+<a href="../../../../source/libraries/auth/yadis/plainhttpfetcher.php.html" target="_top">No frames</a>
+</div>
+<hr>
+
+<h1>libraries/Auth/Yadis/PlainHTTPFetcher.php</h1>
+<div class="comment" id="overview_description"><p>This module contains the plain non-curl HTTP fetcher
+implementation.</p><p>PHP versions 4 and 5</p><p>LICENSE: See the COPYING file included in this distribution.</p></div>
+
+<hr>
+
+<a name="line1"></a><pre><?php
+<a name="line2"></a>
+<a name="line3"></a>/**
+<a name="line4"></a> * This module contains the plain non-curl HTTP fetcher
+<a name="line5"></a> * implementation.
+<a name="line6"></a> *
+<a name="line7"></a> * PHP versions 4 and 5
+<a name="line8"></a> *
+<a name="line9"></a> * LICENSE: See the COPYING file included in this distribution.
+<a name="line10"></a> *
+<a name="line11"></a> * @package OpenID
+<a name="line12"></a> * @author JanRain, Inc. <openid@janrain.com>
+<a name="line13"></a> * @copyright 2005-2008 Janrain, Inc.
+<a name="line14"></a> * @license http://www.apache.org/licenses/LICENSE-2.0 Apache
+<a name="line15"></a> */
+<a name="line16"></a>
+<a name="line17"></a>/**
+<a name="line18"></a> * Interface import
+<a name="line19"></a> */
+<a name="line20"></a>require_once "Auth/Yadis/HTTPFetcher.php";
+<a name="line21"></a>
+<a name="line22"></a>/**
+<a name="line23"></a> * This class implements a plain, hand-built socket-based fetcher
+<a name="line24"></a> * which will be used in the event that CURL is unavailable.
+<a name="line25"></a> *
+<a name="line26"></a> * @package OpenID
+<a name="line27"></a> */
+<a name="line28"></a>class Auth_Yadis_PlainHTTPFetcher extends Auth_Yadis_HTTPFetcher {
+<a name="line29"></a>    /**
+<a name="line30"></a>     * Does this fetcher support SSL URLs?
+<a name="line31"></a>     */
+<a name="line32"></a>    function supportsSSL()
+<a name="line33"></a>    {
+<a name="line34"></a>        return function_exists('openssl_open');
+<a name="line35"></a>    }
+<a name="line36"></a>
+<a name="line37"></a>    function get($url, $extra_headers = null)
+<a name="line38"></a>    {
+<a name="line39"></a>        if (!$this->canFetchURL($url)) {
+<a name="line40"></a>            return null;
+<a name="line41"></a>        }
+<a name="line42"></a>
+<a name="line43"></a>        $redir = true;
+<a name="line44"></a>
+<a name="line45"></a>        $stop = time() + $this->timeout;
+<a name="line46"></a>        $off = $this->timeout;
+<a name="line47"></a>
+<a name="line48"></a>        while ($redir && ($off > 0)) {
+<a name="line49"></a>
+<a name="line50"></a>            $parts = parse_url($url);
+<a name="line51"></a>
+<a name="line52"></a>            $specify_port = true;
+<a name="line53"></a>
+<a name="line54"></a>            // Set a default port.
+<a name="line55"></a>            if (!array_key_exists('port', $parts)) {
+<a name="line56"></a>                $specify_port = false;
+<a name="line57"></a>                if ($parts['scheme'] == 'http') {
+<a name="line58"></a>                    $parts['port'] = 80;
+<a name="line59"></a>                } elseif ($parts['scheme'] == 'https') {
+<a name="line60"></a>                    $parts['port'] = 443;
+<a name="line61"></a>                } else {
+<a name="line62"></a>                    return null;
+<a name="line63"></a>                }
+<a name="line64"></a>            }
+<a name="line65"></a>
+<a name="line66"></a>            if (!array_key_exists('path', $parts)) {
+<a name="line67"></a>                $parts['path'] = '/';
+<a name="line68"></a>            }
+<a name="line69"></a>
+<a name="line70"></a>            $host = $parts['host'];
+<a name="line71"></a>
+<a name="line72"></a>            if ($parts['scheme'] == 'https') {
+<a name="line73"></a>                $host = 'ssl://' . $host;
+<a name="line74"></a>            }
+<a name="line75"></a>
+<a name="line76"></a>            $user_agent = Auth_OpenID_USER_AGENT;
+<a name="line77"></a>
+<a name="line78"></a>            $headers = array(
+<a name="line79"></a>                             "GET ".$parts['path'].
+<a name="line80"></a>                             (array_key_exists('query', $parts) ?
+<a name="line81"></a>                              "?".$parts['query'] : "").
+<a name="line82"></a>                                 " HTTP/1.0",
+<a name="line83"></a>                             "User-Agent: $user_agent",
+<a name="line84"></a>                             "Host: ".$parts['host'].
+<a name="line85"></a>                                ($specify_port ? ":".$parts['port'] : ""),
+<a name="line86"></a>                             "Port: ".$parts['port']);
+<a name="line87"></a>
+<a name="line88"></a>            $errno = 0;
+<a name="line89"></a>            $errstr = '';
+<a name="line90"></a>
+<a name="line91"></a>            if ($extra_headers) {
+<a name="line92"></a>                foreach ($extra_headers as $h) {
+<a name="line93"></a>                    $headers[] = $h;
+<a name="line94"></a>                }
+<a name="line95"></a>            }
+<a name="line96"></a>
+<a name="line97"></a>            @$sock = fsockopen($host, $parts['port'], $errno, $errstr,
+<a name="line98"></a>                               $this->timeout);
+<a name="line99"></a>            if ($sock === false) {
+<a name="line100"></a>                return false;
+<a name="line101"></a>            }
+<a name="line102"></a>
+<a name="line103"></a>            stream_set_timeout($sock, $this->timeout);
+<a name="line104"></a>
+<a name="line105"></a>            fputs($sock, implode("\r\n", $headers) . "\r\n\r\n");
+<a name="line106"></a>
+<a name="line107"></a>            $data = "";
+<a name="line108"></a>            $kilobytes = 0;
+<a name="line109"></a>            while (!feof($sock) &&
+<a name="line110"></a>                   $kilobytes < Auth_OpenID_FETCHER_MAX_RESPONSE_KB ) {
+<a name="line111"></a>                $data .= fgets($sock, 1024);
+<a name="line112"></a>                $kilobytes += 1;
+<a name="line113"></a>            }
+<a name="line114"></a>
+<a name="line115"></a>            fclose($sock);
+<a name="line116"></a>
+<a name="line117"></a>            // Split response into header and body sections
+<a name="line118"></a>            list($headers, $body) = explode("\r\n\r\n", $data, 2);
+<a name="line119"></a>            $headers = explode("\r\n", $headers);
+<a name="line120"></a>
+<a name="line121"></a>            $http_code = explode(" ", $headers[0]);
+<a name="line122"></a>            $code = $http_code[1];
+<a name="line123"></a>
+<a name="line124"></a>            if (in_array($code, array('301', '302'))) {
+<a name="line125"></a>                $url = $this->_findRedirect($headers, $url);
+<a name="line126"></a>                $redir = true;
+<a name="line127"></a>            } else {
+<a name="line128"></a>                $redir = false;
+<a name="line129"></a>            }
+<a name="line130"></a>
+<a name="line131"></a>            $off = $stop - time();
+<a name="line132"></a>        }
+<a name="line133"></a>
+<a name="line134"></a>        $new_headers = array();
+<a name="line135"></a>
+<a name="line136"></a>        foreach ($headers as $header) {
+<a name="line137"></a>            if (preg_match("/:/", $header)) {
+<a name="line138"></a>                $parts = explode(": ", $header, 2);
+<a name="line139"></a>
+<a name="line140"></a>                if (count($parts) == 2) {
+<a name="line141"></a>                    list($name, $value) = $parts;
+<a name="line142"></a>                    $new_headers[$name] = $value;
+<a name="line143"></a>                }
+<a name="line144"></a>            }
+<a name="line145"></a>
+<a name="line146"></a>        }
+<a name="line147"></a>
+<a name="line148"></a>        return new Auth_Yadis_HTTPResponse($url, $code, $new_headers, $body);
+<a name="line149"></a>    }
+<a name="line150"></a>
+<a name="line151"></a>    function post($url, $body, $extra_headers = null)
+<a name="line152"></a>    {
+<a name="line153"></a>        if (!$this->canFetchURL($url)) {
+<a name="line154"></a>            return null;
+<a name="line155"></a>        }
+<a name="line156"></a>
+<a name="line157"></a>        $parts = parse_url($url);
+<a name="line158"></a>
+<a name="line159"></a>        $headers = array();
+<a name="line160"></a>
+<a name="line161"></a>        $post_path = $parts['path'];
+<a name="line162"></a>        if (isset($parts['query'])) {
+<a name="line163"></a>            $post_path .= '?' . $parts['query'];
+<a name="line164"></a>        }
+<a name="line165"></a>
+<a name="line166"></a>        $headers[] = "POST ".$post_path." HTTP/1.0";
+<a name="line167"></a>        $headers[] = "Host: " . $parts['host'];
+<a name="line168"></a>        $headers[] = "Content-type: application/x-www-form-urlencoded";
+<a name="line169"></a>        $headers[] = "Content-length: " . strval(strlen($body));
+<a name="line170"></a>
+<a name="line171"></a>        if ($extra_headers &&
+<a name="line172"></a>            is_array($extra_headers)) {
+<a name="line173"></a>            $headers = array_merge($headers, $extra_headers);
+<a name="line174"></a>        }
+<a name="line175"></a>
+<a name="line176"></a>        // Join all headers together.
+<a name="line177"></a>        $all_headers = implode("\r\n", $headers);
+<a name="line178"></a>
+<a name="line179"></a>        // Add headers, two newlines, and request body.
+<a name="line180"></a>        $request = $all_headers . "\r\n\r\n" . $body;
+<a name="line181"></a>
+<a name="line182"></a>        // Set a default port.
+<a name="line183"></a>        if (!array_key_exists('port', $parts)) {
+<a name="line184"></a>            if ($parts['scheme'] == 'http') {
+<a name="line185"></a>                $parts['port'] = 80;
+<a name="line186"></a>            } elseif ($parts['scheme'] == 'https') {
+<a name="line187"></a>                $parts['port'] = 443;
+<a name="line188"></a>            } else {
+<a name="line189"></a>                return null;
+<a name="line190"></a>            }
+<a name="line191"></a>        }
+<a name="line192"></a>
+<a name="line193"></a>        if ($parts['scheme'] == 'https') {
+<a name="line194"></a>            $parts['host'] = sprintf("ssl://%s", $parts['host']);
+<a name="line195"></a>        }
+<a name="line196"></a>
+<a name="line197"></a>        // Connect to the remote server.
+<a name="line198"></a>        $errno = 0;
+<a name="line199"></a>        $errstr = '';
+<a name="line200"></a>
+<a name="line201"></a>        $sock = fsockopen($parts['host'], $parts['port'], $errno, $errstr,
+<a name="line202"></a>                          $this->timeout);
+<a name="line203"></a>
+<a name="line204"></a>        if ($sock === false) {
+<a name="line205"></a>            return null;
+<a name="line206"></a>        }
+<a name="line207"></a>
+<a name="line208"></a>        stream_set_timeout($sock, $this->timeout);
+<a name="line209"></a>
+<a name="line210"></a>        // Write the POST request.
+<a name="line211"></a>        fputs($sock, $request);
+<a name="line212"></a>
+<a name="line213"></a>        // Get the response from the server.
+<a name="line214"></a>        $response = "";
+<a name="line215"></a>        while (!feof($sock)) {
+<a name="line216"></a>            if ($data = fgets($sock, 128)) {
+<a name="line217"></a>                $response .= $data;
+<a name="line218"></a>            } else {
+<a name="line219"></a>                break;
+<a name="line220"></a>            }
+<a name="line221"></a>        }
+<a name="line222"></a>
+<a name="line223"></a>        // Split the request into headers and body.
+<a name="line224"></a>        list($headers, $response_body) = explode("\r\n\r\n", $response, 2);
+<a name="line225"></a>
+<a name="line226"></a>        $headers = explode("\r\n", $headers);
+<a name="line227"></a>
+<a name="line228"></a>        // Expect the first line of the headers data to be something
+<a name="line229"></a>        // like HTTP/1.1 200 OK.  Split the line on spaces and take
+<a name="line230"></a>        // the second token, which should be the return code.
+<a name="line231"></a>        $http_code = explode(" ", $headers[0]);
+<a name="line232"></a>        $code = $http_code[1];
+<a name="line233"></a>
+<a name="line234"></a>        $new_headers = array();
+<a name="line235"></a>
+<a name="line236"></a>        foreach ($headers as $header) {
+<a name="line237"></a>            if (preg_match("/:/", $header)) {
+<a name="line238"></a>                list($name, $value) = explode(": ", $header, 2);
+<a name="line239"></a>                $new_headers[$name] = $value;
+<a name="line240"></a>            }
+<a name="line241"></a>
+<a name="line242"></a>        }
+<a name="line243"></a>
+<a name="line244"></a>        return new Auth_Yadis_HTTPResponse($url, $code,
+<a name="line245"></a>                                           $new_headers, $response_body);
+<a name="line246"></a>    }
+<a name="line247"></a>}
+<a name="line248"></a>
+<a name="line249"></a></pre>
+<div class="header">
+<h1>GiftFlow API</h1>
+<ul>
+<li><a href="../../../../overview-summary.html">Overview</a></li>
+<li>Package</li><li>Class</li><li>Tree</li><li><a href="../../../../overview-files.html">Files</a></li>
+<li><a href="../../../../deprecated-list.html">Deprecated</a></li>
+<li><a href="../../../../index-all.html">Index</a></li>
+</ul>
+</div>
+
+<div class="small_links">
+<a href="../../../../index.html" target="_top">Frames</a>
+<a href="../../../../source/libraries/auth/yadis/plainhttpfetcher.php.html" target="_top">No frames</a>
+</div>
+<hr>
+
+<p id="footer">This document was generated by <a href="http://peej.github.com/phpdoctor/">PHPDoctor: The PHP Documentation Creator</a></p>
+
+</body>
+
+</html>

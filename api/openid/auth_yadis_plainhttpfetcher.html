@@ -1,0 +1,152 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+
+<html lang="en">
+<head>
+
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
+<meta name="generator" content="PHPDoctor 2RC4 (http://peej.github.com/phpdoctor/)">
+<meta name="when" content="Wed, 09 Feb 2011 20:22:55 +0000">
+
+<link rel="stylesheet" type="text/css" href="../stylesheet.css">
+<link rel="start" href="../overview-summary.html">
+
+<title>Auth_Yadis_PlainHTTPFetcher (GiftFlow API)</title>
+
+</head>
+<body id="definition" onload="parent.document.title=document.title;">
+
+<div class="header">
+<h1>GiftFlow API</h1>
+<ul>
+<li><a href="../overview-summary.html">Overview</a></li>
+<li><a href="../openid/package-summary.html">Package</a></li>
+<li class="active">Class</li>
+<li><a href="../openid/package-tree.html">Tree</a></li>
+<li><a href="../overview-files.html">Files</a></li>
+<li><a href="../deprecated-list.html">Deprecated</a></li>
+<li><a href="../index-all.html">Index</a></li>
+</ul>
+</div>
+
+<div class="small_links">
+<a href="../index.html" target="_top">Frames</a>
+<a href="../openid/auth_yadis_plainhttpfetcher.html" target="_top">No frames</a>
+</div>
+<div class="small_links">
+Summary: <a href="#summary_field">Field</a> | <a href="#summary_method">Method</a> | <a href="#summary_constr">Constr</a>
+Detail: <a href="#detail_field">Field</a> | <a href="#detail_method">Method</a> | <a href="#summary_constr">Constr</a>
+</div>
+<hr>
+
+<div class="qualifiedName">OpenID\Auth_Yadis_PlainHTTPFetcher</div>
+<a href="../source/libraries/auth/yadis/plainhttpfetcher.php.html#line28" class="location">libraries/Auth/Yadis/PlainHTTPFetcher.php at line 28</a>
+
+<h1>Class Auth_Yadis_PlainHTTPFetcher</h1>
+
+<pre class="tree"><a href="../openid/auth_yadis_httpfetcher.html">Auth_Yadis_HTTPFetcher</a><br>    └─<strong>Auth_Yadis_PlainHTTPFetcher</strong><br /></pre>
+
+<hr>
+
+<p class="signature">public  class <strong>Auth_Yadis_PlainHTTPFetcher</strong><br>extends <a href="../openid/auth_yadis_httpfetcher.html">Auth_Yadis_HTTPFetcher</a>
+
+</p>
+
+<div class="comment" id="overview_description"><p>This class implements a plain, hand-built socket-based fetcher
+which will be used in the event that CURL is unavailable.</p></div>
+
+<hr>
+
+<table class="inherit">
+<tr><th colspan="2">Fields inherited from OpenID\Auth_Yadis_HTTPFetcher</th></tr>
+<tr><td><a href="../openid/auth_yadis_httpfetcher.html#timeout">timeout</a></td></tr></table>
+
+<table id="summary_method">
+<tr><th colspan="2">Method Summary</th></tr>
+<tr>
+<td class="type"> mixed</td>
+<td class="description"><p class="name"><a href="#get()">get</a>(string url, array extra_headers, mixed headers)</p><p class="description">Fetches the specified URL using optional extra headers and
+returns the server's response.</p></td>
+</tr>
+<tr>
+<td class="type"> void</td>
+<td class="description"><p class="name"><a href="#post()">post</a>(mixed url, mixed body, mixed extra_headers)</p></td>
+</tr>
+<tr>
+<td class="type"> bool</td>
+<td class="description"><p class="name"><a href="#supportsSSL()">supportsSSL</a>()</p><p class="description">Does this fetcher support SSL URLs?</p></td>
+</tr>
+</table>
+
+<table class="inherit">
+<tr><th colspan="2">Methods inherited from OpenID\Auth_Yadis_HTTPFetcher</th></tr>
+<tr><td><a href="../openid/auth_yadis_httpfetcher.html#URLHasAllowedScheme()">URLHasAllowedScheme</a>, <a href="../openid/auth_yadis_httpfetcher.html#_findRedirect()">_findRedirect</a>, <a href="../openid/auth_yadis_httpfetcher.html#allowedURL()">allowedURL</a>, <a href="../openid/auth_yadis_httpfetcher.html#canFetchURL()">canFetchURL</a>, <a href="../openid/auth_yadis_httpfetcher.html#get()">get</a>, <a href="../openid/auth_yadis_httpfetcher.html#isHTTPS()">isHTTPS</a>, <a href="../openid/auth_yadis_httpfetcher.html#supportsSSL()">supportsSSL</a></td></tr></table>
+
+<h2 id="detail_method">Method Detail</h2><div class="method_detail">
+<div class='method'><a href="../source/libraries/auth/yadis/plainhttpfetcher.php.html#line37" class="location">libraries/Auth/Yadis/PlainHTTPFetcher.php at line 37</a>
+
+<h3 id="get()">get</h3>
+<code class="signature">public  mixed <strong>get</strong>(string url, array extra_headers, mixed headers)</code>
+<div class="details">
+<p>Fetches the specified URL using optional extra headers and
+returns the server's response.</p><dl>
+<dt>Parameters:</dt>
+<dd>url - The URL to be fetched.</dd>
+<dd>extra_headers - An array of header strings (e.g. "Accept: text/html").</dd>
+<dt>Returns:</dt>
+<dd>$result An array of ($code, $url, $headers, $body) if the URL could be fetched; null if the URL does not pass the URLHasAllowedScheme check or if the server's response is malformed.</dd>
+</dl>
+</div></div>
+
+
+
+<div class='method'><a href="../source/libraries/auth/yadis/plainhttpfetcher.php.html#line151" class="location">libraries/Auth/Yadis/PlainHTTPFetcher.php at line 151</a>
+
+<h3 id="post()">post</h3>
+<code class="signature">public  void <strong>post</strong>(mixed url, mixed body, mixed extra_headers)</code>
+<div class="details">
+</div></div>
+
+
+
+<div class='method'><a href="../source/libraries/auth/yadis/plainhttpfetcher.php.html#line32" class="location">libraries/Auth/Yadis/PlainHTTPFetcher.php at line 32</a>
+
+<h3 id="supportsSSL()">supportsSSL</h3>
+<code class="signature">public  bool <strong>supportsSSL</strong>()</code>
+<div class="details">
+<p>Does this fetcher support SSL URLs?</p><dl>
+<dt>Returns:</dt>
+<dd>$support True if this fetcher supports HTTPS fetching; false if not.</dd>
+</dl>
+</div></div>
+
+
+
+</div><div class="header">
+<h1>GiftFlow API</h1>
+<ul>
+<li><a href="../overview-summary.html">Overview</a></li>
+<li><a href="../openid/package-summary.html">Package</a></li>
+<li class="active">Class</li>
+<li><a href="../openid/package-tree.html">Tree</a></li>
+<li><a href="../overview-files.html">Files</a></li>
+<li><a href="../deprecated-list.html">Deprecated</a></li>
+<li><a href="../index-all.html">Index</a></li>
+</ul>
+</div>
+
+<div class="small_links">
+<a href="../index.html" target="_top">Frames</a>
+<a href="../openid/auth_yadis_plainhttpfetcher.html" target="_top">No frames</a>
+</div>
+<div class="small_links">
+Summary: <a href="#summary_field">Field</a> | <a href="#summary_method">Method</a> | <a href="#summary_constr">Constr</a>
+Detail: <a href="#detail_field">Field</a> | <a href="#detail_method">Method</a> | <a href="#summary_constr">Constr</a>
+</div>
+<hr>
+
+<p id="footer">This document was generated by <a href="http://peej.github.com/phpdoctor/">PHPDoctor: The PHP Documentation Creator</a></p>
+
+</body>
+
+</html>

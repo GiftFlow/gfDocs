@@ -1,0 +1,457 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+
+<html lang="en">
+<head>
+
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
+<meta name="generator" content="PHPDoctor 2RC4 (http://peej.github.com/phpdoctor/)">
+<meta name="when" content="Wed, 09 Feb 2011 20:22:56 +0000">
+
+<link rel="stylesheet" type="text/css" href="../../../stylesheet.css">
+<link rel="start" href="../../../overview-summary.html">
+
+<title>views/find/index.php (GiftFlow API)</title>
+
+</head>
+<body id="file" onload="parent.document.title=document.title;">
+
+<div class="header">
+<h1>GiftFlow API</h1>
+<ul>
+<li><a href="../../../overview-summary.html">Overview</a></li>
+<li>Package</li><li>Class</li><li>Tree</li><li><a href="../../../overview-files.html">Files</a></li>
+<li><a href="../../../deprecated-list.html">Deprecated</a></li>
+<li><a href="../../../index-all.html">Index</a></li>
+</ul>
+</div>
+
+<div class="small_links">
+<a href="../../../index.html" target="_top">Frames</a>
+<a href="../../../source/views/find/index.php.html" target="_top">No frames</a>
+</div>
+<hr>
+
+<h1>views/find/index.php</h1>
+<hr>
+
+<a name="line1"></a><pre><div id="find_top" class="clearfix">
+<a name="line2"></a>
+<a name="line3"></a>	<!-- Heading -->
+<a name="line4"></a>	<img src='<?php echo base_url(); ?>assets/images/headings/find.png' id="find_heading" />
+<a name="line5"></a>	
+<a name="line6"></a>	<!-- Search Form -->
+<a name="line7"></a>	<form method="post" id="find_form">
+<a name="line8"></a>	
+<a name="line9"></a>		<div id="find_what" class="field">
+<a name="line10"></a>			<label class="inline" for="q">
+<a name="line11"></a>				What?
+<a name="line12"></a>			</label>
+<a name="line13"></a>			<input name="q" type="text" id="q" value="<?php if(!empty($keyword)){ echo urldecode($keyword); } ?>" />
+<a name="line14"></a>			
+<a name="line15"></a>			<!-- Hidden field stores `type` of search -->
+<a name="line16"></a>			<input name="type" type="hidden" id="find_type" value="<?php echo $type;?>" />
+<a name="line17"></a>			
+<a name="line18"></a>			<!-- @todo replace this button menu with radio buttons or a select dropdown for graceful degradation -->			
+<a name="line19"></a>			<ul id="find_type_buttons" class="clearfix">
+<a name="line20"></a>				<li>
+<a name="line21"></a>					<a rel="gifts" <?php if($type=="gifts"){ echo 'class="active"'; } ?>>Gifts</a>
+<a name="line22"></a>				</li>
+<a name="line23"></a>				<li>
+<a name="line24"></a>					<a rel="needs" <?php if($type=="needs"){ echo 'class="active"'; } ?>>Needs</a>
+<a name="line25"></a>				</li>
+<a name="line26"></a>				<li>
+<a name="line27"></a>					<a rel="people" <?php if($type=="people"){ echo 'class="active"'; } ?>>People</a>
+<a name="line28"></a>				</li>
+<a name="line29"></a>			</ul>
+<a name="line30"></a>		</div>
+<a name="line31"></a>		
+<a name="line32"></a>		<div id="find_where" class="field">
+<a name="line33"></a>			<label class="inline" for="location">
+<a name="line34"></a>				Where?
+<a name="line35"></a>			</label>
+<a name="line36"></a>			<input name="location" type="text" id="location" value='<?php if(!empty($args["location"]->address)){ echo $args["location"]->address; } elseif( !empty($userdata['location']->address)){ echo $userdata['location']->address; } ?>' />
+<a name="line37"></a>			<div id="find_radius">
+<a name="line38"></a>				<span id="label">Search within </span>
+<a name="line39"></a>				<span id="value">100 miles</span>
+<a name="line40"></a>			</div>
+<a name="line41"></a>		</div>
+<a name="line42"></a>		
+<a name="line43"></a>		<div id="find_submit">
+<a name="line44"></a>			<input type='submit' value='Find' />
+<a name="line45"></a>		</div>
+<a name="line46"></a>	
+<a name="line47"></a>	</form>
+<a name="line48"></a>
+<a name="line49"></a></div>
+<a name="line50"></a><div id="find_content" class="clearfix">
+<a name="line51"></a>
+<a name="line52"></a>	<!-- Tags -->
+<a name="line53"></a>	<?php if($display == "tags"){ ?>
+<a name="line54"></a>	<div id='find_tags'>
+<a name="line55"></a>		<h2 style='font-weight: 300;'>Popular Tags</h2>
+<a name="line56"></a>		<?php foreach($tags as $key=>$obj){?>
+<a name="line57"></a>			<?php if($key<25){ ?>
+<a name="line58"></a>				<a rel='<?php echo $key;?>' href='<?php echo site_url('find/'.urlencode($obj->tag));?>' class='tag'>
+<a name="line59"></a>					<?php echo $obj->tag;?>
+<a name="line60"></a>				</a>
+<a name="line61"></a>			<?php } ?>
+<a name="line62"></a>		<?php } ?>
+<a name="line63"></a>	</div>
+<a name="line64"></a>	<?php } ?>
+<a name="line65"></a>	
+<a name="line66"></a>	<!-- Google Map -->
+<a name="line67"></a>	<div id='find_map'>
+<a name="line68"></a>	</div>
+<a name="line69"></a>	
+<a name="line70"></a>	<!-- Search Results -->
+<a name="line71"></a>	<div id='find_results'>
+<a name="line72"></a>	<div class='no_results <?php if( $display != 'no_results' ) { echo "hidden"; } ?>'>
+<a name="line73"></a>		<h2>Oops!</h2>
+<a name="line74"></a>		<p>No results found. You should check out some of the site's most popular tags:</p>
+<a name="line75"></a>	<div id='find_tags'>
+<a name="line76"></a>		<?php
+<a name="line77"></a>		$i=0;
+<a name="line78"></a>		/*foreach($tags as $obj) 
+<a name="line79"></a>		{
+<a name="line80"></a>			if ( $i<10){
+<a name="line81"></a>				echo "<a rel='".$i."' href='".site_url('find/'.urlencode($obj->tag))."' class='tag'>".$obj->tag."</a>";
+<a name="line82"></a>			}
+<a name="line83"></a>			$i++;
+<a name="line84"></a>		}*/
+<a name="line85"></a>		?>
+<a name="line86"></a>	</div>
+<a name="line87"></a>
+<a name="line88"></a>	</div>
+<a name="line89"></a>	<?php 		
+<a name="line90"></a>	if( $display == 'results' )
+<a name="line91"></a>	{
+<a name="line92"></a>		echo "<ul class='results_list'>";
+<a name="line93"></a>		foreach($results as $obj)
+<a name="line94"></a>		{ 
+<a name="line95"></a>			echo $obj->html;  
+<a name="line96"></a>		} 
+<a name="line97"></a>		echo "</ul>";
+<a name="line98"></a>	}
+<a name="line99"></a>	else
+<a name="line100"></a>	{
+<a name="line101"></a>		echo "<ul class='results_list' style='display: none;'></ul>";
+<a name="line102"></a>	}
+<a name="line103"></a>	?>
+<a name="line104"></a>	</div>
+<a name="line105"></a></div>
+<a name="line106"></a><script type='text/javascript'>
+<a name="line107"></a>$(function(){
+<a name="line108"></a>
+<a name="line109"></a>	$("input:submit").button();
+<a name="line110"></a>	
+<a name="line111"></a>	$("label.inline").inFieldLabels();
+<a name="line112"></a>
+<a name="line113"></a>
+<a name="line114"></a>	// define map
+<a name="line115"></a>	var map;
+<a name="line116"></a>	
+<a name="line117"></a>	// define the fluster object
+<a name="line118"></a>	var fluster;
+<a name="line119"></a>
+<a name="line120"></a>	
+<a name="line121"></a>	// define location of gift icon
+<a name="line122"></a>	var giftIcon = '<?php echo base_url(); ?>assets/images/icon_gift.png';
+<a name="line123"></a>   		 
+<a name="line124"></a>	// Write preloaded data
+<a name="line125"></a>	// @todo make this reusable by storing in a view; it's used in you/index
+<a name="line126"></a>	var dataset = { 
+<a name="line127"></a>		<?php if(!empty($userdata['location'])) { ?>
+<a name="line128"></a>		center: {
+<a name="line129"></a>			address:"<?php if(!empty($userdata['location']->address)) echo $userdata['location']->address; ?>",
+<a name="line130"></a>			latitude:"<?php if(!empty($userdata['location']->latitude)) echo $userdata['location']->latitude; ?>",
+<a name="line131"></a>			longitude:"<?php if(!empty($userdata['location']->longitude)) echo $userdata['location']->longitude; ?>"
+<a name="line132"></a>		},
+<a name="line133"></a>		<?php } ?>
+<a name="line134"></a>		results: [
+<a name="line135"></a>		<?php if(!empty($results)) { foreach($results as $key=>$val){ ?>
+<a name="line136"></a>			{
+<a name="line137"></a>				location: { 		
+<a name="line138"></a>					latitude:"<?php echo $val->location->latitude; ?>",
+<a name="line139"></a>					longitude:"<?php echo $val->location->longitude;?>"
+<a name="line140"></a>				},
+<a name="line141"></a>				title: "<?php echo $val->title;?>"
+<a name="line142"></a>			}<?php if($key<(count($results))){ echo ","; } ?>
+<a name="line143"></a>		<?php } } ?>
+<a name="line144"></a>		]
+<a name="line145"></a>	};
+<a name="line146"></a>	
+<a name="line147"></a>	var map = (function(){
+<a name="line148"></a>		var api = {};
+<a name="line149"></a>		
+<a name="line150"></a>		return api;
+<a name="line151"></a>	}());
+<a name="line152"></a>	
+<a name="line153"></a>	// Process preloaded data
+<a name="line154"></a>	if(dataset.results.length>0){
+<a name="line155"></a>		generateCenteredMap(dataset);
+<a name="line156"></a>	} else {
+<a name="line157"></a>	
+<a name="line158"></a>	}
+<a name="line159"></a>	
+<a name="line160"></a>	var latestQuery;
+<a name="line161"></a>	
+<a name="line162"></a>	function updateForm(data){
+<a name="line163"></a>		// console.log("updateForm()");
+<a name="line164"></a>		$("#find_what input").val(data.q);
+<a name="line165"></a>		$("#find_type").val(data.type);
+<a name="line166"></a>		$("#find_where input").val(data.location);
+<a name="line167"></a>	}
+<a name="line168"></a>	
+<a name="line169"></a>	$(window).bind( 'hashchange', function(e) {
+<a name="line170"></a>		var merged = $.extend($.deparam.querystring(),$.deparam.fragment());
+<a name="line171"></a>		// console.log("hashchange event fired");
+<a name="line172"></a>		if(latestQuery!=location.hash){
+<a name="line173"></a>			// console.log("new hash detected, reloading with this data:");
+<a name="line174"></a>			// console.log(merged);
+<a name="line175"></a>			updateForm(merged);
+<a name="line176"></a>			$("#find_form").ajaxSubmit(formOptions);
+<a name="line177"></a>		}
+<a name="line178"></a>	});
+<a name="line179"></a>	function addHash(array){
+<a name="line180"></a>		var hash = $.param(array);
+<a name="line181"></a>		// console.log("addHash(): new hash: "+hash);
+<a name="line182"></a>		window.location.hash = hash;
+<a name="line183"></a>		latestQuery = window.location.hash
+<a name="line184"></a>	}
+<a name="line185"></a>
+<a name="line186"></a>	// Ajaxify the form
+<a name="line187"></a>	var formOptions = {
+<a name="line188"></a>		beforeSubmit: addHash,
+<a name="line189"></a>		success: processAjax,
+<a name="line190"></a>		dataType: 'json'
+<a name="line191"></a>	};
+<a name="line192"></a>	$("#find_form").ajaxForm(formOptions);
+<a name="line193"></a>	
+<a name="line194"></a>	$("ul#find_type_buttons li a").click(function(){
+<a name="line195"></a>		$("ul#find_type_buttons li a").removeClass("active");
+<a name="line196"></a>		$(this).addClass("active");
+<a name="line197"></a>		$("#find_type").val($(this).attr("rel"));
+<a name="line198"></a>		$("#find_form").ajaxSubmit(formOptions);
+<a name="line199"></a>	});
+<a name="line200"></a>	
+<a name="line201"></a>	/*
+<a name="line202"></a>	*	Process the AJAX data returned by the form.
+<a name="line203"></a>	*/
+<a name="line204"></a>	function processAjax(data){
+<a name="line205"></a>		if(data.results[0]!=null){
+<a name="line206"></a>			// Display search results
+<a name="line207"></a>			$("#find_tags").hide();
+<a name="line208"></a>			$(".results_list").empty().show();
+<a name="line209"></a>			$.each(data.results, function( key, val){
+<a name="line210"></a>				$(".results_list").append($(val.html));
+<a name="line211"></a>			});
+<a name="line212"></a>			paginate();
+<a name="line213"></a>			generateCenteredMap( data );
+<a name="line214"></a>		} else {
+<a name="line215"></a>			$("ul.simplePagerNav").remove();
+<a name="line216"></a>			generateCenteredMap( data );
+<a name="line217"></a>			$(".results_list").hide();
+<a name="line218"></a>			$(".no_results").show();
+<a name="line219"></a>		}
+<a name="line220"></a>	}
+<a name="line221"></a>	function generateCenteredMap(data){
+<a name="line222"></a>		$("#find_map").show();
+<a name="line223"></a>		$(".no_results").hide();
+<a name="line224"></a>		
+<a name="line225"></a>		/*
+<a name="line226"></a>		*	Sets the center of the map. There are 3 cases.
+<a name="line227"></a>		*	1. center is defined in the json's center property
+<a name="line228"></a>		*	2. location of first result is used as the center
+<a name="line229"></a>		*	3. location is set to be new haven
+<a name="line230"></a>		*/
+<a name="line231"></a>		if(data.center!=null){
+<a name="line232"></a>			var default_location = new google.maps.LatLng( data.center.latitude, data.center.longitude );
+<a name="line233"></a>		} else if(data.results[0]!=null) {
+<a name="line234"></a>			var default_location = new google.maps.LatLng( data.results[0].location.latitude, data.results[0].location.longitude );
+<a name="line235"></a>		} else {
+<a name="line236"></a>			var default_location = new google.maps.LatLng( 41, -71);
+<a name="line237"></a>		}
+<a name="line238"></a>		
+<a name="line239"></a>		// Options
+<a name="line240"></a>		var mapOptions = {
+<a name="line241"></a>			scrollwheel: false,
+<a name="line242"></a>     			zoom: 12,
+<a name="line243"></a>     			center: default_location,
+<a name="line244"></a>			mapTypeId: google.maps.MapTypeId.ROADMAP,
+<a name="line245"></a>			mapTypeControl: false,
+<a name="line246"></a>			navigationControlOptions:  {
+<a name="line247"></a>				style: google.maps.NavigationControlStyle.SMALL
+<a name="line248"></a> 			}
+<a name="line249"></a>   		 };
+<a name="line250"></a>   		
+<a name="line251"></a>   		// Create new map element
+<a name="line252"></a>		map = new google.maps.Map(document.getElementById("find_map"), mapOptions);
+<a name="line253"></a>		fluster = new Fluster2(map);
+<a name="line254"></a>		
+<a name="line255"></a>		// Set styles
+<a name="line256"></a>		fluster.styles = {
+<a name="line257"></a>			// This style will be used for clusters with more than 0 markers
+<a name="line258"></a>			0: {
+<a name="line259"></a>				image: '<?php echo base_url()."assets/images/cluster_ring_padded_medium.png"; ?>',
+<a name="line260"></a>				textColor: '#45A841',
+<a name="line261"></a>				fontSize: '20px',
+<a name="line262"></a>				fontWeight: 'bold',
+<a name="line263"></a>				width: 90,
+<a name="line264"></a>				height: 90,
+<a name="line265"></a>				size: 'small'
+<a name="line266"></a>			},
+<a name="line267"></a>			// This style will be used for clusters with more than 10 markers
+<a name="line268"></a>			10: {
+<a name="line269"></a>				image: '<?php echo base_url()."assets/images/cluster_ring_padded_medium.png"; ?>',
+<a name="line270"></a>				textColor: '#45A841',
+<a name="line271"></a>				fontSize: '20px',
+<a name="line272"></a>				fontWeight: 'bold',
+<a name="line273"></a>				width: 90,
+<a name="line274"></a>				height: 90,
+<a name="line275"></a>				size: 'medium'
+<a name="line276"></a>			},
+<a name="line277"></a>			20: {
+<a name="line278"></a>				image: '<?php echo base_url()."assets/images/cluster_ring_padded_medium.png"; ?>',
+<a name="line279"></a>				textColor: '#45A841',
+<a name="line280"></a>				fontSize: '20px',
+<a name="line281"></a>				fontWeight: 'bold',
+<a name="line282"></a>				width: 90,
+<a name="line283"></a>				height: 90,
+<a name="line284"></a>				size: 'large'
+<a name="line285"></a>			}
+<a name="line286"></a>		};
+<a name="line287"></a>
+<a name="line288"></a>		
+<a name="line289"></a>		/*
+<a name="line290"></a>		*	important: ensures that the event listener that is about to be created doesn't fire every time
+<a name="line291"></a>		*	the map is reloaded
+<a name="line292"></a>		*/
+<a name="line293"></a>		var init = 0;
+<a name="line294"></a>		
+<a name="line295"></a>		/*
+<a name="line296"></a>		*	When the tiles are finished loading, the markers are added. The getBounds function
+<a name="line297"></a>		*	will not work properly unless this is the case. The if condition makes sure that the 
+<a name="line298"></a>		*	event listener doesn't fire every time the map is moved or zoomed.
+<a name="line299"></a>		*/
+<a name="line300"></a>		google.maps.event.addListener(map, 'tilesloaded', function (){
+<a name="line301"></a>			if(init==0){
+<a name="line302"></a>				init = 1;
+<a name="line303"></a>				
+<a name="line304"></a>				// Add center marker
+<a name="line305"></a>				if(data.center!=null){
+<a name="line306"></a>					add_marker({
+<a name="line307"></a>						title: 'Your Location',
+<a name="line308"></a>						location_obj: default_location
+<a name="line309"></a>					});
+<a name="line310"></a>				}
+<a name="line311"></a>
+<a name="line312"></a>				// Add gift markers
+<a name="line313"></a>				$.each(data.results, function(key, val){
+<a name="line314"></a>				
+<a name="line315"></a>					// Add marker
+<a name="line316"></a>					add_marker({
+<a name="line317"></a>						latitude: val.location.latitude,
+<a name="line318"></a>						longitude: val.location.longitude,
+<a name="line319"></a>						title: val.title,
+<a name="line320"></a>						icon: giftIcon
+<a name="line321"></a>					});
+<a name="line322"></a>
+<a name="line323"></a>					fluster.initialize();
+<a name="line324"></a>				});		
+<a name="line325"></a>			}
+<a name="line326"></a>		});
+<a name="line327"></a>	}
+<a name="line328"></a>
+<a name="line329"></a>	/**
+<a name="line330"></a>	*	Add marker to map
+<a name="line331"></a>	*
+<a name="line332"></a>	*	@param options
+<a name="line333"></a>	*	@arg float latitude
+<a name="line334"></a>	*	@arg float longitude
+<a name="line335"></a>	*	@arg string title
+<a name="line336"></a>	*	@arg object icon
+<a name="line337"></a>	*	@arg object location_obj
+<a name="line338"></a>	*/
+<a name="line339"></a>	function add_marker(options){
+<a name="line340"></a>
+<a name="line341"></a>		// If this is the center marker (which we have already defined and 
+<a name="line342"></a>		// therefore passed the object as the parameter location_obj), then 
+<a name="line343"></a>		// we don't skip the LatLng object creation process
+<a name="line344"></a>		if(options.location_obj!=null){
+<a name="line345"></a>			location = options.location_obj;
+<a name="line346"></a>		} else {
+<a name="line347"></a>			// marker location
+<a name="line348"></a>			var location = new google.maps.LatLng(options.latitude, options.longitude);
+<a name="line349"></a>		}
+<a name="line350"></a>		
+<a name="line351"></a>		// Zooms out until marker is visible
+<a name="line352"></a>		expander( location );
+<a name="line353"></a>		
+<a name="line354"></a>		// Create marker object
+<a name="line355"></a>		var marker = new google.maps.Marker({
+<a name="line356"></a>			position: location, 
+<a name="line357"></a>			map: map, 
+<a name="line358"></a>			icon: options.icon,
+<a name="line359"></a>			title: options.title
+<a name="line360"></a>		});
+<a name="line361"></a>		
+<a name="line362"></a>		// If the marker isn't the center, add it to the marker clustering
+<a name="line363"></a>		// queue.
+<a name="line364"></a>		if( options.location_obj == null ){
+<a name="line365"></a>			fluster.addMarker(marker);
+<a name="line366"></a>		}
+<a name="line367"></a>
+<a name="line368"></a>	}
+<a name="line369"></a>	
+<a name="line370"></a>	/*
+<a name="line371"></a>	*	function recursively expands the bounds to include markers,
+<a name="line372"></a>	*	while ensuring that the map is still centered on the user's location.
+<a name="line373"></a>	*/
+<a name="line374"></a>	function expander(location){
+<a name="line375"></a>		var boundaries = map.getBounds();
+<a name="line376"></a>		var fits = boundaries.contains( location );
+<a name="line377"></a>		if(fits == false){
+<a name="line378"></a>			var zoom = map.getZoom();
+<a name="line379"></a>			map.setZoom(zoom-1);
+<a name="line380"></a>			expander(location);
+<a name="line381"></a>		} else {
+<a name="line382"></a>			return true;
+<a name="line383"></a>		}
+<a name="line384"></a>	}
+<a name="line385"></a>	
+<a name="line386"></a>	<?php if($display=="no_results" && (!empty($userdata['location']->latitude) && !empty($userdata['location']->longitude))) { ?>
+<a name="line387"></a>		generateCenteredMap(dataset);
+<a name="line388"></a>		$(".no_results").show();
+<a name="line389"></a>	<?php } ?>
+<a name="line390"></a>
+<a name="line391"></a>	paginate();
+<a name="line392"></a>	
+<a name="line393"></a>	function paginate(){
+<a name="line394"></a>		$("ul.simplePagerNav").remove();
+<a name="line395"></a>		$("ul.results_list").quickPager({ pageSize: 5});
+<a name="line396"></a>	}
+<a name="line397"></a>});
+<a name="line398"></a>
+<a name="line399"></a></script></pre>
+<div class="header">
+<h1>GiftFlow API</h1>
+<ul>
+<li><a href="../../../overview-summary.html">Overview</a></li>
+<li>Package</li><li>Class</li><li>Tree</li><li><a href="../../../overview-files.html">Files</a></li>
+<li><a href="../../../deprecated-list.html">Deprecated</a></li>
+<li><a href="../../../index-all.html">Index</a></li>
+</ul>
+</div>
+
+<div class="small_links">
+<a href="../../../index.html" target="_top">Frames</a>
+<a href="../../../source/views/find/index.php.html" target="_top">No frames</a>
+</div>
+<hr>
+
+<p id="footer">This document was generated by <a href="http://peej.github.com/phpdoctor/">PHPDoctor: The PHP Documentation Creator</a></p>
+
+</body>
+
+</html>

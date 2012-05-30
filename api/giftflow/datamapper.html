@@ -1,0 +1,3992 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+
+<html lang="en">
+<head>
+
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
+<meta name="generator" content="PHPDoctor 2RC4 (http://peej.github.com/phpdoctor/)">
+<meta name="when" content="Wed, 09 Feb 2011 20:22:55 +0000">
+
+<link rel="stylesheet" type="text/css" href="../stylesheet.css">
+<link rel="start" href="../overview-summary.html">
+
+<title>DataMapper (GiftFlow API)</title>
+
+</head>
+<body id="definition" onload="parent.document.title=document.title;">
+
+<div class="header">
+<h1>GiftFlow API</h1>
+<ul>
+<li><a href="../overview-summary.html">Overview</a></li>
+<li><a href="../giftflow/package-summary.html">Package</a></li>
+<li class="active">Class</li>
+<li><a href="../giftflow/package-tree.html">Tree</a></li>
+<li><a href="../overview-files.html">Files</a></li>
+<li><a href="../deprecated-list.html">Deprecated</a></li>
+<li><a href="../index-all.html">Index</a></li>
+</ul>
+</div>
+
+<div class="small_links">
+<a href="../index.html" target="_top">Frames</a>
+<a href="../giftflow/datamapper.html" target="_top">No frames</a>
+</div>
+<div class="small_links">
+Summary: <a href="#summary_field">Field</a> | <a href="#summary_method">Method</a> | <a href="#summary_constr">Constr</a>
+Detail: <a href="#detail_field">Field</a> | <a href="#detail_method">Method</a> | <a href="#summary_constr">Constr</a>
+</div>
+<hr>
+
+<div class="qualifiedName">GiftFlow\DataMapper</div>
+<a href="../source/libraries/datamapper.php.html#line180" class="location">libraries/datamapper.php at line 180</a>
+
+<h1>Class DataMapper</h1>
+
+<pre class="tree"><strong>DataMapper</strong><br /></pre>
+
+<hr>
+
+<p class="signature">public  class <strong>DataMapper</strong></p>
+
+<div class="comment" id="overview_description"><p>Data Mapper Class, OverZealous Edition</p><p>Transforms database tables into objects.</p></div>
+
+<dl>
+<dt>Package		DMZ:</dt>
+<dd>Properties (for code completion)</dd>
+<dt>Property:</dt>
+<dd>CI_DB_driver $db The CodeIgniter Database Library</dd>
+<dd>CI_Loader $load The CodeIgnter Loader Library</dd>
+<dd>CI_Language $lang The CodeIgniter Language Library</dd>
+<dd>CI_Config $config The CodeIgniter Config Library</dd>
+<dd>CI_Form_validation $form_validation The CodeIgniter Form Validation Library Define some of the magic methods: Get By:</dd>
+<dt>Method:</dt>
+<dd>DataMapper get_by_id() get_by_id(int $value) Looks up an item by its ID.</dd>
+<dd>DataMapper get_by_FIELD() get_by_FIELD(mixed $value) Looks up an item by a specific FIELD. Ex: get_by_name($user_name);</dd>
+<dd>DataMapper get_by_related() get_by_related(mixed $related, string $field = NULL, string $value = NULL) Get results based on a related item.</dd>
+<dd>DataMapper get_by_related_RELATEDFIELD() get_by_related_RELATEDFIELD(string $field = NULL, string $value = NULL) Get results based on a RELATEDFIELD. Ex: get_by_related_user('id', $userid); Save and Delete</dd>
+<dd>DataMapper save_RELATEDFIELD() save_RELATEDFIELD(mixed $object) Saves relationship(s) using the specified RELATEDFIELD. Ex: save_user($user);</dd>
+<dd>DataMapper delete_RELATEDFIELD() delete_RELATEDFIELD(mixed $object) Deletes relationship(s) using the specified RELATEDFIELD. Ex: delete_user($user); Related:</dd>
+<dd>DataMapper where_related() where_related(mixed $related, string $field = NULL, string $value = NULL) Limits results based on a related field.</dd>
+<dd>DataMapper or_where_related() or_where_related(mixed $related, string $field = NULL, string $value = NULL) Limits results based on a related field, via OR.</dd>
+<dd>DataMapper where_in_related() where_in_related(mixed $related, string $field, array $values) Limits results by comparing a related field to a range of values.</dd>
+<dd>DataMapper or_where_in_related() or_where_in_related(mixed $related, string $field, array $values) Limits results by comparing a related field to a range of values.</dd>
+<dd>DataMapper where_not_in_related() where_not_in_related(mixed $related, string $field, array $values) Limits results by comparing a related field to a range of values.</dd>
+<dd>DataMapper or_where_not_in_related() or_where_not_in_related(mixed $related, string $field, array $values) Limits results by comparing a related field to a range of values.</dd>
+<dd>DataMapper like_related() like_related(mixed $related, string $field, string $value, string $match = 'both') Limits results by matching a related field to a value.</dd>
+<dd>DataMapper or_like_related() like_related(mixed $related, string $field, string $value, string $match = 'both') Limits results by matching a related field to a value.</dd>
+<dd>DataMapper not_like_related() like_related(mixed $related, string $field, string $value, string $match = 'both') Limits results by matching a related field to a value.</dd>
+<dd>DataMapper or_not_like_related() like_related(mixed $related, string $field, string $value, string $match = 'both') Limits results by matching a related field to a value.</dd>
+<dd>DataMapper ilike_related() like_related(mixed $related, string $field, string $value, string $match = 'both') Limits results by matching a related field to a value (case insensitive).</dd>
+<dd>DataMapper or_ilike_related() like_related(mixed $related, string $field, string $value, string $match = 'both') Limits results by matching a related field to a value (case insensitive).</dd>
+<dd>DataMapper not_ilike_related() like_related(mixed $related, string $field, string $value, string $match = 'both') Limits results by matching a related field to a value (case insensitive).</dd>
+<dd>DataMapper or_not_ilike_related() like_related(mixed $related, string $field, string $value, string $match = 'both') Limits results by matching a related field to a value (case insensitive).</dd>
+<dd>DataMapper group_by_related() group_by_related(mixed $related, string $field) Groups the query by a related field.</dd>
+<dd>DataMapper having_related() having_related(mixed $related, string $field, string $value) Groups the querying using a HAVING clause.</dd>
+<dd>DataMapper or_having_related() having_related(mixed $related, string $field, string $value) Groups the querying using a HAVING clause, via OR.</dd>
+<dd>DataMapper order_by_related() order_by_related(mixed $related, string $field, string $direction) Orders the query based on a related field. Join Fields:</dd>
+<dd>DataMapper where_join_field() where_join_field(mixed $related, string $field = NULL, string $value = NULL) Limits results based on a join field.</dd>
+<dd>DataMapper or_where_join_field() or_where_join_field(mixed $related, string $field = NULL, string $value = NULL) Limits results based on a join field, via OR.</dd>
+<dd>DataMapper where_in_join_field() where_in_join_field(mixed $related, string $field, array $values) Limits results by comparing a join field to a range of values.</dd>
+<dd>DataMapper or_where_in_join_field() or_where_in_join_field(mixed $related, string $field, array $values) Limits results by comparing a join field to a range of values.</dd>
+<dd>DataMapper where_not_in_join_field() where_not_in_join_field(mixed $related, string $field, array $values) Limits results by comparing a join field to a range of values.</dd>
+<dd>DataMapper or_where_not_in_join_field() or_where_not_in_join_field(mixed $related, string $field, array $values) Limits results by comparing a join field to a range of values.</dd>
+<dd>DataMapper like_join_field() like_join_field(mixed $related, string $field, string $value, string $match = 'both') Limits results by matching a join field to a value.</dd>
+<dd>DataMapper or_like_join_field() like_join_field(mixed $related, string $field, string $value, string $match = 'both') Limits results by matching a join field to a value.</dd>
+<dd>DataMapper not_like_join_field() like_join_field(mixed $related, string $field, string $value, string $match = 'both') Limits results by matching a join field to a value.</dd>
+<dd>DataMapper or_not_like_join_field() like_join_field(mixed $related, string $field, string $value, string $match = 'both') Limits results by matching a join field to a value.</dd>
+<dd>DataMapper ilike_join_field() like_join_field(mixed $related, string $field, string $value, string $match = 'both') Limits results by matching a join field to a value (case insensitive).</dd>
+<dd>DataMapper or_ilike_join_field() like_join_field(mixed $related, string $field, string $value, string $match = 'both') Limits results by matching a join field to a value (case insensitive).</dd>
+<dd>DataMapper not_ilike_join_field() like_join_field(mixed $related, string $field, string $value, string $match = 'both') Limits results by matching a join field to a value (case insensitive).</dd>
+<dd>DataMapper or_not_ilike_join_field() like_join_field(mixed $related, string $field, string $value, string $match = 'both') Limits results by matching a join field to a value (case insensitive).</dd>
+<dd>DataMapper group_by_join_field() group_by_join_field(mixed $related, string $field) Groups the query by a join field.</dd>
+<dd>DataMapper having_join_field() having_join_field(mixed $related, string $field, string $value) Groups the querying using a HAVING clause.</dd>
+<dd>DataMapper or_having_join_field() having_join_field(mixed $related, string $field, string $value) Groups the querying using a HAVING clause, via OR.</dd>
+<dd>DataMapper order_by_join_field() order_by_join_field(mixed $related, string $field, string $direction) Orders the query based on a join field. SQL Functions:</dd>
+<dd>DataMapper select_func() select_func(string $function_name, mixed $args,..., string $alias) Selects the result of a SQL function. Alias is required.</dd>
+<dd>DataMapper where_func() where_func(string $function_name, mixed $args,..., string $value) Limits results based on a SQL function.</dd>
+<dd>DataMapper or_where_func() or_where_func(string $function_name, mixed $args,..., string $value) Limits results based on a SQL function, via OR.</dd>
+<dd>DataMapper where_in_func() where_in_func(string $function_name, mixed $args,..., array $values) Limits results by comparing a SQL function to a range of values.</dd>
+<dd>DataMapper or_where_in_func() or_where_in_func(string $function_name, mixed $args,..., array $values) Limits results by comparing a SQL function to a range of values.</dd>
+<dd>DataMapper where_not_in_func() where_not_in_func(string $function_name, string $field, array $values) Limits results by comparing a SQL function to a range of values.</dd>
+<dd>DataMapper or_where_not_in_func() or_where_not_in_func(string $function_name, mixed $args,..., array $values) Limits results by comparing a SQL function to a range of values.</dd>
+<dd>DataMapper like_func() like_func(string $function_name, mixed $args,..., string $value) Limits results by matching a SQL function to a value.</dd>
+<dd>DataMapper or_like_func() like_func(string $function_name, mixed $args,..., string $value) Limits results by matching a SQL function to a value.</dd>
+<dd>DataMapper not_like_func() like_func(string $function_name, mixed $args,..., string $value) Limits results by matching a SQL function to a value.</dd>
+<dd>DataMapper or_not_like_func() like_func(string $function_name, mixed $args,..., string $value) Limits results by matching a SQL function to a value.</dd>
+<dd>DataMapper ilike_func() like_func(string $function_name, mixed $args,..., string $value) Limits results by matching a SQL function to a value (case insensitive).</dd>
+<dd>DataMapper or_ilike_func() like_func(string $function_name, mixed $args,..., string $value) Limits results by matching a SQL function to a value (case insensitive).</dd>
+<dd>DataMapper not_ilike_func() like_func(string $function_name, mixed $args,..., string $value) Limits results by matching a SQL function to a value (case insensitive).</dd>
+<dd>DataMapper or_not_ilike_func() like_func(string $function_name, mixed $args,..., string $value) Limits results by matching a SQL function to a value (case insensitive).</dd>
+<dd>DataMapper group_by_func() group_by_func(string $function_name, mixed $args,...) Groups the query by a SQL function.</dd>
+<dd>DataMapper having_func() having_func(string $function_name, mixed $args,..., string $value) Groups the querying using a HAVING clause.</dd>
+<dd>DataMapper or_having_func() having_func(string $function_name, mixed $args,..., string $value) Groups the querying using a HAVING clause, via OR.</dd>
+<dd>DataMapper order_by_func() order_by_func(string $function_name, mixed $args,..., string $direction) Orders the query based on a SQL function. Field -> SQL functions:</dd>
+<dd>DataMapper where_field_field_func() where_field_func($field, string $function_name, mixed $args,...) Limits results based on a SQL function.</dd>
+<dd>DataMapper or_where_field_field_func() or_where_field_func($field, string $function_name, mixed $args,...) Limits results based on a SQL function, via OR.</dd>
+<dd>DataMapper where_in_field_field_func() where_in_field_func($field, string $function_name, mixed $args,...) Limits results by comparing a SQL function to a range of values.</dd>
+<dd>DataMapper or_where_in_field_field_func() or_where_in_field_func($field, string $function_name, mixed $args,...) Limits results by comparing a SQL function to a range of values.</dd>
+<dd>DataMapper where_not_in_field_field_func() where_not_in_field_func($field, string $function_name, string $field) Limits results by comparing a SQL function to a range of values.</dd>
+<dd>DataMapper or_where_not_in_field_field_func() or_where_not_in_field_func($field, string $function_name, mixed $args,...) Limits results by comparing a SQL function to a range of values.</dd>
+<dd>DataMapper like_field_field_func() like_field_func($field, string $function_name, mixed $args,...) Limits results by matching a SQL function to a value.</dd>
+<dd>DataMapper or_like_field_field_func() like_field_func($field, string $function_name, mixed $args,...) Limits results by matching a SQL function to a value.</dd>
+<dd>DataMapper not_like_field_field_func() like_field_func($field, string $function_name, mixed $args,...) Limits results by matching a SQL function to a value.</dd>
+<dd>DataMapper or_not_like_field_field_func() like_field_func($field, string $function_name, mixed $args,...) Limits results by matching a SQL function to a value.</dd>
+<dd>DataMapper ilike_field_field_func() like_field_func($field, string $function_name, mixed $args,...) Limits results by matching a SQL function to a value (case insensitive).</dd>
+<dd>DataMapper or_ilike_field_field_func() like_field_func($field, string $function_name, mixed $args,...) Limits results by matching a SQL function to a value (case insensitive).</dd>
+<dd>DataMapper not_ilike_field_field_func() like_field_func($field, string $function_name, mixed $args,...) Limits results by matching a SQL function to a value (case insensitive).</dd>
+<dd>DataMapper or_not_ilike_field_field_func() like_field_func($field, string $function_name, mixed $args,...) Limits results by matching a SQL function to a value (case insensitive).</dd>
+<dd>DataMapper group_by_field_field_func() group_by_field_func($field, string $function_name, mixed $args,...) Groups the query by a SQL function.</dd>
+<dd>DataMapper having_field_field_func() having_field_func($field, string $function_name, mixed $args,...) Groups the querying using a HAVING clause.</dd>
+<dd>DataMapper or_having_field_field_func() having_field_func($field, string $function_name, mixed $args,...) Groups the querying using a HAVING clause, via OR.</dd>
+<dd>DataMapper order_by_field_field_func() order_by_field_func($field, string $function_name, mixed $args,...) Orders the query based on a SQL function. Subqueries:</dd>
+<dd>DataMapper select_subquery() select_subquery(DataMapper $subquery, string $alias) Selects the result of a function. Alias is required.</dd>
+<dd>DataMapper where_subquery() where_subquery(mixed $subquery_or_field, mixed $value_or_subquery) Limits results based on a subquery.</dd>
+<dd>DataMapper or_where_subquery() or_where_subquery(mixed $subquery_or_field, mixed $value_or_subquery) Limits results based on a subquery, via OR.</dd>
+<dd>DataMapper where_in_subquery() where_in_subquery(mixed $subquery_or_field, mixed $values_or_subquery) Limits results by comparing a subquery to a range of values.</dd>
+<dd>DataMapper or_where_in_subquery() or_where_in_subquery(mixed $subquery_or_field, mixed $values_or_subquery) Limits results by comparing a subquery to a range of values.</dd>
+<dd>DataMapper where_not_in_subquery() where_not_in_subquery(mixed $subquery_or_field, string $field, mixed $values_or_subquery) Limits results by comparing a subquery to a range of values.</dd>
+<dd>DataMapper or_where_not_in_subquery() or_where_not_in_subquery(mixed $subquery_or_field, mixed $values_or_subquery) Limits results by comparing a subquery to a range of values.</dd>
+<dd>DataMapper like_subquery() like_subquery(DataMapper $subquery, string $value, string $match = 'both') Limits results by matching a subquery to a value.</dd>
+<dd>DataMapper or_like_subquery() like_subquery(DataMapper $subquery, string $value, string $match = 'both') Limits results by matching a subquery to a value.</dd>
+<dd>DataMapper not_like_subquery() like_subquery(DataMapper $subquery, string $value, string $match = 'both') Limits results by matching a subquery to a value.</dd>
+<dd>DataMapper or_not_like_subquery() like_subquery(DataMapper $subquery, string $value, string $match = 'both') Limits results by matching a subquery to a value.</dd>
+<dd>DataMapper ilike_subquery() like_subquery(DataMapper $subquery, string $value, string $match = 'both') Limits results by matching a subquery to a value (case insensitive).</dd>
+<dd>DataMapper or_ilike_subquery() like_subquery(DataMapper $subquery, string $value, string $match = 'both') Limits results by matching a subquery to a value (case insensitive).</dd>
+<dd>DataMapper not_ilike_subquery() like_subquery(DataMapper $subquery, string $value, string $match = 'both') Limits results by matching a subquery to a value (case insensitive).</dd>
+<dd>DataMapper or_not_ilike_subquery() like_subquery(DataMapper $subquery, string $value, string $match = 'both') Limits results by matching a subquery to a value (case insensitive).</dd>
+<dd>DataMapper having_subquery() having_subquery(string $field, DataMapper $subquery) Groups the querying using a HAVING clause.</dd>
+<dd>DataMapper or_having_subquery() having_subquery(string $field, DataMapper $subquery) Groups the querying using a HAVING clause, via OR.</dd>
+<dd>DataMapper order_by_subquery() order_by_subquery(DataMapper $subquery, string $direction) Orders the query based on a subquery. Related Subqueries:</dd>
+<dd>DataMapper where_related_subquery() where_related_subquery(mixed $related_model, string $related_field, DataMapper $subquery) Limits results based on a subquery.</dd>
+<dd>DataMapper or_where_related_subquery() or_where_related_subquery(mixed $related_model, string $related_field, DataMapper $subquery) Limits results based on a subquery, via OR.</dd>
+<dd>DataMapper where_in_related_subquery() where_in_related_subquery(mixed $related_model, string $related_field, DataMapper $subquery) Limits results by comparing a subquery to a range of values.</dd>
+<dd>DataMapper or_where_in_related_subquery() or_where_in_related_subquery(mixed $related_model, string $related_field, DataMapper $subquery) Limits results by comparing a subquery to a range of values.</dd>
+<dd>DataMapper where_not_in_related_subquery() where_not_in_related_subquery(mixed $related_model, string $related_field, DataMapper $subquery) Limits results by comparing a subquery to a range of values.</dd>
+<dd>DataMapper or_where_not_in_related_subquery() or_where_not_in_related_subquery(mixed $related_model, string $related_field, DataMapper $subquery) Limits results by comparing a subquery to a range of values.</dd>
+<dd>DataMapper having_related_subquery() having_related_subquery(mixed $related_model, string $related_field, DataMapper $subquery) Groups the querying using a HAVING clause.</dd>
+<dd>DataMapper or_having_related_subquery() having_related_subquery(mixed $related_model, string $related_field, DataMapper $subquery) Groups the querying using a HAVING clause, via OR. Array Extension:</dd>
+<dd>array to_array() to_array($fields = '') NEEDS ARRAY EXTENSION.  Converts this object into an associative array.  @link DMZ_Array::to_array</dd>
+<dd>array all_to_array() all_to_array($fields = '') NEEDS ARRAY EXTENSION.  Converts the all array into an associative array.  @link DMZ_Array::all_to_array</dd>
+<dd>array|bool from_array() from_array($data, $fields = '', $save = FALSE) NEEDS ARRAY EXTENSION.  Converts $this->all into an associative array.  @link DMZ_Array::all_to_array CSV Extension</dd>
+<dd>bool csv_export() csv_export($filename, $fields = '', $include_header = TRUE) NEEDS CSV EXTENSION.  Exports this object as a CSV file.</dd>
+<dd>array csv_import() csv_import($filename, $fields = '', $header_row = TRUE, $callback = NULL) NEEDS CSV EXTENSION.  Imports a CSV file into this object. JSON Extension:</dd>
+<dd>string to_json() to_json($fields = '', $pretty_print = FALSE) NEEDS JSON EXTENSION.  Converts this object into a JSON string.</dd>
+<dd>string all_to_json() all_to_json($fields = '', $pretty_print = FALSE) NEEDS JSON EXTENSION.  Converts the all array into a JSON string.</dd>
+<dd>bool from_json() from_json($json, $fields = '') NEEDS JSON EXTENSION.  Imports the values from a JSON string into this object.</dd>
+<dd>void set_json_content_type() set_json_content_type() NEEDS JSON EXTENSION.  Sets the content type header to Content-Type: application/json. SimpleCache Extension:</dd>
+<dd>DataMapper get_cached() get_cached($limit = '', $offset = '') NEEDS SIMPLECACHE EXTENSION.  Enables cacheable queries.</dd>
+<dd>DataMapper clear_cache() get_cached($segment,...) NEEDS SIMPLECACHE EXTENSION.  Clears a cache for the specfied segment. /</dd>
+</dl>
+<hr>
+
+<table id="summary_field">
+<tr><th colspan="2">Field Summary</th></tr>
+<tr>
+<td class="type">protected  mixed</td>
+<td class="description"><p class="name"><a href="#_field_tracking">$_field_tracking</a></p></td>
+</tr>
+<tr>
+<td class="type">protected  mixed</td>
+<td class="description"><p class="name"><a href="#_force_save_as_new">$_force_save_as_new</a></p></td>
+</tr>
+<tr>
+<td class="type">protected  mixed</td>
+<td class="description"><p class="name"><a href="#_include_join_fields">$_include_join_fields</a></p></td>
+</tr>
+<tr>
+<td class="type">protected  mixed</td>
+<td class="description"><p class="name"><a href="#_instantiations">$_instantiations</a></p></td>
+</tr>
+<tr>
+<td class="type">protected  mixed</td>
+<td class="description"><p class="name"><a href="#_query_related">$_query_related</a></p></td>
+</tr>
+<tr>
+<td class="type">protected  mixed</td>
+<td class="description"><p class="name"><a href="#_validated">$_validated</a></p></td>
+</tr>
+<tr>
+<td class="type">protected  mixed</td>
+<td class="description"><p class="name"><a href="#_where_group_started">$_where_group_started</a></p></td>
+</tr>
+<tr>
+<td class="type"> array</td>
+<td class="description"><p class="name"><a href="#all">$all</a></p><p class="description">Contains the result of the last query.</p></td>
+</tr>
+<tr>
+<td class="type"> bool</td>
+<td class="description"><p class="name"><a href="#all_array_uses_ids">$all_array_uses_ids</a></p><p class="description">Enables the old method of storing the all array using an object's ID.</p></td>
+</tr>
+<tr>
+<td class="type"> bool</td>
+<td class="description"><p class="name"><a href="#auto_populate_has_many">$auto_populate_has_many</a></p><p class="description">If TRUE, has_many relationships are automatically loaded when accessed.
+</p></td>
+</tr>
+<tr>
+<td class="type"> bool</td>
+<td class="description"><p class="name"><a href="#auto_populate_has_one">$auto_populate_has_one</a></p><p class="description">If TRUE, has_one relationships are automatically loaded when accessed.
+</p></td>
+</tr>
+<tr>
+<td class="type"> bool</td>
+<td class="description"><p class="name"><a href="#auto_transaction">$auto_transaction</a></p><p class="description">If TRUE, automatically wrap every save and delete in a transaction.</p></td>
+</tr>
+<tr>
+<td class="type"> string</td>
+<td class="description"><p class="name"><a href="#created_field">$created_field</a></p><p class="description">Custom name for the automatic timestamp saved with new objects.
+</p></td>
+</tr>
+<tr>
+<td class="type"> mixed</td>
+<td class="description"><p class="name"><a href="#db_params">$db_params</a></p><p class="description">Can be used to override the default database behavior.</p></td>
+</tr>
+<tr>
+<td class="type"> mixed</td>
+<td class="description"><p class="name"><a href="#default_order_by">$default_order_by</a></p><p class="description">This can be specified as an array of fields to sort by if no other
+sorting or selection has occurred.</p></td>
+</tr>
+<tr>
+<td class="type"> string</td>
+<td class="description"><p class="name"><a href="#error_prefix">$error_prefix</a></p><p class="description">Prefix string used when reporting errors.</p></td>
+</tr>
+<tr>
+<td class="type"> string</td>
+<td class="description"><p class="name"><a href="#error_suffix">$error_suffix</a></p><p class="description">Suffic string used when reporting errors.</p></td>
+</tr>
+<tr>
+<td class="type"> mixed</td>
+<td class="description"><p class="name"><a href="#extensions">$extensions</a></p><p class="description">If set to an array of names, this will automatically load the
+specified extensions for this model.</p></td>
+</tr>
+<tr>
+<td class="type"> string</td>
+<td class="description"><p class="name"><a href="#extensions_path">$extensions_path</a></p><p class="description">Used to determine where to look for extensions.
+</p></td>
+</tr>
+<tr>
+<td class="type"> string</td>
+<td class="description"><p class="name"><a href="#field_label_lang_format">$field_label_lang_format</a></p><p class="description">Set to a string to use when looking up field labels. </p></td>
+</tr>
+<tr>
+<td class="type"> array</td>
+<td class="description"><p class="name"><a href="#fields">$fields</a></p><p class="description">Contains the database fields for this object.
+</p></td>
+</tr>
+<tr>
+<td class="type"> int</td>
+<td class="description"><p class="name"><a href="#free_result_threshold">$free_result_threshold</a></p><p class="description">If a query returns more than the number of rows specified here,
+then it will be automatically freed after a get.</p></td>
+</tr>
+<tr>
+<td class="type">static  <a href="../dmz/dm_error_object.html">DM_Error_Object</a></td>
+<td class="description"><p class="name"><a href="#get_access_level">$get_access_level</a></p><p class="description">Contains any errors that occur during validation, saving, or other
+database access.</p></td>
+</tr>
+<tr>
+<td class="type"> array</td>
+<td class="description"><p class="name"><a href="#has_many">$has_many</a></p><p class="description">Contains any related objects of which this model is related one or more times.</p></td>
+</tr>
+<tr>
+<td class="type"> array</td>
+<td class="description"><p class="name"><a href="#has_one">$has_one</a></p><p class="description">Contains any related objects of which this model is singularly related.</p></td>
+</tr>
+<tr>
+<td class="type"> string</td>
+<td class="description"><p class="name"><a href="#join_prefix">$join_prefix</a></p><p class="description">DB Join Table Prefix</p></td>
+</tr>
+<tr>
+<td class="type"> string</td>
+<td class="description"><p class="name"><a href="#lang_file_format">$lang_file_format</a></p><p class="description">Set to a string to use when autoloading lang files.
+</p></td>
+</tr>
+<tr>
+<td class="type"> bool</td>
+<td class="description"><p class="name"><a href="#local_time">$local_time</a></p><p class="description">If TRUE, the created/updated fields are stored using local time.
+</p></td>
+</tr>
+<tr>
+<td class="type"> string</td>
+<td class="description"><p class="name"><a href="#model">$model</a></p><p class="description">The singular name for this model (may be automatically generated from
+the classname).</p></td>
+</tr>
+<tr>
+<td class="type"> array</td>
+<td class="description"><p class="name"><a href="#parent">$parent</a></p><p class="description">Semi-private field used to track the parent model/id if there is one.</p></td>
+</tr>
+<tr>
+<td class="type"> string</td>
+<td class="description"><p class="name"><a href="#prefix">$prefix</a></p><p class="description">DB Table Prefix</p></td>
+</tr>
+<tr>
+<td class="type"> bool</td>
+<td class="description"><p class="name"><a href="#production_cache">$production_cache</a></p><p class="description">Used to enable or disable the production cache.
+</p></td>
+</tr>
+<tr>
+<td class="type"> object</td>
+<td class="description"><p class="name"><a href="#stored">$stored</a></p><p class="description">Used to keep track of the original values from the database, to
+prevent unecessarily changing fields.</p></td>
+</tr>
+<tr>
+<td class="type"> string</td>
+<td class="description"><p class="name"><a href="#table">$table</a></p><p class="description">The name of the table for this model (may be automatically generated
+from the classname).</p></td>
+</tr>
+<tr>
+<td class="type"> string</td>
+<td class="description"><p class="name"><a href="#timestamp_format">$timestamp_format</a></p><p class="description">Set to a date format to override the default format of
+'Y-m-d H:i:s O'</p></td>
+</tr>
+<tr>
+<td class="type"> bool</td>
+<td class="description"><p class="name"><a href="#unix_timestamp">$unix_timestamp</a></p><p class="description">If TRUE, the created/updated fields are stored as a unix timestamp,
+as opposed to a formatted string.
+</p></td>
+</tr>
+<tr>
+<td class="type"> string</td>
+<td class="description"><p class="name"><a href="#updated_field">$updated_field</a></p><p class="description">Custom name for the automatic timestamp saved when an object changes.
+</p></td>
+</tr>
+<tr>
+<td class="type"> bool</td>
+<td class="description"><p class="name"><a href="#valid">$valid</a></p><p class="description">The result of validate is stored here.</p></td>
+</tr>
+<tr>
+<td class="type"> array</td>
+<td class="description"><p class="name"><a href="#validation">$validation</a></p><p class="description">Contains the validation rules, label, and get_rules for each field.</p></td>
+</tr>
+</table>
+
+<table id="summary_method">
+<tr><th colspan="2">Method Summary</th></tr>
+<tr>
+<td class="type"> void</td>
+<td class="description"><p class="name"><a href="#__call()">__call</a>(mixed method, mixed arguments)</p><p class="description">Magic CallCalls special methods, or extension methods.</p></td>
+</tr>
+<tr>
+<td class="type"> void</td>
+<td class="description"><p class="name"><a href="#__clone()">__clone</a>()</p><p class="description">Magic CloneAllows for a less shallow clone than the default PHP clone.</p></td>
+</tr>
+<tr>
+<td class="type"> void</td>
+<td class="description"><p class="name"><a href="#__construct()">__construct</a>(mixed id)</p><p class="description">ConstructorInitialize DataMapper.</p></td>
+</tr>
+<tr>
+<td class="type"> void</td>
+<td class="description"><p class="name"><a href="#__get()">__get</a>(mixed name)</p><p class="description">Magic GetReturns the value of the named property.
+</p></td>
+</tr>
+<tr>
+<td class="type"> void</td>
+<td class="description"><p class="name"><a href="#__toString()">__toString</a>()</p><p class="description">To StringConverts the current object into a string.
+</p></td>
+</tr>
+<tr>
+<td class="type"> void</td>
+<td class="description"><p class="name"><a href="#_add_related_table()">_add_related_table</a>(mixed object, str related_field, bool id_only, mixed db, mixed query_related, str name_prepend, mixed this_table)</p><p class="description">Add Related TableAdds the table of a related item, and joins it to this class.
+</p></td>
+</tr>
+<tr>
+<td class="type">protected  void</td>
+<td class="description"><p class="name"><a href="#_add_to_select_directly()">_add_to_select_directly</a>(mixed value)</p><p class="description">Manually adds an item to the SELECT column, to prevent it from
+being broken by AR->select</p></td>
+</tr>
+<tr>
+<td class="type">protected  void</td>
+<td class="description"><p class="name"><a href="#_alpha_dash_dot()">_alpha_dash_dot</a>(mixed field)</p><p class="description">Alpha Dash Dot (pre-process)Alpha-numeric with underscores, dashes and full stops.</p></td>
+</tr>
+<tr>
+<td class="type">protected  void</td>
+<td class="description"><p class="name"><a href="#_alpha_slash_dot()">_alpha_slash_dot</a>(mixed field)</p><p class="description">Alpha Slash Dot (pre-process)Alpha-numeric with underscores, dashes, forward slashes and full stops.</p></td>
+</tr>
+<tr>
+<td class="type">protected  void</td>
+<td class="description"><p class="name"><a href="#_always_validate()">_always_validate</a>()</p><p class="description">Always ValidateDoes nothing, but forces a validation even if empty (for non-required fields)</p></td>
+</tr>
+<tr>
+<td class="type"> void</td>
+<td class="description"><p class="name"><a href="#_assign_libraries()">_assign_libraries</a>()</p><p class="description">Assign LibrariesOriginally used by CodeIgniter, now just logs a warning.</p></td>
+</tr>
+<tr>
+<td class="type">protected  void</td>
+<td class="description"><p class="name"><a href="#_auto_trans_begin()">_auto_trans_begin</a>()</p><p class="description">Auto Trans BeginBegin an auto transaction if enabled.</p></td>
+</tr>
+<tr>
+<td class="type">protected  void</td>
+<td class="description"><p class="name"><a href="#_auto_trans_complete()">_auto_trans_complete</a>(str label)</p><p class="description">Auto Trans CompleteComplete an auto transaction if enabled.</p></td>
+</tr>
+<tr>
+<td class="type">protected  void</td>
+<td class="description"><p class="name"><a href="#_boolean()">_boolean</a>(mixed field)</p><p class="description">Boolean (pre-process)Forces a field to be either TRUE or FALSE.
+</p></td>
+</tr>
+<tr>
+<td class="type">protected  void</td>
+<td class="description"><p class="name"><a href="#_clear_after_query()">_clear_after_query</a>()</p><p class="description">Clears the db object after processing a query, or returning the
+SQL for a query.</p></td>
+</tr>
+<tr>
+<td class="type">protected  void</td>
+<td class="description"><p class="name"><a href="#_count_related()">_count_related</a>(mixed related_field, str object)</p><p class="description">Count RelatedReturns the number of related items in the database and in the related object.
+</p></td>
+</tr>
+<tr>
+<td class="type">private  void</td>
+<td class="description"><p class="name"><a href="#_count_related_objects()">_count_related_objects</a>(mixed compare, mixed object, mixed related_field, mixed ids)</p><p class="description">Private recursive function to count the number of objects
+in a passed in array (or a single object)</p></td>
+</tr>
+<tr>
+<td class="type">private  void</td>
+<td class="description"><p class="name"><a href="#_delete()">_delete</a>(mixed related_field, mixed arguments)</p><p class="description">_DeleteUsed by __call to process related deletes.</p></td>
+</tr>
+<tr>
+<td class="type">protected  void</td>
+<td class="description"><p class="name"><a href="#_delete_relation()">_delete_relation</a>(mixed object, str related_field)</p><p class="description">Delete RelationDeletes the relation between this and the other object.</p></td>
+</tr>
+<tr>
+<td class="type">protected  void</td>
+<td class="description"><p class="name"><a href="#_dmz_assign_libraries()">_dmz_assign_libraries</a>()</p><p class="description">Assign LibrariesAssigns required CodeIgniter libraries to DataMapper.</p></td>
+</tr>
+<tr>
+<td class="type">protected  void</td>
+<td class="description"><p class="name"><a href="#_encode_php_tags()">_encode_php_tags</a>(mixed field)</p><p class="description">Encode PHP Tags (prep)Convert PHP tags to entities.
+</p></td>
+</tr>
+<tr>
+<td class="type">private  void</td>
+<td class="description"><p class="name"><a href="#_extension_method_exists()">_extension_method_exists</a>(mixed method, str which)</p><p class="description">Returns TRUE or FALSE if the method exists in the extensions.</p></td>
+</tr>
+<tr>
+<td class="type">private  void</td>
+<td class="description"><p class="name"><a href="#_field_func()">_field_func</a>(mixed query, mixed args)</p><p class="description">Used by the magic method for {where}_field_func, etc.</p></td>
+</tr>
+<tr>
+<td class="type">private  void</td>
+<td class="description"><p class="name"><a href="#_func()">_func</a>(mixed query, mixed args)</p><p class="description">Used by the magic method for select_func, {where}_func, etc</p></td>
+</tr>
+<tr>
+<td class="type">private  void</td>
+<td class="description"><p class="name"><a href="#_get_by()">_get_by</a>(mixed field, mixed value)</p><p class="description">Get ByGets objects by specified field name and value.</p></td>
+</tr>
+<tr>
+<td class="type">private  void</td>
+<td class="description"><p class="name"><a href="#_get_by_related()">_get_by_related</a>(mixed model, mixed arguments)</p><p class="description">Get By RelatedGets objects by specified related object and optionally by field name and value.</p></td>
+</tr>
+<tr>
+<td class="type">private  mixed</td>
+<td class="description"><p class="name"><a href="#_get_generated_timestamp()">_get_generated_timestamp</a>()</p><p class="description">Gets a timestamp to use when saving.</p></td>
+</tr>
+<tr>
+<td class="type">protected  void</td>
+<td class="description"><p class="name"><a href="#_get_prepend_type()">_get_prepend_type</a>(mixed type)</p><p class="description">protected function to convert the AND or OR prefix to '' when starting
+a group.</p></td>
+</tr>
+<tr>
+<td class="type"> void</td>
+<td class="description"><p class="name"><a href="#_get_related_properties()">_get_related_properties</a>(mixed related_field, bool try_singular)</p><p class="description">get_related_propertiesLocated the relationship properties for a given field or model
+Can also optionally attempt to convert the $related_field to
+singular, and look up on that. </p></td>
+</tr>
+<tr>
+<td class="type">private  void</td>
+<td class="description"><p class="name"><a href="#_get_relation()">_get_relation</a>(mixed related_field, mixed id)</p><p class="description">Get RelationFinds all related records of this objects current record.</p></td>
+</tr>
+<tr>
+<td class="type"> void</td>
+<td class="description"><p class="name"><a href="#_get_relationship_table()">_get_relationship_table</a>(mixed object, str related_field)</p><p class="description">Get Relationship TableDetermines the relationship table between this object and $object.</p></td>
+</tr>
+<tr>
+<td class="type">private  DataMapper|NULL</td>
+<td class="description"><p class="name"><a href="#_get_without_auto_populating()">_get_without_auto_populating</a>(string related)</p><p class="description">Used several places to temporarily override the auto_populate setting</p></td>
+</tr>
+<tr>
+<td class="type">protected  void</td>
+<td class="description"><p class="name"><a href="#_handle_default_order_by()">_handle_default_order_by</a>()</p><p class="description">Adds in the defaut order_by items, if there are any, and
+order_by hasn't been overridden.</p></td>
+</tr>
+<tr>
+<td class="type">protected  bool</td>
+<td class="description"><p class="name"><a href="#_handle_related()">_handle_related</a>()</p><p class="description">Handles the adding the related part of a query if $parent is set</p></td>
+</tr>
+<tr>
+<td class="type">protected  void</td>
+<td class="description"><p class="name"><a href="#_having()">_having</a>(mixed key, str value, str type, bool escape)</p><p class="description">HavingSets the HAVING portion of the query.
+</p></td>
+</tr>
+<tr>
+<td class="type">private  void</td>
+<td class="description"><p class="name"><a href="#_initiate_local_extensions()">_initiate_local_extensions</a>(mixed common_key)</p><p class="description">Loads the extensions that are local to this model.</p></td>
+</tr>
+<tr>
+<td class="type">private  void</td>
+<td class="description"><p class="name"><a href="#_join_field()">_join_field</a>(mixed query, mixed arguments)</p><p class="description">Join FieldAdds a query of a join table's extra field
+Accessed via __call</p></td>
+</tr>
+<tr>
+<td class="type">protected  void</td>
+<td class="description"><p class="name"><a href="#_like()">_like</a>(mixed field, str match, str type, str side, str not, bool no_case)</p><p class="description">_LikePrivate function to do actual work.
+</p></td>
+</tr>
+<tr>
+<td class="type">protected static  void</td>
+<td class="description"><p class="name"><a href="#_load_extensions()">_load_extensions</a>(mixed extensions, mixed names)</p><p class="description">Loads in any extensions used by this class or globally.</p></td>
+</tr>
+<tr>
+<td class="type">protected  void</td>
+<td class="description"><p class="name"><a href="#_load_helpers()">_load_helpers</a>()</p><p class="description">Load HelpersLoads required CodeIgniter helpers.</p></td>
+</tr>
+<tr>
+<td class="type">protected  void</td>
+<td class="description"><p class="name"><a href="#_load_languages()">_load_languages</a>()</p><p class="description">Load LanguagesLoads required language files.</p></td>
+</tr>
+<tr>
+<td class="type">protected  void</td>
+<td class="description"><p class="name"><a href="#_matches()">_matches</a>(mixed field, mixed other_field)</p><p class="description">Matches (pre-process)Match one field to another.
+</p></td>
+</tr>
+<tr>
+<td class="type">protected  void</td>
+<td class="description"><p class="name"><a href="#_max_date()">_max_date</a>(mixed field, mixed date)</p><p class="description">Max Date (pre-process)Checks if the value of a property is at most the maximum date.</p></td>
+</tr>
+<tr>
+<td class="type">protected  void</td>
+<td class="description"><p class="name"><a href="#_max_size()">_max_size</a>(mixed field, mixed size)</p><p class="description">Max Size (pre-process)Checks if the value of a property is at most the maximum size.</p></td>
+</tr>
+<tr>
+<td class="type">protected  void</td>
+<td class="description"><p class="name"><a href="#_min_date()">_min_date</a>(mixed field, mixed date)</p><p class="description">Min Date (pre-process)Checks if the value of a property is at least the minimum date.</p></td>
+</tr>
+<tr>
+<td class="type">protected  void</td>
+<td class="description"><p class="name"><a href="#_min_size()">_min_size</a>(mixed field, mixed size)</p><p class="description">Min Size (pre-process)Checks if the value of a property is at least the minimum size.</p></td>
+</tr>
+<tr>
+<td class="type">protected  void</td>
+<td class="description"><p class="name"><a href="#_parse_subquery_object()">_parse_subquery_object</a>(mixed sql)</p><p class="description">Parses and protects a subquery.
+</p></td>
+</tr>
+<tr>
+<td class="type">protected  void</td>
+<td class="description"><p class="name"><a href="#_prep_for_form()">_prep_for_form</a>(mixed field)</p><p class="description">Prep for Form (prep)Converts special characters to allow HTML to be safely shown in a form.
+</p></td>
+</tr>
+<tr>
+<td class="type">protected  void</td>
+<td class="description"><p class="name"><a href="#_prep_url()">_prep_url</a>(mixed field)</p><p class="description">Prep URL (prep)Adds "http://" to URLs if missing.
+</p></td>
+</tr>
+<tr>
+<td class="type">private  void</td>
+<td class="description"><p class="name"><a href="#_process_function_arg()">_process_function_arg</a>(mixed arg, bool is_formula)</p></td>
+</tr>
+<tr>
+<td class="type">protected  void</td>
+<td class="description"><p class="name"><a href="#_process_query()">_process_query</a>(mixed query)</p><p class="description">Process QueryConverts a query result into an array of objects.
+</p></td>
+</tr>
+<tr>
+<td class="type">private  void</td>
+<td class="description"><p class="name"><a href="#_process_special_query_clause()">_process_special_query_clause</a>(mixed query, mixed field, mixed value, mixed extra)</p><p class="description">Handles specialized where clauses, like subqueries and functions</p></td>
+</tr>
+<tr>
+<td class="type">protected  void</td>
+<td class="description"><p class="name"><a href="#_refresh_stored_values()">_refresh_stored_values</a>()</p><p class="description">Refresh Stored ValuesRefreshes the stored values with the current values.</p></td>
+</tr>
+<tr>
+<td class="type">private  void</td>
+<td class="description"><p class="name"><a href="#_related()">_related</a>(mixed query, mixed arguments)</p><p class="description">RelatedSets the specified related query.</p></td>
+</tr>
+<tr>
+<td class="type">protected  void</td>
+<td class="description"><p class="name"><a href="#_related_max_size()">_related_max_size</a>(mixed object, mixed model, int size)</p><p class="description">Related Max Size (pre-process)Checks if the value of a property is at most the maximum size.</p></td>
+</tr>
+<tr>
+<td class="type">protected  void</td>
+<td class="description"><p class="name"><a href="#_related_min_size()">_related_min_size</a>(mixed object, mixed model, int size)</p><p class="description">Related Min Size (pre-process)Checks if the value of a property is at most the minimum size.</p></td>
+</tr>
+<tr>
+<td class="type">protected  void</td>
+<td class="description"><p class="name"><a href="#_related_required()">_related_required</a>(mixed object, mixed model)</p><p class="description">Related Required (pre-process)Checks if the related object has the required related item
+or if the required relation already exists.</p></td>
+</tr>
+<tr>
+<td class="type">private  void</td>
+<td class="description"><p class="name"><a href="#_related_subquery()">_related_subquery</a>(mixed query, mixed args)</p><p class="description">Magic method to process a subquery for a related object.
+</p></td>
+</tr>
+<tr>
+<td class="type">private  void</td>
+<td class="description"><p class="name"><a href="#_remove_other_one_to_one()">_remove_other_one_to_one</a>(string rf, <a href="../giftflow/datamapper.html">DataMapper</a> object)</p><p class="description">Remove Other One-to-One
+Removes other relationships on a one-to-one ITFK relationship</p></td>
+</tr>
+<tr>
+<td class="type">protected  void</td>
+<td class="description"><p class="name"><a href="#_run_get_rules()">_run_get_rules</a>()</p><p class="description">Run Get RulesProcesses values loaded from the database</p></td>
+</tr>
+<tr>
+<td class="type">private  void</td>
+<td class="description"><p class="name"><a href="#_save()">_save</a>(mixed related_field, mixed arguments)</p><p class="description">_SaveUsed by __call to process related saves.</p></td>
+</tr>
+<tr>
+<td class="type">protected  void</td>
+<td class="description"><p class="name"><a href="#_save_itfk()">_save_itfk</a>(mixed objects, mixed related_field)</p><p class="description">Recursively saves arrays of objects if they are In-Table Foreign Keys.</p></td>
+</tr>
+<tr>
+<td class="type">protected  void</td>
+<td class="description"><p class="name"><a href="#_save_related_recursive()">_save_related_recursive</a>(mixed object, mixed related_field)</p><p class="description">Recursively saves arrays of objects.</p></td>
+</tr>
+<tr>
+<td class="type">protected  void</td>
+<td class="description"><p class="name"><a href="#_save_relation()">_save_relation</a>(mixed object, str related_field)</p><p class="description">Save RelationSaves the relation between this and the other object.</p></td>
+</tr>
+<tr>
+<td class="type">protected  void</td>
+<td class="description"><p class="name"><a href="#_strip_image_tags()">_strip_image_tags</a>(mixed field)</p><p class="description">Strip Image Tags (prep)Strips the HTML from image tags leaving the raw URL.
+</p></td>
+</tr>
+<tr>
+<td class="type">private  void</td>
+<td class="description"><p class="name"><a href="#_subquery()">_subquery</a>(mixed query, mixed args)</p><p class="description">Used by the magic method for select_subquery {where}_subquery, etc</p></td>
+</tr>
+<tr>
+<td class="type">protected  void</td>
+<td class="description"><p class="name"><a href="#_to_array()">_to_array</a>(bool validate)</p><p class="description">To ArrayConverts this objects current record into an array for database queries.
+</p></td>
+</tr>
+<tr>
+<td class="type"> void</td>
+<td class="description"><p class="name"><a href="#_to_object()">_to_object</a>(mixed item, mixed row)</p><p class="description">To Object
+Copies the values from a query result row to an object.
+</p></td>
+</tr>
+<tr>
+<td class="type">protected  void</td>
+<td class="description"><p class="name"><a href="#_trim()">_trim</a>(mixed field)</p><p class="description">Trim
+Custom trim rule that ignores NULL values</p></td>
+</tr>
+<tr>
+<td class="type">protected  void</td>
+<td class="description"><p class="name"><a href="#_unique()">_unique</a>(mixed field)</p><p class="description">Unique (pre-process)Checks if the value of a property is unique.
+</p></td>
+</tr>
+<tr>
+<td class="type">protected  void</td>
+<td class="description"><p class="name"><a href="#_unique_pair()">_unique_pair</a>(mixed field, str other_field)</p><p class="description">Unique Pair (pre-process)Checks if the value of a property, paired with another, is unique.
+</p></td>
+</tr>
+<tr>
+<td class="type">protected  void</td>
+<td class="description"><p class="name"><a href="#_valid_date()">_valid_date</a>(mixed field)</p><p class="description">Valid Date (pre-process)Checks whether the field value is a valid DateTime.</p></td>
+</tr>
+<tr>
+<td class="type">protected  void</td>
+<td class="description"><p class="name"><a href="#_valid_date_group()">_valid_date_group</a>(mixed field, mixed fields)</p><p class="description">Valid Date Group (pre-process)Checks whether the field value, grouped with other field values, is a valid DateTime.</p></td>
+</tr>
+<tr>
+<td class="type">protected  void</td>
+<td class="description"><p class="name"><a href="#_valid_match()">_valid_match</a>(mixed field, mixed param)</p><p class="description">Valid Match (pre-process)Checks whether the field value matches one of the specified array values.</p></td>
+</tr>
+<tr>
+<td class="type">protected  void</td>
+<td class="description"><p class="name"><a href="#_where()">_where</a>(mixed key, mixed value, str type, mixed escape)</p><p class="description">WhereCalled by where() or or_where().</p></td>
+</tr>
+<tr>
+<td class="type">protected  void</td>
+<td class="description"><p class="name"><a href="#_where_in()">_where_in</a>(mixed key, mixed values, bool not, str type)</p><p class="description">Where InCalled by where_in(), or_where_in(), where_not_in(), or or_where_not_in().</p></td>
+</tr>
+<tr>
+<td class="type">protected  void</td>
+<td class="description"><p class="name"><a href="#_xss_clean()">_xss_clean</a>(mixed field, bool is_image)</p><p class="description">XSS Clean (prep)Runs the data through the XSS filtering function, described in the Input Class page.
+</p></td>
+</tr>
+<tr>
+<td class="type"> void</td>
+<td class="description"><p class="name"><a href="#add_table_name()">add_table_name</a>(mixed field)</p><p class="description">Add Table NameAdds the table name to a field if necessary</p></td>
+</tr>
+<tr>
+<td class="type">static  void</td>
+<td class="description"><p class="name"><a href="#autoload()">autoload</a>(mixed class)</p><p class="description">AutoloadAutoloads object classes that are used with DataMapper.
+</p></td>
+</tr>
+<tr>
+<td class="type"> void</td>
+<td class="description"><p class="name"><a href="#check_last_query()">check_last_query</a>(str delims)</p><p class="description">Check Last Query
+Renders the last DB query performed.</p></td>
+</tr>
+<tr>
+<td class="type"> void</td>
+<td class="description"><p class="name"><a href="#clear()">clear</a>()</p><p class="description">ClearClears the current object.</p></td>
+</tr>
+<tr>
+<td class="type"> void</td>
+<td class="description"><p class="name"><a href="#count()">count</a>(mixed exclude_ids, mixed column, mixed related_id)</p><p class="description">CountReturns the total count of the object records from the database.
+</p></td>
+</tr>
+<tr>
+<td class="type"> void</td>
+<td class="description"><p class="name"><a href="#count_distinct()">count_distinct</a>(mixed exclude_ids, str column)</p><p class="description">Count DistinctReturns the total count of distinct object records from the database.
+</p></td>
+</tr>
+<tr>
+<td class="type"> void</td>
+<td class="description"><p class="name"><a href="#delete()">delete</a>(str object, str related_field)</p><p class="description">DeleteDeletes the current record.
+</p></td>
+</tr>
+<tr>
+<td class="type"> void</td>
+<td class="description"><p class="name"><a href="#delete_all()">delete_all</a>()</p><p class="description">Delete AllDeletes all records in this objects all list.</p></td>
+</tr>
+<tr>
+<td class="type"> void</td>
+<td class="description"><p class="name"><a href="#distinct()">distinct</a>(bool value)</p><p class="description">DistinctSets the flag to add DISTINCT to the query.</p></td>
+</tr>
+<tr>
+<td class="type"> void</td>
+<td class="description"><p class="name"><a href="#error_message()">error_message</a>(string field, string error)</p><p class="description">Error MessageAdds an error message to this objects error object.</p></td>
+</tr>
+<tr>
+<td class="type"> void</td>
+<td class="description"><p class="name"><a href="#exists()">exists</a>()</p><p class="description">ExistsReturns TRUE if the current object has a database record.</p></td>
+</tr>
+<tr>
+<td class="type"> void</td>
+<td class="description"><p class="name"><a href="#flush_cache()">flush_cache</a>()</p><p class="description">Flush CacheEmpties the AR cache.</p></td>
+</tr>
+<tr>
+<td class="type"> void</td>
+<td class="description"><p class="name"><a href="#func()">func</a>(mixed function_name)</p><p class="description">Creates a SQL-function with the given (optional) arguments.
+</p></td>
+</tr>
+<tr>
+<td class="type"> void</td>
+<td class="description"><p class="name"><a href="#get()">get</a>(mixed limit, mixed offset)</p><p class="description">GetGet objects from the database.</p></td>
+</tr>
+<tr>
+<td class="type"> void</td>
+<td class="description"><p class="name"><a href="#getIterator()">getIterator</a>()</p><p class="description">Allows the all array to be iterated over without
+having to specify it.</p></td>
+</tr>
+<tr>
+<td class="type"> void</td>
+<td class="description"><p class="name"><a href="#get_clone()">get_clone</a>(bool force_db)</p><p class="description">Get CloneReturns a clone of the current object.</p></td>
+</tr>
+<tr>
+<td class="type"> void</td>
+<td class="description"><p class="name"><a href="#get_copy()">get_copy</a>(bool force_db)</p><p class="description">Get CopyReturns an unsaved copy of the current object.</p></td>
+</tr>
+<tr>
+<td class="type"> void</td>
+<td class="description"><p class="name"><a href="#get_iterated()">get_iterated</a>(mixed limit, mixed offset)</p><p class="description">Returns a streamable result set for large queries.
+</p></td>
+</tr>
+<tr>
+<td class="type"> void</td>
+<td class="description"><p class="name"><a href="#get_paged()">get_paged</a>(int page, int page_size, bool page_num_by_rows, str info_object, bool iterated)</p><p class="description">Convenience method that runs a query based on pages.
+</p></td>
+</tr>
+<tr>
+<td class="type"> void</td>
+<td class="description"><p class="name"><a href="#get_paged_iterated()">get_paged_iterated</a>(int page, int page_size, bool page_num_by_rows, str info_object)</p><p class="description">Runs get_paged, but as an Iterable.</p></td>
+</tr>
+<tr>
+<td class="type"> void</td>
+<td class="description"><p class="name"><a href="#get_raw()">get_raw</a>(mixed limit, mixed offset, bool handle_related)</p><p class="description">Runs the query, but returns the raw CodeIgniter results
+NOTE: This also _clears_ the current query info.</p></td>
+</tr>
+<tr>
+<td class="type"> void</td>
+<td class="description"><p class="name"><a href="#get_sql()">get_sql</a>(mixed limit, mixed offset, bool handle_related)</p><p class="description">Returns the SQL string of the current query (SELECTs ONLY).
+</p></td>
+</tr>
+<tr>
+<td class="type"> void</td>
+<td class="description"><p class="name"><a href="#get_where()">get_where</a>(mixed where, mixed offset)</p><p class="description">Get WhereGet items matching the where clause.</p></td>
+</tr>
+<tr>
+<td class="type"> void</td>
+<td class="description"><p class="name"><a href="#group_by()">group_by</a>(mixed by)</p><p class="description">Group BySets the GROUP BY portion of the query.</p></td>
+</tr>
+<tr>
+<td class="type"> void</td>
+<td class="description"><p class="name"><a href="#group_end()">group_end</a>()</p><p class="description">Ends a query group.</p></td>
+</tr>
+<tr>
+<td class="type"> void</td>
+<td class="description"><p class="name"><a href="#group_start()">group_start</a>(str not, str type)</p><p class="description">Starts a query group.</p></td>
+</tr>
+<tr>
+<td class="type"> void</td>
+<td class="description"><p class="name"><a href="#having()">having</a>(mixed key, str value, bool escape)</p><p class="description">HavingSets the HAVING portion of the query.
+</p></td>
+</tr>
+<tr>
+<td class="type"> void</td>
+<td class="description"><p class="name"><a href="#ilike()">ilike</a>(mixed field, str match, str side)</p><p class="description">ILikeSets the case-insensitive %LIKE% portion of the query.</p></td>
+</tr>
+<tr>
+<td class="type"> void</td>
+<td class="description"><p class="name"><a href="#include_join_fields()">include_join_fields</a>(bool include)</p><p class="description">Include Join FieldsIf TRUE, the any extra fields on the join table will be included</p></td>
+</tr>
+<tr>
+<td class="type"> void</td>
+<td class="description"><p class="name"><a href="#include_related()">include_related</a>(mixed related_field, mixed fields, bool append_name, bool instantiate)</p><p class="description">Include RelatedJoins specified values of a has_one object into the current query
+If $fields is NULL or '*', then all columns are joined (may require instantiation of the other object)
+If $fields is a single string, then just that column is joined.
+</p></td>
+</tr>
+<tr>
+<td class="type"> void</td>
+<td class="description"><p class="name"><a href="#include_related_count()">include_related_count</a>(mixed related_field, mixed alias)</p><p class="description">Includes the number of related items using a subquery.
+</p></td>
+</tr>
+<tr>
+<td class="type"> void</td>
+<td class="description"><p class="name"><a href="#is_related_to()">is_related_to</a>(mixed related_field, mixed id)</p><p class="description">Is Related To
+If this object is related to the provided object, returns TRUE.
+</p></td>
+</tr>
+<tr>
+<td class="type"> void</td>
+<td class="description"><p class="name"><a href="#join_related()">join_related</a>(mixed related_field, mixed fields, bool append_name)</p><p class="description">Legacy version of include_related
+DEPRECATED: Will be removed by 2.0</p></td>
+</tr>
+<tr>
+<td class="type"> void</td>
+<td class="description"><p class="name"><a href="#like()">like</a>(mixed field, str match, str side)</p><p class="description">LikeSets the %LIKE% portion of the query.
+</p></td>
+</tr>
+<tr>
+<td class="type"> void</td>
+<td class="description"><p class="name"><a href="#limit()">limit</a>(mixed value, str offset)</p><p class="description">LimitSets the LIMIT portion of the query.</p></td>
+</tr>
+<tr>
+<td class="type"> void</td>
+<td class="description"><p class="name"><a href="#load_extension()">load_extension</a>(mixed name, mixed options, bool local)</p><p class="description">Dynamically load an extension when needed.</p></td>
+</tr>
+<tr>
+<td class="type"> string|bool</td>
+<td class="description"><p class="name"><a href="#localize_by_model()">localize_by_model</a>(string key, string field)</p><p class="description">A specialized language lookup function that will automatically
+insert the model, table, and (optional) field into a key, and return the
+language result for the replaced key.</p></td>
+</tr>
+<tr>
+<td class="type"> string|bool</td>
+<td class="description"><p class="name"><a href="#localize_label()">localize_label</a>(string field, string|bool label)</p><p class="description">Variant that handles looking up a field labels</p></td>
+</tr>
+<tr>
+<td class="type"> void</td>
+<td class="description"><p class="name"><a href="#not_group_start()">not_group_start</a>()</p><p class="description">Starts a query group, but NOTs the group</p></td>
+</tr>
+<tr>
+<td class="type"> void</td>
+<td class="description"><p class="name"><a href="#not_ilike()">not_ilike</a>(mixed field, str match, str side)</p><p class="description">Not ILikeSets the case-insensitive NOT LIKE portion of the query.
+</p></td>
+</tr>
+<tr>
+<td class="type"> void</td>
+<td class="description"><p class="name"><a href="#not_like()">not_like</a>(mixed field, str match, str side)</p><p class="description">Not LikeSets the NOT LIKE portion of the query.
+</p></td>
+</tr>
+<tr>
+<td class="type"> void</td>
+<td class="description"><p class="name"><a href="#offset()">offset</a>(mixed offset)</p><p class="description">OffsetSets the OFFSET portion of the query.</p></td>
+</tr>
+<tr>
+<td class="type"> void</td>
+<td class="description"><p class="name"><a href="#or_group_start()">or_group_start</a>()</p><p class="description">Starts a query group, but ORs the group</p></td>
+</tr>
+<tr>
+<td class="type"> void</td>
+<td class="description"><p class="name"><a href="#or_having()">or_having</a>(mixed key, str value, bool escape)</p><p class="description">Or HavingSets the OR HAVING portion of the query.
+</p></td>
+</tr>
+<tr>
+<td class="type"> void</td>
+<td class="description"><p class="name"><a href="#or_ilike()">or_ilike</a>(mixed field, str match, str side)</p><p class="description">Or LikeSets the case-insensitive %LIKE% portion of the query.
+</p></td>
+</tr>
+<tr>
+<td class="type"> void</td>
+<td class="description"><p class="name"><a href="#or_like()">or_like</a>(mixed field, str match, str side)</p><p class="description">Or LikeSets the %LIKE% portion of the query.
+</p></td>
+</tr>
+<tr>
+<td class="type"> void</td>
+<td class="description"><p class="name"><a href="#or_not_group_start()">or_not_group_start</a>()</p><p class="description">Starts a query group, but OR NOTs the group</p></td>
+</tr>
+<tr>
+<td class="type"> void</td>
+<td class="description"><p class="name"><a href="#or_not_ilike()">or_not_ilike</a>(mixed field, str match, str side)</p><p class="description">Or Not LikeSets the case-insensitive NOT LIKE portion of the query.
+</p></td>
+</tr>
+<tr>
+<td class="type"> void</td>
+<td class="description"><p class="name"><a href="#or_not_like()">or_not_like</a>(mixed field, str match, str side)</p><p class="description">Or Not LikeSets the NOT LIKE portion of the query.
+</p></td>
+</tr>
+<tr>
+<td class="type"> void</td>
+<td class="description"><p class="name"><a href="#or_where()">or_where</a>(mixed key, mixed value, bool escape)</p><p class="description">Or WhereSets the WHERE portion of the query.
+</p></td>
+</tr>
+<tr>
+<td class="type"> void</td>
+<td class="description"><p class="name"><a href="#or_where_in()">or_where_in</a>(mixed key, mixed values)</p><p class="description">Or Where InSets the WHERE field IN ('item', 'item') SQL query joined with
+OR if appropriate.</p></td>
+</tr>
+<tr>
+<td class="type"> void</td>
+<td class="description"><p class="name"><a href="#or_where_not_in()">or_where_not_in</a>(mixed key, mixed values)</p><p class="description">Or Where Not InSets the WHERE field NOT IN ('item', 'item') SQL query joined wuth
+OR if appropriate.</p></td>
+</tr>
+<tr>
+<td class="type"> void</td>
+<td class="description"><p class="name"><a href="#order_by()">order_by</a>(mixed orderby, str direction)</p><p class="description">Order BySets the ORDER BY portion of the query.</p></td>
+</tr>
+<tr>
+<td class="type"> void</td>
+<td class="description"><p class="name"><a href="#query()">query</a>(mixed sql, bool binds)</p><p class="description">QueryRuns the specified query and populates the current object with the results.
+</p></td>
+</tr>
+<tr>
+<td class="type">protected static  void</td>
+<td class="description"><p class="name"><a href="#recursive_require_once()">recursive_require_once</a>(mixed class, mixed path)</p><p class="description">Recursive Require OnceRecursively searches the path for the class, require_once if found.</p></td>
+</tr>
+<tr>
+<td class="type"> void</td>
+<td class="description"><p class="name"><a href="#refresh_all()">refresh_all</a>()</p><p class="description">Refresh AllRemoves any empty objects in this objects all list.
+</p></td>
+</tr>
+<tr>
+<td class="type"> void</td>
+<td class="description"><p class="name"><a href="#reinitialize_model()">reinitialize_model</a>()</p><p class="description">Reloads in the configuration data for a model. </p></td>
+</tr>
+<tr>
+<td class="type"> void</td>
+<td class="description"><p class="name"><a href="#result_count()">result_count</a>()</p><p class="description">Convenience method to return the number of items from
+the last call to get.</p></td>
+</tr>
+<tr>
+<td class="type"> void</td>
+<td class="description"><p class="name"><a href="#save()">save</a>(str object, str related_field)</p><p class="description">SaveSaves the current record, if it validates.
+</p></td>
+</tr>
+<tr>
+<td class="type"> void</td>
+<td class="description"><p class="name"><a href="#save_as_new()">save_as_new</a>(str object, str related_field)</p><p class="description">Forces this object to be INSERTed, even if it has an ID.</p></td>
+</tr>
+<tr>
+<td class="type"> void</td>
+<td class="description"><p class="name"><a href="#select()">select</a>(str select, mixed escape)</p><p class="description">SelectSets the SELECT portion of the query.</p></td>
+</tr>
+<tr>
+<td class="type"> void</td>
+<td class="description"><p class="name"><a href="#select_avg()">select_avg</a>(str select, str alias)</p><p class="description">Select AvgSets the SELECT AVG(field) portion of a query.</p></td>
+</tr>
+<tr>
+<td class="type"> void</td>
+<td class="description"><p class="name"><a href="#select_max()">select_max</a>(str select, str alias)</p><p class="description">Select MaxSets the SELECT MAX(field) portion of a query.</p></td>
+</tr>
+<tr>
+<td class="type"> void</td>
+<td class="description"><p class="name"><a href="#select_min()">select_min</a>(str select, str alias)</p><p class="description">Select MinSets the SELECT MIN(field) portion of a query.</p></td>
+</tr>
+<tr>
+<td class="type"> void</td>
+<td class="description"><p class="name"><a href="#select_sum()">select_sum</a>(str select, str alias)</p><p class="description">Select SumSets the SELECT SUM(field) portion of a query.</p></td>
+</tr>
+<tr>
+<td class="type"> void</td>
+<td class="description"><p class="name"><a href="#set_join_field()">set_join_field</a>(mixed related_field, mixed field, mixed value, mixed object)</p><p class="description">Set Join FieldSets the value on a join table based on the related field
+If $related_field is an array, then the array should be
+in the form $related_field => $object or array($object)</p></td>
+</tr>
+<tr>
+<td class="type"> void</td>
+<td class="description"><p class="name"><a href="#skip_validation()">skip_validation</a>(bool skip)</p><p class="description">Skips validation for the next call to save.
+</p></td>
+</tr>
+<tr>
+<td class="type"> void</td>
+<td class="description"><p class="name"><a href="#start_cache()">start_cache</a>()</p><p class="description">Start CacheStarts AR caching.</p></td>
+</tr>
+<tr>
+<td class="type"> void</td>
+<td class="description"><p class="name"><a href="#stop_cache()">stop_cache</a>()</p><p class="description">Stop CacheStops AR caching.</p></td>
+</tr>
+<tr>
+<td class="type"> void</td>
+<td class="description"><p class="name"><a href="#trans_begin()">trans_begin</a>(bool test_mode)</p><p class="description">Trans BeginBegin a transaction.</p></td>
+</tr>
+<tr>
+<td class="type"> void</td>
+<td class="description"><p class="name"><a href="#trans_commit()">trans_commit</a>()</p><p class="description">Trans CommitCommit a transaction.</p></td>
+</tr>
+<tr>
+<td class="type"> void</td>
+<td class="description"><p class="name"><a href="#trans_complete()">trans_complete</a>()</p><p class="description">Trans CompleteComplete a transaction.</p></td>
+</tr>
+<tr>
+<td class="type"> void</td>
+<td class="description"><p class="name"><a href="#trans_off()">trans_off</a>()</p><p class="description">Trans OffThis permits transactions to be disabled at run-time.</p></td>
+</tr>
+<tr>
+<td class="type"> void</td>
+<td class="description"><p class="name"><a href="#trans_rollback()">trans_rollback</a>()</p><p class="description">Trans RollbackRollback a transaction.</p></td>
+</tr>
+<tr>
+<td class="type"> void</td>
+<td class="description"><p class="name"><a href="#trans_start()">trans_start</a>(bool test_mode)</p><p class="description">Trans StartStart a transaction.</p></td>
+</tr>
+<tr>
+<td class="type"> void</td>
+<td class="description"><p class="name"><a href="#trans_status()">trans_status</a>()</p><p class="description">Trans StatusLets you retrieve the transaction flag to determine if it has failed.</p></td>
+</tr>
+<tr>
+<td class="type"> void</td>
+<td class="description"><p class="name"><a href="#trans_strict()">trans_strict</a>(bool mode)</p><p class="description">Trans StrictWhen strict mode is enabled, if you are running multiple groups of
+transactions, if one group fails all groups will be rolled back.
+</p></td>
+</tr>
+<tr>
+<td class="type"> void</td>
+<td class="description"><p class="name"><a href="#update()">update</a>(mixed field, mixed value, bool escape_values)</p><p class="description">UpdateAllows updating of more than one row at once.</p></td>
+</tr>
+<tr>
+<td class="type"> void</td>
+<td class="description"><p class="name"><a href="#update_all()">update_all</a>(mixed field, mixed value, bool escape_values)</p><p class="description">Update AllUpdates all items that are in the all array.</p></td>
+</tr>
+<tr>
+<td class="type"> void</td>
+<td class="description"><p class="name"><a href="#validate()">validate</a>(str object, str related_field)</p><p class="description">ValidateValidates the value of each property against the assigned validation rules.</p></td>
+</tr>
+<tr>
+<td class="type"> void</td>
+<td class="description"><p class="name"><a href="#where()">where</a>(mixed key, mixed value, bool escape)</p><p class="description">WhereSets the WHERE portion of the query.
+</p></td>
+</tr>
+<tr>
+<td class="type"> void</td>
+<td class="description"><p class="name"><a href="#where_in()">where_in</a>(mixed key, mixed values)</p><p class="description">Where InSets the WHERE field IN ('item', 'item') SQL query joined with
+AND if appropriate.</p></td>
+</tr>
+<tr>
+<td class="type"> void</td>
+<td class="description"><p class="name"><a href="#where_not_in()">where_not_in</a>(mixed key, mixed values)</p><p class="description">Where Not InSets the WHERE field NOT IN ('item', 'item') SQL query joined with
+AND if appropriate.</p></td>
+</tr>
+</table>
+
+<h2 id="detail_field">Field Detail</h2>
+<a href="../source/libraries/datamapper.php.html#line400" class="location">libraries/datamapper.php at line 400</a>
+
+<h3 id="_field_tracking">_field_tracking</h3>
+<code class="signature">protected  mixed <strong>$_field_tracking</strong> = NULL</code>
+<div class="details">
+</div>
+
+<hr>
+
+<a href="../source/libraries/datamapper.php.html#line406" class="location">libraries/datamapper.php at line 406</a>
+
+<h3 id="_force_save_as_new">_force_save_as_new</h3>
+<code class="signature">protected  mixed <strong>$_force_save_as_new</strong> = FALSE</code>
+<div class="details">
+</div>
+
+<hr>
+
+<a href="../source/libraries/datamapper.php.html#line404" class="location">libraries/datamapper.php at line 404</a>
+
+<h3 id="_include_join_fields">_include_join_fields</h3>
+<code class="signature">protected  mixed <strong>$_include_join_fields</strong> = FALSE</code>
+<div class="details">
+</div>
+
+<hr>
+
+<a href="../source/libraries/datamapper.php.html#line398" class="location">libraries/datamapper.php at line 398</a>
+
+<h3 id="_instantiations">_instantiations</h3>
+<code class="signature">protected  mixed <strong>$_instantiations</strong> = NULL</code>
+<div class="details">
+</div>
+
+<hr>
+
+<a href="../source/libraries/datamapper.php.html#line402" class="location">libraries/datamapper.php at line 402</a>
+
+<h3 id="_query_related">_query_related</h3>
+<code class="signature">protected  mixed <strong>$_query_related</strong> = array()</code>
+<div class="details">
+</div>
+
+<hr>
+
+<a href="../source/libraries/datamapper.php.html#line396" class="location">libraries/datamapper.php at line 396</a>
+
+<h3 id="_validated">_validated</h3>
+<code class="signature">protected  mixed <strong>$_validated</strong> = FALSE</code>
+<div class="details">
+</div>
+
+<hr>
+
+<a href="../source/libraries/datamapper.php.html#line408" class="location">libraries/datamapper.php at line 408</a>
+
+<h3 id="_where_group_started">_where_group_started</h3>
+<code class="signature">protected  mixed <strong>$_where_group_started</strong> = FALSE</code>
+<div class="details">
+</div>
+
+<hr>
+
+<a href="../source/libraries/datamapper.php.html#line343" class="location">libraries/datamapper.php at line 343</a>
+
+<h3 id="all">all</h3>
+<code class="signature">public  array <strong>$all</strong> = array()</code>
+<div class="details">
+<p>Contains the result of the last query.</p></div>
+
+<hr>
+
+<a href="../source/libraries/datamapper.php.html#line291" class="location">libraries/datamapper.php at line 291</a>
+
+<h3 id="all_array_uses_ids">all_array_uses_ids</h3>
+<code class="signature">public  bool <strong>$all_array_uses_ids</strong> = FALSE</code>
+<div class="details">
+<p>Enables the old method of storing the all array using an object's ID.</p></div>
+
+<hr>
+
+<a href="../source/libraries/datamapper.php.html#line280" class="location">libraries/datamapper.php at line 280</a>
+
+<h3 id="auto_populate_has_many">auto_populate_has_many</h3>
+<code class="signature">public  bool <strong>$auto_populate_has_many</strong> = FALSE</code>
+<div class="details">
+<p>If TRUE, has_many relationships are automatically loaded when accessed.
+Not recommended in most situations.</p></div>
+
+<hr>
+
+<a href="../source/libraries/datamapper.php.html#line286" class="location">libraries/datamapper.php at line 286</a>
+
+<h3 id="auto_populate_has_one">auto_populate_has_one</h3>
+<code class="signature">public  bool <strong>$auto_populate_has_one</strong> = FALSE</code>
+<div class="details">
+<p>If TRUE, has_one relationships are automatically loaded when accessed.
+Not recommended in some situations.</p></div>
+
+<hr>
+
+<a href="../source/libraries/datamapper.php.html#line274" class="location">libraries/datamapper.php at line 274</a>
+
+<h3 id="auto_transaction">auto_transaction</h3>
+<code class="signature">public  bool <strong>$auto_transaction</strong> = FALSE</code>
+<div class="details">
+<p>If TRUE, automatically wrap every save and delete in a transaction.</p></div>
+
+<hr>
+
+<a href="../source/libraries/datamapper.php.html#line263" class="location">libraries/datamapper.php at line 263</a>
+
+<h3 id="created_field">created_field</h3>
+<code class="signature">public  string <strong>$created_field</strong> = ''</code>
+<div class="details">
+<p>Custom name for the automatic timestamp saved with new objects.
+Defaults to 'created'.</p></div>
+
+<hr>
+
+<a href="../source/libraries/datamapper.php.html#line247" class="location">libraries/datamapper.php at line 247</a>
+
+<h3 id="db_params">db_params</h3>
+<code class="signature">public  mixed <strong>$db_params</strong> = ''</code>
+<div class="details">
+<p>Can be used to override the default database behavior.</p></div>
+
+<hr>
+
+<a href="../source/libraries/datamapper.php.html#line393" class="location">libraries/datamapper.php at line 393</a>
+
+<h3 id="default_order_by">default_order_by</h3>
+<code class="signature">public  mixed <strong>$default_order_by</strong> = NULL</code>
+<div class="details">
+<p>This can be specified as an array of fields to sort by if no other
+sorting or selection has occurred.</p></div>
+
+<hr>
+
+<a href="../source/libraries/datamapper.php.html#line252" class="location">libraries/datamapper.php at line 252</a>
+
+<h3 id="error_prefix">error_prefix</h3>
+<code class="signature">public  string <strong>$error_prefix</strong> = ''</code>
+<div class="details">
+<p>Prefix string used when reporting errors.</p></div>
+
+<hr>
+
+<a href="../source/libraries/datamapper.php.html#line257" class="location">libraries/datamapper.php at line 257</a>
+
+<h3 id="error_suffix">error_suffix</h3>
+<code class="signature">public  string <strong>$error_suffix</strong> = ''</code>
+<div class="details">
+<p>Suffic string used when reporting errors.</p></div>
+
+<hr>
+
+<a href="../source/libraries/datamapper.php.html#line381" class="location">libraries/datamapper.php at line 381</a>
+
+<h3 id="extensions">extensions</h3>
+<code class="signature">public  mixed <strong>$extensions</strong> = NULL</code>
+<div class="details">
+<p>If set to an array of names, this will automatically load the
+specified extensions for this model.</p></div>
+
+<hr>
+
+<a href="../source/libraries/datamapper.php.html#line375" class="location">libraries/datamapper.php at line 375</a>
+
+<h3 id="extensions_path">extensions_path</h3>
+<code class="signature">public  string <strong>$extensions_path</strong> = ''</code>
+<div class="details">
+<p>Used to determine where to look for extensions.
+This should really only be set in the global configuration.</p></div>
+
+<hr>
+
+<a href="../source/libraries/datamapper.php.html#line338" class="location">libraries/datamapper.php at line 338</a>
+
+<h3 id="field_label_lang_format">field_label_lang_format</h3>
+<code class="signature">public  string <strong>$field_label_lang_format</strong> = ''</code>
+<div class="details">
+<p>Set to a string to use when looking up field labels.  Can contain three
+magic values: ${model}, ${table}, and ${field}.  These are automatically
+replaced when looking up the language file.
+Defaults to ${model}_${field}</p></div>
+
+<hr>
+
+<a href="../source/libraries/datamapper.php.html#line321" class="location">libraries/datamapper.php at line 321</a>
+
+<h3 id="fields">fields</h3>
+<code class="signature">public  array <strong>$fields</strong> = array()</code>
+<div class="details">
+<p>Contains the database fields for this object.
+Automatically configured</p></div>
+
+<hr>
+
+<a href="../source/libraries/datamapper.php.html#line387" class="location">libraries/datamapper.php at line 387</a>
+
+<h3 id="free_result_threshold">free_result_threshold</h3>
+<code class="signature">public  int <strong>$free_result_threshold</strong> = 100</code>
+<div class="details">
+<p>If a query returns more than the number of rows specified here,
+then it will be automatically freed after a get.</p></div>
+
+<hr>
+
+<a href="../source/libraries/datamapper.php.html#line214" class="location">libraries/datamapper.php at line 214</a>
+
+<h3 id="get_access_level">get_access_level</h3>
+<code class="signature">public static  <a href="../dmz/dm_error_object.html">DM_Error_Object</a> <strong>$get_access_level</strong></code>
+<div class="details">
+<p>Contains any errors that occur during validation, saving, or other
+database access.</p></div>
+
+<hr>
+
+<a href="../source/libraries/datamapper.php.html#line358" class="location">libraries/datamapper.php at line 358</a>
+
+<h3 id="has_many">has_many</h3>
+<code class="signature">public  array <strong>$has_many</strong> = array()</code>
+<div class="details">
+<p>Contains any related objects of which this model is related one or more times.</p></div>
+
+<hr>
+
+<a href="../source/libraries/datamapper.php.html#line363" class="location">libraries/datamapper.php at line 363</a>
+
+<h3 id="has_one">has_one</h3>
+<code class="signature">public  array <strong>$has_one</strong> = array()</code>
+<div class="details">
+<p>Contains any related objects of which this model is singularly related.</p></div>
+
+<hr>
+
+<a href="../source/libraries/datamapper.php.html#line230" class="location">libraries/datamapper.php at line 230</a>
+
+<h3 id="join_prefix">join_prefix</h3>
+<code class="signature">public  string <strong>$join_prefix</strong> = ''</code>
+<div class="details">
+<p>DB Join Table Prefix</p></div>
+
+<hr>
+
+<a href="../source/libraries/datamapper.php.html#line330" class="location">libraries/datamapper.php at line 330</a>
+
+<h3 id="lang_file_format">lang_file_format</h3>
+<code class="signature">public  string <strong>$lang_file_format</strong> = ''</code>
+<div class="details">
+<p>Set to a string to use when autoloading lang files.
+Can contain two magic values: ${model} and ${table}.
+These are automatically
+replaced when looking up the language file.
+Defaults to model_${model}</p></div>
+
+<hr>
+
+<a href="../source/libraries/datamapper.php.html#line302" class="location">libraries/datamapper.php at line 302</a>
+
+<h3 id="local_time">local_time</h3>
+<code class="signature">public  bool <strong>$local_time</strong> = FALSE</code>
+<div class="details">
+<p>If TRUE, the created/updated fields are stored using local time.
+If FALSE (the default), they are stored using UTC</p></div>
+
+<hr>
+
+<a href="../source/libraries/datamapper.php.html#line242" class="location">libraries/datamapper.php at line 242</a>
+
+<h3 id="model">model</h3>
+<code class="signature">public  string <strong>$model</strong> = ''</code>
+<div class="details">
+<p>The singular name for this model (may be automatically generated from
+the classname).</p></div>
+
+<hr>
+
+<a href="../source/libraries/datamapper.php.html#line348" class="location">libraries/datamapper.php at line 348</a>
+
+<h3 id="parent">parent</h3>
+<code class="signature">public  array <strong>$parent</strong> = array()</code>
+<div class="details">
+<p>Semi-private field used to track the parent model/id if there is one.</p></div>
+
+<hr>
+
+<a href="../source/libraries/datamapper.php.html#line225" class="location">libraries/datamapper.php at line 225</a>
+
+<h3 id="prefix">prefix</h3>
+<code class="signature">public  string <strong>$prefix</strong> = ''</code>
+<div class="details">
+<p>DB Table Prefix</p></div>
+
+<hr>
+
+<a href="../source/libraries/datamapper.php.html#line369" class="location">libraries/datamapper.php at line 369</a>
+
+<h3 id="production_cache">production_cache</h3>
+<code class="signature">public  bool <strong>$production_cache</strong> = FALSE</code>
+<div class="details">
+<p>Used to enable or disable the production cache.
+This should really only be set in the global configuration.</p></div>
+
+<hr>
+
+<a href="../source/libraries/datamapper.php.html#line220" class="location">libraries/datamapper.php at line 220</a>
+
+<h3 id="stored">stored</h3>
+<code class="signature">public  object <strong>$stored</strong></code>
+<div class="details">
+<p>Used to keep track of the original values from the database, to
+prevent unecessarily changing fields.</p></div>
+
+<hr>
+
+<a href="../source/libraries/datamapper.php.html#line236" class="location">libraries/datamapper.php at line 236</a>
+
+<h3 id="table">table</h3>
+<code class="signature">public  string <strong>$table</strong> = ''</code>
+<div class="details">
+<p>The name of the table for this model (may be automatically generated
+from the classname).</p></div>
+
+<hr>
+
+<a href="../source/libraries/datamapper.php.html#line315" class="location">libraries/datamapper.php at line 315</a>
+
+<h3 id="timestamp_format">timestamp_format</h3>
+<code class="signature">public  string <strong>$timestamp_format</strong> = ''</code>
+<div class="details">
+<p>Set to a date format to override the default format of
+'Y-m-d H:i:s O'</p></div>
+
+<hr>
+
+<a href="../source/libraries/datamapper.php.html#line309" class="location">libraries/datamapper.php at line 309</a>
+
+<h3 id="unix_timestamp">unix_timestamp</h3>
+<code class="signature">public  bool <strong>$unix_timestamp</strong> = FALSE</code>
+<div class="details">
+<p>If TRUE, the created/updated fields are stored as a unix timestamp,
+as opposed to a formatted string.
+Defaults to FALSE.</p></div>
+
+<hr>
+
+<a href="../source/libraries/datamapper.php.html#line269" class="location">libraries/datamapper.php at line 269</a>
+
+<h3 id="updated_field">updated_field</h3>
+<code class="signature">public  string <strong>$updated_field</strong> = ''</code>
+<div class="details">
+<p>Custom name for the automatic timestamp saved when an object changes.
+Defaults to 'updated'.</p></div>
+
+<hr>
+
+<a href="../source/libraries/datamapper.php.html#line296" class="location">libraries/datamapper.php at line 296</a>
+
+<h3 id="valid">valid</h3>
+<code class="signature">public  bool <strong>$valid</strong> = FALSE</code>
+<div class="details">
+<p>The result of validate is stored here.</p></div>
+
+<hr>
+
+<a href="../source/libraries/datamapper.php.html#line353" class="location">libraries/datamapper.php at line 353</a>
+
+<h3 id="validation">validation</h3>
+<code class="signature">public  array <strong>$validation</strong> = array()</code>
+<div class="details">
+<p>Contains the validation rules, label, and get_rules for each field.</p></div>
+
+<hr>
+
+<h2 id="detail_method">Method Detail</h2><div class="method_detail">
+<div class='method'><a href="../source/libraries/datamapper.php.html#line1195" class="location">libraries/datamapper.php at line 1195</a>
+
+<h3 id="__call()">__call</h3>
+<code class="signature">public  void <strong>__call</strong>(mixed method, mixed arguments)</code>
+<div class="details">
+<p>Magic Call</p><p>Calls special methods, or extension methods.</p><dl>
+<dt>Ignore.</dt>
+<dt>Param	string:</dt>
+<dd>$method Method name</dd>
+<dt>Param	array:</dt>
+<dd>$arguments Arguments to method</dd>
+<dt>Return	mixed.</dt>
+</dl>
+</div></div>
+
+
+
+<div class='method'><a href="../source/libraries/datamapper.php.html#line1280" class="location">libraries/datamapper.php at line 1280</a>
+
+<h3 id="__clone()">__clone</h3>
+<code class="signature">public  void <strong>__clone</strong>()</code>
+<div class="details">
+<p>Magic Clone</p><p>Allows for a less shallow clone than the default PHP clone.</p><dl>
+<dt>Ignore.</dt>
+</dl>
+</div></div>
+
+
+
+<div class='method'><a href="../source/libraries/datamapper.php.html#line416" class="location">libraries/datamapper.php at line 416</a>
+
+<h3 id="__construct()">__construct</h3>
+<code class="signature">public  void <strong>__construct</strong>(mixed id)</code>
+<div class="details">
+<p>Constructor</p><p>Initialize DataMapper.</p><dl>
+<dt>Param	int:</dt>
+<dd>$id if provided, load in the object specified by that ID.</dd>
+</dl>
+</div></div>
+
+
+
+<div class='method'><a href="../source/libraries/datamapper.php.html#line1066" class="location">libraries/datamapper.php at line 1066</a>
+
+<h3 id="__get()">__get</h3>
+<code class="signature">public  void <strong>__get</strong>(mixed name)</code>
+<div class="details">
+<p>Magic Get</p><p>Returns the value of the named property.
+If named property is a related item, instantiate it first.</p><p>This method also instantiates the DB object and the form_validation
+objects as necessary</p><dl>
+<dt>Ignore.</dt>
+<dt>Param	string:</dt>
+<dd>$name Name of property to look for</dd>
+<dt>Return	mixed.</dt>
+</dl>
+</div></div>
+
+
+
+<div class='method'><a href="../source/libraries/datamapper.php.html#line1301" class="location">libraries/datamapper.php at line 1301</a>
+
+<h3 id="__toString()">__toString</h3>
+<code class="signature">public  void <strong>__toString</strong>()</code>
+<div class="details">
+<p>To String</p><p>Converts the current object into a string.
+Should be overridden by extended objects.</p><dl>
+<dt>Return	string.</dt>
+</dl>
+</div></div>
+
+
+
+<div class='method'><a href="../source/libraries/datamapper.php.html#line4230" class="location">libraries/datamapper.php at line 4230</a>
+
+<h3 id="_add_related_table()">_add_related_table</h3>
+<code class="signature">public  void <strong>_add_related_table</strong>(mixed object, str related_field, bool id_only, mixed db, mixed query_related, str name_prepend, mixed this_table)</code>
+<div class="details">
+<p>Add Related Table</p><p>Adds the table of a related item, and joins it to this class.
+Returns the name of that table for further queries.</p><p>If $related_field is deep, then this adds all necessary relationships
+to the query.</p><dl>
+<dt>Ignore.</dt>
+<dt>Param	mixed:</dt>
+<dd>$object The object (or related field) to look up.</dd>
+<dt>Param	string:</dt>
+<dd>$related_field  Related field name for object</dd>
+<dd>$id_only  Private, do not use.</dd>
+<dd>$name_prepend  Private, do not use.</dd>
+<dd>$this_table  Private, do not use.</dd>
+<dt>Param	object:</dt>
+<dd>$db  Private, do not use.</dd>
+<dt>Param	array:</dt>
+<dd>$query_related  Private, do not use.</dd>
+<dt>Return	string:</dt>
+<dd>Name of the related table, or table.field if ID_Only</dd>
+</dl>
+</div></div>
+
+
+
+<div class='method'><a href="../source/libraries/datamapper.php.html#line3079" class="location">libraries/datamapper.php at line 3079</a>
+
+<h3 id="_add_to_select_directly()">_add_to_select_directly</h3>
+<code class="signature">protected  void <strong>_add_to_select_directly</strong>(mixed value)</code>
+<div class="details">
+<p>Manually adds an item to the SELECT column, to prevent it from
+being broken by AR->select</p><dl>
+<dt>Ignore.</dt>
+<dt>Param	string:</dt>
+<dd>$value New SELECT value</dd>
+</dl>
+</div></div>
+
+
+
+<div class='method'><a href="../source/libraries/datamapper.php.html#line5417" class="location">libraries/datamapper.php at line 5417</a>
+
+<h3 id="_alpha_dash_dot()">_alpha_dash_dot</h3>
+<code class="signature">protected  void <strong>_alpha_dash_dot</strong>(mixed field)</code>
+<div class="details">
+<p>Alpha Dash Dot (pre-process)</p><p>Alpha-numeric with underscores, dashes and full stops.</p><dl>
+<dt>Ignore.</dt>
+</dl>
+</div></div>
+
+
+
+<div class='method'><a href="../source/libraries/datamapper.php.html#line5431" class="location">libraries/datamapper.php at line 5431</a>
+
+<h3 id="_alpha_slash_dot()">_alpha_slash_dot</h3>
+<code class="signature">protected  void <strong>_alpha_slash_dot</strong>(mixed field)</code>
+<div class="details">
+<p>Alpha Slash Dot (pre-process)</p><p>Alpha-numeric with underscores, dashes, forward slashes and full stops.</p><dl>
+<dt>Ignore.</dt>
+</dl>
+</div></div>
+
+
+
+<div class='method'><a href="../source/libraries/datamapper.php.html#line5404" class="location">libraries/datamapper.php at line 5404</a>
+
+<h3 id="_always_validate()">_always_validate</h3>
+<code class="signature">protected  void <strong>_always_validate</strong>()</code>
+<div class="details">
+<p>Always Validate</p><p>Does nothing, but forces a validation even if empty (for non-required fields)</p><dl>
+<dt>Ignore.</dt>
+</dl>
+</div></div>
+
+
+
+<div class='method'><a href="../source/libraries/datamapper.php.html#line6072" class="location">libraries/datamapper.php at line 6072</a>
+
+<h3 id="_assign_libraries()">_assign_libraries</h3>
+<code class="signature">public  void <strong>_assign_libraries</strong>()</code>
+<div class="details">
+<p>Assign Libraries</p><p>Originally used by CodeIgniter, now just logs a warning.</p><dl>
+<dt>Ignore.</dt>
+</dl>
+</div></div>
+
+
+
+<div class='method'><a href="../source/libraries/datamapper.php.html#line4077" class="location">libraries/datamapper.php at line 4077</a>
+
+<h3 id="_auto_trans_begin()">_auto_trans_begin</h3>
+<code class="signature">protected  void <strong>_auto_trans_begin</strong>()</code>
+<div class="details">
+<p>Auto Trans Begin</p><p>Begin an auto transaction if enabled.</p></div></div>
+
+
+
+<div class='method'><a href="../source/libraries/datamapper.php.html#line4095" class="location">libraries/datamapper.php at line 4095</a>
+
+<h3 id="_auto_trans_complete()">_auto_trans_complete</h3>
+<code class="signature">protected  void <strong>_auto_trans_complete</strong>(str label)</code>
+<div class="details">
+<p>Auto Trans Complete</p><p>Complete an auto transaction if enabled.</p><dl>
+<dt>Param	string:</dt>
+<dd>$label Name for this transaction.</dd>
+</dl>
+</div></div>
+
+
+
+<div class='method'><a href="../source/libraries/datamapper.php.html#line5641" class="location">libraries/datamapper.php at line 5641</a>
+
+<h3 id="_boolean()">_boolean</h3>
+<code class="signature">protected  void <strong>_boolean</strong>(mixed field)</code>
+<div class="details">
+<p>Boolean (pre-process)</p><p>Forces a field to be either TRUE or FALSE.
+Uses PHP's built-in boolean conversion.</p><dl>
+<dt>Ignore.</dt>
+</dl>
+</div></div>
+
+
+
+<div class='method'><a href="../source/libraries/datamapper.php.html#line2381" class="location">libraries/datamapper.php at line 2381</a>
+
+<h3 id="_clear_after_query()">_clear_after_query</h3>
+<code class="signature">protected  void <strong>_clear_after_query</strong>()</code>
+<div class="details">
+<p>Clears the db object after processing a query, or returning the
+SQL for a query.</p><dl>
+<dt>Ignore.</dt>
+</dl>
+</div></div>
+
+
+
+<div class='method'><a href="../source/libraries/datamapper.php.html#line5079" class="location">libraries/datamapper.php at line 5079</a>
+
+<h3 id="_count_related()">_count_related</h3>
+<code class="signature">protected  void <strong>_count_related</strong>(mixed related_field, str object)</code>
+<div class="details">
+<p>Count Related</p><p>Returns the number of related items in the database and in the related object.
+Used by the _related_(required|min|max) validation rules.</p><dl>
+<dt>Ignore.</dt>
+<dt>Param	string:</dt>
+<dd>$related_field The related field.</dd>
+<dt>Param	mixed:</dt>
+<dd>$object Object or array to include in the count.</dd>
+<dt>Return	int:</dt>
+<dd>Number of related items.</dd>
+</dl>
+</div></div>
+
+
+
+<div class='method'><a href="../source/libraries/datamapper.php.html#line5131" class="location">libraries/datamapper.php at line 5131</a>
+
+<h3 id="_count_related_objects()">_count_related_objects</h3>
+<code class="signature">private  void <strong>_count_related_objects</strong>(mixed compare, mixed object, mixed related_field, mixed ids)</code>
+<div class="details">
+<p>Private recursive function to count the number of objects
+in a passed in array (or a single object)</p><dl>
+<dt>Ignore.</dt>
+<dt>Param	string:</dt>
+<dd>$compare related field (model) to compare to</dd>
+<dd>$related_field related field of $object</dd>
+<dt>Param	mixed:</dt>
+<dd>$object Object or array to count</dd>
+<dt>Param	array:</dt>
+<dd>$ids list of IDs we've already found.</dd>
+<dt>Return	int:</dt>
+<dd>Number of items found.</dd>
+</dl>
+</div></div>
+
+
+
+<div class='method'><a href="../source/libraries/datamapper.php.html#line2090" class="location">libraries/datamapper.php at line 2090</a>
+
+<h3 id="_delete()">_delete</h3>
+<code class="signature">private  void <strong>_delete</strong>(mixed related_field, mixed arguments)</code>
+<div class="details">
+<p>_Delete</p><p>Used by __call to process related deletes.</p><dl>
+<dt>Ignore.</dt>
+<dt>Param	string:</dt>
+<dd>$related_field</dd>
+<dt>Param	array:</dt>
+<dd>$arguments</dd>
+<dt>Return	bool.</dt>
+</dl>
+</div></div>
+
+
+
+<div class='method'><a href="../source/libraries/datamapper.php.html#line4950" class="location">libraries/datamapper.php at line 4950</a>
+
+<h3 id="_delete_relation()">_delete_relation</h3>
+<code class="signature">protected  void <strong>_delete_relation</strong>(mixed object, str related_field)</code>
+<div class="details">
+<p>Delete Relation</p><p>Deletes the relation between this and the other object.</p><dl>
+<dt>Ignore.</dt>
+<dt>Param	DataMapper:</dt>
+<dd>$object Object to remove the relationship to.</dd>
+<dt>Param	string:</dt>
+<dd>$related_field Optional specific related field</dd>
+<dt>Return	bool:</dt>
+<dd>Success or Failure</dd>
+</dl>
+</div></div>
+
+
+
+<div class='method'><a href="../source/libraries/datamapper.php.html#line6086" class="location">libraries/datamapper.php at line 6086</a>
+
+<h3 id="_dmz_assign_libraries()">_dmz_assign_libraries</h3>
+<code class="signature">protected  void <strong>_dmz_assign_libraries</strong>()</code>
+<div class="details">
+<p>Assign Libraries</p><p>Assigns required CodeIgniter libraries to DataMapper.</p><dl>
+<dt>Ignore.</dt>
+</dl>
+</div></div>
+
+
+
+<div class='method'><a href="../source/libraries/datamapper.php.html#line5656" class="location">libraries/datamapper.php at line 5656</a>
+
+<h3 id="_encode_php_tags()">_encode_php_tags</h3>
+<code class="signature">protected  void <strong>_encode_php_tags</strong>(mixed field)</code>
+<div class="details">
+<p>Encode PHP Tags (prep)</p><p>Convert PHP tags to entities.
+This replaces the version in CI_Form_validation.</p><dl>
+<dt>Ignore.</dt>
+</dl>
+</div></div>
+
+
+
+<div class='method'><a href="../source/libraries/datamapper.php.html#line1260" class="location">libraries/datamapper.php at line 1260</a>
+
+<h3 id="_extension_method_exists()">_extension_method_exists</h3>
+<code class="signature">private  void <strong>_extension_method_exists</strong>(mixed method, str which)</code>
+<div class="details">
+<p>Returns TRUE or FALSE if the method exists in the extensions.</p><dl>
+<dt>Param	object:</dt>
+<dd>$method Method to look for.</dd>
+<dd>$which One of 'both', 'local', or 'global'</dd>
+<dt>Return	bool:</dt>
+<dd>TRUE if the method can be called.</dd>
+</dl>
+</div></div>
+
+
+
+<div class='method'><a href="../source/libraries/datamapper.php.html#line2952" class="location">libraries/datamapper.php at line 2952</a>
+
+<h3 id="_field_func()">_field_func</h3>
+<code class="signature">private  void <strong>_field_func</strong>(mixed query, mixed args)</code>
+<div class="details">
+<p>Used by the magic method for {where}_field_func, etc.</p><dl>
+<dt>Ignore.</dt>
+<dt>Param	string:</dt>
+<dd>$query Name of query function</dd>
+<dt>Param	array:</dt>
+<dd>$args Arguments for func()</dd>
+<dt>Return	DataMapper:</dt>
+<dd>Returns self for method chaining.</dd>
+</dl>
+</div></div>
+
+
+
+<div class='method'><a href="../source/libraries/datamapper.php.html#line2917" class="location">libraries/datamapper.php at line 2917</a>
+
+<h3 id="_func()">_func</h3>
+<code class="signature">private  void <strong>_func</strong>(mixed query, mixed args)</code>
+<div class="details">
+<p>Used by the magic method for select_func, {where}_func, etc</p><dl>
+<dt>Ignore.</dt>
+<dt>Param	object:</dt>
+<dd>$query Name of query function</dd>
+<dt>Param	array:</dt>
+<dd>$args Arguments for func()</dd>
+<dt>Return	DataMapper:</dt>
+<dd>Returns self for method chaining.</dd>
+</dl>
+</div></div>
+
+
+
+<div class='method'><a href="../source/libraries/datamapper.php.html#line2668" class="location">libraries/datamapper.php at line 2668</a>
+
+<h3 id="_get_by()">_get_by</h3>
+<code class="signature">private  void <strong>_get_by</strong>(mixed field, mixed value)</code>
+<div class="details">
+<p>Get By</p><p>Gets objects by specified field name and value.</p><dl>
+<dt>Ignore.</dt>
+<dt>Param	string:</dt>
+<dd>$field Field to look at.</dd>
+<dt>Param	array:</dt>
+<dd>$value Arguments to this method.</dd>
+<dt>Return	DataMapper:</dt>
+<dd>Returns self for method chaining.</dd>
+</dl>
+</div></div>
+
+
+
+<div class='method'><a href="../source/libraries/datamapper.php.html#line2690" class="location">libraries/datamapper.php at line 2690</a>
+
+<h3 id="_get_by_related()">_get_by_related</h3>
+<code class="signature">private  void <strong>_get_by_related</strong>(mixed model, mixed arguments)</code>
+<div class="details">
+<p>Get By Related</p><p>Gets objects by specified related object and optionally by field name and value.</p><dl>
+<dt>Ignore.</dt>
+<dt>Param	mixed:</dt>
+<dd>$model Related Model or Object</dd>
+<dt>Param	array:</dt>
+<dd>$arguments Arguments to the where method</dd>
+<dt>Return	DataMapper:</dt>
+<dd>Returns self for method chaining.</dd>
+</dl>
+</div></div>
+
+
+
+<div class='method'><a href="../source/libraries/datamapper.php.html#line1938" class="location">libraries/datamapper.php at line 1938</a>
+
+<h3 id="_get_generated_timestamp()">_get_generated_timestamp</h3>
+<code class="signature">private  mixed <strong>_get_generated_timestamp</strong>()</code>
+<div class="details">
+<p>Gets a timestamp to use when saving.</p></div></div>
+
+
+
+<div class='method'><a href="../source/libraries/datamapper.php.html#line3349" class="location">libraries/datamapper.php at line 3349</a>
+
+<h3 id="_get_prepend_type()">_get_prepend_type</h3>
+<code class="signature">protected  void <strong>_get_prepend_type</strong>(mixed type)</code>
+<div class="details">
+<p>protected function to convert the AND or OR prefix to '' when starting
+a group.</p><dl>
+<dt>Ignore.</dt>
+<dt>Param	object:</dt>
+<dd>$type Current type value</dd>
+<dt>Return	New:</dt>
+<dd>type value</dd>
+</dl>
+</div></div>
+
+
+
+<div class='method'><a href="../source/libraries/datamapper.php.html#line4150" class="location">libraries/datamapper.php at line 4150</a>
+
+<h3 id="_get_related_properties()">_get_related_properties</h3>
+<code class="signature">public  void <strong>_get_related_properties</strong>(mixed related_field, bool try_singular)</code>
+<div class="details">
+<p>get_related_properties</p><p>Located the relationship properties for a given field or model
+Can also optionally attempt to convert the $related_field to
+singular, and look up on that.  It will modify the $related_field if
+the conversion to singular returns a result.</p><p>$related_field can also be a deep relationship, such as
+'post/editor/group', in which case the $related_field will be processed
+recursively, and the return value will be $user->has_NN['group'];</p><dl>
+<dt>Ignore.</dt>
+<dt>Param	mixed:</dt>
+<dd>$related_field Name of related field or related object.</dd>
+<dt>Param	bool:</dt>
+<dd>$try_singular If TRUE, automatically tries to look for a singular name if not found.</dd>
+<dt>Return	array:</dt>
+<dd>Associative array of related properties.</dd>
+</dl>
+</div></div>
+
+
+
+<div class='method'><a href="../source/libraries/datamapper.php.html#line4742" class="location">libraries/datamapper.php at line 4742</a>
+
+<h3 id="_get_relation()">_get_relation</h3>
+<code class="signature">private  void <strong>_get_relation</strong>(mixed related_field, mixed id)</code>
+<div class="details">
+<p>Get Relation</p><p>Finds all related records of this objects current record.</p><dl>
+<dt>Ignore.</dt>
+<dt>Param	mixed:</dt>
+<dd>$related_field Related field or object</dd>
+<dt>Param	int:</dt>
+<dd>$id ID of related field or object</dd>
+<dt>Return	bool:</dt>
+<dd>Sucess or Failure</dd>
+</dl>
+</div></div>
+
+
+
+<div class='method'><a href="../source/libraries/datamapper.php.html#line5009" class="location">libraries/datamapper.php at line 5009</a>
+
+<h3 id="_get_relationship_table()">_get_relationship_table</h3>
+<code class="signature">public  void <strong>_get_relationship_table</strong>(mixed object, str related_field)</code>
+<div class="details">
+<p>Get Relationship Table</p><p>Determines the relationship table between this object and $object.</p><dl>
+<dt>Ignore.</dt>
+<dt>Param	DataMapper:</dt>
+<dd>$object Object that we are interested in.</dd>
+<dt>Param	string:</dt>
+<dd>$related_field Optional specific related field.</dd>
+<dt>Return	string:</dt>
+<dd>The name of the table this relationship is stored on.</dd>
+</dl>
+</div></div>
+
+
+
+<div class='method'><a href="../source/libraries/datamapper.php.html#line1171" class="location">libraries/datamapper.php at line 1171</a>
+
+<h3 id="_get_without_auto_populating()">_get_without_auto_populating</h3>
+<code class="signature">private  DataMapper|NULL <strong>_get_without_auto_populating</strong>(string related)</code>
+<div class="details">
+<p>Used several places to temporarily override the auto_populate setting</p><dl>
+<dt>Ignore.</dt>
+<dt>Parameters:</dt>
+<dd>related - Related Name</dd>
+</dl>
+</div></div>
+
+
+
+<div class='method'><a href="../source/libraries/datamapper.php.html#line3839" class="location">libraries/datamapper.php at line 3839</a>
+
+<h3 id="_handle_default_order_by()">_handle_default_order_by</h3>
+<code class="signature">protected  void <strong>_handle_default_order_by</strong>()</code>
+<div class="details">
+<p>Adds in the defaut order_by items, if there are any, and
+order_by hasn't been overridden.</p><dl>
+<dt>Ignore.</dt>
+</dl>
+</div></div>
+
+
+
+<div class='method'><a href="../source/libraries/datamapper.php.html#line2711" class="location">libraries/datamapper.php at line 2711</a>
+
+<h3 id="_handle_related()">_handle_related</h3>
+<code class="signature">protected  bool <strong>_handle_related</strong>()</code>
+<div class="details">
+<p>Handles the adding the related part of a query if $parent is set</p><dl>
+<dt>Ignore.</dt>
+<dt>Returns:</dt>
+<dd>Success or failure</dd>
+</dl>
+</div></div>
+
+
+
+<div class='method'><a href="../source/libraries/datamapper.php.html#line3805" class="location">libraries/datamapper.php at line 3805</a>
+
+<h3 id="_having()">_having</h3>
+<code class="signature">protected  void <strong>_having</strong>(mixed key, str value, str type, bool escape)</code>
+<div class="details">
+<p>Having</p><p>Sets the HAVING portion of the query.
+Separates multiple calls with AND.</p><dl>
+<dt>Ignore.</dt>
+<dt>Param	string:</dt>
+<dd>$key Field to compare.</dd>
+<dd>$value value to compare to.</dd>
+<dd>$type Type of connection (AND or OR)</dd>
+<dt>Param	bool:</dt>
+<dd>$escape If FALSE, don't escape the value.</dd>
+<dt>Return	DataMapper:</dt>
+<dd>Returns self for method chaining.</dd>
+</dl>
+</div></div>
+
+
+
+<div class='method'><a href="../source/libraries/datamapper.php.html#line989" class="location">libraries/datamapper.php at line 989</a>
+
+<h3 id="_initiate_local_extensions()">_initiate_local_extensions</h3>
+<code class="signature">private  void <strong>_initiate_local_extensions</strong>(mixed common_key)</code>
+<div class="details">
+<p>Loads the extensions that are local to this model.</p><dl>
+<dt>Param	string:</dt>
+<dd>$common_key Shared key to save extenions to.</dd>
+</dl>
+</div></div>
+
+
+
+<div class='method'><a href="../source/libraries/datamapper.php.html#line5281" class="location">libraries/datamapper.php at line 5281</a>
+
+<h3 id="_join_field()">_join_field</h3>
+<code class="signature">private  void <strong>_join_field</strong>(mixed query, mixed arguments)</code>
+<div class="details">
+<p>Join Field</p><p>Adds a query of a join table's extra field
+Accessed via __call</p><dl>
+<dt>Ignore.</dt>
+<dt>Param	string:</dt>
+<dd>$query Query method.</dd>
+<dt>Param	array:</dt>
+<dd>$arguments Arguments for query.</dd>
+<dt>Return	DataMapper:</dt>
+<dd>Returns self for method chaining.</dd>
+</dl>
+</div></div>
+
+
+
+<div class='method'><a href="../source/libraries/datamapper.php.html#line3687" class="location">libraries/datamapper.php at line 3687</a>
+
+<h3 id="_like()">_like</h3>
+<code class="signature">protected  void <strong>_like</strong>(mixed field, str match, str type, str side, str not, bool no_case)</code>
+<div class="details">
+<p>_Like</p><p>Private function to do actual work.
+NOTE: this does NOT use the built-in ActiveRecord LIKE function.</p><dl>
+<dt>Ignore.</dt>
+<dt>Param	mixed:</dt>
+<dd>$field A field or array of fields to check.</dd>
+<dd>$match For a single field, the value to compare to.</dd>
+<dt>Param	string:</dt>
+<dd>$type The type of connection (AND or OR)</dd>
+<dd>$side One of 'both', 'before', or 'after'</dd>
+<dd>$not 'NOT' or ''</dd>
+<dt>Param	bool:</dt>
+<dd>$no_case If TRUE, configure to ignore case.</dd>
+<dt>Return	DataMapper:</dt>
+<dd>Returns self for method chaining.</dd>
+</dl>
+</div></div>
+
+
+
+<div class='method'><a href="../source/libraries/datamapper.php.html#line891" class="location">libraries/datamapper.php at line 891</a>
+
+<h3 id="_load_extensions()">_load_extensions</h3>
+<code class="signature">protected static  void <strong>_load_extensions</strong>(mixed extensions, mixed names)</code>
+<div class="details">
+<p>Loads in any extensions used by this class or globally.</p><dl>
+<dt>Param	array:</dt>
+<dd>$extensions List of extensions to add to.</dd>
+<dd>$name List of new extensions to load.</dd>
+</dl>
+</div></div>
+
+
+
+<div class='method'><a href="../source/libraries/datamapper.php.html#line6122" class="location">libraries/datamapper.php at line 6122</a>
+
+<h3 id="_load_helpers()">_load_helpers</h3>
+<code class="signature">protected  void <strong>_load_helpers</strong>()</code>
+<div class="details">
+<p>Load Helpers</p><p>Loads required CodeIgniter helpers.</p><dl>
+<dt>Ignore.</dt>
+</dl>
+</div></div>
+
+
+
+<div class='method'><a href="../source/libraries/datamapper.php.html#line6106" class="location">libraries/datamapper.php at line 6106</a>
+
+<h3 id="_load_languages()">_load_languages</h3>
+<code class="signature">protected  void <strong>_load_languages</strong>()</code>
+<div class="details">
+<p>Load Languages</p><p>Loads required language files.</p><dl>
+<dt>Ignore.</dt>
+</dl>
+</div></div>
+
+
+
+<div class='method'><a href="../source/libraries/datamapper.php.html#line5446" class="location">libraries/datamapper.php at line 5446</a>
+
+<h3 id="_matches()">_matches</h3>
+<code class="signature">protected  void <strong>_matches</strong>(mixed field, mixed other_field)</code>
+<div class="details">
+<p>Matches (pre-process)</p><p>Match one field to another.
+This replaces the version in CI_Form_validation.</p><dl>
+<dt>Ignore.</dt>
+</dl>
+</div></div>
+
+
+
+<div class='method'><a href="../source/libraries/datamapper.php.html#line5474" class="location">libraries/datamapper.php at line 5474</a>
+
+<h3 id="_max_date()">_max_date</h3>
+<code class="signature">protected  void <strong>_max_date</strong>(mixed field, mixed date)</code>
+<div class="details">
+<p>Max Date (pre-process)</p><p>Checks if the value of a property is at most the maximum date.</p><dl>
+<dt>Ignore.</dt>
+</dl>
+</div></div>
+
+
+
+<div class='method'><a href="../source/libraries/datamapper.php.html#line5502" class="location">libraries/datamapper.php at line 5502</a>
+
+<h3 id="_max_size()">_max_size</h3>
+<code class="signature">protected  void <strong>_max_size</strong>(mixed field, mixed size)</code>
+<div class="details">
+<p>Max Size (pre-process)</p><p>Checks if the value of a property is at most the maximum size.</p><dl>
+<dt>Ignore.</dt>
+</dl>
+</div></div>
+
+
+
+<div class='method'><a href="../source/libraries/datamapper.php.html#line5460" class="location">libraries/datamapper.php at line 5460</a>
+
+<h3 id="_min_date()">_min_date</h3>
+<code class="signature">protected  void <strong>_min_date</strong>(mixed field, mixed date)</code>
+<div class="details">
+<p>Min Date (pre-process)</p><p>Checks if the value of a property is at least the minimum date.</p><dl>
+<dt>Ignore.</dt>
+</dl>
+</div></div>
+
+
+
+<div class='method'><a href="../source/libraries/datamapper.php.html#line5488" class="location">libraries/datamapper.php at line 5488</a>
+
+<h3 id="_min_size()">_min_size</h3>
+<code class="signature">protected  void <strong>_min_size</strong>(mixed field, mixed size)</code>
+<div class="details">
+<p>Min Size (pre-process)</p><p>Checks if the value of a property is at least the minimum size.</p><dl>
+<dt>Ignore.</dt>
+</dl>
+</div></div>
+
+
+
+<div class='method'><a href="../source/libraries/datamapper.php.html#line3032" class="location">libraries/datamapper.php at line 3032</a>
+
+<h3 id="_parse_subquery_object()">_parse_subquery_object</h3>
+<code class="signature">protected  void <strong>_parse_subquery_object</strong>(mixed sql)</code>
+<div class="details">
+<p>Parses and protects a subquery.
+Automatically replaces the special ${parent} argument with a reference to
+this table.</p><p>Also replaces all table references that would overlap with this object.</p><dl>
+<dt>Ignore.</dt>
+<dt>Param	object:</dt>
+<dd>$sql SQL string to process</dd>
+<dt>Return	string:</dt>
+<dd>Processed SQL string.</dd>
+</dl>
+</div></div>
+
+
+
+<div class='method'><a href="../source/libraries/datamapper.php.html#line5671" class="location">libraries/datamapper.php at line 5671</a>
+
+<h3 id="_prep_for_form()">_prep_for_form</h3>
+<code class="signature">protected  void <strong>_prep_for_form</strong>(mixed field)</code>
+<div class="details">
+<p>Prep for Form (prep)</p><p>Converts special characters to allow HTML to be safely shown in a form.
+This replaces the version in CI_Form_validation.</p><dl>
+<dt>Ignore.</dt>
+</dl>
+</div></div>
+
+
+
+<div class='method'><a href="../source/libraries/datamapper.php.html#line5686" class="location">libraries/datamapper.php at line 5686</a>
+
+<h3 id="_prep_url()">_prep_url</h3>
+<code class="signature">protected  void <strong>_prep_url</strong>(mixed field)</code>
+<div class="details">
+<p>Prep URL (prep)</p><p>Adds "http://" to URLs if missing.
+This replaces the version in CI_Form_validation.</p><dl>
+<dt>Ignore.</dt>
+</dl>
+</div></div>
+
+
+
+<div class='method'><a href="../source/libraries/datamapper.php.html#line2828" class="location">libraries/datamapper.php at line 2828</a>
+
+<h3 id="_process_function_arg()">_process_function_arg</h3>
+<code class="signature">private  void <strong>_process_function_arg</strong>(mixed arg, bool is_formula)</code>
+<div class="details">
+</div></div>
+
+
+
+<div class='method'><a href="../source/libraries/datamapper.php.html#line5840" class="location">libraries/datamapper.php at line 5840</a>
+
+<h3 id="_process_query()">_process_query</h3>
+<code class="signature">protected  void <strong>_process_query</strong>(mixed query)</code>
+<div class="details">
+<p>Process Query</p><p>Converts a query result into an array of objects.
+Also updates this object</p><dl>
+<dt>Ignore.</dt>
+<dt>Param	CI_DB_result:</dt>
+<dd>$query</dd>
+</dl>
+</div></div>
+
+
+
+<div class='method'><a href="../source/libraries/datamapper.php.html#line3103" class="location">libraries/datamapper.php at line 3103</a>
+
+<h3 id="_process_special_query_clause()">_process_special_query_clause</h3>
+<code class="signature">private  void <strong>_process_special_query_clause</strong>(mixed query, mixed field, mixed value, mixed extra)</code>
+<div class="details">
+<p>Handles specialized where clauses, like subqueries and functions</p><dl>
+<dt>Ignore.</dt>
+<dt>Param	string:</dt>
+<dd>$query Query function</dd>
+<dd>$field Field for Query function</dd>
+<dt>Param	mixed:</dt>
+<dd>$value Value for Query function</dd>
+<dd>$extra If included, overrides the default assumption of FALSE for the third parameter to $query</dd>
+<dt>Return	DataMapper:</dt>
+<dd>Returns self for method chaining.</dd>
+</dl>
+</div></div>
+
+
+
+<div class='method'><a href="../source/libraries/datamapper.php.html#line6048" class="location">libraries/datamapper.php at line 6048</a>
+
+<h3 id="_refresh_stored_values()">_refresh_stored_values</h3>
+<code class="signature">protected  void <strong>_refresh_stored_values</strong>()</code>
+<div class="details">
+<p>Refresh Stored Values</p><p>Refreshes the stored values with the current values.</p><dl>
+<dt>Ignore.</dt>
+</dl>
+</div></div>
+
+
+
+<div class='method'><a href="../source/libraries/datamapper.php.html#line4419" class="location">libraries/datamapper.php at line 4419</a>
+
+<h3 id="_related()">_related</h3>
+<code class="signature">private  void <strong>_related</strong>(mixed query, mixed arguments)</code>
+<div class="details">
+<p>Related</p><p>Sets the specified related query.</p><dl>
+<dt>Ignore.</dt>
+<dt>Param	string:</dt>
+<dd>$query Query String</dd>
+<dt>Param	array:</dt>
+<dd>$arguments Arguments to process</dd>
+<dt>Param	mixed:</dt>
+<dd>$extra Used to prevent escaping in special circumstances.</dd>
+<dt>Return	DataMapper:</dt>
+<dd>Returns self for method chaining.</dd>
+</dl>
+</div></div>
+
+
+
+<div class='method'><a href="../source/libraries/datamapper.php.html#line5377" class="location">libraries/datamapper.php at line 5377</a>
+
+<h3 id="_related_max_size()">_related_max_size</h3>
+<code class="signature">protected  void <strong>_related_max_size</strong>(mixed object, mixed model, int size)</code>
+<div class="details">
+<p>Related Max Size (pre-process)</p><p>Checks if the value of a property is at most the maximum size.</p><dl>
+<dt>Ignore.</dt>
+</dl>
+</div></div>
+
+
+
+<div class='method'><a href="../source/libraries/datamapper.php.html#line5363" class="location">libraries/datamapper.php at line 5363</a>
+
+<h3 id="_related_min_size()">_related_min_size</h3>
+<code class="signature">protected  void <strong>_related_min_size</strong>(mixed object, mixed model, int size)</code>
+<div class="details">
+<p>Related Min Size (pre-process)</p><p>Checks if the value of a property is at most the minimum size.</p><dl>
+<dt>Ignore.</dt>
+</dl>
+</div></div>
+
+
+
+<div class='method'><a href="../source/libraries/datamapper.php.html#line5349" class="location">libraries/datamapper.php at line 5349</a>
+
+<h3 id="_related_required()">_related_required</h3>
+<code class="signature">protected  void <strong>_related_required</strong>(mixed object, mixed model)</code>
+<div class="details">
+<p>Related Required (pre-process)</p><p>Checks if the related object has the required related item
+or if the required relation already exists.</p><dl>
+<dt>Ignore.</dt>
+</dl>
+</div></div>
+
+
+
+<div class='method'><a href="../source/libraries/datamapper.php.html#line4514" class="location">libraries/datamapper.php at line 4514</a>
+
+<h3 id="_related_subquery()">_related_subquery</h3>
+<code class="signature">private  void <strong>_related_subquery</strong>(mixed query, mixed args)</code>
+<div class="details">
+<p>Magic method to process a subquery for a related object.
+The format for this should be
+$object->{where}_related_subquery($related_item, $related_field, $subquery)
+related_field is optional</p><dl>
+<dt>Ignore.</dt>
+<dt>Param	string:</dt>
+<dd>$query Query Method</dd>
+<dt>Param	object:</dt>
+<dd>$args Arguments for the query</dd>
+<dt>Return	DataMapper:</dt>
+<dd>Returns self for method chaining.</dd>
+</dl>
+</div></div>
+
+
+
+<div class='method'><a href="../source/libraries/datamapper.php.html#line4914" class="location">libraries/datamapper.php at line 4914</a>
+
+<h3 id="_remove_other_one_to_one()">_remove_other_one_to_one</h3>
+<code class="signature">private  void <strong>_remove_other_one_to_one</strong>(string rf, <a href="../giftflow/datamapper.html">DataMapper</a> object)</code>
+<div class="details">
+<p>Remove Other One-to-One
+Removes other relationships on a one-to-one ITFK relationship</p><dl>
+<dt>Ignore.</dt>
+<dt>Parameters:</dt>
+<dd>rf - Related field to look at.</dd>
+<dd>object - Object to look at.</dd>
+</dl>
+</div></div>
+
+
+
+<div class='method'><a href="../source/libraries/datamapper.php.html#line5976" class="location">libraries/datamapper.php at line 5976</a>
+
+<h3 id="_run_get_rules()">_run_get_rules</h3>
+<code class="signature">protected  void <strong>_run_get_rules</strong>()</code>
+<div class="details">
+<p>Run Get Rules</p><p>Processes values loaded from the database</p><dl>
+<dt>Ignore.</dt>
+</dl>
+</div></div>
+
+
+
+<div class='method'><a href="../source/libraries/datamapper.php.html#line1848" class="location">libraries/datamapper.php at line 1848</a>
+
+<h3 id="_save()">_save</h3>
+<code class="signature">private  void <strong>_save</strong>(mixed related_field, mixed arguments)</code>
+<div class="details">
+<p>_Save</p><p>Used by __call to process related saves.</p><dl>
+<dt>Ignore.</dt>
+<dt>Param	mixed:</dt>
+<dd>$related_field</dd>
+<dt>Param	array:</dt>
+<dd>$arguments</dd>
+<dt>Return	bool.</dt>
+</dl>
+</div></div>
+
+
+
+<div class='method'><a href="../source/libraries/datamapper.php.html#line1759" class="location">libraries/datamapper.php at line 1759</a>
+
+<h3 id="_save_itfk()">_save_itfk</h3>
+<code class="signature">protected  void <strong>_save_itfk</strong>(mixed objects, mixed related_field)</code>
+<div class="details">
+<p>Recursively saves arrays of objects if they are In-Table Foreign Keys.</p><dl>
+<dt>Ignore.</dt>
+<dt>Param	object:</dt>
+<dd>$objects Objects to save.  This array may be modified.</dd>
+<dd>$related_field Related Field name (empty is OK)</dd>
+</dl>
+</div></div>
+
+
+
+<div class='method'><a href="../source/libraries/datamapper.php.html#line1814" class="location">libraries/datamapper.php at line 1814</a>
+
+<h3 id="_save_related_recursive()">_save_related_recursive</h3>
+<code class="signature">protected  void <strong>_save_related_recursive</strong>(mixed object, mixed related_field)</code>
+<div class="details">
+<p>Recursively saves arrays of objects.</p><dl>
+<dt>Ignore.</dt>
+<dt>Param	object:</dt>
+<dd>$object Array of objects to save, or single object</dd>
+<dd>$related_field Default related field name (empty is OK)</dd>
+<dt>Return	bool:</dt>
+<dd>TRUE or FALSE if an error occurred.</dd>
+</dl>
+</div></div>
+
+
+
+<div class='method'><a href="../source/libraries/datamapper.php.html#line4778" class="location">libraries/datamapper.php at line 4778</a>
+
+<h3 id="_save_relation()">_save_relation</h3>
+<code class="signature">protected  void <strong>_save_relation</strong>(mixed object, str related_field)</code>
+<div class="details">
+<p>Save Relation</p><p>Saves the relation between this and the other object.</p><dl>
+<dt>Ignore.</dt>
+<dt>Param	DataMapper:</dt>
+<dd>DataMapper Object to related to this object</dd>
+<dt>Param	string:</dt>
+<dd>Specific related field if necessary.</dd>
+<dt>Return	bool:</dt>
+<dd>Success or Failure</dd>
+</dl>
+</div></div>
+
+
+
+<div class='method'><a href="../source/libraries/datamapper.php.html#line5701" class="location">libraries/datamapper.php at line 5701</a>
+
+<h3 id="_strip_image_tags()">_strip_image_tags</h3>
+<code class="signature">protected  void <strong>_strip_image_tags</strong>(mixed field)</code>
+<div class="details">
+<p>Strip Image Tags (prep)</p><p>Strips the HTML from image tags leaving the raw URL.
+This replaces the version in CI_Form_validation.</p><dl>
+<dt>Ignore.</dt>
+</dl>
+</div></div>
+
+
+
+<div class='method'><a href="../source/libraries/datamapper.php.html#line2973" class="location">libraries/datamapper.php at line 2973</a>
+
+<h3 id="_subquery()">_subquery</h3>
+<code class="signature">private  void <strong>_subquery</strong>(mixed query, mixed args)</code>
+<div class="details">
+<p>Used by the magic method for select_subquery {where}_subquery, etc</p><dl>
+<dt>Ignore.</dt>
+<dt>Param	string:</dt>
+<dd>$query Name of query function</dd>
+<dt>Param	array:</dt>
+<dd>$args Arguments for subquery</dd>
+<dt>Return	DataMapper:</dt>
+<dd>Returns self for method chaining.</dd>
+</dl>
+</div></div>
+
+
+
+<div class='method'><a href="../source/libraries/datamapper.php.html#line5812" class="location">libraries/datamapper.php at line 5812</a>
+
+<h3 id="_to_array()">_to_array</h3>
+<code class="signature">protected  void <strong>_to_array</strong>(bool validate)</code>
+<div class="details">
+<p>To Array</p><p>Converts this objects current record into an array for database queries.
+If validate is TRUE (getting by objects properties) empty objects are ignored.</p><dl>
+<dt>Ignore.</dt>
+<dt>Param	bool:</dt>
+<dd>$validate</dd>
+<dt>Return	array.</dt>
+</dl>
+</div></div>
+
+
+
+<div class='method'><a href="../source/libraries/datamapper.php.html#line5915" class="location">libraries/datamapper.php at line 5915</a>
+
+<h3 id="_to_object()">_to_object</h3>
+<code class="signature">public  void <strong>_to_object</strong>(mixed item, mixed row)</code>
+<div class="details">
+<p>To Object
+Copies the values from a query result row to an object.
+Also initializes that object by running get rules, and
+refreshing stored values on the object.</p><p>Finally, if any "instantiations" are requested, those related objects
+are created off of query results</p><p>This is only public so that the iterator can access it.</p><dl>
+<dt>Ignore.</dt>
+<dt>Param	DataMapper:</dt>
+<dd>$item Item to configure</dd>
+<dt>Param	object:</dt>
+<dd>$row Query results</dd>
+</dl>
+</div></div>
+
+
+
+<div class='method'><a href="../source/libraries/datamapper.php.html#line5730" class="location">libraries/datamapper.php at line 5730</a>
+
+<h3 id="_trim()">_trim</h3>
+<code class="signature">protected  void <strong>_trim</strong>(mixed field)</code>
+<div class="details">
+<p>Trim
+Custom trim rule that ignores NULL values</p><dl>
+<dt>Ignore.</dt>
+</dl>
+</div></div>
+
+
+
+<div class='method'><a href="../source/libraries/datamapper.php.html#line5517" class="location">libraries/datamapper.php at line 5517</a>
+
+<h3 id="_unique()">_unique</h3>
+<code class="signature">protected  void <strong>_unique</strong>(mixed field)</code>
+<div class="details">
+<p>Unique (pre-process)</p><p>Checks if the value of a property is unique.
+If the property belongs to this object, we can ignore it.</p><dl>
+<dt>Ignore.</dt>
+</dl>
+</div></div>
+
+
+
+<div class='method'><a href="../source/libraries/datamapper.php.html#line5550" class="location">libraries/datamapper.php at line 5550</a>
+
+<h3 id="_unique_pair()">_unique_pair</h3>
+<code class="signature">protected  void <strong>_unique_pair</strong>(mixed field, str other_field)</code>
+<div class="details">
+<p>Unique Pair (pre-process)</p><p>Checks if the value of a property, paired with another, is unique.
+If the properties belongs to this object, we can ignore it.</p><dl>
+<dt>Ignore.</dt>
+</dl>
+</div></div>
+
+
+
+<div class='method'><a href="../source/libraries/datamapper.php.html#line5582" class="location">libraries/datamapper.php at line 5582</a>
+
+<h3 id="_valid_date()">_valid_date</h3>
+<code class="signature">protected  void <strong>_valid_date</strong>(mixed field)</code>
+<div class="details">
+<p>Valid Date (pre-process)</p><p>Checks whether the field value is a valid DateTime.</p><dl>
+<dt>Ignore.</dt>
+</dl>
+</div></div>
+
+
+
+<div class='method'><a href="../source/libraries/datamapper.php.html#line5604" class="location">libraries/datamapper.php at line 5604</a>
+
+<h3 id="_valid_date_group()">_valid_date_group</h3>
+<code class="signature">protected  void <strong>_valid_date_group</strong>(mixed field, mixed fields)</code>
+<div class="details">
+<p>Valid Date Group (pre-process)</p><p>Checks whether the field value, grouped with other field values, is a valid DateTime.</p><dl>
+<dt>Ignore.</dt>
+</dl>
+</div></div>
+
+
+
+<div class='method'><a href="../source/libraries/datamapper.php.html#line5626" class="location">libraries/datamapper.php at line 5626</a>
+
+<h3 id="_valid_match()">_valid_match</h3>
+<code class="signature">protected  void <strong>_valid_match</strong>(mixed field, mixed param)</code>
+<div class="details">
+<p>Valid Match (pre-process)</p><p>Checks whether the field value matches one of the specified array values.</p><dl>
+<dt>Ignore.</dt>
+</dl>
+</div></div>
+
+
+
+<div class='method'><a href="../source/libraries/datamapper.php.html#line3411" class="location">libraries/datamapper.php at line 3411</a>
+
+<h3 id="_where()">_where</h3>
+<code class="signature">protected  void <strong>_where</strong>(mixed key, mixed value, str type, mixed escape)</code>
+<div class="details">
+<p>Where</p><p>Called by where() or or_where().</p><dl>
+<dt>Ignore.</dt>
+<dt>Param	mixed:</dt>
+<dd>$key A field or array of fields to check.</dd>
+<dd>$value For a single field, the value to compare to.</dd>
+<dt>Param	string:</dt>
+<dd>$type Type of addition (AND or OR)</dd>
+<dt>Param	bool:</dt>
+<dd>$escape If FALSE, the field is not escaped.</dd>
+<dt>Return	DataMapper:</dt>
+<dd>Returns self for method chaining.</dd>
+</dl>
+</div></div>
+
+
+
+<div class='method'><a href="../source/libraries/datamapper.php.html#line3517" class="location">libraries/datamapper.php at line 3517</a>
+
+<h3 id="_where_in()">_where_in</h3>
+<code class="signature">protected  void <strong>_where_in</strong>(mixed key, mixed values, bool not, str type)</code>
+<div class="details">
+<p>Where In</p><p>Called by where_in(), or_where_in(), where_not_in(), or or_where_not_in().</p><dl>
+<dt>Ignore.</dt>
+<dt>Param	string:</dt>
+<dd>$key A field to check.</dd>
+<dd>$type The type of connection (AND or OR)</dd>
+<dt>Param	array:</dt>
+<dd>$values An array of values to compare against</dd>
+<dt>Param	bool:</dt>
+<dd>$not If TRUE, use NOT IN instead of IN.</dd>
+<dt>Return	DataMapper:</dt>
+<dd>Returns self for method chaining.</dd>
+</dl>
+</div></div>
+
+
+
+<div class='method'><a href="../source/libraries/datamapper.php.html#line5716" class="location">libraries/datamapper.php at line 5716</a>
+
+<h3 id="_xss_clean()">_xss_clean</h3>
+<code class="signature">protected  void <strong>_xss_clean</strong>(mixed field, bool is_image)</code>
+<div class="details">
+<p>XSS Clean (prep)</p><p>Runs the data through the XSS filtering function, described in the Input Class page.
+This replaces the version in CI_Form_validation.</p><dl>
+<dt>Ignore.</dt>
+</dl>
+</div></div>
+
+
+
+<div class='method'><a href="../source/libraries/datamapper.php.html#line2761" class="location">libraries/datamapper.php at line 2761</a>
+
+<h3 id="add_table_name()">add_table_name</h3>
+<code class="signature">public  void <strong>add_table_name</strong>(mixed field)</code>
+<div class="details">
+<p>Add Table Name</p><p>Adds the table name to a field if necessary</p><dl>
+<dt>Param	string:</dt>
+<dd>$field Field to add the table name to.</dd>
+<dt>Return	string:</dt>
+<dd>Possibly modified field name.</dd>
+</dl>
+</div></div>
+
+
+
+<div class='method'><a href="../source/libraries/datamapper.php.html#line784" class="location">libraries/datamapper.php at line 784</a>
+
+<h3 id="autoload()">autoload</h3>
+<code class="signature">public static  void <strong>autoload</strong>(mixed class)</code>
+<div class="details">
+<p>Autoload</p><p>Autoloads object classes that are used with DataMapper.
+This method will look in any model directories available to CI.</p><p>Note:
+It is important that they are autoloaded as loading them manually with
+CodeIgniter's loader class will cause DataMapper's __get and __set functions
+to not function.</p><dl>
+<dt>Param	string:</dt>
+<dd>$class Name of class to load.</dd>
+</dl>
+</div></div>
+
+
+
+<div class='method'><a href="../source/libraries/datamapper.php.html#line2578" class="location">libraries/datamapper.php at line 2578</a>
+
+<h3 id="check_last_query()">check_last_query</h3>
+<code class="signature">public  void <strong>check_last_query</strong>(str delims)</code>
+<div class="details">
+<p>Check Last Query
+Renders the last DB query performed.</p><dl>
+<dt>Param	array:</dt>
+<dd>$delims Delimiters for the SQL string.</dd>
+<dt>Param	bool:</dt>
+<dd>$return_as_string If TRUE, don't output automatically.</dd>
+<dt>Return	string:</dt>
+<dd>Last db query formatted as a string.</dd>
+</dl>
+</div></div>
+
+
+
+<div class='method'><a href="../source/libraries/datamapper.php.html#line2335" class="location">libraries/datamapper.php at line 2335</a>
+
+<h3 id="clear()">clear</h3>
+<code class="signature">public  void <strong>clear</strong>()</code>
+<div class="details">
+<p>Clear</p><p>Clears the current object.</p></div></div>
+
+
+
+<div class='method'><a href="../source/libraries/datamapper.php.html#line2407" class="location">libraries/datamapper.php at line 2407</a>
+
+<h3 id="count()">count</h3>
+<code class="signature">public  void <strong>count</strong>(mixed exclude_ids, mixed column, mixed related_id)</code>
+<div class="details">
+<p>Count</p><p>Returns the total count of the object records from the database.
+If on a related object, returns the total count of related objects records.</p><dl>
+<dt>Param	array:</dt>
+<dd>$exclude_ids A list of ids to exlcude from the count</dd>
+<dt>Return	int:</dt>
+<dd>Number of rows in query.</dd>
+</dl>
+</div></div>
+
+
+
+<div class='method'><a href="../source/libraries/datamapper.php.html#line2507" class="location">libraries/datamapper.php at line 2507</a>
+
+<h3 id="count_distinct()">count_distinct</h3>
+<code class="signature">public  void <strong>count_distinct</strong>(mixed exclude_ids, str column)</code>
+<div class="details">
+<p>Count Distinct</p><p>Returns the total count of distinct object records from the database.
+If on a related object, returns the total count of related objects records.</p><dl>
+<dt>Param	array:</dt>
+<dd>$exclude_ids A list of ids to exlcude from the count</dd>
+<dt>Param	string:</dt>
+<dd>$column If provided, use this column for the DISTINCT instead of 'id'</dd>
+<dt>Return	int:</dt>
+<dd>Number of rows in query.</dd>
+</dl>
+</div></div>
+
+
+
+<div class='method'><a href="../source/libraries/datamapper.php.html#line1959" class="location">libraries/datamapper.php at line 1959</a>
+
+<h3 id="delete()">delete</h3>
+<code class="signature">public  void <strong>delete</strong>(str object, str related_field)</code>
+<div class="details">
+<p>Delete</p><p>Deletes the current record.
+If object is supplied, deletes relations between this object and the supplied object(s).</p><dl>
+<dt>Param	mixed:</dt>
+<dd>$object If specified, delete the relationship to the object or array of objects.</dd>
+<dt>Param	string:</dt>
+<dd>$related_field Can be used to specify which relationship to delete.</dd>
+<dt>Return	bool:</dt>
+<dd>Success or Failure of the delete.</dd>
+</dl>
+</div></div>
+
+
+
+<div class='method'><a href="../source/libraries/datamapper.php.html#line2104" class="location">libraries/datamapper.php at line 2104</a>
+
+<h3 id="delete_all()">delete_all</h3>
+<code class="signature">public  void <strong>delete_all</strong>()</code>
+<div class="details">
+<p>Delete All</p><p>Deletes all records in this objects all list.</p><dl>
+<dt>Return	bool:</dt>
+<dd>Success or Failure of the delete</dd>
+</dl>
+</div></div>
+
+
+
+<div class='method'><a href="../source/libraries/datamapper.php.html#line3246" class="location">libraries/datamapper.php at line 3246</a>
+
+<h3 id="distinct()">distinct</h3>
+<code class="signature">public  void <strong>distinct</strong>(bool value)</code>
+<div class="details">
+<p>Distinct</p><p>Sets the flag to add DISTINCT to the query.</p><dl>
+<dt>Param	bool:</dt>
+<dd>$value Set to FALSE to turn back off DISTINCT</dd>
+<dt>Return	DataMapper:</dt>
+<dd>Returns self for method chaining.</dd>
+</dl>
+</div></div>
+
+
+
+<div class='method'><a href="../source/libraries/datamapper.php.html#line2599" class="location">libraries/datamapper.php at line 2599</a>
+
+<h3 id="error_message()">error_message</h3>
+<code class="signature">public  void <strong>error_message</strong>(string field, string error)</code>
+<div class="details">
+<p>Error Message</p><p>Adds an error message to this objects error object.</p><dl>
+<dt>Parameters:</dt>
+<dd>field - Field to set the error on.</dd>
+<dd>error - Error message.</dd>
+</dl>
+</div></div>
+
+
+
+<div class='method'><a href="../source/libraries/datamapper.php.html#line2537" class="location">libraries/datamapper.php at line 2537</a>
+
+<h3 id="exists()">exists</h3>
+<code class="signature">public  void <strong>exists</strong>()</code>
+<div class="details">
+<p>Exists</p><p>Returns TRUE if the current object has a database record.</p><dl>
+<dt>Return	bool.</dt>
+</dl>
+</div></div>
+
+
+
+<div class='method'><a href="../source/libraries/datamapper.php.html#line3937" class="location">libraries/datamapper.php at line 3937</a>
+
+<h3 id="flush_cache()">flush_cache</h3>
+<code class="signature">public  void <strong>flush_cache</strong>()</code>
+<div class="details">
+<p>Flush Cache</p><p>Empties the AR cache.</p></div></div>
+
+
+
+<div class='method'><a href="../source/libraries/datamapper.php.html#line2808" class="location">libraries/datamapper.php at line 2808</a>
+
+<h3 id="func()">func</h3>
+<code class="signature">public  void <strong>func</strong>(mixed function_name)</code>
+<div class="details">
+<p>Creates a SQL-function with the given (optional) arguments.</p><p>Each argument can be one of several forms:
+1) An un escaped string value, which will be automatically escaped: "hello"
+2) An escaped value or non-string, which is copied directly: "'hello'" 123, etc
+3) An operator, *, or a non-escaped string is copied directly: "[non-escaped]" ">", etc
+4) A field on this model: "@property"  (Also, "@<whatever>" will be copied directly
+5) A field on a related or deeply related model: "@model/property" "@model/other_model/property"
+6) An array, which is processed recursively as a forumla.</p><dl>
+<dt>Param	string:</dt>
+<dd>$function_name Function name.</dd>
+<dt>Param	mixed:</dt>
+<dd>$args,... (Optional) Any commands that need to be passed to the function.</dd>
+<dt>Return	string:</dt>
+<dd>The new SQL function string.</dd>
+</dl>
+</div></div>
+
+
+
+<div class='method'><a href="../source/libraries/datamapper.php.html#line1346" class="location">libraries/datamapper.php at line 1346</a>
+
+<h3 id="get()">get</h3>
+<code class="signature">public  void <strong>get</strong>(mixed limit, mixed offset)</code>
+<div class="details">
+<p>Get</p><p>Get objects from the database.</p><dl>
+<dt>Param	integer|NULL:</dt>
+<dd>$limit Limit the number of results.</dd>
+<dd>$offset Offset the results when limiting.</dd>
+<dt>Return	DataMapper:</dt>
+<dd>Returns self for method chaining.</dd>
+</dl>
+</div></div>
+
+
+
+<div class='method'><a href="../source/libraries/datamapper.php.html#line1314" class="location">libraries/datamapper.php at line 1314</a>
+
+<h3 id="getIterator()">getIterator</h3>
+<code class="signature">public  void <strong>getIterator</strong>()</code>
+<div class="details">
+<p>Allows the all array to be iterated over without
+having to specify it.</p><dl>
+<dt>Return	Iterator:</dt>
+<dd>An iterator for the all array</dd>
+</dl>
+</div></div>
+
+
+
+<div class='method'><a href="../source/libraries/datamapper.php.html#line2623" class="location">libraries/datamapper.php at line 2623</a>
+
+<h3 id="get_clone()">get_clone</h3>
+<code class="signature">public  void <strong>get_clone</strong>(bool force_db)</code>
+<div class="details">
+<p>Get Clone</p><p>Returns a clone of the current object.</p><dl>
+<dt>Return	DataMapper:</dt>
+<dd>Cloned copy of this object.</dd>
+</dl>
+</div></div>
+
+
+
+<div class='method'><a href="../source/libraries/datamapper.php.html#line2647" class="location">libraries/datamapper.php at line 2647</a>
+
+<h3 id="get_copy()">get_copy</h3>
+<code class="signature">public  void <strong>get_copy</strong>(bool force_db)</code>
+<div class="details">
+<p>Get Copy</p><p>Returns an unsaved copy of the current object.</p><dl>
+<dt>Return	DataMapper:</dt>
+<dd>Cloned copy of this object with an empty ID for saving as new.</dd>
+</dl>
+</div></div>
+
+
+
+<div class='method'><a href="../source/libraries/datamapper.php.html#line1472" class="location">libraries/datamapper.php at line 1472</a>
+
+<h3 id="get_iterated()">get_iterated</h3>
+<code class="signature">public  void <strong>get_iterated</strong>(mixed limit, mixed offset)</code>
+<div class="details">
+<p>Returns a streamable result set for large queries.
+Usage:
+$rs = $object->get_iterated();
+$size = $rs->count;
+foreach($rs as $o) {
+handle $o
+}
+$rs can be looped through more than once.</p><dl>
+<dt>Param	integer|NULL:</dt>
+<dd>$limit Limit the number of results.</dd>
+<dd>$offset Offset the results when limiting.</dd>
+<dt>Return	DataMapper:</dt>
+<dd>Returns self for method chaining.</dd>
+</dl>
+</div></div>
+
+
+
+<div class='method'><a href="../source/libraries/datamapper.php.html#line1501" class="location">libraries/datamapper.php at line 1501</a>
+
+<h3 id="get_paged()">get_paged</h3>
+<code class="signature">public  void <strong>get_paged</strong>(int page, int page_size, bool page_num_by_rows, str info_object, bool iterated)</code>
+<div class="details">
+<p>Convenience method that runs a query based on pages.
+This object will have two new values, $query_total_pages and
+$query_total_rows, which can be used to determine how many pages and
+how many rows are available in total, respectively.</p><dl>
+<dt>Param	int:</dt>
+<dd>$page Page (1-based) to start on, or row (0-based) to start on</dd>
+<dd>$page_size Number of rows in a page</dd>
+<dt>Param	bool:</dt>
+<dd>$page_num_by_rows When TRUE, $page is the starting row, not the starting page</dd>
+<dd>$iterated Internal Use Only</dd>
+<dt>Return	DataMapper:</dt>
+<dd>Returns self for method chaining.</dd>
+</dl>
+</div></div>
+
+
+
+<div class='method'><a href="../source/libraries/datamapper.php.html#line1573" class="location">libraries/datamapper.php at line 1573</a>
+
+<h3 id="get_paged_iterated()">get_paged_iterated</h3>
+<code class="signature">public  void <strong>get_paged_iterated</strong>(int page, int page_size, bool page_num_by_rows, str info_object)</code>
+<div class="details">
+<p>Runs get_paged, but as an Iterable.</p><dl>
+<dt>See Also:</dt>
+<dd><a href="../giftflow/datamapper.html#get_paged()">get_paged</a></dd>
+<dt>Param	int:</dt>
+<dd>$page Page (1-based) to start on, or row (0-based) to start on</dd>
+<dd>$page_size Number of rows in a page</dd>
+<dt>Param	bool:</dt>
+<dd>$page_num_by_rows When TRUE, $page is the starting row, not the starting page</dd>
+<dd>$iterated Internal Use Only</dd>
+<dt>Return	DataMapper:</dt>
+<dd>Returns self for method chaining.</dd>
+</dl>
+</div></div>
+
+
+
+<div class='method'><a href="../source/libraries/datamapper.php.html#line1443" class="location">libraries/datamapper.php at line 1443</a>
+
+<h3 id="get_raw()">get_raw</h3>
+<code class="signature">public  void <strong>get_raw</strong>(mixed limit, mixed offset, bool handle_related)</code>
+<div class="details">
+<p>Runs the query, but returns the raw CodeIgniter results
+NOTE: This also _clears_ the current query info.</p><dl>
+<dt>Param	integer|NULL:</dt>
+<dd>$limit Limit the number of results.</dd>
+<dd>$offset Offset the results when limiting.</dd>
+<dt>Return	CI_DB_result:</dt>
+<dd>Result Object</dd>
+</dl>
+</div></div>
+
+
+
+<div class='method'><a href="../source/libraries/datamapper.php.html#line1412" class="location">libraries/datamapper.php at line 1412</a>
+
+<h3 id="get_sql()">get_sql</h3>
+<code class="signature">public  void <strong>get_sql</strong>(mixed limit, mixed offset, bool handle_related)</code>
+<div class="details">
+<p>Returns the SQL string of the current query (SELECTs ONLY).
+NOTE: This also _clears_ the current query info.</p><p>This can be used to generate subqueries.</p><dl>
+<dt>Param	integer|NULL:</dt>
+<dd>$limit Limit the number of results.</dd>
+<dd>$offset Offset the results when limiting.</dd>
+<dt>Return	string:</dt>
+<dd>SQL as a string.</dd>
+</dl>
+</div></div>
+
+
+
+<div class='method'><a href="../source/libraries/datamapper.php.html#line3266" class="location">libraries/datamapper.php at line 3266</a>
+
+<h3 id="get_where()">get_where</h3>
+<code class="signature">public  void <strong>get_where</strong>(mixed where, mixed offset)</code>
+<div class="details">
+<p>Get Where</p><p>Get items matching the where clause.</p><dl>
+<dt>Param	mixed:</dt>
+<dd>$where See where()</dd>
+<dt>Param	integer|NULL:</dt>
+<dd>$limit Limit the number of results.</dd>
+<dd>$offset Offset the results when limiting.</dd>
+<dt>Return	DataMapper:</dt>
+<dd>Returns self for method chaining.</dd>
+</dl>
+</div></div>
+
+
+
+<div class='method'><a href="../source/libraries/datamapper.php.html#line3746" class="location">libraries/datamapper.php at line 3746</a>
+
+<h3 id="group_by()">group_by</h3>
+<code class="signature">public  void <strong>group_by</strong>(mixed by)</code>
+<div class="details">
+<p>Group By</p><p>Sets the GROUP BY portion of the query.</p><dl>
+<dt>Param	string:</dt>
+<dd>$by Field to group by</dd>
+<dt>Return	DataMapper:</dt>
+<dd>Returns self for method chaining.</dd>
+</dl>
+</div></div>
+
+
+
+<div class='method'><a href="../source/libraries/datamapper.php.html#line3332" class="location">libraries/datamapper.php at line 3332</a>
+
+<h3 id="group_end()">group_end</h3>
+<code class="signature">public  void <strong>group_end</strong>()</code>
+<div class="details">
+<p>Ends a query group.</p><dl>
+<dt>Return	DataMapper:</dt>
+<dd>Returns self for method chaining.</dd>
+</dl>
+</div></div>
+
+
+
+<div class='method'><a href="../source/libraries/datamapper.php.html#line3282" class="location">libraries/datamapper.php at line 3282</a>
+
+<h3 id="group_start()">group_start</h3>
+<code class="signature">public  void <strong>group_start</strong>(str not, str type)</code>
+<div class="details">
+<p>Starts a query group.</p><dl>
+<dt>Param	string:</dt>
+<dd>$not (Internal use only)</dd>
+<dd>$type (Internal use only)</dd>
+<dt>Return	DataMapper:</dt>
+<dd>Returns self for method chaining.</dd>
+</dl>
+</div></div>
+
+
+
+<div class='method'><a href="../source/libraries/datamapper.php.html#line3767" class="location">libraries/datamapper.php at line 3767</a>
+
+<h3 id="having()">having</h3>
+<code class="signature">public  void <strong>having</strong>(mixed key, str value, bool escape)</code>
+<div class="details">
+<p>Having</p><p>Sets the HAVING portion of the query.
+Separates multiple calls with AND.</p><dl>
+<dt>Param	string:</dt>
+<dd>$key Field to compare.</dd>
+<dd>$value value to compare to.</dd>
+<dt>Param	bool:</dt>
+<dd>$escape If FALSE, don't escape the value.</dd>
+<dt>Return	DataMapper:</dt>
+<dd>Returns self for method chaining.</dd>
+</dl>
+</div></div>
+
+
+
+<div class='method'><a href="../source/libraries/datamapper.php.html#line3611" class="location">libraries/datamapper.php at line 3611</a>
+
+<h3 id="ilike()">ilike</h3>
+<code class="signature">public  void <strong>ilike</strong>(mixed field, str match, str side)</code>
+<div class="details">
+<p>ILike</p><p>Sets the case-insensitive %LIKE% portion of the query.</p><dl>
+<dt>Param	mixed:</dt>
+<dd>$field A field or array of fields to check.</dd>
+<dd>$match For a single field, the value to compare to.</dd>
+<dt>Param	string:</dt>
+<dd>$side One of 'both', 'before', or 'after'</dd>
+<dt>Return	DataMapper:</dt>
+<dd>Returns self for method chaining.</dd>
+</dl>
+</div></div>
+
+
+
+<div class='method'><a href="../source/libraries/datamapper.php.html#line5174" class="location">libraries/datamapper.php at line 5174</a>
+
+<h3 id="include_join_fields()">include_join_fields</h3>
+<code class="signature">public  void <strong>include_join_fields</strong>(bool include)</code>
+<div class="details">
+<p>Include Join Fields</p><p>If TRUE, the any extra fields on the join table will be included</p><dl>
+<dt>Param	bool:</dt>
+<dd>$include If FALSE, turns back off the directive.</dd>
+<dt>Return	DataMapper:</dt>
+<dd>Returns self for method chaining.</dd>
+</dl>
+</div></div>
+
+
+
+<div class='method'><a href="../source/libraries/datamapper.php.html#line4577" class="location">libraries/datamapper.php at line 4577</a>
+
+<h3 id="include_related()">include_related</h3>
+<code class="signature">public  void <strong>include_related</strong>(mixed related_field, mixed fields, bool append_name, bool instantiate)</code>
+<div class="details">
+<p>Include Related</p><p>Joins specified values of a has_one object into the current query
+If $fields is NULL or '*', then all columns are joined (may require instantiation of the other object)
+If $fields is a single string, then just that column is joined.
+Otherwise, $fields should be an array of column names.</p><p>$append_name can be used to override the default name to append, or set it to FALSE to prevent appending.</p><dl>
+<dt>Param	mixed:</dt>
+<dd>$related_field The related object or field name</dd>
+<dt>Param	array:</dt>
+<dd>$fields The fields to join (NULL or '*' means all fields, or use a single field or array of fields)</dd>
+<dt>Param	bool:</dt>
+<dd>$append_name The name to use for joining (with '_'), or FALSE to disable.</dd>
+<dd>$instantiate If TRUE, the results are instantiated into objects</dd>
+<dt>Return	DataMapper:</dt>
+<dd>Returns self for method chaining.</dd>
+</dl>
+</div></div>
+
+
+
+<div class='method'><a href="../source/libraries/datamapper.php.html#line4694" class="location">libraries/datamapper.php at line 4694</a>
+
+<h3 id="include_related_count()">include_related_count</h3>
+<code class="signature">public  void <strong>include_related_count</strong>(mixed related_field, mixed alias)</code>
+<div class="details">
+<p>Includes the number of related items using a subquery.</p><p>Default alias is {$related_field}_count</p><dl>
+<dt>Param	mixed:</dt>
+<dd>$related_field Field to count</dd>
+<dt>Param	string:</dt>
+<dd>$alias  Alternative alias.</dd>
+<dt>Return	DataMapper:</dt>
+<dd>Returns self for method chaining.</dd>
+</dl>
+</div></div>
+
+
+
+<div class='method'><a href="../source/libraries/datamapper.php.html#line4549" class="location">libraries/datamapper.php at line 4549</a>
+
+<h3 id="is_related_to()">is_related_to</h3>
+<code class="signature">public  void <strong>is_related_to</strong>(mixed related_field, mixed id)</code>
+<div class="details">
+<p>Is Related To
+If this object is related to the provided object, returns TRUE.
+Otherwise returns FALSE.
+Optionally can be provided a related field and ID.</p><dl>
+<dt>Param	mixed:</dt>
+<dd>$related_field The related object or field name</dd>
+<dt>Param	int:</dt>
+<dd>$id ID to compare to if $related_field is a string</dd>
+<dt>Return	bool:</dt>
+<dd>TRUE or FALSE if this object is related to $related_field</dd>
+</dl>
+</div></div>
+
+
+
+<div class='method'><a href="../source/libraries/datamapper.php.html#line4678" class="location">libraries/datamapper.php at line 4678</a>
+
+<h3 id="join_related()">join_related</h3>
+<code class="signature">public  void <strong>join_related</strong>(mixed related_field, mixed fields, bool append_name)</code>
+<div class="details">
+<p>Legacy version of include_related
+DEPRECATED: Will be removed by 2.0</p><dl>
+<dt>Deprecated:</dt>
+<dd>Please use include_related</dd>
+</dl>
+</div></div>
+
+
+
+<div class='method'><a href="../source/libraries/datamapper.php.html#line3540" class="location">libraries/datamapper.php at line 3540</a>
+
+<h3 id="like()">like</h3>
+<code class="signature">public  void <strong>like</strong>(mixed field, str match, str side)</code>
+<div class="details">
+<p>Like</p><p>Sets the %LIKE% portion of the query.
+Separates multiple calls with AND.</p><dl>
+<dt>Param	mixed:</dt>
+<dd>$field A field or array of fields to check.</dd>
+<dd>$match For a single field, the value to compare to.</dd>
+<dt>Param	string:</dt>
+<dd>$side One of 'both', 'before', or 'after'</dd>
+<dt>Return	DataMapper:</dt>
+<dd>Returns self for method chaining.</dd>
+</dl>
+</div></div>
+
+
+
+<div class='method'><a href="../source/libraries/datamapper.php.html#line3880" class="location">libraries/datamapper.php at line 3880</a>
+
+<h3 id="limit()">limit</h3>
+<code class="signature">public  void <strong>limit</strong>(mixed value, str offset)</code>
+<div class="details">
+<p>Limit</p><p>Sets the LIMIT portion of the query.</p><dl>
+<dt>Param	integer:</dt>
+<dd>$limit Limit the number of results.</dd>
+<dt>Param	integer|NULL:</dt>
+<dd>$offset Offset the results when limiting.</dd>
+<dt>Return	DataMapper:</dt>
+<dd>Returns self for method chaining.</dd>
+</dl>
+</div></div>
+
+
+
+<div class='method'><a href="../source/libraries/datamapper.php.html#line1014" class="location">libraries/datamapper.php at line 1014</a>
+
+<h3 id="load_extension()">load_extension</h3>
+<code class="signature">public  void <strong>load_extension</strong>(mixed name, mixed options, bool local)</code>
+<div class="details">
+<p>Dynamically load an extension when needed.</p><dl>
+<dt>Param	object:</dt>
+<dd>$name Name of the extension (or array of extensions).</dd>
+<dt>Param	array:</dt>
+<dd>$options Options for the extension</dd>
+<dt>Param	boolean:</dt>
+<dd>$local If TRUE, only loads the extension into this object</dd>
+</dl>
+</div></div>
+
+
+
+<div class='method'><a href="../source/libraries/datamapper.php.html#line5758" class="location">libraries/datamapper.php at line 5758</a>
+
+<h3 id="localize_by_model()">localize_by_model</h3>
+<code class="signature">public  string|bool <strong>localize_by_model</strong>(string key, string field)</code>
+<div class="details">
+<p>A specialized language lookup function that will automatically
+insert the model, table, and (optional) field into a key, and return the
+language result for the replaced key.</p><dl>
+<dt>Parameters:</dt>
+<dd>key - Basic key to use</dd>
+<dd>field - Optional field value</dd>
+</dl>
+</div></div>
+
+
+
+<div class='method'><a href="../source/libraries/datamapper.php.html#line5779" class="location">libraries/datamapper.php at line 5779</a>
+
+<h3 id="localize_label()">localize_label</h3>
+<code class="signature">public  string|bool <strong>localize_label</strong>(string field, string|bool label)</code>
+<div class="details">
+<p>Variant that handles looking up a field labels</p><dl>
+<dt>Parameters:</dt>
+<dd>field - Name of field</dd>
+<dd>label - If not FALSE overrides default label.</dd>
+</dl>
+</div></div>
+
+
+
+<div class='method'><a href="../source/libraries/datamapper.php.html#line3310" class="location">libraries/datamapper.php at line 3310</a>
+
+<h3 id="not_group_start()">not_group_start</h3>
+<code class="signature">public  void <strong>not_group_start</strong>()</code>
+<div class="details">
+<p>Starts a query group, but NOTs the group</p><dl>
+<dt>Return	DataMapper:</dt>
+<dd>Returns self for method chaining.</dd>
+</dl>
+</div></div>
+
+
+
+<div class='method'><a href="../source/libraries/datamapper.php.html#line3629" class="location">libraries/datamapper.php at line 3629</a>
+
+<h3 id="not_ilike()">not_ilike</h3>
+<code class="signature">public  void <strong>not_ilike</strong>(mixed field, str match, str side)</code>
+<div class="details">
+<p>Not ILike</p><p>Sets the case-insensitive NOT LIKE portion of the query.
+Separates multiple calls with AND.</p><dl>
+<dt>Param	mixed:</dt>
+<dd>$field A field or array of fields to check.</dd>
+<dd>$match For a single field, the value to compare to.</dd>
+<dt>Param	string:</dt>
+<dd>$side One of 'both', 'before', or 'after'</dd>
+<dt>Return	DataMapper:</dt>
+<dd>Returns self for method chaining.</dd>
+</dl>
+</div></div>
+
+
+
+<div class='method'><a href="../source/libraries/datamapper.php.html#line3558" class="location">libraries/datamapper.php at line 3558</a>
+
+<h3 id="not_like()">not_like</h3>
+<code class="signature">public  void <strong>not_like</strong>(mixed field, str match, str side)</code>
+<div class="details">
+<p>Not Like</p><p>Sets the NOT LIKE portion of the query.
+Separates multiple calls with AND.</p><dl>
+<dt>Param	mixed:</dt>
+<dd>$field A field or array of fields to check.</dd>
+<dd>$match For a single field, the value to compare to.</dd>
+<dt>Param	string:</dt>
+<dd>$side One of 'both', 'before', or 'after'</dd>
+<dt>Return	DataMapper:</dt>
+<dd>Returns self for method chaining.</dd>
+</dl>
+</div></div>
+
+
+
+<div class='method'><a href="../source/libraries/datamapper.php.html#line3898" class="location">libraries/datamapper.php at line 3898</a>
+
+<h3 id="offset()">offset</h3>
+<code class="signature">public  void <strong>offset</strong>(mixed offset)</code>
+<div class="details">
+<p>Offset</p><p>Sets the OFFSET portion of the query.</p><dl>
+<dt>Param	integer:</dt>
+<dd>$offset Offset the results when limiting.</dd>
+<dt>Return	DataMapper:</dt>
+<dd>Returns self for method chaining.</dd>
+</dl>
+</div></div>
+
+
+
+<div class='method'><a href="../source/libraries/datamapper.php.html#line3299" class="location">libraries/datamapper.php at line 3299</a>
+
+<h3 id="or_group_start()">or_group_start</h3>
+<code class="signature">public  void <strong>or_group_start</strong>()</code>
+<div class="details">
+<p>Starts a query group, but ORs the group</p><dl>
+<dt>Return	DataMapper:</dt>
+<dd>Returns self for method chaining.</dd>
+</dl>
+</div></div>
+
+
+
+<div class='method'><a href="../source/libraries/datamapper.php.html#line3785" class="location">libraries/datamapper.php at line 3785</a>
+
+<h3 id="or_having()">or_having</h3>
+<code class="signature">public  void <strong>or_having</strong>(mixed key, str value, bool escape)</code>
+<div class="details">
+<p>Or Having</p><p>Sets the OR HAVING portion of the query.
+Separates multiple calls with OR.</p><dl>
+<dt>Param	string:</dt>
+<dd>$key Field to compare.</dd>
+<dd>$value value to compare to.</dd>
+<dt>Param	bool:</dt>
+<dd>$escape If FALSE, don't escape the value.</dd>
+<dt>Return	DataMapper:</dt>
+<dd>Returns self for method chaining.</dd>
+</dl>
+</div></div>
+
+
+
+<div class='method'><a href="../source/libraries/datamapper.php.html#line3647" class="location">libraries/datamapper.php at line 3647</a>
+
+<h3 id="or_ilike()">or_ilike</h3>
+<code class="signature">public  void <strong>or_ilike</strong>(mixed field, str match, str side)</code>
+<div class="details">
+<p>Or Like</p><p>Sets the case-insensitive %LIKE% portion of the query.
+Separates multiple calls with OR.</p><dl>
+<dt>Param	mixed:</dt>
+<dd>$field A field or array of fields to check.</dd>
+<dd>$match For a single field, the value to compare to.</dd>
+<dt>Param	string:</dt>
+<dd>$side One of 'both', 'before', or 'after'</dd>
+<dt>Return	DataMapper:</dt>
+<dd>Returns self for method chaining.</dd>
+</dl>
+</div></div>
+
+
+
+<div class='method'><a href="../source/libraries/datamapper.php.html#line3576" class="location">libraries/datamapper.php at line 3576</a>
+
+<h3 id="or_like()">or_like</h3>
+<code class="signature">public  void <strong>or_like</strong>(mixed field, str match, str side)</code>
+<div class="details">
+<p>Or Like</p><p>Sets the %LIKE% portion of the query.
+Separates multiple calls with OR.</p><dl>
+<dt>Param	mixed:</dt>
+<dd>$field A field or array of fields to check.</dd>
+<dd>$match For a single field, the value to compare to.</dd>
+<dt>Param	string:</dt>
+<dd>$side One of 'both', 'before', or 'after'</dd>
+<dt>Return	DataMapper:</dt>
+<dd>Returns self for method chaining.</dd>
+</dl>
+</div></div>
+
+
+
+<div class='method'><a href="../source/libraries/datamapper.php.html#line3321" class="location">libraries/datamapper.php at line 3321</a>
+
+<h3 id="or_not_group_start()">or_not_group_start</h3>
+<code class="signature">public  void <strong>or_not_group_start</strong>()</code>
+<div class="details">
+<p>Starts a query group, but OR NOTs the group</p><dl>
+<dt>Return	DataMapper:</dt>
+<dd>Returns self for method chaining.</dd>
+</dl>
+</div></div>
+
+
+
+<div class='method'><a href="../source/libraries/datamapper.php.html#line3665" class="location">libraries/datamapper.php at line 3665</a>
+
+<h3 id="or_not_ilike()">or_not_ilike</h3>
+<code class="signature">public  void <strong>or_not_ilike</strong>(mixed field, str match, str side)</code>
+<div class="details">
+<p>Or Not Like</p><p>Sets the case-insensitive NOT LIKE portion of the query.
+Separates multiple calls with OR.</p><dl>
+<dt>Param	mixed:</dt>
+<dd>$field A field or array of fields to check.</dd>
+<dd>$match For a single field, the value to compare to.</dd>
+<dt>Param	string:</dt>
+<dd>$side One of 'both', 'before', or 'after'</dd>
+<dt>Return	DataMapper:</dt>
+<dd>Returns self for method chaining.</dd>
+</dl>
+</div></div>
+
+
+
+<div class='method'><a href="../source/libraries/datamapper.php.html#line3594" class="location">libraries/datamapper.php at line 3594</a>
+
+<h3 id="or_not_like()">or_not_like</h3>
+<code class="signature">public  void <strong>or_not_like</strong>(mixed field, str match, str side)</code>
+<div class="details">
+<p>Or Not Like</p><p>Sets the NOT LIKE portion of the query.
+Separates multiple calls with OR.</p><dl>
+<dt>Param	mixed:</dt>
+<dd>$field A field or array of fields to check.</dd>
+<dd>$match For a single field, the value to compare to.</dd>
+<dt>Param	string:</dt>
+<dd>$side One of 'both', 'before', or 'after'</dd>
+<dt>Return	DataMapper:</dt>
+<dd>Returns self for method chaining.</dd>
+</dl>
+</div></div>
+
+
+
+<div class='method'><a href="../source/libraries/datamapper.php.html#line3392" class="location">libraries/datamapper.php at line 3392</a>
+
+<h3 id="or_where()">or_where</h3>
+<code class="signature">public  void <strong>or_where</strong>(mixed key, mixed value, bool escape)</code>
+<div class="details">
+<p>Or Where</p><p>Sets the WHERE portion of the query.
+Separates multiple calls with OR.</p><dl>
+<dt>Param	mixed:</dt>
+<dd>$key A field or array of fields to check.</dd>
+<dd>$value For a single field, the value to compare to.</dd>
+<dt>Param	bool:</dt>
+<dd>$escape If FALSE, the field is not escaped.</dd>
+<dt>Return	DataMapper:</dt>
+<dd>Returns self for method chaining.</dd>
+</dl>
+</div></div>
+
+
+
+<div class='method'><a href="../source/libraries/datamapper.php.html#line3464" class="location">libraries/datamapper.php at line 3464</a>
+
+<h3 id="or_where_in()">or_where_in</h3>
+<code class="signature">public  void <strong>or_where_in</strong>(mixed key, mixed values)</code>
+<div class="details">
+<p>Or Where In</p><p>Sets the WHERE field IN ('item', 'item') SQL query joined with
+OR if appropriate.</p><dl>
+<dt>Param	string:</dt>
+<dd>$key A field to check.</dd>
+<dt>Param	array:</dt>
+<dd>$values An array of values to compare against</dd>
+<dt>Return	DataMapper:</dt>
+<dd>Returns self for method chaining.</dd>
+</dl>
+</div></div>
+
+
+
+<div class='method'><a href="../source/libraries/datamapper.php.html#line3498" class="location">libraries/datamapper.php at line 3498</a>
+
+<h3 id="or_where_not_in()">or_where_not_in</h3>
+<code class="signature">public  void <strong>or_where_not_in</strong>(mixed key, mixed values)</code>
+<div class="details">
+<p>Or Where Not In</p><p>Sets the WHERE field NOT IN ('item', 'item') SQL query joined wuth
+OR if appropriate.</p><dl>
+<dt>Param	string:</dt>
+<dd>$key A field to check.</dd>
+<dt>Param	array:</dt>
+<dd>$values An array of values to compare against</dd>
+<dt>Return	DataMapper:</dt>
+<dd>Returns self for method chaining.</dd>
+</dl>
+</div></div>
+
+
+
+<div class='method'><a href="../source/libraries/datamapper.php.html#line3824" class="location">libraries/datamapper.php at line 3824</a>
+
+<h3 id="order_by()">order_by</h3>
+<code class="signature">public  void <strong>order_by</strong>(mixed orderby, str direction)</code>
+<div class="details">
+<p>Order By</p><p>Sets the ORDER BY portion of the query.</p><dl>
+<dt>Param	string:</dt>
+<dd>$orderby Field to order by</dd>
+<dd>$direction One of 'ASC' or 'DESC'  Defaults to 'ASC'</dd>
+<dt>Return	DataMapper:</dt>
+<dd>Returns self for method chaining.</dd>
+</dl>
+</div></div>
+
+
+
+<div class='method'><a href="../source/libraries/datamapper.php.html#line2557" class="location">libraries/datamapper.php at line 2557</a>
+
+<h3 id="query()">query</h3>
+<code class="signature">public  void <strong>query</strong>(mixed sql, bool binds)</code>
+<div class="details">
+<p>Query</p><p>Runs the specified query and populates the current object with the results.</p><p>Warning: Use at your own risk.  This will only be as reliable as your query.</p><dl>
+<dt>Param	string:</dt>
+<dd>$sql The query to process</dd>
+<dt>Param	array|bool:</dt>
+<dd>$binds Array of values to bind (see CodeIgniter)</dd>
+<dt>Return	DataMapper:</dt>
+<dd>Returns self for method chaining.</dd>
+</dl>
+</div></div>
+
+
+
+<div class='method'><a href="../source/libraries/datamapper.php.html#line845" class="location">libraries/datamapper.php at line 845</a>
+
+<h3 id="recursive_require_once()">recursive_require_once</h3>
+<code class="signature">protected static  void <strong>recursive_require_once</strong>(mixed class, mixed path)</code>
+<div class="details">
+<p>Recursive Require Once</p><p>Recursively searches the path for the class, require_once if found.</p><dl>
+<dt>Param	string:</dt>
+<dd>$class Name of class to look for</dd>
+<dd>$path Current path to search</dd>
+</dl>
+</div></div>
+
+
+
+<div class='method'><a href="../source/libraries/datamapper.php.html#line2130" class="location">libraries/datamapper.php at line 2130</a>
+
+<h3 id="refresh_all()">refresh_all</h3>
+<code class="signature">public  void <strong>refresh_all</strong>()</code>
+<div class="details">
+<p>Refresh All</p><p>Removes any empty objects in this objects all list.
+Only needs to be used if you are looping through the all list
+a second time and you have deleted a record the first time through.</p><dl>
+<dt>Return	bool:</dt>
+<dd>FALSE if the $all array was already empty.</dd>
+</dl>
+</div></div>
+
+
+
+<div class='method'><a href="../source/libraries/datamapper.php.html#line750" class="location">libraries/datamapper.php at line 750</a>
+
+<h3 id="reinitialize_model()">reinitialize_model</h3>
+<code class="signature">public  void <strong>reinitialize_model</strong>()</code>
+<div class="details">
+<p>Reloads in the configuration data for a model.  This is mainly
+used to handle language changes.  Only this instance and new instances
+will see the changes.</p></div></div>
+
+
+
+<div class='method'><a href="../source/libraries/datamapper.php.html#line2520" class="location">libraries/datamapper.php at line 2520</a>
+
+<h3 id="result_count()">result_count</h3>
+<code class="signature">public  void <strong>result_count</strong>()</code>
+<div class="details">
+<p>Convenience method to return the number of items from
+the last call to get.</p><dl>
+<dt>Return	int.</dt>
+</dl>
+</div></div>
+
+
+
+<div class='method'><a href="../source/libraries/datamapper.php.html#line1605" class="location">libraries/datamapper.php at line 1605</a>
+
+<h3 id="save()">save</h3>
+<code class="signature">public  void <strong>save</strong>(str object, str related_field)</code>
+<div class="details">
+<p>Save</p><p>Saves the current record, if it validates.
+If object is supplied, saves relations between this object and the supplied object(s).</p><dl>
+<dt>Param	mixed:</dt>
+<dd>$object Optional object to save or array of objects to save.</dd>
+<dt>Param	string:</dt>
+<dd>$related_field Optional string to save the object as a specific relationship.</dd>
+<dt>Return	bool:</dt>
+<dd>Success or Failure of the validation and save.</dd>
+</dl>
+</div></div>
+
+
+
+<div class='method'><a href="../source/libraries/datamapper.php.html#line1587" class="location">libraries/datamapper.php at line 1587</a>
+
+<h3 id="save_as_new()">save_as_new</h3>
+<code class="signature">public  void <strong>save_as_new</strong>(str object, str related_field)</code>
+<div class="details">
+<p>Forces this object to be INSERTed, even if it has an ID.</p><dl>
+<dt>Param	mixed:</dt>
+<dd>$object  See save.</dd>
+<dt>Param	string:</dt>
+<dd>$related_field See save.</dd>
+<dt>Return	bool:</dt>
+<dd>Result of the save.</dd>
+</dl>
+</div></div>
+
+
+
+<div class='method'><a href="../source/libraries/datamapper.php.html#line3128" class="location">libraries/datamapper.php at line 3128</a>
+
+<h3 id="select()">select</h3>
+<code class="signature">public  void <strong>select</strong>(str select, mixed escape)</code>
+<div class="details">
+<p>Select</p><p>Sets the SELECT portion of the query.</p><dl>
+<dt>Param	string:</dt>
+<dd>$select Field(s) to select</dd>
+<dt>Param	bool:</dt>
+<dd>$escape If FALSE, don't escape this field (Probably won't work)</dd>
+<dt>Return	DataMapper:</dt>
+<dd>Returns self for method chaining.</dd>
+</dl>
+</div></div>
+
+
+
+<div class='method'><a href="../source/libraries/datamapper.php.html#line3199" class="location">libraries/datamapper.php at line 3199</a>
+
+<h3 id="select_avg()">select_avg</h3>
+<code class="signature">public  void <strong>select_avg</strong>(str select, str alias)</code>
+<div class="details">
+<p>Select Avg</p><p>Sets the SELECT AVG(field) portion of a query.</p><dl>
+<dt>Param	string:</dt>
+<dd>$select Field to look at.</dd>
+<dd>$alias Alias of the AVG value.</dd>
+<dt>Return	DataMapper:</dt>
+<dd>Returns self for method chaining.</dd>
+</dl>
+</div></div>
+
+
+
+<div class='method'><a href="../source/libraries/datamapper.php.html#line3151" class="location">libraries/datamapper.php at line 3151</a>
+
+<h3 id="select_max()">select_max</h3>
+<code class="signature">public  void <strong>select_max</strong>(str select, str alias)</code>
+<div class="details">
+<p>Select Max</p><p>Sets the SELECT MAX(field) portion of a query.</p><dl>
+<dt>Param	string:</dt>
+<dd>$select Field to look at.</dd>
+<dd>$alias Alias of the MAX value.</dd>
+<dt>Return	DataMapper:</dt>
+<dd>Returns self for method chaining.</dd>
+</dl>
+</div></div>
+
+
+
+<div class='method'><a href="../source/libraries/datamapper.php.html#line3175" class="location">libraries/datamapper.php at line 3175</a>
+
+<h3 id="select_min()">select_min</h3>
+<code class="signature">public  void <strong>select_min</strong>(str select, str alias)</code>
+<div class="details">
+<p>Select Min</p><p>Sets the SELECT MIN(field) portion of a query.</p><dl>
+<dt>Param	string:</dt>
+<dd>$select Field to look at.</dd>
+<dd>$alias Alias of the MIN value.</dd>
+<dt>Return	DataMapper:</dt>
+<dd>Returns self for method chaining.</dd>
+</dl>
+</div></div>
+
+
+
+<div class='method'><a href="../source/libraries/datamapper.php.html#line3223" class="location">libraries/datamapper.php at line 3223</a>
+
+<h3 id="select_sum()">select_sum</h3>
+<code class="signature">public  void <strong>select_sum</strong>(str select, str alias)</code>
+<div class="details">
+<p>Select Sum</p><p>Sets the SELECT SUM(field) portion of a query.</p><dl>
+<dt>Param	string:</dt>
+<dd>$select Field to look at.</dd>
+<dd>$alias Alias of the SUM value.</dd>
+<dt>Return	DataMapper:</dt>
+<dd>Returns self for method chaining.</dd>
+</dl>
+</div></div>
+
+
+
+<div class='method'><a href="../source/libraries/datamapper.php.html#line5195" class="location">libraries/datamapper.php at line 5195</a>
+
+<h3 id="set_join_field()">set_join_field</h3>
+<code class="signature">public  void <strong>set_join_field</strong>(mixed related_field, mixed field, mixed value, mixed object)</code>
+<div class="details">
+<p>Set Join Field</p><p>Sets the value on a join table based on the related field
+If $related_field is an array, then the array should be
+in the form $related_field => $object or array($object)</p><dl>
+<dt>Param	mixed:</dt>
+<dd>$related_field An object or array.</dd>
+<dd>$field Field or array of fields to set.</dd>
+<dd>$value Value for a single field to set.</dd>
+<dd>$object Private for recursion, do not use.</dd>
+<dt>Return	DataMapper:</dt>
+<dd>Returns self for method chaining.</dd>
+</dl>
+</div></div>
+
+
+
+<div class='method'><a href="../source/libraries/datamapper.php.html#line2321" class="location">libraries/datamapper.php at line 2321</a>
+
+<h3 id="skip_validation()">skip_validation</h3>
+<code class="signature">public  void <strong>skip_validation</strong>(bool skip)</code>
+<div class="details">
+<p>Skips validation for the next call to save.
+Note that this also prevents the validation routine from running until the next get.</p><dl>
+<dt>Param	object:</dt>
+<dd>$skip If FALSE, re-enables validation.</dd>
+<dt>Return	DataMapper:</dt>
+<dd>Returns self for method chaining.</dd>
+</dl>
+</div></div>
+
+
+
+<div class='method'><a href="../source/libraries/datamapper.php.html#line3913" class="location">libraries/datamapper.php at line 3913</a>
+
+<h3 id="start_cache()">start_cache</h3>
+<code class="signature">public  void <strong>start_cache</strong>()</code>
+<div class="details">
+<p>Start Cache</p><p>Starts AR caching.</p></div></div>
+
+
+
+<div class='method'><a href="../source/libraries/datamapper.php.html#line3925" class="location">libraries/datamapper.php at line 3925</a>
+
+<h3 id="stop_cache()">stop_cache</h3>
+<code class="signature">public  void <strong>stop_cache</strong>()</code>
+<div class="details">
+<p>Stop Cache</p><p>Stops AR caching.</p></div></div>
+
+
+
+<div class='method'><a href="../source/libraries/datamapper.php.html#line4022" class="location">libraries/datamapper.php at line 4022</a>
+
+<h3 id="trans_begin()">trans_begin</h3>
+<code class="signature">public  void <strong>trans_begin</strong>(bool test_mode)</code>
+<div class="details">
+<p>Trans Begin</p><p>Begin a transaction.</p><dl>
+<dt>Param	bool:</dt>
+<dd>$test_mode Set to TRUE to only run a test (and not commit)</dd>
+<dt>Return	bool:</dt>
+<dd>Success or Failure</dd>
+</dl>
+</div></div>
+
+
+
+<div class='method'><a href="../source/libraries/datamapper.php.html#line4050" class="location">libraries/datamapper.php at line 4050</a>
+
+<h3 id="trans_commit()">trans_commit</h3>
+<code class="signature">public  void <strong>trans_commit</strong>()</code>
+<div class="details">
+<p>Trans Commit</p><p>Commit a transaction.</p><dl>
+<dt>Return	bool:</dt>
+<dd>Success or Failure</dd>
+</dl>
+</div></div>
+
+
+
+<div class='method'><a href="../source/libraries/datamapper.php.html#line4007" class="location">libraries/datamapper.php at line 4007</a>
+
+<h3 id="trans_complete()">trans_complete</h3>
+<code class="signature">public  void <strong>trans_complete</strong>()</code>
+<div class="details">
+<p>Trans Complete</p><p>Complete a transaction.</p><dl>
+<dt>Return	bool:</dt>
+<dd>Success or Failure</dd>
+</dl>
+</div></div>
+
+
+
+<div class='method'><a href="../source/libraries/datamapper.php.html#line3962" class="location">libraries/datamapper.php at line 3962</a>
+
+<h3 id="trans_off()">trans_off</h3>
+<code class="signature">public  void <strong>trans_off</strong>()</code>
+<div class="details">
+<p>Trans Off</p><p>This permits transactions to be disabled at run-time.</p></div></div>
+
+
+
+<div class='method'><a href="../source/libraries/datamapper.php.html#line4064" class="location">libraries/datamapper.php at line 4064</a>
+
+<h3 id="trans_rollback()">trans_rollback</h3>
+<code class="signature">public  void <strong>trans_rollback</strong>()</code>
+<div class="details">
+<p>Trans Rollback</p><p>Rollback a transaction.</p><dl>
+<dt>Return	bool:</dt>
+<dd>Success or Failure</dd>
+</dl>
+</div></div>
+
+
+
+<div class='method'><a href="../source/libraries/datamapper.php.html#line3993" class="location">libraries/datamapper.php at line 3993</a>
+
+<h3 id="trans_start()">trans_start</h3>
+<code class="signature">public  void <strong>trans_start</strong>(bool test_mode)</code>
+<div class="details">
+<p>Trans Start</p><p>Start a transaction.</p><dl>
+<dt>Param	bool:</dt>
+<dd>$test_mode Set to TRUE to only run a test (and not commit)</dd>
+</dl>
+</div></div>
+
+
+
+<div class='method'><a href="../source/libraries/datamapper.php.html#line4036" class="location">libraries/datamapper.php at line 4036</a>
+
+<h3 id="trans_status()">trans_status</h3>
+<code class="signature">public  void <strong>trans_status</strong>()</code>
+<div class="details">
+<p>Trans Status</p><p>Lets you retrieve the transaction flag to determine if it has failed.</p><dl>
+<dt>Return	bool:</dt>
+<dd>Returns FALSE if the transaction has failed.</dd>
+</dl>
+</div></div>
+
+
+
+<div class='method'><a href="../source/libraries/datamapper.php.html#line3979" class="location">libraries/datamapper.php at line 3979</a>
+
+<h3 id="trans_strict()">trans_strict</h3>
+<code class="signature">public  void <strong>trans_strict</strong>(bool mode)</code>
+<div class="details">
+<p>Trans Strict</p><p>When strict mode is enabled, if you are running multiple groups of
+transactions, if one group fails all groups will be rolled back.
+If strict mode is disabled, each group is treated autonomously, meaning
+a failure of one group will not affect any others.</p><dl>
+<dt>Param	bool:</dt>
+<dd>$mode Set to false to disable strict mode.</dd>
+</dl>
+</div></div>
+
+
+
+<div class='method'><a href="../source/libraries/datamapper.php.html#line1865" class="location">libraries/datamapper.php at line 1865</a>
+
+<h3 id="update()">update</h3>
+<code class="signature">public  void <strong>update</strong>(mixed field, mixed value, bool escape_values)</code>
+<div class="details">
+<p>Update</p><p>Allows updating of more than one row at once.</p><dl>
+<dt>Param	object:</dt>
+<dd>$field A field to update, or an array of fields => values</dd>
+<dd>$value The new value</dd>
+<dd>$escape_values  If false, don't escape the values</dd>
+<dt>Return	bool:</dt>
+<dd>TRUE or FALSE on success or failure</dd>
+</dl>
+</div></div>
+
+
+
+<div class='method'><a href="../source/libraries/datamapper.php.html#line1916" class="location">libraries/datamapper.php at line 1916</a>
+
+<h3 id="update_all()">update_all</h3>
+<code class="signature">public  void <strong>update_all</strong>(mixed field, mixed value, bool escape_values)</code>
+<div class="details">
+<p>Update All</p><p>Updates all items that are in the all array.</p><dl>
+<dt>Param	object:</dt>
+<dd>$field A field to update, or an array of fields => values</dd>
+<dd>$value The new value</dd>
+<dd>$escape_values  If false, don't escape the values</dd>
+<dt>Return	bool:</dt>
+<dd>TRUE or FALSE on success or failure</dd>
+</dl>
+</div></div>
+
+
+
+<div class='method'><a href="../source/libraries/datamapper.php.html#line2163" class="location">libraries/datamapper.php at line 2163</a>
+
+<h3 id="validate()">validate</h3>
+<code class="signature">public  void <strong>validate</strong>(str object, str related_field)</code>
+<div class="details">
+<p>Validate</p><p>Validates the value of each property against the assigned validation rules.</p><dl>
+<dt>Param	mixed:</dt>
+<dd>$object Objects included with the validation [from save()].</dd>
+<dt>Param	string:</dt>
+<dd>$related_field See save.</dd>
+<dt>Return	DataMapper:</dt>
+<dd>Returns $this for method chanining.</dd>
+</dl>
+</div></div>
+
+
+
+<div class='method'><a href="../source/libraries/datamapper.php.html#line3374" class="location">libraries/datamapper.php at line 3374</a>
+
+<h3 id="where()">where</h3>
+<code class="signature">public  void <strong>where</strong>(mixed key, mixed value, bool escape)</code>
+<div class="details">
+<p>Where</p><p>Sets the WHERE portion of the query.
+Separates multiple calls with AND.</p><p>Called by get_where()</p><dl>
+<dt>Param	mixed:</dt>
+<dd>$key A field or array of fields to check.</dd>
+<dd>$value For a single field, the value to compare to.</dd>
+<dt>Param	bool:</dt>
+<dd>$escape If FALSE, the field is not escaped.</dd>
+<dt>Return	DataMapper:</dt>
+<dd>Returns self for method chaining.</dd>
+</dl>
+</div></div>
+
+
+
+<div class='method'><a href="../source/libraries/datamapper.php.html#line3447" class="location">libraries/datamapper.php at line 3447</a>
+
+<h3 id="where_in()">where_in</h3>
+<code class="signature">public  void <strong>where_in</strong>(mixed key, mixed values)</code>
+<div class="details">
+<p>Where In</p><p>Sets the WHERE field IN ('item', 'item') SQL query joined with
+AND if appropriate.</p><dl>
+<dt>Param	string:</dt>
+<dd>$key A field to check.</dd>
+<dt>Param	array:</dt>
+<dd>$values An array of values to compare against</dd>
+<dt>Return	DataMapper:</dt>
+<dd>Returns self for method chaining.</dd>
+</dl>
+</div></div>
+
+
+
+<div class='method'><a href="../source/libraries/datamapper.php.html#line3481" class="location">libraries/datamapper.php at line 3481</a>
+
+<h3 id="where_not_in()">where_not_in</h3>
+<code class="signature">public  void <strong>where_not_in</strong>(mixed key, mixed values)</code>
+<div class="details">
+<p>Where Not In</p><p>Sets the WHERE field NOT IN ('item', 'item') SQL query joined with
+AND if appropriate.</p><dl>
+<dt>Param	string:</dt>
+<dd>$key A field to check.</dd>
+<dt>Param	array:</dt>
+<dd>$values An array of values to compare against</dd>
+<dt>Return	DataMapper:</dt>
+<dd>Returns self for method chaining.</dd>
+</dl>
+</div></div>
+
+
+
+</div><div class="header">
+<h1>GiftFlow API</h1>
+<ul>
+<li><a href="../overview-summary.html">Overview</a></li>
+<li><a href="../giftflow/package-summary.html">Package</a></li>
+<li class="active">Class</li>
+<li><a href="../giftflow/package-tree.html">Tree</a></li>
+<li><a href="../overview-files.html">Files</a></li>
+<li><a href="../deprecated-list.html">Deprecated</a></li>
+<li><a href="../index-all.html">Index</a></li>
+</ul>
+</div>
+
+<div class="small_links">
+<a href="../index.html" target="_top">Frames</a>
+<a href="../giftflow/datamapper.html" target="_top">No frames</a>
+</div>
+<div class="small_links">
+Summary: <a href="#summary_field">Field</a> | <a href="#summary_method">Method</a> | <a href="#summary_constr">Constr</a>
+Detail: <a href="#detail_field">Field</a> | <a href="#detail_method">Method</a> | <a href="#summary_constr">Constr</a>
+</div>
+<hr>
+
+<p id="footer">This document was generated by <a href="http://peej.github.com/phpdoctor/">PHPDoctor: The PHP Documentation Creator</a></p>
+
+</body>
+
+</html>

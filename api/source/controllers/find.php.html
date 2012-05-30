@@ -1,0 +1,273 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+
+<html lang="en">
+<head>
+
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
+<meta name="generator" content="PHPDoctor 2RC4 (http://peej.github.com/phpdoctor/)">
+<meta name="when" content="Wed, 09 Feb 2011 20:22:56 +0000">
+
+<link rel="stylesheet" type="text/css" href="../../stylesheet.css">
+<link rel="start" href="../../overview-summary.html">
+
+<title>controllers/find.php (GiftFlow API)</title>
+
+</head>
+<body id="file" onload="parent.document.title=document.title;">
+
+<div class="header">
+<h1>GiftFlow API</h1>
+<ul>
+<li><a href="../../overview-summary.html">Overview</a></li>
+<li>Package</li><li>Class</li><li>Tree</li><li><a href="../../overview-files.html">Files</a></li>
+<li><a href="../../deprecated-list.html">Deprecated</a></li>
+<li><a href="../../index-all.html">Index</a></li>
+</ul>
+</div>
+
+<div class="small_links">
+<a href="../../index.html" target="_top">Frames</a>
+<a href="../../source/controllers/find.php.html" target="_top">No frames</a>
+</div>
+<hr>
+
+<h1>controllers/find.php</h1>
+<hr>
+
+<a name="line1"></a><pre><?php
+<a name="line2"></a>/**
+<a name="line3"></a>*	Find and search pages routed through this controller.
+<a name="line4"></a>*
+<a name="line5"></a>*	@author Brandon Jackson
+<a name="line6"></a>*	@package Controllers
+<a name="line7"></a>*/
+<a name="line8"></a>class Find extends CI_Controller {
+<a name="line9"></a>
+<a name="line10"></a>	var $data;
+<a name="line11"></a>	
+<a name="line12"></a>	var $G;
+<a name="line13"></a>
+<a name="line14"></a>	/**
+<a name="line15"></a>	*	@var array
+<a name="line16"></a>	*/
+<a name="line17"></a>	var $args = array(
+<a name="line18"></a>		"q"=>"",
+<a name="line19"></a>		"type"=>"gifts",
+<a name="line20"></a>		"location"=>"",
+<a name="line21"></a>		"radius"=>100,
+<a name="line22"></a>		"limit"=>50
+<a name="line23"></a>	);
+<a name="line24"></a>	
+<a name="line25"></a>	function __construct()
+<a name="line26"></a>	{
+<a name="line27"></a>		parent::__construct();
+<a name="line28"></a>		$this->util->config();
+<a name="line29"></a>		$this->data = $this->util->parse_globals(array(
+<a name="line30"></a>			"geocode_ip"=>TRUE
+<a name="line31"></a>		));
+<a name="line32"></a>		$this->load->library('finder');
+<a name="line33"></a>	}
+<a name="line34"></a>
+<a name="line35"></a>	public function index( $type = NULL, $q = NULL)
+<a name="line36"></a>	{
+<a name="line37"></a>		Console::logSpeed("Find::index()");
+<a name="line38"></a>		
+<a name="line39"></a>		// Run search query if extra parameters, $_GET or $_POST data found
+<a name="line40"></a>		if(!empty($_GET) || !empty($_POST) || !empty($type))
+<a name="line41"></a>		{
+<a name="line42"></a>			$this->_set_args();
+<a name="line43"></a>	
+<a name="line44"></a>			$this->_search();
+<a name="line45"></a>			
+<a name="line46"></a>			if($this->input->is_ajax_request())
+<a name="line47"></a>			{
+<a name="line48"></a>				return $this->_ajax();
+<a name="line49"></a>			}
+<a name="line50"></a>		}
+<a name="line51"></a>		
+<a name="line52"></a>		// Page Title
+<a name="line53"></a>		$this->data['title'] = "Find";
+<a name="line54"></a>		
+<a name="line55"></a>		// Includes the needed Google Maps references in the header
+<a name="line56"></a>		$this->data['googlemaps'] = TRUE;
+<a name="line57"></a>		
+<a name="line58"></a>		// Type of data being searched
+<a name="line59"></a>		$this->data['type'] = $this->args["type"];
+<a name="line60"></a>		
+<a name="line61"></a>		// Search keyword
+<a name="line62"></a>		$this->data['keyword'] = $this->args["q"];
+<a name="line63"></a>		
+<a name="line64"></a>		// Search args
+<a name="line65"></a>		$this->data['args'] = $this->args;
+<a name="line66"></a>
+<a name="line67"></a>		// Page can display one of three types of content.
+<a name="line68"></a>		// 1. Tags
+<a name="line69"></a>		// 2. Tags + No results message
+<a name="line70"></a>		// 3. Results & Google Map
+<a name="line71"></a>		
+<a name="line72"></a>		// Cases 1 & 2: Tags / Tags + No Results Message
+<a name="line73"></a>		if(empty($this->data['results']))
+<a name="line74"></a>		{
+<a name="line75"></a>			// Load and instantiate Tag_search library
+<a name="line76"></a>			$this->load->library('Search/Tag_search');
+<a name="line77"></a>			$T = new Tag_search;
+<a name="line78"></a>						
+<a name="line79"></a>			// Get popular tags
+<a name="line80"></a>			$this->data['tags'] = $T->popular_tags(array(
+<a name="line81"></a>				"location"=>$this->data['userdata']['location'],
+<a name="line82"></a>				"type"=>"gift"
+<a name="line83"></a>			));
+<a name="line84"></a>			
+<a name="line85"></a>			// Set display type
+<a name="line86"></a>			if(empty($this->data['keyword']))
+<a name="line87"></a>			{
+<a name="line88"></a>				$this->data['display'] = 'tags';
+<a name="line89"></a>			}
+<a name="line90"></a>			else
+<a name="line91"></a>			{
+<a name="line92"></a>				$this->data['display'] = 'no_results';
+<a name="line93"></a>			}
+<a name="line94"></a>		}
+<a name="line95"></a>		
+<a name="line96"></a>		// Case 3: Results & Google Map
+<a name="line97"></a>		else
+<a name="line98"></a>		{
+<a name="line99"></a>			$this->data['display'] = 'results';
+<a name="line100"></a>		}
+<a name="line101"></a>
+<a name="line102"></a>		$this->load->view('header', $this->data);
+<a name="line103"></a>		$this->load->view('find/index', $this->data);
+<a name="line104"></a>		$this->load->view('footer', $this->data);
+<a name="line105"></a>		
+<a name="line106"></a>		Console::logSpeed("Find::index(): done.");
+<a name="line107"></a>	}
+<a name="line108"></a>
+<a name="line109"></a>	/**
+<a name="line110"></a>	*	Performs search
+<a name="line111"></a>	*/
+<a name="line112"></a>	function _search ()
+<a name="line113"></a>	{
+<a name="line114"></a>		Console::logSpeed("Find::_search()");
+<a name="line115"></a>	
+<a name="line116"></a>		if($this->args["type"]=="people")
+<a name="line117"></a>		{
+<a name="line118"></a>			Console::logSpeed("Find::_search(): starting people search...");
+<a name="line119"></a>		}
+<a name="line120"></a>		else
+<a name="line121"></a>		{
+<a name="line122"></a>			Console::logSpeed("Find::_search(): starting goods search...");
+<a name="line123"></a>			
+<a name="line124"></a>			// Set Location object
+<a name="line125"></a>			$this->finder->location = $this->args["location"];
+<a name="line126"></a>			
+<a name="line127"></a>			// Set Search Keyword
+<a name="line128"></a>			$this->finder->search_keyword = $this->args["q"];
+<a name="line129"></a>			
+<a name="line130"></a>			// Ensure `type` arg is singular, then set Finder
+<a name="line131"></a>			if($this->args["type"]=="gift" || $this->args["type"]=="gifts")
+<a name="line132"></a>			{
+<a name="line133"></a>				$this->finder->where_type("gift");
+<a name="line134"></a>			}
+<a name="line135"></a>			elseif($this->args["type"]=="need" || $this->args["type"]=="needs")
+<a name="line136"></a>			{
+<a name="line137"></a>				$this->finder->where_type("need");
+<a name="line138"></a>			}
+<a name="line139"></a>			
+<a name="line140"></a>			// Set Limit
+<a name="line141"></a>			$this->finder->limit($this->args["limit"]);
+<a name="line142"></a>			
+<a name="line143"></a>			$this->data['results'] = $this->finder->find_search();
+<a name="line144"></a>		}
+<a name="line145"></a>	}
+<a name="line146"></a>
+<a name="line147"></a>	/**
+<a name="line148"></a>	*	@return JSON
+<a name="line149"></a>	*/
+<a name="line150"></a>	protected function _ajax()
+<a name="line151"></a>	{
+<a name="line152"></a>		Console::logSpeed("Find::_ajax()");
+<a name="line153"></a>	
+<a name="line154"></a>		$data = array(
+<a name="line155"></a>			"center"=>$this->args["location"],
+<a name="line156"></a>			"total_results"=>count($this->data['results']),
+<a name="line157"></a>			"results"=>$this->data['results']
+<a name="line158"></a>		);
+<a name="line159"></a>		
+<a name="line160"></a>		$json = json_encode($data);
+<a name="line161"></a>		
+<a name="line162"></a>		$this->output->set_header("Content-Type:application/json");
+<a name="line163"></a>		$this->output->set_output($json);
+<a name="line164"></a>	}
+<a name="line165"></a>	
+<a name="line166"></a>	function _set_args()
+<a name="line167"></a>	{
+<a name="line168"></a>		Console::logSpeed("Find::_set_args()");
+<a name="line169"></a>			
+<a name="line170"></a>		// Scan 2nd URL segment for useful args
+<a name="line171"></a>		if(!empty($this->data['segment'][2]))
+<a name="line172"></a>		{
+<a name="line173"></a>			// Scan for `type` keywords
+<a name="line174"></a>			$types = array("gifts","needs","people");
+<a name="line175"></a>			if(in_array(strtolower($this->data['segment'][2]),$types))
+<a name="line176"></a>			{
+<a name="line177"></a>				$this->args["type"] = strtolower($this->data['segment'][2]);
+<a name="line178"></a>			}
+<a name="line179"></a>			
+<a name="line180"></a>			// If not a type and not index, use as `q`
+<a name="line181"></a>			elseif($this->data["segment"][2]!="index")
+<a name="line182"></a>			{
+<a name="line183"></a>				$this->args["q"] = urldecode($this->data["segment"][2]);
+<a name="line184"></a>			}
+<a name="line185"></a>		}
+<a name="line186"></a>		
+<a name="line187"></a>		// Scan 3rd URL segment for `q`
+<a name="line188"></a>		if(!empty($this->data['segment'][3]))
+<a name="line189"></a>		{
+<a name="line190"></a>			$this->args["q"] = $this->data["segment"][3];
+<a name="line191"></a>		}
+<a name="line192"></a>		
+<a name="line193"></a>		// Get Data from $_GET and $_POST arrays
+<a name="line194"></a>		foreach($this->args as $key=>$val)
+<a name="line195"></a>		{
+<a name="line196"></a>			if(!empty($_REQUEST[$key]))
+<a name="line197"></a>			{
+<a name="line198"></a>				$this->args[$key] = $_REQUEST[$key];
+<a name="line199"></a>			}
+<a name="line200"></a>		}
+<a name="line201"></a>		
+<a name="line202"></a>		// If location consists only of a string, geocode it
+<a name="line203"></a>		if(!empty($this->args["location"]) && !is_object($this->args["location"]))
+<a name="line204"></a>		{
+<a name="line205"></a>			$this->load->library('geo');
+<a name="line206"></a>			$this->args["location"] = $this->geo->geocode($this->args['location']);
+<a name="line207"></a>		}
+<a name="line208"></a>		
+<a name="line209"></a>		// If no location, try to use the userdata's location object
+<a name="line210"></a>		elseif(empty($this->args["location"]) && !empty($this->data['userdata']['location']))
+<a name="line211"></a>		{
+<a name="line212"></a>			$this->args["location"] = $this->data['userdata']['location'];
+<a name="line213"></a>		}
+<a name="line214"></a>	}
+<a name="line215"></a>}</pre>
+<div class="header">
+<h1>GiftFlow API</h1>
+<ul>
+<li><a href="../../overview-summary.html">Overview</a></li>
+<li>Package</li><li>Class</li><li>Tree</li><li><a href="../../overview-files.html">Files</a></li>
+<li><a href="../../deprecated-list.html">Deprecated</a></li>
+<li><a href="../../index-all.html">Index</a></li>
+</ul>
+</div>
+
+<div class="small_links">
+<a href="../../index.html" target="_top">Frames</a>
+<a href="../../source/controllers/find.php.html" target="_top">No frames</a>
+</div>
+<hr>
+
+<p id="footer">This document was generated by <a href="http://peej.github.com/phpdoctor/">PHPDoctor: The PHP Documentation Creator</a></p>
+
+</body>
+
+</html>

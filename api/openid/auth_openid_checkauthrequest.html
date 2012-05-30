@@ -1,0 +1,165 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+
+<html lang="en">
+<head>
+
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
+<meta name="generator" content="PHPDoctor 2RC4 (http://peej.github.com/phpdoctor/)">
+<meta name="when" content="Wed, 09 Feb 2011 20:22:55 +0000">
+
+<link rel="stylesheet" type="text/css" href="../stylesheet.css">
+<link rel="start" href="../overview-summary.html">
+
+<title>Auth_OpenID_CheckAuthRequest (GiftFlow API)</title>
+
+</head>
+<body id="definition" onload="parent.document.title=document.title;">
+
+<div class="header">
+<h1>GiftFlow API</h1>
+<ul>
+<li><a href="../overview-summary.html">Overview</a></li>
+<li><a href="../openid/package-summary.html">Package</a></li>
+<li class="active">Class</li>
+<li><a href="../openid/package-tree.html">Tree</a></li>
+<li><a href="../overview-files.html">Files</a></li>
+<li><a href="../deprecated-list.html">Deprecated</a></li>
+<li><a href="../index-all.html">Index</a></li>
+</ul>
+</div>
+
+<div class="small_links">
+<a href="../index.html" target="_top">Frames</a>
+<a href="../openid/auth_openid_checkauthrequest.html" target="_top">No frames</a>
+</div>
+<div class="small_links">
+Summary: <a href="#summary_field">Field</a> | <a href="#summary_method">Method</a> | <a href="#summary_constr">Constr</a>
+Detail: <a href="#detail_field">Field</a> | <a href="#detail_method">Method</a> | <a href="#summary_constr">Constr</a>
+</div>
+<hr>
+
+<div class="qualifiedName">OpenID\Auth_OpenID_CheckAuthRequest</div>
+<a href="../source/libraries/auth/openid/server.php.html#line349" class="location">libraries/Auth/OpenID/Server.php at line 349</a>
+
+<h1>Class Auth_OpenID_CheckAuthRequest</h1>
+
+<pre class="tree"><a href="../openid/auth_openid_request.html">Auth_OpenID_Request</a><br>    └─<strong>Auth_OpenID_CheckAuthRequest</strong><br /></pre>
+
+<hr>
+
+<p class="signature">public  class <strong>Auth_OpenID_CheckAuthRequest</strong><br>extends <a href="../openid/auth_openid_request.html">Auth_OpenID_Request</a>
+
+</p>
+
+<div class="comment" id="overview_description"><p>A request to verify the validity of a previous response.</p></div>
+
+<hr>
+
+<table id="summary_field">
+<tr><th colspan="2">Field Summary</th></tr>
+<tr>
+<td class="type"> mixed</td>
+<td class="description"><p class="name"><a href="#invalidate_handle">$invalidate_handle</a></p></td>
+</tr>
+<tr>
+<td class="type"> mixed</td>
+<td class="description"><p class="name"><a href="#mode">$mode</a></p></td>
+</tr>
+</table>
+
+<table class="inherit">
+<tr><th colspan="2">Fields inherited from OpenID\Auth_OpenID_Request</th></tr>
+<tr><td><a href="../openid/auth_openid_request.html#mode">mode</a></td></tr></table>
+
+<table id="summary_method">
+<tr><th colspan="2">Method Summary</th></tr>
+<tr>
+<td class="type"> void</td>
+<td class="description"><p class="name"><a href="#__construct()">__construct</a>(mixed assoc_handle, mixed signed, mixed invalidate_handle)</p></td>
+</tr>
+<tr>
+<td class="type"> void</td>
+<td class="description"><p class="name"><a href="#answer()">answer</a>(mixed signatory)</p></td>
+</tr>
+<tr>
+<td class="type">static  void</td>
+<td class="description"><p class="name"><a href="#fromMessage()">fromMessage</a>(mixed message, mixed server)</p></td>
+</tr>
+</table>
+
+<h2 id="detail_field">Field Detail</h2>
+<a href="../source/libraries/auth/openid/server.php.html#line351" class="location">libraries/Auth/OpenID/Server.php at line 351</a>
+
+<h3 id="invalidate_handle">invalidate_handle</h3>
+<code class="signature">public  mixed <strong>$invalidate_handle</strong> = null</code>
+<div class="details">
+</div>
+
+<hr>
+
+<a href="../source/libraries/auth/openid/server.php.html#line350" class="location">libraries/Auth/OpenID/Server.php at line 350</a>
+
+<h3 id="mode">mode</h3>
+<code class="signature">public  mixed <strong>$mode</strong> = &quot;check_authentication&quot;</code>
+<div class="details">
+</div>
+
+<hr>
+
+<h2 id="detail_method">Method Detail</h2><div class="method_detail">
+<div class='method'><a href="../source/libraries/auth/openid/server.php.html#line353" class="location">libraries/Auth/OpenID/Server.php at line 353</a>
+
+<h3 id="__construct()">__construct</h3>
+<code class="signature">public  void <strong>__construct</strong>(mixed assoc_handle, mixed signed, mixed invalidate_handle)</code>
+<div class="details">
+</div></div>
+
+
+
+<div class='method'><a href="../source/libraries/auth/openid/server.php.html#line395" class="location">libraries/Auth/OpenID/Server.php at line 395</a>
+
+<h3 id="answer()">answer</h3>
+<code class="signature">public  void <strong>answer</strong>(mixed signatory)</code>
+<div class="details">
+</div></div>
+
+
+
+<div class='method'><a href="../source/libraries/auth/openid/server.php.html#line364" class="location">libraries/Auth/OpenID/Server.php at line 364</a>
+
+<h3 id="fromMessage()">fromMessage</h3>
+<code class="signature">public static  void <strong>fromMessage</strong>(mixed message, mixed server)</code>
+<div class="details">
+</div></div>
+
+
+
+</div><div class="header">
+<h1>GiftFlow API</h1>
+<ul>
+<li><a href="../overview-summary.html">Overview</a></li>
+<li><a href="../openid/package-summary.html">Package</a></li>
+<li class="active">Class</li>
+<li><a href="../openid/package-tree.html">Tree</a></li>
+<li><a href="../overview-files.html">Files</a></li>
+<li><a href="../deprecated-list.html">Deprecated</a></li>
+<li><a href="../index-all.html">Index</a></li>
+</ul>
+</div>
+
+<div class="small_links">
+<a href="../index.html" target="_top">Frames</a>
+<a href="../openid/auth_openid_checkauthrequest.html" target="_top">No frames</a>
+</div>
+<div class="small_links">
+Summary: <a href="#summary_field">Field</a> | <a href="#summary_method">Method</a> | <a href="#summary_constr">Constr</a>
+Detail: <a href="#detail_field">Field</a> | <a href="#detail_method">Method</a> | <a href="#summary_constr">Constr</a>
+</div>
+<hr>
+
+<p id="footer">This document was generated by <a href="http://peej.github.com/phpdoctor/">PHPDoctor: The PHP Documentation Creator</a></p>
+
+</body>
+
+</html>

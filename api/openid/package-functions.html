@@ -1,0 +1,869 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+
+<html lang="en">
+<head>
+
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
+<meta name="generator" content="PHPDoctor 2RC4 (http://peej.github.com/phpdoctor/)">
+<meta name="when" content="Wed, 09 Feb 2011 20:22:55 +0000">
+
+<link rel="stylesheet" type="text/css" href="../stylesheet.css">
+<link rel="start" href="../overview-summary.html">
+
+<title>Functions (GiftFlow API)</title>
+
+</head>
+<body id="definition" onload="parent.document.title=document.title;">
+
+<div class="header">
+<h1>GiftFlow API</h1>
+<ul>
+<li><a href="../overview-summary.html">Overview</a></li>
+<li><a href="../openid/package-summary.html">Package</a></li>
+<li class="active">Function</li>
+<li><a href="../openid/package-tree.html">Tree</a></li>
+<li><a href="../overview-files.html">Files</a></li>
+<li><a href="../deprecated-list.html">Deprecated</a></li>
+<li><a href="../index-all.html">Index</a></li>
+</ul>
+</div>
+
+<div class="small_links">
+<a href="../index.html" target="_top">Frames</a>
+<a href="../openid/package-functions.html" target="_top">No frames</a>
+</div>
+<div class="small_links">
+Summary: <a href="#summary_function">Function</a>
+Detail: <a href="#detail_function">Function</a>
+</div>
+<hr>
+
+<h1>Functions</h1>
+
+<hr>
+
+<table id="summary_function" class="title">
+<tr><th colspan="2" class="title">Function Summary</th></tr>
+<tr>
+<td class="type"> void</td>
+<td class="description"><p class="name"><a href="#Auth_OpenID_AX_checkAlias()">Auth_OpenID_AX_checkAlias</a>(mixed alias)</p><p class="description">Check an alias for invalid characters; raise AXError if any are
+found. </p></td>
+</tr>
+<tr>
+<td class="type"> $seq</td>
+<td class="description"><p class="name"><a href="#Auth_OpenID_AX_toTypeURIs()">Auth_OpenID_AX_toTypeURIs</a>($alias_list_s The, mixed namespace_map, mixed alias_list_s)</p><p class="description">Given a namespace mapping and a string containing a comma-separated
+list of namespace aliases, return a list of type URIs that
+correspond to those aliases.</p></td>
+</tr>
+<tr>
+<td class="type">private  string</td>
+<td class="description"><p class="name"><a href="#Auth_OpenID_HMACSHA1()">Auth_OpenID_HMACSHA1</a>(mixed key, mixed text)</p><p class="description">Compute an HMAC/SHA1 hash.</p></td>
+</tr>
+<tr>
+<td class="type"> void</td>
+<td class="description"><p class="name"><a href="#Auth_OpenID_HMACSHA256()">Auth_OpenID_HMACSHA256</a>(mixed key, mixed text)</p></td>
+</tr>
+<tr>
+<td class="type"> void</td>
+<td class="description"><p class="name"><a href="#Auth_OpenID_SHA256()">Auth_OpenID_SHA256</a>(mixed text)</p></td>
+</tr>
+<tr>
+<td class="type"> void</td>
+<td class="description"><p class="name"><a href="#Auth_OpenID_checkSessionType()">Auth_OpenID_checkSessionType</a>(mixed assoc_type, mixed session_type)</p></td>
+</tr>
+<tr>
+<td class="type"> void</td>
+<td class="description"><p class="name"><a href="#Auth_OpenID_checkTimestamp()">Auth_OpenID_checkTimestamp</a>(mixed nonce_string, mixed allowed_skew, mixed now)</p></td>
+</tr>
+<tr>
+<td class="type"> void</td>
+<td class="description"><p class="name"><a href="#Auth_OpenID_detectMathLibrary()">Auth_OpenID_detectMathLibrary</a>(mixed exts)</p><p class="description">Detect which (if any) math library is available</p></td>
+</tr>
+<tr>
+<td class="type"> void</td>
+<td class="description"><p class="name"><a href="#Auth_OpenID_extractReturnURL()">Auth_OpenID_extractReturnURL</a>(mixed endpoint_list)</p></td>
+</tr>
+<tr>
+<td class="type"> void</td>
+<td class="description"><p class="name"><a href="#Auth_OpenID_getAllAssociationTypes()">Auth_OpenID_getAllAssociationTypes</a>()</p></td>
+</tr>
+<tr>
+<td class="type"> void</td>
+<td class="description"><p class="name"><a href="#Auth_OpenID_getAllowedReturnURLs()">Auth_OpenID_getAllowedReturnURLs</a>(mixed relying_party_url, mixed fetcher, mixed discover_function)</p></td>
+</tr>
+<tr>
+<td class="type"> void</td>
+<td class="description"><p class="name"><a href="#Auth_OpenID_getAuthorityPattern()">Auth_OpenID_getAuthorityPattern</a>()</p></td>
+</tr>
+<tr>
+<td class="type"> void</td>
+<td class="description"><p class="name"><a href="#Auth_OpenID_getAvailableSessionTypes()">Auth_OpenID_getAvailableSessionTypes</a>()</p><p class="description">Returns available session types.</p></td>
+</tr>
+<tr>
+<td class="type"> void</td>
+<td class="description"><p class="name"><a href="#Auth_OpenID_getDefaultAssociationOrder()">Auth_OpenID_getDefaultAssociationOrder</a>()</p></td>
+</tr>
+<tr>
+<td class="type">private  void</td>
+<td class="description"><p class="name"><a href="#Auth_OpenID_getDefaultMod()">Auth_OpenID_getDefaultMod</a>()</p><p class="description">The OpenID library's Diffie-Hellman implementation.
+</p></td>
+</tr>
+<tr>
+<td class="type"> void</td>
+<td class="description"><p class="name"><a href="#Auth_OpenID_getDefaultNegotiator()">Auth_OpenID_getDefaultNegotiator</a>()</p></td>
+</tr>
+<tr>
+<td class="type"> void</td>
+<td class="description"><p class="name"><a href="#Auth_OpenID_getEncodedPattern()">Auth_OpenID_getEncodedPattern</a>()</p></td>
+</tr>
+<tr>
+<td class="type"> void</td>
+<td class="description"><p class="name"><a href="#Auth_OpenID_getEncryptedNegotiator()">Auth_OpenID_getEncryptedNegotiator</a>()</p></td>
+</tr>
+<tr>
+<td class="type"> void</td>
+<td class="description"><p class="name"><a href="#Auth_OpenID_getEscapeRE()">Auth_OpenID_getEscapeRE</a>()</p></td>
+</tr>
+<tr>
+<td class="type"> Auth_OpenID_MathWrapper</td>
+<td class="description"><p class="name"><a href="#Auth_OpenID_getMathLib()">Auth_OpenID_getMathLib</a>()</p><p class="description"><a href="../openid/package-functions.html#Auth_OpenID_getMathLib()">Auth_OpenID_getMathLib</a> checks for the presence of long
+number extension modules and returns an instance of
+Auth_OpenID_MathWrapper which exposes the module's
+functionality.
+</p></td>
+</tr>
+<tr>
+<td class="type"> void</td>
+<td class="description"><p class="name"><a href="#Auth_OpenID_getOnlyEncryptedOrder()">Auth_OpenID_getOnlyEncryptedOrder</a>()</p></td>
+</tr>
+<tr>
+<td class="type"> void</td>
+<td class="description"><p class="name"><a href="#Auth_OpenID_getSecretSize()">Auth_OpenID_getSecretSize</a>(mixed assoc_type)</p></td>
+</tr>
+<tr>
+<td class="type"> void</td>
+<td class="description"><p class="name"><a href="#Auth_OpenID_getSessionTypes()">Auth_OpenID_getSessionTypes</a>(mixed assoc_type)</p></td>
+</tr>
+<tr>
+<td class="type"> void</td>
+<td class="description"><p class="name"><a href="#Auth_OpenID_getSupportedAssociationTypes()">Auth_OpenID_getSupportedAssociationTypes</a>()</p></td>
+</tr>
+<tr>
+<td class="type"> void</td>
+<td class="description"><p class="name"><a href="#Auth_OpenID_getURIPattern()">Auth_OpenID_getURIPattern</a>()</p><p class="description">URI normalization routines.</p></td>
+</tr>
+<tr>
+<td class="type"> void</td>
+<td class="description"><p class="name"><a href="#Auth_OpenID_getURLIllegalCharRE()">Auth_OpenID_getURLIllegalCharRE</a>()</p></td>
+</tr>
+<tr>
+<td class="type"> void</td>
+<td class="description"><p class="name"><a href="#Auth_OpenID_getUnreserved()">Auth_OpenID_getUnreserved</a>()</p></td>
+</tr>
+<tr>
+<td class="type"> void</td>
+<td class="description"><p class="name"><a href="#Auth_OpenID_include_init()">Auth_OpenID_include_init</a>()</p></td>
+</tr>
+<tr>
+<td class="type"> void</td>
+<td class="description"><p class="name"><a href="#Auth_OpenID_legacy_discover()">Auth_OpenID_legacy_discover</a>(mixed html_text, mixed server_rel, mixed delegate_rel)</p></td>
+</tr>
+<tr>
+<td class="type"> void</td>
+<td class="description"><p class="name"><a href="#Auth_OpenID_math_extensions()">Auth_OpenID_math_extensions</a>()</p><p class="description">Define the supported extensions. </p></td>
+</tr>
+<tr>
+<td class="type"> void</td>
+<td class="description"><p class="name"><a href="#Auth_OpenID_mkNonce()">Auth_OpenID_mkNonce</a>(mixed when)</p></td>
+</tr>
+<tr>
+<td class="type"> void</td>
+<td class="description"><p class="name"><a href="#Auth_OpenID_noMathSupport()">Auth_OpenID_noMathSupport</a>()</p></td>
+</tr>
+<tr>
+<td class="type"> void</td>
+<td class="description"><p class="name"><a href="#Auth_OpenID_pct_encoded_replace()">Auth_OpenID_pct_encoded_replace</a>(mixed mo)</p></td>
+</tr>
+<tr>
+<td class="type"> void</td>
+<td class="description"><p class="name"><a href="#Auth_OpenID_pct_encoded_replace_unreserved()">Auth_OpenID_pct_encoded_replace_unreserved</a>(mixed mo)</p></td>
+</tr>
+<tr>
+<td class="type"> void</td>
+<td class="description"><p class="name"><a href="#Auth_OpenID_registerNamespaceAlias()">Auth_OpenID_registerNamespaceAlias</a>(mixed namespace_uri, mixed alias)</p><p class="description">Registers a (namespace URI, alias) mapping in a global namespace
+alias map. </p></td>
+</tr>
+<tr>
+<td class="type"> void</td>
+<td class="description"><p class="name"><a href="#Auth_OpenID_removeNamespaceAlias()">Auth_OpenID_removeNamespaceAlias</a>(mixed namespace_uri, mixed alias)</p><p class="description">Removes a (namespace_uri, alias) registration from the global
+namespace alias map. </p></td>
+</tr>
+<tr>
+<td class="type"> void</td>
+<td class="description"><p class="name"><a href="#Auth_OpenID_remove_dot_segments()">Auth_OpenID_remove_dot_segments</a>(mixed path)</p></td>
+</tr>
+<tr>
+<td class="type"> void</td>
+<td class="description"><p class="name"><a href="#Auth_OpenID_returnToMatches()">Auth_OpenID_returnToMatches</a>(mixed allowed_return_to_urls, mixed return_to)</p></td>
+</tr>
+<tr>
+<td class="type">static  void</td>
+<td class="description"><p class="name"><a href="#Auth_OpenID_setNoMathSupport()">Auth_OpenID_setNoMathSupport</a>()</p></td>
+</tr>
+<tr>
+<td class="type"> void</td>
+<td class="description"><p class="name"><a href="#Auth_OpenID_supportsSReg()">Auth_OpenID_supportsSReg</a>(mixed endpoint)</p><p class="description">Does the given endpoint advertise support for simple
+registration?$endpoint: The endpoint object as returned by OpenID discovery.
+</p></td>
+</tr>
+<tr>
+<td class="type"> void</td>
+<td class="description"><p class="name"><a href="#Auth_OpenID_urinorm()">Auth_OpenID_urinorm</a>(mixed uri)</p></td>
+</tr>
+<tr>
+<td class="type"> void</td>
+<td class="description"><p class="name"><a href="#Auth_OpenID_verifyReturnTo()">Auth_OpenID_verifyReturnTo</a>(mixed realm_str, mixed return_to, mixed fetcher, str _vrfy)</p></td>
+</tr>
+<tr>
+<td class="type">private  void</td>
+<td class="description"><p class="name"><a href="#Auth_Yadis_array_scramble()">Auth_Yadis_array_scramble</a>(mixed arr)</p><p class="description"></p></td>
+</tr>
+<tr>
+<td class="type"> void</td>
+<td class="description"><p class="name"><a href="#Auth_Yadis_getDefaultProxy()">Auth_Yadis_getDefaultProxy</a>()</p><p class="description">Routines for XRI resolution.</p></td>
+</tr>
+<tr>
+<td class="type"> void</td>
+<td class="description"><p class="name"><a href="#Auth_Yadis_getServiceEndpoints()">Auth_Yadis_getServiceEndpoints</a>(mixed input_url, mixed xrds_parse_func, mixed discover_func, mixed fetcher)</p><p class="description">Perform the Yadis protocol on the input URL and return an iterable
+of resulting endpoint objects.
+</p></td>
+</tr>
+<tr>
+<td class="type"> void</td>
+<td class="description"><p class="name"><a href="#Auth_Yadis_getSupportedExtensions()">Auth_Yadis_getSupportedExtensions</a>()</p></td>
+</tr>
+<tr>
+<td class="type"> void</td>
+<td class="description"><p class="name"><a href="#Auth_Yadis_getUCSChars()">Auth_Yadis_getUCSChars</a>()</p><p class="description">Miscellaneous utility values and functions for OpenID and Yadis.</p></td>
+</tr>
+<tr>
+<td class="type"> void</td>
+<td class="description"><p class="name"><a href="#Auth_Yadis_getXMLParser()">Auth_Yadis_getXMLParser</a>()</p><p class="description">Returns an instance of a Auth_Yadis_XMLParser subclass based on
+the availability of PHP extensions for XML parsing. </p></td>
+</tr>
+<tr>
+<td class="type"> void</td>
+<td class="description"><p class="name"><a href="#Auth_Yadis_getXRDExpiration()">Auth_Yadis_getXRDExpiration</a>(mixed xrd_element, mixed default)</p></td>
+</tr>
+<tr>
+<td class="type"> void</td>
+<td class="description"><p class="name"><a href="#Auth_Yadis_setDefaultParser()">Auth_Yadis_setDefaultParser</a>(mixed parser)</p><p class="description">Set a default parser to override the extension-driven selection of
+available parser classes. </p></td>
+</tr>
+<tr>
+<td class="type"> void</td>
+<td class="description"><p class="name"><a href="#filter_extractReturnURL()">filter_extractReturnURL</a>(mixed endpoint)</p></td>
+</tr>
+</table>
+
+<h2 id="detail_function">Function Detail</h2>
+<a href="../source/libraries/auth/openid/ax.php.html#line50" class="location">libraries/Auth/OpenID/AX.php at line 50</a>
+
+<h3 id="Auth_OpenID_AX_checkAlias()">Auth_OpenID_AX_checkAlias</h3>
+<code class="signature">public  void <strong>Auth_OpenID_AX_checkAlias</strong>(mixed alias)</code>
+<div class="details">
+<p>Check an alias for invalid characters; raise AXError if any are
+found.  Return None if the alias is valid.</p>
+</div>
+
+<hr>
+
+<a href="../source/libraries/auth/openid/ax.php.html#line235" class="location">libraries/Auth/OpenID/AX.php at line 235</a>
+
+<h3 id="Auth_OpenID_AX_toTypeURIs()">Auth_OpenID_AX_toTypeURIs</h3>
+<code class="signature">public  $seq <strong>Auth_OpenID_AX_toTypeURIs</strong>($alias_list_s The, mixed namespace_map, mixed alias_list_s)</code>
+<div class="details">
+<p>Given a namespace mapping and a string containing a comma-separated
+list of namespace aliases, return a list of type URIs that
+correspond to those aliases.</p>
+<dl>
+<dt>Parameters:</dt>
+<dd>The - mapping from namespace URI to alias</dd>
+<dd>The - string containing the comma-separated list of aliases. May also be None for convenience.</dd>
+<dt>Returns:</dt>
+<dd>The list of namespace URIs that corresponds to the supplied list of aliases. If the string was zero-length or None, an empty list will be returned. return null If an alias is present in the list of aliases but is not present in the namespace map.</dd>
+</dl>
+</div>
+
+<hr>
+
+<a href="../source/libraries/auth/openid/hmac.php.html#line57" class="location">libraries/Auth/OpenID/HMAC.php at line 57</a>
+
+<h3 id="Auth_OpenID_HMACSHA1()">Auth_OpenID_HMACSHA1</h3>
+<code class="signature">private  string <strong>Auth_OpenID_HMACSHA1</strong>(mixed key, mixed text)</code>
+<div class="details">
+<p>Compute an HMAC/SHA1 hash.</p>
+<dl>
+<dt>Parameters:</dt>
+<dd>key - The HMAC key</dd>
+<dd>text - The message text to hash</dd>
+<dt>Returns:</dt>
+<dd>$mac The MAC</dd>
+</dl>
+</div>
+
+<hr>
+
+<a href="../source/libraries/auth/openid/hmac.php.html#line88" class="location">libraries/Auth/OpenID/HMAC.php at line 88</a>
+
+<h3 id="Auth_OpenID_HMACSHA256()">Auth_OpenID_HMACSHA256</h3>
+<code class="signature">public  void <strong>Auth_OpenID_HMACSHA256</strong>(mixed key, mixed text)</code>
+<div class="details">
+</div>
+
+<hr>
+
+<a href="../source/libraries/auth/openid/hmac.php.html#line74" class="location">libraries/Auth/OpenID/HMAC.php at line 74</a>
+
+<h3 id="Auth_OpenID_SHA256()">Auth_OpenID_SHA256</h3>
+<code class="signature">public  void <strong>Auth_OpenID_SHA256</strong>(mixed text)</code>
+<div class="details">
+</div>
+
+<hr>
+
+<a href="../source/libraries/auth/openid/association.php.html#line410" class="location">libraries/Auth/OpenID/Association.php at line 410</a>
+
+<h3 id="Auth_OpenID_checkSessionType()">Auth_OpenID_checkSessionType</h3>
+<code class="signature">public  void <strong>Auth_OpenID_checkSessionType</strong>(mixed assoc_type, mixed session_type)</code>
+<div class="details">
+</div>
+
+<hr>
+
+<a href="../source/libraries/auth/openid/nonce.php.html#line56" class="location">libraries/Auth/OpenID/Nonce.php at line 56</a>
+
+<h3 id="Auth_OpenID_checkTimestamp()">Auth_OpenID_checkTimestamp</h3>
+<code class="signature">public  void <strong>Auth_OpenID_checkTimestamp</strong>(mixed nonce_string, mixed allowed_skew, mixed now)</code>
+<div class="details">
+</div>
+
+<hr>
+
+<a href="../source/libraries/auth/openid/bigmath.php.html#line364" class="location">libraries/Auth/OpenID/BigMath.php at line 364</a>
+
+<h3 id="Auth_OpenID_detectMathLibrary()">Auth_OpenID_detectMathLibrary</h3>
+<code class="signature">public  void <strong>Auth_OpenID_detectMathLibrary</strong>(mixed exts)</code>
+<div class="details">
+<p>Detect which (if any) math library is available</p>
+</div>
+
+<hr>
+
+<a href="../source/libraries/auth/openid/trustroot.php.html#line334" class="location">libraries/Auth/OpenID/TrustRoot.php at line 334</a>
+
+<h3 id="Auth_OpenID_extractReturnURL()">Auth_OpenID_extractReturnURL</h3>
+<code class="signature">public  void <strong>Auth_OpenID_extractReturnURL</strong>(mixed endpoint_list)</code>
+<div class="details">
+</div>
+
+<hr>
+
+<a href="../source/libraries/auth/openid/association.php.html#line381" class="location">libraries/Auth/OpenID/Association.php at line 381</a>
+
+<h3 id="Auth_OpenID_getAllAssociationTypes()">Auth_OpenID_getAllAssociationTypes</h3>
+<code class="signature">public  void <strong>Auth_OpenID_getAllAssociationTypes</strong>()</code>
+<div class="details">
+</div>
+
+<hr>
+
+<a href="../source/libraries/auth/openid/trustroot.php.html#line378" class="location">libraries/Auth/OpenID/TrustRoot.php at line 378</a>
+
+<h3 id="Auth_OpenID_getAllowedReturnURLs()">Auth_OpenID_getAllowedReturnURLs</h3>
+<code class="signature">public  void <strong>Auth_OpenID_getAllowedReturnURLs</strong>(mixed relying_party_url, mixed fetcher, mixed discover_function)</code>
+<div class="details">
+</div>
+
+<hr>
+
+<a href="../source/libraries/auth/openid/urinorm.php.html#line20" class="location">libraries/Auth/OpenID/URINorm.php at line 20</a>
+
+<h3 id="Auth_OpenID_getAuthorityPattern()">Auth_OpenID_getAuthorityPattern</h3>
+<code class="signature">public  void <strong>Auth_OpenID_getAuthorityPattern</strong>()</code>
+<div class="details">
+</div>
+
+<hr>
+
+<a href="../source/libraries/auth/openid/consumer.php.html#line549" class="location">libraries/Auth/OpenID/Consumer.php at line 549</a>
+
+<h3 id="Auth_OpenID_getAvailableSessionTypes()">Auth_OpenID_getAvailableSessionTypes</h3>
+<code class="signature">public  void <strong>Auth_OpenID_getAvailableSessionTypes</strong>()</code>
+<div class="details">
+<p>Returns available session types.</p>
+</div>
+
+<hr>
+
+<a href="../source/libraries/auth/openid/association.php.html#line420" class="location">libraries/Auth/OpenID/Association.php at line 420</a>
+
+<h3 id="Auth_OpenID_getDefaultAssociationOrder()">Auth_OpenID_getDefaultAssociationOrder</h3>
+<code class="signature">public  void <strong>Auth_OpenID_getDefaultAssociationOrder</strong>()</code>
+<div class="details">
+</div>
+
+<hr>
+
+<a href="../source/libraries/auth/openid/diffiehellman.php.html#line20" class="location">libraries/Auth/OpenID/DiffieHellman.php at line 20</a>
+
+<h3 id="Auth_OpenID_getDefaultMod()">Auth_OpenID_getDefaultMod</h3>
+<code class="signature">private  void <strong>Auth_OpenID_getDefaultMod</strong>()</code>
+<div class="details">
+<p>The OpenID library's Diffie-Hellman implementation.</p><p>PHP versions 4 and 5</p><p>LICENSE: See the COPYING file included in this distribution.</p>
+<dl>
+<dt>Author:</dt>
+<dd>JanRain, Inc. <openid@janrain.com></dd>
+<dt>Copyright:</dt>
+<dd>2005-2008 Janrain, Inc.</dd>
+<dt>License:</dt>
+<dd>http://www.apache.org/licenses/LICENSE-2.0 Apache</dd>
+</dl>
+</div>
+
+<hr>
+
+<a href="../source/libraries/auth/openid/association.php.html#line461" class="location">libraries/Auth/OpenID/Association.php at line 461</a>
+
+<h3 id="Auth_OpenID_getDefaultNegotiator()">Auth_OpenID_getDefaultNegotiator</h3>
+<code class="signature">public  void <strong>Auth_OpenID_getDefaultNegotiator</strong>()</code>
+<div class="details">
+</div>
+
+<hr>
+
+<a href="../source/libraries/auth/openid/urinorm.php.html#line25" class="location">libraries/Auth/OpenID/URINorm.php at line 25</a>
+
+<h3 id="Auth_OpenID_getEncodedPattern()">Auth_OpenID_getEncodedPattern</h3>
+<code class="signature">public  void <strong>Auth_OpenID_getEncodedPattern</strong>()</code>
+<div class="details">
+</div>
+
+<hr>
+
+<a href="../source/libraries/auth/openid/association.php.html#line467" class="location">libraries/Auth/OpenID/Association.php at line 467</a>
+
+<h3 id="Auth_OpenID_getEncryptedNegotiator()">Auth_OpenID_getEncryptedNegotiator</h3>
+<code class="signature">public  void <strong>Auth_OpenID_getEncryptedNegotiator</strong>()</code>
+<div class="details">
+</div>
+
+<hr>
+
+<a href="../source/libraries/auth/openid/urinorm.php.html#line68" class="location">libraries/Auth/OpenID/URINorm.php at line 68</a>
+
+<h3 id="Auth_OpenID_getEscapeRE()">Auth_OpenID_getEscapeRE</h3>
+<code class="signature">public  void <strong>Auth_OpenID_getEscapeRE</strong>()</code>
+<div class="details">
+</div>
+
+<hr>
+
+<a href="../source/libraries/auth/openid/bigmath.php.html#line400" class="location">libraries/Auth/OpenID/BigMath.php at line 400</a>
+
+<h3 id="Auth_OpenID_getMathLib()">Auth_OpenID_getMathLib</h3>
+<code class="signature">public  Auth_OpenID_MathWrapper <strong>Auth_OpenID_getMathLib</strong>()</code>
+<div class="details">
+<p><code><a href="../openid/package-functions.html#Auth_OpenID_getMathLib()">Auth_OpenID_getMathLib</a></code> checks for the presence of long
+number extension modules and returns an instance of
+<code>Auth_OpenID_MathWrapper</code> which exposes the module's
+functionality.</p><p>Checks for the existence of an extension module described by the
+result of <code><a href="../openid/package-functions.html#Auth_OpenID_math_extensions()">Auth_OpenID_math_extensions()</a></code> and returns an
+instance of a wrapper for that extension module.  If no extension
+module is found, an instance of <code>Auth_OpenID_MathWrapper</code> is
+returned, which wraps the native PHP integer implementation.  The
+proper calling convention for this method is $lib =
+Auth_OpenID_getMathLib().</p><p>This function checks for the existence of specific long number
+implementations in the following order: GMP followed by BCmath.</p>
+<dl>
+<dt>Returns:</dt>
+<dd>$instance An instance of {@link Auth_OpenID_MathWrapper} or one of its subclasses</dd>
+</dl>
+</div>
+
+<hr>
+
+<a href="../source/libraries/auth/openid/association.php.html#line441" class="location">libraries/Auth/OpenID/Association.php at line 441</a>
+
+<h3 id="Auth_OpenID_getOnlyEncryptedOrder()">Auth_OpenID_getOnlyEncryptedOrder</h3>
+<code class="signature">public  void <strong>Auth_OpenID_getOnlyEncryptedOrder</strong>()</code>
+<div class="details">
+</div>
+
+<hr>
+
+<a href="../source/libraries/auth/openid/association.php.html#line370" class="location">libraries/Auth/OpenID/Association.php at line 370</a>
+
+<h3 id="Auth_OpenID_getSecretSize()">Auth_OpenID_getSecretSize</h3>
+<code class="signature">public  void <strong>Auth_OpenID_getSecretSize</strong>(mixed assoc_type)</code>
+<div class="details">
+</div>
+
+<hr>
+
+<a href="../source/libraries/auth/openid/association.php.html#line397" class="location">libraries/Auth/OpenID/Association.php at line 397</a>
+
+<h3 id="Auth_OpenID_getSessionTypes()">Auth_OpenID_getSessionTypes</h3>
+<code class="signature">public  void <strong>Auth_OpenID_getSessionTypes</strong>(mixed assoc_type)</code>
+<div class="details">
+</div>
+
+<hr>
+
+<a href="../source/libraries/auth/openid/association.php.html#line386" class="location">libraries/Auth/OpenID/Association.php at line 386</a>
+
+<h3 id="Auth_OpenID_getSupportedAssociationTypes()">Auth_OpenID_getSupportedAssociationTypes</h3>
+<code class="signature">public  void <strong>Auth_OpenID_getSupportedAssociationTypes</strong>()</code>
+<div class="details">
+</div>
+
+<hr>
+
+<a href="../source/libraries/auth/openid/urinorm.php.html#line15" class="location">libraries/Auth/OpenID/URINorm.php at line 15</a>
+
+<h3 id="Auth_OpenID_getURIPattern()">Auth_OpenID_getURIPattern</h3>
+<code class="signature">public  void <strong>Auth_OpenID_getURIPattern</strong>()</code>
+<div class="details">
+<p>URI normalization routines.</p>
+<dl>
+<dt>Author:</dt>
+<dd>JanRain, Inc. <openid@janrain.com></dd>
+<dt>Copyright:</dt>
+<dd>2005-2008 Janrain, Inc.</dd>
+<dt>License:</dt>
+<dd>http://www.apache.org/licenses/LICENSE-2.0 Apache</dd>
+</dl>
+</div>
+
+<hr>
+
+<a href="../source/libraries/auth/openid/urinorm.php.html#line36" class="location">libraries/Auth/OpenID/URINorm.php at line 36</a>
+
+<h3 id="Auth_OpenID_getURLIllegalCharRE()">Auth_OpenID_getURLIllegalCharRE</h3>
+<code class="signature">public  void <strong>Auth_OpenID_getURLIllegalCharRE</strong>()</code>
+<div class="details">
+</div>
+
+<hr>
+
+<a href="../source/libraries/auth/openid/urinorm.php.html#line41" class="location">libraries/Auth/OpenID/URINorm.php at line 41</a>
+
+<h3 id="Auth_OpenID_getUnreserved()">Auth_OpenID_getUnreserved</h3>
+<code class="signature">public  void <strong>Auth_OpenID_getUnreserved</strong>()</code>
+<div class="details">
+</div>
+
+<hr>
+
+<a href="../source/libraries/auth/openid.php.html#line555" class="location">libraries/Auth/OpenID.php at line 555</a>
+
+<h3 id="Auth_OpenID_include_init()">Auth_OpenID_include_init</h3>
+<code class="signature">public  void <strong>Auth_OpenID_include_init</strong>()</code>
+<div class="details">
+</div>
+
+<hr>
+
+<a href="../source/libraries/auth/openid/parse.php.html#line358" class="location">libraries/Auth/OpenID/Parse.php at line 358</a>
+
+<h3 id="Auth_OpenID_legacy_discover()">Auth_OpenID_legacy_discover</h3>
+<code class="signature">public  void <strong>Auth_OpenID_legacy_discover</strong>(mixed html_text, mixed server_rel, mixed delegate_rel)</code>
+<div class="details">
+</div>
+
+<hr>
+
+<a href="../source/libraries/auth/openid/bigmath.php.html#line343" class="location">libraries/Auth/OpenID/BigMath.php at line 343</a>
+
+<h3 id="Auth_OpenID_math_extensions()">Auth_OpenID_math_extensions</h3>
+<code class="signature">public  void <strong>Auth_OpenID_math_extensions</strong>()</code>
+<div class="details">
+<p>Define the supported extensions.  An extension array has keys
+'modules', 'extension', and 'class'.  'modules' is an array of PHP
+module names which the loading code will attempt to load.  These
+values will be suffixed with a library file extension (e.g. ".so").
+'extension' is the name of a PHP extension which will be tested
+before 'modules' are loaded.  'class' is the string name of a
+<code>Auth_OpenID_MathWrapper</code> subclass which should be
+instantiated if a given extension is present.</p><p>You can define new math library implementations and add them to
+this array.</p>
+</div>
+
+<hr>
+
+<a href="../source/libraries/auth/openid/nonce.php.html#line88" class="location">libraries/Auth/OpenID/Nonce.php at line 88</a>
+
+<h3 id="Auth_OpenID_mkNonce()">Auth_OpenID_mkNonce</h3>
+<code class="signature">public  void <strong>Auth_OpenID_mkNonce</strong>(mixed when)</code>
+<div class="details">
+</div>
+
+<hr>
+
+<a href="../source/libraries/auth/openid/bigmath.php.html#line447" class="location">libraries/Auth/OpenID/BigMath.php at line 447</a>
+
+<h3 id="Auth_OpenID_noMathSupport()">Auth_OpenID_noMathSupport</h3>
+<code class="signature">public  void <strong>Auth_OpenID_noMathSupport</strong>()</code>
+<div class="details">
+</div>
+
+<hr>
+
+<a href="../source/libraries/auth/openid/urinorm.php.html#line94" class="location">libraries/Auth/OpenID/URINorm.php at line 94</a>
+
+<h3 id="Auth_OpenID_pct_encoded_replace()">Auth_OpenID_pct_encoded_replace</h3>
+<code class="signature">public  void <strong>Auth_OpenID_pct_encoded_replace</strong>(mixed mo)</code>
+<div class="details">
+</div>
+
+<hr>
+
+<a href="../source/libraries/auth/openid/urinorm.php.html#line80" class="location">libraries/Auth/OpenID/URINorm.php at line 80</a>
+
+<h3 id="Auth_OpenID_pct_encoded_replace_unreserved()">Auth_OpenID_pct_encoded_replace_unreserved</h3>
+<code class="signature">public  void <strong>Auth_OpenID_pct_encoded_replace_unreserved</strong>(mixed mo)</code>
+<div class="details">
+</div>
+
+<hr>
+
+<a href="../source/libraries/auth/openid/message.php.html#line77" class="location">libraries/Auth/OpenID/Message.php at line 77</a>
+
+<h3 id="Auth_OpenID_registerNamespaceAlias()">Auth_OpenID_registerNamespaceAlias</h3>
+<code class="signature">public  void <strong>Auth_OpenID_registerNamespaceAlias</strong>(mixed namespace_uri, mixed alias)</code>
+<div class="details">
+<p>Registers a (namespace URI, alias) mapping in a global namespace
+alias map.  Raises NamespaceAliasRegistrationError if either the
+namespace URI or alias has already been registered with a different
+value.  This function is required if you want to use a namespace
+with an OpenID 1 message.</p>
+</div>
+
+<hr>
+
+<a href="../source/libraries/auth/openid/message.php.html#line104" class="location">libraries/Auth/OpenID/Message.php at line 104</a>
+
+<h3 id="Auth_OpenID_removeNamespaceAlias()">Auth_OpenID_removeNamespaceAlias</h3>
+<code class="signature">public  void <strong>Auth_OpenID_removeNamespaceAlias</strong>(mixed namespace_uri, mixed alias)</code>
+<div class="details">
+<p>Removes a (namespace_uri, alias) registration from the global
+namespace alias map.  Returns true if the removal succeeded; false
+if not (if the mapping did not exist).</p>
+</div>
+
+<hr>
+
+<a href="../source/libraries/auth/openid/urinorm.php.html#line99" class="location">libraries/Auth/OpenID/URINorm.php at line 99</a>
+
+<h3 id="Auth_OpenID_remove_dot_segments()">Auth_OpenID_remove_dot_segments</h3>
+<code class="signature">public  void <strong>Auth_OpenID_remove_dot_segments</strong>(mixed path)</code>
+<div class="details">
+</div>
+
+<hr>
+
+<a href="../source/libraries/auth/openid/trustroot.php.html#line351" class="location">libraries/Auth/OpenID/TrustRoot.php at line 351</a>
+
+<h3 id="Auth_OpenID_returnToMatches()">Auth_OpenID_returnToMatches</h3>
+<code class="signature">public  void <strong>Auth_OpenID_returnToMatches</strong>(mixed allowed_return_to_urls, mixed return_to)</code>
+<div class="details">
+</div>
+
+<hr>
+
+<a href="../source/libraries/auth/openid/bigmath.php.html#line440" class="location">libraries/Auth/OpenID/BigMath.php at line 440</a>
+
+<h3 id="Auth_OpenID_setNoMathSupport()">Auth_OpenID_setNoMathSupport</h3>
+<code class="signature">public static  void <strong>Auth_OpenID_setNoMathSupport</strong>()</code>
+<div class="details">
+</div>
+
+<hr>
+
+<a href="../source/libraries/auth/openid/sreg.php.html#line97" class="location">libraries/Auth/OpenID/SReg.php at line 97</a>
+
+<h3 id="Auth_OpenID_supportsSReg()">Auth_OpenID_supportsSReg</h3>
+<code class="signature">public  void <strong>Auth_OpenID_supportsSReg</strong>(mixed endpoint)</code>
+<div class="details">
+<p>Does the given endpoint advertise support for simple
+registration?</p><p>$endpoint: The endpoint object as returned by OpenID discovery.
+returns whether an sreg type was advertised by the endpoint</p>
+</div>
+
+<hr>
+
+<a href="../source/libraries/auth/openid/urinorm.php.html#line142" class="location">libraries/Auth/OpenID/URINorm.php at line 142</a>
+
+<h3 id="Auth_OpenID_urinorm()">Auth_OpenID_urinorm</h3>
+<code class="signature">public  void <strong>Auth_OpenID_urinorm</strong>(mixed uri)</code>
+<div class="details">
+</div>
+
+<hr>
+
+<a href="../source/libraries/auth/openid/trustroot.php.html#line418" class="location">libraries/Auth/OpenID/TrustRoot.php at line 418</a>
+
+<h3 id="Auth_OpenID_verifyReturnTo()">Auth_OpenID_verifyReturnTo</h3>
+<code class="signature">public  void <strong>Auth_OpenID_verifyReturnTo</strong>(mixed realm_str, mixed return_to, mixed fetcher, str _vrfy)</code>
+<div class="details">
+</div>
+
+<hr>
+
+<a href="../source/libraries/auth/yadis/xrds.php.html#line58" class="location">libraries/Auth/Yadis/XRDS.php at line 58</a>
+
+<h3 id="Auth_Yadis_array_scramble()">Auth_Yadis_array_scramble</h3>
+<code class="signature">private  void <strong>Auth_Yadis_array_scramble</strong>(mixed arr)</code>
+<div class="details">
+<p></p>
+</div>
+
+<hr>
+
+<a href="../source/libraries/auth/yadis/xri.php.html#line16" class="location">libraries/Auth/Yadis/XRI.php at line 16</a>
+
+<h3 id="Auth_Yadis_getDefaultProxy()">Auth_Yadis_getDefaultProxy</h3>
+<code class="signature">public  void <strong>Auth_Yadis_getDefaultProxy</strong>()</code>
+<div class="details">
+<p>Routines for XRI resolution.</p>
+<dl>
+<dt>Author:</dt>
+<dd>JanRain, Inc. <openid@janrain.com></dd>
+<dt>Copyright:</dt>
+<dd>2005-2008 Janrain, Inc.</dd>
+<dt>License:</dt>
+<dd>http://www.apache.org/licenses/LICENSE-2.0 Apache</dd>
+</dl>
+</div>
+
+<hr>
+
+<a href="../source/libraries/auth/yadis/yadis.php.html#line136" class="location">libraries/Auth/Yadis/Yadis.php at line 136</a>
+
+<h3 id="Auth_Yadis_getServiceEndpoints()">Auth_Yadis_getServiceEndpoints</h3>
+<code class="signature">public  void <strong>Auth_Yadis_getServiceEndpoints</strong>(mixed input_url, mixed xrds_parse_func, mixed discover_func, mixed fetcher)</code>
+<div class="details">
+<p>Perform the Yadis protocol on the input URL and return an iterable
+of resulting endpoint objects.</p><p>input_url: The URL on which to perform the Yadis protocol</p>
+<dl>
+<dt>Return::</dt>
+<dd>The normalized identity URL and an iterable of endpoint objects generated by the filter function. xrds_parse_func: a callback which will take (uri, xrds_text) and return an array of service endpoint objects or null.  Usually array('Auth_OpenID_ServiceEndpoint', 'fromXRDS'). discover_func: if not null, a callback which should take (uri) and return an Auth_Yadis_Yadis object or null.</dd>
+</dl>
+</div>
+
+<hr>
+
+<a href="../source/libraries/auth/yadis/xml.php.html#line319" class="location">libraries/Auth/Yadis/XML.php at line 319</a>
+
+<h3 id="Auth_Yadis_getSupportedExtensions()">Auth_Yadis_getSupportedExtensions</h3>
+<code class="signature">public  void <strong>Auth_Yadis_getSupportedExtensions</strong>()</code>
+<div class="details">
+</div>
+
+<hr>
+
+<a href="../source/libraries/auth/yadis/misc.php.html#line12" class="location">libraries/Auth/Yadis/Misc.php at line 12</a>
+
+<h3 id="Auth_Yadis_getUCSChars()">Auth_Yadis_getUCSChars</h3>
+<code class="signature">public  void <strong>Auth_Yadis_getUCSChars</strong>()</code>
+<div class="details">
+<p>Miscellaneous utility values and functions for OpenID and Yadis.</p>
+<dl>
+<dt>Author:</dt>
+<dd>JanRain, Inc. <openid@janrain.com></dd>
+<dt>Copyright:</dt>
+<dd>2005-2008 Janrain, Inc.</dd>
+<dt>License:</dt>
+<dd>http://www.apache.org/licenses/LICENSE-2.0 Apache</dd>
+</dl>
+</div>
+
+<hr>
+
+<a href="../source/libraries/auth/yadis/xml.php.html#line331" class="location">libraries/Auth/Yadis/XML.php at line 331</a>
+
+<h3 id="Auth_Yadis_getXMLParser()">Auth_Yadis_getXMLParser</h3>
+<code class="signature">public  void <strong>Auth_Yadis_getXMLParser</strong>()</code>
+<div class="details">
+<p>Returns an instance of a Auth_Yadis_XMLParser subclass based on
+the availability of PHP extensions for XML parsing.  If
+Auth_Yadis_setDefaultParser has been called, the parser used in
+that call will be returned instead.</p>
+</div>
+
+<hr>
+
+<a href="../source/libraries/auth/yadis/xrds.php.html#line214" class="location">libraries/Auth/Yadis/XRDS.php at line 214</a>
+
+<h3 id="Auth_Yadis_getXRDExpiration()">Auth_Yadis_getXRDExpiration</h3>
+<code class="signature">public  void <strong>Auth_Yadis_getXRDExpiration</strong>(mixed xrd_element, mixed default)</code>
+<div class="details">
+</div>
+
+<hr>
+
+<a href="../source/libraries/auth/yadis/xml.php.html#line313" class="location">libraries/Auth/Yadis/XML.php at line 313</a>
+
+<h3 id="Auth_Yadis_setDefaultParser()">Auth_Yadis_setDefaultParser</h3>
+<code class="signature">public  void <strong>Auth_Yadis_setDefaultParser</strong>(mixed parser)</code>
+<div class="details">
+<p>Set a default parser to override the extension-driven selection of
+available parser classes.  This is helpful in a test environment or
+one in which multiple parsers can be used but one is more
+desirable.</p>
+<dl>
+<dt>Parameters:</dt>
+<dd>parser - An instance of a Auth_Yadis_XMLParser subclass.</dd>
+</dl>
+</div>
+
+<hr>
+
+<a href="../source/libraries/auth/openid/trustroot.php.html#line325" class="location">libraries/Auth/OpenID/TrustRoot.php at line 325</a>
+
+<h3 id="filter_extractReturnURL()">filter_extractReturnURL</h3>
+<code class="signature">public  void <strong>filter_extractReturnURL</strong>(mixed endpoint)</code>
+<div class="details">
+</div>
+
+<hr>
+
+<div class="header">
+<h1>GiftFlow API</h1>
+<ul>
+<li><a href="../overview-summary.html">Overview</a></li>
+<li><a href="../openid/package-summary.html">Package</a></li>
+<li class="active">Function</li>
+<li><a href="../openid/package-tree.html">Tree</a></li>
+<li><a href="../overview-files.html">Files</a></li>
+<li><a href="../deprecated-list.html">Deprecated</a></li>
+<li><a href="../index-all.html">Index</a></li>
+</ul>
+</div>
+
+<div class="small_links">
+<a href="../index.html" target="_top">Frames</a>
+<a href="../openid/package-functions.html" target="_top">No frames</a>
+</div>
+<div class="small_links">
+Summary: <a href="#summary_function">Function</a>
+Detail: <a href="#detail_function">Function</a>
+</div>
+<hr>
+
+<p id="footer">This document was generated by <a href="http://peej.github.com/phpdoctor/">PHPDoctor: The PHP Documentation Creator</a></p>
+
+</body>
+
+</html>

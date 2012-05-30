@@ -1,0 +1,463 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+
+<html lang="en">
+<head>
+
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
+<meta name="generator" content="PHPDoctor 2RC4 (http://peej.github.com/phpdoctor/)">
+<meta name="when" content="Wed, 09 Feb 2011 20:22:56 +0000">
+
+<link rel="stylesheet" type="text/css" href="../../../../stylesheet.css">
+<link rel="start" href="../../../../overview-summary.html">
+
+<title>libraries/Auth/OpenID/Parse.php (GiftFlow API)</title>
+
+</head>
+<body id="file" onload="parent.document.title=document.title;">
+
+<div class="header">
+<h1>GiftFlow API</h1>
+<ul>
+<li><a href="../../../../overview-summary.html">Overview</a></li>
+<li>Package</li><li>Class</li><li>Tree</li><li><a href="../../../../overview-files.html">Files</a></li>
+<li><a href="../../../../deprecated-list.html">Deprecated</a></li>
+<li><a href="../../../../index-all.html">Index</a></li>
+</ul>
+</div>
+
+<div class="small_links">
+<a href="../../../../index.html" target="_top">Frames</a>
+<a href="../../../../source/libraries/auth/openid/parse.php.html" target="_top">No frames</a>
+</div>
+<hr>
+
+<h1>libraries/Auth/OpenID/Parse.php</h1>
+<div class="comment" id="overview_description"><p>This module implements a VERY limited parser that finds <link> tags
+in the head of HTML or XHTML documents and parses out their
+attributes according to the OpenID spec. It is a liberal parser,
+but it requires these things from the data in order to work:</p><p>- There must be an open <html> tag</p><p>- There must be an open <head> tag inside of the <html> tag</p><p>- Only <link>s that are found inside of the <head> tag are parsed
+(this is by design)</p><p>- The parser follows the OpenID specification in resolving the
+attributes of the link tags. This means that the attributes DO
+NOT get resolved as they would by an XML or HTML parser. In
+particular, only certain entities get replaced, and href
+attributes do not get resolved relative to a base URL.</p><p>From http://openid.net/specs.bml:</p><p>- The openid.server URL MUST be an absolute URL. OpenID consumers
+MUST NOT attempt to resolve relative URLs.</p><p>- The openid.server URL MUST NOT include entities other than &amp;,
+&lt;, &gt;, and &quot;.</p><p>The parser ignores SGML comments and <![CDATA[blocks]]>. Both kinds
+of quoting are allowed for attributes.</p><p>The parser deals with invalid markup in these ways:</p><p>- Tag names are not case-sensitive</p><p>- The <html> tag is accepted even when it is not at the top level</p><p>- The <head> tag is accepted even when it is not a direct child of
+the <html> tag, but a <html> tag must be an ancestor of the
+<head> tag</p><p>- <link> tags are accepted even when they are not direct children
+of the <head> tag, but a <head> tag must be an ancestor of the
+<link> tag</p><p>- If there is no closing tag for an open <html> or <head> tag, the
+remainder of the document is viewed as being inside of the
+tag. If there is no closing tag for a <link> tag, the link tag is
+treated as a short tag. Exceptions to this rule are that <html>
+closes <html> and <body> or <head> closes <head></p><p>- Attributes of the <link> tag are not required to be quoted.</p><p>- In the case of duplicated attribute names, the attribute coming
+last in the tag will be the value returned.</p><p>- Any text that does not parse as an attribute within a link tag
+will be ignored. (e.g. <link pumpkin rel='openid.server' /> will
+ignore pumpkin)</p><p>- If there are more than one <html> or <head> tag, the parser only
+looks inside of the first one.</p><p>- The contents of <script> tags are ignored entirely, except
+unclosed <script> tags. Unclosed <script> tags are ignored.</p><p>- Any other invalid markup is ignored, including unclosed SGML
+comments and unclosed <![CDATA[blocks.</p><p>PHP versions 4 and 5</p><p>LICENSE: See the COPYING file included in this distribution.</p></div>
+
+<hr>
+
+<a name="line1"></a><pre><?php
+<a name="line2"></a>
+<a name="line3"></a>/**
+<a name="line4"></a> * This module implements a VERY limited parser that finds <link> tags
+<a name="line5"></a> * in the head of HTML or XHTML documents and parses out their
+<a name="line6"></a> * attributes according to the OpenID spec. It is a liberal parser,
+<a name="line7"></a> * but it requires these things from the data in order to work:
+<a name="line8"></a> *
+<a name="line9"></a> * - There must be an open <html> tag
+<a name="line10"></a> *
+<a name="line11"></a> * - There must be an open <head> tag inside of the <html> tag
+<a name="line12"></a> *
+<a name="line13"></a> * - Only <link>s that are found inside of the <head> tag are parsed
+<a name="line14"></a> *   (this is by design)
+<a name="line15"></a> *
+<a name="line16"></a> * - The parser follows the OpenID specification in resolving the
+<a name="line17"></a> *   attributes of the link tags. This means that the attributes DO
+<a name="line18"></a> *   NOT get resolved as they would by an XML or HTML parser. In
+<a name="line19"></a> *   particular, only certain entities get replaced, and href
+<a name="line20"></a> *   attributes do not get resolved relative to a base URL.
+<a name="line21"></a> *
+<a name="line22"></a> * From http://openid.net/specs.bml:
+<a name="line23"></a> *
+<a name="line24"></a> * - The openid.server URL MUST be an absolute URL. OpenID consumers
+<a name="line25"></a> *   MUST NOT attempt to resolve relative URLs.
+<a name="line26"></a> *
+<a name="line27"></a> * - The openid.server URL MUST NOT include entities other than &amp;,
+<a name="line28"></a> *   &lt;, &gt;, and &quot;.
+<a name="line29"></a> *
+<a name="line30"></a> * The parser ignores SGML comments and <![CDATA[blocks]]>. Both kinds
+<a name="line31"></a> * of quoting are allowed for attributes.
+<a name="line32"></a> *
+<a name="line33"></a> * The parser deals with invalid markup in these ways:
+<a name="line34"></a> *
+<a name="line35"></a> * - Tag names are not case-sensitive
+<a name="line36"></a> *
+<a name="line37"></a> * - The <html> tag is accepted even when it is not at the top level
+<a name="line38"></a> *
+<a name="line39"></a> * - The <head> tag is accepted even when it is not a direct child of
+<a name="line40"></a> *   the <html> tag, but a <html> tag must be an ancestor of the
+<a name="line41"></a> *   <head> tag
+<a name="line42"></a> *
+<a name="line43"></a> * - <link> tags are accepted even when they are not direct children
+<a name="line44"></a> *   of the <head> tag, but a <head> tag must be an ancestor of the
+<a name="line45"></a> *   <link> tag
+<a name="line46"></a> *
+<a name="line47"></a> * - If there is no closing tag for an open <html> or <head> tag, the
+<a name="line48"></a> *   remainder of the document is viewed as being inside of the
+<a name="line49"></a> *   tag. If there is no closing tag for a <link> tag, the link tag is
+<a name="line50"></a> *   treated as a short tag. Exceptions to this rule are that <html>
+<a name="line51"></a> *   closes <html> and <body> or <head> closes <head>
+<a name="line52"></a> *
+<a name="line53"></a> * - Attributes of the <link> tag are not required to be quoted.
+<a name="line54"></a> *
+<a name="line55"></a> * - In the case of duplicated attribute names, the attribute coming
+<a name="line56"></a> *   last in the tag will be the value returned.
+<a name="line57"></a> *
+<a name="line58"></a> * - Any text that does not parse as an attribute within a link tag
+<a name="line59"></a> *   will be ignored. (e.g. <link pumpkin rel='openid.server' /> will
+<a name="line60"></a> *   ignore pumpkin)
+<a name="line61"></a> *
+<a name="line62"></a> * - If there are more than one <html> or <head> tag, the parser only
+<a name="line63"></a> *   looks inside of the first one.
+<a name="line64"></a> *
+<a name="line65"></a> * - The contents of <script> tags are ignored entirely, except
+<a name="line66"></a> *   unclosed <script> tags. Unclosed <script> tags are ignored.
+<a name="line67"></a> *
+<a name="line68"></a> * - Any other invalid markup is ignored, including unclosed SGML
+<a name="line69"></a> *   comments and unclosed <![CDATA[blocks.
+<a name="line70"></a> *
+<a name="line71"></a> * PHP versions 4 and 5
+<a name="line72"></a> *
+<a name="line73"></a> * LICENSE: See the COPYING file included in this distribution.
+<a name="line74"></a> *
+<a name="line75"></a> * @access private
+<a name="line76"></a> * @package OpenID
+<a name="line77"></a> * @author JanRain, Inc. <openid@janrain.com>
+<a name="line78"></a> * @copyright 2005-2008 Janrain, Inc.
+<a name="line79"></a> * @license http://www.apache.org/licenses/LICENSE-2.0 Apache
+<a name="line80"></a> */
+<a name="line81"></a>
+<a name="line82"></a>/**
+<a name="line83"></a> * Require Auth_OpenID::arrayGet().
+<a name="line84"></a> */
+<a name="line85"></a>require_once "Auth/OpenID.php";
+<a name="line86"></a>
+<a name="line87"></a>class Auth_OpenID_Parse {
+<a name="line88"></a>
+<a name="line89"></a>    /**
+<a name="line90"></a>     * Specify some flags for use with regex matching.
+<a name="line91"></a>     */
+<a name="line92"></a>    var $_re_flags = "si";
+<a name="line93"></a>
+<a name="line94"></a>    /**
+<a name="line95"></a>     * Stuff to remove before we start looking for tags
+<a name="line96"></a>     */
+<a name="line97"></a>    var $_removed_re =
+<a name="line98"></a>           "<!--.*?-->|<!\[CDATA\[.*?\]\]>|<script\b(?!:)[^>]*>.*?<\/script>";
+<a name="line99"></a>
+<a name="line100"></a>    /**
+<a name="line101"></a>     * Starts with the tag name at a word boundary, where the tag name
+<a name="line102"></a>     * is not a namespace
+<a name="line103"></a>     */
+<a name="line104"></a>    var $_tag_expr = "<%s\b(?!:)([^>]*?)(?:\/>|>(.*)(?:<\/?%s\s*>|\Z))";
+<a name="line105"></a>
+<a name="line106"></a>    var $_attr_find = '\b(\w+)=("[^"]*"|\'[^\']*\'|[^\'"\s\/<>]+)';
+<a name="line107"></a>
+<a name="line108"></a>    var $_open_tag_expr = "<%s\b";
+<a name="line109"></a>    var $_close_tag_expr = "<((\/%s\b)|(%s[^>\/]*\/))>";
+<a name="line110"></a>
+<a name="line111"></a>    function Auth_OpenID_Parse()
+<a name="line112"></a>    {
+<a name="line113"></a>        $this->_link_find = sprintf("/<link\b(?!:)([^>]*)(?!<)>/%s",
+<a name="line114"></a>                                    $this->_re_flags);
+<a name="line115"></a>
+<a name="line116"></a>        $this->_entity_replacements = array(
+<a name="line117"></a>                                            'amp' => '&',
+<a name="line118"></a>                                            'lt' => '<',
+<a name="line119"></a>                                            'gt' => '>',
+<a name="line120"></a>                                            'quot' => '"'
+<a name="line121"></a>                                            );
+<a name="line122"></a>
+<a name="line123"></a>        $this->_attr_find = sprintf("/%s/%s",
+<a name="line124"></a>                                    $this->_attr_find,
+<a name="line125"></a>                                    $this->_re_flags);
+<a name="line126"></a>
+<a name="line127"></a>        $this->_removed_re = sprintf("/%s/%s",
+<a name="line128"></a>                                     $this->_removed_re,
+<a name="line129"></a>                                     $this->_re_flags);
+<a name="line130"></a>
+<a name="line131"></a>        $this->_ent_replace =
+<a name="line132"></a>            sprintf("&(%s);", implode("|",
+<a name="line133"></a>                                      $this->_entity_replacements));
+<a name="line134"></a>    }
+<a name="line135"></a>
+<a name="line136"></a>    /**
+<a name="line137"></a>     * Returns a regular expression that will match a given tag in an
+<a name="line138"></a>     * SGML string.
+<a name="line139"></a>     */
+<a name="line140"></a>    function tagMatcher($tag_name, $close_tags = null)
+<a name="line141"></a>    {
+<a name="line142"></a>        $expr = $this->_tag_expr;
+<a name="line143"></a>
+<a name="line144"></a>        if ($close_tags) {
+<a name="line145"></a>            $options = implode("|", array_merge(array($tag_name), $close_tags));
+<a name="line146"></a>            $closer = sprintf("(?:%s)", $options);
+<a name="line147"></a>        } else {
+<a name="line148"></a>            $closer = $tag_name;
+<a name="line149"></a>        }
+<a name="line150"></a>
+<a name="line151"></a>        $expr = sprintf($expr, $tag_name, $closer);
+<a name="line152"></a>        return sprintf("/%s/%s", $expr, $this->_re_flags);
+<a name="line153"></a>    }
+<a name="line154"></a>
+<a name="line155"></a>    function openTag($tag_name)
+<a name="line156"></a>    {
+<a name="line157"></a>        $expr = sprintf($this->_open_tag_expr, $tag_name);
+<a name="line158"></a>        return sprintf("/%s/%s", $expr, $this->_re_flags);
+<a name="line159"></a>    }
+<a name="line160"></a>
+<a name="line161"></a>    function closeTag($tag_name)
+<a name="line162"></a>    {
+<a name="line163"></a>        $expr = sprintf($this->_close_tag_expr, $tag_name, $tag_name);
+<a name="line164"></a>        return sprintf("/%s/%s", $expr, $this->_re_flags);
+<a name="line165"></a>    }
+<a name="line166"></a>
+<a name="line167"></a>    function htmlBegin($s)
+<a name="line168"></a>    {
+<a name="line169"></a>        $matches = array();
+<a name="line170"></a>        $result = preg_match($this->openTag('html'), $s,
+<a name="line171"></a>                             $matches, PREG_OFFSET_CAPTURE);
+<a name="line172"></a>        if ($result === false || !$matches) {
+<a name="line173"></a>            return false;
+<a name="line174"></a>        }
+<a name="line175"></a>        // Return the offset of the first match.
+<a name="line176"></a>        return $matches[0][1];
+<a name="line177"></a>    }
+<a name="line178"></a>
+<a name="line179"></a>    function htmlEnd($s)
+<a name="line180"></a>    {
+<a name="line181"></a>        $matches = array();
+<a name="line182"></a>        $result = preg_match($this->closeTag('html'), $s,
+<a name="line183"></a>                             $matches, PREG_OFFSET_CAPTURE);
+<a name="line184"></a>        if ($result === false || !$matches) {
+<a name="line185"></a>            return false;
+<a name="line186"></a>        }
+<a name="line187"></a>        // Return the offset of the first match.
+<a name="line188"></a>        return $matches[count($matches) - 1][1];
+<a name="line189"></a>    }
+<a name="line190"></a>
+<a name="line191"></a>    function headFind()
+<a name="line192"></a>    {
+<a name="line193"></a>        return $this->tagMatcher('head', array('body', 'html'));
+<a name="line194"></a>    }
+<a name="line195"></a>
+<a name="line196"></a>    function replaceEntities($str)
+<a name="line197"></a>    {
+<a name="line198"></a>        foreach ($this->_entity_replacements as $old => $new) {
+<a name="line199"></a>            $str = preg_replace(sprintf("/&%s;/", $old), $new, $str);
+<a name="line200"></a>        }
+<a name="line201"></a>        return $str;
+<a name="line202"></a>    }
+<a name="line203"></a>
+<a name="line204"></a>    function removeQuotes($str)
+<a name="line205"></a>    {
+<a name="line206"></a>        $matches = array();
+<a name="line207"></a>        $double = '/^"(.*)"$/';
+<a name="line208"></a>        $single = "/^\'(.*)\'$/";
+<a name="line209"></a>
+<a name="line210"></a>        if (preg_match($double, $str, $matches)) {
+<a name="line211"></a>            return $matches[1];
+<a name="line212"></a>        } else if (preg_match($single, $str, $matches)) {
+<a name="line213"></a>            return $matches[1];
+<a name="line214"></a>        } else {
+<a name="line215"></a>            return $str;
+<a name="line216"></a>        }
+<a name="line217"></a>    }
+<a name="line218"></a>    
+<a name="line219"></a>    function match($regexp, $text, &$match)
+<a name="line220"></a>    {
+<a name="line221"></a>        if (!is_callable('mb_ereg_search_init')) {
+<a name="line222"></a>            return preg_match($regexp, $text, $match);
+<a name="line223"></a>        }
+<a name="line224"></a>
+<a name="line225"></a>        $regexp = substr($regexp, 1, strlen($regexp) - 2 - strlen($this->_re_flags));
+<a name="line226"></a>        mb_ereg_search_init($text);
+<a name="line227"></a>        if (!mb_ereg_search($regexp)) {
+<a name="line228"></a>            return false;
+<a name="line229"></a>        }
+<a name="line230"></a>        list($match) = mb_ereg_search_getregs();
+<a name="line231"></a>        return true;
+<a name="line232"></a>    }
+<a name="line233"></a>
+<a name="line234"></a>    /**
+<a name="line235"></a>     * Find all link tags in a string representing a HTML document and
+<a name="line236"></a>     * return a list of their attributes.
+<a name="line237"></a>     *
+<a name="line238"></a>     * @todo This is quite ineffective and may fail with the default
+<a name="line239"></a>     *       pcre.backtrack_limit of 100000 in PHP 5.2, if $html is big.
+<a name="line240"></a>     *       It should rather use stripos (in PHP5) or strpos()+strtoupper()
+<a name="line241"></a>     *       in PHP4 to manage this.
+<a name="line242"></a>     *
+<a name="line243"></a>     * @param string $html The text to parse
+<a name="line244"></a>     * @return array $list An array of arrays of attributes, one for each
+<a name="line245"></a>     * link tag
+<a name="line246"></a>     */
+<a name="line247"></a>    function parseLinkAttrs($html)
+<a name="line248"></a>    {
+<a name="line249"></a>        $stripped = preg_replace($this->_removed_re,
+<a name="line250"></a>                                 "",
+<a name="line251"></a>                                 $html);
+<a name="line252"></a>
+<a name="line253"></a>        $html_begin = $this->htmlBegin($stripped);
+<a name="line254"></a>        $html_end = $this->htmlEnd($stripped);
+<a name="line255"></a>
+<a name="line256"></a>        if ($html_begin === false) {
+<a name="line257"></a>            return array();
+<a name="line258"></a>        }
+<a name="line259"></a>
+<a name="line260"></a>        if ($html_end === false) {
+<a name="line261"></a>            $html_end = strlen($stripped);
+<a name="line262"></a>        }
+<a name="line263"></a>
+<a name="line264"></a>        $stripped = substr($stripped, $html_begin,
+<a name="line265"></a>                           $html_end - $html_begin);
+<a name="line266"></a>
+<a name="line267"></a>        // Workaround to prevent PREG_BACKTRACK_LIMIT_ERROR:
+<a name="line268"></a>        $old_btlimit = ini_set( 'pcre.backtrack_limit', -1 );
+<a name="line269"></a>
+<a name="line270"></a>        // Try to find the <HEAD> tag.
+<a name="line271"></a>        $head_re = $this->headFind();
+<a name="line272"></a>        $head_match = '';
+<a name="line273"></a>        if (!$this->match($head_re, $stripped, $head_match)) {
+<a name="line274"></a>                     ini_set( 'pcre.backtrack_limit', $old_btlimit );
+<a name="line275"></a>                     return array();
+<a name="line276"></a>        }
+<a name="line277"></a>
+<a name="line278"></a>        $link_data = array();
+<a name="line279"></a>        $link_matches = array();
+<a name="line280"></a>
+<a name="line281"></a>        if (!preg_match_all($this->_link_find, $head_match,
+<a name="line282"></a>                            $link_matches)) {
+<a name="line283"></a>            ini_set( 'pcre.backtrack_limit', $old_btlimit );
+<a name="line284"></a>            return array();
+<a name="line285"></a>        }
+<a name="line286"></a>
+<a name="line287"></a>        foreach ($link_matches[0] as $link) {
+<a name="line288"></a>            $attr_matches = array();
+<a name="line289"></a>            preg_match_all($this->_attr_find, $link, $attr_matches);
+<a name="line290"></a>            $link_attrs = array();
+<a name="line291"></a>            foreach ($attr_matches[0] as $index => $full_match) {
+<a name="line292"></a>                $name = $attr_matches[1][$index];
+<a name="line293"></a>                $value = $this->replaceEntities(
+<a name="line294"></a>                              $this->removeQuotes($attr_matches[2][$index]));
+<a name="line295"></a>
+<a name="line296"></a>                $link_attrs[strtolower($name)] = $value;
+<a name="line297"></a>            }
+<a name="line298"></a>            $link_data[] = $link_attrs;
+<a name="line299"></a>        }
+<a name="line300"></a>
+<a name="line301"></a>        ini_set( 'pcre.backtrack_limit', $old_btlimit );
+<a name="line302"></a>        return $link_data;
+<a name="line303"></a>    }
+<a name="line304"></a>
+<a name="line305"></a>    function relMatches($rel_attr, $target_rel)
+<a name="line306"></a>    {
+<a name="line307"></a>        // Does this target_rel appear in the rel_str?
+<a name="line308"></a>        // XXX: TESTME
+<a name="line309"></a>        $rels = preg_split("/\s+/", trim($rel_attr));
+<a name="line310"></a>        foreach ($rels as $rel) {
+<a name="line311"></a>            $rel = strtolower($rel);
+<a name="line312"></a>            if ($rel == $target_rel) {
+<a name="line313"></a>                return 1;
+<a name="line314"></a>            }
+<a name="line315"></a>        }
+<a name="line316"></a>
+<a name="line317"></a>        return 0;
+<a name="line318"></a>    }
+<a name="line319"></a>
+<a name="line320"></a>    function linkHasRel($link_attrs, $target_rel)
+<a name="line321"></a>    {
+<a name="line322"></a>        // Does this link have target_rel as a relationship?
+<a name="line323"></a>        // XXX: TESTME
+<a name="line324"></a>        $rel_attr = Auth_OpeniD::arrayGet($link_attrs, 'rel', null);
+<a name="line325"></a>        return ($rel_attr && $this->relMatches($rel_attr,
+<a name="line326"></a>                                               $target_rel));
+<a name="line327"></a>    }
+<a name="line328"></a>
+<a name="line329"></a>    function findLinksRel($link_attrs_list, $target_rel)
+<a name="line330"></a>    {
+<a name="line331"></a>        // Filter the list of link attributes on whether it has
+<a name="line332"></a>        // target_rel as a relationship.
+<a name="line333"></a>        // XXX: TESTME
+<a name="line334"></a>        $result = array();
+<a name="line335"></a>        foreach ($link_attrs_list as $attr) {
+<a name="line336"></a>            if ($this->linkHasRel($attr, $target_rel)) {
+<a name="line337"></a>                $result[] = $attr;
+<a name="line338"></a>            }
+<a name="line339"></a>        }
+<a name="line340"></a>
+<a name="line341"></a>        return $result;
+<a name="line342"></a>    }
+<a name="line343"></a>
+<a name="line344"></a>    function findFirstHref($link_attrs_list, $target_rel)
+<a name="line345"></a>    {
+<a name="line346"></a>        // Return the value of the href attribute for the first link
+<a name="line347"></a>        // tag in the list that has target_rel as a relationship.
+<a name="line348"></a>        // XXX: TESTME
+<a name="line349"></a>        $matches = $this->findLinksRel($link_attrs_list,
+<a name="line350"></a>                                       $target_rel);
+<a name="line351"></a>        if (!$matches) {
+<a name="line352"></a>            return null;
+<a name="line353"></a>        }
+<a name="line354"></a>        $first = $matches[0];
+<a name="line355"></a>        return Auth_OpenID::arrayGet($first, 'href', null);
+<a name="line356"></a>    }
+<a name="line357"></a>}
+<a name="line358"></a>
+<a name="line359"></a>function Auth_OpenID_legacy_discover($html_text, $server_rel,
+<a name="line360"></a>                                     $delegate_rel)
+<a name="line361"></a>{
+<a name="line362"></a>    $p = new Auth_OpenID_Parse();
+<a name="line363"></a>
+<a name="line364"></a>    $link_attrs = $p->parseLinkAttrs($html_text);
+<a name="line365"></a>
+<a name="line366"></a>    $server_url = $p->findFirstHref($link_attrs,
+<a name="line367"></a>                                    $server_rel);
+<a name="line368"></a>
+<a name="line369"></a>    if ($server_url === null) {
+<a name="line370"></a>        return false;
+<a name="line371"></a>    } else {
+<a name="line372"></a>        $delegate_url = $p->findFirstHref($link_attrs,
+<a name="line373"></a>                                          $delegate_rel);
+<a name="line374"></a>        return array($delegate_url, $server_url);
+<a name="line375"></a>    }
+<a name="line376"></a>}
+<a name="line377"></a>
+<a name="line378"></a></pre>
+<div class="header">
+<h1>GiftFlow API</h1>
+<ul>
+<li><a href="../../../../overview-summary.html">Overview</a></li>
+<li>Package</li><li>Class</li><li>Tree</li><li><a href="../../../../overview-files.html">Files</a></li>
+<li><a href="../../../../deprecated-list.html">Deprecated</a></li>
+<li><a href="../../../../index-all.html">Index</a></li>
+</ul>
+</div>
+
+<div class="small_links">
+<a href="../../../../index.html" target="_top">Frames</a>
+<a href="../../../../source/libraries/auth/openid/parse.php.html" target="_top">No frames</a>
+</div>
+<hr>
+
+<p id="footer">This document was generated by <a href="http://peej.github.com/phpdoctor/">PHPDoctor: The PHP Documentation Creator</a></p>
+
+</body>
+
+</html>

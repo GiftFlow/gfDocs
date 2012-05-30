@@ -1,0 +1,303 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+
+<html lang="en">
+<head>
+
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
+<meta name="generator" content="PHPDoctor 2RC4 (http://peej.github.com/phpdoctor/)">
+<meta name="when" content="Wed, 09 Feb 2011 20:22:56 +0000">
+
+<link rel="stylesheet" type="text/css" href="../../stylesheet.css">
+<link rel="start" href="../../overview-summary.html">
+
+<title>libraries/geo.php (GiftFlow API)</title>
+
+</head>
+<body id="file" onload="parent.document.title=document.title;">
+
+<div class="header">
+<h1>GiftFlow API</h1>
+<ul>
+<li><a href="../../overview-summary.html">Overview</a></li>
+<li>Package</li><li>Class</li><li>Tree</li><li><a href="../../overview-files.html">Files</a></li>
+<li><a href="../../deprecated-list.html">Deprecated</a></li>
+<li><a href="../../index-all.html">Index</a></li>
+</ul>
+</div>
+
+<div class="small_links">
+<a href="../../index.html" target="_top">Frames</a>
+<a href="../../source/libraries/geo.php.html" target="_top">No frames</a>
+</div>
+<hr>
+
+<h1>libraries/geo.php</h1>
+<hr>
+
+<a name="line1"></a><pre><?php  if ( ! defined('BASEPATH')) exit('No direct script access allowed');
+<a name="line2"></a>/**
+<a name="line3"></a>*	Geography-related Functionality
+<a name="line4"></a>*	
+<a name="line5"></a>*	@author Brandon Jackson
+<a name="line6"></a>*/
+<a name="line7"></a>
+<a name="line8"></a>class Geo
+<a name="line9"></a>{
+<a name="line10"></a>
+<a name="line11"></a>	/**
+<a name="line12"></a>	*	CodeIgniter super-object
+<a name="line13"></a>	*	@var object
+<a name="line14"></a>	*/
+<a name="line15"></a>	protected $CI;
+<a name="line16"></a>
+<a name="line17"></a>	/**
+<a name="line18"></a>	*	@todo move to config file
+<a name="line19"></a>	*	@var string
+<a name="line20"></a>	*/
+<a name="line21"></a>	var $google_maps_api_key = "ABQIAAAAkOw8NpiV3ytX3LtD-8v38BT2yXp_ZAY8_ufC3CFXhHIE1NvwkxR1ZRBaI4FdPyk103lbr60FLRnCqA";
+<a name="line22"></a>	
+<a name="line23"></a>	/**
+<a name="line24"></a>	*	@todo move to config file
+<a name="line25"></a>	*	@var string
+<a name="line26"></a>	*/
+<a name="line27"></a>	var $ipinfodb_api_key = "897fa95906c6c0f4bef881463cb60b254d23c778565f37308116ae5f010c5f7d";
+<a name="line28"></a>	
+<a name="line29"></a>	/**
+<a name="line30"></a>	*	Default search radius in miles
+<a name="line31"></a>	*	@var int
+<a name="line32"></a>	*/
+<a name="line33"></a>	var $radius = 60;
+<a name="line34"></a>	
+<a name="line35"></a>	public function __construct()
+<a name="line36"></a>	{
+<a name="line37"></a>		$this->CI =& get_instance();
+<a name="line38"></a>	}
+<a name="line39"></a>
+<a name="line40"></a>	/**
+<a name="line41"></a>	*	Convert an address into a lat/lng pair
+<a name="line42"></a>	*	Optionally, an object (such as a DataMapper model object, can be
+<a name="line43"></a>	*	passed to the method. It then assigns the geocoding results as
+<a name="line44"></a>	*	properties of this object instead of creating and then returning
+<a name="line45"></a>	*	a new object.
+<a name="line46"></a>	*
+<a name="line47"></a>	*	Documentation Here:
+<a name="line48"></a>	*	http://code.google.com/apis/maps/documentation/geocoding/
+<a name="line49"></a>	*
+<a name="line50"></a>	*	@param string $address		Location keyword / address to encode
+<a name="line51"></a>	*	@param object $object		Object to store results in (optional)
+<a name="line52"></a>	*	@return object
+<a name="line53"></a>	*/
+<a name="line54"></a>	function geocode( $address, $object = NULL )
+<a name="line55"></a>	{
+<a name="line56"></a>		Console::logSpeed("Geo::geocode()");
+<a name="line57"></a>		
+<a name="line58"></a>		// Build URL
+<a name="line59"></a>		$data = array ( 
+<a name="line60"></a>			"address" => $address, 
+<a name="line61"></a>			"sensor"=>"false", 
+<a name="line62"></a>			"key" => $this->google_maps_api_key,
+<a name="line63"></a>			"language"=>"en"
+<a name="line64"></a>		);
+<a name="line65"></a>		$url = "http://maps.googleapis.com/maps/api/geocode/json?";
+<a name="line66"></a>		$url .= http_build_query($data);
+<a name="line67"></a>		
+<a name="line68"></a>		// Get & Decode Data
+<a name="line69"></a>		$data = json_decode(file_get_contents($url));
+<a name="line70"></a>
+<a name="line71"></a>		// If result invalid, exit
+<a name="line72"></a>		if($data->status != "OK" || empty($data->results[0]))
+<a name="line73"></a>		{
+<a name="line74"></a>			return FALSE;
+<a name="line75"></a>		}
+<a name="line76"></a>		
+<a name="line77"></a>		// Else start parsing
+<a name="line78"></a>		
+<a name="line79"></a>		// Object will store location components
+<a name="line80"></a>		if(!is_object($object))
+<a name="line81"></a>		{
+<a name="line82"></a>			$object = new stdClass;
+<a name="line83"></a>		}
+<a name="line84"></a>		
+<a name="line85"></a>		// Shortcut to the part of $data we're interested in
+<a name="line86"></a>		$object->address = $data->results[0]->formatted_address;
+<a name="line87"></a>		$object->latitude = $data->results[0]->geometry->location->lat;
+<a name="line88"></a>		$object->longitude = $data->results[0]->geometry->location->lng;
+<a name="line89"></a>		
+<a name="line90"></a>		foreach($data->results[0]->address_components as $key=>$val)
+<a name="line91"></a>		{
+<a name="line92"></a>			if(in_array("street_number",$val->types))
+<a name="line93"></a>			{
+<a name="line94"></a>				$object->street_address = $val->long_name;
+<a name="line95"></a>			}
+<a name="line96"></a>			elseif(in_array("route",$val->types))
+<a name="line97"></a>			{
+<a name="line98"></a>				$object->street_address .= " ".$val->long_name;
+<a name="line99"></a>			}
+<a name="line100"></a>			elseif(in_array("locality",$val->types))
+<a name="line101"></a>			{
+<a name="line102"></a>				$object->city = $val->long_name;
+<a name="line103"></a>			}
+<a name="line104"></a>			elseif(in_array("postal_code",$val->types))
+<a name="line105"></a>			{
+<a name="line106"></a>				$object->postal_code = $val->long_name;
+<a name="line107"></a>			}
+<a name="line108"></a>			elseif(in_array("administrative_area_level_1",$val->types))
+<a name="line109"></a>			{
+<a name="line110"></a>				$object->state = $val->long_name;
+<a name="line111"></a>			}
+<a name="line112"></a>			elseif(in_array("country",$val->types))
+<a name="line113"></a>			{
+<a name="line114"></a>				$object->country = $val->long_name;
+<a name="line115"></a>			}
+<a name="line116"></a>		}
+<a name="line117"></a>		
+<a name="line118"></a>		Console::logSpeed("Geo::geocode(): done.");
+<a name="line119"></a>		
+<a name="line120"></a>		// Return finished object
+<a name="line121"></a>		return $object;
+<a name="line122"></a>	}
+<a name="line123"></a>	
+<a name="line124"></a>	/**
+<a name="line125"></a>	*	Geocodes an IP address using an external IP address API.
+<a name="line126"></a>	*	If the IP is encoded successfully, then it will populate an array and 
+<a name="line127"></a>	*	various properties of $this.
+<a name="line128"></a>	*
+<a name="line129"></a>	*	API Documentation: http://www.ipinfodb.com/ip_location_api.php
+<a name="line130"></a>	*
+<a name="line131"></a>	*	@param string $ip
+<a name="line132"></a>	*	@return array
+<a name="line133"></a>	*/
+<a name="line134"></a>	public function geocode_ip($ip = NULL)
+<a name="line135"></a>	{
+<a name="line136"></a>		Console::logSpeed("Geo::geocode_ip()");
+<a name="line137"></a>	
+<a name="line138"></a>		// Grab IP Address
+<a name="line139"></a>		if(empty($ip))
+<a name="line140"></a>		{
+<a name="line141"></a>			$ip = $this->CI->input->ip_address();
+<a name="line142"></a>		}
+<a name="line143"></a>		
+<a name="line144"></a>		// If localhost, manually override IP address to be one from within the
+<a name="line145"></a>		// Yale network for testing purposes
+<a name="line146"></a>		if($ip=="0.0.0.0")
+<a name="line147"></a>		{
+<a name="line148"></a>			$ip = "128.36.160.90";
+<a name="line149"></a>		}
+<a name="line150"></a>		
+<a name="line151"></a>		// Build API Query
+<a name="line152"></a>		$endpoint = "http://api.ipinfodb.com/v2/ip_query.php";
+<a name="line153"></a>		$options = array(
+<a name="line154"></a>			"ip"=>$ip,
+<a name="line155"></a>			"key"=>$this->ipinfodb_api_key,
+<a name="line156"></a>			"timezone"=>true
+<a name="line157"></a>		);
+<a name="line158"></a>		$url = $endpoint . "?" . http_build_query($options);
+<a name="line159"></a>
+<a name="line160"></a>		// Load XML File
+<a name="line161"></a>		$xml = simplexml_load_file($url);
+<a name="line162"></a>		
+<a name="line163"></a>		// Parse XML into Object
+<a name="line164"></a>		if(!empty($xml->City)&&!empty($xml->RegionName))
+<a name="line165"></a>		{
+<a name="line166"></a>			Console::logSpeed("Geo::geocode_ip(): saving valid result...");
+<a name="line167"></a>
+<a name="line168"></a>			$object = (object) array(
+<a name="line169"></a>				"address"=>$xml->City.", ".$xml->RegionName,
+<a name="line170"></a>				"city"=> (string) $xml->City,
+<a name="line171"></a>				"state"=> (string) $xml->RegionName,
+<a name="line172"></a>				"postal_code"=> (string) $xml->ZipPostalCode,
+<a name="line173"></a>				"country"=> (string) $xml->CountryName,
+<a name="line174"></a>				"latitude"=> (double) $xml->Latitude,
+<a name="line175"></a>				"longitude"=> (double) $xml->Longitude
+<a name="line176"></a>			);
+<a name="line177"></a>		}
+<a name="line178"></a>		Console::logSpeed("Geo::geocode_ip(): done.");
+<a name="line179"></a>
+<a name="line180"></a>		return isset($object) ? $object : FALSE;
+<a name="line181"></a>	}
+<a name="line182"></a>
+<a name="line183"></a>	/**
+<a name="line184"></a>	*	Calculates a min/max latitude and longitude range that
+<a name="line185"></a>	*	approximates a distance search
+<a name="line186"></a>	*
+<a name="line187"></a>	*	@param float $latitude
+<a name="line188"></a>	*	@param float $longitude
+<a name="line189"></a>	*	@param float $radius
+<a name="line190"></a>	*	@return array
+<a name="line191"></a>	*/
+<a name="line192"></a>	public function get_bounds($latitude,$longitude, $radius = NULL)
+<a name="line193"></a>	{
+<a name="line194"></a>		// Set default search radius
+<a name="line195"></a>		if(empty($radius))
+<a name="line196"></a>		{
+<a name="line197"></a>			$radius = $this->radius;
+<a name="line198"></a>		}
+<a name="line199"></a>		
+<a name="line200"></a>		$latitude_degree = 69;
+<a name="line201"></a>		$longitude_degree = ((3.14*cos(deg2rad($latitude))*6367449)/(180000))/1.609;
+<a name="line202"></a>		
+<a name="line203"></a>		// How wide is the search radius (in degrees)?
+<a name="line204"></a>		$latitude_radius = $radius / $latitude_degree;
+<a name="line205"></a>		$longitude_radius = $radius / $latitude_degree;
+<a name="line206"></a>		
+<a name="line207"></a>		$bounds = array (
+<a name="line208"></a>			"latitude"=>array (
+<a name="line209"></a>				"max"=> ( $latitude + $latitude_radius ),
+<a name="line210"></a>				"min" => ( $latitude - $latitude_radius ) 
+<a name="line211"></a>			),
+<a name="line212"></a>			"longitude"=>array(	
+<a name="line213"></a>				"max"=> ( $longitude + $longitude_radius ),
+<a name="line214"></a>				"min" => ( $longitude - $longitude_radius )
+<a name="line215"></a>			) 
+<a name="line216"></a>		);
+<a name="line217"></a>		
+<a name="line218"></a>		return $bounds;
+<a name="line219"></a>	}
+<a name="line220"></a>
+<a name="line221"></a>	/**
+<a name="line222"></a>	*	Calculates the distance between two points (given the latitude/longitude 
+<a name="line223"></a>	*	of those points).
+<a name="line224"></a>	*
+<a name="line225"></a>	*	@param float $lat1		1st Latitude
+<a name="line226"></a>	*	@param float $lng2		1st Longitude
+<a name="line227"></a>	*	@param float $lat2		2nd Latitude
+<a name="line228"></a>	*	@param float $lng2		2nd Longitude
+<a name="line229"></a>	*	@param string $unit		Unit of Result ('m' [default], 'km')
+<a name="line230"></a>	*/
+<a name="line231"></a>	function distance( $lat1, $lng1, $lat2, $lng2, $unit = 'm' ) 
+<a name="line232"></a>	{ 
+<a name="line233"></a>		$miles = rad2deg(acos(sin(deg2rad($lat1))*sin(deg2rad($lat2))+cos(deg2rad($lat1))*cos(deg2rad($lat2))*cos(deg2rad($lng1-$lng2))))*69.09; 
+<a name="line234"></a>		
+<a name="line235"></a>		if($unit == "km") 
+<a name="line236"></a>		{
+<a name="line237"></a>			return ($miles * 1.609344);
+<a name="line238"></a>		}
+<a name="line239"></a>		else
+<a name="line240"></a>		{
+<a name="line241"></a>			return $miles;
+<a name="line242"></a>		} 
+<a name="line243"></a>	}
+<a name="line244"></a>
+<a name="line245"></a>}</pre>
+<div class="header">
+<h1>GiftFlow API</h1>
+<ul>
+<li><a href="../../overview-summary.html">Overview</a></li>
+<li>Package</li><li>Class</li><li>Tree</li><li><a href="../../overview-files.html">Files</a></li>
+<li><a href="../../deprecated-list.html">Deprecated</a></li>
+<li><a href="../../index-all.html">Index</a></li>
+</ul>
+</div>
+
+<div class="small_links">
+<a href="../../index.html" target="_top">Frames</a>
+<a href="../../source/libraries/geo.php.html" target="_top">No frames</a>
+</div>
+<hr>
+
+<p id="footer">This document was generated by <a href="http://peej.github.com/phpdoctor/">PHPDoctor: The PHP Documentation Creator</a></p>
+
+</body>
+
+</html>

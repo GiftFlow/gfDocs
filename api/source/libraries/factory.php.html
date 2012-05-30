@@ -1,0 +1,414 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+
+<html lang="en">
+<head>
+
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
+<meta name="generator" content="PHPDoctor 2RC4 (http://peej.github.com/phpdoctor/)">
+<meta name="when" content="Wed, 09 Feb 2011 20:22:56 +0000">
+
+<link rel="stylesheet" type="text/css" href="../../stylesheet.css">
+<link rel="start" href="../../overview-summary.html">
+
+<title>libraries/factory.php (GiftFlow API)</title>
+
+</head>
+<body id="file" onload="parent.document.title=document.title;">
+
+<div class="header">
+<h1>GiftFlow API</h1>
+<ul>
+<li><a href="../../overview-summary.html">Overview</a></li>
+<li>Package</li><li>Class</li><li>Tree</li><li><a href="../../overview-files.html">Files</a></li>
+<li><a href="../../deprecated-list.html">Deprecated</a></li>
+<li><a href="../../index-all.html">Index</a></li>
+</ul>
+</div>
+
+<div class="small_links">
+<a href="../../index.html" target="_top">Frames</a>
+<a href="../../source/libraries/factory.php.html" target="_top">No frames</a>
+</div>
+<hr>
+
+<h1>libraries/factory.php</h1>
+<hr>
+
+<a name="line1"></a><pre><?php  if ( ! defined('BASEPATH')) exit('No direct script access allowed');
+<a name="line2"></a>/**
+<a name="line3"></a>*	Conversations object
+<a name="line4"></a>*	A component of the Messaging library
+<a name="line5"></a>*	
+<a name="line6"></a>*	@author Brandon Jackson
+<a name="line7"></a>*	@package Messaging
+<a name="line8"></a>*/
+<a name="line9"></a>
+<a name="line10"></a>class Factory
+<a name="line11"></a>{	
+<a name="line12"></a>
+<a name="line13"></a>	/**
+<a name="line14"></a>	*	CodeIgniter super-object
+<a name="line15"></a>	*	@var object
+<a name="line16"></a>	*/
+<a name="line17"></a>	protected $CI;
+<a name="line18"></a>
+<a name="line19"></a>	/**
+<a name="line20"></a>	*	Constructor
+<a name="line21"></a>	*/
+<a name="line22"></a>	public function __construct()
+<a name="line23"></a>	{
+<a name="line24"></a>		$this->CI =& get_instance();
+<a name="line25"></a>	}
+<a name="line26"></a>	
+<a name="line27"></a>	/**
+<a name="line28"></a>	*	@todo make this its own class, then automatically pass
+<a name="line29"></a>	*	function calls made to this object redirect to an instance
+<a name="line30"></a>	*	of the Good_search class.
+<a name="line31"></a>	*/
+<a name="line32"></a>	public function good( $result )
+<a name="line33"></a>	{
+<a name="line34"></a>		Console::logSpeed('Factory::good()');
+<a name="line35"></a>	
+<a name="line36"></a>		// Stores formatted result objects
+<a name="line37"></a>		$product = array();
+<a name="line38"></a>	
+<a name="line39"></a>		// Loop over results
+<a name="line40"></a>		foreach((array) $result as $row )
+<a name="line41"></a>		{
+<a name="line42"></a>			// Create object and its child objects
+<a name="line43"></a>			$item = (object) array(
+<a name="line44"></a>				"user"=>new stdClass,
+<a name="line45"></a>				"location"=>new stdClass,
+<a name="line46"></a>				"default_photo"=>new stdClass,
+<a name="line47"></a>				"category"=>new stdClass,
+<a name="line48"></a>				"transaction"=>new StdClass
+<a name="line49"></a>			);
+<a name="line50"></a>			
+<a name="line51"></a>			// Loop over row columns
+<a name="line52"></a>			foreach( $row as $key=>$val )
+<a name="line53"></a>			{
+<a name="line54"></a>				$object = substr($key, 0, strpos($key, "_"));
+<a name="line55"></a>				$key = substr(strstr($key, "_"), 1);
+<a name="line56"></a>				
+<a name="line57"></a>				// Copy Good properties to main object
+<a name="line58"></a>				if( $object == "good")
+<a name="line59"></a>				{
+<a name="line60"></a>					$item->$key = $val;
+<a name="line61"></a>				}
+<a name="line62"></a>				
+<a name="line63"></a>				// Copy other properties to their child objects
+<a name="line64"></a>				elseif($object == "photo")
+<a name="line65"></a>				{
+<a name="line66"></a>					if( empty( $item->default_photo->id ) )
+<a name="line67"></a>					{
+<a name="line68"></a>						$item->default_photo->thumb_url = base_url()."assets/images/default_".$item->type.".png";
+<a name="line69"></a>						$item->default_photo->url = base_url()."assets/images/default_".$item->type.".png";
+<a name="line70"></a>					}
+<a name="line71"></a>					else
+<a name="line72"></a>					{
+<a name="line73"></a>						$item->$object->$key = $val;
+<a name="line74"></a>					}
+<a name="line75"></a>				}
+<a name="line76"></a>				elseif($object=="tags"&&$key=="list")
+<a name="line77"></a>				{
+<a name="line78"></a>					// Explode comma delimited list of tags into array
+<a name="line79"></a>					$item->tags = explode(",",$val);
+<a name="line80"></a>				}
+<a name="line81"></a>				else
+<a name="line82"></a>				{
+<a name="line83"></a>					$item->$object->$key = $val;
+<a name="line84"></a>				}
+<a name="line85"></a>			}
+<a name="line86"></a>			
+<a name="line87"></a>			// Add new object to $product array
+<a name="line88"></a>			$product[] = $item;
+<a name="line89"></a>		}
+<a name="line90"></a>		Console::logSpeed('Factory::good(): done.');
+<a name="line91"></a>		return $product;
+<a name="line92"></a>	}
+<a name="line93"></a>	
+<a name="line94"></a>	/**
+<a name="line95"></a>	*	@todo make this its own class, then automatically pass
+<a name="line96"></a>	*	function calls made to this object redirect to an instance
+<a name="line97"></a>	*	of the Good_search class.
+<a name="line98"></a>	*/
+<a name="line99"></a>	public function transaction( $result )
+<a name="line100"></a>	{
+<a name="line101"></a>		Console::logSpeed('Factory::transaction()');
+<a name="line102"></a>	
+<a name="line103"></a>		// Stores formatted result objects
+<a name="line104"></a>		$transactions = array();
+<a name="line105"></a>	
+<a name="line106"></a>		/*
+<a name="line107"></a>		JSON Prototype
+<a name="line108"></a>		
+<a name="line109"></a>		var transactions = [
+<a name="line110"></a>			{
+<a name="line111"></a>				status: '',
+<a name="line112"></a>				demands: [
+<a name="line113"></a>					{
+<a name="line114"></a>						type: '',
+<a name="line115"></a>						good: {
+<a name="line116"></a>							id: '',
+<a name="line117"></a>							type: '',
+<a name="line118"></a>							user: {}
+<a name="line119"></a>						}
+<a name="line120"></a>					},
+<a name="line121"></a>					{}...
+<a name="line122"></a>				],
+<a name="line123"></a>				demander: {
+<a name="line124"></a>					id: '',
+<a name="line125"></a>					screen_name: ''
+<a name="line126"></a>				},
+<a name="line127"></a>				decider: {
+<a name="line128"></a>					id: '',
+<a name="line129"></a>					screen_name: ''
+<a name="line130"></a>				},
+<a name="line131"></a>				language: {
+<a name="line132"></a>					demander_summary: '',
+<a name="line133"></a>					decider_summary: ''
+<a name="line134"></a>				}
+<a name="line135"></a>			},
+<a name="line136"></a>			{}
+<a name="line137"></a>		];
+<a name="line138"></a>		*/
+<a name="line139"></a>		
+<a name="line140"></a>		// Loop over results
+<a name="line141"></a>		foreach( $result as $row )
+<a name="line142"></a>		{
+<a name="line143"></a>			// Create transaction object and its child objects
+<a name="line144"></a>			if(!isset($transactions[$row->transaction_id]))
+<a name="line145"></a>			{
+<a name="line146"></a>				$transactions[$row->transaction_id] = (object) array(
+<a name="line147"></a>					"id"=>"",
+<a name="line148"></a>					"status"=>"",
+<a name="line149"></a>					"created"=>"",
+<a name="line150"></a>					"demands"=>array(),
+<a name="line151"></a>					"demander"=>new stdClass,
+<a name="line152"></a>					"decider"=>new stdClass,
+<a name="line153"></a>					"language"=>new StdClass
+<a name="line154"></a>				);
+<a name="line155"></a>			}
+<a name="line156"></a>			
+<a name="line157"></a>			// Create demand object
+<a name="line158"></a>			$demand = (object) array(
+<a name="line159"></a>				"good" => (object) array(
+<a name="line160"></a>					"photo" => new stdClass
+<a name="line161"></a>				)
+<a name="line162"></a>			);
+<a name="line163"></a>			
+<a name="line164"></a>			// Loop over row columns
+<a name="line165"></a>			foreach( $row as $key=>$val )
+<a name="line166"></a>			{
+<a name="line167"></a>				$keys = explode("_",$key);
+<a name="line168"></a>				
+<a name="line169"></a>				// Copy Good properties to main object
+<a name="line170"></a>				if( $keys[0] == "transaction")
+<a name="line171"></a>				{
+<a name="line172"></a>					$transactions[$row->transaction_id]->$keys[1] = $val;
+<a name="line173"></a>				}
+<a name="line174"></a>				
+<a name="line175"></a>				else if($keys[0] == "demand")
+<a name="line176"></a>				{
+<a name="line177"></a>					$newkey = implode(array_slice($keys,1),"_");
+<a name="line178"></a>					$demand->{implode(array_slice($keys,1),"_")} = $val;
+<a name="line179"></a>				}
+<a name="line180"></a>				
+<a name="line181"></a>				// Copy other properties to their child objects
+<a name="line182"></a>				elseif($keys[0] == "good")
+<a name="line183"></a>				{
+<a name="line184"></a>					if($keys[1]=="photo")
+<a name="line185"></a>					{
+<a name="line186"></a>						if($keys[2]=="thumb")
+<a name="line187"></a>						{
+<a name="line188"></a>							$demand->good->photo->thumb_url = (!empty($val)) ? $val : base_url()."assets/images/default_".$row->good_type.".png";
+<a name="line189"></a>						} 
+<a name="line190"></a>						
+<a name="line191"></a>						elseif($keys[2]=="url")
+<a name="line192"></a>						{
+<a name="line193"></a>							$demand->good->photo->url = (!empty($val)) ? $val : base_url()."assets/images/default_".$row->good_type.".png";
+<a name="line194"></a>						}
+<a name="line195"></a>					}
+<a name="line196"></a>					else
+<a name="line197"></a>					{
+<a name="line198"></a>						$demand->good->{implode(array_slice($keys, 1),"_")} = $val;
+<a name="line199"></a>					}
+<a name="line200"></a>				}
+<a name="line201"></a>				elseif($keys[0]=="decider" || $keys[0]=="demander")
+<a name="line202"></a>				{
+<a name="line203"></a>					$transactions[$row->transaction_id]->{$keys[0]}->{str_replace($keys[0]."_","",$key)} = $val;
+<a name="line204"></a>				}
+<a name="line205"></a>				else
+<a name="line206"></a>				{
+<a name="line207"></a>					$demand->{$keys[0]}->{str_replace($keys[0]."_","",$key)} = $val;
+<a name="line208"></a>				}
+<a name="line209"></a>			}
+<a name="line210"></a>			
+<a name="line211"></a>			// Add new object to $product array
+<a name="line212"></a>			$transactions[$row->transaction_id]->demands[] = $demand;
+<a name="line213"></a>		}
+<a name="line214"></a>		
+<a name="line215"></a>		// Loop over new transactions array and generate language text
+<a name="line216"></a>		foreach($transactions as $key=>$val)
+<a name="line217"></a>		{
+<a name="line218"></a>			// Decider summary
+<a name="line219"></a>			$decider_summary = "<a href='".site_url('people/'.$val->demander->id)."'>".$val->demander->screen_name."</a> ";
+<a name="line220"></a>			
+<a name="line221"></a>			$decider_summary_demands = array();
+<a name="line222"></a>			foreach($val->demands as $demand)
+<a name="line223"></a>			{
+<a name="line224"></a>				switch($demand->type)
+<a name="line225"></a>				{
+<a name="line226"></a>					case "take":
+<a name="line227"></a>						$brief = "has requested your";
+<a name="line228"></a>						break;
+<a name="line229"></a>					case "borrow":
+<a name="line230"></a>						$brief = "would like to borrow your";
+<a name="line231"></a>						break;
+<a name="line232"></a>					case "fulfill":
+<a name="line233"></a>						$brief = "would like to fulfill your";
+<a name="line234"></a>						break;
+<a name="line235"></a>					case "share":
+<a name="line236"></a>						$brief = "has offered to share a ";
+<a name="line237"></a>						break;
+<a name="line238"></a>					case "give":
+<a name="line239"></a>						$brief = "has offered you a ";
+<a name="line240"></a>						break;
+<a name="line241"></a>					default:
+<a name="line242"></a>						$brief = "wants to ".$demand->type." your";
+<a name="line243"></a>				}
+<a name="line244"></a>				$brief .= " ".$demand->good->type.", <a href='".site_url($demand->good->type.'s/'.$demand->good->id)."'>".$demand->good->title."</a>";
+<a name="line245"></a>				$decider_summary_demands[] = $brief;
+<a name="line246"></a>			}
+<a name="line247"></a>			$decider_summary .= implode(" and ",$decider_summary_demands);
+<a name="line248"></a>			
+<a name="line249"></a>			$transactions[$key]->language->decider_summary = $decider_summary;
+<a name="line250"></a>			
+<a name="line251"></a>			// Demander summary
+<a name="line252"></a>			$demander_summary = "You requested to ";
+<a name="line253"></a>			
+<a name="line254"></a>			$demander_link = "<a href='".site_url('people/'.$val->decider->id)."'>".$val->decider->screen_name."'s</a> ";
+<a name="line255"></a>			
+<a name="line256"></a>			$demander_summary_demands = array();
+<a name="line257"></a>			foreach($val->demands as $demand)
+<a name="line258"></a>			{
+<a name="line259"></a>				$brief = $demand->type." ";
+<a name="line260"></a>				if($demand->good->user_id!=$val->demander->id)
+<a name="line261"></a>				{
+<a name="line262"></a>					$brief .= $demander_link;
+<a name="line263"></a>				}
+<a name="line264"></a>				else
+<a name="line265"></a>				{
+<a name="line266"></a>					$brief .= "your";
+<a name="line267"></a>				}
+<a name="line268"></a>				$brief .= " ".$demand->good->type.", <a href='".site_url($demand->good->type.'s/'.$demand->good->id)."'>".$demand->good->title."</a>";
+<a name="line269"></a>				
+<a name="line270"></a>				$demander_summary_demands[] = $brief;
+<a name="line271"></a>			}
+<a name="line272"></a>			$demander_summary .= implode(" and ",$demander_summary_demands);
+<a name="line273"></a>			
+<a name="line274"></a>			$transactions[$key]->language->demander_summary = $demander_summary;
+<a name="line275"></a>			
+<a name="line276"></a>			// Set type
+<a name="line277"></a>			$transactions[$key]->type = (count($val->demands)>1) ? "Complex" : $val->demands[0]->type;
+<a name="line278"></a>				
+<a name="line279"></a>		}
+<a name="line280"></a>		
+<a name="line281"></a>		//print_r($transactions);
+<a name="line282"></a>
+<a name="line283"></a>		Console::logSpeed('Factory::transaction(): done.');
+<a name="line284"></a>
+<a name="line285"></a>		return $transactions;
+<a name="line286"></a>	}
+<a name="line287"></a>	
+<a name="line288"></a>	/**
+<a name="line289"></a>	*	@todo make this its own class, then automatically pass
+<a name="line290"></a>	*	function calls made to this object redirect to an instance
+<a name="line291"></a>	*	of the Good_search class.
+<a name="line292"></a>	*
+<a name="line293"></a>	*/
+<a name="line294"></a>	function user( $result )
+<a name="line295"></a>	{
+<a name="line296"></a>		Console::logSpeed('Factory::user()');
+<a name="line297"></a>	
+<a name="line298"></a>		// Stores formatted result objects
+<a name="line299"></a>		$users = array();
+<a name="line300"></a>	
+<a name="line301"></a>		// Loop over results
+<a name="line302"></a>		foreach( $result as $row )
+<a name="line303"></a>		{
+<a name="line304"></a>			// Create object and its child objects
+<a name="line305"></a>			$user = (object) array(
+<a name="line306"></a>				"location"=>new stdClass,
+<a name="line307"></a>				"default_photo"=>new stdClass
+<a name="line308"></a>			);
+<a name="line309"></a>			
+<a name="line310"></a>			// Loop over row columns
+<a name="line311"></a>			foreach( $row as $key=>$val )
+<a name="line312"></a>			{
+<a name="line313"></a>				$object = substr($key, 0, strpos($key, "_"));
+<a name="line314"></a>				$key = substr(strstr($key, "_"), 1);
+<a name="line315"></a>				
+<a name="line316"></a>				// Copy Good properties to main object
+<a name="line317"></a>				if( $object == "user")
+<a name="line318"></a>				{
+<a name="line319"></a>					$user->$key = $val;
+<a name="line320"></a>				}
+<a name="line321"></a>				
+<a name="line322"></a>				// Copy other properties to their child objects
+<a name="line323"></a>				elseif($object == "photo")
+<a name="line324"></a>				{
+<a name="line325"></a>					if( empty( $user->default_photo->id ) )
+<a name="line326"></a>					{
+<a name="line327"></a>						// @todo define default user photo via config file
+<a name="line328"></a>						if($user->photo_source=="giftflow")
+<a name="line329"></a>						{
+<a name="line330"></a>							$user->default_photo->thumb_url = base_url()."assets/images/default_user_photo.jpg";
+<a name="line331"></a>							$user->default_photo->url = base_url()."assets/images/default_user_photo.jpg";
+<a name="line332"></a>						}
+<a name="line333"></a>						else if($user->photo_source == "facebook" && !empty( $user->facebook_id ))
+<a name="line334"></a>						{
+<a name="line335"></a>							$user->default_photo->thumb_url = "http://graph.facebook.com/".$user->facebook_id."/picture?type=square";
+<a name="line336"></a>							$user->default_photo->url = "http://graph.facebook.com/".$user->facebook_id."/picture?type=large";
+<a name="line337"></a>						}
+<a name="line338"></a>					}
+<a name="line339"></a>					else
+<a name="line340"></a>					{
+<a name="line341"></a>						$user->$object->$key = $val;
+<a name="line342"></a>					}
+<a name="line343"></a>				}
+<a name="line344"></a>				else
+<a name="line345"></a>				{
+<a name="line346"></a>					$user->$object->$key = $val;
+<a name="line347"></a>				}
+<a name="line348"></a>			}
+<a name="line349"></a>			
+<a name="line350"></a>			// Add new object to $users array
+<a name="line351"></a>			$users[] = $user;
+<a name="line352"></a>		}
+<a name="line353"></a>		Console::logSpeed('Factory::user(): done.');
+<a name="line354"></a>		return $users;
+<a name="line355"></a>	}
+<a name="line356"></a>}</pre>
+<div class="header">
+<h1>GiftFlow API</h1>
+<ul>
+<li><a href="../../overview-summary.html">Overview</a></li>
+<li>Package</li><li>Class</li><li>Tree</li><li><a href="../../overview-files.html">Files</a></li>
+<li><a href="../../deprecated-list.html">Deprecated</a></li>
+<li><a href="../../index-all.html">Index</a></li>
+</ul>
+</div>
+
+<div class="small_links">
+<a href="../../index.html" target="_top">Frames</a>
+<a href="../../source/libraries/factory.php.html" target="_top">No frames</a>
+</div>
+<hr>
+
+<p id="footer">This document was generated by <a href="http://peej.github.com/phpdoctor/">PHPDoctor: The PHP Documentation Creator</a></p>
+
+</body>
+
+</html>

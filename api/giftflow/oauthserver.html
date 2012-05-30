@@ -1,0 +1,306 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+
+<html lang="en">
+<head>
+
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
+<meta name="generator" content="PHPDoctor 2RC4 (http://peej.github.com/phpdoctor/)">
+<meta name="when" content="Wed, 09 Feb 2011 20:22:55 +0000">
+
+<link rel="stylesheet" type="text/css" href="../stylesheet.css">
+<link rel="start" href="../overview-summary.html">
+
+<title>OAuthServer (GiftFlow API)</title>
+
+</head>
+<body id="definition" onload="parent.document.title=document.title;">
+
+<div class="header">
+<h1>GiftFlow API</h1>
+<ul>
+<li><a href="../overview-summary.html">Overview</a></li>
+<li><a href="../giftflow/package-summary.html">Package</a></li>
+<li class="active">Class</li>
+<li><a href="../giftflow/package-tree.html">Tree</a></li>
+<li><a href="../overview-files.html">Files</a></li>
+<li><a href="../deprecated-list.html">Deprecated</a></li>
+<li><a href="../index-all.html">Index</a></li>
+</ul>
+</div>
+
+<div class="small_links">
+<a href="../index.html" target="_top">Frames</a>
+<a href="../giftflow/oauthserver.html" target="_top">No frames</a>
+</div>
+<div class="small_links">
+Summary: <a href="#summary_field">Field</a> | <a href="#summary_method">Method</a> | <a href="#summary_constr">Constr</a>
+Detail: <a href="#detail_field">Field</a> | <a href="#detail_method">Method</a> | <a href="#summary_constr">Constr</a>
+</div>
+<hr>
+
+<div class="qualifiedName">GiftFlow\OAuthServer</div>
+<a href="../source/libraries/auth/oauth.php.html#line548" class="location">libraries/Auth/OAuth.php at line 548</a>
+
+<h1>Class OAuthServer</h1>
+
+<pre class="tree"><strong>OAuthServer</strong><br /></pre>
+
+<hr>
+
+<p class="signature">public  class <strong>OAuthServer</strong></p>
+
+<hr>
+
+<table id="summary_field">
+<tr><th colspan="2">Field Summary</th></tr>
+<tr>
+<td class="type">protected  mixed</td>
+<td class="description"><p class="name"><a href="#data_store">$data_store</a></p></td>
+</tr>
+<tr>
+<td class="type">protected  mixed</td>
+<td class="description"><p class="name"><a href="#signature_methods">$signature_methods</a></p></td>
+</tr>
+<tr>
+<td class="type">protected  mixed</td>
+<td class="description"><p class="name"><a href="#timestamp_threshold">$timestamp_threshold</a></p></td>
+</tr>
+<tr>
+<td class="type">protected  mixed</td>
+<td class="description"><p class="name"><a href="#version">$version</a></p></td>
+</tr>
+</table>
+
+<table id="summary_method">
+<tr><th colspan="2">Method Summary</th></tr>
+<tr>
+<td class="type"> void</td>
+<td class="description"><p class="name"><a href="#__construct()">__construct</a>(mixed data_store)</p></td>
+</tr>
+<tr>
+<td class="type"> void</td>
+<td class="description"><p class="name"><a href="#add_signature_method()">add_signature_method</a>(mixed signature_method)</p></td>
+</tr>
+<tr>
+<td class="type">private  void</td>
+<td class="description"><p class="name"><a href="#check_nonce()">check_nonce</a>(mixed consumer, mixed token, mixed nonce, mixed timestamp)</p><p class="description">check that the nonce is not repeated</p></td>
+</tr>
+<tr>
+<td class="type">private  void</td>
+<td class="description"><p class="name"><a href="#check_signature()">check_signature</a>(mixed request, mixed consumer, mixed token)</p><p class="description">all-in-one function to check the signature on a request
+should guess the signature method appropriately</p></td>
+</tr>
+<tr>
+<td class="type">private  void</td>
+<td class="description"><p class="name"><a href="#check_timestamp()">check_timestamp</a>(mixed timestamp)</p><p class="description">check that the timestamp is new enough</p></td>
+</tr>
+<tr>
+<td class="type"> void</td>
+<td class="description"><p class="name"><a href="#fetch_access_token()">fetch_access_token</a>(mixed request)</p><p class="description">process an access_token request
+returns the access token on success</p></td>
+</tr>
+<tr>
+<td class="type"> void</td>
+<td class="description"><p class="name"><a href="#fetch_request_token()">fetch_request_token</a>(mixed request)</p><p class="description">process a request_token request
+returns the request token on success</p></td>
+</tr>
+<tr>
+<td class="type">private  void</td>
+<td class="description"><p class="name"><a href="#get_consumer()">get_consumer</a>(mixed request)</p><p class="description">try to find the consumer for the provided request's consumer key</p></td>
+</tr>
+<tr>
+<td class="type">private  void</td>
+<td class="description"><p class="name"><a href="#get_signature_method()">get_signature_method</a>(mixed request)</p><p class="description">figure out the signature with some defaults</p></td>
+</tr>
+<tr>
+<td class="type">private  void</td>
+<td class="description"><p class="name"><a href="#get_token()">get_token</a>(mixed request, mixed consumer, str token_type)</p><p class="description">try to find the token for the provided request's token key</p></td>
+</tr>
+<tr>
+<td class="type">private  void</td>
+<td class="description"><p class="name"><a href="#get_version()">get_version</a>(mixed request)</p><p class="description">version 1</p></td>
+</tr>
+<tr>
+<td class="type"> void</td>
+<td class="description"><p class="name"><a href="#verify_request()">verify_request</a>(mixed request)</p><p class="description">verify an api call, checks all the parameters</p></td>
+</tr>
+</table>
+
+<h2 id="detail_field">Field Detail</h2>
+<a href="../source/libraries/auth/oauth.php.html#line554" class="location">libraries/Auth/OAuth.php at line 554</a>
+
+<h3 id="data_store">data_store</h3>
+<code class="signature">protected  mixed <strong>$data_store</strong></code>
+<div class="details">
+</div>
+
+<hr>
+
+<a href="../source/libraries/auth/oauth.php.html#line552" class="location">libraries/Auth/OAuth.php at line 552</a>
+
+<h3 id="signature_methods">signature_methods</h3>
+<code class="signature">protected  mixed <strong>$signature_methods</strong> = array()</code>
+<div class="details">
+</div>
+
+<hr>
+
+<a href="../source/libraries/auth/oauth.php.html#line550" class="location">libraries/Auth/OAuth.php at line 550</a>
+
+<h3 id="timestamp_threshold">timestamp_threshold</h3>
+<code class="signature">protected  mixed <strong>$timestamp_threshold</strong> = 300</code>
+<div class="details">
+</div>
+
+<hr>
+
+<a href="../source/libraries/auth/oauth.php.html#line551" class="location">libraries/Auth/OAuth.php at line 551</a>
+
+<h3 id="version">version</h3>
+<code class="signature">protected  mixed <strong>$version</strong> = 1.0</code>
+<div class="details">
+</div>
+
+<hr>
+
+<h2 id="detail_method">Method Detail</h2><div class="method_detail">
+<div class='method'><a href="../source/libraries/auth/oauth.php.html#line556" class="location">libraries/Auth/OAuth.php at line 556</a>
+
+<h3 id="__construct()">__construct</h3>
+<code class="signature">public  void <strong>__construct</strong>(mixed data_store)</code>
+<div class="details">
+</div></div>
+
+
+
+<div class='method'><a href="../source/libraries/auth/oauth.php.html#line561" class="location">libraries/Auth/OAuth.php at line 561</a>
+
+<h3 id="add_signature_method()">add_signature_method</h3>
+<code class="signature">public  void <strong>add_signature_method</strong>(mixed signature_method)</code>
+<div class="details">
+</div></div>
+
+
+
+<div class='method'><a href="../source/libraries/auth/oauth.php.html#line733" class="location">libraries/Auth/OAuth.php at line 733</a>
+
+<h3 id="check_nonce()">check_nonce</h3>
+<code class="signature">private  void <strong>check_nonce</strong>(mixed consumer, mixed token, mixed nonce, mixed timestamp)</code>
+<div class="details">
+<p>check that the nonce is not repeated</p></div></div>
+
+
+
+<div class='method'><a href="../source/libraries/auth/oauth.php.html#line697" class="location">libraries/Auth/OAuth.php at line 697</a>
+
+<h3 id="check_signature()">check_signature</h3>
+<code class="signature">private  void <strong>check_signature</strong>(mixed request, mixed consumer, mixed token)</code>
+<div class="details">
+<p>all-in-one function to check the signature on a request
+should guess the signature method appropriately</p></div></div>
+
+
+
+<div class='method'><a href="../source/libraries/auth/oauth.php.html#line720" class="location">libraries/Auth/OAuth.php at line 720</a>
+
+<h3 id="check_timestamp()">check_timestamp</h3>
+<code class="signature">private  void <strong>check_timestamp</strong>(mixed timestamp)</code>
+<div class="details">
+<p>check that the timestamp is new enough</p></div></div>
+
+
+
+<div class='method'><a href="../source/libraries/auth/oauth.php.html#line592" class="location">libraries/Auth/OAuth.php at line 592</a>
+
+<h3 id="fetch_access_token()">fetch_access_token</h3>
+<code class="signature">public  void <strong>fetch_access_token</strong>(mixed request)</code>
+<div class="details">
+<p>process an access_token request
+returns the access token on success</p></div></div>
+
+
+
+<div class='method'><a href="../source/libraries/auth/oauth.php.html#line572" class="location">libraries/Auth/OAuth.php at line 572</a>
+
+<h3 id="fetch_request_token()">fetch_request_token</h3>
+<code class="signature">public  void <strong>fetch_request_token</strong>(mixed request)</code>
+<div class="details">
+<p>process a request_token request
+returns the request token on success</p></div></div>
+
+
+
+<div class='method'><a href="../source/libraries/auth/oauth.php.html#line662" class="location">libraries/Auth/OAuth.php at line 662</a>
+
+<h3 id="get_consumer()">get_consumer</h3>
+<code class="signature">private  void <strong>get_consumer</strong>(mixed request)</code>
+<div class="details">
+<p>try to find the consumer for the provided request's consumer key</p></div></div>
+
+
+
+<div class='method'><a href="../source/libraries/auth/oauth.php.html#line645" class="location">libraries/Auth/OAuth.php at line 645</a>
+
+<h3 id="get_signature_method()">get_signature_method</h3>
+<code class="signature">private  void <strong>get_signature_method</strong>(mixed request)</code>
+<div class="details">
+<p>figure out the signature with some defaults</p></div></div>
+
+
+
+<div class='method'><a href="../source/libraries/auth/oauth.php.html#line682" class="location">libraries/Auth/OAuth.php at line 682</a>
+
+<h3 id="get_token()">get_token</h3>
+<code class="signature">private  void <strong>get_token</strong>(mixed request, mixed consumer, str token_type)</code>
+<div class="details">
+<p>try to find the token for the provided request's token key</p></div></div>
+
+
+
+<div class='method'><a href="../source/libraries/auth/oauth.php.html#line628" class="location">libraries/Auth/OAuth.php at line 628</a>
+
+<h3 id="get_version()">get_version</h3>
+<code class="signature">private  void <strong>get_version</strong>(mixed request)</code>
+<div class="details">
+<p>version 1</p></div></div>
+
+
+
+<div class='method'><a href="../source/libraries/auth/oauth.php.html#line611" class="location">libraries/Auth/OAuth.php at line 611</a>
+
+<h3 id="verify_request()">verify_request</h3>
+<code class="signature">public  void <strong>verify_request</strong>(mixed request)</code>
+<div class="details">
+<p>verify an api call, checks all the parameters</p></div></div>
+
+
+
+</div><div class="header">
+<h1>GiftFlow API</h1>
+<ul>
+<li><a href="../overview-summary.html">Overview</a></li>
+<li><a href="../giftflow/package-summary.html">Package</a></li>
+<li class="active">Class</li>
+<li><a href="../giftflow/package-tree.html">Tree</a></li>
+<li><a href="../overview-files.html">Files</a></li>
+<li><a href="../deprecated-list.html">Deprecated</a></li>
+<li><a href="../index-all.html">Index</a></li>
+</ul>
+</div>
+
+<div class="small_links">
+<a href="../index.html" target="_top">Frames</a>
+<a href="../giftflow/oauthserver.html" target="_top">No frames</a>
+</div>
+<div class="small_links">
+Summary: <a href="#summary_field">Field</a> | <a href="#summary_method">Method</a> | <a href="#summary_constr">Constr</a>
+Detail: <a href="#detail_field">Field</a> | <a href="#detail_method">Method</a> | <a href="#summary_constr">Constr</a>
+</div>
+<hr>
+
+<p id="footer">This document was generated by <a href="http://peej.github.com/phpdoctor/">PHPDoctor: The PHP Documentation Creator</a></p>
+
+</body>
+
+</html>

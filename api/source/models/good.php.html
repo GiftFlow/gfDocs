@@ -1,0 +1,338 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+
+<html lang="en">
+<head>
+
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
+<meta name="generator" content="PHPDoctor 2RC4 (http://peej.github.com/phpdoctor/)">
+<meta name="when" content="Wed, 09 Feb 2011 20:22:56 +0000">
+
+<link rel="stylesheet" type="text/css" href="../../stylesheet.css">
+<link rel="start" href="../../overview-summary.html">
+
+<title>models/good.php (GiftFlow API)</title>
+
+</head>
+<body id="file" onload="parent.document.title=document.title;">
+
+<div class="header">
+<h1>GiftFlow API</h1>
+<ul>
+<li><a href="../../overview-summary.html">Overview</a></li>
+<li>Package</li><li>Class</li><li>Tree</li><li><a href="../../overview-files.html">Files</a></li>
+<li><a href="../../deprecated-list.html">Deprecated</a></li>
+<li><a href="../../index-all.html">Index</a></li>
+</ul>
+</div>
+
+<div class="small_links">
+<a href="../../index.html" target="_top">Frames</a>
+<a href="../../source/models/good.php.html" target="_top">No frames</a>
+</div>
+<hr>
+
+<h1>models/good.php</h1>
+<hr>
+
+<a name="line1"></a><pre><?php
+<a name="line2"></a>/**
+<a name="line3"></a>*	The Good object is used primarily to store two types of objects:
+<a name="line4"></a>*	Gifts and Needs.
+<a name="line5"></a>*
+<a name="line6"></a>*	@author Brandon Jackson
+<a name="line7"></a>*	@package App
+<a name="line8"></a>*	@version 0.1
+<a name="line9"></a>*/
+<a name="line10"></a>
+<a name="line11"></a>class Good extends DataMapperExtension {
+<a name="line12"></a>
+<a name="line13"></a>	/**
+<a name="line14"></a>	*	CodeIgniter super-object
+<a name="line15"></a>	*	@var object
+<a name="line16"></a>	*/
+<a name="line17"></a>	protected $CI;
+<a name="line18"></a>
+<a name="line19"></a>
+<a name="line20"></a>	var $created_field = 'created';
+<a name="line21"></a>	var $error_prefix = "<p class='alert_error'>";
+<a name="line22"></a>	var $error_suffix = "</p>";
+<a name="line23"></a>	var $active_transaction;
+<a name="line24"></a>  
+<a name="line25"></a>	/**
+<a name="line26"></a>	*	Has-one relationships
+<a name="line27"></a>	*/
+<a name="line28"></a>	var $has_one = array(
+<a name="line29"></a>		"user",
+<a name="line30"></a>		"default_photo"=> array (
+<a name="line31"></a>			'class' => 'photo'
+<a name="line32"></a>		),
+<a name="line33"></a>		"location"
+<a name="line34"></a>		);
+<a name="line35"></a>	
+<a name="line36"></a>	var $has_many = array(
+<a name="line37"></a>		"photo", 
+<a name="line38"></a>		"tag"
+<a name="line39"></a>	);
+<a name="line40"></a>	
+<a name="line41"></a>	/**
+<a name="line42"></a>	* 	Validation rules
+<a name="line43"></a>	*	
+<a name="line44"></a>	*/
+<a name="line45"></a>	var $validation = array(
+<a name="line46"></a>		'title' => array(
+<a name="line47"></a>			'rules' => array(
+<a name="line48"></a>				'required'
+<a name="line49"></a>			),
+<a name="line50"></a>			'label' => 'Title'
+<a name="line51"></a>		),
+<a name="line52"></a>		'description' => array(
+<a name="line53"></a>			'rules' => array(),
+<a name="line54"></a>			'label' => 'Description',
+<a name="line55"></a>			'type'=>'textarea'
+<a name="line56"></a>		),
+<a name="line57"></a>		'location' => array(
+<a name="line58"></a>			"rules"=> array(),
+<a name="line59"></a>			'label' => "Location",
+<a name="line60"></a>			"type"=>"dropdown"
+<a name="line61"></a>		)
+<a name="line62"></a>	);
+<a name="line63"></a>	
+<a name="line64"></a>	/**
+<a name="line65"></a>	*	@param int $id
+<a name="line66"></a>	*/
+<a name="line67"></a>
+<a name="line68"></a>	function __construct( $id = NULL )
+<a name="line69"></a>	{
+<a name="line70"></a>		parent::__construct( $id );
+<a name="line71"></a>		$this->CI =& get_instance();
+<a name="line72"></a>	}
+<a name="line73"></a>
+<a name="line74"></a>	function get_htmlform_list( $object, $field )
+<a name="line75"></a>	{
+<a name="line76"></a>		$this->where('user_id', $this->session->userdata('user_id'))->get('locations');
+<a name="line77"></a>	}
+<a name="line78"></a>	
+<a name="line79"></a>	/**
+<a name="line80"></a>	*	Saves a tag relationship. Updates tag count.
+<a name="line81"></a>	*	@param string/object $tag		either tag's name or Tag object
+<a name="line82"></a>	*/
+<a name="line83"></a>	function add_tag($tag)
+<a name="line84"></a>	{
+<a name="line85"></a>		Console::logSpeed("Good::add_tag()");
+<a name="line86"></a>		
+<a name="line87"></a>		// $tag is tag's name
+<a name="line88"></a>		if(is_string($tag))
+<a name="line89"></a>		{
+<a name="line90"></a>			$tag_name = strtolower($tag);
+<a name="line91"></a>			$T = new Tag();
+<a name="line92"></a>			
+<a name="line93"></a>			// Search for tags with this name
+<a name="line94"></a>			$T->where('name', $tag_name)
+<a name="line95"></a>				->get();
+<a name="line96"></a>		}
+<a name="line97"></a>		
+<a name="line98"></a>		// $tag is a Tag object
+<a name="line99"></a>		else
+<a name="line100"></a>		{
+<a name="line101"></a>			$T = $tag;
+<a name="line102"></a>		}
+<a name="line103"></a>		
+<a name="line104"></a>		// If no matching tags already exist, create one
+<a name="line105"></a>		if(count($T->all) == 0)
+<a name="line106"></a>		{
+<a name="line107"></a>			$New_Tag = new Tag();
+<a name="line108"></a>			$New_Tag->name = $tag_name;
+<a name="line109"></a>			$New_Tag->count = 1;
+<a name="line110"></a>			$New_Tag->save();
+<a name="line111"></a>			
+<a name="line112"></a>			// Save relationship to this Good
+<a name="line113"></a>			$this->save($New_Tag);
+<a name="line114"></a>			return TRUE;
+<a name="line115"></a>		}
+<a name="line116"></a>		
+<a name="line117"></a>		// If matching tags exist, save relationship
+<a name="line118"></a>		else
+<a name="line119"></a>		{
+<a name="line120"></a>			// See if relationship already exists
+<a name="line121"></a>			$Good_Tag = new Tag();
+<a name="line122"></a>			$Good_Tag->where_related('good','id', $this->id)
+<a name="line123"></a>				->where('name',$tag_name )
+<a name="line124"></a>				->get();
+<a name="line125"></a>			
+<a name="line126"></a>			// If relationship doesn't exist, create it
+<a name="line127"></a>			if(count($Good_Tag->all)==0)
+<a name="line128"></a>			{
+<a name="line129"></a>				// Update the tag's count field
+<a name="line130"></a>				$T->count = count($T->all)+1;
+<a name="line131"></a>				$T->save();
+<a name="line132"></a>				
+<a name="line133"></a>				// Save relationship
+<a name="line134"></a>				$this->save($T);
+<a name="line135"></a>				return TRUE;
+<a name="line136"></a>			}
+<a name="line137"></a>			
+<a name="line138"></a>			// Relationship already exists
+<a name="line139"></a>			else
+<a name="line140"></a>			{
+<a name="line141"></a>				return FALSE;
+<a name="line142"></a>			}
+<a name="line143"></a>		}
+<a name="line144"></a>	}
+<a name="line145"></a>	
+<a name="line146"></a>	/**
+<a name="line147"></a>	*	Deletes a tag relationship. Updates tag count.
+<a name="line148"></a>	*	@param string/object $tag		either tag's name or Tag object
+<a name="line149"></a>	*/
+<a name="line150"></a>	function remove_tag($tag)
+<a name="line151"></a>	{
+<a name="line152"></a>		Console::logSpeed("Good::add_tag()");
+<a name="line153"></a>
+<a name="line154"></a>		$tag_name = is_string($tag) ? strtolower($tag_name) : $tag->name;
+<a name="line155"></a>		
+<a name="line156"></a>		// Search for tags with this name related to this good
+<a name="line157"></a>		$T = new Tag();
+<a name="line158"></a>		$T->where('name', $tag_name)
+<a name="line159"></a>			->where_related_good('id',$this->id)
+<a name="line160"></a>			->where_related_good('status','active')
+<a name="line161"></a>			->get();
+<a name="line162"></a>		
+<a name="line163"></a>		// If tag found, begin removal process
+<a name="line164"></a>		if(count($T->all)>0)
+<a name="line165"></a>		{
+<a name="line166"></a>			// Remove relationship
+<a name="line167"></a>			$this->delete($T);
+<a name="line168"></a>
+<a name="line169"></a>			// Decrement Tag's count field (use active record since count
+<a name="line170"></a>			// is a reserved word in datamapper)
+<a name="line171"></a>			if(($T->count - 1)>0)
+<a name="line172"></a>			{
+<a name="line173"></a>				$this->CI->db->where("id",$T->id)
+<a name="line174"></a>					->update("tags",array("count"=>($T->count - 1)));
+<a name="line175"></a>			}
+<a name="line176"></a>			
+<a name="line177"></a>			// @todo If tag not used by any other good, delete it
+<a name="line178"></a>			else
+<a name="line179"></a>			{
+<a name="line180"></a>				// $T->delete();
+<a name="line181"></a>			}
+<a name="line182"></a>		}
+<a name="line183"></a>	}
+<a name="line184"></a>    	
+<a name="line185"></a>	/**
+<a name="line186"></a>	*	This function loads a list of requests related to this good object.
+<a name="line187"></a>	*
+<a name="line188"></a>	*	@param string $status 	(optional) filter by status
+<a name="line189"></a>	*	@return array				array of Transaction objects
+<a name="line190"></a>	*/
+<a name="line191"></a>	function requests( $status = NULL )
+<a name="line192"></a>	{
+<a name="line193"></a>		// Create Transaction object
+<a name="line194"></a>		$T = new Transaction();
+<a name="line195"></a>		
+<a name="line196"></a>		// Filter by status
+<a name="line197"></a>		if( !empty( $status) )
+<a name="line198"></a>		{	
+<a name="line199"></a>
+<a name="line200"></a>			// Multiple statii provided to filter by
+<a name="line201"></a>			if( is_array($status))
+<a name="line202"></a>			{
+<a name="line203"></a>				$T->where_in('status', $status);
+<a name="line204"></a>			}
+<a name="line205"></a>			
+<a name="line206"></a>			// Single status provided to filter by
+<a name="line207"></a>			else
+<a name="line208"></a>			{
+<a name="line209"></a>				$T->where('status', $status);
+<a name="line210"></a>			}
+<a name="line211"></a>		}
+<a name="line212"></a>		
+<a name="line213"></a>		// Execute query
+<a name="line214"></a>		$T	->where_related_good('id', $this->id)
+<a name="line215"></a>			->order_by('created', 'desc')
+<a name="line216"></a>			->include_related('user', "*", TRUE, TRUE)
+<a name="line217"></a>			->get();
+<a name="line218"></a>
+<a name="line219"></a>		// Return result
+<a name="line220"></a>		return $T->all;
+<a name="line221"></a>    	}
+<a name="line222"></a>    	
+<a name="line223"></a>    	/**
+<a name="line224"></a>    	*	@param int $user_id		ID of user whose request you're requesting
+<a name="line225"></a>    	*	@return mixed
+<a name="line226"></a>    	*/
+<a name="line227"></a>    	function request_status( $user_id )
+<a name="line228"></a>    	{
+<a name="line229"></a>		$T = new Transaction();
+<a name="line230"></a>		$T->where_related_user('id',$user_id)
+<a name="line231"></a>			->where_related_good('id', $this->id)
+<a name="line232"></a>			->get();
+<a name="line233"></a>		if($T->exists())
+<a name="line234"></a>		{
+<a name="line235"></a>			return array(	"status"=>$T->all[0]->status,
+<a name="line236"></a>							"request"=>$T->all[0]);
+<a name="line237"></a>		}
+<a name="line238"></a>		else
+<a name="line239"></a>		{
+<a name="line240"></a>			return "unrequested";
+<a name="line241"></a>		}
+<a name="line242"></a>    	}
+<a name="line243"></a>    	/**
+<a name="line244"></a>    	*	Loads the current active transaction for this gift.
+<a name="line245"></a>    	*
+<a name="line246"></a>    	*	@return Transaction
+<a name="line247"></a>    	*	@return Array
+<a name="line248"></a>    	*/
+<a name="line249"></a>    	function active_transaction()
+<a name="line250"></a>    	{
+<a name="line251"></a>		$T = new Transaction();
+<a name="line252"></a>		$T	->where_related_good('id', $this->id)
+<a name="line253"></a>			->where_in('status',array('accepted', 'exchanged') )
+<a name="line254"></a>			->order_by('created', 'desc')
+<a name="line255"></a>			->include_related('user','*', FALSE, TRUE)
+<a name="line256"></a>			->get();
+<a name="line257"></a>		if(count($T->all)==1)
+<a name="line258"></a>		{
+<a name="line259"></a>			return $T->all[0];
+<a name="line260"></a>		}
+<a name="line261"></a>		else
+<a name="line262"></a>		{
+<a name="line263"></a>			return $T->all;
+<a name="line264"></a>		}
+<a name="line265"></a>    	}
+<a name="line266"></a>    	
+<a name="line267"></a>    	function active_transactions()
+<a name="line268"></a>    	{
+<a name="line269"></a>    		/*$q=$this->db->from('transactions AS T ')
+<a name="line270"></a>    					->join('goods_transactions AS GT ', 'T.id = GT.request_id')
+<a name="line271"></a>    					->join('transactions_users AS TU ', 'T.id = TU.transaction_id')
+<a name="line272"></a>    					->where('GT.gift_id', $this->id)
+<a name="line273"></a>					->where_in('T.status',array('accepted', 'exchanged') )
+<a name="line274"></a>					->order_by('T.created', 'desc')
+<a name="line275"></a>					->get();
+<a name="line276"></a>		$T = $q->result();*/
+<a name="line277"></a>    	}
+<a name="line278"></a>}
+<a name="line279"></a>?>
+<a name="line280"></a></pre>
+<div class="header">
+<h1>GiftFlow API</h1>
+<ul>
+<li><a href="../../overview-summary.html">Overview</a></li>
+<li>Package</li><li>Class</li><li>Tree</li><li><a href="../../overview-files.html">Files</a></li>
+<li><a href="../../deprecated-list.html">Deprecated</a></li>
+<li><a href="../../index-all.html">Index</a></li>
+</ul>
+</div>
+
+<div class="small_links">
+<a href="../../index.html" target="_top">Frames</a>
+<a href="../../source/models/good.php.html" target="_top">No frames</a>
+</div>
+<hr>
+
+<p id="footer">This document was generated by <a href="http://peej.github.com/phpdoctor/">PHPDoctor: The PHP Documentation Creator</a></p>
+
+</body>
+
+</html>

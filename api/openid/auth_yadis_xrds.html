@@ -1,0 +1,187 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+
+<html lang="en">
+<head>
+
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
+<meta name="generator" content="PHPDoctor 2RC4 (http://peej.github.com/phpdoctor/)">
+<meta name="when" content="Wed, 09 Feb 2011 20:22:55 +0000">
+
+<link rel="stylesheet" type="text/css" href="../stylesheet.css">
+<link rel="start" href="../overview-summary.html">
+
+<title>Auth_Yadis_XRDS (GiftFlow API)</title>
+
+</head>
+<body id="definition" onload="parent.document.title=document.title;">
+
+<div class="header">
+<h1>GiftFlow API</h1>
+<ul>
+<li><a href="../overview-summary.html">Overview</a></li>
+<li><a href="../openid/package-summary.html">Package</a></li>
+<li class="active">Class</li>
+<li><a href="../openid/package-tree.html">Tree</a></li>
+<li><a href="../overview-files.html">Files</a></li>
+<li><a href="../deprecated-list.html">Deprecated</a></li>
+<li><a href="../index-all.html">Index</a></li>
+</ul>
+</div>
+
+<div class="small_links">
+<a href="../index.html" target="_top">Frames</a>
+<a href="../openid/auth_yadis_xrds.html" target="_top">No frames</a>
+</div>
+<div class="small_links">
+Summary: <a href="#summary_field">Field</a> | <a href="#summary_method">Method</a> | <a href="#summary_constr">Constr</a>
+Detail: <a href="#detail_field">Field</a> | <a href="#detail_method">Method</a> | <a href="#summary_constr">Constr</a>
+</div>
+<hr>
+
+<div class="qualifiedName">OpenID\Auth_Yadis_XRDS</div>
+<a href="../source/libraries/auth/yadis/xrds.php.html#line252" class="location">libraries/Auth/Yadis/XRDS.php at line 252</a>
+
+<h1>Class Auth_Yadis_XRDS</h1>
+
+<pre class="tree"><strong>Auth_Yadis_XRDS</strong><br /></pre>
+
+<hr>
+
+<p class="signature">public  class <strong>Auth_Yadis_XRDS</strong></p>
+
+<div class="comment" id="overview_description"><p>This class performs parsing of XRDS documents.</p><p>You should not instantiate this class directly; rather, call
+parseXRDS statically:</p><p><pre>  $xrds = Auth_Yadis_XRDS::parseXRDS($xml_string);</pre></p><p>If the XRDS can be parsed and is valid, an instance of
+Auth_Yadis_XRDS will be returned.  Otherwise, null will be
+returned.  This class is used by the Auth_Yadis_Yadis::discover
+method.</p></div>
+
+<hr>
+
+<table id="summary_method">
+<tr><th colspan="2">Method Summary</th></tr>
+<tr>
+<td class="type"> void</td>
+<td class="description"><p class="name"><a href="#__construct()">__construct</a>(mixed xmlParser, mixed xrdNodes)</p><p class="description">Instantiate a Auth_Yadis_XRDS object. </p></td>
+</tr>
+<tr>
+<td class="type">private  void</td>
+<td class="description"><p class="name"><a href="#_addService()">_addService</a>(mixed priority, mixed service)</p><p class="description"></p></td>
+</tr>
+<tr>
+<td class="type">private  void</td>
+<td class="description"><p class="name"><a href="#_parse()">_parse</a>()</p><p class="description">Creates the service list using nodes from the XRDS XML
+document.</p></td>
+</tr>
+<tr>
+<td class="type">static  mixed</td>
+<td class="description"><p class="name"><a href="#parseXRDS()">parseXRDS</a>(string xml_string, mixed extra_ns_map)</p><p class="description">Parse an XML string (XRDS document) and return either a
+Auth_Yadis_XRDS object or null, depending on whether the
+XRDS XML is valid.</p></td>
+</tr>
+<tr>
+<td class="type"> mixed</td>
+<td class="description"><p class="name"><a href="#services()">services</a>(mixed filters, integer filter_mode)</p><p class="description">Returns a list of service objects which correspond to 
+elements in the XRDS XML document for this object.
+</p></td>
+</tr>
+</table>
+
+<h2 id="detail_method">Method Detail</h2><div class="method_detail">
+<div class='method'><a href="../source/libraries/auth/yadis/xrds.php.html#line258" class="location">libraries/Auth/Yadis/XRDS.php at line 258</a>
+
+<h3 id="__construct()">__construct</h3>
+<code class="signature">public  void <strong>__construct</strong>(mixed xmlParser, mixed xrdNodes)</code>
+<div class="details">
+<p>Instantiate a Auth_Yadis_XRDS object.  Requires an XPath
+instance which has been used to parse a valid XRDS document.</p></div></div>
+
+
+
+<div class='method'><a href="../source/libraries/auth/yadis/xrds.php.html#line331" class="location">libraries/Auth/Yadis/XRDS.php at line 331</a>
+
+<h3 id="_addService()">_addService</h3>
+<code class="signature">private  void <strong>_addService</strong>(mixed priority, mixed service)</code>
+<div class="details">
+<p></p></div></div>
+
+
+
+<div class='method'><a href="../source/libraries/auth/yadis/xrds.php.html#line348" class="location">libraries/Auth/Yadis/XRDS.php at line 348</a>
+
+<h3 id="_parse()">_parse</h3>
+<code class="signature">private  void <strong>_parse</strong>()</code>
+<div class="details">
+<p>Creates the service list using nodes from the XRDS XML
+document.</p></div></div>
+
+
+
+<div class='method'><a href="../source/libraries/auth/yadis/xrds.php.html#line276" class="location">libraries/Auth/Yadis/XRDS.php at line 276</a>
+
+<h3 id="parseXRDS()">parseXRDS</h3>
+<code class="signature">public static  mixed <strong>parseXRDS</strong>(string xml_string, mixed extra_ns_map)</code>
+<div class="details">
+<p>Parse an XML string (XRDS document) and return either a
+Auth_Yadis_XRDS object or null, depending on whether the
+XRDS XML is valid.</p><dl>
+<dt>Parameters:</dt>
+<dd>xml_string - An XRDS XML string.</dd>
+<dt>Returns:</dt>
+<dd>$xrds An instance of Auth_Yadis_XRDS or null, depending on the validity of $xml_string</dd>
+</dl>
+</div></div>
+
+
+
+<div class='method'><a href="../source/libraries/auth/yadis/xrds.php.html#line393" class="location">libraries/Auth/Yadis/XRDS.php at line 393</a>
+
+<h3 id="services()">services</h3>
+<code class="signature">public  mixed <strong>services</strong>(mixed filters, integer filter_mode)</code>
+<div class="details">
+<p>Returns a list of service objects which correspond to <Service>
+elements in the XRDS XML document for this object.</p><p>Optionally, an array of filter callbacks may be given to limit
+the list of returned service objects.  Furthermore, the default
+mode is to return all service objects which match ANY of the
+specified filters, but $filter_mode may be
+SERVICES_YADIS_MATCH_ALL if you want to be sure that the
+returned services match all the given filters.  See  for detailed usage information on filter
+functions.</p><dl>
+<dt>Parameters:</dt>
+<dd>filters - An array of callbacks to filter the returned services, or null if all services are to be returned.</dd>
+<dd>filter_mode - SERVICES_YADIS_MATCH_ALL or SERVICES_YADIS_MATCH_ANY, depending on whether the returned services should match ALL or ANY of the specified filters, respectively.</dd>
+<dt>Returns:</dt>
+<dd>$services An array of {@link Auth_Yadis_Service} objects if $filter_mode is a valid mode; null if $filter_mode is an invalid mode (i.e., not SERVICES_YADIS_MATCH_ANY or SERVICES_YADIS_MATCH_ALL).</dd>
+</dl>
+</div></div>
+
+
+
+</div><div class="header">
+<h1>GiftFlow API</h1>
+<ul>
+<li><a href="../overview-summary.html">Overview</a></li>
+<li><a href="../openid/package-summary.html">Package</a></li>
+<li class="active">Class</li>
+<li><a href="../openid/package-tree.html">Tree</a></li>
+<li><a href="../overview-files.html">Files</a></li>
+<li><a href="../deprecated-list.html">Deprecated</a></li>
+<li><a href="../index-all.html">Index</a></li>
+</ul>
+</div>
+
+<div class="small_links">
+<a href="../index.html" target="_top">Frames</a>
+<a href="../openid/auth_yadis_xrds.html" target="_top">No frames</a>
+</div>
+<div class="small_links">
+Summary: <a href="#summary_field">Field</a> | <a href="#summary_method">Method</a> | <a href="#summary_constr">Constr</a>
+Detail: <a href="#detail_field">Field</a> | <a href="#detail_method">Method</a> | <a href="#summary_constr">Constr</a>
+</div>
+<hr>
+
+<p id="footer">This document was generated by <a href="http://peej.github.com/phpdoctor/">PHPDoctor: The PHP Documentation Creator</a></p>
+
+</body>
+
+</html>

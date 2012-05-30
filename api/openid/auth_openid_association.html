@@ -1,0 +1,347 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+
+<html lang="en">
+<head>
+
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
+<meta name="generator" content="PHPDoctor 2RC4 (http://peej.github.com/phpdoctor/)">
+<meta name="when" content="Wed, 09 Feb 2011 20:22:55 +0000">
+
+<link rel="stylesheet" type="text/css" href="../stylesheet.css">
+<link rel="start" href="../overview-summary.html">
+
+<title>Auth_OpenID_Association (GiftFlow API)</title>
+
+</head>
+<body id="definition" onload="parent.document.title=document.title;">
+
+<div class="header">
+<h1>GiftFlow API</h1>
+<ul>
+<li><a href="../overview-summary.html">Overview</a></li>
+<li><a href="../openid/package-summary.html">Package</a></li>
+<li class="active">Class</li>
+<li><a href="../openid/package-tree.html">Tree</a></li>
+<li><a href="../overview-files.html">Files</a></li>
+<li><a href="../deprecated-list.html">Deprecated</a></li>
+<li><a href="../index-all.html">Index</a></li>
+</ul>
+</div>
+
+<div class="small_links">
+<a href="../index.html" target="_top">Frames</a>
+<a href="../openid/auth_openid_association.html" target="_top">No frames</a>
+</div>
+<div class="small_links">
+Summary: <a href="#summary_field">Field</a> | <a href="#summary_method">Method</a> | <a href="#summary_constr">Constr</a>
+Detail: <a href="#detail_field">Field</a> | <a href="#detail_method">Method</a> | <a href="#summary_constr">Constr</a>
+</div>
+<hr>
+
+<div class="qualifiedName">OpenID\Auth_OpenID_Association</div>
+<a href="../source/libraries/auth/openid/association.php.html#line44" class="location">libraries/Auth/OpenID/Association.php at line 44</a>
+
+<h1>Class Auth_OpenID_Association</h1>
+
+<pre class="tree"><strong>Auth_OpenID_Association</strong><br /></pre>
+
+<hr>
+
+<p class="signature">private  class <strong>Auth_OpenID_Association</strong></p>
+
+<div class="comment" id="overview_description"><p>This class represents an association between a server and a
+consumer.  In general, users of this library will never see
+instances of this object.  The only exception is if you implement a
+custom <code><a href="../openid/auth_openid_openidstore.html">Auth_OpenID_OpenIDStore</a></code>.</p><p>If you do implement such a store, it will need to store the values
+of the handle, secret, issued, lifetime, and assoc_type instance
+variables.</p></div>
+
+<hr>
+
+<table id="summary_field">
+<tr><th colspan="2">Field Summary</th></tr>
+<tr>
+<td class="type">private  mixed</td>
+<td class="description"><p class="name"><a href="#SIG_LENGTH">$SIG_LENGTH</a></p><p class="description">This is a HMAC-SHA1 specific value.</p></td>
+</tr>
+<tr>
+<td class="type">private  mixed</td>
+<td class="description"><p class="name"><a href="#_macs">$_macs</a></p></td>
+</tr>
+<tr>
+<td class="type">private  mixed</td>
+<td class="description"><p class="name"><a href="#assoc_keys">$assoc_keys</a></p><p class="description">The ordering and name of keys as stored by serialize.</p></td>
+</tr>
+</table>
+
+<table id="summary_method">
+<tr><th colspan="2">Method Summary</th></tr>
+<tr>
+<td class="type">private  void</td>
+<td class="description"><p class="name"><a href="#__construct()">__construct</a>(string handle, string secret, integer issued, integer lifetime, string assoc_type)</p><p class="description">This is the standard constructor for creating an association.
+</p></td>
+</tr>
+<tr>
+<td class="type">private  void</td>
+<td class="description"><p class="name"><a href="#_makePairs()">_makePairs</a>(mixed message)</p><p class="description">Given a <a href="../openid/auth_openid_message.html">Auth_OpenID_Message</a>, return the key/value pairs
+to be signed according to the signed list in the message. </p></td>
+</tr>
+<tr>
+<td class="type">private  void</td>
+<td class="description"><p class="name"><a href="#checkMessageSignature()">checkMessageSignature</a>(mixed message)</p><p class="description">Confirm that the signature of these fields matches the
+signature contained in the data.</p></td>
+</tr>
+<tr>
+<td class="type">static  <a href="../openid/auth_openid_association.html">Auth_OpenID_Association</a></td>
+<td class="description"><p class="name"><a href="#deserialize()">deserialize</a>(mixed class_name, string assoc_s)</p><p class="description">Parse an association as stored by serialize(). </p></td>
+</tr>
+<tr>
+<td class="type"> bool</td>
+<td class="description"><p class="name"><a href="#equal()">equal</a>(mixed other)</p><p class="description">This checks to see if two {@link Auth_OpenID_Association}
+instances represent the same association.</p></td>
+</tr>
+<tr>
+<td class="type">private static  association</td>
+<td class="description"><p class="name"><a href="#fromExpiresIn()">fromExpiresIn</a>(integer expires_in, string handle, string secret, mixed assoc_type, assoc_type This)</p><p class="description">This is an alternate constructor (factory method) used by the
+OpenID consumer library to create associations. </p></td>
+</tr>
+<tr>
+<td class="type"> integer</td>
+<td class="description"><p class="name"><a href="#getExpiresIn()">getExpiresIn</a>(mixed now)</p><p class="description">This returns the number of seconds this association is still
+valid for, or 0 if the association is no longer valid.</p></td>
+</tr>
+<tr>
+<td class="type">private  void</td>
+<td class="description"><p class="name"><a href="#getMessageSignature()">getMessageSignature</a>(mixed message)</p><p class="description">Given an {@link Auth_OpenID_Message}, return the signature for
+the signed list in the message.</p></td>
+</tr>
+<tr>
+<td class="type"> string</td>
+<td class="description"><p class="name"><a href="#serialize()">serialize</a>()</p><p class="description">Convert an association to KV form.</p></td>
+</tr>
+<tr>
+<td class="type">private  string</td>
+<td class="description"><p class="name"><a href="#sign()">sign</a>(array pairs)</p><p class="description">Generate a signature for a sequence of (key, value) pairs</p></td>
+</tr>
+<tr>
+<td class="type">private  string</td>
+<td class="description"><p class="name"><a href="#signMessage()">signMessage</a>(mixed message, array fields, array data)</p><p class="description">Generate a signature for some fields in a dictionary</p></td>
+</tr>
+</table>
+
+<h2 id="detail_field">Field Detail</h2>
+<a href="../source/libraries/auth/openid/association.php.html#line51" class="location">libraries/Auth/OpenID/Association.php at line 51</a>
+
+<h3 id="SIG_LENGTH">SIG_LENGTH</h3>
+<code class="signature">private  mixed <strong>$SIG_LENGTH</strong> = 20</code>
+<div class="details">
+<p>This is a HMAC-SHA1 specific value.</p></div>
+
+<hr>
+
+<a href="../source/libraries/auth/openid/association.php.html#line60" class="location">libraries/Auth/OpenID/Association.php at line 60</a>
+
+<h3 id="_macs">_macs</h3>
+<code class="signature">private  mixed <strong>$_macs</strong> = array(...)</code>
+<div class="details">
+</div>
+
+<hr>
+
+<a href="../source/libraries/auth/openid/association.php.html#line58" class="location">libraries/Auth/OpenID/Association.php at line 58</a>
+
+<h3 id="assoc_keys">assoc_keys</h3>
+<code class="signature">private  mixed <strong>$assoc_keys</strong> = array(...)</code>
+<div class="details">
+<p>The ordering and name of keys as stored by serialize.</p></div>
+
+<hr>
+
+<h2 id="detail_method">Method Detail</h2><div class="method_detail">
+<div class='method'><a href="../source/libraries/auth/openid/association.php.html#line121" class="location">libraries/Auth/OpenID/Association.php at line 121</a>
+
+<h3 id="__construct()">__construct</h3>
+<code class="signature">private  void <strong>__construct</strong>(string handle, string secret, integer issued, integer lifetime, string assoc_type)</code>
+<div class="details">
+<p>This is the standard constructor for creating an association.
+The library should create all of the necessary associations, so
+this constructor is not part of the external API.</p><dl>
+<dt>Parameters:</dt>
+<dd>handle - This is the handle the server gave this association.</dd>
+<dd>secret - This is the shared secret the server generated for this association.</dd>
+<dd>issued - This is the time this association was issued, in seconds since 00:00 GMT, January 1, 1970. (ie, a unix timestamp)</dd>
+<dd>lifetime - This is the amount of time this association is good for, measured in seconds since the association was issued.</dd>
+<dd>assoc_type - This is the type of association this instance represents. The only valid values of this field at this time is 'HMAC-SHA1' and 'HMAC-SHA256', but new types may be defined in the future.</dd>
+</dl>
+</div></div>
+
+
+
+<div class='method'><a href="../source/libraries/auth/openid/association.php.html#line319" class="location">libraries/Auth/OpenID/Association.php at line 319</a>
+
+<h3 id="_makePairs()">_makePairs</h3>
+<code class="signature">private  void <strong>_makePairs</strong>(mixed message)</code>
+<div class="details">
+<p>Given a <code><a href="../openid/auth_openid_message.html">Auth_OpenID_Message</a></code>, return the key/value pairs
+to be signed according to the signed list in the message.  If
+the message lacks a signed list, return null.</p></div></div>
+
+
+
+<div class='method'><a href="../source/libraries/auth/openid/association.php.html#line356" class="location">libraries/Auth/OpenID/Association.php at line 356</a>
+
+<h3 id="checkMessageSignature()">checkMessageSignature</h3>
+<code class="signature">private  void <strong>checkMessageSignature</strong>(mixed message)</code>
+<div class="details">
+<p>Confirm that the signature of these fields matches the
+signature contained in the data.</p></div></div>
+
+
+
+<div class='method'><a href="../source/libraries/auth/openid/association.php.html#line198" class="location">libraries/Auth/OpenID/Association.php at line 198</a>
+
+<h3 id="deserialize()">deserialize</h3>
+<code class="signature">public static  <a href="../openid/auth_openid_association.html">Auth_OpenID_Association</a> <strong>deserialize</strong>(mixed class_name, string assoc_s)</code>
+<div class="details">
+<p>Parse an association as stored by serialize().  This is the
+inverse of serialize.</p><dl>
+<dt>Parameters:</dt>
+<dd>assoc_s - Association as serialized by serialize()</dd>
+<dt>Returns:</dt>
+<dd>$result instance of this class</dd>
+</dl>
+</div></div>
+
+
+
+<div class='method'><a href="../source/libraries/auth/openid/association.php.html#line159" class="location">libraries/Auth/OpenID/Association.php at line 159</a>
+
+<h3 id="equal()">equal</h3>
+<code class="signature">public  bool <strong>equal</strong>(mixed other)</code>
+<div class="details">
+<p>This checks to see if two <code><a href="../openid/auth_openid_association.html">Auth_OpenID_Association</a></code>
+instances represent the same association.</p><dl>
+<dt>Returns:</dt>
+<dd>$result true if the two instances represent the same association, false otherwise.</dd>
+</dl>
+</div></div>
+
+
+
+<div class='method'><a href="../source/libraries/auth/openid/association.php.html#line87" class="location">libraries/Auth/OpenID/Association.php at line 87</a>
+
+<h3 id="fromExpiresIn()">fromExpiresIn</h3>
+<code class="signature">private static  association <strong>fromExpiresIn</strong>(integer expires_in, string handle, string secret, mixed assoc_type, assoc_type This)</code>
+<div class="details">
+<p>This is an alternate constructor (factory method) used by the
+OpenID consumer library to create associations.  OpenID store
+implementations shouldn't use this constructor.</p><dl>
+<dt>Parameters:</dt>
+<dd>expires_in - This is the amount of time this association is good for, measured in seconds since the association was issued.</dd>
+<dd>handle - This is the handle the server gave this association.</dd>
+<dd>secret - This is the shared secret the server generated for this association.</dd>
+<dd>This - is the type of association this instance represents. The only valid values of this field at this time is 'HMAC-SHA1' and 'HMAC-SHA256', but new types may be defined in the future.</dd>
+<dt>Returns:</dt>
+<dd>An {@link Auth_OpenID_Association} instance.</dd>
+</dl>
+</div></div>
+
+
+
+<div class='method'><a href="../source/libraries/auth/openid/association.php.html#line143" class="location">libraries/Auth/OpenID/Association.php at line 143</a>
+
+<h3 id="getExpiresIn()">getExpiresIn</h3>
+<code class="signature">public  integer <strong>getExpiresIn</strong>(mixed now)</code>
+<div class="details">
+<p>This returns the number of seconds this association is still
+valid for, or 0 if the association is no longer valid.</p><dl>
+<dt>Returns:</dt>
+<dd>$seconds The number of seconds this association is still valid for, or 0 if the association is no longer valid.</dd>
+</dl>
+</div></div>
+
+
+
+<div class='method'><a href="../source/libraries/auth/openid/association.php.html#line344" class="location">libraries/Auth/OpenID/Association.php at line 344</a>
+
+<h3 id="getMessageSignature()">getMessageSignature</h3>
+<code class="signature">private  void <strong>getMessageSignature</strong>(mixed message)</code>
+<div class="details">
+<p>Given an <code><a href="../openid/auth_openid_message.html">Auth_OpenID_Message</a></code>, return the signature for
+the signed list in the message.</p></div></div>
+
+
+
+<div class='method'><a href="../source/libraries/auth/openid/association.php.html#line175" class="location">libraries/Auth/OpenID/Association.php at line 175</a>
+
+<h3 id="serialize()">serialize</h3>
+<code class="signature">public  string <strong>serialize</strong>()</code>
+<div class="details">
+<p>Convert an association to KV form.</p><dl>
+<dt>Returns:</dt>
+<dd>$result String in KV form suitable for deserialization by deserialize.</dd>
+</dl>
+</div></div>
+
+
+
+<div class='method'><a href="../source/libraries/auth/openid/association.php.html#line252" class="location">libraries/Auth/OpenID/Association.php at line 252</a>
+
+<h3 id="sign()">sign</h3>
+<code class="signature">private  string <strong>sign</strong>(array pairs)</code>
+<div class="details">
+<p>Generate a signature for a sequence of (key, value) pairs</p><dl>
+<dt>Parameters:</dt>
+<dd>pairs - The pairs to sign, in order. This is an array of two-tuples.</dd>
+<dt>Returns:</dt>
+<dd>$signature The binary signature of this sequence of pairs</dd>
+</dl>
+</div></div>
+
+
+
+<div class='method'><a href="../source/libraries/auth/openid/association.php.html#line272" class="location">libraries/Auth/OpenID/Association.php at line 272</a>
+
+<h3 id="signMessage()">signMessage</h3>
+<code class="signature">private  string <strong>signMessage</strong>(mixed message, array fields, array data)</code>
+<div class="details">
+<p>Generate a signature for some fields in a dictionary</p><dl>
+<dt>Parameters:</dt>
+<dd>fields - The fields to sign, in order; this is an array of strings.</dd>
+<dd>data - Dictionary of values to sign (an array of string => string pairs).</dd>
+<dt>Returns:</dt>
+<dd>$signature The signature, base64 encoded</dd>
+</dl>
+</div></div>
+
+
+
+</div><div class="header">
+<h1>GiftFlow API</h1>
+<ul>
+<li><a href="../overview-summary.html">Overview</a></li>
+<li><a href="../openid/package-summary.html">Package</a></li>
+<li class="active">Class</li>
+<li><a href="../openid/package-tree.html">Tree</a></li>
+<li><a href="../overview-files.html">Files</a></li>
+<li><a href="../deprecated-list.html">Deprecated</a></li>
+<li><a href="../index-all.html">Index</a></li>
+</ul>
+</div>
+
+<div class="small_links">
+<a href="../index.html" target="_top">Frames</a>
+<a href="../openid/auth_openid_association.html" target="_top">No frames</a>
+</div>
+<div class="small_links">
+Summary: <a href="#summary_field">Field</a> | <a href="#summary_method">Method</a> | <a href="#summary_constr">Constr</a>
+Detail: <a href="#detail_field">Field</a> | <a href="#detail_method">Method</a> | <a href="#summary_constr">Constr</a>
+</div>
+<hr>
+
+<p id="footer">This document was generated by <a href="http://peej.github.com/phpdoctor/">PHPDoctor: The PHP Documentation Creator</a></p>
+
+</body>
+
+</html>

@@ -1,0 +1,312 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+
+<html lang="en">
+<head>
+
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
+<meta name="generator" content="PHPDoctor 2RC4 (http://peej.github.com/phpdoctor/)">
+<meta name="when" content="Wed, 09 Feb 2011 20:22:54 +0000">
+
+<link rel="stylesheet" type="text/css" href="../stylesheet.css">
+<link rel="start" href="../overview-summary.html">
+
+<title>OpenID (GiftFlow API)</title>
+
+</head>
+<body id="tree" onload="parent.document.title=document.title;">
+
+<div class="header">
+<h1>GiftFlow API</h1>
+<ul>
+<li><a href="../overview-summary.html">Overview</a></li>
+<li class="active">Package</li>
+<li>Class</li><li><a href="../openid/package-tree.html">Tree</a></li>
+<li><a href="../overview-files.html">Files</a></li>
+<li><a href="../deprecated-list.html">Deprecated</a></li>
+<li><a href="../index-all.html">Index</a></li>
+</ul>
+</div>
+
+<div class="small_links">
+<a href="../index.html" target="_top">Frames</a>
+<a href="../openid/package-summary.html" target="_top">No frames</a>
+</div>
+<hr>
+
+<h1>Package OpenID</h1>
+
+<table class="title">
+<tr><th colspan="2" class="title">Class Summary</th></tr>
+<tr><td class="name"><a href="../openid/auth_openid.html">Auth_OpenID</a></td><td class="description">The OpenID utility function class.</td></tr>
+<tr><td class="name"><a href="../openid/auth_openid_ax.html">Auth_OpenID_AX</a></td><td class="description">AX utility class.</td></tr>
+<tr><td class="name"><a href="../openid/auth_openid_ax_attrinfo.html">Auth_OpenID_AX_AttrInfo</a></td><td class="description">Represents a single attribute in an attribute exchange
+request. </td></tr>
+<tr><td class="name"><a href="../openid/auth_openid_ax_error.html">Auth_OpenID_AX_Error</a></td><td class="description">Results from data that does not meet the attribute exchange 1.0
+specification</td></tr>
+<tr><td class="name"><a href="../openid/auth_openid_ax_fetchrequest.html">Auth_OpenID_AX_FetchRequest</a></td><td class="description">An attribute exchange 'fetch_request' message. </td></tr>
+<tr><td class="name"><a href="../openid/auth_openid_ax_fetchresponse.html">Auth_OpenID_AX_FetchResponse</a></td><td class="description">A fetch_response attribute exchange message.</td></tr>
+<tr><td class="name"><a href="../openid/auth_openid_ax_keyvaluemessage.html">Auth_OpenID_AX_KeyValueMessage</a></td><td class="description">An abstract class that implements a message that has attribute keys
+and values. </td></tr>
+<tr><td class="name"><a href="../openid/auth_openid_ax_message.html">Auth_OpenID_AX_Message</a></td><td class="description">Abstract class containing common code for attribute exchange
+messages.</td></tr>
+<tr><td class="name"><a href="../openid/auth_openid_ax_storerequest.html">Auth_OpenID_AX_StoreRequest</a></td><td class="description">A store request attribute exchange message representation.</td></tr>
+<tr><td class="name"><a href="../openid/auth_openid_ax_storeresponse.html">Auth_OpenID_AX_StoreResponse</a></td><td class="description">An indication that the store request was processed along with this
+OpenID transaction. </td></tr>
+<tr><td class="name"><a href="../openid/auth_openid_alreadysigned.html">Auth_OpenID_AlreadySigned</a></td><td class="description">An error that indicates that a response was already signed.</td></tr>
+<tr><td class="name"><a href="../openid/auth_openid_associaterequest.html">Auth_OpenID_AssociateRequest</a></td><td class="description">A request to associate with the server.</td></tr>
+<tr><td class="name"><a href="../openid/auth_openid_association.html">Auth_OpenID_Association</a></td><td class="description">This class represents an association between a server and a
+consumer. </td></tr>
+<tr><td class="name"><a href="../openid/auth_openid_authrequest.html">Auth_OpenID_AuthRequest</a></td><td class="description">This class represents an authentication request from a consumer to
+an OpenID server.</td></tr>
+<tr><td class="name"><a href="../openid/auth_openid_bcmathwrapper.html">Auth_OpenID_BcMathWrapper</a></td><td class="description">Exposes BCmath math library functionality.
+</td></tr>
+<tr><td class="name"><a href="../openid/auth_openid_cancelresponse.html">Auth_OpenID_CancelResponse</a></td><td class="description">A response with a status of Auth_OpenID_CANCEL. </td></tr>
+<tr><td class="name"><a href="../openid/auth_openid_checkauthrequest.html">Auth_OpenID_CheckAuthRequest</a></td><td class="description">A request to verify the validity of a previous response.</td></tr>
+<tr><td class="name"><a href="../openid/auth_openid_checkidrequest.html">Auth_OpenID_CheckIDRequest</a></td><td class="description">A request to confirm the identity of a user.</td></tr>
+<tr><td class="name"><a href="../openid/auth_openid_consumer.html">Auth_OpenID_Consumer</a></td><td class="description">An OpenID consumer implementation that performs discovery and does
+session management. </td></tr>
+<tr><td class="name"><a href="../openid/auth_openid_consumerresponse.html">Auth_OpenID_ConsumerResponse</a></td><td class="description">The base class for responses from the Auth_OpenID_Consumer.</td></tr>
+<tr><td class="name"><a href="../openid/auth_openid_databaseconnection.html">Auth_OpenID_DatabaseConnection</a></td><td class="description">An empty base class intended to emulate PEAR connection
+functionality in applications that supply their own database
+abstraction mechanisms. </td></tr>
+<tr><td class="name"><a href="../openid/auth_openid_decoder.html">Auth_OpenID_Decoder</a></td><td class="description">Decode an incoming query into an Auth_OpenID_Request.</td></tr>
+<tr><td class="name"><a href="../openid/auth_openid_diffiehellman.html">Auth_OpenID_DiffieHellman</a></td><td class="description">The Diffie-Hellman key exchange class. </td></tr>
+<tr><td class="name"><a href="../openid/auth_openid_diffiehellmansha1consumersession.html">Auth_OpenID_DiffieHellmanSHA1ConsumerSession</a></td><td class="description">A class implementing HMAC/DH-SHA1 consumer sessions.</td></tr>
+<tr><td class="name"><a href="../openid/auth_openid_diffiehellmansha1serversession.html">Auth_OpenID_DiffieHellmanSHA1ServerSession</a></td><td class="description">A class implementing DH-SHA1 server sessions.</td></tr>
+<tr><td class="name"><a href="../openid/auth_openid_diffiehellmansha256consumersession.html">Auth_OpenID_DiffieHellmanSHA256ConsumerSession</a></td><td class="description">A class implementing HMAC/DH-SHA256 consumer sessions.</td></tr>
+<tr><td class="name"><a href="../openid/auth_openid_diffiehellmansha256serversession.html">Auth_OpenID_DiffieHellmanSHA256ServerSession</a></td><td class="description">A class implementing DH-SHA256 server sessions.</td></tr>
+<tr><td class="name"><a href="../openid/auth_openid_dumbstore.html">Auth_OpenID_DumbStore</a></td><td class="description">This is a store for use in the worst case, when you have no way of
+saving state on the consumer site. </td></tr>
+<tr><td class="name"><a href="../openid/auth_openid_encoder.html">Auth_OpenID_Encoder</a></td><td class="description">Encode an {@link Auth_OpenID_ServerResponse} to an
+{@link Auth_OpenID_WebResponse}.</td></tr>
+<tr><td class="name"><a href="../openid/auth_openid_encodingerror.html">Auth_OpenID_EncodingError</a></td><td class="description">An error that indicates an encoding problem occurred.</td></tr>
+<tr><td class="name"><a href="../openid/auth_openid_extension.html">Auth_OpenID_Extension</a></td><td class="description">A base class for accessing extension request and response data for
+the OpenID 2 protocol.</td></tr>
+<tr><td class="name"><a href="../openid/auth_openid_failureresponse.html">Auth_OpenID_FailureResponse</a></td><td class="description">A response with a status of Auth_OpenID_FAILURE. </td></tr>
+<tr><td class="name"><a href="../openid/auth_openid_filestore.html">Auth_OpenID_FileStore</a></td><td class="description">This is a filesystem-based store for OpenID associations and
+nonces. </td></tr>
+<tr><td class="name"><a href="../openid/auth_openid_genericconsumer.html">Auth_OpenID_GenericConsumer</a></td><td class="description">This class is the interface to the OpenID consumer logic.
+</td></tr>
+<tr><td class="name"><a href="../openid/auth_openid_gmpmathwrapper.html">Auth_OpenID_GmpMathWrapper</a></td><td class="description">Exposes GMP math library functionality.
+</td></tr>
+<tr><td class="name"><a href="../openid/auth_openid_kvform.html">Auth_OpenID_KVForm</a></td><td class="description">Container for key-value/comma-newline OpenID format and parsing</td></tr>
+<tr><td class="name"><a href="../openid/auth_openid_mdb2store.html">Auth_OpenID_MDB2Store</a></td><td class="description">This store uses a PEAR::MDB2 connection to store persistence
+information.
+</td></tr>
+<tr><td class="name"><a href="../openid/auth_openid_malformedreturnurl.html">Auth_OpenID_MalformedReturnURL</a></td><td class="description">An error indicating that the return_to URL is malformed.</td></tr>
+<tr><td class="name"><a href="../openid/auth_openid_malformedtrustroot.html">Auth_OpenID_MalformedTrustRoot</a></td><td class="description">This error is returned when the trust_root value is malformed.</td></tr>
+<tr><td class="name"><a href="../openid/auth_openid_mapping.html">Auth_OpenID_Mapping</a></td><td class="description">An Auth_OpenID_Mapping maintains a mapping from arbitrary keys to
+arbitrary values. </td></tr>
+<tr><td class="name"><a href="../openid/auth_openid_mathlibrary.html">Auth_OpenID_MathLibrary</a></td><td class="description">The superclass of all big-integer math implementations</td></tr>
+<tr><td class="name"><a href="../openid/auth_openid_memcachedstore.html">Auth_OpenID_MemcachedStore</a></td><td class="description">This is a memcached-based store for OpenID associations and
+nonces. </td></tr>
+<tr><td class="name"><a href="../openid/auth_openid_message.html">Auth_OpenID_Message</a></td><td class="description">In the implementation of this object, null represents the global
+namespace as well as a namespace with no key.</td></tr>
+<tr><td class="name"><a href="../openid/auth_openid_mysqlstore.html">Auth_OpenID_MySQLStore</a></td><td class="description">An SQL store that uses MySQL as its backend.</td></tr>
+<tr><td class="name"><a href="../openid/auth_openid_namespacemap.html">Auth_OpenID_NamespaceMap</a></td><td class="description">Maintains a bijective map between namespace uris and aliases.</td></tr>
+<tr><td class="name"><a href="../openid/auth_openid_noreturntoerror.html">Auth_OpenID_NoReturnToError</a></td><td class="description">Error returned by the server code when a return_to is absent from a
+request.</td></tr>
+<tr><td class="name"><a href="../openid/auth_openid_openidstore.html">Auth_OpenID_OpenIDStore</a></td><td class="description">This is the interface for the store objects the OpenID library
+uses. </td></tr>
+<tr><td class="name"><a href="../openid/auth_openid_parse.html">Auth_OpenID_Parse</a></td><td class="description">Require Auth_OpenID::arrayGet().</td></tr>
+<tr><td class="name"><a href="../openid/auth_openid_plaintextconsumersession.html">Auth_OpenID_PlainTextConsumerSession</a></td><td class="description">A class implementing plaintext consumer sessions.</td></tr>
+<tr><td class="name"><a href="../openid/auth_openid_plaintextserversession.html">Auth_OpenID_PlainTextServerSession</a></td><td class="description">A class implementing plaintext server sessions.</td></tr>
+<tr><td class="name"><a href="../openid/auth_openid_postgresqlstore.html">Auth_OpenID_PostgreSQLStore</a></td><td class="description">An SQL store that uses PostgreSQL as its backend.</td></tr>
+<tr><td class="name"><a href="../openid/auth_openid_request.html">Auth_OpenID_Request</a></td><td class="description">The base class for all server request classes.</td></tr>
+<tr><td class="name"><a href="../openid/auth_openid_sqlstore.html">Auth_OpenID_SQLStore</a></td><td class="description">This is the parent class for the SQL stores, which contains the
+logic common to all of the SQL stores.
+</td></tr>
+<tr><td class="name"><a href="../openid/auth_openid_sqlitestore.html">Auth_OpenID_SQLiteStore</a></td><td class="description">An SQL store that uses SQLite as its backend.</td></tr>
+<tr><td class="name"><a href="../openid/auth_openid_sregbase.html">Auth_OpenID_SRegBase</a></td><td class="description">A base class for classes dealing with Simple Registration protocol
+messages.</td></tr>
+<tr><td class="name"><a href="../openid/auth_openid_sregrequest.html">Auth_OpenID_SRegRequest</a></td><td class="description">An object to hold the state of a simple registration request.
+</td></tr>
+<tr><td class="name"><a href="../openid/auth_openid_sregresponse.html">Auth_OpenID_SRegResponse</a></td><td class="description">Represents the data returned in a simple registration response
+inside of an OpenID C{id_res} response. </td></tr>
+<tr><td class="name"><a href="../openid/auth_openid_server.html">Auth_OpenID_Server</a></td><td class="description">I handle requests for an OpenID server.
+</td></tr>
+<tr><td class="name"><a href="../openid/auth_openid_servererror.html">Auth_OpenID_ServerError</a></td><td class="description">An error class which gets instantiated and returned whenever an
+OpenID protocol error occurs. </td></tr>
+<tr><td class="name"><a href="../openid/auth_openid_servererrorcontainer.html">Auth_OpenID_ServerErrorContainer</a></td><td class="description">Exception that is raised when the server returns a 400 response
+code to a direct request.</td></tr>
+<tr><td class="name"><a href="../openid/auth_openid_serverrequest.html">Auth_OpenID_ServerRequest</a></td><td class="description">Object that holds the state of a request to the OpenID serverWith accessor functions to get at the internal request data.</td></tr>
+<tr><td class="name"><a href="../openid/auth_openid_serverresponse.html">Auth_OpenID_ServerResponse</a></td><td class="description">This class encapsulates the response to an OpenID server request.</td></tr>
+<tr><td class="name"><a href="../openid/auth_openid_serviceendpointloader.html">Auth_OpenID_ServiceEndpointLoader</a></td><td class="description">A concrete loader implementation for Auth_OpenID_ServiceEndpoints.</td></tr>
+<tr><td class="name"><a href="../openid/auth_openid_sessionnegotiator.html">Auth_OpenID_SessionNegotiator</a></td><td class="description">A session negotiator controls the allowed and preferred association
+types and association session types. </td></tr>
+<tr><td class="name"><a href="../openid/auth_openid_setupneededresponse.html">Auth_OpenID_SetupNeededResponse</a></td><td class="description">A response with a status of Auth_OpenID_SETUP_NEEDED. </td></tr>
+<tr><td class="name"><a href="../openid/auth_openid_signatory.html">Auth_OpenID_Signatory</a></td><td class="description">Responsible for the signature of query data and the verification of
+OpenID signature values.</td></tr>
+<tr><td class="name"><a href="../openid/auth_openid_signingencoder.html">Auth_OpenID_SigningEncoder</a></td><td class="description">An encoder which also takes care of signing fields when required.</td></tr>
+<tr><td class="name"><a href="../openid/auth_openid_successresponse.html">Auth_OpenID_SuccessResponse</a></td><td class="description">A response with a status of Auth_OpenID_SUCCESS. </td></tr>
+<tr><td class="name"><a href="../openid/auth_openid_typeurimismatch.html">Auth_OpenID_TypeURIMismatch</a></td><td class="description">A specific, internal failure used to detect type URI mismatch.</td></tr>
+<tr><td class="name"><a href="../openid/auth_openid_untrustedreturnurl.html">Auth_OpenID_UntrustedReturnURL</a></td><td class="description">An error that indicates that the given return_to is not under the
+given trust_root.</td></tr>
+<tr><td class="name"><a href="../openid/auth_openid_webresponse.html">Auth_OpenID_WebResponse</a></td><td class="description">A web-capable response object which you can use to generate a
+user-agent response.</td></tr>
+<tr><td class="name"><a href="../openid/auth_yadis_discovery.html">Auth_Yadis_Discovery</a></td><td class="description">State management for discovery.
+</td></tr>
+<tr><td class="name"><a href="../openid/auth_yadis_discoveryresult.html">Auth_Yadis_DiscoveryResult</a></td><td class="description">Contains the result of performing Yadis discovery on a URI.</td></tr>
+<tr><td class="name"><a href="../openid/auth_yadis_httpfetcher.html">Auth_Yadis_HTTPFetcher</a></td><td class="description">This class is the interface for HTTP fetchers the Yadis library
+uses. </td></tr>
+<tr><td class="name"><a href="../openid/auth_yadis_manager.html">Auth_Yadis_Manager</a></td><td class="description">The Yadis service manager which stores state in a session and
+iterates over  elements in a Yadis XRDS document and lets
+a caller attempt to use each one. </td></tr>
+<tr><td class="name"><a href="../openid/auth_yadis_managerloader.html">Auth_Yadis_ManagerLoader</a></td><td class="description">A concrete loader implementation for Auth_Yadis_Managers.</td></tr>
+<tr><td class="name"><a href="../openid/auth_yadis_phpsession.html">Auth_Yadis_PHPSession</a></td><td class="description">The base session class used by the Auth_Yadis_Manager. </td></tr>
+<tr><td class="name"><a href="../openid/auth_yadis_paranoidhttpfetcher.html">Auth_Yadis_ParanoidHTTPFetcher</a></td><td class="description">A paranoid {@link Auth_Yadis_HTTPFetcher} class which uses CURL
+for fetching.</td></tr>
+<tr><td class="name"><a href="../openid/auth_yadis_parsehtml.html">Auth_Yadis_ParseHTML</a></td><td class="description">This class is responsible for scanning an HTML string to find META
+tags and their attributes. </td></tr>
+<tr><td class="name"><a href="../openid/auth_yadis_plainhttpfetcher.html">Auth_Yadis_PlainHTTPFetcher</a></td><td class="description">This class implements a plain, hand-built socket-based fetcher
+which will be used in the event that CURL is unavailable.</td></tr>
+<tr><td class="name"><a href="../openid/auth_yadis_service.html">Auth_Yadis_Service</a></td><td class="description">This class represents a  element in an XRDS document.
+</td></tr>
+<tr><td class="name"><a href="../openid/auth_yadis_sessionloader.html">Auth_Yadis_SessionLoader</a></td><td class="description">A session helper class designed to translate between arrays and
+objects. </td></tr>
+<tr><td class="name"><a href="../openid/auth_yadis_xmlparser.html">Auth_Yadis_XMLParser</a></td><td class="description">The base class for wrappers for available PHP XML-parsing
+extensions. </td></tr>
+<tr><td class="name"><a href="../openid/auth_yadis_xrds.html">Auth_Yadis_XRDS</a></td><td class="description">This class performs parsing of XRDS documents.
+</td></tr>
+<tr><td class="name"><a href="../openid/auth_yadis_yadis.html">Auth_Yadis_Yadis</a></td><td class="description">This is the core of the PHP Yadis library. </td></tr>
+<tr><td class="name"><a href="../openid/auth_yadis_dom.html">Auth_Yadis_dom</a></td><td class="description">This concrete implementation of Auth_Yadis_XMLParser implements
+the appropriate API for the 'dom' extension which is typically
+packaged with PHP 5. </td></tr>
+<tr><td class="name"><a href="../openid/auth_yadis_domxml.html">Auth_Yadis_domxml</a></td><td class="description">This concrete implementation of Auth_Yadis_XMLParser implements
+the appropriate API for the 'domxml' extension which is typically
+packaged with PHP 4. </td></tr>
+</table>
+
+<table class="title">
+<tr><th colspan="2" class="title">Function Summary</th></tr>
+<tr><td class="name"><a href="package-functions.html#Auth_OpenID_AX_checkAlias">Auth_OpenID_AX_checkAlias</a></td><td class="description">Check an alias for invalid characters; raise AXError if any are
+found. </td></tr>
+<tr><td class="name"><a href="package-functions.html#Auth_OpenID_AX_toTypeURIs">Auth_OpenID_AX_toTypeURIs</a></td><td class="description">Given a namespace mapping and a string containing a comma-separated
+list of namespace aliases, return a list of type URIs that
+correspond to those aliases.</td></tr>
+<tr><td class="name"><a href="package-functions.html#Auth_OpenID_HMACSHA1">Auth_OpenID_HMACSHA1</a></td><td class="description">Compute an HMAC/SHA1 hash.</td></tr>
+<tr><td class="name"><a href="package-functions.html#Auth_OpenID_HMACSHA256">Auth_OpenID_HMACSHA256</a></td><td class="description"></td></tr>
+<tr><td class="name"><a href="package-functions.html#Auth_OpenID_SHA256">Auth_OpenID_SHA256</a></td><td class="description"></td></tr>
+<tr><td class="name"><a href="package-functions.html#Auth_OpenID_checkSessionType">Auth_OpenID_checkSessionType</a></td><td class="description"></td></tr>
+<tr><td class="name"><a href="package-functions.html#Auth_OpenID_checkTimestamp">Auth_OpenID_checkTimestamp</a></td><td class="description"></td></tr>
+<tr><td class="name"><a href="package-functions.html#Auth_OpenID_detectMathLibrary">Auth_OpenID_detectMathLibrary</a></td><td class="description">Detect which (if any) math library is available</td></tr>
+<tr><td class="name"><a href="package-functions.html#Auth_OpenID_extractReturnURL">Auth_OpenID_extractReturnURL</a></td><td class="description"></td></tr>
+<tr><td class="name"><a href="package-functions.html#Auth_OpenID_getAllAssociationTypes">Auth_OpenID_getAllAssociationTypes</a></td><td class="description"></td></tr>
+<tr><td class="name"><a href="package-functions.html#Auth_OpenID_getAllowedReturnURLs">Auth_OpenID_getAllowedReturnURLs</a></td><td class="description"></td></tr>
+<tr><td class="name"><a href="package-functions.html#Auth_OpenID_getAuthorityPattern">Auth_OpenID_getAuthorityPattern</a></td><td class="description"></td></tr>
+<tr><td class="name"><a href="package-functions.html#Auth_OpenID_getAvailableSessionTypes">Auth_OpenID_getAvailableSessionTypes</a></td><td class="description">Returns available session types.</td></tr>
+<tr><td class="name"><a href="package-functions.html#Auth_OpenID_getDefaultAssociationOrder">Auth_OpenID_getDefaultAssociationOrder</a></td><td class="description"></td></tr>
+<tr><td class="name"><a href="package-functions.html#Auth_OpenID_getDefaultMod">Auth_OpenID_getDefaultMod</a></td><td class="description">The OpenID library's Diffie-Hellman implementation.
+</td></tr>
+<tr><td class="name"><a href="package-functions.html#Auth_OpenID_getDefaultNegotiator">Auth_OpenID_getDefaultNegotiator</a></td><td class="description"></td></tr>
+<tr><td class="name"><a href="package-functions.html#Auth_OpenID_getEncodedPattern">Auth_OpenID_getEncodedPattern</a></td><td class="description"></td></tr>
+<tr><td class="name"><a href="package-functions.html#Auth_OpenID_getEncryptedNegotiator">Auth_OpenID_getEncryptedNegotiator</a></td><td class="description"></td></tr>
+<tr><td class="name"><a href="package-functions.html#Auth_OpenID_getEscapeRE">Auth_OpenID_getEscapeRE</a></td><td class="description"></td></tr>
+<tr><td class="name"><a href="package-functions.html#Auth_OpenID_getMathLib">Auth_OpenID_getMathLib</a></td><td class="description"><a href="../openid/package-functions.html#Auth_OpenID_getMathLib()">Auth_OpenID_getMathLib</a> checks for the presence of long
+number extension modules and returns an instance of
+Auth_OpenID_MathWrapper which exposes the module's
+functionality.
+</td></tr>
+<tr><td class="name"><a href="package-functions.html#Auth_OpenID_getOnlyEncryptedOrder">Auth_OpenID_getOnlyEncryptedOrder</a></td><td class="description"></td></tr>
+<tr><td class="name"><a href="package-functions.html#Auth_OpenID_getSecretSize">Auth_OpenID_getSecretSize</a></td><td class="description"></td></tr>
+<tr><td class="name"><a href="package-functions.html#Auth_OpenID_getSessionTypes">Auth_OpenID_getSessionTypes</a></td><td class="description"></td></tr>
+<tr><td class="name"><a href="package-functions.html#Auth_OpenID_getSupportedAssociationTypes">Auth_OpenID_getSupportedAssociationTypes</a></td><td class="description"></td></tr>
+<tr><td class="name"><a href="package-functions.html#Auth_OpenID_getURIPattern">Auth_OpenID_getURIPattern</a></td><td class="description">URI normalization routines.</td></tr>
+<tr><td class="name"><a href="package-functions.html#Auth_OpenID_getURLIllegalCharRE">Auth_OpenID_getURLIllegalCharRE</a></td><td class="description"></td></tr>
+<tr><td class="name"><a href="package-functions.html#Auth_OpenID_getUnreserved">Auth_OpenID_getUnreserved</a></td><td class="description"></td></tr>
+<tr><td class="name"><a href="package-functions.html#Auth_OpenID_include_init">Auth_OpenID_include_init</a></td><td class="description"></td></tr>
+<tr><td class="name"><a href="package-functions.html#Auth_OpenID_legacy_discover">Auth_OpenID_legacy_discover</a></td><td class="description"></td></tr>
+<tr><td class="name"><a href="package-functions.html#Auth_OpenID_math_extensions">Auth_OpenID_math_extensions</a></td><td class="description">Define the supported extensions. </td></tr>
+<tr><td class="name"><a href="package-functions.html#Auth_OpenID_mkNonce">Auth_OpenID_mkNonce</a></td><td class="description"></td></tr>
+<tr><td class="name"><a href="package-functions.html#Auth_OpenID_noMathSupport">Auth_OpenID_noMathSupport</a></td><td class="description"></td></tr>
+<tr><td class="name"><a href="package-functions.html#Auth_OpenID_pct_encoded_replace">Auth_OpenID_pct_encoded_replace</a></td><td class="description"></td></tr>
+<tr><td class="name"><a href="package-functions.html#Auth_OpenID_pct_encoded_replace_unreserved">Auth_OpenID_pct_encoded_replace_unreserved</a></td><td class="description"></td></tr>
+<tr><td class="name"><a href="package-functions.html#Auth_OpenID_registerNamespaceAlias">Auth_OpenID_registerNamespaceAlias</a></td><td class="description">Registers a (namespace URI, alias) mapping in a global namespace
+alias map. </td></tr>
+<tr><td class="name"><a href="package-functions.html#Auth_OpenID_removeNamespaceAlias">Auth_OpenID_removeNamespaceAlias</a></td><td class="description">Removes a (namespace_uri, alias) registration from the global
+namespace alias map. </td></tr>
+<tr><td class="name"><a href="package-functions.html#Auth_OpenID_remove_dot_segments">Auth_OpenID_remove_dot_segments</a></td><td class="description"></td></tr>
+<tr><td class="name"><a href="package-functions.html#Auth_OpenID_returnToMatches">Auth_OpenID_returnToMatches</a></td><td class="description"></td></tr>
+<tr><td class="name"><a href="package-functions.html#Auth_OpenID_setNoMathSupport">Auth_OpenID_setNoMathSupport</a></td><td class="description"></td></tr>
+<tr><td class="name"><a href="package-functions.html#Auth_OpenID_supportsSReg">Auth_OpenID_supportsSReg</a></td><td class="description">Does the given endpoint advertise support for simple
+registration?$endpoint: The endpoint object as returned by OpenID discovery.
+</td></tr>
+<tr><td class="name"><a href="package-functions.html#Auth_OpenID_urinorm">Auth_OpenID_urinorm</a></td><td class="description"></td></tr>
+<tr><td class="name"><a href="package-functions.html#Auth_OpenID_verifyReturnTo">Auth_OpenID_verifyReturnTo</a></td><td class="description"></td></tr>
+<tr><td class="name"><a href="package-functions.html#Auth_Yadis_array_scramble">Auth_Yadis_array_scramble</a></td><td class="description"></td></tr>
+<tr><td class="name"><a href="package-functions.html#Auth_Yadis_getDefaultProxy">Auth_Yadis_getDefaultProxy</a></td><td class="description">Routines for XRI resolution.</td></tr>
+<tr><td class="name"><a href="package-functions.html#Auth_Yadis_getServiceEndpoints">Auth_Yadis_getServiceEndpoints</a></td><td class="description">Perform the Yadis protocol on the input URL and return an iterable
+of resulting endpoint objects.
+</td></tr>
+<tr><td class="name"><a href="package-functions.html#Auth_Yadis_getSupportedExtensions">Auth_Yadis_getSupportedExtensions</a></td><td class="description"></td></tr>
+<tr><td class="name"><a href="package-functions.html#Auth_Yadis_getUCSChars">Auth_Yadis_getUCSChars</a></td><td class="description">Miscellaneous utility values and functions for OpenID and Yadis.</td></tr>
+<tr><td class="name"><a href="package-functions.html#Auth_Yadis_getXMLParser">Auth_Yadis_getXMLParser</a></td><td class="description">Returns an instance of a Auth_Yadis_XMLParser subclass based on
+the availability of PHP extensions for XML parsing. </td></tr>
+<tr><td class="name"><a href="package-functions.html#Auth_Yadis_getXRDExpiration">Auth_Yadis_getXRDExpiration</a></td><td class="description"></td></tr>
+<tr><td class="name"><a href="package-functions.html#Auth_Yadis_setDefaultParser">Auth_Yadis_setDefaultParser</a></td><td class="description">Set a default parser to override the extension-driven selection of
+available parser classes. </td></tr>
+<tr><td class="name"><a href="package-functions.html#filter_extractReturnURL">filter_extractReturnURL</a></td><td class="description"></td></tr>
+</table>
+
+<table class="title">
+<tr><th colspan="2" class="title">Global Summary</th></tr>
+<tr><td class="name"><a href="package-globals.html#AUTH_OPENID_HTTP_OK">AUTH_OPENID_HTTP_OK</a></td><td class="description">Required imports</td></tr>
+<tr><td class="name"><a href="package-globals.html#Auth_OpenID_AX_NS_URI">Auth_OpenID_AX_NS_URI</a></td><td class="description">Require utility classes and functions for the consumer.</td></tr>
+<tr><td class="name"><a href="package-globals.html#Auth_OpenID_BARE_NS">Auth_OpenID_BARE_NS</a></td><td class="description"></td></tr>
+<tr><td class="name"><a href="package-globals.html#Auth_OpenID_FETCHER_MAX_RESPONSE_KB">Auth_OpenID_FETCHER_MAX_RESPONSE_KB</a></td><td class="description">Require logging functionality</td></tr>
+<tr><td class="name"><a href="package-globals.html#Auth_OpenID_HMACSHA256_SUPPORTED">Auth_OpenID_HMACSHA256_SUPPORTED</a></td><td class="description"></td></tr>
+<tr><td class="name"><a href="package-globals.html#Auth_OpenID_IDENTIFIER_SELECT">Auth_OpenID_IDENTIFIER_SELECT</a></td><td class="description">Import tools needed to deal with messages.</td></tr>
+<tr><td class="name"><a href="package-globals.html#Auth_OpenID_NO_DEFAULT">Auth_OpenID_NO_DEFAULT</a></td><td class="description"></td></tr>
+<tr><td class="name"><a href="package-globals.html#Auth_OpenID_NO_MATH_SUPPORT">Auth_OpenID_NO_MATH_SUPPORT</a></td><td class="description"></td></tr>
+<tr><td class="name"><a href="package-globals.html#Auth_OpenID_NULL_NAMESPACE">Auth_OpenID_NULL_NAMESPACE</a></td><td class="description"></td></tr>
+<tr><td class="name"><a href="package-globals.html#Auth_OpenID_Nonce_CHRS">Auth_OpenID_Nonce_CHRS</a></td><td class="description">This is the characters that the nonces are made from.</td></tr>
+<tr><td class="name"><a href="package-globals.html#Auth_OpenID_OPENID1_URL_LIMIT">Auth_OpenID_OPENID1_URL_LIMIT</a></td><td class="description"></td></tr>
+<tr><td class="name"><a href="package-globals.html#Auth_OpenID_OPENID2_NS">Auth_OpenID_OPENID2_NS</a></td><td class="description"></td></tr>
+<tr><td class="name"><a href="package-globals.html#Auth_OpenID_OPENID_NS">Auth_OpenID_OPENID_NS</a></td><td class="description"></td></tr>
+<tr><td class="name"><a href="package-globals.html#Auth_OpenID_OPENID_PROTOCOL_FIELDS">Auth_OpenID_OPENID_PROTOCOL_FIELDS</a></td><td class="description"></td></tr>
+<tr><td class="name"><a href="package-globals.html#Auth_OpenID_RAND_SOURCE">Auth_OpenID_RAND_SOURCE</a></td><td class="description">The filename for a source of random bytes. </td></tr>
+<tr><td class="name"><a href="package-globals.html#Auth_OpenID_SHA1_BLOCKSIZE">Auth_OpenID_SHA1_BLOCKSIZE</a></td><td class="description">SHA1_BLOCKSIZE is this module's SHA1 blocksize used by the fallback
+implementation.</td></tr>
+<tr><td class="name"><a href="package-globals.html#Auth_OpenID_SHA256_SUPPORTED">Auth_OpenID_SHA256_SUPPORTED</a></td><td class="description"></td></tr>
+<tr><td class="name"><a href="package-globals.html#Auth_OpenID_SREG_NS_URI">Auth_OpenID_SREG_NS_URI</a></td><td class="description"></td></tr>
+<tr><td class="name"><a href="package-globals.html#Auth_OpenID_SREG_NS_URI_1_0">Auth_OpenID_SREG_NS_URI_1_0</a></td><td class="description"></td></tr>
+<tr><td class="name"><a href="package-globals.html#Auth_OpenID_SREG_NS_URI_1_1">Auth_OpenID_SREG_NS_URI_1_1</a></td><td class="description"></td></tr>
+<tr><td class="name"><a href="package-globals.html#Auth_OpenID_SUCCESS">Auth_OpenID_SUCCESS</a></td><td class="description">This is the status code returned when the complete method returns
+successfully.</td></tr>
+<tr><td class="name"><a href="package-globals.html#Auth_OpenID_VERSION">Auth_OpenID_VERSION</a></td><td class="description">The library version string</td></tr>
+<tr><td class="name"><a href="package-globals.html#Auth_OpenID___TLDs">Auth_OpenID___TLDs</a></td><td class="description">A regular expression that matches a domain ending in a top-level domains.
+</td></tr>
+<tr><td class="name"><a href="package-globals.html#Auth_OpenID_registered_aliases">Auth_OpenID_registered_aliases</a></td><td class="description"></td></tr>
+<tr><td class="name"><a href="package-globals.html#Auth_OpenID_sreg_data_fields">Auth_OpenID_sreg_data_fields</a></td><td class="description">Import message and extension internals.</td></tr>
+<tr><td class="name"><a href="package-globals.html#Auth_Yadis_CONTENT_TYPE">Auth_Yadis_CONTENT_TYPE</a></td><td class="description">XRDS (yadis) content type</td></tr>
+<tr><td class="name"><a href="package-globals.html#SERVICES_YADIS_MATCH_ALL">SERVICES_YADIS_MATCH_ALL</a></td><td class="description">This match mode means a given service must match ALL filters passed
+to the Auth_Yadis_XRDS::services() call.</td></tr>
+<tr><td class="name"><a href="package-globals.html#__Auth_Yadis_defaultParser">__Auth_Yadis_defaultParser</a></td><td class="description"></td></tr>
+</table>
+
+<hr>
+
+<div class="header">
+<h1>GiftFlow API</h1>
+<ul>
+<li><a href="../overview-summary.html">Overview</a></li>
+<li class="active">Package</li>
+<li>Class</li><li><a href="../openid/package-tree.html">Tree</a></li>
+<li><a href="../overview-files.html">Files</a></li>
+<li><a href="../deprecated-list.html">Deprecated</a></li>
+<li><a href="../index-all.html">Index</a></li>
+</ul>
+</div>
+
+<div class="small_links">
+<a href="../index.html" target="_top">Frames</a>
+<a href="../openid/package-summary.html" target="_top">No frames</a>
+</div>
+<hr>
+
+<p id="footer">This document was generated by <a href="http://peej.github.com/phpdoctor/">PHPDoctor: The PHP Documentation Creator</a></p>
+
+</body>
+
+</html>

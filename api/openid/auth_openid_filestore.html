@@ -1,0 +1,453 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+
+<html lang="en">
+<head>
+
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
+<meta name="generator" content="PHPDoctor 2RC4 (http://peej.github.com/phpdoctor/)">
+<meta name="when" content="Wed, 09 Feb 2011 20:22:55 +0000">
+
+<link rel="stylesheet" type="text/css" href="../stylesheet.css">
+<link rel="start" href="../overview-summary.html">
+
+<title>Auth_OpenID_FileStore (GiftFlow API)</title>
+
+</head>
+<body id="definition" onload="parent.document.title=document.title;">
+
+<div class="header">
+<h1>GiftFlow API</h1>
+<ul>
+<li><a href="../overview-summary.html">Overview</a></li>
+<li><a href="../openid/package-summary.html">Package</a></li>
+<li class="active">Class</li>
+<li><a href="../openid/package-tree.html">Tree</a></li>
+<li><a href="../overview-files.html">Files</a></li>
+<li><a href="../deprecated-list.html">Deprecated</a></li>
+<li><a href="../index-all.html">Index</a></li>
+</ul>
+</div>
+
+<div class="small_links">
+<a href="../index.html" target="_top">Frames</a>
+<a href="../openid/auth_openid_filestore.html" target="_top">No frames</a>
+</div>
+<div class="small_links">
+Summary: <a href="#summary_field">Field</a> | <a href="#summary_method">Method</a> | <a href="#summary_constr">Constr</a>
+Detail: <a href="#detail_field">Field</a> | <a href="#detail_method">Method</a> | <a href="#summary_constr">Constr</a>
+</div>
+<hr>
+
+<div class="qualifiedName">OpenID\Auth_OpenID_FileStore</div>
+<a href="../source/libraries/auth/openid/filestore.php.html#line39" class="location">libraries/Auth/OpenID/FileStore.php at line 39</a>
+
+<h1>Class Auth_OpenID_FileStore</h1>
+
+<pre class="tree"><a href="../openid/auth_openid_openidstore.html">Auth_OpenID_OpenIDStore</a><br>    └─<strong>Auth_OpenID_FileStore</strong><br /></pre>
+
+<hr>
+
+<p class="signature">public  class <strong>Auth_OpenID_FileStore</strong><br>extends <a href="../openid/auth_openid_openidstore.html">Auth_OpenID_OpenIDStore</a>
+
+</p>
+
+<div class="comment" id="overview_description"><p>This is a filesystem-based store for OpenID associations and
+nonces.  This store should be safe for use in concurrent systems on
+both windows and unix (excluding NFS filesystems).  There are a
+couple race conditions in the system, but those failure cases have
+been set up in such a way that the worst-case behavior is someone
+having to try to log in a second time.</p><p>Most of the methods of this class are implementation details.
+People wishing to just use this store need only pay attention to
+the constructor.</p></div>
+
+<dl>
+<dt>Author:</dt>
+<dd>JanRain, Inc. <openid@janrain.com></dd>
+</dl>
+<hr>
+
+<table id="summary_method">
+<tr><th colspan="2">Method Summary</th></tr>
+<tr>
+<td class="type"> void</td>
+<td class="description"><p class="name"><a href="#__construct()">__construct</a>(string directory)</p><p class="description">Initializes a new <a href="../openid/auth_openid_filestore.html">Auth_OpenID_FileStore</a>. </p></td>
+</tr>
+<tr>
+<td class="type">private  void</td>
+<td class="description"><p class="name"><a href="#_allAssocs()">_allAssocs</a>()</p><p class="description">Remove expired entries from the database. </p></td>
+</tr>
+<tr>
+<td class="type">private  void</td>
+<td class="description"><p class="name"><a href="#_filenameEscape()">_filenameEscape</a>(mixed str)</p><p class="description"></p></td>
+</tr>
+<tr>
+<td class="type">private  void</td>
+<td class="description"><p class="name"><a href="#_getAssociation()">_getAssociation</a>(mixed filename)</p><p class="description"></p></td>
+</tr>
+<tr>
+<td class="type">private  void</td>
+<td class="description"><p class="name"><a href="#_isFilenameSafe()">_isFilenameSafe</a>(mixed char)</p><p class="description"></p></td>
+</tr>
+<tr>
+<td class="type">private  void</td>
+<td class="description"><p class="name"><a href="#_listdir()">_listdir</a>(mixed dir)</p><p class="description"></p></td>
+</tr>
+<tr>
+<td class="type">private static  void</td>
+<td class="description"><p class="name"><a href="#_mkdtemp()">_mkdtemp</a>(mixed dir)</p><p class="description"></p></td>
+</tr>
+<tr>
+<td class="type">private  void</td>
+<td class="description"><p class="name"><a href="#_mkstemp()">_mkstemp</a>(mixed dir)</p><p class="description"></p></td>
+</tr>
+<tr>
+<td class="type">private  array</td>
+<td class="description"><p class="name"><a href="#_mktemp()">_mktemp</a>()</p><p class="description">Create a temporary file on the same filesystem as
+$this->association_dir.
+</p></td>
+</tr>
+<tr>
+<td class="type">private  bool</td>
+<td class="description"><p class="name"><a href="#_removeIfPresent()">_removeIfPresent</a>(mixed filename)</p><p class="description">Attempt to remove a file, returning whether the file existed at
+the time of the call.</p></td>
+</tr>
+<tr>
+<td class="type">private  void</td>
+<td class="description"><p class="name"><a href="#_rmtree()">_rmtree</a>(mixed dir)</p><p class="description"></p></td>
+</tr>
+<tr>
+<td class="type">private  void</td>
+<td class="description"><p class="name"><a href="#_safe64()">_safe64</a>(mixed str)</p><p class="description"></p></td>
+</tr>
+<tr>
+<td class="type">private  void</td>
+<td class="description"><p class="name"><a href="#_setup()">_setup</a>()</p><p class="description">Make sure that the directories in which we store our data
+exist.</p></td>
+</tr>
+<tr>
+<td class="type"> void</td>
+<td class="description"><p class="name"><a href="#clean()">clean</a>()</p></td>
+</tr>
+<tr>
+<td class="type"> void</td>
+<td class="description"><p class="name"><a href="#cleanupAssociations()">cleanupAssociations</a>()</p></td>
+</tr>
+<tr>
+<td class="type"> void</td>
+<td class="description"><p class="name"><a href="#cleanupNonces()">cleanupNonces</a>()</p></td>
+</tr>
+<tr>
+<td class="type"> void</td>
+<td class="description"><p class="name"><a href="#destroy()">destroy</a>()</p></td>
+</tr>
+<tr>
+<td class="type"> mixed</td>
+<td class="description"><p class="name"><a href="#getAssociation()">getAssociation</a>(string server_url, mixed handle)</p><p class="description">Retrieve an association. </p></td>
+</tr>
+<tr>
+<td class="type"> string</td>
+<td class="description"><p class="name"><a href="#getAssociationFilename()">getAssociationFilename</a>(mixed server_url, mixed handle)</p><p class="description">Create a unique filename for a given server url and
+handle. </p></td>
+</tr>
+<tr>
+<td class="type"> bool</td>
+<td class="description"><p class="name"><a href="#removeAssociation()">removeAssociation</a>(string server_url, string handle)</p><p class="description">Remove an association if it exists. </p></td>
+</tr>
+<tr>
+<td class="type"> void</td>
+<td class="description"><p class="name"><a href="#storeAssociation()">storeAssociation</a>(string server_url, Association association)</p><p class="description">Store an association in the association directory.</p></td>
+</tr>
+<tr>
+<td class="type"> bool</td>
+<td class="description"><p class="name"><a href="#useNonce()">useNonce</a>(mixed server_url, mixed timestamp, mixed salt, string nonce)</p><p class="description">Return whether this nonce is present. </p></td>
+</tr>
+</table>
+
+<table class="inherit">
+<tr><th colspan="2">Methods inherited from OpenID\Auth_OpenID_OpenIDStore</th></tr>
+<tr><td><a href="../openid/auth_openid_openidstore.html#cleanup()">cleanup</a>, <a href="../openid/auth_openid_openidstore.html#cleanupAssociations()">cleanupAssociations</a>, <a href="../openid/auth_openid_openidstore.html#cleanupNonces()">cleanupNonces</a>, <a href="../openid/auth_openid_openidstore.html#getAssociation()">getAssociation</a>, <a href="../openid/auth_openid_openidstore.html#removeAssociation()">removeAssociation</a>, <a href="../openid/auth_openid_openidstore.html#reset()">reset</a>, <a href="../openid/auth_openid_openidstore.html#storeAssociation()">storeAssociation</a>, <a href="../openid/auth_openid_openidstore.html#supportsCleanup()">supportsCleanup</a>, <a href="../openid/auth_openid_openidstore.html#useNonce()">useNonce</a></td></tr></table>
+
+<h2 id="detail_method">Method Detail</h2><div class="method_detail">
+<div class='method'><a href="../source/libraries/auth/openid/filestore.php.html#line49" class="location">libraries/Auth/OpenID/FileStore.php at line 49</a>
+
+<h3 id="__construct()">__construct</h3>
+<code class="signature">public  void <strong>__construct</strong>(string directory)</code>
+<div class="details">
+<p>Initializes a new <code><a href="../openid/auth_openid_filestore.html">Auth_OpenID_FileStore</a></code>.  This
+initializes the nonce and association directories, which are
+subdirectories of the directory passed in.</p><dl>
+<dt>Parameters:</dt>
+<dd>directory - This is the directory to put the store directories in.</dd>
+</dl>
+</div></div>
+
+
+
+<div class='method'><a href="../source/libraries/auth/openid/filestore.php.html#line405" class="location">libraries/Auth/OpenID/FileStore.php at line 405</a>
+
+<h3 id="_allAssocs()">_allAssocs</h3>
+<code class="signature">private  void <strong>_allAssocs</strong>()</code>
+<div class="details">
+<p>Remove expired entries from the database. This is potentially
+expensive, so only run when it is acceptable to take time.</p></div></div>
+
+
+
+<div class='method'><a href="../source/libraries/auth/openid/filestore.php.html#line576" class="location">libraries/Auth/OpenID/FileStore.php at line 576</a>
+
+<h3 id="_filenameEscape()">_filenameEscape</h3>
+<code class="signature">private  void <strong>_filenameEscape</strong>(mixed str)</code>
+<div class="details">
+<p></p></div></div>
+
+
+
+<div class='method'><a href="../source/libraries/auth/openid/filestore.php.html#line296" class="location">libraries/Auth/OpenID/FileStore.php at line 296</a>
+
+<h3 id="_getAssociation()">_getAssociation</h3>
+<code class="signature">private  void <strong>_getAssociation</strong>(mixed filename)</code>
+<div class="details">
+<p></p></div></div>
+
+
+
+<div class='method'><a href="../source/libraries/auth/openid/filestore.php.html#line554" class="location">libraries/Auth/OpenID/FileStore.php at line 554</a>
+
+<h3 id="_isFilenameSafe()">_isFilenameSafe</h3>
+<code class="signature">private  void <strong>_isFilenameSafe</strong>(mixed char)</code>
+<div class="details">
+<p></p></div></div>
+
+
+
+<div class='method'><a href="../source/libraries/auth/openid/filestore.php.html#line539" class="location">libraries/Auth/OpenID/FileStore.php at line 539</a>
+
+<h3 id="_listdir()">_listdir</h3>
+<code class="signature">private  void <strong>_listdir</strong>(mixed dir)</code>
+<div class="details">
+<p></p></div></div>
+
+
+
+<div class='method'><a href="../source/libraries/auth/openid/filestore.php.html#line522" class="location">libraries/Auth/OpenID/FileStore.php at line 522</a>
+
+<h3 id="_mkdtemp()">_mkdtemp</h3>
+<code class="signature">private static  void <strong>_mkdtemp</strong>(mixed dir)</code>
+<div class="details">
+<p></p></div></div>
+
+
+
+<div class='method'><a href="../source/libraries/auth/openid/filestore.php.html#line507" class="location">libraries/Auth/OpenID/FileStore.php at line 507</a>
+
+<h3 id="_mkstemp()">_mkstemp</h3>
+<code class="signature">private  void <strong>_mkstemp</strong>(mixed dir)</code>
+<div class="details">
+<p></p></div></div>
+
+
+
+<div class='method'><a href="../source/libraries/auth/openid/filestore.php.html#line108" class="location">libraries/Auth/OpenID/FileStore.php at line 108</a>
+
+<h3 id="_mktemp()">_mktemp</h3>
+<code class="signature">private  array <strong>_mktemp</strong>()</code>
+<div class="details">
+<p>Create a temporary file on the same filesystem as
+$this->association_dir.</p><p>The temporary directory should not be cleaned if there are any
+processes using the store. If there is no active process using
+the store, it is safe to remove all of the files in the
+temporary directory.</p><dl>
+<dt>Returns:</dt>
+<dd>($fd, $filename)</dd>
+</dl>
+</div></div>
+
+
+
+<div class='method'><a href="../source/libraries/auth/openid/filestore.php.html#line599" class="location">libraries/Auth/OpenID/FileStore.php at line 599</a>
+
+<h3 id="_removeIfPresent()">_removeIfPresent</h3>
+<code class="signature">private  bool <strong>_removeIfPresent</strong>(mixed filename)</code>
+<div class="details">
+<p>Attempt to remove a file, returning whether the file existed at
+the time of the call.</p><dl>
+<dt>Returns:</dt>
+<dd>$result True if the file was present, false if not.</dd>
+</dl>
+</div></div>
+
+
+
+<div class='method'><a href="../source/libraries/auth/openid/filestore.php.html#line469" class="location">libraries/Auth/OpenID/FileStore.php at line 469</a>
+
+<h3 id="_rmtree()">_rmtree</h3>
+<code class="signature">private  void <strong>_rmtree</strong>(mixed dir)</code>
+<div class="details">
+<p></p></div></div>
+
+
+
+<div class='method'><a href="../source/libraries/auth/openid/filestore.php.html#line564" class="location">libraries/Auth/OpenID/FileStore.php at line 564</a>
+
+<h3 id="_safe64()">_safe64</h3>
+<code class="signature">private  void <strong>_safe64</strong>(mixed str)</code>
+<div class="details">
+<p></p></div></div>
+
+
+
+<div class='method'><a href="../source/libraries/auth/openid/filestore.php.html#line89" class="location">libraries/Auth/OpenID/FileStore.php at line 89</a>
+
+<h3 id="_setup()">_setup</h3>
+<code class="signature">private  void <strong>_setup</strong>()</code>
+<div class="details">
+<p>Make sure that the directories in which we store our data
+exist.</p></div></div>
+
+
+
+<div class='method'><a href="../source/libraries/auth/openid/filestore.php.html#line440" class="location">libraries/Auth/OpenID/FileStore.php at line 440</a>
+
+<h3 id="clean()">clean</h3>
+<code class="signature">public  void <strong>clean</strong>()</code>
+<div class="details">
+</div></div>
+
+
+
+<div class='method'><a href="../source/libraries/auth/openid/filestore.php.html#line604" class="location">libraries/Auth/OpenID/FileStore.php at line 604</a>
+
+<h3 id="cleanupAssociations()">cleanupAssociations</h3>
+<code class="signature">public  void <strong>cleanupAssociations</strong>()</code>
+<div class="details">
+</div></div>
+
+
+
+<div class='method'><a href="../source/libraries/auth/openid/filestore.php.html#line119" class="location">libraries/Auth/OpenID/FileStore.php at line 119</a>
+
+<h3 id="cleanupNonces()">cleanupNonces</h3>
+<code class="signature">public  void <strong>cleanupNonces</strong>()</code>
+<div class="details">
+</div></div>
+
+
+
+<div class='method'><a href="../source/libraries/auth/openid/filestore.php.html#line77" class="location">libraries/Auth/OpenID/FileStore.php at line 77</a>
+
+<h3 id="destroy()">destroy</h3>
+<code class="signature">public  void <strong>destroy</strong>()</code>
+<div class="details">
+</div></div>
+
+
+
+<div class='method'><a href="../source/libraries/auth/openid/filestore.php.html#line232" class="location">libraries/Auth/OpenID/FileStore.php at line 232</a>
+
+<h3 id="getAssociation()">getAssociation</h3>
+<code class="signature">public  mixed <strong>getAssociation</strong>(string server_url, mixed handle)</code>
+<div class="details">
+<p>Retrieve an association. If no handle is specified, return the
+association with the most recent issue time.</p><dl>
+<dt>Returns:</dt>
+<dd>$association</dd>
+<dt>Parameters:</dt>
+<dd>server_url - The URL of the identity server to get the association for. Because of the way the server portion of the library uses this interface, don't assume there are any limitations on the character set of the input string. In particular, expect to see unescaped non-url-safe characters in the server_url field.</dd>
+<dd>handle - This optional parameter is the handle of the specific association to get. If no specific handle is provided, any valid association matching the server URL is returned.</dd>
+</dl>
+</div></div>
+
+
+
+<div class='method'><a href="../source/libraries/auth/openid/filestore.php.html#line150" class="location">libraries/Auth/OpenID/FileStore.php at line 150</a>
+
+<h3 id="getAssociationFilename()">getAssociationFilename</h3>
+<code class="signature">public  string <strong>getAssociationFilename</strong>(mixed server_url, mixed handle)</code>
+<div class="details">
+<p>Create a unique filename for a given server url and
+handle. This implementation does not assume anything about the
+format of the handle. The filename that is returned will
+contain the domain name from the server URL for ease of human
+inspection of the data directory.</p><dl>
+<dt>Returns:</dt>
+<dd>$filename</dd>
+</dl>
+</div></div>
+
+
+
+<div class='method'><a href="../source/libraries/auth/openid/filestore.php.html#line338" class="location">libraries/Auth/OpenID/FileStore.php at line 338</a>
+
+<h3 id="removeAssociation()">removeAssociation</h3>
+<code class="signature">public  bool <strong>removeAssociation</strong>(string server_url, string handle)</code>
+<div class="details">
+<p>Remove an association if it exists. Do nothing if it does not.</p><dl>
+<dt>Returns:</dt>
+<dd>$success</dd>
+<dt>Parameters:</dt>
+<dd>server_url - The URL of the identity server the association to remove belongs to. Because of the way the server portion of the library uses this interface, don't assume there are any limitations on the character set of the input string. In particular, expect to see unescaped non-url-safe characters in the server_url field.</dd>
+<dd>handle - This is the handle of the association to remove. If there isn't an association found that matches both the given URL and handle, then there was no matching handle found.</dd>
+</dl>
+</div></div>
+
+
+
+<div class='method'><a href="../source/libraries/auth/openid/filestore.php.html#line182" class="location">libraries/Auth/OpenID/FileStore.php at line 182</a>
+
+<h3 id="storeAssociation()">storeAssociation</h3>
+<code class="signature">public  void <strong>storeAssociation</strong>(string server_url, Association association)</code>
+<div class="details">
+<p>Store an association in the association directory.</p><dl>
+<dt>Parameters:</dt>
+<dd>server_url - The URL of the identity server that this association is with. Because of the way the server portion of the library uses this interface, don't assume there are any limitations on the character set of the input string. In particular, expect to see unescaped non-url-safe characters in the server_url field.</dd>
+<dd>association - The Association to store.</dd>
+</dl>
+</div></div>
+
+
+
+<div class='method'><a href="../source/libraries/auth/openid/filestore.php.html#line360" class="location">libraries/Auth/OpenID/FileStore.php at line 360</a>
+
+<h3 id="useNonce()">useNonce</h3>
+<code class="signature">public  bool <strong>useNonce</strong>(mixed server_url, mixed timestamp, mixed salt, string nonce)</code>
+<div class="details">
+<p>Return whether this nonce is present. As a side effect, mark it
+as no longer present.</p><dl>
+<dt>Returns:</dt>
+<dd>$present</dd>
+<dt>Parameters:</dt>
+<dd>nonce - The nonce to use.</dd>
+</dl>
+</div></div>
+
+
+
+</div><div class="header">
+<h1>GiftFlow API</h1>
+<ul>
+<li><a href="../overview-summary.html">Overview</a></li>
+<li><a href="../openid/package-summary.html">Package</a></li>
+<li class="active">Class</li>
+<li><a href="../openid/package-tree.html">Tree</a></li>
+<li><a href="../overview-files.html">Files</a></li>
+<li><a href="../deprecated-list.html">Deprecated</a></li>
+<li><a href="../index-all.html">Index</a></li>
+</ul>
+</div>
+
+<div class="small_links">
+<a href="../index.html" target="_top">Frames</a>
+<a href="../openid/auth_openid_filestore.html" target="_top">No frames</a>
+</div>
+<div class="small_links">
+Summary: <a href="#summary_field">Field</a> | <a href="#summary_method">Method</a> | <a href="#summary_constr">Constr</a>
+Detail: <a href="#detail_field">Field</a> | <a href="#detail_method">Method</a> | <a href="#summary_constr">Constr</a>
+</div>
+<hr>
+
+<p id="footer">This document was generated by <a href="http://peej.github.com/phpdoctor/">PHPDoctor: The PHP Documentation Creator</a></p>
+
+</body>
+
+</html>

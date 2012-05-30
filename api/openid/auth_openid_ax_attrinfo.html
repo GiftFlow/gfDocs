@@ -1,0 +1,145 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+
+<html lang="en">
+<head>
+
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
+<meta name="generator" content="PHPDoctor 2RC4 (http://peej.github.com/phpdoctor/)">
+<meta name="when" content="Wed, 09 Feb 2011 20:22:55 +0000">
+
+<link rel="stylesheet" type="text/css" href="../stylesheet.css">
+<link rel="start" href="../overview-summary.html">
+
+<title>Auth_OpenID_AX_AttrInfo (GiftFlow API)</title>
+
+</head>
+<body id="definition" onload="parent.document.title=document.title;">
+
+<div class="header">
+<h1>GiftFlow API</h1>
+<ul>
+<li><a href="../overview-summary.html">Overview</a></li>
+<li><a href="../openid/package-summary.html">Package</a></li>
+<li class="active">Class</li>
+<li><a href="../openid/package-tree.html">Tree</a></li>
+<li><a href="../overview-files.html">Files</a></li>
+<li><a href="../deprecated-list.html">Deprecated</a></li>
+<li><a href="../index-all.html">Index</a></li>
+</ul>
+</div>
+
+<div class="small_links">
+<a href="../index.html" target="_top">Frames</a>
+<a href="../openid/auth_openid_ax_attrinfo.html" target="_top">No frames</a>
+</div>
+<div class="small_links">
+Summary: <a href="#summary_field">Field</a> | <a href="#summary_method">Method</a> | <a href="#summary_constr">Constr</a>
+Detail: <a href="#detail_field">Field</a> | <a href="#detail_method">Method</a> | <a href="#summary_constr">Constr</a>
+</div>
+<hr>
+
+<div class="qualifiedName">OpenID\Auth_OpenID_AX_AttrInfo</div>
+<a href="../source/libraries/auth/openid/ax.php.html#line138" class="location">libraries/Auth/OpenID/AX.php at line 138</a>
+
+<h1>Class Auth_OpenID_AX_AttrInfo</h1>
+
+<pre class="tree"><strong>Auth_OpenID_AX_AttrInfo</strong><br /></pre>
+
+<hr>
+
+<p class="signature">public  class <strong>Auth_OpenID_AX_AttrInfo</strong></p>
+
+<div class="comment" id="overview_description"><p>Represents a single attribute in an attribute exchange
+request. This should be added to an AXRequest object in order to
+request the attribute.</p></div>
+
+<hr>
+
+<table id="summary_method">
+<tr><th colspan="2">Method Summary</th></tr>
+<tr>
+<td class="type"> void</td>
+<td class="description"><p class="name"><a href="#__construct()">__construct</a>(string type_uri, int count, bool required, string alias)</p><p class="description">Construct an attribute information object. </p></td>
+</tr>
+<tr>
+<td class="type">static  void</td>
+<td class="description"><p class="name"><a href="#make()">make</a>(mixed type_uri, int count, bool required, mixed alias)</p><p class="description">Construct an attribute information object. </p></td>
+</tr>
+<tr>
+<td class="type"> void</td>
+<td class="description"><p class="name"><a href="#wantsUnlimitedValues()">wantsUnlimitedValues</a>()</p><p class="description">When processing a request for this attribute, the OP should
+call this method to determine whether all available attribute
+values were requested. </p></td>
+</tr>
+</table>
+
+<h2 id="detail_method">Method Detail</h2><div class="method_detail">
+<div class='method'><a href="../source/libraries/auth/openid/ax.php.html#line153" class="location">libraries/Auth/OpenID/AX.php at line 153</a>
+
+<h3 id="__construct()">__construct</h3>
+<code class="signature">public  void <strong>__construct</strong>(string type_uri, int count, bool required, string alias)</code>
+<div class="details">
+<p>Construct an attribute information object.  Do not call this
+directly; call make(...) instead.</p><dl>
+<dt>Parameters:</dt>
+<dd>type_uri - The type URI for this attribute.</dd>
+<dd>count - The number of values of this type to request.</dd>
+<dd>required - Whether the attribute will be marked as required in the request.</dd>
+<dd>alias - The name that should be given to this attribute in the request.</dd>
+</dl>
+</div></div>
+
+
+
+<div class='method'><a href="../source/libraries/auth/openid/ax.php.html#line192" class="location">libraries/Auth/OpenID/AX.php at line 192</a>
+
+<h3 id="make()">make</h3>
+<code class="signature">public static  void <strong>make</strong>(mixed type_uri, int count, bool required, mixed alias)</code>
+<div class="details">
+<p>Construct an attribute information object.  For parameter
+details, see the constructor.</p></div></div>
+
+
+
+<div class='method'><a href="../source/libraries/auth/openid/ax.php.html#line213" class="location">libraries/Auth/OpenID/AX.php at line 213</a>
+
+<h3 id="wantsUnlimitedValues()">wantsUnlimitedValues</h3>
+<code class="signature">public  void <strong>wantsUnlimitedValues</strong>()</code>
+<div class="details">
+<p>When processing a request for this attribute, the OP should
+call this method to determine whether all available attribute
+values were requested.  If self.count == UNLIMITED_VALUES, this
+returns True.  Otherwise this returns False, in which case
+self.count is an integer.</p></div></div>
+
+
+
+</div><div class="header">
+<h1>GiftFlow API</h1>
+<ul>
+<li><a href="../overview-summary.html">Overview</a></li>
+<li><a href="../openid/package-summary.html">Package</a></li>
+<li class="active">Class</li>
+<li><a href="../openid/package-tree.html">Tree</a></li>
+<li><a href="../overview-files.html">Files</a></li>
+<li><a href="../deprecated-list.html">Deprecated</a></li>
+<li><a href="../index-all.html">Index</a></li>
+</ul>
+</div>
+
+<div class="small_links">
+<a href="../index.html" target="_top">Frames</a>
+<a href="../openid/auth_openid_ax_attrinfo.html" target="_top">No frames</a>
+</div>
+<div class="small_links">
+Summary: <a href="#summary_field">Field</a> | <a href="#summary_method">Method</a> | <a href="#summary_constr">Constr</a>
+Detail: <a href="#detail_field">Field</a> | <a href="#detail_method">Method</a> | <a href="#summary_constr">Constr</a>
+</div>
+<hr>
+
+<p id="footer">This document was generated by <a href="http://peej.github.com/phpdoctor/">PHPDoctor: The PHP Documentation Creator</a></p>
+
+</body>
+
+</html>

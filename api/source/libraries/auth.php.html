@@ -1,0 +1,492 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+
+<html lang="en">
+<head>
+
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
+<meta name="generator" content="PHPDoctor 2RC4 (http://peej.github.com/phpdoctor/)">
+<meta name="when" content="Wed, 09 Feb 2011 20:22:56 +0000">
+
+<link rel="stylesheet" type="text/css" href="../../stylesheet.css">
+<link rel="start" href="../../overview-summary.html">
+
+<title>libraries/auth.php (GiftFlow API)</title>
+
+</head>
+<body id="file" onload="parent.document.title=document.title;">
+
+<div class="header">
+<h1>GiftFlow API</h1>
+<ul>
+<li><a href="../../overview-summary.html">Overview</a></li>
+<li>Package</li><li>Class</li><li>Tree</li><li><a href="../../overview-files.html">Files</a></li>
+<li><a href="../../deprecated-list.html">Deprecated</a></li>
+<li><a href="../../index-all.html">Index</a></li>
+</ul>
+</div>
+
+<div class="small_links">
+<a href="../../index.html" target="_top">Frames</a>
+<a href="../../source/libraries/auth.php.html" target="_top">No frames</a>
+</div>
+<hr>
+
+<h1>libraries/auth.php</h1>
+<hr>
+
+<a name="line1"></a><pre><?php  if ( ! defined('BASEPATH')) exit('No direct script access allowed');
+<a name="line2"></a>/**
+<a name="line3"></a>*	The Auth library handles both authentication and authorization functionality.
+<a name="line4"></a>*
+<a name="line5"></a>*	@author Brandon Jackson
+<a name="line6"></a>* 	@package Libraries
+<a name="line7"></a>*/
+<a name="line8"></a>class Auth
+<a name="line9"></a>{
+<a name="line10"></a>
+<a name="line11"></a>	protected $CI;
+<a name="line12"></a>	
+<a name="line13"></a>	/**
+<a name="line14"></a>	*	@var User
+<a name="line15"></a>	*/
+<a name="line16"></a>	var $U;
+<a name="line17"></a>
+<a name="line18"></a>	/**
+<a name="line19"></a>	*	Constructor
+<a name="line20"></a>	*/
+<a name="line21"></a>	public function __construct()
+<a name="line22"></a>	{
+<a name="line23"></a>		$this->CI =& get_instance();
+<a name="line24"></a>		$this->hooks =& load_class('Hooks');
+<a name="line25"></a>	}
+<a name="line26"></a>	
+<a name="line27"></a>	/**
+<a name="line28"></a>	*	Register new user
+<a name="line29"></a>	*
+<a name="line30"></a>	*	Reads from $_POST data
+<a name="line31"></a>	*
+<a name="line32"></a>	*	@return User
+<a name="line33"></a>	*/
+<a name="line34"></a>	public function register()
+<a name="line35"></a>	{
+<a name="line36"></a>		$this->CI->load->library('datamapper');
+<a name="line37"></a>	
+<a name="line38"></a>		// Construct new User object
+<a name="line39"></a>		$this->U = new User();
+<a name="line40"></a>		
+<a name="line41"></a>		// Set $_POST data
+<a name="line42"></a>		$this->U->email = $this->CI->input->post('email');
+<a name="line43"></a>		$this->U->screen_name = $this->U->email;
+<a name="line44"></a>		$this->U->password = $this->CI->input->post('password');
+<a name="line45"></a>		
+<a name="line46"></a>		// Set default user role to 2, which is a normal user
+<a name="line47"></a>		$this->U->role = 'user';
+<a name="line48"></a>		
+<a name="line49"></a>		// Set IP address
+<a name="line50"></a>		$this->U->ip_address = $this->CI->input->ip_address();
+<a name="line51"></a>		
+<a name="line52"></a>		// Generate salt based on time and email
+<a name="line53"></a>		$this->U->salt =  sha1('~'.$this->U->email.'~'.microtime(TRUE));
+<a name="line54"></a>		
+<a name="line55"></a>		// Save new user. If successful....
+<a name="line56"></a>		if($this->U->register())
+<a name="line57"></a>		{
+<a name="line58"></a>			// Deactive user, generate activation code
+<a name="line59"></a>			$this->U->deactivate();
+<a name="line60"></a>		
+<a name="line61"></a>			// Hook: 'user_registration_manual'
+<a name="line62"></a>			$this->hooks->call('user_registration_manual', $this);
+<a name="line63"></a>		}
+<a name="line64"></a>		
+<a name="line65"></a>		// Return new user
+<a name="line66"></a>		return $this->U;
+<a name="line67"></a>	}
+<a name="line68"></a>	
+<a name="line69"></a>	
+<a name="line70"></a>	/**
+<a name="line71"></a>	*	Tests to see if user is logged in
+<a name="line72"></a>	*	
+<a name="line73"></a>	*	@return boolean
+<a name="line74"></a>	*/
+<a name="line75"></a>	function is_logged_in()
+<a name="line76"></a>	{
+<a name="line77"></a>		return $this->CI->session->userdata('user_id') ? TRUE : FALSE;
+<a name="line78"></a>	}
+<a name="line79"></a>	
+<a name="line80"></a>	/**
+<a name="line81"></a>	*	Handles logins. Reads credentials from $_POST and validates using 
+<a name="line82"></a>	*	methods stored in the User model. If successful, creates new session.
+<a name="line83"></a>	*
+<a name="line84"></a>	*	@return User
+<a name="line85"></a>	*/
+<a name="line86"></a>	public function login()
+<a name="line87"></a>	{
+<a name="line88"></a>		$this->CI->load->library('datamapper');
+<a name="line89"></a>	
+<a name="line90"></a>		// Construct new User object
+<a name="line91"></a>		$this->U = new User();
+<a name="line92"></a>		
+<a name="line93"></a>		// Parse $_POST input
+<a name="line94"></a>		$this->U->email = $this->CI->input->post('email');
+<a name="line95"></a>		$this->U->password = $this->CI->input->post('password');
+<a name="line96"></a>		
+<a name="line97"></a>		// Validates login info. If valid...
+<a name="line98"></a>		if($this->U->login())
+<a name="line99"></a>		{
+<a name="line100"></a>			// Hook: 'user_logged_in'
+<a name="line101"></a>			$this->hooks->call('user_logged_in', $this);
+<a name="line102"></a>		
+<a name="line103"></a>			// ... create new session
+<a name="line104"></a>			$this->new_session();
+<a name="line105"></a>		}
+<a name="line106"></a>		
+<a name="line107"></a>		// Return User object
+<a name="line108"></a>		return $this->U;
+<a name="line109"></a>	}
+<a name="line110"></a>	
+<a name="line111"></a>	/**
+<a name="line112"></a>	*	Logs user out. Destroys CodeIgniter session.
+<a name="line113"></a>	*
+<a name="line114"></a>	*	@return void
+<a name="line115"></a>	*/
+<a name="line116"></a>	public function logout()
+<a name="line117"></a>	{
+<a name="line118"></a>		// Destroy CI session
+<a name="line119"></a>		$this->CI->session->sess_destroy();
+<a name="line120"></a>		
+<a name="line121"></a>		// Hook: 'user_logged_out'
+<a name="line122"></a>		$this->hooks->call('user_logged_out', $this);
+<a name="line123"></a>	}
+<a name="line124"></a>	
+<a name="line125"></a>	/**
+<a name="line126"></a>	*	Creates new CodeIgniter session for the user defined
+<a name="line127"></a>	*	in $this->U
+<a name="line128"></a>	*
+<a name="line129"></a>	*	@return boolean
+<a name="line130"></a>	*/
+<a name="line131"></a>	protected function new_session()
+<a name="line132"></a>	{
+<a name="line133"></a>		$this->CI->load->library('datamapper');
+<a name="line134"></a>	
+<a name="line135"></a>		if ( empty($this->U) )
+<a name="line136"></a>		{
+<a name="line137"></a>			return FALSE;
+<a name="line138"></a>		}
+<a name="line139"></a>		$this->U->default_location->get();
+<a name="line140"></a>		$this->U->default_photo->get();
+<a name="line141"></a>		
+<a name="line142"></a>		// Build userdata object
+<a name="line143"></a>		$userdata = array ( 
+<a name="line144"></a>			'logged_in' => TRUE,
+<a name="line145"></a>			'role'=>$this->U->role,
+<a name="line146"></a>			'level'=>$this->get_access_level($this->U->role),
+<a name="line147"></a>			'user_id'=>$this->U->id,
+<a name="line148"></a>			'email'=>$this->U->email,
+<a name="line149"></a>			'username'=>$this->U->username,
+<a name="line150"></a>			'screen_name'=>$this->U->screen_name,
+<a name="line151"></a>			'first_name'=>$this->U->first_name,
+<a name="line152"></a>			'last_name'=>$this->U->last_name,
+<a name="line153"></a>			'location_latitude'=>$this->U->default_location->latitude,
+<a name="line154"></a>			'location_longitude'=>$this->U->default_location->longitude,
+<a name="line155"></a>			'location_street_address' => $this->U->default_location->street_address,
+<a name="line156"></a>			'location_address'=>$this->U->default_location->address,
+<a name="line157"></a>			'location_city'=>$this->U->default_location->city,
+<a name="line158"></a>			'location_state'=>$this->U->default_location->state,
+<a name="line159"></a>			'location_country'=>$this->U->default_location->country,
+<a name="line160"></a>			'status'=>$this->U->status
+<a name="line161"></a>		);
+<a name="line162"></a>						
+<a name="line163"></a>		// Determine appropriate photo thumbnail source, then add to userdata
+<a name="line164"></a>		if($this->U->photo_source=="facebook" && !empty($this->U->facebook_id))
+<a name="line165"></a>		{
+<a name="line166"></a>			$userdata['photo_thumb_url'] = "http://graph.facebook.com/".$this->U->facebook_id."/picture?type=square";
+<a name="line167"></a>			$userdata['photo_url'] = "http://graph.facebook.com/".$this->U->facebook_id."/picture?type=large";
+<a name="line168"></a>		}
+<a name="line169"></a>		elseif(!empty($this->U->default_photo->thumb_url)&&!empty($this->U->default_photo->url))
+<a name="line170"></a>		{
+<a name="line171"></a>			$userdata['photo_thumb_url'] = $this->U->default_photo->thumb_url;
+<a name="line172"></a>			$userdata['photo_url'] = $this->U->default_photo->url;
+<a name="line173"></a>		}
+<a name="line174"></a>		else
+<a name="line175"></a>		{
+<a name="line176"></a>			$userdata['photo_thumb_url'] = base_url().'assets/images/default_user_photo_thumb.jpg';
+<a name="line177"></a>			$userdata['photo_url'] = base_url().'assets/images/default_user_photo.jpg';
+<a name="line178"></a>		}
+<a name="line179"></a>		
+<a name="line180"></a>		// Save to userdata array
+<a name="line181"></a>		$this->CI->session->set_userdata($userdata);
+<a name="line182"></a>		return TRUE;
+<a name="line183"></a>	}
+<a name="line184"></a>	
+<a name="line185"></a>	
+<a name="line186"></a>	/*
+<a name="line187"></a>	*
+<a name="line188"></a>	*	AUTHORIZATION FUNCTIONS
+<a name="line189"></a>	*
+<a name="line190"></a>	*/
+<a name="line191"></a>
+<a name="line192"></a>	/**
+<a name="line193"></a>	*	Validates whether the user has a high enough authentication level to view a page.
+<a name="line194"></a>	*	
+<a name="line195"></a>	*	@param int $min	The minimum authorization level needed to view this page
+<a name="line196"></a>	*	@return boolean
+<a name="line197"></a>	*/
+<a name="line198"></a>	public function validate( $min )
+<a name="line199"></a>	{
+<a name="line200"></a>		if($this->CI->session->userdata('level'))
+<a name="line201"></a>		{
+<a name="line202"></a>			$level = $this->CI->session->userdata('level');
+<a name="line203"></a>		}
+<a name="line204"></a>		else 
+<a name="line205"></a>		{
+<a name="line206"></a>			$level = 0;
+<a name="line207"></a>		}
+<a name="line208"></a>
+<a name="line209"></a>		// If no minimum level specified, default to 100
+<a name="line210"></a>		if(empty($min))
+<a name="line211"></a>		{
+<a name="line212"></a>			$min = 100;
+<a name="line213"></a>		}
+<a name="line214"></a>		
+<a name="line215"></a>		// Test user's access $level vs $min level required
+<a name="line216"></a>		if ($level >= $min)
+<a name="line217"></a>		{
+<a name="line218"></a>			return true;
+<a name="line219"></a>		}
+<a name="line220"></a>		else
+<a name="line221"></a>		{
+<a name="line222"></a>			return false;
+<a name="line223"></a>		}
+<a name="line224"></a>	}
+<a name="line225"></a>	
+<a name="line226"></a>	/**
+<a name="line227"></a>	*	Lets authorized users view a page and redirects unauthorized users
+<a name="line228"></a>	*	to either an access denied page or login page.
+<a name="line229"></a>	*
+<a name="line230"></a>	*	@param int $min 			Minimum auth level
+<a name="line231"></a>	*	@param string $redirect	URL to redirect to
+<a name="line232"></a>	*/
+<a name="line233"></a>	
+<a name="line234"></a>	public function bouncer ($min = NULL, $redirect = 'login')
+<a name="line235"></a>	{
+<a name="line236"></a>		Console::logSpeed('start Auth::bouncer()');
+<a name="line237"></a>
+<a name="line238"></a>		if($this->validate($min))
+<a name="line239"></a>		{
+<a name="line240"></a>			return true;
+<a name="line241"></a>			Console::logSpeed('end Auth::bouncer()');
+<a name="line242"></a>		}
+<a name="line243"></a>		else
+<a name="line244"></a>		{
+<a name="line245"></a>			if($this->CI->session->userdata('logged_in'))
+<a name="line246"></a>			{
+<a name="line247"></a>				redirect('restricted');
+<a name="line248"></a>			}
+<a name="line249"></a>			else
+<a name="line250"></a>			{
+<a name="line251"></a>				$this->CI->db->insert('redirects', array("url"=>$this->CI->uri->uri_string()));
+<a name="line252"></a>				redirect($redirect."/".$this->CI->db->insert_id());
+<a name="line253"></a>			}
+<a name="line254"></a>		}
+<a name="line255"></a>	}
+<a name="line256"></a>	
+<a name="line257"></a>	/** 	
+<a name="line258"></a>	*	Handles Facebook connect auth requests
+<a name="line259"></a>	*
+<a name="line260"></a>	*	Outline
+<a name="line261"></a>	* 	1: Is the Facebook data valid?
+<a name="line262"></a>	*    		a: Yes. Proceed to 2.
+<a name="line263"></a>	*    		b: No. Return error message.
+<a name="line264"></a>	* 	2: Is Facebook ID in system?
+<a name="line265"></a>	*     	a: Yes. Create session for that user.
+<a name="line266"></a>	*     	b: No. Facebook ID not in system. Proceed to 3.
+<a name="line267"></a>	*	3. Is this user already logged in?
+<a name="line268"></a>	*		a. Yes. Link Facebook ID with that user. Fill in missing profile fields.
+<a name="line269"></a>	*		b. No. Proceed to step 4.
+<a name="line270"></a>	* 	4: Is email in system?
+<a name="line271"></a>	*     	a: Yes. Create session for that user. Link Facebook ID with that user. 
+<a name="line272"></a>	*		   Fill in missing profile fields.
+<a name="line273"></a>	*     	b: No. Create new User.
+<a name="line274"></a>	*
+<a name="line275"></a>	*	@param object $data	JSON data received from Facebook
+<a name="line276"></a>	*/
+<a name="line277"></a>	function facebook( $data )
+<a name="line278"></a>	{
+<a name="line279"></a>		$this->CI->load->library('datamapper');
+<a name="line280"></a>	
+<a name="line281"></a>		// Only proceed if ID present
+<a name="line282"></a>		if(!empty($data->id))
+<a name="line283"></a>		{
+<a name="line284"></a>			// Check for this Facebook ID in DB
+<a name="line285"></a>			$step_two = $this->CI->db->where('facebook_id',$data->id)->from('users')->get();
+<a name="line286"></a>			
+<a name="line287"></a>			// Outcome 2a: Facebook ID already in system. Logging User In.
+<a name="line288"></a>			if($step_two->num_rows==1)
+<a name="line289"></a>			{
+<a name="line290"></a>				$user = $step_two->row();
+<a name="line291"></a>				$this->U = new User($user->id);
+<a name="line292"></a>				$this->U->facebook_sync( $data );
+<a name="line293"></a>				$this->new_session();
+<a name="line294"></a>				redirect('');
+<a name="line295"></a>			}
+<a name="line296"></a>			// eof 2a
+<a name="line297"></a>			
+<a name="line298"></a>			// Outcome 3a: User exists and is logged in. Linking GiftFlow & Facebook
+<a name="line299"></a>			// accounts.
+<a name="line300"></a>			elseif(!empty($this->CI->session->userdata['user_id']))
+<a name="line301"></a>			{
+<a name="line302"></a>				$this->U = new User( $this->CI->session->userdata['user_id'] );
+<a name="line303"></a>				
+<a name="line304"></a>				// Sync Facebook data
+<a name="line305"></a>				$this->U->facebook_sync($data);
+<a name="line306"></a>				
+<a name="line307"></a>				// Set success message, redirect back to Manage Linked Accounts page
+<a name="line308"></a>				$this->CI->session->set_flashdata('success', 'Facebook account now linked with GiftFlow');
+<a name="line309"></a>				redirect('account/links');
+<a name="line310"></a>			}
+<a name="line311"></a>			// eof 3a
+<a name="line312"></a>			
+<a name="line313"></a>			elseif(!empty($data->email))
+<a name="line314"></a>			{
+<a name="line315"></a>				// Check for existing accounts with provided email address
+<a name="line316"></a>				$step_four = $this->CI->db->where('email',$data->email)->from('users')->get();
+<a name="line317"></a>				
+<a name="line318"></a>				// Outcome 4a: Existing user logging in for first time using Facebook
+<a name="line319"></a>				if($step_four->num_rows==1)
+<a name="line320"></a>				{
+<a name="line321"></a>					$user = $step_four->row();
+<a name="line322"></a>					$this->U = new User($user->id);
+<a name="line323"></a>					$this->U->facebook_sync($data);
+<a name="line324"></a>					
+<a name="line325"></a>					// Create new session
+<a name="line326"></a>					if($this->new_session())
+<a name="line327"></a>					{
+<a name="line328"></a>						$this->U->save();
+<a name="line329"></a>						// Redirect to dashboard
+<a name="line330"></a>						redirect('');
+<a name="line331"></a>					}
+<a name="line332"></a>				}
+<a name="line333"></a>				// eof 4a
+<a name="line334"></a>				
+<a name="line335"></a>				// Outcome 4b: New user
+<a name="line336"></a>				else
+<a name="line337"></a>				{
+<a name="line338"></a>					$this->U = new User();
+<a name="line339"></a>					
+<a name="line340"></a>					// Save user, sync with Facebook data
+<a name="line341"></a>					if($this->U->facebook_sync( $data ))
+<a name="line342"></a>					{
+<a name="line343"></a>						// Create new session
+<a name="line344"></a>						if($this->new_session())
+<a name="line345"></a>						{
+<a name="line346"></a>							// Redirect to facebook welcome page
+<a name="line347"></a>							redirect('welcome/facebook');
+<a name="line348"></a>						}
+<a name="line349"></a>						else
+<a name="line350"></a>						{
+<a name="line351"></a>							// @todo bad session error
+<a name="line352"></a>						}
+<a name="line353"></a>					}
+<a name="line354"></a>					else
+<a name="line355"></a>					{
+<a name="line356"></a>						// @todo facebook data sync error
+<a name="line357"></a>					}
+<a name="line358"></a>				}
+<a name="line359"></a>				// eof 4b
+<a name="line360"></a>			}
+<a name="line361"></a>		}		
+<a name="line362"></a>	}
+<a name="line363"></a>	
+<a name="line364"></a>	/**
+<a name="line365"></a>	*	Logs in users authenticated by OpenID
+<a name="line366"></a>	*/
+<a name="line367"></a>	function openid_login( $U = NULL )
+<a name="line368"></a>	{
+<a name="line369"></a>	
+<a name="line370"></a>		$this->CI->load->library('datamapper');
+<a name="line371"></a>
+<a name="line372"></a>		if( empty( $U ) )
+<a name="line373"></a>		{
+<a name="line374"></a>			return false;
+<a name="line375"></a>		}
+<a name="line376"></a>		$this->U = $U;
+<a name="line377"></a>		
+<a name="line378"></a>		// Hook: 'user_logged_in'
+<a name="line379"></a>		$this->hooks->call('user_logged_in', $this);
+<a name="line380"></a>		$this->hooks->call('user_logged_in_openid', $this);
+<a name="line381"></a>
+<a name="line382"></a>		// ... create new session
+<a name="line383"></a>		$this->new_session();
+<a name="line384"></a>		
+<a name="line385"></a>		redirect('');
+<a name="line386"></a>	}
+<a name="line387"></a>
+<a name="line388"></a>	/**
+<a name="line389"></a>	*	Logs in users manually, using the User object passed as first parameter
+<a name="line390"></a>	*
+<a name="line391"></a>	*	@param object $U 			User object to log in
+<a name="line392"></a>	*	@param boolean $redirect	If true, redirect to index
+<a name="line393"></a>	*/
+<a name="line394"></a>	function manual_login( $U = NULL, $redirect = TRUE )
+<a name="line395"></a>	{
+<a name="line396"></a>		$this->CI->load->library('datamapper');
+<a name="line397"></a>	
+<a name="line398"></a>		if(empty($U))
+<a name="line399"></a>		{
+<a name="line400"></a>			return FALSE;
+<a name="line401"></a>		}
+<a name="line402"></a>		
+<a name="line403"></a>		$this->U = $U;
+<a name="line404"></a>		
+<a name="line405"></a>		// Hook: 'user_logged_in'
+<a name="line406"></a>		$this->hooks->call('user_logged_in', $this);
+<a name="line407"></a>		$this->hooks->call('user_logged_in_openid', $this);
+<a name="line408"></a>
+<a name="line409"></a>		// ... create new session
+<a name="line410"></a>		$this->new_session();
+<a name="line411"></a>		
+<a name="line412"></a>		if( $redirect )
+<a name="line413"></a>		{
+<a name="line414"></a>			redirect('');
+<a name="line415"></a>		}
+<a name="line416"></a>	}
+<a name="line417"></a>	
+<a name="line418"></a>	/**
+<a name="line419"></a>	*	Get access level based on provided $role
+<a name="line420"></a>	*	@param string $role		User's role (e.g. "admin" or "user")
+<a name="line421"></a>	*	@return int				User's access level
+<a name="line422"></a>	*/
+<a name="line423"></a>	function get_access_level($role)
+<a name="line424"></a>	{
+<a name="line425"></a>		if($role=="admin")
+<a name="line426"></a>		{
+<a name="line427"></a>			return 100;
+<a name="line428"></a>		}
+<a name="line429"></a>		else
+<a name="line430"></a>		{
+<a name="line431"></a>			return 1;
+<a name="line432"></a>		}
+<a name="line433"></a>	}
+<a name="line434"></a>}</pre>
+<div class="header">
+<h1>GiftFlow API</h1>
+<ul>
+<li><a href="../../overview-summary.html">Overview</a></li>
+<li>Package</li><li>Class</li><li>Tree</li><li><a href="../../overview-files.html">Files</a></li>
+<li><a href="../../deprecated-list.html">Deprecated</a></li>
+<li><a href="../../index-all.html">Index</a></li>
+</ul>
+</div>
+
+<div class="small_links">
+<a href="../../index.html" target="_top">Frames</a>
+<a href="../../source/libraries/auth.php.html" target="_top">No frames</a>
+</div>
+<hr>
+
+<p id="footer">This document was generated by <a href="http://peej.github.com/phpdoctor/">PHPDoctor: The PHP Documentation Creator</a></p>
+
+</body>
+
+</html>

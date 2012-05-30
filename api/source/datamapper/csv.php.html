@@ -1,0 +1,286 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+
+<html lang="en">
+<head>
+
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
+<meta name="generator" content="PHPDoctor 2RC4 (http://peej.github.com/phpdoctor/)">
+<meta name="when" content="Wed, 09 Feb 2011 20:22:56 +0000">
+
+<link rel="stylesheet" type="text/css" href="../../stylesheet.css">
+<link rel="start" href="../../overview-summary.html">
+
+<title>datamapper/csv.php (GiftFlow API)</title>
+
+</head>
+<body id="file" onload="parent.document.title=document.title;">
+
+<div class="header">
+<h1>GiftFlow API</h1>
+<ul>
+<li><a href="../../overview-summary.html">Overview</a></li>
+<li>Package</li><li>Class</li><li>Tree</li><li><a href="../../overview-files.html">Files</a></li>
+<li><a href="../../deprecated-list.html">Deprecated</a></li>
+<li><a href="../../index-all.html">Index</a></li>
+</ul>
+</div>
+
+<div class="small_links">
+<a href="../../index.html" target="_top">Frames</a>
+<a href="../../source/datamapper/csv.php.html" target="_top">No frames</a>
+</div>
+<hr>
+
+<h1>datamapper/csv.php</h1>
+<div class="comment" id="overview_description"><p>CSV Extension for DataMapper classes.</p><p>Quickly import and export a set of DataMapper models to-and-from CSV files.</p></div>
+
+<hr>
+
+<a name="line1"></a><pre><?php
+<a name="line2"></a>
+<a name="line3"></a>/**
+<a name="line4"></a> * CSV Extension for DataMapper classes.
+<a name="line5"></a> *
+<a name="line6"></a> * Quickly import and export a set of DataMapper models to-and-from CSV files.
+<a name="line7"></a> *
+<a name="line8"></a> * @license 	MIT License
+<a name="line9"></a> * @package		DMZ-Included-Extensions
+<a name="line10"></a> * @category	DMZ
+<a name="line11"></a> * @author  	Phil DeJarnett
+<a name="line12"></a> * @link    	http://www.overzealous.com/dmz/pages/extensions/csv.html
+<a name="line13"></a> * @version 	1.0
+<a name="line14"></a> */
+<a name="line15"></a>
+<a name="line16"></a>// --------------------------------------------------------------------------
+<a name="line17"></a>
+<a name="line18"></a>/**
+<a name="line19"></a> * DMZ_CSV Class
+<a name="line20"></a> *
+<a name="line21"></a> * @package		DMZ-Included-Extensions
+<a name="line22"></a> */
+<a name="line23"></a>class DMZ_CSV {
+<a name="line24"></a>	
+<a name="line25"></a>	/**
+<a name="line26"></a>	 * Convert a DataMapper model into an associative array.
+<a name="line27"></a>	 * 
+<a name="line28"></a>	 * @param	DataMapper $object The DataMapper Object to export
+<a name="line29"></a>	 * @param	mixed filename The filename to export to, or a file pointer. If this is a file pointer, it will not be closed.
+<a name="line30"></a>	 * @param	array $fields Array of fields to include.  If empty, includes all database columns.
+<a name="line31"></a>	 * @param	bool $include_header If FALSE the header is not exported with the CSV. Not recommended if planning to import this data.
+<a name="line32"></a>	 * @return	bool TRUE on success, or FALSE on failure.
+<a name="line33"></a>	 */
+<a name="line34"></a>	function csv_export($object, $filename, $fields = '', $include_header = TRUE)
+<a name="line35"></a>	{
+<a name="line36"></a>		// determine the correct field set.
+<a name="line37"></a>		if(empty($fields))
+<a name="line38"></a>		{
+<a name="line39"></a>			$fields = $object->fields;
+<a name="line40"></a>		}
+<a name="line41"></a>		
+<a name="line42"></a>		$success = TRUE;
+<a name="line43"></a>		
+<a name="line44"></a>		// determine if we need to open the file or not.
+<a name="line45"></a>		if(is_string($filename))
+<a name="line46"></a>		{
+<a name="line47"></a>			// open the file, if possible.
+<a name="line48"></a>			$fp = fopen($filename, 'w');
+<a name="line49"></a>			if($fp === FALSE)
+<a name="line50"></a>			{
+<a name="line51"></a>				log_message('error', 'CSV Extension: Unable to open file ' . $filename);
+<a name="line52"></a>				return FALSE;
+<a name="line53"></a>			}
+<a name="line54"></a>		}
+<a name="line55"></a>		else
+<a name="line56"></a>		{
+<a name="line57"></a>			// assume file pointer.
+<a name="line58"></a>			$fp = $filename;
+<a name="line59"></a>		}
+<a name="line60"></a>		
+<a name="line61"></a>		if($include_header)
+<a name="line62"></a>		{
+<a name="line63"></a>			// Print out header line
+<a name="line64"></a>			$success = fputcsv($fp, $fields);
+<a name="line65"></a>		}
+<a name="line66"></a>		
+<a name="line67"></a>		if($success)
+<a name="line68"></a>		{
+<a name="line69"></a>			foreach($object as $o)
+<a name="line70"></a>			{
+<a name="line71"></a>				// convert each object into an array
+<a name="line72"></a>				$result = array();
+<a name="line73"></a>				foreach($fields as $f)
+<a name="line74"></a>				{
+<a name="line75"></a>					$result[] = $o->{$f};
+<a name="line76"></a>				}
+<a name="line77"></a>				// output CSV-formatted line
+<a name="line78"></a>				$success = fputcsv($fp, $result);
+<a name="line79"></a>				if(!$success)
+<a name="line80"></a>				{
+<a name="line81"></a>					// stop on first failure.
+<a name="line82"></a>					break;
+<a name="line83"></a>				}
+<a name="line84"></a>			}
+<a name="line85"></a>		}
+<a name="line86"></a>		
+<a name="line87"></a>		if(is_string($filename))
+<a name="line88"></a>		{
+<a name="line89"></a>			fclose($fp);
+<a name="line90"></a>		}
+<a name="line91"></a>		
+<a name="line92"></a>		return $success;
+<a name="line93"></a>	}
+<a name="line94"></a>	
+<a name="line95"></a>	/**
+<a name="line96"></a>	 * Import objects from a CSV file.
+<a name="line97"></a>	 * 
+<a name="line98"></a>	 * Completely empty rows are automatically skipped, as are rows that
+<a name="line99"></a>	 * start with a # sign (assumed to be comments).
+<a name="line100"></a>	 * 
+<a name="line101"></a>	 * @param	DataMapper $object The type of DataMapper Object to import
+<a name="line102"></a>	 * @param	mixed $filename Name of CSV file, or a file pointer.
+<a name="line103"></a>	 * @param	array $fields If empty, the database fields are used.  Otherwise used to limit what fields are saved.
+<a name="line104"></a>	 * @param	boolean $header_row If true, the first line is assumed to be a header row.  Defaults to true.
+<a name="line105"></a>	 * @param	mixed $callback A callback method for each row.  Can return FALSE on failure to save, or 'stop' to stop the import.
+<a name="line106"></a>	 * @return	array Array of imported objects, or FALSE if unable to import.
+<a name="line107"></a>	 */
+<a name="line108"></a>	function csv_import($object, $filename, $fields = '', $header_row = TRUE, $callback = NULL)
+<a name="line109"></a>	{
+<a name="line110"></a>		$class = get_class($object);
+<a name="line111"></a>		
+<a name="line112"></a>		if(empty($fields))
+<a name="line113"></a>		{
+<a name="line114"></a>			$fields = $object->fields;
+<a name="line115"></a>		}
+<a name="line116"></a>		
+<a name="line117"></a>		// determine if we need to open the file or not.
+<a name="line118"></a>		if(is_string($filename))
+<a name="line119"></a>		{
+<a name="line120"></a>			// open the file, if possible.
+<a name="line121"></a>			$fp = fopen($filename, 'r');
+<a name="line122"></a>			if($fp === FALSE)
+<a name="line123"></a>			{
+<a name="line124"></a>				log_message('error', 'CSV Extension: Unable to open file ' . $filename);
+<a name="line125"></a>				return FALSE;
+<a name="line126"></a>			}
+<a name="line127"></a>		}
+<a name="line128"></a>		else
+<a name="line129"></a>		{
+<a name="line130"></a>			// assume file pointer.
+<a name="line131"></a>			$fp = $filename;
+<a name="line132"></a>		}
+<a name="line133"></a>		
+<a name="line134"></a>		if(empty($callback))
+<a name="line135"></a>		{
+<a name="line136"></a>			$result = array();			
+<a name="line137"></a>		}
+<a name="line138"></a>		else
+<a name="line139"></a>		{
+<a name="line140"></a>			$result = 0;
+<a name="line141"></a>		}
+<a name="line142"></a>		$columns = NULL;
+<a name="line143"></a>		
+<a name="line144"></a>		while(($data = fgetcsv($fp)) !== FALSE)
+<a name="line145"></a>		{
+<a name="line146"></a>			// get column names
+<a name="line147"></a>			if(is_null($columns))
+<a name="line148"></a>			{
+<a name="line149"></a>				if($header_row)
+<a name="line150"></a>				{
+<a name="line151"></a>					// store header row for column names
+<a name="line152"></a>					$columns = $data;
+<a name="line153"></a>					// only include columns in $fields
+<a name="line154"></a>					foreach($columns as $index => $name)
+<a name="line155"></a>					{
+<a name="line156"></a>						if( ! in_array($name, $fields))
+<a name="line157"></a>						{
+<a name="line158"></a>							// mark column as false to skip
+<a name="line159"></a>							$columns[$index] = FALSE;
+<a name="line160"></a>						}
+<a name="line161"></a>					}
+<a name="line162"></a>					continue;
+<a name="line163"></a>				}
+<a name="line164"></a>				else
+<a name="line165"></a>				{
+<a name="line166"></a>					$columns = $fields;
+<a name="line167"></a>				}
+<a name="line168"></a>			}
+<a name="line169"></a>			
+<a name="line170"></a>			// skip on comments and empty rows
+<a name="line171"></a>			if(empty($data) || $data[0][0] == '#' || implode('', $data) == '')
+<a name="line172"></a>			{
+<a name="line173"></a>				continue;
+<a name="line174"></a>			}
+<a name="line175"></a>			
+<a name="line176"></a>			// create the object to save
+<a name="line177"></a>			$o = new $class();
+<a name="line178"></a>			foreach($columns as $index => $key)
+<a name="line179"></a>			{
+<a name="line180"></a>				if(count($data) <= $index)
+<a name="line181"></a>				{
+<a name="line182"></a>					// more header columns than data columns
+<a name="line183"></a>					break;
+<a name="line184"></a>				}
+<a name="line185"></a>				
+<a name="line186"></a>				// skip columns that were determined to not be needed above.
+<a name="line187"></a>				if($key === FALSE)
+<a name="line188"></a>				{
+<a name="line189"></a>					continue;
+<a name="line190"></a>				}
+<a name="line191"></a>				
+<a name="line192"></a>				// finally, it's OK to save the data column.
+<a name="line193"></a>				$o->{$key} = $data[$index];
+<a name="line194"></a>			}
+<a name="line195"></a>			
+<a name="line196"></a>			if( empty($callback))
+<a name="line197"></a>			{
+<a name="line198"></a>				$result[] = $o;
+<a name="line199"></a>			}
+<a name="line200"></a>			else
+<a name="line201"></a>			{
+<a name="line202"></a>				$test = call_user_func($callback, $o);
+<a name="line203"></a>				if($test === 'stop')
+<a name="line204"></a>				{
+<a name="line205"></a>					break;
+<a name="line206"></a>				}
+<a name="line207"></a>				if($test !== FALSE)
+<a name="line208"></a>				{
+<a name="line209"></a>					$result++;
+<a name="line210"></a>				}
+<a name="line211"></a>			}
+<a name="line212"></a>		}
+<a name="line213"></a>		
+<a name="line214"></a>		if(is_string($filename))
+<a name="line215"></a>		{
+<a name="line216"></a>			fclose($fp);
+<a name="line217"></a>		}
+<a name="line218"></a>		
+<a name="line219"></a>		return $result;
+<a name="line220"></a>	}
+<a name="line221"></a>	
+<a name="line222"></a>}
+<a name="line223"></a>
+<a name="line224"></a>/* End of file csv.php */
+<a name="line225"></a>/* Location: ./application/datamapper/csv.php */
+<a name="line226"></a></pre>
+<div class="header">
+<h1>GiftFlow API</h1>
+<ul>
+<li><a href="../../overview-summary.html">Overview</a></li>
+<li>Package</li><li>Class</li><li>Tree</li><li><a href="../../overview-files.html">Files</a></li>
+<li><a href="../../deprecated-list.html">Deprecated</a></li>
+<li><a href="../../index-all.html">Index</a></li>
+</ul>
+</div>
+
+<div class="small_links">
+<a href="../../index.html" target="_top">Frames</a>
+<a href="../../source/datamapper/csv.php.html" target="_top">No frames</a>
+</div>
+<hr>
+
+<p id="footer">This document was generated by <a href="http://peej.github.com/phpdoctor/">PHPDoctor: The PHP Documentation Creator</a></p>
+
+</body>
+
+</html>

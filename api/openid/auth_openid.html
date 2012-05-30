@@ -1,0 +1,403 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+
+<html lang="en">
+<head>
+
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
+<meta name="generator" content="PHPDoctor 2RC4 (http://peej.github.com/phpdoctor/)">
+<meta name="when" content="Wed, 09 Feb 2011 20:22:55 +0000">
+
+<link rel="stylesheet" type="text/css" href="../stylesheet.css">
+<link rel="start" href="../overview-summary.html">
+
+<title>Auth_OpenID (GiftFlow API)</title>
+
+</head>
+<body id="definition" onload="parent.document.title=document.title;">
+
+<div class="header">
+<h1>GiftFlow API</h1>
+<ul>
+<li><a href="../overview-summary.html">Overview</a></li>
+<li><a href="../openid/package-summary.html">Package</a></li>
+<li class="active">Class</li>
+<li><a href="../openid/package-tree.html">Tree</a></li>
+<li><a href="../overview-files.html">Files</a></li>
+<li><a href="../deprecated-list.html">Deprecated</a></li>
+<li><a href="../index-all.html">Index</a></li>
+</ul>
+</div>
+
+<div class="small_links">
+<a href="../index.html" target="_top">Frames</a>
+<a href="../openid/auth_openid.html" target="_top">No frames</a>
+</div>
+<div class="small_links">
+Summary: <a href="#summary_field">Field</a> | <a href="#summary_method">Method</a> | <a href="#summary_constr">Constr</a>
+Detail: <a href="#detail_field">Field</a> | <a href="#detail_method">Method</a> | <a href="#summary_constr">Constr</a>
+</div>
+<hr>
+
+<div class="qualifiedName">OpenID\Auth_OpenID</div>
+<a href="../source/libraries/auth/openid.php.html#line110" class="location">libraries/Auth/OpenID.php at line 110</a>
+
+<h1>Class Auth_OpenID</h1>
+
+<pre class="tree"><strong>Auth_OpenID</strong><br /></pre>
+
+<hr>
+
+<p class="signature">private  class <strong>Auth_OpenID</strong></p>
+
+<div class="comment" id="overview_description"><p>The OpenID utility function class.</p></div>
+
+<hr>
+
+<table id="summary_method">
+<tr><th colspan="2">Method Summary</th></tr>
+<tr>
+<td class="type">private static  void</td>
+<td class="description"><p class="name"><a href="#addPrefix()">addPrefix</a>(mixed values, mixed prefix)</p><p class="description">Adds a string prefix to all values of an array. </p></td>
+</tr>
+<tr>
+<td class="type">private static  string</td>
+<td class="description"><p class="name"><a href="#appendArgs()">appendArgs</a>(string url, array args)</p><p class="description">"Appends" query arguments onto a URL. </p></td>
+</tr>
+<tr>
+<td class="type">private static  void</td>
+<td class="description"><p class="name"><a href="#arrayGet()">arrayGet</a>(mixed arr, mixed key, mixed fallback)</p><p class="description">Convenience function for getting array values. </p></td>
+</tr>
+<tr>
+<td class="type">static  void</td>
+<td class="description"><p class="name"><a href="#autoSubmitHTML()">autoSubmitHTML</a>(mixed form, str title)</p></td>
+</tr>
+<tr>
+<td class="type">static  int</td>
+<td class="description"><p class="name"><a href="#bytes()">bytes</a>(string str)</p><p class="description">Count the number of bytes in a string independently of
+multibyte support conditions.</p></td>
+</tr>
+<tr>
+<td class="type">private static  void</td>
+<td class="description"><p class="name"><a href="#ensureDir()">ensureDir</a>(mixed dir_name)</p><p class="description">Create dir_name as a directory if it does not exist. </p></td>
+</tr>
+<tr>
+<td class="type">static  void</td>
+<td class="description"><p class="name"><a href="#filter()">filter</a>(mixed callback, mixed sequence)</p></td>
+</tr>
+<tr>
+<td class="type">private static  void</td>
+<td class="description"><p class="name"><a href="#getQuery()">getQuery</a>(mixed query_str)</p><p class="description">Gets the query data from the server environment based on the
+request method used. </p></td>
+</tr>
+<tr>
+<td class="type">private static  string</td>
+<td class="description"><p class="name"><a href="#httpBuildQuery()">httpBuildQuery</a>(array data)</p><p class="description">Implements the PHP 5 'http_build_query' functionality.</p></td>
+</tr>
+<tr>
+<td class="type">private static  void</td>
+<td class="description"><p class="name"><a href="#intval()">intval</a>(mixed value)</p><p class="description">Replacement (wrapper) for PHP's intval() because it's broken.</p></td>
+</tr>
+<tr>
+<td class="type">private static  void</td>
+<td class="description"><p class="name"><a href="#isFailure()">isFailure</a>(mixed thing)</p><p class="description">Return true if $thing is an Auth_OpenID_FailureResponse object;
+false if not.</p></td>
+</tr>
+<tr>
+<td class="type">static  void</td>
+<td class="description"><p class="name"><a href="#log()">log</a>(string format_string)</p><p class="description">Wrap PHP's standard error_log functionality. </p></td>
+</tr>
+<tr>
+<td class="type">private static  mixed</td>
+<td class="description"><p class="name"><a href="#normalizeUrl()">normalizeUrl</a>(string url)</p><p class="description">Given a URL, this "normalizes" it by adding a trailing slash
+and / or a leading http:// scheme where necessary. </p></td>
+</tr>
+<tr>
+<td class="type">static  void</td>
+<td class="description"><p class="name"><a href="#params_from_string()">params_from_string</a>(mixed str)</p></td>
+</tr>
+<tr>
+<td class="type">static  void</td>
+<td class="description"><p class="name"><a href="#parse_str()">parse_str</a>(mixed query)</p><p class="description">Replacement for PHP's broken parse_str.</p></td>
+</tr>
+<tr>
+<td class="type">static  void</td>
+<td class="description"><p class="name"><a href="#toBytes()">toBytes</a>(mixed str)</p><p class="description">Get the bytes in a string independently of multibyte support
+conditions.</p></td>
+</tr>
+<tr>
+<td class="type">static  void</td>
+<td class="description"><p class="name"><a href="#update()">update</a>(mixed dest, mixed src)</p></td>
+</tr>
+<tr>
+<td class="type">static  void</td>
+<td class="description"><p class="name"><a href="#urldefrag()">urldefrag</a>(mixed url)</p></td>
+</tr>
+<tr>
+<td class="type">private static  string</td>
+<td class="description"><p class="name"><a href="#urlunparse()">urlunparse</a>(string scheme, string host, string port, string path, string query, string fragment)</p><p class="description">Implements python's urlunparse, which is not available in PHP.
+</p></td>
+</tr>
+</table>
+
+<h2 id="detail_method">Method Detail</h2><div class="method_detail">
+<div class='method'><a href="../source/libraries/auth/openid.php.html#line226" class="location">libraries/Auth/OpenID.php at line 226</a>
+
+<h3 id="addPrefix()">addPrefix</h3>
+<code class="signature">private static  void <strong>addPrefix</strong>(mixed values, mixed prefix)</code>
+<div class="details">
+<p>Adds a string prefix to all values of an array.  Returns a new
+array containing the prefixed values.</p></div></div>
+
+
+
+<div class='method'><a href="../source/libraries/auth/openid.php.html#line324" class="location">libraries/Auth/OpenID.php at line 324</a>
+
+<h3 id="appendArgs()">appendArgs</h3>
+<code class="signature">private static  string <strong>appendArgs</strong>(string url, array args)</code>
+<div class="details">
+<p>"Appends" query arguments onto a URL.  The URL may or may not
+already have arguments (following a question mark).</p><dl>
+<dt>Parameters:</dt>
+<dd>url - A URL, which may or may not already have arguments.</dd>
+<dd>args - Either an array key/value pairs or an array of arrays, each of which holding two values: a key and a value, sequentially. If $args is an ordinary key/value array, the parameters will be added to the URL in sorted alphabetical order; if $args is an array of arrays, their order will be preserved.</dd>
+<dt>Returns:</dt>
+<dd>$url The original URL with the new parameters added. /</dd>
+</dl>
+</div></div>
+
+
+
+<div class='method'><a href="../source/libraries/auth/openid.php.html#line242" class="location">libraries/Auth/OpenID.php at line 242</a>
+
+<h3 id="arrayGet()">arrayGet</h3>
+<code class="signature">private static  void <strong>arrayGet</strong>(mixed arr, mixed key, mixed fallback)</code>
+<div class="details">
+<p>Convenience function for getting array values.  Given an array
+$arr and a key $key, get the corresponding value from the array
+or return $default if the key is absent.</p></div></div>
+
+
+
+<div class='method'><a href="../source/libraries/auth/openid.php.html#line531" class="location">libraries/Auth/OpenID.php at line 531</a>
+
+<h3 id="autoSubmitHTML()">autoSubmitHTML</h3>
+<code class="signature">public static  void <strong>autoSubmitHTML</strong>(mixed form, str title)</code>
+<div class="details">
+</div></div>
+
+
+
+<div class='method'><a href="../source/libraries/auth/openid.php.html#line461" class="location">libraries/Auth/OpenID.php at line 461</a>
+
+<h3 id="bytes()">bytes</h3>
+<code class="signature">public static  int <strong>bytes</strong>(string str)</code>
+<div class="details">
+<p>Count the number of bytes in a string independently of
+multibyte support conditions.</p><dl>
+<dt>Parameters:</dt>
+<dd>str - The string of bytes to count.</dd>
+<dt>Returns:</dt>
+<dd>The number of bytes in $str.</dd>
+</dl>
+</div></div>
+
+
+
+<div class='method'><a href="../source/libraries/auth/openid.php.html#line204" class="location">libraries/Auth/OpenID.php at line 204</a>
+
+<h3 id="ensureDir()">ensureDir</h3>
+<code class="signature">private static  void <strong>ensureDir</strong>(mixed dir_name)</code>
+<div class="details">
+<p>Create dir_name as a directory if it does not exist. If it
+exists, make sure that it is, in fact, a directory.  Returns
+true if the operation succeeded; false if not.</p></div></div>
+
+
+
+<div class='method'><a href="../source/libraries/auth/openid.php.html#line497" class="location">libraries/Auth/OpenID.php at line 497</a>
+
+<h3 id="filter()">filter</h3>
+<code class="signature">public static  void <strong>filter</strong>(mixed callback, mixed sequence)</code>
+<div class="details">
+</div></div>
+
+
+
+<div class='method'><a href="../source/libraries/auth/openid.php.html#line142" class="location">libraries/Auth/OpenID.php at line 142</a>
+
+<h3 id="getQuery()">getQuery</h3>
+<code class="signature">private static  void <strong>getQuery</strong>(mixed query_str)</code>
+<div class="details">
+<p>Gets the query data from the server environment based on the
+request method used.  If GET was used, this looks at
+$_SERVER['QUERY_STRING'] directly.  If POST was used, this
+fetches data from the special php://input file stream.</p><p>Returns an associative array of the query arguments.</p><p>Skips invalid key/value pairs (i.e. keys with no '=value'
+portion).</p><p>Returns an empty array if neither GET nor POST was used, or if
+POST was used but php://input cannot be opened.</p><p>See background:
+http://lists.openidenabled.com/pipermail/dev/2007-March/000395.html</p></div></div>
+
+
+
+<div class='method'><a href="../source/libraries/auth/openid.php.html#line296" class="location">libraries/Auth/OpenID.php at line 296</a>
+
+<h3 id="httpBuildQuery()">httpBuildQuery</h3>
+<code class="signature">private static  string <strong>httpBuildQuery</strong>(array data)</code>
+<div class="details">
+<p>Implements the PHP 5 'http_build_query' functionality.</p><dl>
+<dt>Parameters:</dt>
+<dd>data - Either an array key/value pairs or an array of arrays, each of which holding two values: a key and a value, sequentially.</dd>
+<dt>Returns:</dt>
+<dd>$result The result of url-encoding the key/value pairs from $data into a URL query string (e.g. "username=bob&id=56").</dd>
+</dl>
+</div></div>
+
+
+
+<div class='method'><a href="../source/libraries/auth/openid.php.html#line443" class="location">libraries/Auth/OpenID.php at line 443</a>
+
+<h3 id="intval()">intval</h3>
+<code class="signature">private static  void <strong>intval</strong>(mixed value)</code>
+<div class="details">
+<p>Replacement (wrapper) for PHP's intval() because it's broken.</p></div></div>
+
+
+
+<div class='method'><a href="../source/libraries/auth/openid.php.html#line118" class="location">libraries/Auth/OpenID.php at line 118</a>
+
+<h3 id="isFailure()">isFailure</h3>
+<code class="signature">private static  void <strong>isFailure</strong>(mixed thing)</code>
+<div class="details">
+<p>Return true if $thing is an Auth_OpenID_FailureResponse object;
+false if not.</p></div></div>
+
+
+
+<div class='method'><a href="../source/libraries/auth/openid.php.html#line524" class="location">libraries/Auth/OpenID.php at line 524</a>
+
+<h3 id="log()">log</h3>
+<code class="signature">public static  void <strong>log</strong>(string format_string)</code>
+<div class="details">
+<p>Wrap PHP's standard error_log functionality.  Use this to
+perform all logging. It will interpolate any additional
+arguments into the format string before logging.</p><dl>
+<dt>Parameters:</dt>
+<dd>format_string - The sprintf format for the message</dd>
+</dl>
+</div></div>
+
+
+
+<div class='method'><a href="../source/libraries/auth/openid.php.html#line412" class="location">libraries/Auth/OpenID.php at line 412</a>
+
+<h3 id="normalizeUrl()">normalizeUrl</h3>
+<code class="signature">private static  mixed <strong>normalizeUrl</strong>(string url)</code>
+<div class="details">
+<p>Given a URL, this "normalizes" it by adding a trailing slash
+and / or a leading http:// scheme where necessary.  Returns
+null if the original URL is malformed and cannot be normalized.</p><dl>
+<dt>Parameters:</dt>
+<dd>url - The URL to be normalized.</dd>
+<dt>Returns:</dt>
+<dd>$new_url The URL after normalization, or null if $url was malformed.</dd>
+</dl>
+</div></div>
+
+
+
+<div class='method'><a href="../source/libraries/auth/openid.php.html#line178" class="location">libraries/Auth/OpenID.php at line 178</a>
+
+<h3 id="params_from_string()">params_from_string</h3>
+<code class="signature">public static  void <strong>params_from_string</strong>(mixed str)</code>
+<div class="details">
+</div></div>
+
+
+
+<div class='method'><a href="../source/libraries/auth/openid.php.html#line262" class="location">libraries/Auth/OpenID.php at line 262</a>
+
+<h3 id="parse_str()">parse_str</h3>
+<code class="signature">public static  void <strong>parse_str</strong>(mixed query)</code>
+<div class="details">
+<p>Replacement for PHP's broken parse_str.</p></div></div>
+
+
+
+<div class='method'><a href="../source/libraries/auth/openid.php.html#line470" class="location">libraries/Auth/OpenID.php at line 470</a>
+
+<h3 id="toBytes()">toBytes</h3>
+<code class="signature">public static  void <strong>toBytes</strong>(mixed str)</code>
+<div class="details">
+<p>Get the bytes in a string independently of multibyte support
+conditions.</p></div></div>
+
+
+
+<div class='method'><a href="../source/libraries/auth/openid.php.html#line510" class="location">libraries/Auth/OpenID.php at line 510</a>
+
+<h3 id="update()">update</h3>
+<code class="signature">public static  void <strong>update</strong>(mixed dest, mixed src)</code>
+<div class="details">
+</div></div>
+
+
+
+<div class='method'><a href="../source/libraries/auth/openid.php.html#line486" class="location">libraries/Auth/OpenID.php at line 486</a>
+
+<h3 id="urldefrag()">urldefrag</h3>
+<code class="signature">public static  void <strong>urldefrag</strong>(mixed url)</code>
+<div class="details">
+</div></div>
+
+
+
+<div class='method'><a href="../source/libraries/auth/openid.php.html#line368" class="location">libraries/Auth/OpenID.php at line 368</a>
+
+<h3 id="urlunparse()">urlunparse</h3>
+<code class="signature">private static  string <strong>urlunparse</strong>(string scheme, string host, string port, string path, string query, string fragment)</code>
+<div class="details">
+<p>Implements python's urlunparse, which is not available in PHP.
+Given the specified components of a URL, this function rebuilds
+and returns the URL.</p><dl>
+<dt>Parameters:</dt>
+<dd>scheme - The scheme (e.g. 'http'). Defaults to 'http'.</dd>
+<dd>host - The host. Required.</dd>
+<dd>port - The port.</dd>
+<dd>path - The path.</dd>
+<dd>query - The query.</dd>
+<dd>fragment - The fragment.</dd>
+<dt>Returns:</dt>
+<dd>$url The URL resulting from assembling the specified components.</dd>
+</dl>
+</div></div>
+
+
+
+</div><div class="header">
+<h1>GiftFlow API</h1>
+<ul>
+<li><a href="../overview-summary.html">Overview</a></li>
+<li><a href="../openid/package-summary.html">Package</a></li>
+<li class="active">Class</li>
+<li><a href="../openid/package-tree.html">Tree</a></li>
+<li><a href="../overview-files.html">Files</a></li>
+<li><a href="../deprecated-list.html">Deprecated</a></li>
+<li><a href="../index-all.html">Index</a></li>
+</ul>
+</div>
+
+<div class="small_links">
+<a href="../index.html" target="_top">Frames</a>
+<a href="../openid/auth_openid.html" target="_top">No frames</a>
+</div>
+<div class="small_links">
+Summary: <a href="#summary_field">Field</a> | <a href="#summary_method">Method</a> | <a href="#summary_constr">Constr</a>
+Detail: <a href="#detail_field">Field</a> | <a href="#detail_method">Method</a> | <a href="#summary_constr">Constr</a>
+</div>
+<hr>
+
+<p id="footer">This document was generated by <a href="http://peej.github.com/phpdoctor/">PHPDoctor: The PHP Documentation Creator</a></p>
+
+</body>
+
+</html>

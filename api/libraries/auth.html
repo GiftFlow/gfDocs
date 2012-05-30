@@ -1,0 +1,324 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+
+<html lang="en">
+<head>
+
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
+<meta name="generator" content="PHPDoctor 2RC4 (http://peej.github.com/phpdoctor/)">
+<meta name="when" content="Wed, 09 Feb 2011 20:22:55 +0000">
+
+<link rel="stylesheet" type="text/css" href="../stylesheet.css">
+<link rel="start" href="../overview-summary.html">
+
+<title>Auth (GiftFlow API)</title>
+
+</head>
+<body id="definition" onload="parent.document.title=document.title;">
+
+<div class="header">
+<h1>GiftFlow API</h1>
+<ul>
+<li><a href="../overview-summary.html">Overview</a></li>
+<li><a href="../libraries/package-summary.html">Package</a></li>
+<li class="active">Class</li>
+<li><a href="../libraries/package-tree.html">Tree</a></li>
+<li><a href="../overview-files.html">Files</a></li>
+<li><a href="../deprecated-list.html">Deprecated</a></li>
+<li><a href="../index-all.html">Index</a></li>
+</ul>
+</div>
+
+<div class="small_links">
+<a href="../index.html" target="_top">Frames</a>
+<a href="../libraries/auth.html" target="_top">No frames</a>
+</div>
+<div class="small_links">
+Summary: <a href="#summary_field">Field</a> | <a href="#summary_method">Method</a> | <a href="#summary_constr">Constr</a>
+Detail: <a href="#detail_field">Field</a> | <a href="#detail_method">Method</a> | <a href="#summary_constr">Constr</a>
+</div>
+<hr>
+
+<div class="qualifiedName">Libraries\Auth</div>
+<a href="../source/libraries/auth.php.html#line8" class="location">libraries/auth.php at line 8</a>
+
+<h1>Class Auth</h1>
+
+<pre class="tree"><strong>Auth</strong><br /></pre>
+
+<hr>
+
+<p class="signature">public  class <strong>Auth</strong></p>
+
+<div class="comment" id="overview_description"><p>The Auth library handles both authentication and authorization functionality.</p></div>
+
+<dl>
+<dt>Author:</dt>
+<dd>Brandon Jackson</dd>
+</dl>
+<hr>
+
+<table id="summary_field">
+<tr><th colspan="2">Field Summary</th></tr>
+<tr>
+<td class="type"> <a href="../models/user.html">User</a></td>
+<td class="description"><p class="name"><a href="#U">$U</a></p><p class="description"></p></td>
+</tr>
+<tr>
+<td class="type">protected  mixed</td>
+<td class="description"><p class="name"><a href="#create">$create</a></p></td>
+</tr>
+</table>
+
+<table id="summary_method">
+<tr><th colspan="2">Method Summary</th></tr>
+<tr>
+<td class="type"> void</td>
+<td class="description"><p class="name"><a href="#__construct()">__construct</a>()</p><p class="description">Constructor</p></td>
+</tr>
+<tr>
+<td class="type"> void</td>
+<td class="description"><p class="name"><a href="#bouncer()">bouncer</a>(int min, string redirect)</p><p class="description">Lets authorized users view a page and redirects unauthorized users
+to either an access denied page or login page.</p></td>
+</tr>
+<tr>
+<td class="type"> void</td>
+<td class="description"><p class="name"><a href="#facebook()">facebook</a>(object data)</p><p class="description">Handles Facebook connect auth requestsOutline
+1: Is the Facebook data valid?
+a: Yes. </p></td>
+</tr>
+<tr>
+<td class="type"> int</td>
+<td class="description"><p class="name"><a href="#get_access_level()">get_access_level</a>(string role)</p><p class="description">Get access level based on provided $role</p></td>
+</tr>
+<tr>
+<td class="type"> boolean</td>
+<td class="description"><p class="name"><a href="#is_logged_in()">is_logged_in</a>()</p><p class="description">Tests to see if user is logged in</p></td>
+</tr>
+<tr>
+<td class="type"> <a href="../models/user.html">User</a></td>
+<td class="description"><p class="name"><a href="#login()">login</a>()</p><p class="description">Handles logins. </p></td>
+</tr>
+<tr>
+<td class="type"> void</td>
+<td class="description"><p class="name"><a href="#logout()">logout</a>()</p><p class="description">Logs user out. </p></td>
+</tr>
+<tr>
+<td class="type"> void</td>
+<td class="description"><p class="name"><a href="#manual_login()">manual_login</a>(object U, boolean redirect)</p><p class="description">Logs in users manually, using the User object passed as first parameter</p></td>
+</tr>
+<tr>
+<td class="type">protected  boolean</td>
+<td class="description"><p class="name"><a href="#new_session()">new_session</a>()</p><p class="description">Creates new CodeIgniter session for the user defined
+in $this->U</p></td>
+</tr>
+<tr>
+<td class="type"> void</td>
+<td class="description"><p class="name"><a href="#openid_login()">openid_login</a>(mixed U)</p><p class="description">Logs in users authenticated by OpenID</p></td>
+</tr>
+<tr>
+<td class="type"> <a href="../models/user.html">User</a></td>
+<td class="description"><p class="name"><a href="#register()">register</a>()</p><p class="description">Register new userReads from $_POST data</p></td>
+</tr>
+<tr>
+<td class="type"> boolean</td>
+<td class="description"><p class="name"><a href="#validate()">validate</a>(int min)</p><p class="description">Validates whether the user has a high enough authentication level to view a page.</p></td>
+</tr>
+</table>
+
+<h2 id="detail_field">Field Detail</h2>
+<a href="../source/libraries/auth.php.html#line16" class="location">libraries/auth.php at line 16</a>
+
+<h3 id="U">U</h3>
+<code class="signature">public  <a href="../models/user.html">User</a> <strong>$U</strong></code>
+<div class="details">
+<p></p></div>
+
+<hr>
+
+<a href="../source/libraries/auth.php.html#line11" class="location">libraries/auth.php at line 11</a>
+
+<h3 id="create">create</h3>
+<code class="signature">protected  mixed <strong>$create</strong> = null</code>
+<div class="details">
+</div>
+
+<hr>
+
+<h2 id="detail_method">Method Detail</h2><div class="method_detail">
+<div class='method'><a href="../source/libraries/auth.php.html#line21" class="location">libraries/auth.php at line 21</a>
+
+<h3 id="__construct()">__construct</h3>
+<code class="signature">public  void <strong>__construct</strong>()</code>
+<div class="details">
+<p>Constructor</p></div></div>
+
+
+
+<div class='method'><a href="../source/libraries/auth.php.html#line234" class="location">libraries/auth.php at line 234</a>
+
+<h3 id="bouncer()">bouncer</h3>
+<code class="signature">public  void <strong>bouncer</strong>(int min, string redirect)</code>
+<div class="details">
+<p>Lets authorized users view a page and redirects unauthorized users
+to either an access denied page or login page.</p><dl>
+<dt>Parameters:</dt>
+<dd>min - Minimum auth level</dd>
+<dd>redirect - URL to redirect to</dd>
+</dl>
+</div></div>
+
+
+
+<div class='method'><a href="../source/libraries/auth.php.html#line277" class="location">libraries/auth.php at line 277</a>
+
+<h3 id="facebook()">facebook</h3>
+<code class="signature">public  void <strong>facebook</strong>(object data)</code>
+<div class="details">
+<p>Handles Facebook connect auth requests</p><p>Outline
+1: Is the Facebook data valid?
+a: Yes. Proceed to 2.
+b: No. Return error message.
+2: Is Facebook ID in system?
+a: Yes. Create session for that user.
+b: No. Facebook ID not in system. Proceed to 3.
+3. Is this user already logged in?
+a. Yes. Link Facebook ID with that user. Fill in missing profile fields.
+b. No. Proceed to step 4.
+4: Is email in system?
+a: Yes. Create session for that user. Link Facebook ID with that user. 
+Fill in missing profile fields.
+b: No. Create new User.</p><dl>
+<dt>Parameters:</dt>
+<dd>data - JSON data received from Facebook</dd>
+</dl>
+</div></div>
+
+
+
+<div class='method'><a href="../source/libraries/auth.php.html#line423" class="location">libraries/auth.php at line 423</a>
+
+<h3 id="get_access_level()">get_access_level</h3>
+<code class="signature">public  int <strong>get_access_level</strong>(string role)</code>
+<div class="details">
+<p>Get access level based on provided $role</p><dl>
+<dt>Parameters:</dt>
+<dd>role - User's role (e.g. "admin" or "user")</dd>
+<dt>Returns:</dt>
+<dd>User's access level</dd>
+</dl>
+</div></div>
+
+
+
+<div class='method'><a href="../source/libraries/auth.php.html#line75" class="location">libraries/auth.php at line 75</a>
+
+<h3 id="is_logged_in()">is_logged_in</h3>
+<code class="signature">public  boolean <strong>is_logged_in</strong>()</code>
+<div class="details">
+<p>Tests to see if user is logged in</p></div></div>
+
+
+
+<div class='method'><a href="../source/libraries/auth.php.html#line86" class="location">libraries/auth.php at line 86</a>
+
+<h3 id="login()">login</h3>
+<code class="signature">public  <a href="../models/user.html">User</a> <strong>login</strong>()</code>
+<div class="details">
+<p>Handles logins. Reads credentials from $_POST and validates using 
+methods stored in the User model. If successful, creates new session.</p></div></div>
+
+
+
+<div class='method'><a href="../source/libraries/auth.php.html#line116" class="location">libraries/auth.php at line 116</a>
+
+<h3 id="logout()">logout</h3>
+<code class="signature">public  void <strong>logout</strong>()</code>
+<div class="details">
+<p>Logs user out. Destroys CodeIgniter session.</p></div></div>
+
+
+
+<div class='method'><a href="../source/libraries/auth.php.html#line394" class="location">libraries/auth.php at line 394</a>
+
+<h3 id="manual_login()">manual_login</h3>
+<code class="signature">public  void <strong>manual_login</strong>(object U, boolean redirect)</code>
+<div class="details">
+<p>Logs in users manually, using the User object passed as first parameter</p><dl>
+<dt>Parameters:</dt>
+<dd>U - User object to log in</dd>
+<dd>redirect - If true, redirect to index</dd>
+</dl>
+</div></div>
+
+
+
+<div class='method'><a href="../source/libraries/auth.php.html#line131" class="location">libraries/auth.php at line 131</a>
+
+<h3 id="new_session()">new_session</h3>
+<code class="signature">protected  boolean <strong>new_session</strong>()</code>
+<div class="details">
+<p>Creates new CodeIgniter session for the user defined
+in $this->U</p></div></div>
+
+
+
+<div class='method'><a href="../source/libraries/auth.php.html#line367" class="location">libraries/auth.php at line 367</a>
+
+<h3 id="openid_login()">openid_login</h3>
+<code class="signature">public  void <strong>openid_login</strong>(mixed U)</code>
+<div class="details">
+<p>Logs in users authenticated by OpenID</p></div></div>
+
+
+
+<div class='method'><a href="../source/libraries/auth.php.html#line34" class="location">libraries/auth.php at line 34</a>
+
+<h3 id="register()">register</h3>
+<code class="signature">public  <a href="../models/user.html">User</a> <strong>register</strong>()</code>
+<div class="details">
+<p>Register new user</p><p>Reads from $_POST data</p></div></div>
+
+
+
+<div class='method'><a href="../source/libraries/auth.php.html#line198" class="location">libraries/auth.php at line 198</a>
+
+<h3 id="validate()">validate</h3>
+<code class="signature">public  boolean <strong>validate</strong>(int min)</code>
+<div class="details">
+<p>Validates whether the user has a high enough authentication level to view a page.</p><dl>
+<dt>Parameters:</dt>
+<dd>min - The minimum authorization level needed to view this page</dd>
+</dl>
+</div></div>
+
+
+
+</div><div class="header">
+<h1>GiftFlow API</h1>
+<ul>
+<li><a href="../overview-summary.html">Overview</a></li>
+<li><a href="../libraries/package-summary.html">Package</a></li>
+<li class="active">Class</li>
+<li><a href="../libraries/package-tree.html">Tree</a></li>
+<li><a href="../overview-files.html">Files</a></li>
+<li><a href="../deprecated-list.html">Deprecated</a></li>
+<li><a href="../index-all.html">Index</a></li>
+</ul>
+</div>
+
+<div class="small_links">
+<a href="../index.html" target="_top">Frames</a>
+<a href="../libraries/auth.html" target="_top">No frames</a>
+</div>
+<div class="small_links">
+Summary: <a href="#summary_field">Field</a> | <a href="#summary_method">Method</a> | <a href="#summary_constr">Constr</a>
+Detail: <a href="#detail_field">Field</a> | <a href="#detail_method">Method</a> | <a href="#summary_constr">Constr</a>
+</div>
+<hr>
+
+<p id="footer">This document was generated by <a href="http://peej.github.com/phpdoctor/">PHPDoctor: The PHP Documentation Creator</a></p>
+
+</body>
+
+</html>

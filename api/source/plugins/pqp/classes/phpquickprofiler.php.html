@@ -1,0 +1,291 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+
+<html lang="en">
+<head>
+
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
+<meta name="generator" content="PHPDoctor 2RC4 (http://peej.github.com/phpdoctor/)">
+<meta name="when" content="Wed, 09 Feb 2011 20:22:56 +0000">
+
+<link rel="stylesheet" type="text/css" href="../../../../stylesheet.css">
+<link rel="start" href="../../../../overview-summary.html">
+
+<title>plugins/pqp/classes/PhpQuickProfiler.php (GiftFlow API)</title>
+
+</head>
+<body id="file" onload="parent.document.title=document.title;">
+
+<div class="header">
+<h1>GiftFlow API</h1>
+<ul>
+<li><a href="../../../../overview-summary.html">Overview</a></li>
+<li>Package</li><li>Class</li><li>Tree</li><li><a href="../../../../overview-files.html">Files</a></li>
+<li><a href="../../../../deprecated-list.html">Deprecated</a></li>
+<li><a href="../../../../index-all.html">Index</a></li>
+</ul>
+</div>
+
+<div class="small_links">
+<a href="../../../../index.html" target="_top">Frames</a>
+<a href="../../../../source/plugins/pqp/classes/phpquickprofiler.php.html" target="_top">No frames</a>
+</div>
+<hr>
+
+<h1>plugins/pqp/classes/PhpQuickProfiler.php</h1>
+<hr>
+
+<a name="line1"></a><pre><?php
+<a name="line2"></a>
+<a name="line3"></a>/* - - - - - - - - - - - - - - - - - - - - -
+<a name="line4"></a>
+<a name="line5"></a> Title : PHP Quick Profiler Class
+<a name="line6"></a> Author : Created by Ryan Campbell
+<a name="line7"></a> URL : http://particletree.com/features/php-quick-profiler/
+<a name="line8"></a>
+<a name="line9"></a> Last Updated : April 22, 2009
+<a name="line10"></a>
+<a name="line11"></a> Description : This class processes the logs and organizes the data
+<a name="line12"></a> for output to the browser. Initialize this class with a start time at
+<a name="line13"></a> the beginning of your code, and then call the display method when your code
+<a name="line14"></a> is terminating.
+<a name="line15"></a>
+<a name="line16"></a>- - - - - - - - - - - - - - - - - - - - - */
+<a name="line17"></a>
+<a name="line18"></a>class PhpQuickProfiler {
+<a name="line19"></a>	
+<a name="line20"></a>	public $output = array();
+<a name="line21"></a>	public $config = '';
+<a name="line22"></a>	
+<a name="line23"></a>	public function __construct($startTime, $config = '/pqp/') {
+<a name="line24"></a>		$this->startTime = $startTime;
+<a name="line25"></a>		$this->config = $config;
+<a name="line26"></a>		//require_once($_SERVER['DOCUMENT_ROOT'].$config.'classes/Console.php');
+<a name="line27"></a>        require_once dirname(__FILE__) . '/Console.php';
+<a name="line28"></a>	}
+<a name="line29"></a>	
+<a name="line30"></a>	/*-------------------------------------------
+<a name="line31"></a>	     FORMAT THE DIFFERENT TYPES OF LOGS
+<a name="line32"></a>	-------------------------------------------*/
+<a name="line33"></a>	
+<a name="line34"></a>	public function gatherConsoleData() {
+<a name="line35"></a>		$logs = Console::getLogs();
+<a name="line36"></a>		if(isset($logs['console'])) {
+<a name="line37"></a>			foreach($logs['console'] as $key => $log) {
+<a name="line38"></a>				if($log['type'] == 'log') {
+<a name="line39"></a>					$logs['console'][$key]['data'] = print_r($log['data'], true);
+<a name="line40"></a>				}
+<a name="line41"></a>				elseif($log['type'] == 'memory') {
+<a name="line42"></a>					$logs['console'][$key]['data'] = $this->getReadableFileSize($log['data']);
+<a name="line43"></a>				}
+<a name="line44"></a>				elseif($log['type'] == 'speed') {
+<a name="line45"></a>					$logs['console'][$key]['data'] = $this->getReadableTime(($log['data'] - $this->startTime)*1000);
+<a name="line46"></a>				}
+<a name="line47"></a>			}
+<a name="line48"></a>		}
+<a name="line49"></a>		$this->output['logs'] = $logs;
+<a name="line50"></a>	}
+<a name="line51"></a>	
+<a name="line52"></a>	/*-------------------------------------------
+<a name="line53"></a>	    AGGREGATE DATA ON THE FILES INCLUDED
+<a name="line54"></a>	-------------------------------------------*/
+<a name="line55"></a>	
+<a name="line56"></a>	public function gatherFileData() {
+<a name="line57"></a>		$files = get_included_files();
+<a name="line58"></a>		$fileList = array();
+<a name="line59"></a>		$fileTotals = array(
+<a name="line60"></a>			"count" => count($files),
+<a name="line61"></a>			"size" => 0,
+<a name="line62"></a>			"largest" => 0,
+<a name="line63"></a>		);
+<a name="line64"></a>
+<a name="line65"></a>		foreach($files as $key => $file) {
+<a name="line66"></a>			if (file_exists($file)) {
+<a name="line67"></a>			    $size = filesize($file);
+<a name="line68"></a>			} else {
+<a name="line69"></a>			    $size = 0;
+<a name="line70"></a>			}
+<a name="line71"></a>			$fileList[] = array(
+<a name="line72"></a>					'name' => $file,
+<a name="line73"></a>					'size' => $this->getReadableFileSize($size)
+<a name="line74"></a>				);
+<a name="line75"></a>			$fileTotals['size'] += $size;
+<a name="line76"></a>			if($size > $fileTotals['largest']) $fileTotals['largest'] = $size;
+<a name="line77"></a>		}
+<a name="line78"></a>		
+<a name="line79"></a>		$fileTotals['size'] = $this->getReadableFileSize($fileTotals['size']);
+<a name="line80"></a>		$fileTotals['largest'] = $this->getReadableFileSize($fileTotals['largest']);
+<a name="line81"></a>		$this->output['files'] = $fileList;
+<a name="line82"></a>		$this->output['fileTotals'] = $fileTotals;
+<a name="line83"></a>	}
+<a name="line84"></a>	
+<a name="line85"></a>	/*-------------------------------------------
+<a name="line86"></a>	     MEMORY USAGE AND MEMORY AVAILABLE
+<a name="line87"></a>	-------------------------------------------*/
+<a name="line88"></a>	
+<a name="line89"></a>	public function gatherMemoryData() {
+<a name="line90"></a>		$memoryTotals = array();
+<a name="line91"></a>		$memoryTotals['used'] = $this->getReadableFileSize(memory_get_peak_usage());
+<a name="line92"></a>		$memoryTotals['total'] = ini_get("memory_limit");
+<a name="line93"></a>		$this->output['memoryTotals'] = $memoryTotals;
+<a name="line94"></a>	}
+<a name="line95"></a>	
+<a name="line96"></a>	/*--------------------------------------------------------
+<a name="line97"></a>	     QUERY DATA -- DATABASE OBJECT WITH LOGGING REQUIRED
+<a name="line98"></a>	----------------------------------------------------------*/
+<a name="line99"></a>	
+<a name="line100"></a>	public function gatherQueryData() {
+<a name="line101"></a>		$queryTotals = array();
+<a name="line102"></a>		$queryTotals['count'] = 0;
+<a name="line103"></a>		$queryTotals['time'] = 0;
+<a name="line104"></a>		$queries = array();
+<a name="line105"></a>		
+<a name="line106"></a>		if($this->db != '') {
+<a name="line107"></a>			$queryTotals['count'] += $this->db->queryCount;
+<a name="line108"></a>			foreach($this->db->queries as $key => $query) {
+<a name="line109"></a>				$query = $this->attemptToExplainQuery($query);
+<a name="line110"></a>				$queryTotals['time'] += $query['time'];
+<a name="line111"></a>				$query['time'] = $this->getReadableTime($query['time']);
+<a name="line112"></a>				$queries[] = $query;
+<a name="line113"></a>			}
+<a name="line114"></a>		}
+<a name="line115"></a>		
+<a name="line116"></a>		$queryTotals['time'] = $this->getReadableTime($queryTotals['time']);
+<a name="line117"></a>		$this->output['queries'] = $queries;
+<a name="line118"></a>		$this->output['queryTotals'] = $queryTotals;
+<a name="line119"></a>	}
+<a name="line120"></a>	
+<a name="line121"></a>	/*--------------------------------------------------------
+<a name="line122"></a>	     CALL SQL EXPLAIN ON THE QUERY TO FIND MORE INFO
+<a name="line123"></a>	----------------------------------------------------------*/
+<a name="line124"></a>	
+<a name="line125"></a>	function attemptToExplainQuery($query) {
+<a name="line126"></a>		/*
+<a name="line127"></a>		try {
+<a name="line128"></a>			$sql = 'EXPLAIN '.$query['sql'];
+<a name="line129"></a>			$rs = $this->db->query($sql);
+<a name="line130"></a>		}
+<a name="line131"></a>		catch(Exception $e) {}
+<a name="line132"></a>		if($rs) {
+<a name="line133"></a>			$row = mysql_fetch_array($rs, MYSQL_ASSOC);
+<a name="line134"></a>			$query['explain'] = $row;
+<a name="line135"></a>		}
+<a name="line136"></a>		*/
+<a name="line137"></a>		
+<a name="line138"></a>		//Check if it's not a select query
+<a name="line139"></a>		if (strtolower(substr($query['sql'], 0, 6)) !== 'select') {
+<a name="line140"></a>		    return $query;
+<a name="line141"></a>		}
+<a name="line142"></a>		
+<a name="line143"></a>		$ci = get_instance();
+<a name="line144"></a>		if (is_object($ci->db)) {
+<a name="line145"></a>		    $sql = 'EXPLAIN '.$query['sql'];
+<a name="line146"></a>			$rs = $ci->db->query($sql);
+<a name="line147"></a>			$results = $rs->result_array();
+<a name="line148"></a>			if (isset($results[0])) {
+<a name="line149"></a>			    $query['explain'] = $results[0];
+<a name="line150"></a>			}
+<a name="line151"></a>		}
+<a name="line152"></a>		
+<a name="line153"></a>		return $query;
+<a name="line154"></a>	}
+<a name="line155"></a>	
+<a name="line156"></a>	/*-------------------------------------------
+<a name="line157"></a>	     SPEED DATA FOR ENTIRE PAGE LOAD
+<a name="line158"></a>	-------------------------------------------*/
+<a name="line159"></a>	
+<a name="line160"></a>	public function gatherSpeedData() {
+<a name="line161"></a>		$speedTotals = array();
+<a name="line162"></a>		$speedTotals['total'] = $this->getReadableTime(($this->getMicroTime() - $this->startTime)*1000);
+<a name="line163"></a>		$speedTotals['allowed'] = ini_get("max_execution_time");
+<a name="line164"></a>		$this->output['speedTotals'] = $speedTotals;
+<a name="line165"></a>	}
+<a name="line166"></a>	
+<a name="line167"></a>	/*-------------------------------------------
+<a name="line168"></a>	     HELPER FUNCTIONS TO FORMAT DATA
+<a name="line169"></a>	-------------------------------------------*/
+<a name="line170"></a>	
+<a name="line171"></a>	function getMicroTime() {
+<a name="line172"></a>		$time = microtime();
+<a name="line173"></a>		$time = explode(' ', $time);
+<a name="line174"></a>		return $time[1] + $time[0];
+<a name="line175"></a>	}
+<a name="line176"></a>	
+<a name="line177"></a>	public function getReadableFileSize($size, $retstring = null) {
+<a name="line178"></a>        	// adapted from code at http://aidanlister.com/repos/v/function.size_readable.php
+<a name="line179"></a>	       $sizes = array('bytes', 'kB', 'MB', 'GB', 'TB', 'PB', 'EB', 'ZB', 'YB');
+<a name="line180"></a>
+<a name="line181"></a>	       if ($retstring === null) { $retstring = '%01.2f %s'; }
+<a name="line182"></a>
+<a name="line183"></a>		$lastsizestring = end($sizes);
+<a name="line184"></a>
+<a name="line185"></a>		foreach ($sizes as $sizestring) {
+<a name="line186"></a>	       	if ($size < 1024) { break; }
+<a name="line187"></a>	           if ($sizestring != $lastsizestring) { $size /= 1024; }
+<a name="line188"></a>	       }
+<a name="line189"></a>	       if ($sizestring == $sizes[0]) { $retstring = '%01d %s'; } // Bytes aren't normally fractional
+<a name="line190"></a>	       return sprintf($retstring, $size, $sizestring);
+<a name="line191"></a>	}
+<a name="line192"></a>	
+<a name="line193"></a>	public function getReadableTime($time) {
+<a name="line194"></a>		$ret = $time;
+<a name="line195"></a>		$formatter = 0;
+<a name="line196"></a>		$formats = array('ms', 's', 'm');
+<a name="line197"></a>		if($time >= 1000 && $time < 60000) {
+<a name="line198"></a>			$formatter = 1;
+<a name="line199"></a>			$ret = ($time / 1000);
+<a name="line200"></a>		}
+<a name="line201"></a>		if($time >= 60000) {
+<a name="line202"></a>			$formatter = 2;
+<a name="line203"></a>			$ret = ($time / 1000) / 60;
+<a name="line204"></a>		}
+<a name="line205"></a>		$ret = number_format($ret,3,'.','') . ' ' . $formats[$formatter];
+<a name="line206"></a>		return $ret;
+<a name="line207"></a>	}
+<a name="line208"></a>	
+<a name="line209"></a>	/*---------------------------------------------------------
+<a name="line210"></a>	     DISPLAY TO THE SCREEN -- CALL WHEN CODE TERMINATING
+<a name="line211"></a>	-----------------------------------------------------------*/
+<a name="line212"></a>	
+<a name="line213"></a>	public function display($db = '', $master_db = '') {
+<a name="line214"></a>		$this->db = $db;
+<a name="line215"></a>		$this->master_db = $master_db;
+<a name="line216"></a>		$this->gatherConsoleData();
+<a name="line217"></a>		$this->gatherFileData();
+<a name="line218"></a>		$this->gatherMemoryData();
+<a name="line219"></a>		$this->gatherQueryData();
+<a name="line220"></a>		$this->gatherSpeedData();
+<a name="line221"></a>		//require_once($_SERVER['DOCUMENT_ROOT'].$this->config.'display.php');
+<a name="line222"></a>		require_once dirname(__FILE__) . '/../display.php';
+<a name="line223"></a>		
+<a name="line224"></a>		ob_start();
+<a name="line225"></a>		displayPqp($this->output, $this->config);
+<a name="line226"></a>		$buffer = ob_get_contents();
+<a name="line227"></a>		@ob_end_clean();
+<a name="line228"></a>		return $buffer;
+<a name="line229"></a>	}
+<a name="line230"></a>	
+<a name="line231"></a>}
+<a name="line232"></a>
+<a name="line233"></a>?></pre>
+<div class="header">
+<h1>GiftFlow API</h1>
+<ul>
+<li><a href="../../../../overview-summary.html">Overview</a></li>
+<li>Package</li><li>Class</li><li>Tree</li><li><a href="../../../../overview-files.html">Files</a></li>
+<li><a href="../../../../deprecated-list.html">Deprecated</a></li>
+<li><a href="../../../../index-all.html">Index</a></li>
+</ul>
+</div>
+
+<div class="small_links">
+<a href="../../../../index.html" target="_top">Frames</a>
+<a href="../../../../source/plugins/pqp/classes/phpquickprofiler.php.html" target="_top">No frames</a>
+</div>
+<hr>
+
+<p id="footer">This document was generated by <a href="http://peej.github.com/phpdoctor/">PHPDoctor: The PHP Documentation Creator</a></p>
+
+</body>
+
+</html>

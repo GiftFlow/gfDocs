@@ -1,0 +1,443 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+
+<html lang="en">
+<head>
+
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
+<meta name="generator" content="PHPDoctor 2RC4 (http://peej.github.com/phpdoctor/)">
+<meta name="when" content="Wed, 09 Feb 2011 20:22:56 +0000">
+
+<link rel="stylesheet" type="text/css" href="../../../../stylesheet.css">
+<link rel="start" href="../../../../overview-summary.html">
+
+<title>libraries/Auth/Yadis/Yadis.php (GiftFlow API)</title>
+
+</head>
+<body id="file" onload="parent.document.title=document.title;">
+
+<div class="header">
+<h1>GiftFlow API</h1>
+<ul>
+<li><a href="../../../../overview-summary.html">Overview</a></li>
+<li>Package</li><li>Class</li><li>Tree</li><li><a href="../../../../overview-files.html">Files</a></li>
+<li><a href="../../../../deprecated-list.html">Deprecated</a></li>
+<li><a href="../../../../index-all.html">Index</a></li>
+</ul>
+</div>
+
+<div class="small_links">
+<a href="../../../../index.html" target="_top">Frames</a>
+<a href="../../../../source/libraries/auth/yadis/yadis.php.html" target="_top">No frames</a>
+</div>
+<hr>
+
+<h1>libraries/Auth/Yadis/Yadis.php</h1>
+<div class="comment" id="overview_description"><p>The core PHP Yadis implementation.</p><p>PHP versions 4 and 5</p><p>LICENSE: See the COPYING file included in this distribution.</p></div>
+
+<hr>
+
+<a name="line1"></a><pre><?php
+<a name="line2"></a>
+<a name="line3"></a>/**
+<a name="line4"></a> * The core PHP Yadis implementation.
+<a name="line5"></a> *
+<a name="line6"></a> * PHP versions 4 and 5
+<a name="line7"></a> *
+<a name="line8"></a> * LICENSE: See the COPYING file included in this distribution.
+<a name="line9"></a> *
+<a name="line10"></a> * @package OpenID
+<a name="line11"></a> * @author JanRain, Inc. <openid@janrain.com>
+<a name="line12"></a> * @copyright 2005-2008 Janrain, Inc.
+<a name="line13"></a> * @license http://www.apache.org/licenses/LICENSE-2.0 Apache
+<a name="line14"></a> */
+<a name="line15"></a>
+<a name="line16"></a>/**
+<a name="line17"></a> * Need both fetcher types so we can use the right one based on the
+<a name="line18"></a> * presence or absence of CURL.
+<a name="line19"></a> */
+<a name="line20"></a>require_once "Auth/Yadis/PlainHTTPFetcher.php";
+<a name="line21"></a>require_once "Auth/Yadis/ParanoidHTTPFetcher.php";
+<a name="line22"></a>
+<a name="line23"></a>/**
+<a name="line24"></a> * Need this for parsing HTML (looking for META tags).
+<a name="line25"></a> */
+<a name="line26"></a>require_once "Auth/Yadis/ParseHTML.php";
+<a name="line27"></a>
+<a name="line28"></a>/**
+<a name="line29"></a> * Need this to parse the XRDS document during Yadis discovery.
+<a name="line30"></a> */
+<a name="line31"></a>require_once "Auth/Yadis/XRDS.php";
+<a name="line32"></a>
+<a name="line33"></a>/**
+<a name="line34"></a> * XRDS (yadis) content type
+<a name="line35"></a> */
+<a name="line36"></a>define('Auth_Yadis_CONTENT_TYPE', 'application/xrds+xml');
+<a name="line37"></a>
+<a name="line38"></a>/**
+<a name="line39"></a> * Yadis header
+<a name="line40"></a> */
+<a name="line41"></a>define('Auth_Yadis_HEADER_NAME', 'X-XRDS-Location');
+<a name="line42"></a>
+<a name="line43"></a>/**
+<a name="line44"></a> * Contains the result of performing Yadis discovery on a URI.
+<a name="line45"></a> *
+<a name="line46"></a> * @package OpenID
+<a name="line47"></a> */
+<a name="line48"></a>class Auth_Yadis_DiscoveryResult {
+<a name="line49"></a>
+<a name="line50"></a>    // The URI that was passed to the fetcher
+<a name="line51"></a>    var $request_uri = null;
+<a name="line52"></a>
+<a name="line53"></a>    // The result of following redirects from the request_uri
+<a name="line54"></a>    var $normalized_uri = null;
+<a name="line55"></a>
+<a name="line56"></a>    // The URI from which the response text was returned (set to
+<a name="line57"></a>    // None if there was no XRDS document found)
+<a name="line58"></a>    var $xrds_uri = null;
+<a name="line59"></a>
+<a name="line60"></a>    var $xrds = null;
+<a name="line61"></a>
+<a name="line62"></a>    // The content-type returned with the response_text
+<a name="line63"></a>    var $content_type = null;
+<a name="line64"></a>
+<a name="line65"></a>    // The document returned from the xrds_uri
+<a name="line66"></a>    var $response_text = null;
+<a name="line67"></a>
+<a name="line68"></a>    // Did the discovery fail miserably?
+<a name="line69"></a>    var $failed = false;
+<a name="line70"></a>
+<a name="line71"></a>    function Auth_Yadis_DiscoveryResult($request_uri)
+<a name="line72"></a>    {
+<a name="line73"></a>        // Initialize the state of the object
+<a name="line74"></a>        // sets all attributes to None except the request_uri
+<a name="line75"></a>        $this->request_uri = $request_uri;
+<a name="line76"></a>    }
+<a name="line77"></a>
+<a name="line78"></a>    function fail()
+<a name="line79"></a>    {
+<a name="line80"></a>        $this->failed = true;
+<a name="line81"></a>    }
+<a name="line82"></a>
+<a name="line83"></a>    function isFailure()
+<a name="line84"></a>    {
+<a name="line85"></a>        return $this->failed;
+<a name="line86"></a>    }
+<a name="line87"></a>
+<a name="line88"></a>    /**
+<a name="line89"></a>     * Returns the list of service objects as described by the XRDS
+<a name="line90"></a>     * document, if this yadis object represents a successful Yadis
+<a name="line91"></a>     * discovery.
+<a name="line92"></a>     *
+<a name="line93"></a>     * @return array $services An array of {@link Auth_Yadis_Service}
+<a name="line94"></a>     * objects
+<a name="line95"></a>     */
+<a name="line96"></a>    function services()
+<a name="line97"></a>    {
+<a name="line98"></a>        if ($this->xrds) {
+<a name="line99"></a>            return $this->xrds->services();
+<a name="line100"></a>        }
+<a name="line101"></a>
+<a name="line102"></a>        return null;
+<a name="line103"></a>    }
+<a name="line104"></a>
+<a name="line105"></a>    function usedYadisLocation()
+<a name="line106"></a>    {
+<a name="line107"></a>        // Was the Yadis protocol's indirection used?
+<a name="line108"></a>        return ($this->xrds_uri && $this->normalized_uri != $this->xrds_uri);
+<a name="line109"></a>    }
+<a name="line110"></a>
+<a name="line111"></a>    function isXRDS()
+<a name="line112"></a>    {
+<a name="line113"></a>        // Is the response text supposed to be an XRDS document?
+<a name="line114"></a>        return ($this->usedYadisLocation() ||
+<a name="line115"></a>                $this->content_type == Auth_Yadis_CONTENT_TYPE);
+<a name="line116"></a>    }
+<a name="line117"></a>}
+<a name="line118"></a>
+<a name="line119"></a>/**
+<a name="line120"></a> *
+<a name="line121"></a> * Perform the Yadis protocol on the input URL and return an iterable
+<a name="line122"></a> * of resulting endpoint objects.
+<a name="line123"></a> *
+<a name="line124"></a> * input_url: The URL on which to perform the Yadis protocol
+<a name="line125"></a> *
+<a name="line126"></a> * @return: The normalized identity URL and an iterable of endpoint
+<a name="line127"></a> * objects generated by the filter function.
+<a name="line128"></a> *
+<a name="line129"></a> * xrds_parse_func: a callback which will take (uri, xrds_text) and
+<a name="line130"></a> * return an array of service endpoint objects or null.  Usually
+<a name="line131"></a> * array('Auth_OpenID_ServiceEndpoint', 'fromXRDS').
+<a name="line132"></a> *
+<a name="line133"></a> * discover_func: if not null, a callback which should take (uri) and
+<a name="line134"></a> * return an Auth_Yadis_Yadis object or null.
+<a name="line135"></a> */
+<a name="line136"></a>function Auth_Yadis_getServiceEndpoints($input_url, $xrds_parse_func,
+<a name="line137"></a>                                        $discover_func=null, $fetcher=null)
+<a name="line138"></a>{
+<a name="line139"></a>    if ($discover_func === null) {
+<a name="line140"></a>        $discover_function = array('Auth_Yadis_Yadis', 'discover');
+<a name="line141"></a>    }
+<a name="line142"></a>
+<a name="line143"></a>    $yadis_result = call_user_func_array($discover_func,
+<a name="line144"></a>                                         array($input_url, &$fetcher));
+<a name="line145"></a>
+<a name="line146"></a>    if ($yadis_result === null) {
+<a name="line147"></a>        return array($input_url, array());
+<a name="line148"></a>    }
+<a name="line149"></a>
+<a name="line150"></a>    $endpoints = call_user_func_array($xrds_parse_func,
+<a name="line151"></a>                      array($yadis_result->normalized_uri,
+<a name="line152"></a>                            $yadis_result->response_text));
+<a name="line153"></a>
+<a name="line154"></a>    if ($endpoints === null) {
+<a name="line155"></a>        $endpoints = array();
+<a name="line156"></a>    }
+<a name="line157"></a>
+<a name="line158"></a>    return array($yadis_result->normalized_uri, $endpoints);
+<a name="line159"></a>}
+<a name="line160"></a>
+<a name="line161"></a>/**
+<a name="line162"></a> * This is the core of the PHP Yadis library.  This is the only class
+<a name="line163"></a> * a user needs to use to perform Yadis discovery.  This class
+<a name="line164"></a> * performs the discovery AND stores the result of the discovery.
+<a name="line165"></a> *
+<a name="line166"></a> * First, require this library into your program source:
+<a name="line167"></a> *
+<a name="line168"></a> * <pre>  require_once "Auth/Yadis/Yadis.php";</pre>
+<a name="line169"></a> *
+<a name="line170"></a> * To perform Yadis discovery, first call the "discover" method
+<a name="line171"></a> * statically with a URI parameter:
+<a name="line172"></a> *
+<a name="line173"></a> * <pre>  $http_response = array();
+<a name="line174"></a> *  $fetcher = Auth_Yadis_Yadis::getHTTPFetcher();
+<a name="line175"></a> *  $yadis_object = Auth_Yadis_Yadis::discover($uri,
+<a name="line176"></a> *                                    $http_response, $fetcher);</pre>
+<a name="line177"></a> *
+<a name="line178"></a> * If the discovery succeeds, $yadis_object will be an instance of
+<a name="line179"></a> * {@link Auth_Yadis_Yadis}.  If not, it will be null.  The XRDS
+<a name="line180"></a> * document found during discovery should have service descriptions,
+<a name="line181"></a> * which can be accessed by calling
+<a name="line182"></a> *
+<a name="line183"></a> * <pre>  $service_list = $yadis_object->services();</pre>
+<a name="line184"></a> *
+<a name="line185"></a> * which returns an array of objects which describe each service.
+<a name="line186"></a> * These objects are instances of Auth_Yadis_Service.  Each object
+<a name="line187"></a> * describes exactly one whole Service element, complete with all of
+<a name="line188"></a> * its Types and URIs (no expansion is performed).  The common use
+<a name="line189"></a> * case for using the service objects returned by services() is to
+<a name="line190"></a> * write one or more filter functions and pass those to services():
+<a name="line191"></a> *
+<a name="line192"></a> * <pre>  $service_list = $yadis_object->services(
+<a name="line193"></a> *                               array("filterByURI",
+<a name="line194"></a> *                                     "filterByExtension"));</pre>
+<a name="line195"></a> *
+<a name="line196"></a> * The filter functions (whose names appear in the array passed to
+<a name="line197"></a> * services()) take the following form:
+<a name="line198"></a> *
+<a name="line199"></a> * <pre>  function myFilter($service) {
+<a name="line200"></a> *       // Query $service object here.  Return true if the service
+<a name="line201"></a> *       // matches your query; false if not.
+<a name="line202"></a> *  }</pre>
+<a name="line203"></a> *
+<a name="line204"></a> * This is an example of a filter which uses a regular expression to
+<a name="line205"></a> * match the content of URI tags (note that the Auth_Yadis_Service
+<a name="line206"></a> * class provides a getURIs() method which you should use instead of
+<a name="line207"></a> * this contrived example):
+<a name="line208"></a> *
+<a name="line209"></a> * <pre>
+<a name="line210"></a> *  function URIMatcher($service) {
+<a name="line211"></a> *      foreach ($service->getElements('xrd:URI') as $uri) {
+<a name="line212"></a> *          if (preg_match("/some_pattern/",
+<a name="line213"></a> *                         $service->parser->content($uri))) {
+<a name="line214"></a> *              return true;
+<a name="line215"></a> *          }
+<a name="line216"></a> *      }
+<a name="line217"></a> *      return false;
+<a name="line218"></a> *  }</pre>
+<a name="line219"></a> *
+<a name="line220"></a> * The filter functions you pass will be called for each service
+<a name="line221"></a> * object to determine which ones match the criteria your filters
+<a name="line222"></a> * specify.  The default behavior is that if a given service object
+<a name="line223"></a> * matches ANY of the filters specified in the services() call, it
+<a name="line224"></a> * will be returned.  You can specify that a given service object will
+<a name="line225"></a> * be returned ONLY if it matches ALL specified filters by changing
+<a name="line226"></a> * the match mode of services():
+<a name="line227"></a> *
+<a name="line228"></a> * <pre>  $yadis_object->services(array("filter1", "filter2"),
+<a name="line229"></a> *                          SERVICES_YADIS_MATCH_ALL);</pre>
+<a name="line230"></a> *
+<a name="line231"></a> * See {@link SERVICES_YADIS_MATCH_ALL} and {@link
+<a name="line232"></a> * SERVICES_YADIS_MATCH_ANY}.
+<a name="line233"></a> *
+<a name="line234"></a> * Services described in an XRDS should have a library which you'll
+<a name="line235"></a> * probably be using.  Those libraries are responsible for defining
+<a name="line236"></a> * filters that can be used with the "services()" call.  If you need
+<a name="line237"></a> * to write your own filter, see the documentation for {@link
+<a name="line238"></a> * Auth_Yadis_Service}.
+<a name="line239"></a> *
+<a name="line240"></a> * @package OpenID
+<a name="line241"></a> */
+<a name="line242"></a>class Auth_Yadis_Yadis {
+<a name="line243"></a>
+<a name="line244"></a>    /**
+<a name="line245"></a>     * Returns an HTTP fetcher object.  If the CURL extension is
+<a name="line246"></a>     * present, an instance of {@link Auth_Yadis_ParanoidHTTPFetcher}
+<a name="line247"></a>     * is returned.  If not, an instance of
+<a name="line248"></a>     * {@link Auth_Yadis_PlainHTTPFetcher} is returned.
+<a name="line249"></a>     *
+<a name="line250"></a>     * If Auth_Yadis_CURL_OVERRIDE is defined, this method will always
+<a name="line251"></a>     * return a {@link Auth_Yadis_PlainHTTPFetcher}.
+<a name="line252"></a>     */
+<a name="line253"></a>    static function getHTTPFetcher($timeout = 20)
+<a name="line254"></a>    {
+<a name="line255"></a>        if (Auth_Yadis_Yadis::curlPresent() &&
+<a name="line256"></a>            (!defined('Auth_Yadis_CURL_OVERRIDE'))) {
+<a name="line257"></a>            $fetcher = new Auth_Yadis_ParanoidHTTPFetcher($timeout);
+<a name="line258"></a>        } else {
+<a name="line259"></a>            $fetcher = new Auth_Yadis_PlainHTTPFetcher($timeout);
+<a name="line260"></a>        }
+<a name="line261"></a>        return $fetcher;
+<a name="line262"></a>    }
+<a name="line263"></a>
+<a name="line264"></a>    static function curlPresent()
+<a name="line265"></a>    {
+<a name="line266"></a>        return function_exists('curl_init');
+<a name="line267"></a>    }
+<a name="line268"></a>
+<a name="line269"></a>    /**
+<a name="line270"></a>     * @access private
+<a name="line271"></a>     */
+<a name="line272"></a>   static function _getHeader($header_list, $names)
+<a name="line273"></a>    {
+<a name="line274"></a>        foreach ($header_list as $name => $value) {
+<a name="line275"></a>            foreach ($names as $n) {
+<a name="line276"></a>                if (strtolower($name) == strtolower($n)) {
+<a name="line277"></a>                    return $value;
+<a name="line278"></a>                }
+<a name="line279"></a>            }
+<a name="line280"></a>        }
+<a name="line281"></a>
+<a name="line282"></a>        return null;
+<a name="line283"></a>    }
+<a name="line284"></a>
+<a name="line285"></a>    /**
+<a name="line286"></a>     * @access private
+<a name="line287"></a>     */
+<a name="line288"></a>    static function _getContentType($content_type_header)
+<a name="line289"></a>    {
+<a name="line290"></a>        if ($content_type_header) {
+<a name="line291"></a>            $parts = explode(";", $content_type_header);
+<a name="line292"></a>            return strtolower($parts[0]);
+<a name="line293"></a>        }
+<a name="line294"></a>    }
+<a name="line295"></a>
+<a name="line296"></a>    /**
+<a name="line297"></a>     * This should be called statically and will build a Yadis
+<a name="line298"></a>     * instance if the discovery process succeeds.  This implements
+<a name="line299"></a>     * Yadis discovery as specified in the Yadis specification.
+<a name="line300"></a>     *
+<a name="line301"></a>     * @param string $uri The URI on which to perform Yadis discovery.
+<a name="line302"></a>     *
+<a name="line303"></a>     * @param array $http_response An array reference where the HTTP
+<a name="line304"></a>     * response object will be stored (see {@link
+<a name="line305"></a>     * Auth_Yadis_HTTPResponse}.
+<a name="line306"></a>     *
+<a name="line307"></a>     * @param Auth_Yadis_HTTPFetcher $fetcher An instance of a
+<a name="line308"></a>     * Auth_Yadis_HTTPFetcher subclass.
+<a name="line309"></a>     *
+<a name="line310"></a>     * @param array $extra_ns_map An array which maps namespace names
+<a name="line311"></a>     * to namespace URIs to be used when parsing the Yadis XRDS
+<a name="line312"></a>     * document.
+<a name="line313"></a>     *
+<a name="line314"></a>     * @param integer $timeout An optional fetcher timeout, in seconds.
+<a name="line315"></a>     *
+<a name="line316"></a>     * @return mixed $obj Either null or an instance of
+<a name="line317"></a>     * Auth_Yadis_Yadis, depending on whether the discovery
+<a name="line318"></a>     * succeeded.
+<a name="line319"></a>     */
+<a name="line320"></a>    static function discover($uri, $fetcher,
+<a name="line321"></a>                      $extra_ns_map = null, $timeout = 20)
+<a name="line322"></a>    {
+<a name="line323"></a>        $result = new Auth_Yadis_DiscoveryResult($uri);
+<a name="line324"></a>
+<a name="line325"></a>        $request_uri = $uri;
+<a name="line326"></a>        $headers = array("Accept: " . Auth_Yadis_CONTENT_TYPE .
+<a name="line327"></a>                         ', text/html; q=0.3, application/xhtml+xml; q=0.5');
+<a name="line328"></a>
+<a name="line329"></a>        if ($fetcher === null) {
+<a name="line330"></a>            $fetcher = Auth_Yadis_Yadis::getHTTPFetcher($timeout);
+<a name="line331"></a>        }
+<a name="line332"></a>
+<a name="line333"></a>        $response = $fetcher->get($uri, $headers);
+<a name="line334"></a>
+<a name="line335"></a>        if (!$response || ($response->status != 200 and
+<a name="line336"></a>                           $response->status != 206)) {
+<a name="line337"></a>            $result->fail();
+<a name="line338"></a>            return $result;
+<a name="line339"></a>        }
+<a name="line340"></a>
+<a name="line341"></a>        $result->normalized_uri = $response->final_url;
+<a name="line342"></a>        $result->content_type = Auth_Yadis_Yadis::_getHeader(
+<a name="line343"></a>                                       $response->headers,
+<a name="line344"></a>                                       array('content-type'));
+<a name="line345"></a>
+<a name="line346"></a>        if ($result->content_type &&
+<a name="line347"></a>            (Auth_Yadis_Yadis::_getContentType($result->content_type) ==
+<a name="line348"></a>             Auth_Yadis_CONTENT_TYPE)) {
+<a name="line349"></a>            $result->xrds_uri = $result->normalized_uri;
+<a name="line350"></a>        } else {
+<a name="line351"></a>            $yadis_location = Auth_Yadis_Yadis::_getHeader(
+<a name="line352"></a>                                                 $response->headers,
+<a name="line353"></a>                                                 array(Auth_Yadis_HEADER_NAME));
+<a name="line354"></a>
+<a name="line355"></a>            if (!$yadis_location) {
+<a name="line356"></a>                $parser = new Auth_Yadis_ParseHTML();
+<a name="line357"></a>                $yadis_location = $parser->getHTTPEquiv($response->body);
+<a name="line358"></a>            }
+<a name="line359"></a>
+<a name="line360"></a>            if ($yadis_location) {
+<a name="line361"></a>                $result->xrds_uri = $yadis_location;
+<a name="line362"></a>
+<a name="line363"></a>                $response = $fetcher->get($yadis_location);
+<a name="line364"></a>
+<a name="line365"></a>                if ((!$response) || ($response->status != 200 and
+<a name="line366"></a>                                     $response->status != 206)) {
+<a name="line367"></a>                    $result->fail();
+<a name="line368"></a>                    return $result;
+<a name="line369"></a>                }
+<a name="line370"></a>
+<a name="line371"></a>                $result->content_type = Auth_Yadis_Yadis::_getHeader(
+<a name="line372"></a>                                                         $response->headers,
+<a name="line373"></a>                                                         array('content-type'));
+<a name="line374"></a>            }
+<a name="line375"></a>        }
+<a name="line376"></a>
+<a name="line377"></a>        $result->response_text = $response->body;
+<a name="line378"></a>        return $result;
+<a name="line379"></a>    }
+<a name="line380"></a>}
+<a name="line381"></a>
+<a name="line382"></a>
+<a name="line383"></a></pre>
+<div class="header">
+<h1>GiftFlow API</h1>
+<ul>
+<li><a href="../../../../overview-summary.html">Overview</a></li>
+<li>Package</li><li>Class</li><li>Tree</li><li><a href="../../../../overview-files.html">Files</a></li>
+<li><a href="../../../../deprecated-list.html">Deprecated</a></li>
+<li><a href="../../../../index-all.html">Index</a></li>
+</ul>
+</div>
+
+<div class="small_links">
+<a href="../../../../index.html" target="_top">Frames</a>
+<a href="../../../../source/libraries/auth/yadis/yadis.php.html" target="_top">No frames</a>
+</div>
+<hr>
+
+<p id="footer">This document was generated by <a href="http://peej.github.com/phpdoctor/">PHPDoctor: The PHP Documentation Creator</a></p>
+
+</body>
+
+</html>

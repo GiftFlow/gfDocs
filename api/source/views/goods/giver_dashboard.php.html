@@ -1,0 +1,583 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+
+<html lang="en">
+<head>
+
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
+<meta name="generator" content="PHPDoctor 2RC4 (http://peej.github.com/phpdoctor/)">
+<meta name="when" content="Wed, 09 Feb 2011 20:22:56 +0000">
+
+<link rel="stylesheet" type="text/css" href="../../../stylesheet.css">
+<link rel="start" href="../../../overview-summary.html">
+
+<title>views/goods/giver_dashboard.php (GiftFlow API)</title>
+
+</head>
+<body id="file" onload="parent.document.title=document.title;">
+
+<div class="header">
+<h1>GiftFlow API</h1>
+<ul>
+<li><a href="../../../overview-summary.html">Overview</a></li>
+<li>Package</li><li>Class</li><li>Tree</li><li><a href="../../../overview-files.html">Files</a></li>
+<li><a href="../../../deprecated-list.html">Deprecated</a></li>
+<li><a href="../../../index-all.html">Index</a></li>
+</ul>
+</div>
+
+<div class="small_links">
+<a href="../../../index.html" target="_top">Frames</a>
+<a href="../../../source/views/goods/giver_dashboard.php.html" target="_top">No frames</a>
+</div>
+<hr>
+
+<h1>views/goods/giver_dashboard.php</h1>
+<hr>
+
+<a name="line1"></a><pre><?php
+<a name="line2"></a>/*
+<a name="line3"></a>* 	Giver Dashboard
+<a name="line4"></a>*/
+<a name="line5"></a>?>
+<a name="line6"></a><div id='edit_gift' class='gift_module dashboard'>
+<a name="line7"></a>	<div class='top'></div>
+<a name="line8"></a>	<div class='middle ui-widget'>
+<a name="line9"></a>		<img src='<?php echo $G->default_photo->thumb_url;?>' />
+<a name="line10"></a>		<div class='right'>
+<a name="line11"></a>			<h1>
+<a name="line12"></a>				<?php echo $G->title; ?>
+<a name="line13"></a>			</h1>
+<a name="line14"></a>			<a href="#" id='edit_this_gift_info'></a>
+<a name="line15"></a>			<!--<a href="#" id='edit_this_gift_photos'>Edit Photos</a>-->
+<a name="line16"></a>
+<a name="line17"></a>		</div>
+<a name="line18"></a>		
+<a name="line19"></a>		<div style='clear: both;'></div>
+<a name="line20"></a>		
+<a name="line21"></a>		<!-- Edit Photos -->
+<a name="line22"></a>		<div id='edit_photos' style='display: none;'>
+<a name="line23"></a>			<?php if(count($G->photo->all)>0) { ?>
+<a name="line24"></a>				<ul id='edit_good_photos'>
+<a name="line25"></a>					<?php foreach($G->photo->all as $key=>$val) { ?>
+<a name="line26"></a>						<li id='<?php echo $val->id; ?>'>
+<a name="line27"></a>							<img src='<?php echo $val->thumb_url; ?>' />
+<a name="line28"></a>							<div class='edit_dialog'>
+<a name="line29"></a>								<a href='#' id='default'>
+<a name="line30"></a>									Make Default
+<a name="line31"></a>								</a>
+<a name="line32"></a>								<a href='#' id='delete'>
+<a name="line33"></a>									Delete
+<a name="line34"></a>								</a>
+<a name="line35"></a>							</div>
+<a name="line36"></a>						</li>
+<a name="line37"></a>					<?php } ?>
+<a name="line38"></a>				</ul>
+<a name="line39"></a>				<br style='clear: both;' />
+<a name="line40"></a>			<?php } else { ?>
+<a name="line41"></a>				<ul id='edit_good_photos' style='margin:0;'></ul>
+<a name="line42"></a>				<?php // @todo add text here saying "no photos yet, but you should add some..." ?>
+<a name="line43"></a>			<?php } ?>
+<a name="line44"></a>			<a href='#' id='upload_photo_form'>
+<a name="line45"></a>				Upload a Photo
+<a name="line46"></a>			</a>
+<a name="line47"></a>			<form id='upload_photo' enctype="multipart/form-data" method="post" action="<?php echo site_url('ajax/upload_photo'); ?>">
+<a name="line48"></a>				<h3>Upload a Photo</h3>
+<a name="line49"></a>				<input type='hidden' name='type' value='gift' />
+<a name="line50"></a>				<input type='hidden' name='id' value='<?php echo $G->id; ?>'/>
+<a name="line51"></a>				<input type="file" name="userfile" size="20" />
+<a name="line52"></a>				<input type="submit" value="upload" />
+<a name="line53"></a>			</form>
+<a name="line54"></a>			<a href='#' class='edit' style='float: right; display: none;'>
+<a name="line55"></a>				Edit this
+<a name="line56"></a>			</a>
+<a name="line57"></a>		</div>
+<a name="line58"></a>			
+<a name="line59"></a>		
+<a name="line60"></a>		
+<a name="line61"></a>		<div id='edit_gift_form' style='display: none;'>
+<a name="line62"></a>			<form name='edit_good' method='post'>
+<a name="line63"></a>			<div class='main'>
+<a name="line64"></a>
+<a name="line65"></a>				<!-- Edit Info -->
+<a name="line66"></a>				<div id='edit_info'>
+<a name="line67"></a>					<p id='edit_title'>
+<a name="line68"></a>						<label>Title</label>
+<a name="line69"></a>						<input type='text' name='title' value='<?php echo $G->title; ?>' />
+<a name="line70"></a>					</p>
+<a name="line71"></a>					<p id='edit_description'>
+<a name="line72"></a>						<label>Description</label>
+<a name="line73"></a>						<textarea name='description'>
+<a name="line74"></a>							<?php echo $G->description; ?>
+<a name="line75"></a>						</textarea>
+<a name="line76"></a>					</p>
+<a name="line77"></a>				</div>
+<a name="line78"></a>
+<a name="line79"></a>				<!-- Edit Location -->
+<a name="line80"></a>				<p id='edit_location'>
+<a name="line81"></a>					<label>Location</label>
+<a name="line82"></a>					<input type='text' id='location' name='location' value="<?php echo $G->location->address; ?>" />
+<a name="line83"></a>					
+<a name="line84"></a>					<?php if(!empty($U->location->all)) { ?>
+<a name="line85"></a>						
+<a name="line86"></a>						<!-- Your Locations -->
+<a name="line87"></a>						<div id='your_locations' style='display: none;'>
+<a name="line88"></a>							<h3 style='margin-left: 10px;'>Your Locations</h3>
+<a name="line89"></a>							<ul>
+<a name="line90"></a>							<?php foreach($U->location->all as $key=>$val) { ?>
+<a name="line91"></a>								<li class='ui-menu-item'>
+<a name="line92"></a>									<a href='#' rel="<?php echo $val->address; ?>">
+<a name="line93"></a>										<?php echo $val->title; ?><br />
+<a name="line94"></a>										<span class='location_details' >
+<a name="line95"></a>											<?php echo $val->address;?>
+<a name="line96"></a>										</span>
+<a name="line97"></a>									</a>
+<a name="line98"></a>								</li>
+<a name="line99"></a>							<?php  } ?>
+<a name="line100"></a>							</ul>
+<a name="line101"></a>						</div>
+<a name="line102"></a>					<?php } ?>
+<a name="line103"></a>				</p>
+<a name="line104"></a>			</div>
+<a name="line105"></a>			
+<a name="line106"></a>			<div class='sidebar'>
+<a name="line107"></a>
+<a name="line108"></a>				<!-- Edit Tags -->
+<a name="line109"></a>				<div id='edit_tags'>
+<a name="line110"></a>					<p id='old_tag_editor'>
+<a name="line111"></a>						<label>Tags</label>
+<a name="line112"></a>						<input type='text' name='tags' id='old_tags' value='<?php foreach($G->tags->all as $val) { echo $val->name.","; } ?>' />
+<a name="line113"></a>					</p>
+<a name="line114"></a>					<p id='tag_editor' style='display: none;'>
+<a name="line115"></a>						<label>Tags</label>
+<a name="line116"></a>		
+<a name="line117"></a>						<input type='text' name='tag_editor_input' id='tag_editor_input' value='' style='width: 60%;' />
+<a name="line118"></a>						<input type='hidden' id='tag_list' name='tags' value='<?php foreach($G->tags as $val) { echo $val.","; } ?>' />
+<a name="line119"></a>						<a href="#" id='add_this_tag' class='button'>Add</a>
+<a name="line120"></a>						<ul class='tag_cloud'>
+<a name="line121"></a>						</ul>
+<a name="line122"></a>					</p>
+<a name="line123"></a>				</div>
+<a name="line124"></a>			</div>
+<a name="line125"></a>			<div class='clear' style='display: block; padding: 20px 0px;'>
+<a name="line126"></a>				<input type='submit' value='Save Changes' class='blue' /> 
+<a name="line127"></a>				<a id="cancel_edit" class='button secondary' href="<?php echo site_url('gifts/'.$G->id); ?>">Cancel</a>
+<a name="line128"></a>				<a id="delete_gift" class='button css_right' href="<?php echo site_url('gifts/'.$G->id.'/delete'); ?>">Delete</a>
+<a name="line129"></a>			</div>
+<a name="line130"></a>			<div class='clear'></div>
+<a name="line131"></a>			</form>
+<a name="line132"></a>		</div>
+<a name="line133"></a>	</div>
+<a name="line134"></a>	<div class='bottom shadow'></div>
+<a name="line135"></a>	<div style='' id='gift_wizard'>
+<a name="line136"></a>		<ul id='gift_wizard_steps'>
+<a name="line137"></a>			<li id='find_recipient_link' class='<?php echo $menu['find_recipient']; ?>'>
+<a name="line138"></a>				<span class='banner'></span>
+<a name="line139"></a>				<a href='#' rel='find_recipient'>
+<a name="line140"></a>					<span class='number' id='one'>1</span>
+<a name="line141"></a>					Find a Recipient
+<a name="line142"></a>					<div style='clear: both;'></div>
+<a name="line143"></a>				</a>
+<a name="line144"></a>			</li>
+<a name="line145"></a>			<li id='choose_recipient_link' class='<?php echo $menu['choose_recipient']; ?>'>
+<a name="line146"></a>				<span class='banner'></span>
+<a name="line147"></a>				<a href='#' rel='choose_recipient'>
+<a name="line148"></a>					<span class='number' id='two'>2</span>
+<a name="line149"></a>					Choose a Recipient
+<a name="line150"></a>					<div style='clear: both;'></div>
+<a name="line151"></a>				</a>
+<a name="line152"></a>			</li>
+<a name="line153"></a>			<li id='arrange_meeting_link' class='<?php echo $menu['arrange_meeting']; ?>'>
+<a name="line154"></a>				<span class='banner'></span>
+<a name="line155"></a>				<a href='#' rel='arrange_meeting'>
+<a name="line156"></a>					<span class='number' id='three'>3</span>
+<a name="line157"></a>					Arrange a Meeting
+<a name="line158"></a>					<div style='clear: both;'></div>
+<a name="line159"></a>				</a>
+<a name="line160"></a>			</li>
+<a name="line161"></a>			<li id='leave_feedback_link' class='<?php echo $menu['leave_feedback']; ?>'>
+<a name="line162"></a>				<span class='banner'></span>
+<a name="line163"></a>				<a href='#' rel='leave_feedback'>
+<a name="line164"></a>					<span class='number' id='four'>4</span>
+<a name="line165"></a>					Leave Feedback
+<a name="line166"></a>					<div style='clear: both;'></div>
+<a name="line167"></a>				</a>
+<a name="line168"></a>			</li>
+<a name="line169"></a>		</ul>
+<a name="line170"></a>		<div id='find_recipient' class='wizard_panel <?php echo $menu['find_recipient']; ?>'>
+<a name="line171"></a>			<h2>Share this with your friends</h2>
+<a name="line172"></a>			<p>The best way for you to find someone to give your gift to is to let all your friends know about it.</p>
+<a name="line173"></a>				<ol id='share_gift'>
+<a name="line174"></a>					<li>
+<a name="line175"></a>						<a class="addthis_button_facebook_like" style='width: 50px; float: left; display: block; margin-top: 5px; margin-right: 5px;'></a><span class='service'>via Facebook</span>
+<a name="line176"></a>					</li>
+<a name="line177"></a>					<li>
+<a name="line178"></a>					
+<a name="line179"></a>						<a href='http://api.addthis.com/oexchange/0.8/forward/facebook/offer?url=<?php echo current_url(); ?>&username=giftflow&title=<?php echo urlencode($G->title);?>' id='facebook_wall' target="_BLANK">Post it to Your Wall</a> <span class='service'>via Facebook</span>
+<a name="line180"></a>					</li>
+<a name="line181"></a>					<li>
+<a name="line182"></a>						<a href='http://api.addthis.com/oexchange/0.8/forward/email/offer?url=<?php echo current_url(); ?>&username=giftflow&title=<?php echo urlencode($G->title);?>' id='share_email' target='_BLANK'>Send an Email about it</a> <span class='service'>via email</span>
+<a name="line183"></a>					</li>
+<a name="line184"></a>
+<a name="line185"></a>					<li>
+<a name="line186"></a>						<a id='tweet_it' href="http://api.addthis.com/oexchange/0.8/forward/twitter/offer?url=<?php echo current_url(); ?>&username=giftflow&title=<?php echo urlencode($G->title);?>&template=<?php echo urlencode("Check out my gift: {{title}} {{url}} (via @giftflow)"); ?>" target="_BLANK">Tweet About It</a>
+<a name="line187"></a>						<span class='service'> via Twitter</span>
+<a name="line188"></a>					</li>
+<a name="line189"></a>					<li>
+<a name="line190"></a>							<a class="addthis_button_expanded">Share Everywhere</a>
+<a name="line191"></a>					</li>
+<a name="line192"></a>				</ol>
+<a name="line193"></a>					
+<a name="line194"></a>		</div>
+<a name="line195"></a>		<div id='choose_recipient' class='wizard_panel <?php echo $menu['choose_recipient']; ?>'>
+<a name="line196"></a>			
+<a name="line197"></a>			<?php 
+<a name="line198"></a>			
+<a name="line199"></a>			/* Display selected recipient */
+<a name="line200"></a>			
+<a name="line201"></a>			?>
+<a name="line202"></a>			
+<a name="line203"></a>			<?php if(!empty($active_transaction)) { ?>
+<a name="line204"></a>				<h2>The Recipient</h2>
+<a name="line205"></a>				<ul>
+<a name="line206"></a>					<li>
+<a name="line207"></a>						<div class='info'>
+<a name="line208"></a>							<img src="<?php echo site_url('api/member/'.$active_transaction->recipient_id.'/photo/thumb'); ?>" />
+<a name="line209"></a>							<div class='text css_left'>
+<a name="line210"></a>								<a class='request_recipient' href='<?php echo site_url('people/'.$active_transaction->recipient_id);?>'>
+<a name="line211"></a>									<?php echo $active_transaction->recipient_screen_name;?>
+<a name="line212"></a>								</a>
+<a name="line213"></a>								<p class='request_meta'>Requested on <?php echo date('F jS', strtotime($active_transaction->created)); ?> at  <?php echo date('g:ia', strtotime($active_transaction->created)); ?>.</p>
+<a name="line214"></a>							</div>
+<a name="line215"></a>						</div>
+<a name="line216"></a>						
+<a name="line217"></a>						<div class='ui-widget buttonset css_right'>
+<a name="line218"></a>							<a class='button cancel_request' href="<?php echo site_url('gifts/'.$G->id.'/abort/'.$active_transaction->id); ?>" rel="<?php echo $active_transaction->id; ?>">Cancel</a>
+<a name="line219"></a>						</div>
+<a name="line220"></a>						<div class='clear'></div>
+<a name="line221"></a>					</li>
+<a name="line222"></a>				</ul>
+<a name="line223"></a>			<?php }?>
+<a name="line224"></a>
+<a name="line225"></a>			<?php if(!empty($requests)) { ?>
+<a name="line226"></a>				<h2>Pending Requests</h2>
+<a name="line227"></a>				<p>The following people have requested your gift! Choose the person you'd like to give it to and then click Accept.</p>
+<a name="line228"></a>				<ul>
+<a name="line229"></a>				<?php foreach($requests as $key=>$request) { ?>
+<a name="line230"></a>					<li>
+<a name="line231"></a>						<div class='info'>
+<a name="line232"></a>							<img src="<?php echo site_url('api/member/'.$request->recipient_id.'/photo/thumb'); ?>" />
+<a name="line233"></a>							<div class='text css_left'>
+<a name="line234"></a>								<a class='request_recipient' href='<?php echo site_url('profile/'.$request->recipient_id);?>'>
+<a name="line235"></a>									<?php echo $request->recipient_screen_name;?>
+<a name="line236"></a>								</a>
+<a name="line237"></a>								<p class='request_meta'>Requested on <?php echo date('F jS', strtotime($request->created)); ?> at  <?php echo date('g:ia', strtotime($request->created)); ?>.</p>
+<a name="line238"></a>
+<a name="line239"></a>								<?php if(!empty($request->reason)) { ?>
+<a name="line240"></a>									<p class='request_reason'>
+<a name="line241"></a>										<span class='request_reason_text'>&ldquo;<?php echo $request->reason; ?>&rdquo;</span>
+<a name="line242"></a>									</p>
+<a name="line243"></a>								<?php } ?>
+<a name="line244"></a>							</div>
+<a name="line245"></a>						</div>
+<a name="line246"></a>						<?php if(empty($active_transaction)) { ?>
+<a name="line247"></a>						<div class='ui-widget buttonset css_right'>
+<a name="line248"></a>							<a class='button accept_request' href="<?php echo site_url('gifts/'.$G->id.'/accept/'.$request->id); ?>" rel="<?php echo $request->id; ?>">Accept</a>
+<a name="line249"></a>							<a class='button ignore_request secondary' href="<?php echo site_url('gifts/'.$G->id.'/ignore/'.$request->id); ?>#" rel="<?php echo $request->id; ?>">Ignore</a>
+<a name="line250"></a>						</div>
+<a name="line251"></a>						<?php } ?>
+<a name="line252"></a>						<div class='clear'></div>
+<a name="line253"></a>					</li>
+<a name="line254"></a>				<?php 	} ?>
+<a name="line255"></a>				</ul>
+<a name="line256"></a>			<?php } else { ?>
+<a name="line257"></a>			<?php } ?>
+<a name="line258"></a>		</div>
+<a name="line259"></a>		<div id='arrange_meeting' class='wizard_panel <?php echo $menu['arrange_meeting']; ?>'>
+<a name="line260"></a>			<h2>Arrange a Meeting</h2>
+<a name="line261"></a>			<?php
+<a name="line262"></a>			/* 
+<a name="line263"></a>			*	Outline.
+<a name="line264"></a>			*
+<a name="line265"></a>			*	Interface should resemble Tumblr, with the following being the post types
+<a name="line266"></a>			*
+<a name="line267"></a>			*	1) Share your contact information
+<a name="line268"></a>			*	2) Suggest a location
+<a name="line269"></a>			*	3) Suggest a time
+<a name="line270"></a>			*	4) Say something
+<a name="line271"></a>			*	5) "Gift given" button / "Confirm that gift was given"
+<a name="line272"></a>			*/
+<a name="line273"></a>			?>
+<a name="line274"></a>			<p>Now that you've found someone to give to, you need to figure out where you'll meet to give it to them.</p>
+<a name="line275"></a>			<h3>Say Something!</h3>
+<a name="line276"></a>			<div id='say_something' class='ui-widget'>
+<a name="line277"></a>				<img src='<?php echo site_url('api/member/'.$logged_in_user_id.'/photo/thumb'); ?>' class='thumb css_left' />
+<a name="line278"></a>				<form name='arrange_meeting' method='post' action='<?php echo current_url(); ?>/message'>
+<a name="line279"></a>					<input type='hidden' name='transaction_id' value='<?php echo $active_transaction->id; ?>' />
+<a name="line280"></a>					<textarea name='message'></textarea>
+<a name="line281"></a>					<br />
+<a name="line282"></a>					<input type='submit' value='Say It' class='css_right'>
+<a name="line283"></a>				</form>
+<a name="line284"></a>				<div class='clear'></div>
+<a name="line285"></a>			</div>
+<a name="line286"></a>			<div id='conversation'>
+<a name="line287"></a>			<h3>The Conversation</h3>
+<a name="line288"></a>			<ul>
+<a name="line289"></a>			<?php foreach($messages as $msg) {  ?>
+<a name="line290"></a>			<li>
+<a name="line291"></a>				<div class='author'>
+<a name="line292"></a>					<img src='<?php echo site_url('api/member/'.$msg['author_id'].'/photo/thumb'); ?>' class='thumb css_left' />
+<a name="line293"></a>					<a class='author_link' href='<?php echo site_url('profile/'.$msg['author_id']); ?>'>
+<a name="line294"></a>						<?php echo ($msg['author_id']==$logged_in_user_id) ? "You" : $msg['screen_name']; ?>
+<a name="line295"></a>					</a>
+<a name="line296"></a>					<p class='time_ago'>
+<a name="line297"></a>						<?php echo time_ago( strtotime( $msg['created'] ) - 4000 ); ?>
+<a name="line298"></a>					</p>
+<a name="line299"></a>				</div>
+<a name="line300"></a>				<p class='message'>
+<a name="line301"></a>					<?php echo nl2br($msg['body']); ?>
+<a name="line302"></a>				</p>
+<a name="line303"></a>				<div class='clear'></div>
+<a name="line304"></a>			</li>
+<a name="line305"></a>			<?php } ?>
+<a name="line306"></a>			</ul>
+<a name="line307"></a>			</div>
+<a name="line308"></a>			<a class="button" href="<?php echo site_url('gifts/'.$G->id.'/exchanged/'.$active_transaction->id); ?>">
+<a name="line309"></a>				Gift Exchanged
+<a name="line310"></a>			</a>
+<a name="line311"></a>		</div>
+<a name="line312"></a>		<div id='leave_feedback' class='wizard_panel <?php echo $menu['leave_feedback']; ?>'>
+<a name="line313"></a>			<h2>Leave Feedback</h2>
+<a name="line314"></a>			<form name='feedback' id='feedback' method='post' class='ui-widget' action="<?php echo site_url('gifts/'.$G->id); ?>">
+<a name="line315"></a>			<p>
+<a name="line316"></a>				<label>Do you have any comments about this transaction?</label>
+<a name="line317"></a>				<textarea name='comment'></textarea>
+<a name="line318"></a>			</p>
+<a name="line319"></a>			<p>
+<a name="line320"></a>				<label>Rate this transaction</label>
+<a name="line321"></a>				<select name='rating'>
+<a name="line322"></a>					<option>Rate this transaction</option>
+<a name="line323"></a>					<option value='positive'>Positive</option>
+<a name="line324"></a>					<option value='neutral'>Neutral</option>
+<a name="line325"></a>					<option value='negative'>Negative</option>
+<a name="line326"></a>				</select>
+<a name="line327"></a>			</p>
+<a name="line328"></a>			<p>
+<a name="line329"></a>				<input type='submit' value='Save' />
+<a name="line330"></a>			</p>
+<a name="line331"></a>			</form>
+<a name="line332"></a>		</div>
+<a name="line333"></a>		<div style='clear: both;'></div>
+<a name="line334"></a>	</div>
+<a name="line335"></a>
+<a name="line336"></a>
+<a name="line337"></a></div>
+<a name="line338"></a>
+<a name="line339"></a><div class='jqmWindow' id='social_iframe' style='display: none;'>
+<a name="line340"></a>	<iframe src=''>
+<a name="line341"></a>	</iframe>
+<a name="line342"></a></div>
+<a name="line343"></a>
+<a name="line344"></a><script type='text/javascript'>
+<a name="line345"></a>var tags = new Array();
+<a name="line346"></a>$(function(){
+<a name="line347"></a>
+<a name="line348"></a>	/*$("#social_iframe").jqm();
+<a name="line349"></a>	$("a#facebook_wall").click(function(){
+<a name="line350"></a>		var url = $(this).attr("href");
+<a name="line351"></a>		$("#social_iframe iframe").attr("src",url);
+<a name="line352"></a>		$("#social_iframe").jqmShow();
+<a name="line353"></a>		return false;
+<a name="line354"></a>	});*/
+<a name="line355"></a>	$("ul#gift_wizard_steps li a").click(function(){
+<a name="line356"></a>		if(!$(this).parent().hasClass("disabled"))
+<a name="line357"></a>		{
+<a name="line358"></a>			$("ul#gift_wizard_steps li").removeClass("active");
+<a name="line359"></a>			$(this).parent().addClass("active");
+<a name="line360"></a>			var id = "#" + $(this).attr("rel");
+<a name="line361"></a>			$(".wizard_panel").hide();
+<a name="line362"></a>			$(id).fadeIn();
+<a name="line363"></a>		}
+<a name="line364"></a>		return false;
+<a name="line365"></a>	});
+<a name="line366"></a>	
+<a name="line367"></a>	
+<a name="line368"></a>	/*
+<a name="line369"></a>	*  Toggle drawer
+<a name="line370"></a>	*/
+<a name="line371"></a>	
+<a name="line372"></a>	$("#edit_this_gift_info").click(drawer);
+<a name="line373"></a>	$("#cancel_edit").click(drawer);
+<a name="line374"></a>	
+<a name="line375"></a>	function drawer()
+<a name="line376"></a>	{
+<a name="line377"></a>		$("#edit_gift_form").slideToggle(1000);
+<a name="line378"></a>		$("#edit_this_gift_info").toggle();
+<a name="line379"></a>		$("#edit_this_gift_photos").toggle();
+<a name="line380"></a>		return false;
+<a name="line381"></a>	}
+<a name="line382"></a>	
+<a name="line383"></a>	/*
+<a name="line384"></a>	*  Upload / edit photos
+<a name="line385"></a>	*/
+<a name="line386"></a>	$('.button').button();
+<a name="line387"></a>	$(".buttonset, .photo_edit_toolbar").buttonset();
+<a name="line388"></a>	$("#upload_photo").ajaxForm( { 'success': uploaded } );
+<a name="line389"></a>	$(".edit_dialog #delete").click(function(){ 
+<a name="line390"></a>										var go = confirm('Are you sure you want to delete this photo?');
+<a name="line391"></a>										if(go) $.post('<?php echo site_url('ajax/delete_photo'); ?>', { 'id': $(this).parent().parent().attr('id') }, delete_photo, 'json' );
+<a name="line392"></a>									});
+<a name="line393"></a>	function delete_photo( data )
+<a name="line394"></a>	{
+<a name="line395"></a>		if(data.result=="true")
+<a name="line396"></a>		{
+<a name="line397"></a>			$("ul#edit_good_photos li#"+ data.id).remove();
+<a name="line398"></a>			$.notifyBar({
+<a name="line399"></a>				html: "Photo deleted.",
+<a name="line400"></a>				cls: "success"
+<a name="line401"></a>			});  			
+<a name="line402"></a>		}
+<a name="line403"></a>	}
+<a name="line404"></a>	function uploaded( data )
+<a name="line405"></a>	{
+<a name="line406"></a>		$("ul#edit_good_photos").append(data);
+<a name="line407"></a>		$("#upload_photo").hide();
+<a name="line408"></a>		$("#upload_photo_form").show();
+<a name="line409"></a>		$.notifyBar({
+<a name="line410"></a>    			html: "Your photo was uploaded.",
+<a name="line411"></a>    			cls: "success",
+<a name="line412"></a>  		});  
+<a name="line413"></a>
+<a name="line414"></a>	}
+<a name="line415"></a>	$("#upload_photo_form").button();
+<a name="line416"></a>	$("#upload_photo_form").live('click', function(){
+<a name="line417"></a>		$("#upload_photo").show();
+<a name="line418"></a>		$(this).hide();
+<a name="line419"></a>		return false;
+<a name="line420"></a>	});
+<a name="line421"></a>	
+<a name="line422"></a>	
+<a name="line423"></a>	/*
+<a name="line424"></a>	* Edit Tags
+<a name="line425"></a>	*/ 
+<a name="line426"></a>	
+<a name="line427"></a>	editTags();
+<a name="line428"></a>	
+<a name="line429"></a>	function editTags()
+<a name="line430"></a>	{
+<a name="line431"></a>		var selected = false;
+<a name="line432"></a>		$("#old_tag_editor").hide();
+<a name="line433"></a>		$("#tag_editor").show();
+<a name="line434"></a>		var existing = $("input#tag_list").val().split(",");
+<a name="line435"></a>		$.each(existing, function(key, val) { 
+<a name="line436"></a>			if(val!="") addTag(val);
+<a name="line437"></a>		});
+<a name="line438"></a>		$("input#tag_editor_input").autocomplete({
+<a name="line439"></a>			source: function(request, response)
+<a name="line440"></a>			{
+<a name="line441"></a>				$.post("<?php echo site_url("ajax/tags"); ?>", { term: request.term }, function(data) { response(data) }, 'json');
+<a name="line442"></a>			},
+<a name="line443"></a>			select: function( event, ui )
+<a name="line444"></a>			{
+<a name="line445"></a>				addTag(ui.item.value);
+<a name="line446"></a>				selected = true;
+<a name="line447"></a>            	},
+<a name="line448"></a>            	change: function( event, ui )
+<a name="line449"></a>            	{
+<a name="line450"></a>            		if(selected)
+<a name="line451"></a>            			$(this).val('');
+<a name="line452"></a>            		selected = false;
+<a name="line453"></a>            	},
+<a name="line454"></a>            	focus: function ( event, ui )
+<a name="line455"></a>            	{
+<a name="line456"></a>            		return false;
+<a name="line457"></a>            	}
+<a name="line458"></a>		});
+<a name="line459"></a>		$("input#tag_editor_input").keydown(function(event){if (event.keyCode == 13){ addTag($(this).val()); return false; }});
+<a name="line460"></a>		$("ul.tag_cloud li a.delete_tag").live('click', function(){ 
+<a name="line461"></a>		 	var tag = $.trim($(this).parent().text());
+<a name="line462"></a>		 	var key = tags.lastIndexOf(tag);
+<a name="line463"></a>			tags.splice(key, 1);
+<a name="line464"></a>		 	$(this).parent().slideUp('fast');
+<a name="line465"></a>		 	$("#tag_list").val(tags);
+<a name="line466"></a>			return false;
+<a name="line467"></a>		});
+<a name="line468"></a>		$("a#add_this_tag").click(function(){
+<a name="line469"></a>			addTag($("input#tag_editor_input").val());
+<a name="line470"></a>			return false;
+<a name="line471"></a>		});
+<a name="line472"></a>	}
+<a name="line473"></a>	function addTag( tag )
+<a name="line474"></a>	{
+<a name="line475"></a>		if(tag=="") return false;
+<a name="line476"></a>		tags.push(tag);	
+<a name="line477"></a>		$("#tag_editor_input").val('');
+<a name="line478"></a>		$("#tag_list").val(tags);
+<a name="line479"></a>		$("ul.tag_cloud").append("<li><a class='tag'>"+tag+"<\/a> <a href='#' class='delete_tag'><\/a><\/li>");
+<a name="line480"></a>		$("ul.tag_cloud li:last a.delete_tag").button({icons:{primary: 'ui-icon-trash'}, text: false});
+<a name="line481"></a>	}
+<a name="line482"></a>	
+<a name="line483"></a>	/*
+<a name="line484"></a>	*  Edit Location
+<a name="line485"></a>	*/
+<a name="line486"></a>	
+<a name="line487"></a>	$("#location").focus(function(){ $("#your_locations").slideDown(); });
+<a name="line488"></a>	$("#your_locations_link").click(function(){
+<a name="line489"></a>		$("#your_locations").show();
+<a name="line490"></a>		$(this).hide();
+<a name="line491"></a>		return false;
+<a name="line492"></a>	});
+<a name="line493"></a>	$("#your_locations li a").live('click', function(){
+<a name="line494"></a>		$("#location").val($(this).attr('rel'));
+<a name="line495"></a>		$("#your_locations").hide();
+<a name="line496"></a>		return false;
+<a name="line497"></a>	});
+<a name="line498"></a>	
+<a name="line499"></a>	/*
+<a name="line500"></a>	* Ignore request
+<a name="line501"></a>	*/ 
+<a name="line502"></a>	
+<a name="line503"></a>	$(".ignore_request").live('click', function(){ 
+<a name="line504"></a>		var div = $(this).parent().parent();
+<a name="line505"></a>		
+<a name="line506"></a>		$.post( $(this).attr("href"), { type: 'ignore', 'request_id': $(this).attr('rel') }, function ( data ) {
+<a name="line507"></a>			div.slideUp(500, function(){ div.html(data).fadeIn(500); });
+<a name="line508"></a>		}, 'html');
+<a name="line509"></a>		return false;
+<a name="line510"></a>	});
+<a name="line511"></a>	$("input:submit").button();
+<a name="line512"></a>	$(".button.accept_request").button( { icons: { primary: 'ui-icon-check' } } );
+<a name="line513"></a>	
+<a name="line514"></a>	$("#delete_gift").click(function(){
+<a name="line515"></a>		var answer = confirm('Are you sure you want to delete this gift?');
+<a name="line516"></a>		if(answer) return true;
+<a name="line517"></a>		else return false;
+<a name="line518"></a>	});
+<a name="line519"></a>	
+<a name="line520"></a>	/*
+<a name="line521"></a>	* Notifybar code
+<a name="line522"></a>	*/
+<a name="line523"></a>	<?php echo notify(); ?>
+<a name="line524"></a>});
+<a name="line525"></a></script></pre>
+<div class="header">
+<h1>GiftFlow API</h1>
+<ul>
+<li><a href="../../../overview-summary.html">Overview</a></li>
+<li>Package</li><li>Class</li><li>Tree</li><li><a href="../../../overview-files.html">Files</a></li>
+<li><a href="../../../deprecated-list.html">Deprecated</a></li>
+<li><a href="../../../index-all.html">Index</a></li>
+</ul>
+</div>
+
+<div class="small_links">
+<a href="../../../index.html" target="_top">Frames</a>
+<a href="../../../source/views/goods/giver_dashboard.php.html" target="_top">No frames</a>
+</div>
+<hr>
+
+<p id="footer">This document was generated by <a href="http://peej.github.com/phpdoctor/">PHPDoctor: The PHP Documentation Creator</a></p>
+
+</body>
+
+</html>

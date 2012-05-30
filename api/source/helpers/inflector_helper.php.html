@@ -1,0 +1,298 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+
+<html lang="en">
+<head>
+
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
+<meta name="generator" content="PHPDoctor 2RC4 (http://peej.github.com/phpdoctor/)">
+<meta name="when" content="Wed, 09 Feb 2011 20:22:56 +0000">
+
+<link rel="stylesheet" type="text/css" href="../../stylesheet.css">
+<link rel="start" href="../../overview-summary.html">
+
+<title>helpers/inflector_helper.php (GiftFlow API)</title>
+
+</head>
+<body id="file" onload="parent.document.title=document.title;">
+
+<div class="header">
+<h1>GiftFlow API</h1>
+<ul>
+<li><a href="../../overview-summary.html">Overview</a></li>
+<li>Package</li><li>Class</li><li>Tree</li><li><a href="../../overview-files.html">Files</a></li>
+<li><a href="../../deprecated-list.html">Deprecated</a></li>
+<li><a href="../../index-all.html">Index</a></li>
+</ul>
+</div>
+
+<div class="small_links">
+<a href="../../index.html" target="_top">Frames</a>
+<a href="../../source/helpers/inflector_helper.php.html" target="_top">No frames</a>
+</div>
+<hr>
+
+<h1>helpers/inflector_helper.php</h1>
+<div class="comment" id="overview_description"><p>CodeIgniter Inflector Helpers
+
+Customised singular and plural helpers.</p></div>
+
+<hr>
+
+<a name="line1"></a><pre><?php  if ( ! defined('BASEPATH')) exit('No direct script access allowed');
+<a name="line2"></a>
+<a name="line3"></a>// ------------------------------------------------------------------------
+<a name="line4"></a>
+<a name="line5"></a>/**
+<a name="line6"></a> * CodeIgniter Inflector Helpers
+<a name="line7"></a> *
+<a name="line8"></a> * Customised singular and plural helpers.
+<a name="line9"></a> *
+<a name="line10"></a> * @package		CodeIgniter
+<a name="line11"></a> * @subpackage	Helpers
+<a name="line12"></a> * @category	Helpers
+<a name="line13"></a> * @author		ExpressionEngine Dev Team, stensi
+<a name="line14"></a> * @link		http://codeigniter.com/user_guide/helpers/inflector_helper.html
+<a name="line15"></a> */
+<a name="line16"></a>
+<a name="line17"></a>// --------------------------------------------------------------------
+<a name="line18"></a>
+<a name="line19"></a>/**
+<a name="line20"></a>* Singular
+<a name="line21"></a>*
+<a name="line22"></a>* Takes a plural word and makes it singular (improved by stensi)
+<a name="line23"></a>*
+<a name="line24"></a>* @access	public
+<a name="line25"></a>* @param	string
+<a name="line26"></a>* @return	str
+<a name="line27"></a>*/
+<a name="line28"></a>if ( ! function_exists('singular'))
+<a name="line29"></a>{
+<a name="line30"></a>	function singular($str)
+<a name="line31"></a>	{
+<a name="line32"></a>		$str = strtolower(trim($str));
+<a name="line33"></a>		$end5 = substr($str, -5);
+<a name="line34"></a>		$end4 = substr($str, -4);
+<a name="line35"></a>		$end3 = substr($str, -3);
+<a name="line36"></a>		$end2 = substr($str, -2);
+<a name="line37"></a>		$end1 = substr($str, -1);
+<a name="line38"></a>
+<a name="line39"></a>		if ($end5 == 'eives')
+<a name="line40"></a>		{
+<a name="line41"></a>			$str = substr($str, 0, -3).'f';
+<a name="line42"></a>		}
+<a name="line43"></a>		elseif ($end4 == 'eaux')
+<a name="line44"></a>		{
+<a name="line45"></a>			$str = substr($str, 0, -1);
+<a name="line46"></a>		}
+<a name="line47"></a>		elseif ($end4 == 'ives')
+<a name="line48"></a>		{
+<a name="line49"></a>			$str = substr($str, 0, -3).'fe';
+<a name="line50"></a>		}
+<a name="line51"></a>		elseif ($end3 == 'ves')
+<a name="line52"></a>		{
+<a name="line53"></a>			$str = substr($str, 0, -3).'f';
+<a name="line54"></a>		}
+<a name="line55"></a>		elseif ($end3 == 'ies')
+<a name="line56"></a>		{
+<a name="line57"></a>			$str = substr($str, 0, -3).'y';
+<a name="line58"></a>		}
+<a name="line59"></a>		elseif ($end3 == 'men')
+<a name="line60"></a>		{
+<a name="line61"></a>			$str = substr($str, 0, -2).'an';
+<a name="line62"></a>		}
+<a name="line63"></a>		elseif ($end3 == 'xes' && strlen($str) > 4 OR in_array($end3, array('ses', 'hes', 'oes')))
+<a name="line64"></a>		{
+<a name="line65"></a>			$str = substr($str, 0, -2);
+<a name="line66"></a>		}
+<a name="line67"></a>		elseif (in_array($end2, array('da', 'ia', 'la')))
+<a name="line68"></a>		{
+<a name="line69"></a>			$str = substr($str, 0, -1).'um';
+<a name="line70"></a>		}
+<a name="line71"></a>		elseif (in_array($end2, array('bi', 'ei', 'gi', 'li', 'mi', 'pi')))
+<a name="line72"></a>		{
+<a name="line73"></a>			$str = substr($str, 0, -1).'us';
+<a name="line74"></a>		}
+<a name="line75"></a>		else
+<a name="line76"></a>		{
+<a name="line77"></a>			if ($end1 == 's' && $end2 != 'us' && $end2 != 'ss')
+<a name="line78"></a>			{
+<a name="line79"></a>				$str = substr($str, 0, -1);
+<a name="line80"></a>			}
+<a name="line81"></a>		}
+<a name="line82"></a>	
+<a name="line83"></a>		return $str;
+<a name="line84"></a>	}
+<a name="line85"></a>}
+<a name="line86"></a>
+<a name="line87"></a>// --------------------------------------------------------------------
+<a name="line88"></a>
+<a name="line89"></a>/**
+<a name="line90"></a>* Plural
+<a name="line91"></a>*
+<a name="line92"></a>* Takes a singular word and makes it plural (improved by stensi)
+<a name="line93"></a>*
+<a name="line94"></a>* @access	public
+<a name="line95"></a>* @param	string
+<a name="line96"></a>* @param	bool
+<a name="line97"></a>* @return	str
+<a name="line98"></a>*/
+<a name="line99"></a>if ( ! function_exists('plural'))
+<a name="line100"></a>{	
+<a name="line101"></a>	function plural($str, $force = FALSE)
+<a name="line102"></a>	{
+<a name="line103"></a>		$str = strtolower(trim($str));
+<a name="line104"></a>		$end3 = substr($str, -3);
+<a name="line105"></a>		$end2 = substr($str, -2);
+<a name="line106"></a>		$end1 = substr($str, -1);
+<a name="line107"></a>
+<a name="line108"></a>		if ($end3 == 'eau')
+<a name="line109"></a>		{
+<a name="line110"></a>			$str .= 'x';
+<a name="line111"></a>		}
+<a name="line112"></a>		elseif ($end3 == 'man')
+<a name="line113"></a>		{
+<a name="line114"></a>			$str = substr($str, 0, -2).'en';
+<a name="line115"></a>		}
+<a name="line116"></a>		elseif (in_array($end3, array('dum', 'ium', 'lum')))
+<a name="line117"></a>		{
+<a name="line118"></a>			$str = substr($str, 0, -2).'a';
+<a name="line119"></a>		}
+<a name="line120"></a>		elseif (strlen($str) > 4 && in_array($end3, array('bus', 'eus', 'gus', 'lus', 'mus', 'pus')))
+<a name="line121"></a>		{
+<a name="line122"></a>			$str = substr($str, 0, -2).'i';
+<a name="line123"></a>		}
+<a name="line124"></a>		elseif ($end3 == 'ife')
+<a name="line125"></a>		{
+<a name="line126"></a>			$str = substr($str, 0, -2).'ves';
+<a name="line127"></a>		}
+<a name="line128"></a>		elseif ($end1 == 'f')
+<a name="line129"></a>		{
+<a name="line130"></a>			$str = substr($str, 0, -1).'ves';
+<a name="line131"></a>		}
+<a name="line132"></a>		elseif ($end1 == 'y')
+<a name="line133"></a>		{
+<a name="line134"></a>			if(preg_match('#[aeiou]y#i', $end2))
+<a name="line135"></a>			{
+<a name="line136"></a>				// ays, oys, etc.
+<a name="line137"></a>				$str = $str . 's';
+<a name="line138"></a>			}
+<a name="line139"></a>			else
+<a name="line140"></a>			{
+<a name="line141"></a>				$str = substr($str, 0, -1).'ies';
+<a name="line142"></a>			}
+<a name="line143"></a>		}
+<a name="line144"></a>		elseif ($end1 == 'o')
+<a name="line145"></a>		{
+<a name="line146"></a>			if(preg_match('#[aeiou]o#i', $end2))
+<a name="line147"></a>			{
+<a name="line148"></a>				// oos, etc.
+<a name="line149"></a>				$str = $str . 's';
+<a name="line150"></a>			}
+<a name="line151"></a>			else
+<a name="line152"></a>			{
+<a name="line153"></a>				$str .= 'es';
+<a name="line154"></a>			}
+<a name="line155"></a>		}
+<a name="line156"></a>		elseif ($end1 == 'x' || in_array($end2, array('ss', 'ch', 'sh')) )
+<a name="line157"></a>		{
+<a name="line158"></a>			$str .= 'es';
+<a name="line159"></a>		}
+<a name="line160"></a>		elseif ($end1 == 's')
+<a name="line161"></a>		{
+<a name="line162"></a>			if ($force == TRUE)
+<a name="line163"></a>			{
+<a name="line164"></a>				$str .= 'es';
+<a name="line165"></a>			}
+<a name="line166"></a>		}
+<a name="line167"></a>		else
+<a name="line168"></a>		{
+<a name="line169"></a>			$str .= 's';
+<a name="line170"></a>		}
+<a name="line171"></a>
+<a name="line172"></a>		return $str;
+<a name="line173"></a>	}
+<a name="line174"></a>}
+<a name="line175"></a>
+<a name="line176"></a>// --------------------------------------------------------------------
+<a name="line177"></a>
+<a name="line178"></a>/**
+<a name="line179"></a> * Camelize
+<a name="line180"></a> *
+<a name="line181"></a> * Takes multiple words separated by spaces or underscores and camelizes them
+<a name="line182"></a> *
+<a name="line183"></a> * @access	public
+<a name="line184"></a> * @param	string
+<a name="line185"></a> * @return	str
+<a name="line186"></a> */	
+<a name="line187"></a>if ( ! function_exists('camelize'))
+<a name="line188"></a>{	
+<a name="line189"></a>	function camelize($str)
+<a name="line190"></a>	{		
+<a name="line191"></a>		$str = 'x'.strtolower(trim($str));
+<a name="line192"></a>		$str = ucwords(preg_replace('/[\s_]+/', ' ', $str));
+<a name="line193"></a>		return substr(str_replace(' ', '', $str), 1);
+<a name="line194"></a>	}
+<a name="line195"></a>}
+<a name="line196"></a>
+<a name="line197"></a>// --------------------------------------------------------------------
+<a name="line198"></a>
+<a name="line199"></a>/**
+<a name="line200"></a> * Underscore
+<a name="line201"></a> *
+<a name="line202"></a> * Takes multiple words separated by spaces and underscores them
+<a name="line203"></a> *
+<a name="line204"></a> * @access	public
+<a name="line205"></a> * @param	string
+<a name="line206"></a> * @return	str
+<a name="line207"></a> */	
+<a name="line208"></a>if ( ! function_exists('underscore'))
+<a name="line209"></a>{
+<a name="line210"></a>	function underscore($str)
+<a name="line211"></a>	{
+<a name="line212"></a>		return preg_replace('/[\s]+/', '_', strtolower(trim($str)));
+<a name="line213"></a>	}
+<a name="line214"></a>}
+<a name="line215"></a>
+<a name="line216"></a>// --------------------------------------------------------------------
+<a name="line217"></a>
+<a name="line218"></a>/**
+<a name="line219"></a> * Humanize
+<a name="line220"></a> *
+<a name="line221"></a> * Takes multiple words separated by underscores and changes them to spaces
+<a name="line222"></a> *
+<a name="line223"></a> * @access	public
+<a name="line224"></a> * @param	string
+<a name="line225"></a> * @return	str
+<a name="line226"></a> */
+<a name="line227"></a>if ( ! function_exists('humanize'))
+<a name="line228"></a>{	
+<a name="line229"></a>	function humanize($str)
+<a name="line230"></a>	{
+<a name="line231"></a>		return ucwords(preg_replace('/[_]+/', ' ', strtolower(trim($str))));
+<a name="line232"></a>	}
+<a name="line233"></a>}
+<a name="line234"></a>
+<a name="line235"></a>/* End of file inflector_helper.php */
+<a name="line236"></a>/* Location: ./application/helpers/inflector_helper.php */</pre>
+<div class="header">
+<h1>GiftFlow API</h1>
+<ul>
+<li><a href="../../overview-summary.html">Overview</a></li>
+<li>Package</li><li>Class</li><li>Tree</li><li><a href="../../overview-files.html">Files</a></li>
+<li><a href="../../deprecated-list.html">Deprecated</a></li>
+<li><a href="../../index-all.html">Index</a></li>
+</ul>
+</div>
+
+<div class="small_links">
+<a href="../../index.html" target="_top">Frames</a>
+<a href="../../source/helpers/inflector_helper.php.html" target="_top">No frames</a>
+</div>
+<hr>
+
+<p id="footer">This document was generated by <a href="http://peej.github.com/phpdoctor/">PHPDoctor: The PHP Documentation Creator</a></p>
+
+</body>
+
+</html>

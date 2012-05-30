@@ -1,0 +1,307 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+
+<html lang="en">
+<head>
+
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
+<meta name="generator" content="PHPDoctor 2RC4 (http://peej.github.com/phpdoctor/)">
+<meta name="when" content="Wed, 09 Feb 2011 20:22:55 +0000">
+
+<link rel="stylesheet" type="text/css" href="../stylesheet.css">
+<link rel="start" href="../overview-summary.html">
+
+<title>Auth_OpenID_CheckIDRequest (GiftFlow API)</title>
+
+</head>
+<body id="definition" onload="parent.document.title=document.title;">
+
+<div class="header">
+<h1>GiftFlow API</h1>
+<ul>
+<li><a href="../overview-summary.html">Overview</a></li>
+<li><a href="../openid/package-summary.html">Package</a></li>
+<li class="active">Class</li>
+<li><a href="../openid/package-tree.html">Tree</a></li>
+<li><a href="../overview-files.html">Files</a></li>
+<li><a href="../deprecated-list.html">Deprecated</a></li>
+<li><a href="../index-all.html">Index</a></li>
+</ul>
+</div>
+
+<div class="small_links">
+<a href="../index.html" target="_top">Frames</a>
+<a href="../openid/auth_openid_checkidrequest.html" target="_top">No frames</a>
+</div>
+<div class="small_links">
+Summary: <a href="#summary_field">Field</a> | <a href="#summary_method">Method</a> | <a href="#summary_constr">Constr</a>
+Detail: <a href="#detail_field">Field</a> | <a href="#detail_method">Method</a> | <a href="#summary_constr">Constr</a>
+</div>
+<hr>
+
+<div class="qualifiedName">OpenID\Auth_OpenID_CheckIDRequest</div>
+<a href="../source/libraries/auth/openid/server.php.html#line703" class="location">libraries/Auth/OpenID/Server.php at line 703</a>
+
+<h1>Class Auth_OpenID_CheckIDRequest</h1>
+
+<pre class="tree"><a href="../openid/auth_openid_request.html">Auth_OpenID_Request</a><br>    └─<strong>Auth_OpenID_CheckIDRequest</strong><br /></pre>
+
+<hr>
+
+<p class="signature">public  class <strong>Auth_OpenID_CheckIDRequest</strong><br>extends <a href="../openid/auth_openid_request.html">Auth_OpenID_Request</a>
+
+</p>
+
+<div class="comment" id="overview_description"><p>A request to confirm the identity of a user.</p></div>
+
+<hr>
+
+<table id="summary_field">
+<tr><th colspan="2">Field Summary</th></tr>
+<tr>
+<td class="type"> mixed</td>
+<td class="description"><p class="name"><a href="#immediate">$immediate</a></p><p class="description">Whether this request is for immediate mode.</p></td>
+</tr>
+<tr>
+<td class="type"> mixed</td>
+<td class="description"><p class="name"><a href="#mode">$mode</a></p><p class="description">The mode of this request.</p></td>
+</tr>
+<tr>
+<td class="type"> mixed</td>
+<td class="description"><p class="name"><a href="#namespace">$namespace</a></p><p class="description">The OpenID namespace for this request.
+</p></td>
+</tr>
+<tr>
+<td class="type"> mixed</td>
+<td class="description"><p class="name"><a href="#trust_root">$trust_root</a></p><p class="description">The trust_root value for this request.</p></td>
+</tr>
+<tr>
+<td class="type"> mixed</td>
+<td class="description"><p class="name"><a href="#verifyReturnTo">$verifyReturnTo</a></p><p class="description">Return-to verification callback. </p></td>
+</tr>
+</table>
+
+<table class="inherit">
+<tr><th colspan="2">Fields inherited from OpenID\Auth_OpenID_Request</th></tr>
+<tr><td><a href="../openid/auth_openid_request.html#mode">mode</a></td></tr></table>
+
+<table id="summary_method">
+<tr><th colspan="2">Method Summary</th></tr>
+<tr>
+<td class="type"> void</td>
+<td class="description"><p class="name"><a href="#__construct()">__construct</a>(mixed identity, mixed return_to, mixed trust_root, bool immediate, mixed assoc_handle, mixed server, mixed claimed_id)</p></td>
+</tr>
+<tr>
+<td class="type"> mixed</td>
+<td class="description"><p class="name"><a href="#answer()">answer</a>(bool allow, string server_url, string identity, string claimed_id)</p><p class="description">Respond to this request. </p></td>
+</tr>
+<tr>
+<td class="type"> void</td>
+<td class="description"><p class="name"><a href="#encodeToURL()">encodeToURL</a>(mixed server_url)</p></td>
+</tr>
+<tr>
+<td class="type"> void</td>
+<td class="description"><p class="name"><a href="#equals()">equals</a>(mixed other)</p></td>
+</tr>
+<tr>
+<td class="type">static  void</td>
+<td class="description"><p class="name"><a href="#fromMessage()">fromMessage</a>(mixed message, mixed server)</p></td>
+</tr>
+<tr>
+<td class="type"> void</td>
+<td class="description"><p class="name"><a href="#getCancelURL()">getCancelURL</a>()</p></td>
+</tr>
+<tr>
+<td class="type"> void</td>
+<td class="description"><p class="name"><a href="#idSelect()">idSelect</a>()</p></td>
+</tr>
+<tr>
+<td class="type">static  void</td>
+<td class="description"><p class="name"><a href="#make()">make</a>(mixed message, mixed identity, mixed return_to, mixed trust_root, bool immediate, mixed assoc_handle, mixed server)</p></td>
+</tr>
+<tr>
+<td class="type"> void</td>
+<td class="description"><p class="name"><a href="#returnToVerified()">returnToVerified</a>()</p></td>
+</tr>
+<tr>
+<td class="type"> void</td>
+<td class="description"><p class="name"><a href="#trustRootValid()">trustRootValid</a>()</p></td>
+</tr>
+</table>
+
+<h2 id="detail_field">Field Detail</h2>
+<a href="../source/libraries/auth/openid/server.php.html#line718" class="location">libraries/Auth/OpenID/Server.php at line 718</a>
+
+<h3 id="immediate">immediate</h3>
+<code class="signature">public  mixed <strong>$immediate</strong> = false</code>
+<div class="details">
+<p>Whether this request is for immediate mode.</p></div>
+
+<hr>
+
+<a href="../source/libraries/auth/openid/server.php.html#line713" class="location">libraries/Auth/OpenID/Server.php at line 713</a>
+
+<h3 id="mode">mode</h3>
+<code class="signature">public  mixed <strong>$mode</strong> = &quot;checkid_setup&quot;</code>
+<div class="details">
+<p>The mode of this request.</p></div>
+
+<hr>
+
+<a href="../source/libraries/auth/openid/server.php.html#line729" class="location">libraries/Auth/OpenID/Server.php at line 729</a>
+
+<h3 id="namespace">namespace</h3>
+<code class="signature">public  mixed <strong>$namespace</strong></code>
+<div class="details">
+<p>The OpenID namespace for this request.
+deprecated since version 2.0.2</p></div>
+
+<hr>
+
+<a href="../source/libraries/auth/openid/server.php.html#line723" class="location">libraries/Auth/OpenID/Server.php at line 723</a>
+
+<h3 id="trust_root">trust_root</h3>
+<code class="signature">public  mixed <strong>$trust_root</strong> = null</code>
+<div class="details">
+<p>The trust_root value for this request.</p></div>
+
+<hr>
+
+<a href="../source/libraries/auth/openid/server.php.html#line708" class="location">libraries/Auth/OpenID/Server.php at line 708</a>
+
+<h3 id="verifyReturnTo">verifyReturnTo</h3>
+<code class="signature">public  mixed <strong>$verifyReturnTo</strong> = 'Auth_OpenID_verifyReturnTo'</code>
+<div class="details">
+<p>Return-to verification callback.  Default is
+Auth_OpenID_verifyReturnTo from TrustRoot.php.</p></div>
+
+<hr>
+
+<h2 id="detail_method">Method Detail</h2><div class="method_detail">
+<div class='method'><a href="../source/libraries/auth/openid/server.php.html#line759" class="location">libraries/Auth/OpenID/Server.php at line 759</a>
+
+<h3 id="__construct()">__construct</h3>
+<code class="signature">public  void <strong>__construct</strong>(mixed identity, mixed return_to, mixed trust_root, bool immediate, mixed assoc_handle, mixed server, mixed claimed_id)</code>
+<div class="details">
+</div></div>
+
+
+
+<div class='method'><a href="../source/libraries/auth/openid/server.php.html#line964" class="location">libraries/Auth/OpenID/Server.php at line 964</a>
+
+<h3 id="answer()">answer</h3>
+<code class="signature">public  mixed <strong>answer</strong>(bool allow, string server_url, string identity, string claimed_id)</code>
+<div class="details">
+<p>Respond to this request.  Return either an
+<code><a href="../openid/auth_openid_serverresponse.html">Auth_OpenID_ServerResponse</a></code> or
+<code><a href="../openid/auth_openid_servererror.html">Auth_OpenID_ServerError</a></code>.</p><dl>
+<dt>Parameters:</dt>
+<dd>allow - Allow this user to claim this identity, and allow the consumer to have this information?</dd>
+<dd>server_url - DEPRECATED. Passing $op_endpoint to the {@link Auth_OpenID_Server} constructor makes this optional. When an OpenID 1.x immediate mode request does not succeed, it gets back a URL where the request may be carried out in a not-so-immediate fashion. Pass my URL in here (the fully qualified address of this server's endpoint, i.e. http://example.com/server), and I will use it as a base for the URL for a new request. Optional for requests where {@link $immediate} is false or $allow is true.</dd>
+<dd>identity - The OP-local identifier to answer with. Only for use when the relying party requested identifier selection.</dd>
+<dd>claimed_id - The claimed identifier to answer with, for use with identifier selection in the case where the claimed identifier and the OP-local identifier differ, i.e. when the claimed_id uses delegation. If $identity is provided but this is not, $claimed_id will default to the value of $identity. When answering requests that did not ask for identifier selection, the response $claimed_id will default to that of the request. This parameter is new in OpenID 2.0.</dd>
+</dl>
+</div></div>
+
+
+
+<div class='method'><a href="../source/libraries/auth/openid/server.php.html#line1115" class="location">libraries/Auth/OpenID/Server.php at line 1115</a>
+
+<h3 id="encodeToURL()">encodeToURL</h3>
+<code class="signature">public  void <strong>encodeToURL</strong>(mixed server_url)</code>
+<div class="details">
+</div></div>
+
+
+
+<div class='method'><a href="../source/libraries/auth/openid/server.php.html#line782" class="location">libraries/Auth/OpenID/Server.php at line 782</a>
+
+<h3 id="equals()">equals</h3>
+<code class="signature">public  void <strong>equals</strong>(mixed other)</code>
+<div class="details">
+</div></div>
+
+
+
+<div class='method'><a href="../source/libraries/auth/openid/server.php.html#line815" class="location">libraries/Auth/OpenID/Server.php at line 815</a>
+
+<h3 id="fromMessage()">fromMessage</h3>
+<code class="signature">public static  void <strong>fromMessage</strong>(mixed message, mixed server)</code>
+<div class="details">
+</div></div>
+
+
+
+<div class='method'><a href="../source/libraries/auth/openid/server.php.html#line1149" class="location">libraries/Auth/OpenID/Server.php at line 1149</a>
+
+<h3 id="getCancelURL()">getCancelURL</h3>
+<code class="signature">public  void <strong>getCancelURL</strong>()</code>
+<div class="details">
+</div></div>
+
+
+
+<div class='method'><a href="../source/libraries/auth/openid/server.php.html#line898" class="location">libraries/Auth/OpenID/Server.php at line 898</a>
+
+<h3 id="idSelect()">idSelect</h3>
+<code class="signature">public  void <strong>idSelect</strong>()</code>
+<div class="details">
+</div></div>
+
+
+
+<div class='method'><a href="../source/libraries/auth/openid/server.php.html#line731" class="location">libraries/Auth/OpenID/Server.php at line 731</a>
+
+<h3 id="make()">make</h3>
+<code class="signature">public static  void <strong>make</strong>(mixed message, mixed identity, mixed return_to, mixed trust_root, bool immediate, mixed assoc_handle, mixed server)</code>
+<div class="details">
+</div></div>
+
+
+
+<div class='method'><a href="../source/libraries/auth/openid/server.php.html#line808" class="location">libraries/Auth/OpenID/Server.php at line 808</a>
+
+<h3 id="returnToVerified()">returnToVerified</h3>
+<code class="signature">public  void <strong>returnToVerified</strong>()</code>
+<div class="details">
+</div></div>
+
+
+
+<div class='method'><a href="../source/libraries/auth/openid/server.php.html#line905" class="location">libraries/Auth/OpenID/Server.php at line 905</a>
+
+<h3 id="trustRootValid()">trustRootValid</h3>
+<code class="signature">public  void <strong>trustRootValid</strong>()</code>
+<div class="details">
+</div></div>
+
+
+
+</div><div class="header">
+<h1>GiftFlow API</h1>
+<ul>
+<li><a href="../overview-summary.html">Overview</a></li>
+<li><a href="../openid/package-summary.html">Package</a></li>
+<li class="active">Class</li>
+<li><a href="../openid/package-tree.html">Tree</a></li>
+<li><a href="../overview-files.html">Files</a></li>
+<li><a href="../deprecated-list.html">Deprecated</a></li>
+<li><a href="../index-all.html">Index</a></li>
+</ul>
+</div>
+
+<div class="small_links">
+<a href="../index.html" target="_top">Frames</a>
+<a href="../openid/auth_openid_checkidrequest.html" target="_top">No frames</a>
+</div>
+<div class="small_links">
+Summary: <a href="#summary_field">Field</a> | <a href="#summary_method">Method</a> | <a href="#summary_constr">Constr</a>
+Detail: <a href="#detail_field">Field</a> | <a href="#detail_method">Method</a> | <a href="#summary_constr">Constr</a>
+</div>
+<hr>
+
+<p id="footer">This document was generated by <a href="http://peej.github.com/phpdoctor/">PHPDoctor: The PHP Documentation Creator</a></p>
+
+</body>
+
+</html>
